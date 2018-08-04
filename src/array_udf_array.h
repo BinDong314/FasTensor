@@ -1196,6 +1196,8 @@ void Apply(T (*UDF)(void *), Array<T> *B){
       /////////////////////////////////////
       t_end   =  MPI_Wtime();  time_udf = t_end-t_start + time_udf;
 
+      
+      //MPI_Barrier(MPI_COMM_WORLD);  
       //#ifdef DEBUG
       if(mpi_rank == 0)
         std::cout <<  "Process data of chunk [ " << current_chunk_id  << "] at rank 0 ... done !" << std::endl;
@@ -1207,7 +1209,7 @@ void Apply(T (*UDF)(void *), Array<T> *B){
           //Write result to B
           if(skip_flag == 0){
             B->SaveResult(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
-            //if(mpi_rank == 2) {printf("Write A: At rank = %d \n", mpi_rank); PrintVector("Start: ", current_chunk_start_offset); PrintVector("End: ", current_chunk_end_offset); PrintVector("(Right after write at apply) written data: ", current_result_chunk_data); fflush(stdout);}
+            //if(mpi_rank == 0 || mpi_rank = (mpi_size - 1)) {printf("Write A: At rank = %d \n", mpi_rank); PrintVector("Start: ", current_chunk_start_offset); PrintVector("End: ", current_chunk_end_offset); PrintVector("(Right after write at apply) written data: ", current_result_chunk_data); fflush(stdout);}
           }else{
             B->SaveResult(current_result_chunk_start_offset, current_result_chunk_end_offset, current_result_chunk_data);
           }
@@ -1498,7 +1500,11 @@ void Apply(T (*UDF)(void *), Array<T> *B){
       }
       skiped_dims_size[i] = data_dims_size[i]/skip_size_p[i];
       skiped_chunk_size[i] = data_chunk_size[i]/skip_size_p[i];
-      skiped_chunks[i] = skiped_dims_size[i]/skiped_chunk_size[i];
+      if(skiped_dims_size[i] % skiped_chunk_size[i] != 0){
+        skiped_chunks[i] = skiped_dims_size[i]/skiped_chunk_size[i] + 1;
+      }else{
+        skiped_chunks[i] = skiped_dims_size[i]/skiped_chunk_size[i];
+      }
       //skiped_chunks_per_orig_chunk[i] = data_chunk_size[i]/skip_size_p[i];
       skip_size[i] = skip_size_p[i];
     }

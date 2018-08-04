@@ -27,6 +27,7 @@
 #define    DELAY_TO_CREATE 1
 #define    SDS_UDF_COLLECTIVE_IO 1
 
+
 using namespace std;
 
 //These information are HDF5 related.
@@ -150,7 +151,6 @@ public:
       case H5T_INTEGER:
        // ret = H5Dread(did, H5T_NATIVE_INT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
 	ret = H5Dread(did, H5T_NATIVE_INT, memspace_id, dataspace_id, plist_cio_id, &data[0]);
-       
         //dataset.read(data, PredType::NATIVE_INT, memspace, dataspace);
         break;
       case H5T_FLOAT:
