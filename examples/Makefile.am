@@ -12,13 +12,13 @@ AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++11 -std=c++0x
 bin_PROGRAMS=  ccl-pc-new fake-hdf5-data udf-example-new udf-example
 
 
-vpic_xyz_global_position_SOURCES=vpic-xyz-global-position.cpp
-vpic_xyz_global_position_DEPENDENCIES=../src/libArrayUDF.la
-vpic_xyz_global_position_LDADD=../src/libArrayUDF.la
+#vpic_xyz_global_position_SOURCES=vpic-xyz-global-position.cpp
+#vpic_xyz_global_position_DEPENDENCIES=../src/libArrayUDF.la
+#vpic_xyz_global_position_LDADD=../src/libArrayUDF.la
 
-vpic_gradient_decent_SOURCES=vpic-gradient-decent.cpp
-vpic_gradient_decent_DEPENDENCIES=../src/libArrayUDF.la
-vpic_gradient_decent_LDADD=../src/libArrayUDF.la
+#vpic_gradient_decent_SOURCES=vpic-gradient-decent.cpp
+#vpic_gradient_decent_DEPENDENCIES=../src/libArrayUDF.la
+#vpic_gradient_decent_LDADD=../src/libArrayUDF.la
 
 fake_hdf5_data_SOURCES=fake-HDF5-data.c
 fake_hdf5_data_DEPENDENCIES=../src/libArrayUDF.la
@@ -57,9 +57,9 @@ ccl_pc_new_LDADD=../src/libArrayUDF.la
 #inter_LDADD=../src/libArrayUDF.la
 
 
-inter_xyz_SOURCES=inter-xyz.cpp
-inter_xyz_DEPENDENCIES=../src/libArrayUDF.la
-inter_xyz_LDADD=../src/libArrayUDF.la
+#inter_xyz_SOURCES=inter-xyz.cpp
+#inter_xyz_DEPENDENCIES=../src/libArrayUDF.la
+#inter_xyz_LDADD=../src/libArrayUDF.la
 
 
 #hist_SOURCES=hist.cpp
@@ -67,13 +67,13 @@ inter_xyz_LDADD=../src/libArrayUDF.la
 #hist_LDADD=../src/libArrayUDF.la
 
 
-conv_SOURCES=conv.cpp
-conv_DEPENDENCIES=../src/libArrayUDF.la
-conv_LDADD=../src/libArrayUDF.la
+#conv_SOURCES=conv.cpp
+#conv_DEPENDENCIES=../src/libArrayUDF.la
+#conv_LDADD=../src/libArrayUDF.la
 
-conv_micro_test_SOURCES=conv-micro-test.cpp
-conv_micro_test_DEPENDENCIES=../src/libArrayUDF.la
-conv_micro_test_LDADD=../src/libArrayUDF.la
+#conv_micro_test_SOURCES=conv-micro-test.cpp
+#conv_micro_test_DEPENDENCIES=../src/libArrayUDF.la
+#conv_micro_test_LDADD=../src/libArrayUDF.la
 
 
 #udf_test_SOURCES=udf-test.cpp
