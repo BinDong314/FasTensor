@@ -9,7 +9,7 @@ AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++11 -std=c++0x
 #bin_PROGRAMS=conv  fake-hdf5-data udf-example-new inter-xyz conv
 #bin_PROGRAMS= fake-hdf5-data udf-example udf-example-new ccl-pc-new  inter hist  udf-test 
 #bin_PROGRAMS= fake-hdf5-data ccl-pc-new conv inter-xyz conv-micro-test vpic-gradient-decent vpic-xyz-global-position
-bin_PROGRAMS=  ccl-pc-new fake-hdf5-data udf-example-new
+bin_PROGRAMS=  ccl-pc-new fake-hdf5-data udf-example-new udf-example
 
 
 vpic_xyz_global_position_SOURCES=vpic-xyz-global-position.cpp
@@ -24,9 +24,9 @@ fake_hdf5_data_SOURCES=fake-HDF5-data.c
 fake_hdf5_data_DEPENDENCIES=../src/libArrayUDF.la
 fake_hdf5_data_LDADD=../src/libArrayUDF.la
 
-#udf_example_SOURCES=udf-example.cpp
-#udf_example_DEPENDENCIES=../src/libArrayUDF.la
-#udf_example_LDADD=../src/libArrayUDF.la
+udf_example_SOURCES=udf-example.cpp
+udf_example_DEPENDENCIES=../src/libArrayUDF.la
+udf_example_LDADD=../src/libArrayUDF.la
 
 udf_example_new_SOURCES=udf-example-new.cpp
 udf_example_new_DEPENDENCIES=../src/libArrayUDF.la
