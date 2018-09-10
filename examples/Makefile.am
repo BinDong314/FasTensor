@@ -9,7 +9,7 @@ AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++11 -std=c++0x
 #bin_PROGRAMS=conv  fake-hdf5-data udf-example-new inter-xyz conv
 #bin_PROGRAMS= fake-hdf5-data udf-example udf-example-new ccl-pc-new  inter hist  udf-test 
 #bin_PROGRAMS= fake-hdf5-data ccl-pc-new conv inter-xyz conv-micro-test vpic-gradient-decent vpic-xyz-global-position
-bin_PROGRAMS=  ccl-pc-new 
+bin_PROGRAMS=  ccl-pc-new fake-hdf5-data udf-example udf-example-new
 
 
 vpic_xyz_global_position_SOURCES=vpic-xyz-global-position.cpp
