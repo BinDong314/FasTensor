@@ -1,0 +1,30 @@
+
+Requirement h5py
+
+Quick steps to start with sample data. More advanced features can be obtained by "-h"
+
+Step1: convert TDMS files (all in a directory ) to HDF5 files (in another directory)
+
+   > ls   ~/Dropbox/xinXingMLshareFolder/testTDMSdata/
+          westSac_170728224410.tdms	westSac_170728224610.tdms
+	  westSac_170728224510.tdms	westSac_170728224710.tdms
+   > mkdir testH5data
+   > python tdms2h5.py -i ~/Dropbox/xinXingMLshareFolder/testTDMSdata/ -o testH5data -b
+
+    
+Step2: merge HDF5 files into a single HDF5 file
+
+   > ls testH5data/
+      westSac_170728224410.h5p	westSac_170728224610.h5p
+      westSac_170728224510.h5p	westSac_170728224710.h5p
+   > python h5-merge.py -i testH5data/ -o westSac_merged.h5p
+   > h5dump -A westSac_merged.h5p
+     HDF5 "westSac_merged.h5p" {
+     	  GROUP "/" {
+	     DATASET "DataByChannelTime" {
+	           DATATYPE  H5T_STD_I16LE
+		         DATASPACE  SIMPLE { ( 120000, 11648 ) / ( 120000, 11648 ) }
+     }}}
+
+
+Step3: Analysis to come
