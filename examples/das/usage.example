@@ -1,15 +1,14 @@
 
 
 
-Preparing steps (on snowbear):
+Preparing steps (on snowbear only):
     
   > python 3:
     module load  python/3.5.1
     pip3 install nptdms 
 
-    > h5py https://github.com/h5py/h5py
-      version > 2.9 to use HDF5 Virtual Dataset for h5-merge.py
-      python3 -c "import h5py; print(h5py.__version__)"
+    > HDF5 and h5py 
+      Note: for paralle case, we need a new version of HDF5
 
       tips to install HDF5:
         git clone https://bitbucket.hdfgroup.org/scm/hdffv/hdf5.git
@@ -22,7 +21,7 @@ Preparing steps (on snowbear):
         module load automake/1.15
 
         ./autogen.sh
-        ./configure --enable-parallel --prefix=/bearbin-data3/home/dbin/soft/hdf5/build
+        ./configure --enable-parallel --prefix=/bearbin-data3/home/dbin/soft/hdf5/build 
         make
         make install
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/soft/hdf5/build/lib/
