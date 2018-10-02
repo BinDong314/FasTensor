@@ -11,7 +11,24 @@ Preparing steps (on snowbear):
       version > 2.9 to use HDF5 Virtual Dataset for h5-merge.py
       python3 -c "import h5py; print(h5py.__version__)"
 
-      tips to insall h5py:
+      tips to install HDF5:
+        git clone https://bitbucket.hdfgroup.org/scm/hdffv/hdf5.git
+        cd hdf5
+        git checkout parallel_vds_develop
+
+        module load gcc/4.8.5
+        module load openmpi/3.1.2-gcc
+        module load libtool/2.4.6
+        module load automake/1.15
+
+        ./autogen.sh
+        ./configure --enable-parallel --prefix=/bearbin-data3/home/dbin/soft/hdf5/build
+        make
+        make install
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/soft/hdf5/build/lib/
+
+
+      tips to install h5py:
          dbin@snowbear data]$ module list
            1) python/3.5.1         3) gcc/4.8.5            5) hdf5/1.10.1-gcc-p
            2) arrayudf/1.0.0-gcc   4) openmpi/3.1.2-gcc 
@@ -60,12 +77,9 @@ module load arrayudf/1.0.0-gcc
 
 
 New HDF5:
-git clone https://bitbucket.hdfgroup.org/scm/hdffv/hdf5.git
-module load libtool/2.4.6
-module load automake/1.15
-module load openmpi/3.1.2-gcc
-./autoge
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/soft/hdf5/build/lib/
+
+
+
 
 
 
