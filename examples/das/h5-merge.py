@@ -55,11 +55,11 @@ def main():
     print('Assume each file has shape as: ', h5_shape)
     print('Total files: ', h5_file_count)
     
-    layout = h5py.VirtualLayout(shape=(h5_shape[0]*h5_file_count, h5_shape[1]), dtype='i2')
+    layout = h5py.VirtualLayout(shape=(h5_shape[0]*h5_file_count, h5_shape[1]), dtype='f4')
     n=0
     for filename in sorted(h5_file):
         print('merging file: ', filename)
-        vsource = h5py.VirtualSource(filename, hdf_dataset, shape=h5_shape, dtype='i2')
+        vsource = h5py.VirtualSource(filename, hdf_dataset, shape=h5_shape, dtype='f4')
         layout[n*h5_shape[0]:(n+1)*h5_shape[0], :] = vsource
         n += 1
 

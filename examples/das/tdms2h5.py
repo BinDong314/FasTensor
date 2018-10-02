@@ -15,7 +15,7 @@ def tdms2ht(input_tdms_file, output_hdf_file, hdf_dataset):
     tdms_file = TdmsFile(input_tdms_file)
     df=tdms_file.as_dataframe()
     f = h5py.File(output_hdf_file, "w")
-    f.create_dataset(hdf_dataset, data=df.values)
+    f.create_dataset(hdf_dataset, data=df.values, dtype='f4')
     f.close()
 
 def main():
