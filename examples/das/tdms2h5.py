@@ -13,9 +13,9 @@ def usage():
   print('Usage: '+sys.argv[0]+' -i <input tdms file or directory in -b model> -o <output hdf file or directory in -b model>  [-g hdf group (root by defualt), -d hdf dataset (DataByChannelTime by defualt) -b bath model]')
 def tdms2ht(input_tdms_file, output_hdf_file, hdf_dataset):
     tdms_file = TdmsFile(input_tdms_file)
-    df=tdms_file.as_dataframe()
+    df=tdms_file.as_dataframe().astype(float)
     f = h5py.File(output_hdf_file, "w")
-    f.create_dataset(hdf_dataset, data=df.values)
+    f.create_dataset(hdf_dataset, data=df.values, dtype='f4')
     f.close()
 
 def main():
