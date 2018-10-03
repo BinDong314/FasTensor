@@ -1,5 +1,45 @@
 
-Requirement h5py
+
+
+Preparing steps (on snowbear only):
+    
+  > python 3:
+    module load  python/3.5.1
+    pip3 install nptdms 
+
+    > HDF5 and h5py 
+      Note: for paralle case, we need a new version of HDF5
+
+      tips to install HDF5:
+        git clone https://bitbucket.hdfgroup.org/scm/hdffv/hdf5.git
+        cd hdf5
+        git checkout parallel_vds_develop
+
+        module load gcc/4.8.5
+        module load openmpi/3.1.2-gcc
+        module load libtool/2.4.6
+        module load automake/1.15
+
+        ./autogen.sh
+        ./configure --enable-parallel --prefix=/bearbin-data3/home/dbin/soft/hdf5/build 
+        make
+        make install
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/soft/hdf5/build/lib/
+
+
+      tips to install h5py:
+         dbin@snowbear data]$ module list
+           1) python/3.5.1         3) gcc/4.8.5            5) hdf5/1.10.1-gcc-p
+           2) arrayudf/1.0.0-gcc   4) openmpi/3.1.2-gcc 
+         
+         wget https://github.com/h5py/h5py/archive/master.zip
+         python3 setup.py configure  --reset
+         python3 setup.py configure  --hdf5=/usr/local/software/sl-6.x86_64/modules/hdf5/1.10.1-gcc-p
+         python3 setup.py build
+         python3 setup.py install --user
+
+    > https://github.com/adamreeve/npTDMS
+
 
 Quick steps to start with sample data. More advanced features can be obtained by "-h"
 
@@ -28,3 +68,24 @@ Step2: merge HDF5 files into a single HDF5 file
 
 
 Step3: Analysis to come
+
+module load gcc/4.8.5
+module load openmpi/3.1.2-gcc
+module load hdf5/1.10.1-gcc-p
+module load arrayudf/1.0.0-gcc
+
+
+New HDF5:
+
+
+
+
+
+
+module load hdf5/1.10.1-gcc-p
+
+
+
+
+
+
