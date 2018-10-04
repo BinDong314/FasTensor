@@ -120,11 +120,55 @@ int main(int argc, char *argv[])
 
   printf("dims_per_dset = (%lld, %lld) \n",dims_per_dset[0], dims_per_dset[1]);
 
-  dims_per_dset[0] = dims_per_dset[0] * file_to_merge_count;
-  printf("dims for finale merged file = (%lld, %lld) \n",dims_per_dset[0], dims_per_dset[1]);
+  hsize_t *dims_vir_dset = malloc(rank * sizeof(hsize_t));
+  dims_vir_dset[0] = dims_per_dset[0] * file_to_merge_count;
+  dims_vir_dset[1] = dims_per_dset[1] ;
+
+  printf("dims for finale merged file = (%lld, %lld) \n",dims_vir_dset[0], dims_vir_dset[1]);
+
+  H5Dclose(did);
+  H5Fclose(fid);
+
+
+  /* Create file in which virtual dataset will be stored. */
+  hid_t vir_file_id = H5Fcreate (output_file, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+  /* Create VDS dataspace.  */
+  hid_t vir_space = H5Screate_simple (rank, dims_vir_dset, NULL);
+
+  /* Initialize hyperslab values. */
+
+  hsize_t start_out[2], count_out[2];
+  start_out[0] = 0;
+  start_out[1] = 0;
+  count_out[0] = dims_per_dset[0];
+  count_out[1] = dims_per_dset[1];
+
+  /* Set VDS creation property. */
+  hid_t dcpl = H5Pcreate(H5P_DATASET_CREATE);
+
+  hid_t  src_space = H5Screate_simple (rank, dims_per_dset, NULL);
+  int src_index =0;
+  for (i = 0; i < namelist_length; i++) {
+    if(namelist[i] != NULL){
+        start_out[0] = (hsize_t)src_index * dims_per_dset[0];
+        /* Select i-th row in the virtual dataset; selection in the source datasets is the same. */
+        H5Sselect_hyperslab (vir_space, H5S_SELECT_SET, start_out, NULL, count_out, NULL);
+        H5Pset_virtual (dcpl, vir_space, namelist[i]->d_name, dataset, src_space);
+        src_index++;
+    }
+  }
+
+  /* Create a virtual dataset. */
+  hid_t  vir_dset = H5Dcreate2 (vir_file_id, dataset, H5T_IEEE_F32LE, vir_space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
+  H5Sclose (vir_space);
+  H5Sclose (src_space);
+  H5Dclose (vir_dset);
+  H5Fclose (vir_file_id);
 
 
 
+
+  free(dims_vir_dset);
   free(dims_per_dset);
   free(temp_file);
   for(i = 0; i < namelist_length; i++){
