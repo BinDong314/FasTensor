@@ -9,6 +9,8 @@
 #include <math.h>       /* ceil  and floor*/
 #include <getopt.h>
 #include "hdf5.h" 
+#include <limits.h> /* PATH_MAX */
+
 
 void  printf_help(char *cmd);
 
@@ -18,7 +20,7 @@ void  printf_help(char *cmd);
 
 int main(int argc, char *argv[])
 {
-  char  input_dir[NAME_LENGTH]="./testH5data";
+  char  input_dir[PATH_MAX + 1]="./testH5data";
   char  output_file[NAME_LENGTH]="./testHDF5data-merged.h5p";
   char  filter_str[NAME_LENGTH]="";
   char  group[NAME_LENGTH]="/";  //both input and output file share the same group and dataset name
@@ -26,6 +28,7 @@ int main(int argc, char *argv[])
 
   int filter_flag = 0;
   int copt; 
+  char *res;
   while ((copt = getopt (argc, argv, "o:i:g:d:hf")) != -1)
     switch (copt)
     {
@@ -34,8 +37,15 @@ int main(int argc, char *argv[])
         strcpy(output_file, optarg);
         break;
       case 'i':
-        memset(input_dir, 0, sizeof(input_dir));
-	      strcpy(input_dir, optarg);
+        res=realpath(optarg, input_dir);
+        if (res ) {
+          printf("Files to merge at:  %s.\n", input_dir);
+        } else {
+          perror("Can not resolve input directory");
+          exit(EXIT_FAILURE);
+        }
+        //  memset(input_dir, 0, sizeof(input_dir));
+	      //strcpy(input_dir, optarg);
 	      break;
       case 'g':
         memset(group, 0, sizeof(group));
@@ -60,7 +70,7 @@ int main(int argc, char *argv[])
     }
 
 
- 
+  //Get the list of files under input_dir 
   struct dirent **namelist;
   int namelist_length = scandir(input_dir, &namelist, 0, alphasort);
 
@@ -97,10 +107,10 @@ int main(int argc, char *argv[])
   printf("Use %s as template to create virtual file.\n", temp_file);
 
 
+  //Open a temp file to find out its dimensions
   hid_t fid, gid, did;
   fid  = H5Fopen(temp_file, H5F_ACC_RDONLY, H5P_DEFAULT);
 
-    
   if (strcmp(group, "/") != 0){
       //std::cout << "Open Group : " << gn << std::endl;
       gid  = H5Gopen(fid, group, H5P_DEFAULT);
@@ -109,22 +119,22 @@ int main(int argc, char *argv[])
       did  = H5Dopen(fid,  dataset,  H5P_DEFAULT);
   }
     
-  hid_t datatype       = H5Dget_type(did);     /* datatype handle */ 
+  hid_t datatype             = H5Dget_type(did);     /* datatype handle */ 
   H5T_class_t type_class     = H5Tget_class(datatype);  
-  hid_t dataspace_id   = H5Dget_space(did);
+  hid_t dataspace_id         = H5Dget_space(did);
   int rank = H5Sget_simple_extent_ndims(dataspace_id);
 
   //Obtain the size of original array
   hsize_t *dims_per_dset = malloc(rank * sizeof(hsize_t));
   H5Sget_simple_extent_dims(dataspace_id, dims_per_dset, NULL);
 
-  printf("dims_per_dset = (%lld, %lld) \n",dims_per_dset[0], dims_per_dset[1]);
+  printf("dims per dataset = (%lld, %lld) \n",dims_per_dset[0], dims_per_dset[1]);
 
   hsize_t *dims_vir_dset = malloc(rank * sizeof(hsize_t));
   dims_vir_dset[0] = dims_per_dset[0] * file_to_merge_count;
   dims_vir_dset[1] = dims_per_dset[1] ;
 
-  printf("dims for finale merged file = (%lld, %lld) \n",dims_vir_dset[0], dims_vir_dset[1]);
+  printf("dims for the merged dataset = (%lld, %lld) \n",dims_vir_dset[0], dims_vir_dset[1]);
 
   H5Dclose(did);
   H5Fclose(fid);
@@ -137,29 +147,38 @@ int main(int argc, char *argv[])
 
   /* Initialize hyperslab values. */
 
-  hsize_t start_out[2], count_out[2];
+  hsize_t start_out[2], count_out[2], block_out[2];
   start_out[0] = 0;
   start_out[1] = 0;
-  count_out[0] = dims_per_dset[0];
-  count_out[1] = dims_per_dset[1];
+
+  count_out[0] = 1;
+  count_out[1] = 1;
+
+  block_out[0] = dims_per_dset[0];
+  block_out[1] = dims_per_dset[1];
+
 
   /* Set VDS creation property. */
   hid_t dcpl = H5Pcreate(H5P_DATASET_CREATE);
+  float fill_value = 0;
+  H5Pset_fill_value (dcpl, H5T_IEEE_F32LE, &fill_value);
 
   hid_t  src_space = H5Screate_simple (rank, dims_per_dset, NULL);
   int src_index =0;
   for (i = 0; i < namelist_length; i++) {
     if(namelist[i] != NULL){
+        sprintf(temp_file, "%s/%s", input_dir, namelist[i]->d_name);
         start_out[0] = (hsize_t)src_index * dims_per_dset[0];
-        /* Select i-th row in the virtual dataset; selection in the source datasets is the same. */
-        H5Sselect_hyperslab (vir_space, H5S_SELECT_SET, start_out, NULL, count_out, NULL);
-        H5Pset_virtual (dcpl, vir_space, namelist[i]->d_name, dataset, src_space);
+        H5Sselect_hyperslab (vir_space, H5S_SELECT_SET, start_out, NULL, count_out, block_out);
+        H5Pset_virtual (dcpl, vir_space, temp_file, dataset, src_space);
         src_index++;
     }
   }
 
   /* Create a virtual dataset. */
-  hid_t  vir_dset = H5Dcreate2 (vir_file_id, dataset, H5T_IEEE_F32LE, vir_space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
+  hid_t  vir_dset = H5Dcreate (vir_file_id, dataset, H5T_IEEE_F32LE, vir_space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
+      
+
   H5Sclose (vir_space);
   H5Sclose (src_space);
   H5Dclose (vir_dset);
