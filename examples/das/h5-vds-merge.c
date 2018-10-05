@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
         temp_index++;
        }
    }
-  char *temp_file = malloc(strlen(input_dir) + max_file_name_legnth + 2);
+  char *temp_file = (char *)malloc(strlen(input_dir) + max_file_name_legnth + 2);
 
 
   printf("List of files to merge (count = %d ): \n", file_to_merge_count);
@@ -125,12 +125,12 @@ int main(int argc, char *argv[])
   int rank = H5Sget_simple_extent_ndims(dataspace_id);
 
   //Obtain the size of original array
-  hsize_t *dims_per_dset = malloc(rank * sizeof(hsize_t));
+  hsize_t *dims_per_dset = (hsize_t *)malloc(rank * sizeof(hsize_t));
   H5Sget_simple_extent_dims(dataspace_id, dims_per_dset, NULL);
 
   printf("dims per dataset = (%lld, %lld) \n",dims_per_dset[0], dims_per_dset[1]);
 
-  hsize_t *dims_vir_dset = malloc(rank * sizeof(hsize_t));
+  hsize_t *dims_vir_dset = (hsize_t *)malloc(rank * sizeof(hsize_t));
   dims_vir_dset[0] = dims_per_dset[0] * file_to_merge_count;
   dims_vir_dset[1] = dims_per_dset[1] ;
 
