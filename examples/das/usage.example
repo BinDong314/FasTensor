@@ -34,7 +34,9 @@ Step1: convert TDMS files (all in a directory ) to HDF5 files (in another direct
           westSac_170728224410.tdms westSac_170728224610.tdms
           westSac_170728224510.tdms westSac_170728224710.tdms
    > mkdir ~/testH5data
+  
    > module load  python/3.5.1
+  
    > python3 tdms2h5.py -i ~/testTDMSdata/ -o ~/testH5data -b
        * it takes a while
     
@@ -42,8 +44,11 @@ Step2: merge HDF5 files into a single HDF5 file
    > ls ~/testH5data/
       westSac_170728224410.h5p  westSac_170728224610.h5p
       westSac_170728224510.h5p  westSac_170728224710.h5p
+  
    > cd arrayudf-test/examples/das/
-   > h5-vds-merge -i ~/testH5data/  -o ~/westSac_merged.h5p
+  
+   > ./h5-vds-merge -i ~/testH5data/  -o ~/westSac_merged.h5p
+  
    > h5dump -A westSac_merged.h5p
      HDF5 "westSac_merged.h5p" {
         GROUP "/" {
@@ -55,29 +60,36 @@ Step2: merge HDF5 files into a single HDF5 file
 
 Step3: ArrayUDF Code
    > cd arrayudf-test/examples/das/
-   > mpirun -n 4  ./das-correlation -i ~/westSac_merged.h5p -o ~/westSac_merged_arrayudf.h5p -g / -d /DataByChannelTime -n 2 -c 30000,32 -t 0,20 -s 1000,1 -e 500 -w 300 -l 10
+  
+   > rm  ~/westSac_merged_arrayudf.h5p
+     * Always remove the output file and will be more smart soon
+  
+   > mpirun -n 4  ./das-correlation -i ~/westSac_merged.h5p -o ~/westSac_merged_arrayudf.h5p -g / -d /DataByChannelTime -n 2 -c 120000,32 -t 0,20 -s 1000,1 -e 500 -w 300 -l 10
+  
    > h5dump -A ~/westSac_merged_arrayudf.h5p 
-    GROUP "/" {
+     GROUP "/" {
      DATASET "DataByChannelTime" {
       DATATYPE  H5T_IEEE_F32LE
       DATASPACE  SIMPLE { ( 120, 11648 ) / ( 120, 11648 ) }
-   }}}
+     }}}
 
 
 So far, you make it and the "westSac_merged_arrayudf.h5p" is the result file
 
+Parameters for das-correlation
 
+-i input HDF5 file
+-o output HDF5 file
+-g group within HDF5
+-d dataset within HDF5
+-n the dimension of input dataset, it is always 2 for das data
+-c chunk size which breaks the input data into subsets for parallel processing
 
-
-
-
-
-
-
-
-
-
-
+-t overlap among chunks (to be aligned with -l paramter)
+-s skip points, e.g., 1000,1 computes local similarity eavy 1000 points on first dimension 
+-e size of time window along single channel 
+-w counts of windes along single channel
+-l channel offset ()
 
 
 
