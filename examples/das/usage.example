@@ -74,6 +74,10 @@ Step3: ArrayUDF Code
      }}}
 
 
+Step3: 
+  > plot.py
+  
+
 So far, you make it and the "westSac_merged_arrayudf.h5p" is the result file
 
 Parameters for das-correlation
