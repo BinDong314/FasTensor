@@ -332,5 +332,8 @@ tframe++;
 }
 
 
+#undef create_file_with_header
+#undef invert_xml_item
+
 
 
