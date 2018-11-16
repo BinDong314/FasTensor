@@ -37,7 +37,7 @@ struct iArray{
   std::vector<int> l_start;  //g_dimension/g_chunk_sze * mpi_rank
   std::vector<int> l_count;  // = g_chunk_size
   std::vector<int> l_offset;  //l_start - g_ghost_size
-  Array2D          local_array;
+  iArrayLocal      local_array;
   void            *local_data;
 };
 
@@ -52,36 +52,101 @@ int iArray_delete(int iArray_id);
 int iArray_get_global_dims(int iArray_id, std::vector<unsigned long long> & dims);
 int iArray_get_local_dims(int iArray_id, std::vector<int> &start, std::vector<int> &count);
 int iArray_get_element_type(int iArray_id);
+int dump_debug_to_file(int iArray_id, std::string name_ext);
+int iArray_get_global_chunk_size(int iArray_id, std::vector<int> &cs);
+int iArray_get_global_ghost_size(int iArray_id, std::vector<int> &gs);
+int iArray_get_global_rank(int iArray_id);
+int iArray_write_local_all_directly(int iArray_id, void *buf, size_t buf_size);
 
+int iArray_read_offset_direct(int iArray_handle, unsigned long long offset, void *data_at_offset, int type_size);
 
 template < typename T >
-void WriteLocalArray( T* pdata, const Array2D& g, T *buf) {
-    Array2DAccessor< T > a( pdata, g );
-    int buf_index  = 0;
-    for( int row = 0; row != a.Layout().height; ++row ) {
-        for( int column = 0; column != a.Layout().width; ++column ) {
-          a( row, column) = buf[buf_index];
-          buf_index  = buf_index + 1;
+void WriteLocalArray( T* pdata, const iArrayLocal& g, T *buf) {
+    iArrayLocalAccessor< T > a( pdata, g );
+    size_t buf_index  = 0;
+    std::vector<int> coordinate;
+    switch(g.rank){
+      case 1:
+        coordinate.resize(1);
+        for( int row = 0; row != a.Layout().count[0]; ++row ) {
+          coordinate[0] =  row;
+          a(coordinate) = buf[buf_index];
+            buf_index  = buf_index + 1;
         }
+        break;
+      case 2:
+        coordinate.resize(2);
+        for( int row = 0; row != a.Layout().count[0]; ++row ) {
+          for( int column = 0; column != a.Layout().count[1]; ++column ) {
+            coordinate[0] =  row;
+            coordinate[1] =  column;
+            a(coordinate) = buf[buf_index];
+            buf_index  = buf_index + 1;
+          }
+        }
+        break;
+      case 3:
+        coordinate.resize(3);
+        for( int row = 0; row != a.Layout().count[0]; ++row ) {
+          for( int column = 0; column != a.Layout().count[1]; ++column ) {
+            for( int z = 0;     z != a.Layout().count[2]; ++z ) {
+              coordinate[0] =  row;
+              coordinate[1] =  column;
+              coordinate[2]=z;
+              a(coordinate) = buf[buf_index];
+              buf_index  = buf_index + 1;
+          }
+        }
+        }
+        break;
     }
 }
 
 template < typename T >
-void ReadLocalArray( T* pdata, const Array2D& g, T *buf) {
-    Array2DAccessor< T > a( pdata, g );
-    int buf_index  = 0;
-    int mpi_size, mpi_rank;
-    MPI_Comm_size(MPI_COMM_WORLD,&mpi_size); 
-    MPI_Comm_rank(MPI_COMM_WORLD,&mpi_rank);
-    
-    for( int row = 0; row != a.Layout().height; ++row ) {
-        for( int column = 0; column != a.Layout().width; ++column ) {
-          buf[buf_index] = a(row, column);
-          buf_index = buf_index + 1;
-          //if(mpi_rank == 0 || mpi_rank == 5){
-          //  std::cout << ", " << a(row, column) << std::endl;
-          //}
+void ReadLocalArray( T* pdata, const iArrayLocal& g, T *buf) {
+    iArrayLocalAccessor< T > a( pdata, g );
+    size_t buf_index  = 0;
+    //int mpi_size, mpi_rank;
+    //MPI_Comm_size(MPI_COMM_WORLD,&mpi_size); 
+    //MPI_Comm_rank(MPI_COMM_WORLD,&mpi_rank);
+    switch(g.rank){
+      case 1:
+        {std::vector<int> coordinate(1);
+        //     coordinate.resize(1);
+        for( int row = 0; row != a.Layout().count[0]; ++row ) {
+          coordinate[0] =  row;
+          buf[buf_index] =  a(coordinate);
+          buf_index  = buf_index + 1;
+        }}
+        break;
+      case 2:
+        //coordinate.resize(2);
+        {std::vector<int> coordinate(2);
+        for( int row = 0; row != a.Layout().count[0]; ++row ) {
+          for( int column = 0; column != a.Layout().count[1]; ++column ) {
+            coordinate[0] =  row;             coordinate[1] =  column;
+            buf[buf_index] =  a(coordinate);
+            buf_index  = buf_index + 1;
+          }
         }
+        }
+        break;
+      case 3:
+        //coordinate.resize(3);
+        {std::vector<int> coordinate(3);
+        for( int row = 0; row != a.Layout().count[0]; ++row ) {
+          for( int column = 0; column != a.Layout().count[1]; ++column ) {
+            for( int z = 0; z != a.Layout().count[2]; ++z ) {
+              coordinate[0] = row;
+              coordinate[1] = column;
+              coordinate[2] = z;
+              buf[buf_index] =  a(coordinate);
+              buf_index  = buf_index + 1;
+          }
+          }
+        }
+        }
+        break;
     }
 }
 

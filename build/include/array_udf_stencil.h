@@ -161,7 +161,7 @@ public:
   }
 
   //2D
-  inline T & operator()(const int i1, const int i2) const{
+  inline T operator()(const int i1, const int i2) const{
     if(trail_run_flag == 1){
       if (std::abs(i1) > coordinate_shift[0])
         coordinate_shift[0] =  std::abs(i1);
@@ -170,6 +170,8 @@ public:
       return chunk_data_pointer[0];
     }
 
+    if(i1 == 0 && i2 == 0)
+      return value;
 
     //if(mpi_rank == 0) PrintVector("At rank 0, in (), chunk_dim_size=",  chunk_dim_size);
     coordinate_shift[0] = i1;  coordinate_shift[1] = i2;
@@ -315,7 +317,9 @@ public:
       chunk_dim_size[i]       = current_chunk_ol_size[i];
     }
     chunk_data_size_no_ol = chunk_data_size_no_ol -1 ; //start from 0
-    my_offset_no_ol       = RowMajorOrder(chunk_dim_size_no_ol_p, my_location_no_ol_p) - 1;
+    //my_offset_no_ol       = RowMajorOrder(chunk_dim_size_no_ol_p, my_location_no_ol_p) - 1;
+    ROW_MAJOR_ORDER_MACRO(chunk_dim_size_no_ol_p, chunk_dim_size_no_ol_p.size(), my_location_no_ol_p, my_offset_no_ol)
+   my_offset_no_ol = my_offset_no_ol  -1;
     //p_location           = n_location;
   }
 

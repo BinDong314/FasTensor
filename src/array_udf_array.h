@@ -1788,6 +1788,99 @@ void Apply(T (*UDF)(void *), Array<T> *B){
     }
   }
 
+  void SetAttributes(Array<AttrType> *a1, Array<AttrType> *a2, Array<AttrType> *a3, Array<AttrType> *a4, Array<AttrType> *a5, Array<AttrType> *a6){
+    //Save the attributes
+    attributes.push_back(a1);
+    attributes.push_back(a2);
+    attributes.push_back(a3);
+    attributes.push_back(a4);
+    attributes.push_back(a5);
+    attributes.push_back(a6);
+
+    //Todo: check the dimenson of a1 = a2 = a3
+
+    //Extract some information from a1 ... a2.
+    data_chunk_size   = a1->GetChunkSize();
+    data_overlap_size = a1->GetOverlapSize();
+    data_dims_size = a1->GetDimSize();
+    data_dims      = data_dims_size.size();
+    
+    current_chunk_start_offset.resize(data_dims);
+    current_chunk_end_offset.resize(data_dims);
+    current_chunk_size.resize(data_dims);
+
+    current_result_chunk_start_offset.resize(data_dims);
+    current_result_chunk_end_offset.resize(data_dims);
+
+    current_chunk_ol_start_offset.resize(data_dims);
+    current_chunk_ol_end_offset.resize(data_dims);
+    current_chunk_ol_size.resize(data_dims);
+       
+    data_chunked_dims_size.resize(data_dims);
+    ol_origin_offset.resize(data_dims);
+       
+    data_total_chunks = 1;
+    
+    for(int i = 0; i < data_dims; i++){
+      if(data_dims_size[i]%data_chunk_size[i] == 0){
+        data_chunked_dims_size[i] = data_dims_size[i]/data_chunk_size[i];  
+      }else{
+        data_chunked_dims_size[i] = data_dims_size[i]/data_chunk_size[i] + 1; 
+      }
+      data_total_chunks = data_total_chunks * data_chunked_dims_size[i];
+    }
+  }
+
+  void SetAttributes(Array<AttrType> *a1, Array<AttrType> *a2, Array<AttrType> *a3, Array<AttrType> *a4, Array<AttrType> *a5, Array<AttrType> *a6,Array<AttrType> *a7, Array<AttrType> *a8, Array<AttrType> *a9, Array<AttrType> *a10, Array<AttrType> *a11, Array<AttrType> *a12){
+    //Save the attributes
+    attributes.push_back(a1);
+    attributes.push_back(a2);
+    attributes.push_back(a3);
+    attributes.push_back(a4);
+    attributes.push_back(a5);
+    attributes.push_back(a6);
+       attributes.push_back(a7);
+    attributes.push_back(a8);
+    attributes.push_back(a9);
+    attributes.push_back(a10);
+    attributes.push_back(a11);
+    attributes.push_back(a12);
+
+    //Todo: check the dimenson of a1 = a2 = a3
+
+    //Extract some information from a1 ... a2.
+    data_chunk_size   = a1->GetChunkSize();
+    data_overlap_size = a1->GetOverlapSize();
+    data_dims_size = a1->GetDimSize();
+    data_dims      = data_dims_size.size();
+    
+    current_chunk_start_offset.resize(data_dims);
+    current_chunk_end_offset.resize(data_dims);
+    current_chunk_size.resize(data_dims);
+
+    current_result_chunk_start_offset.resize(data_dims);
+    current_result_chunk_end_offset.resize(data_dims);
+
+    current_chunk_ol_start_offset.resize(data_dims);
+    current_chunk_ol_end_offset.resize(data_dims);
+    current_chunk_ol_size.resize(data_dims);
+       
+    data_chunked_dims_size.resize(data_dims);
+    ol_origin_offset.resize(data_dims);
+       
+    data_total_chunks = 1;
+    
+    for(int i = 0; i < data_dims; i++){
+      if(data_dims_size[i]%data_chunk_size[i] == 0){
+        data_chunked_dims_size[i] = data_dims_size[i]/data_chunk_size[i];  
+      }else{
+        data_chunked_dims_size[i] = data_dims_size[i]/data_chunk_size[i] + 1; 
+      }
+      data_total_chunks = data_total_chunks * data_chunked_dims_size[i];
+    }
+  }
+
+
   std::vector<int> GetChunkSize(){
     return data_chunk_size;
   }

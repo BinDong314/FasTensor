@@ -210,6 +210,18 @@ sim_log("TimeHDF5Write: "<< el2 << " s");
 
 double el3 = uptime();
 
+//Write metadata (geo original and geo dx/dy/dz) for ArrayUDF
+float       attr_data[2][3];
+attr_data[0][0] =  grid->x0; attr_data[0][1] =  grid->y0; attr_data[0][2] =  grid->z0; 
+attr_data[1][0] =  grid->dx; attr_data[1][1] =  grid->dy; attr_data[1][2] =  grid->dz; 
+hsize_t     dims[2];
+dims[0] = 2;   dims[1] = 3;
+hid_t va_geo_dataspace_id = H5Screate_simple(2, dims, NULL);
+hid_t va_geo_attribute_id = H5Acreate2 (file_id, "VPIC-ArrayUDF-GEO", H5T_IEEE_F32BE, va_geo_dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
+H5Awrite(va_geo_attribute_id, H5T_NATIVE_FLOAT, attr_data);
+H5Sclose(va_geo_dataspace_id); H5Aclose(va_geo_attribute_id); 
+
+
 free(temp_buf);
 H5Sclose(filespace);
 H5Sclose(memspace);

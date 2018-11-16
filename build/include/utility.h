@@ -22,12 +22,25 @@
 #include <vector>
 #include <type_traits>
 #include <cstring>
-
+#include <cmath>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 using namespace std;
 
 double time_address_cal = 0, row_major_order_cal = 0, pre_row_major_order_cal=0, data_access_time = 0, trail_run_time = 0;
-inline unsigned long long RowMajorOrder(std::vector<unsigned long long> dsize, std::vector<unsigned long long> coordinate){
+
+
+
+#define ROW_MAJOR_ORDER_MACRO(dsize, dsize_len,  coordinate, offset){ \
+    offset = coordinate[0]; \
+    for (int iii = 1; iii < dsize_len; iii++){  \
+      offset = offset*dsize[iii] + coordinate[iii];     \
+    } \
+}
+
+inline unsigned long long RowMajorOrder(std::vector<unsigned long long> dsize, std::vector<unsigned long long>  coordinate){
   unsigned long long offset = coordinate[0];
   int n = dsize.size();
   for (int i = 1; i < n; i++){
@@ -36,13 +49,21 @@ inline unsigned long long RowMajorOrder(std::vector<unsigned long long> dsize, s
   return offset;
 }
 
-inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long offset, std::vector<unsigned long long> dsize){
+#define ROW_MAJOR_ORDER_REVERSE_MACRO(offset, dsize, dsize_len, result_coord_v){ \
+  unsigned long long temp_offset = offset; \
+  for (int iii = dsize_len-1; iii >= 1; iii--){ \
+    result_coord_v[iii] = temp_offset % dsize[iii]; \
+    temp_offset   = temp_offset / dsize[iii];  \
+  } \
+  result_coord_v[0] = temp_offset;  \
+}
+  
+inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long  offset, std::vector<unsigned long long> dsize){
   int n = dsize.size();
   std::vector<unsigned long long> original_coordinate;
   original_coordinate.resize(n);
   //unsigned long long reminder; 
   for (unsigned long long i = n-1; i >= 1; i--){
-    //reminder = 
     original_coordinate[i] = offset % dsize[i];
     offset   = offset / dsize[i]; 
   }
@@ -59,6 +80,7 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
 }
 
 
+
 inline std::vector<unsigned long long> NextCoordinateAfterSkipWithinChunk(std::vector<unsigned long long> coordinate_at_chunk, std::vector<unsigned long long> skip_size, std::vector<unsigned long long> skiped_chunks_per_orig_chunk){
   int rank = coordinate_at_chunk.size();
   //Determine if coodinate_at_chunk is the first element of the the the skip chunk (not partition chunk)
@@ -70,7 +92,7 @@ inline std::vector<unsigned long long> NextCoordinateAfterSkipWithinChunk(std::v
   unsigned long long chunk_id;  int skip_flag = 0;
   chunk_coordinate.resize(rank); chunk_coordinate_start.resize(rank);
   for(int i = 0; i < rank; i++){
-    //The coordinate of the skip chunk this coordinate belong 
+    //The coordinate of the skip chunk this coordinate belong to 
     chunk_coordinate[i] = coordinate_at_chunk[i]/skip_size[i];
     total_chunks = total_chunks * skiped_chunks_per_orig_chunk[i];
   }
@@ -98,18 +120,87 @@ inline std::vector<unsigned long long> NextCoordinateAfterSkipWithinChunk(std::v
     return chunk_coordinate_start;
   }
 }
+//Return
+// 1: yes, skip this point
+// 0: no,  run computing on it
+inline int SkipIt(std::vector<unsigned long long> coordinate_at_chunk, std::vector<unsigned long long> skip_size){
+  int rank = coordinate_at_chunk.size();
+  //Determine if coodinate_at_chunk is the first element of the the the skip chunk (not partition chunk)
+  //TODO: we now assume each skip chunk starts with (0, 0, 0 , ...), i.e., the left-most element
+  //      we can add some skip to chunk_coordinate_start inside a chunk.
+  //      We also assume one cell per skiped chunk is processed
+  std::vector<unsigned long long> chunk_coordinate, chunk_coordinate_start;
+  //unsigned long long total_chunks = 1;
+  //unsigned long long chunk_id;
+  int skip_flag = 0;
+  chunk_coordinate.resize(rank);
+  chunk_coordinate_start.resize(rank);
+  for(int i = 0; i < rank; i++){
+    //The coordinate of the skip chunk this coordinate belong to 
+    chunk_coordinate[i] = std::floor(coordinate_at_chunk[i]/skip_size[i]);
+    chunk_coordinate_start[i] = chunk_coordinate[i] * skip_size[i];  //first cell's coodinate of this skip chunk
+    if(chunk_coordinate_start[i] != coordinate_at_chunk[i]){  //we only run on the first  element of this skip chunk
+      skip_flag = 1; break;
+    }
+  }
+  //The id of the skip chunk that this choodinate belong
+  //chunk_id = RowMajorOrder(skiped_chunks_per_orig_chunk, chunk_coordinate);
+  //chunk_coordinate = RowMajorOrderReverse(chunk_id, skip_chunks);
+  //for(int i = 0; i < rank; i++){
+  //  chunk_coordinate_start[i] = chunk_coordinate[i] * skip_size[i];  //first cell's coodinate of this skip chunk
+  //  if(chunk_coordinate_start[i] != coordinate_at_chunk[i]){  //we only run on the first  element of this skip chunk
+  //    skip_flag = 1;  // break;
+  //  }
+  //}
+  return skip_flag;
+}
+
+
+void InsertIntoVirtualVectorVoidP(void *insert_vector, void *virtual_vector, int index, size_t length, int type_lenght){
+
+}
+
+template<class T1, class T2 >
+void InsertIntoVirtualVector(const std::vector<T1> &insert_vector, std::vector<T2> &virtual_vector, int index){
+  assert(insert_vector.size() == virtual_vector.size());
+  size_t n = insert_vector.size();
+  for(size_t i = 0; i < n; i++){
+    //memcpy(&(virtual_vector[i])+sizeof(T1)*index, &(insert_vector[i]), sizeof(T1));
+    virtual_vector[i].set_value(index, insert_vector[i]);
+  }
+}
+
+
+template<>
+void InsertIntoVirtualVector(const std::vector<float> &insert_vector, std::vector<float> &virtual_vector, int index){
+}
+
+
+template<>
+void InsertIntoVirtualVector(const std::vector<int> &insert_vector, std::vector<int> &virtual_vector, int index){
+}
+
+template<>
+void InsertIntoVirtualVector(const std::vector<float> &insert_vector, std::vector<int> &virtual_vector, int index){
+}
+
+template<>
+void InsertIntoVirtualVector(const std::vector<int> &insert_vector, std::vector<float> &virtual_vector, int index){
+}
+
+
 
 
 template<typename VT>
 inline void PrintVector(std::string name, std::vector<VT> v){
   int n=v.size();
   std::cout <<  name << ": ";
-  if(n > 40 ){
-     for(int i = 0; i < 10; i++){
+  if(n > 60 ){
+     for(int i = 0; i < 30; i++){
     	std::cout << v[i] << ",";
      }
      std::cout << " ... " ;
-    for(int i = n - 10; i < n ; i++){
+    for(int i = n - 30; i < n ; i++){
     	std::cout << v[i] << ",";
     }
   }else{
@@ -166,5 +257,37 @@ template<typename T>
 void *vv2v(std::vector<T>  &v) {
   return NULL;
 }
+
+
+
+template<typename T>
+void *vv2v_empty(std::vector<std::vector<T>>  &v) {
+  if(v[0].size() == 0){
+    T *rv = (T*)malloc(v.size() * sizeof(T)); //Assuming all rows have the same size
+    if(rv == NULL){
+      printf("Not enough memory (in *vv2v) !\n"); exit(-1);
+    }
+    return (void *)rv;
+  }else{
+    return NULL;
+  }
+}
+
+
+template<typename T>
+void *vv2v_empty(std::vector<T>  &v) {
+  return NULL;
+}
+
+
+//return 
+//1 file exists
+//0 file does not exist
+int file_exist(const char *filename)
+{
+  struct stat  buffer;   
+  return (stat(filename, &buffer) == 0);
+}
+
 
 #endif

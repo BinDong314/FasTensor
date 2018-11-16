@@ -127,8 +127,9 @@ public:
       H5Dclose(did);
     if(gid > 0)
       H5Gclose(gid);
-    if(fid > 0)
-      H5Fclose(fid);
+    if(fid > 0){
+      H5Fflush(fid, H5F_SCOPE_GLOBAL);H5Fclose(fid);
+    }
     plist_id = -1; plist_cio_id=-1;dataspace_id=-1;memspace_id=-1;did=-1;gid=-1;fid=-1;
   }
   std::vector<unsigned long long>  GetDimSize(){
@@ -374,7 +375,7 @@ public:
     if(file_exist(fn_str.c_str()) == 0){
       fid  = H5Fcreate(fn_str.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
     }else{
-      fid  = H5Fopen(fn_str.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
+      fid  = H5Fopen(fn_str.c_str(), H5F_ACC_RDWR, plist_id);
       if(fid < 0)
         fid  = H5Fcreate(fn_str.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
     }
@@ -489,7 +490,7 @@ public:
     plist_id      = H5Pcreate(H5P_FILE_ACCESS);
     H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
-    fid  = H5Fopen(fn_str.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+    fid  = H5Fopen(fn_str.c_str(), H5F_ACC_RDONLY, plist_id);
     if(fid < 0){
       std::cout << "Error happens in open file " << fn_str << std::endl; exit(-1);
     }

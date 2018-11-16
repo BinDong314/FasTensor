@@ -5,13 +5,13 @@
 # It is necessary for linking the library.
 
 # The name that we can dlopen(3).
-dlname='libArrayUDF.0.dylib'
+dlname=''
 
 # Names of this library.
-library_names='libArrayUDF.0.dylib libArrayUDF.dylib'
+library_names=''
 
 # The name of the static archive.
-old_library=''
+old_library='libArrayUDF.a'
 
 # Linker flags that cannot go in dependency_libs.
 inherited_linker_flags=' '
@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/Users/dbin/work/arrayudf-git-svn/build/lib'
+libdir='/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/lib'

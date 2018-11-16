@@ -1,5 +1,5 @@
 #! /bin/bash
-libtoolize --force
+glibtoolize --force
 aclocal -I m4 --install
 autoheader
 automake --force-missing --add-missing --copy 

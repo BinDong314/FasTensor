@@ -140,10 +140,10 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
  /Users/dbin/work/soft/mpich-3.2/build/include/mpi.h \
  /Users/dbin/work/soft/mpich-3.2/build/include/mpicxx.h \
  ../src/array_udf_io.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/hdf5.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5public.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5pubconf.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5version.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/hdf5.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5public.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5pubconf.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5version.h \
  /usr/include/sys/types.h /usr/include/sys/_types/_blkcnt_t.h \
  /usr/include/sys/_types/_blksize_t.h /usr/include/sys/_types/_gid_t.h \
  /usr/include/sys/_types/_in_addr_t.h \
@@ -163,39 +163,47 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
  /usr/include/i386/limits.h /usr/include/i386/_limits.h \
  /usr/include/sys/syslimits.h /usr/include/inttypes.h \
  /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stddef.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5api_adpt.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Apublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Ipublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Opublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Lpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Tpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5ACpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Cpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Dpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Epublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Epubgen.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Fpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Gpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5MMpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Ppublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Zpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5PLpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Rpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Spublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDcore.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDfamily.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDlog.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmpi.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmpio.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmulti.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDsec2.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDstdio.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDdirect.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5api_adpt.h \
+ /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stdbool.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Apublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Ipublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Opublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Lpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Tpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5ACpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Cpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Dpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Epublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Epubgen.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Fpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Gpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5MMpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Ppublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Zpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5PLpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Rpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Spublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDcore.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDdirect.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDfamily.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDlog.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmpi.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmpio.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmulti.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDsec2.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDstdio.h \
  ../src/array_udf_attribute.h ../src/array_udf_h5.h ../src/utility.h \
  /opt/local/include/gcc49/c++/cstring /usr/include/string.h \
- /usr/include/strings.h ../src/array_udf_iarray.h ../src/iarray/iarray.h \
- ../src/iarray/iarray-helper.h /opt/local/include/gcc49/c++/sstream \
+ /usr/include/strings.h /opt/local/include/gcc49/c++/cmath \
+ /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include-fixed/math.h \
+ /usr/include/sys/stat.h /usr/include/sys/_types/_s_ifmt.h \
+ /usr/include/sys/_types/_filesec_t.h /usr/include/unistd.h \
+ /usr/include/sys/unistd.h /usr/include/sys/_types/_posix_vdisable.h \
+ /usr/include/sys/_types/_seek_set.h /usr/include/sys/select.h \
+ /usr/include/sys/_select.h /usr/include/sys/_types/_uuid_t.h \
+ /usr/include/gethostuuid.h ../src/array_udf_iarray.h ../src/iarray.h \
+ ../src/iarray-helper.h /opt/local/include/gcc49/c++/sstream \
  /opt/local/include/gcc49/c++/bits/sstream.tcc \
  /opt/local/include/gcc49/c++/algorithm \
  /opt/local/include/gcc49/c++/utility \
@@ -204,9 +212,7 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
  /opt/local/include/gcc49/c++/bits/algorithmfwd.h \
  /opt/local/include/gcc49/c++/bits/stl_heap.h \
  /opt/local/include/gcc49/c++/bits/stl_tempbuf.h \
- /opt/local/include/gcc49/c++/random /opt/local/include/gcc49/c++/cmath \
- /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include-fixed/math.h \
- /opt/local/include/gcc49/c++/limits \
+ /opt/local/include/gcc49/c++/random /opt/local/include/gcc49/c++/limits \
  /opt/local/include/gcc49/c++/bits/random.h \
  /opt/local/include/gcc49/c++/x86_64-apple-darwin15/bits/opt_random.h \
  /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/x86intrin.h \
@@ -249,11 +255,8 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
  /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/adxintrin.h \
  /opt/local/include/gcc49/c++/bits/random.tcc \
  /opt/local/include/gcc49/c++/numeric \
- /opt/local/include/gcc49/c++/bits/stl_numeric.h /usr/include/unistd.h \
- /usr/include/sys/unistd.h /usr/include/sys/_types/_posix_vdisable.h \
- /usr/include/sys/_types/_seek_set.h /usr/include/sys/select.h \
- /usr/include/sys/_select.h /usr/include/sys/_types/_uuid_t.h \
- /usr/include/gethostuuid.h /opt/local/include/gcc49/c++/cassert \
+ /opt/local/include/gcc49/c++/bits/stl_numeric.h \
+ /opt/local/include/gcc49/c++/cassert \
  /opt/local/include/gcc49/c++/fstream \
  /opt/local/include/gcc49/c++/bits/codecvt.h \
  /opt/local/include/gcc49/c++/x86_64-apple-darwin15/bits/basic_file.h \
@@ -267,13 +270,7 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
  /opt/local/include/gcc49/c++/stdexcept \
  /opt/local/include/gcc49/c++/bits/uses_allocator.h \
  /opt/local/include/gcc49/c++/bits/stl_multimap.h \
- ../src/array_udf_stencil.h ../src/array_udf_ga.h \
- /Users/dbin/work/soft/ga-5.6.1/build/include/ga.h \
- /Users/dbin/work/soft/ga-5.6.1/build/include/gacommon.h \
- /Users/dbin/work/soft/ga-5.6.1/build/include/macommon.h \
- /Users/dbin/work/soft/ga-5.6.1/build/include/typesf2c.h \
- /Users/dbin/work/soft/ga-5.6.1/build/include/macdecls.h \
- /Users/dbin/work/soft/ga-5.6.1/build/include/matypes.h
+ ../src/array_udf_stencil.h
 
 /opt/local/include/gcc49/c++/iostream:
 
@@ -649,13 +646,13 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
 
 ../src/array_udf_io.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/hdf5.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/hdf5.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5public.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5public.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5pubconf.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5pubconf.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5version.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5version.h:
 
 /usr/include/sys/types.h:
 
@@ -721,63 +718,65 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
 
 /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stddef.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5api_adpt.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5api_adpt.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Apublic.h:
+/opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stdbool.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Ipublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Apublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Opublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Ipublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Lpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Opublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Tpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Lpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5ACpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Tpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Cpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5ACpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Dpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Cpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Epublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Dpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Epubgen.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Epublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Fpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Epubgen.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Fpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Gpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5MMpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Gpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Ppublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5MMpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Zpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Ppublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5PLpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Zpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Rpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5PLpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Spublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Rpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDcore.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Spublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDfamily.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDcore.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDlog.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDdirect.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmpi.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDfamily.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmpio.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDlog.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmulti.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmpi.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDsec2.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmpio.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDstdio.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmulti.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDdirect.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDsec2.h:
+
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDstdio.h:
 
 ../src/array_udf_attribute.h:
 
@@ -791,11 +790,37 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
 
 /usr/include/strings.h:
 
+/opt/local/include/gcc49/c++/cmath:
+
+/opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include-fixed/math.h:
+
+/usr/include/sys/stat.h:
+
+/usr/include/sys/_types/_s_ifmt.h:
+
+/usr/include/sys/_types/_filesec_t.h:
+
+/usr/include/unistd.h:
+
+/usr/include/sys/unistd.h:
+
+/usr/include/sys/_types/_posix_vdisable.h:
+
+/usr/include/sys/_types/_seek_set.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/sys/_select.h:
+
+/usr/include/sys/_types/_uuid_t.h:
+
+/usr/include/gethostuuid.h:
+
 ../src/array_udf_iarray.h:
 
-../src/iarray/iarray.h:
+../src/iarray.h:
 
-../src/iarray/iarray-helper.h:
+../src/iarray-helper.h:
 
 /opt/local/include/gcc49/c++/sstream:
 
@@ -816,10 +841,6 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
 /opt/local/include/gcc49/c++/bits/stl_tempbuf.h:
 
 /opt/local/include/gcc49/c++/random:
-
-/opt/local/include/gcc49/c++/cmath:
-
-/opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include-fixed/math.h:
 
 /opt/local/include/gcc49/c++/limits:
 
@@ -909,22 +930,6 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
 
 /opt/local/include/gcc49/c++/bits/stl_numeric.h:
 
-/usr/include/unistd.h:
-
-/usr/include/sys/unistd.h:
-
-/usr/include/sys/_types/_posix_vdisable.h:
-
-/usr/include/sys/_types/_seek_set.h:
-
-/usr/include/sys/select.h:
-
-/usr/include/sys/_select.h:
-
-/usr/include/sys/_types/_uuid_t.h:
-
-/usr/include/gethostuuid.h:
-
 /opt/local/include/gcc49/c++/cassert:
 
 /opt/local/include/gcc49/c++/fstream:
@@ -956,17 +961,3 @@ udf-example.o: udf-example.cpp /opt/local/include/gcc49/c++/iostream \
 /opt/local/include/gcc49/c++/bits/stl_multimap.h:
 
 ../src/array_udf_stencil.h:
-
-../src/array_udf_ga.h:
-
-/Users/dbin/work/soft/ga-5.6.1/build/include/ga.h:
-
-/Users/dbin/work/soft/ga-5.6.1/build/include/gacommon.h:
-
-/Users/dbin/work/soft/ga-5.6.1/build/include/macommon.h:
-
-/Users/dbin/work/soft/ga-5.6.1/build/include/typesf2c.h:
-
-/Users/dbin/work/soft/ga-5.6.1/build/include/macdecls.h:
-
-/Users/dbin/work/soft/ga-5.6.1/build/include/matypes.h:

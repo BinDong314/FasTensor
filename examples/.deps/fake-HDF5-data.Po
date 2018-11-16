@@ -30,10 +30,10 @@ fake-HDF5-data.o: fake-HDF5-data.c /usr/include/stdlib.h \
  /usr/include/sys/_types/_wchar_t.h /usr/include/sys/_types/_null.h \
  /usr/include/machine/types.h /usr/include/i386/types.h \
  /usr/include/sys/_types/_dev_t.h /usr/include/sys/_types/_mode_t.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/hdf5.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5public.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5pubconf.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5version.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/hdf5.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5public.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5pubconf.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5version.h \
  /usr/include/sys/types.h /usr/include/sys/_types/_blkcnt_t.h \
  /usr/include/sys/_types/_blksize_t.h /usr/include/sys/_types/_gid_t.h \
  /usr/include/sys/_types/_in_addr_t.h \
@@ -63,43 +63,46 @@ fake-HDF5-data.o: fake-HDF5-data.c /usr/include/stdlib.h \
  /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include-fixed/syslimits.h \
  /usr/include/limits.h /usr/include/machine/limits.h \
  /usr/include/i386/limits.h /usr/include/i386/_limits.h \
- /usr/include/sys/syslimits.h /usr/include/inttypes.h \
+ /usr/include/sys/syslimits.h \
+ /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stdarg.h \
+ /usr/include/inttypes.h \
  /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stddef.h \
  /Users/dbin/work/soft/mpich-3.2/build/include/mpi.h \
  /Users/dbin/work/soft/mpich-3.2/build/include/mpio.h \
  /Users/dbin/work/soft/mpich-3.2/build/include/mpi.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5api_adpt.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Apublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Ipublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Opublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Lpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Tpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5ACpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Cpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Dpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Epublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5api_adpt.h \
+ /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stdbool.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Apublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Ipublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Opublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Lpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Tpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5ACpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Cpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Dpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Epublic.h \
  /usr/include/stdio.h /usr/include/sys/_types/_va_list.h \
  /usr/include/sys/stdio.h /usr/include/secure/_stdio.h \
  /usr/include/secure/_common.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Epubgen.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Fpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Gpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5MMpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Ppublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Zpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5PLpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Rpublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Spublic.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDcore.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDfamily.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDlog.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmpi.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmpio.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmulti.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDsec2.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDstdio.h \
- /Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDdirect.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Epubgen.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Fpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Gpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5MMpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Ppublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Zpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5PLpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Rpublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Spublic.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDcore.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDdirect.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDfamily.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDlog.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmpi.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmpio.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmulti.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDsec2.h \
+ /Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDstdio.h \
  /usr/include/getopt.h /usr/include/unistd.h /usr/include/sys/unistd.h \
  /usr/include/sys/_types/_posix_vdisable.h \
  /usr/include/sys/_types/_seek_set.h /usr/include/sys/select.h \
@@ -222,13 +225,13 @@ fake-HDF5-data.o: fake-HDF5-data.c /usr/include/stdlib.h \
 
 /usr/include/sys/_types/_mode_t.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/hdf5.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/hdf5.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5public.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5public.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5pubconf.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5pubconf.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5version.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5version.h:
 
 /usr/include/sys/types.h:
 
@@ -316,6 +319,8 @@ fake-HDF5-data.o: fake-HDF5-data.c /usr/include/stdlib.h \
 
 /usr/include/sys/syslimits.h:
 
+/opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stdarg.h:
+
 /usr/include/inttypes.h:
 
 /opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stddef.h:
@@ -326,25 +331,27 @@ fake-HDF5-data.o: fake-HDF5-data.c /usr/include/stdlib.h \
 
 /Users/dbin/work/soft/mpich-3.2/build/include/mpi.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5api_adpt.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5api_adpt.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Apublic.h:
+/opt/local/lib/gcc49/gcc/x86_64-apple-darwin15/4.9.4/include/stdbool.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Ipublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Apublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Opublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Ipublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Lpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Opublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Tpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Lpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5ACpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Tpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Cpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5ACpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Dpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Cpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Epublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Dpublic.h:
+
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Epublic.h:
 
 /usr/include/stdio.h:
 
@@ -356,43 +363,43 @@ fake-HDF5-data.o: fake-HDF5-data.c /usr/include/stdlib.h \
 
 /usr/include/secure/_common.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Epubgen.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Epubgen.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Fpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Fpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Gpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Gpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5MMpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5MMpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Ppublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Ppublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Zpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Zpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5PLpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5PLpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Rpublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Rpublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5Spublic.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5Spublic.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDcore.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDcore.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDfamily.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDdirect.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDlog.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDfamily.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmpi.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDlog.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmpio.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmpi.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDmulti.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmpio.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDsec2.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDmulti.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDstdio.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDsec2.h:
 
-/Users/dbin/work/soft/hdf5-1.8.18/build//include/H5FDdirect.h:
+/Users/dbin/work/soft/hdf5-1.10.3/build//include/H5FDstdio.h:
 
 /usr/include/getopt.h:
 
