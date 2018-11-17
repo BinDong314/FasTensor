@@ -54,127 +54,74 @@ struct Particle{
 };
 
 
-Array<int> *np_local;
+Array<int>   *np_local;
 Array<float> *x0v;
-Array<float> *nx;
 Array<float> *dx;
 Array<float> *y0v;
-Array<float> *ny;
 Array<float> *dy;
 Array<float> *z0v;
-Array<float> *nz;
 Array<float> *dz;
 
+Array<int> *nx;
+Array<int> *ny;
+Array<int> *nz;
 
-#define DOMAIN_NUM 2048
 
-inline int find_domain_index(unsigned long long particle_offset){
-  int domain_index = 0;
-  int np_local_acc = 0;
-  for(int i = 0; i < DOMAIN_NUM; i++){
-    domain_index = i;
-    if (particle_offset > np_local_acc &&  particle_offset < (np_local_acc + np_local->operator()(i) ) ){
-      break;
-    }
-    np_local_acc = np_local_acc + np_local->operator()(i);
-  }
-  return domain_index;
-}
+//This is intilized by np-get
+int np_total_domains;
 
-#define FIND_DOMAIN_INDEX_MACRO(particle_offset_m, domain_index_m){ \
-  unsigned long long np_local_acc = 0;  \
-  int  np_local_acc_temp; \
-  for(int i = 0; i < DOMAIN_NUM; i++){ \
-    domain_index_m = i; \
-    np_local_acc_temp = np_local->operator()(i); \
-    if (particle_offset_m > np_local_acc &&  particle_offset_m < (np_local_acc + np_local_acc_temp ) ){ \
-      break; \
-    } \
-    np_local_acc = np_local_acc + np_local_acc_temp; \
-  } \
-}
 
-int prev_domain_index = 0;
-unsigned long long prev_np_local_acc =  0 ;
-int              prev_np_local_acc_temp = 0;
+
 inline float Domain_UDF(const Stencil<float> &p){
   unsigned long long particle_offset = p.get_id();
-  if(particle_offset >= prev_np_local_acc && particle_offset < (prev_np_local_acc + prev_np_local_acc_temp))
-    return (float) prev_domain_index;
-  
   int   domain_index;
   unsigned long long np_local_acc = 0;  
-  int np_local_acc_temp;
-  for(int i = prev_domain_index; i < DOMAIN_NUM; i++){ 
-    domain_index = i;                         
-    np_local_acc_temp = np_local->operator()(i); 
-    if (particle_offset >= np_local_acc &&  particle_offset < (np_local_acc + np_local_acc_temp ) ){
+  for(domain_index = 0; domain_index < np_total_domains; domain_index++){ 
+    if (particle_offset >= np_local_acc  &&  particle_offset < (np_local_acc + np_local->operator()(domain_index))){
       break; 
     } 
-    np_local_acc = np_local_acc + np_local_acc_temp; 
+    np_local_acc = np_local_acc + np_local->operator()(domain_index); 
   }
-  
-  prev_domain_index = domain_index;    
-  prev_np_local_acc = np_local_acc;
-  prev_np_local_acc_temp = np_local_acc_temp;
-  
-  return (float) (domain_index) ;   
+  return (float) domain_index ;   
 }
 
 
-int nx_v = 0;
-int x_udf_prev_domain_index = -1;
-float dx_v = 0;
-float x0_v = 0;
 
 //x =  ( i%(nx[0] +2)   + (dX-1) /2.0 ) * dx[0] + x0[0]  = ...
 inline float X_UDF(const Stencil<Particle> &p) 
 {
   Particle pt = p(0);
-  int   domain_index = (int) (pt.domain_id);
-  if(x_udf_prev_domain_index != domain_index){
-    nx_v = (int) (nx->operator()(domain_index));
-    dx_v = dx->operator()(domain_index);
-    x0_v = x0v->operator()(domain_index);
-    x_udf_prev_domain_index = domain_index;
-  }
-  //if(p.get_id() < 10)
-  //printf("domain_index＝%d, nx_v = %d , dx_v= %f, x0_v = %f, pd.dX=%f, x0_v=%f \n ", domain_index, nx_v, dx_v, x0_v, pt.dX, x0_v);
-  //x_v = 
-  return  ( ((int)(pt.i)) % ( nx_v + 2) + (pt.dX - 1)/2.0 ) * dx_v + x0_v;
+  int    domain_index = (int) (pt.domain_id);
+  int    nx_v = nx->operator()(domain_index);
+  float  dx_v = dx->operator()(domain_index);
+  float  x0_v = x0v->operator()(domain_index);
+
+  return  ( domain_index % ( nx_v + 2) + (pt.dX - 1)/2.0 ) * dx_v + x0_v;
 }
 
 inline float Y_UDF(const Stencil<Particle> &p) 
 {
   Particle pt = p(0);
-  float y_v, dy_v, y0_v;
-  int   domain_index;
-  //domain_index = find_domain_index(p.get_id());
-  domain_index = (int) (pt.domain_id);
+  int domain_index = (int) (pt.domain_id);
   int ny_v = ny->operator()(domain_index);
-  dy_v = dy->operator()(domain_index);
-  y0_v = y0v->operator()(domain_index);
   int nx_v = ny->operator()(domain_index);
-
-  y_v = ( (int)(pt.i / (nx_v + 2))%(ny_v + 2) + (pt.dY - 1)/2.0 ) * dy_v + y0_v;
-  return  y_v;
+  float dy_v     = dy->operator()(domain_index);
+  float y0_v     = y0v->operator()(domain_index);
+  return  ((domain_index / (nx_v + 2))%(ny_v + 2) + (pt.dY - 1)/2.0 ) * dy_v + y0_v;
 }
 
 inline float Z_UDF(const Stencil<Particle> &p) 
 {
   Particle pt = p(0);
-  float z_v, dz_v, z0_v;
-  int   domain_index;
-  //domain_index = find_domain_index(p.get_id());
-  domain_index = (int) (pt.domain_id);
-  int nz_v = nz->operator()(domain_index);
-  dz_v = dz->operator()(domain_index);
-  z0_v = z0v->operator()(domain_index);
-  int ny_v = ny->operator()(domain_index);
-  int nx_v = nx->operator()(domain_index);
+  int domain_index = (int) (pt.domain_id);
+  float dz_v = dz->operator()(domain_index);
+  float z0_v = z0v->operator()(domain_index);
   
-  z_v = ( (float)pt.i / ((nx_v + 2) * (ny_v + 2)) + (pt.dZ - 1)/2.0 ) * dz_v + z0_v;
-  return  z_v;
+  int nx_v = nx->operator()(domain_index);
+  int ny_v = ny->operator()(domain_index);
+  int nz_v = nz->operator()(domain_index);
+  printf("domain_index = %d, dz_v = %f, z0_v = %f, nx_v = %d, ny_v = %d, nz_v = %d, pt.dZ = %f \n " , domain_index,  dz_v, dz_v, z0_v, nx_v, ny_v, nz_v, pt.dZ);
+  return (domain_index / ((nx_v + 2) * (ny_v + 2)) + (pt.dZ - 1)/2.0 ) * dz_v + z0_v;
 }
 
 
@@ -188,33 +135,22 @@ inline float I_UDF(const Stencil<int> &c){
 
 int main(int argc, char *argv[])
 {
-  int cache_flag = 0, backward_flag = 0, mirrors_flag = 0, replace_flag = 0, copt, writeback_flag = 0, convert_flag = 0;
-  int c_size = 12288, o_size = 1;
-  int f_value = 0;
+  int convert_flag = 1, copt;
+  int c_size = 3277, o_size = 0;  
   
-  
-  // create an instance of the myArray class 
-  // 23488064664
-  char i_file[1024]="/global/cscratch1/sd/dbin/de-test-all-osts/vpic-small-mag3/particle/T.2/eparticle.h5p";
-  char t_file[1024]="/global/cscratch1/sd/dbin/de-test-all-osts/vpic-small-mag3/particle/T.2/grid_metadata.h5p";
-  char o_file[1024]="/global/cscratch1/sd/dbin/de-test-all-osts/vpic-small-mag3/particle/T.2/eparticle-new.h5p";
-  char o_file_x[1024]="/global/cscratch1/sd/dbin/de-test-all-osts/vpic-small-mag3/particle/T.2/eparticle-new-x.h5p";
-  char o_file_y[1024]="/global/cscratch1/sd/dbin/de-test-all-osts/vpic-small-mag3/particle/T.2/eparticle-new-y.h5p";
-  char o_file_z[1024]="/global/cscratch1/sd/dbin/de-test-all-osts/vpic-small-mag3/particle/T.2/eparticle-new-z.h5p";
+  char p_file[1024]="/Users/dbin/work/vpic-hdf5/vpic/build/testdir/particle/T.50/electron_50.h5part";
+  char m_file[1024]="/Users/dbin/work/vpic-hdf5/vpic/build/testdir/particle/T.50/grid_metadata_electron_50.h5part";
+  char o_file[1024]="/Users/dbin/work/vpic-hdf5/vpic/build/testdir/particle/T.50/electron_50_arrayudf.h5part";
 
   
-  char  group[1024]="/Step#2";
-  char dataset[1024]="/Step#2/dX";
+  char  group[1024]="/Step#50";
 
-  std::vector<int> chunk_size(1) ;
-  std::vector<int> overlap_size(1);
-  chunk_size[0]   = 80000000; 
-  overlap_size[0] = 0; 
 
-  while ((copt = getopt (argc, argv, "cbmrwo:i:g:d:t:s:h:f:e")) != -1)
+
+  while ((copt = getopt (argc, argv, "cs:h:p:m:g:m:o:")) != -1)
     switch (copt)
     {
-      case 'e':
+      case 'c':
         convert_flag = 1;
         break;
       case 's':
@@ -223,104 +159,94 @@ int main(int argc, char *argv[])
       case 'h':
         o_size = atoi(optarg);
         break;	
-      case 'f':
-        f_value = atoi(optarg);
-        break;	
-      case 'c':
-        cache_flag = 1;
-        break;
-      case 'b':
-        backward_flag = 1;
-        break;
+      case 'p':
+	       memset(p_file, 0, sizeof(p_file));
+         strcpy(p_file, optarg);
+	       break;
       case 'm':
-        mirrors_flag = 1;
-        break;
-      case 'r':
-        replace_flag = 1;
-        break;
-      case 'w':
-        writeback_flag = 1;
-        break;
-      case 'o':
-	memset(o_file, 0, sizeof(o_file));
-        strcpy(o_file, optarg);
-	break;
-      case 'i':
-	memset(i_file, 0, sizeof(i_file));
-	strcpy(i_file, optarg);
-	break;
+    	   memset(m_file, 0, sizeof(m_file));
+	       strcpy(m_file, optarg);
+	       break;
       case 'g':
         memset(group, 0, sizeof(group));
         strcpy(group, optarg);
-	break;
-      case 'd':
-	memset(dataset, 0, sizeof(dataset));
-        strcpy(dataset, optarg);
-	break;
+	       break;
+      case 'o':
+         memset(o_file, 0, sizeof(o_file));
+         strcpy(o_file, optarg);
+         break;
       default:
         break;
     }
   
+  std::vector<int> chunk_size(1) ;
+  std::vector<int> overlap_size(1);
+  chunk_size[0]   = c_size; 
+  overlap_size[0] = o_size; 
+
+
   MPI_Init(&argc, &argv);
 
   if(convert_flag == 1){
-    //Array<int, float> *i0 = new Array<int, float>(AU_NVS,  AU_HDF5, i_file, group,   "i", chunk_size, overlap_size);
-    //Array<float> *i1 = new Array<float>(AU_COMPUTED,  AU_HDF5, o_file, group,   "if", chunk_size, overlap_size);
-    //i0->Apply(I_UDF, i1);
-    //delete i0;
-    //delete i1;
+    Array<int, float> *iINT = new Array<int, float>(AU_NVS,    AU_HDF5,  p_file, group,   "i", chunk_size, overlap_size);
+    Array<float>      *iFLOAT = new Array<float>(AU_COMPUTED,  AU_HDF5,  p_file, group,   "if", chunk_size, overlap_size);
+    iINT->Apply(I_UDF, iFLOAT);
+    delete iINT;
+   
 
-    np_local = new Array<int>(AU_NVS, AU_HDF5, t_file, group, "np_local", AU_PRELOAD);
-    Array<float> *ii1 = new Array<float>(AU_NVS,  AU_HDF5, o_file, group,   "if", chunk_size, overlap_size);
-    Array<float> *ii2 = new Array<float>(AU_COMPUTED,  AU_HDF5, "/global/cscratch1/sd/dbin/de-test-all-osts/vpic-small-mag3/particle/T.2/eparticle-new2.h5p", group,   "domain_id", chunk_size, overlap_size);
-    ii1->Apply(Domain_UDF, ii2);
-    delete ii1;
-    delete ii2;
+    np_local = new Array<int>(AU_NVS, AU_HDF5, m_file, group,  "np_local", AU_PRELOAD);
+    np_total_domains = np_local->GetDims()[0];
+    printf("Totoal domains = %d \n", np_total_domains);
+    Array<float> *domainID = new Array<float>(AU_COMPUTED,  AU_HDF5,   p_file, group, "domain_id", chunk_size, overlap_size);
+    iFLOAT->Apply(Domain_UDF, domainID);
+    
     delete np_local;
-    return 0;
+    delete iFLOAT;
+    delete domainID;
+    //return 0;
   }
   
   
   //Orginal data set
-  Array<float> *dX = new Array<float>(AU_NVS,  AU_HDF5, i_file, group, "dX", chunk_size, overlap_size);
+  Array<float> *dX        = new Array<float>(AU_NVS,  AU_HDF5, p_file, group,   "dX", chunk_size, overlap_size);
   //Orginal data set
-  Array<float> *dY = new Array<float>(AU_NVS,  AU_HDF5,  i_file, group, "dY",  chunk_size, overlap_size);
+  Array<float> *dY        = new Array<float>(AU_NVS,  AU_HDF5, p_file, group,   "dY",  chunk_size, overlap_size);
   //Orginal data set
-  Array<float> *dZ = new Array<float>(AU_NVS,  AU_HDF5, i_file, group,  "dZ", chunk_size, overlap_size);
+  Array<float> *dZ        = new Array<float>(AU_NVS,  AU_HDF5, p_file, group,   "dZ", chunk_size, overlap_size);
   //Orginal data set
-  Array<float> *i = new Array<float>(AU_NVS,  AU_HDF5, i_file, group,   "if", chunk_size, overlap_size);
-  Array<float> *domain_id = new Array<float>(AU_NVS,  AU_HDF5, i_file, group,   "domain_id", chunk_size, overlap_size);
+  Array<float> *i         = new Array<float>(AU_NVS,  AU_HDF5, p_file, group,   "if", chunk_size, overlap_size);
+  Array<float> *domain_id = new Array<float>(AU_NVS,  AU_HDF5, p_file, group,   "domain_id", chunk_size, overlap_size);
 
   
   Array<Particle, float> *P = new Array<Particle, float>(AU_VIRTUAL);
   P->SetAttributes(dX, dY, dZ, i, domain_id); //Todo: change to pushback()
 
   //np_local = new Array<int>(AU_NVS, AU_HDF5, t_file, group, "np_local", AU_PRELOAD);
-  x0v       = new Array<float>(AU_NVS, AU_HDF5, t_file, group, "x0", AU_PRELOAD);
-  nx       = new Array<float>(AU_NVS, AU_HDF5, t_file, group, "nx", AU_PRELOAD);
-  dx       = new Array<float>(AU_NVS, AU_HDF5, t_file, group, "dx", AU_PRELOAD);
-  y0v       = new Array<float>(AU_NVS, AU_HDF5, t_file, group, "y0", AU_PRELOAD);
-  ny       = new Array<float>(AU_NVS, AU_HDF5, t_file, group, "ny", AU_PRELOAD);
-  dy       = new Array<float>(AU_NVS, AU_HDF5, t_file, group, "dy", AU_PRELOAD);
-  z0v       = new Array<float>(AU_NVS, AU_HDF5, t_file, group, "z0", AU_PRELOAD);
-  nz       = new Array<float>(AU_NVS, AU_HDF5, t_file, group, "nz", AU_PRELOAD);
-  dz       = new Array<float>(AU_NVS, AU_HDF5, t_file, group, "dz", AU_PRELOAD);
+  x0v       = new Array<float>(AU_NVS, AU_HDF5,  m_file, group, "x0", AU_PRELOAD);
+  y0v       = new Array<float>(AU_NVS, AU_HDF5,  m_file, group, "y0", AU_PRELOAD);
+  z0v       = new Array<float>(AU_NVS, AU_HDF5,  m_file, group, "z0", AU_PRELOAD);
+
+  nx        = new Array<int>(AU_NVS, AU_HDF5,  m_file, group, "nx", AU_PRELOAD);
+  ny        = new Array<int>(AU_NVS, AU_HDF5,  m_file, group, "ny", AU_PRELOAD);
+  nz        = new Array<int>(AU_NVS, AU_HDF5,  m_file, group, "nz", AU_PRELOAD);
+
+  dx        = new Array<float>(AU_NVS, AU_HDF5,  m_file, group, "dx", AU_PRELOAD);
+  dy        = new Array<float>(AU_NVS, AU_HDF5,  m_file, group, "dy", AU_PRELOAD);
+  dz        = new Array<float>(AU_NVS, AU_HDF5,  m_file, group, "dz", AU_PRELOAD);
   
 
   
   //Results data sets
-  Array<float> *X = new Array<float>(AU_COMPUTED, AU_HDF5, o_file_x, group, "x", chunk_size, overlap_size);
-  //Results data sets
-  Array<float> *Y = new Array<float>(AU_COMPUTED, AU_HDF5, o_file_y, group, "y", chunk_size, overlap_size);
-  //Results data sets
-  Array<float> *Z = new Array<float>(AU_COMPUTED, AU_HDF5, o_file_z, group, "z", chunk_size, overlap_size);
+  Array<float> *X = new Array<float>(AU_COMPUTED, AU_HDF5, p_file, group, "x", chunk_size, overlap_size);
+  Array<float> *Y = new Array<float>(AU_COMPUTED, AU_HDF5, p_file, group, "y", chunk_size, overlap_size);
+  Array<float> *Z = new Array<float>(AU_COMPUTED, AU_HDF5, p_file, group, "z", chunk_size, overlap_size);
 
   
   P->Apply(X_UDF, X);  
   P->Apply(Y_UDF, Y);  
   P->Apply(Z_UDF, Z);  
   
-  MPI_Finalize();
+  
 
   //Clear
   delete dX;
@@ -329,11 +255,10 @@ int main(int argc, char *argv[])
   delete i;
   delete domain_id;
   delete X;
-  //delete Y;
-  //delete Z;
+  delete Y;
+  delete Z;
   delete P;
 
-  //delete np_local;
   delete x0v;
   delete nx;
   delete dx;
@@ -344,5 +269,6 @@ int main(int argc, char *argv[])
   delete nz;
   delete dz;
 
+  MPI_Finalize();
   return 0; 
 }

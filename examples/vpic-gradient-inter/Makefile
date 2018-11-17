@@ -3,10 +3,13 @@ HDF5_DIR=/Users/dbin/work/soft/hdf5-1.10.3/build/
 
 
 .PHONY:all
-all:element-wise 
+all:element-wise vpic-xyz-global-position
 
 element-wise:element-wise.cpp  
 	mpic++ -o  element-wise          element-wise.cpp            -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
 
+vpic-xyz-global-position:vpic-xyz-global-position.cpp
+	mpic++ -o vpic-xyz-global-position  vpic-xyz-global-position.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
+
 clean:
-	rm element-wise
+	rm element-wise vpic-xyz-global-position
