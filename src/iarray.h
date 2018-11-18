@@ -109,6 +109,7 @@ void ReadLocalArray( T* pdata, const iArrayLocal& g, T *buf) {
     //int mpi_size, mpi_rank;
     //MPI_Comm_size(MPI_COMM_WORLD,&mpi_size); 
     //MPI_Comm_rank(MPI_COMM_WORLD,&mpi_rank);
+    //printf("g.rank = %d \n", g.rank);
     switch(g.rank){
       case 1:
         {std::vector<int> coordinate(1);
@@ -140,6 +141,7 @@ void ReadLocalArray( T* pdata, const iArrayLocal& g, T *buf) {
               coordinate[0] = row;
               coordinate[1] = column;
               coordinate[2] = z;
+              //printf("ijk = (%d, %d, %d), value = %f \n", coordinate[0], coordinate[1], coordinate[2], buf[buf_index]);
               buf[buf_index] =  a(coordinate);
               buf_index  = buf_index + 1;
           }

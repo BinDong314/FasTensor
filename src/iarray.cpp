@@ -29,8 +29,12 @@ int iArray_create(std::vector<unsigned long long> dims, std::vector<int> ghost_s
   std::vector< int > cart_dims;
   int each_rank_has_one_copy_flag = 1;
   for(int i = 0 ; i < dims.size(); i++){
+    printf(" i = %d, dims[] =%lld  chunk_size[] = %d \n ", i, dims[i], chunk_size[i]);
     if( dims[i]  != chunk_size[i]) each_rank_has_one_copy_flag = 0;
   }
+
+
+  printf("each_rank_has_one_copy_flag =  %d \n ", each_rank_has_one_copy_flag);
 
   std::vector< int > coords(dims.size(), -1 );
   if(each_rank_has_one_copy_flag != 1){
@@ -46,7 +50,7 @@ int iArray_create(std::vector<unsigned long long> dims, std::vector<int> ghost_s
     MPI_Cart_create( MPI_COMM_WORLD, dims.size(), &cart_dims[ 0 ], &periods[ 0 ], reorder, &cartcomm ); 
     iArray_new->cartcomm = cartcomm;
     MPI_Comm_rank( cartcomm, &task );
-#ifdef DEBUG
+//#ifdef DEBUG
     if(task == 0){
       std::cout << "Cart dims for iArray: ";
       for(int i = 0 ; i < dims.size(); i++){
@@ -54,7 +58,7 @@ int iArray_create(std::vector<unsigned long long> dims, std::vector<int> ghost_s
       }
       std::cout << "\n";
     }
-#endif
+//#endif
     MPI_Cart_coords( cartcomm, task, dims.size(), &coords[ 0 ] );
     iArray_new->mpi_rank = task;
     iArray_new->mpi_size = numtasks;
@@ -98,6 +102,7 @@ int iArray_create(std::vector<unsigned long long> dims, std::vector<int> ghost_s
     local_data_size_temp = local_size[i] * local_data_size_temp;
   }
 
+  printf("local_data_size_temp = %d \n", local_data_size_temp);
   //iArray_new->local_array = iArrayLocalAccessor( local_size[1], local_size[0],  local_size[1]);
   iArray_new->local_array = iArrayLocal(local_size, local_size);
   

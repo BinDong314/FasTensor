@@ -1618,7 +1618,8 @@ void Apply(T (*UDF)(void *), Array<T> *B){
         std::vector<unsigned long long> coordinate(3, 0);
         coordinate[0]=idx;coordinate[1]=idy;coordinate[2]=idz;
         ROW_MAJOR_ORDER_MACRO(data_dims_size, data_dims_size.size(), coordinate, offset)
-        data->ReadPreloadPointAtOffset(offset);
+        //printf(" idxyz = (%d, %d, %d), offset=%lld \n", idx, idy, idz, offset);
+        return data->ReadPreloadPointAtOffset(offset);
       }
     }else{  
       int n = attributes.size();
