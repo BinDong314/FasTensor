@@ -140,10 +140,10 @@ int main(int argc, char *argv[])
   int convert_flag = 0, copt;
   int c_size = 3277, o_size = 0;  
   
-  char p_file[1024]="/Users/dbin/work/vpic-hdf5/vpic/build/testdir/particle/T.50/electron_50.h5part";
-  char m_file[1024]="/Users/dbin/work/vpic-hdf5/vpic/build/testdir/particle/T.50/grid_metadata_electron_50.h5part";
+  char p_file[1024]="/Users/dbin/work/vpic-hdf5/vpic/build/testdir/particle_hdf5/T.50/electron_50.h5";
+  char m_file[1024]="/Users/dbin/work/vpic-hdf5/vpic/build/testdir/particle_hdf5/T.50/grid_metadata_electron_50.h5";
   
-  char  group[1024]="/Step#50";
+  char  group[1024]="/Timestep_50";;
 
 
 

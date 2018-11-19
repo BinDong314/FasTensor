@@ -409,13 +409,17 @@ public:
     switch (type_class){
       case H5T_INTEGER:
         if (gn_str != root_dir){
-          did = H5Dcreate(gid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-          if(did < 0)
+          if(H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) == 0){
+            did = H5Dcreate(gid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+          }else{
             did  = H5Dopen(gid,  dn_str.c_str(),  H5P_DEFAULT);
+          }
         }else{
-          did = H5Dcreate(fid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-          if(did < 0)
+          if(H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) == 0){
+            did = H5Dcreate(fid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+          }else{            
             did  = H5Dopen(gid,  dn_str.c_str(),  H5P_DEFAULT);
+          } 
         }
         break;
       case H5T_FLOAT:

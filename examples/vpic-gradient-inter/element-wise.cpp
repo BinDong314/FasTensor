@@ -237,7 +237,12 @@ int main(int argc, char *argv[])
     hsize_t     dims[1]; dims[0] =1;
     hid_t dataspace_id = H5Screate_simple(1, dims, NULL);
     hid_t group_id  =H5Gopen(squared_absJ_file_id, group, H5P_DEFAULT);
-    hid_t dataset_id = H5Dcreate(group_id, "squared_absJ", H5T_IEEE_F32BE, dataspace_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    hid_t dataset_id;
+    if(H5Lexists(group_id, "squared_absJ", H5P_DEFAULT) == 0){
+      dataset_id = H5Dcreate(group_id, "squared_absJ", H5T_IEEE_F32BE, dataspace_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    }else{
+      dataset_id = H5Dopen(group_id, "squared_absJ",  H5P_DEFAULT);
+    }
     H5Dwrite(dataset_id, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &final_squared_absJ);
     H5Dclose(dataset_id); H5Gclose(group_id);H5Sclose(dataspace_id); H5Fclose(squared_absJ_file_id);
  
@@ -252,7 +257,7 @@ int main(int argc, char *argv[])
 
   std::vector<unsigned long long> output_array_size; output_array_size.resize(3);
   output_array_size = EX->GetDimSize();
-  char xml_output_file[1024], hdf5_file_dataset1[1024], hdf5_file_dataset2[1024], hdf5_file_dataset3[1024], hdf5_file_dataset4[1024];
+  char xml_output_file[1024], hdf5_file_dataset1[1024], hdf5_file_dataset2[1024], hdf5_file_dataset3[1024], hdf5_file_dataset4[1024], hdf5_file_dataset5[1024];
   char dimensions[128], origin_dxdydz_dimensions[128], origin[128], dxdydz[128], attribute_name1[128], attribute_name2[128], attribute_name3[128], attribute_name4[128]; 
 
   sprintf(xml_output_file, "%s.xmf", o_file);
