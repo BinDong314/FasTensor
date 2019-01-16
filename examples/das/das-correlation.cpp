@@ -163,8 +163,8 @@ int main(int argc, char *argv[])
 
   MPI_Init(&argc, &argv);
   //Array<float> *A = new Array<float>(AU_NVS,  AU_HDF5, i_file, group, dataset, chunk_size, overlap_size);
-  Array<float> * IFILE = new Array<float>(AU_NVS,       AU_HDF5, i_file, group, dataset, chunk_size, ghost_size);
-  Array<float> * OFILE = new Array<float>(AU_COMPUTED,  AU_HDF5, o_file, group, dataset, chunk_size, ghost_size);
+  Array<int, float> * IFILE = new Array<int float>(AU_NVS,       AU_HDF5, i_file, group, dataset, chunk_size, ghost_size);
+  Array<float>      * OFILE = new Array<float>(AU_COMPUTED,  AU_HDF5, o_file, group, dataset, chunk_size, ghost_size);
   
   if(strip_flag) IFILE->SetApplyStripSize(strip_size); 
   //rank, dims, chunk_size, overlap_siz

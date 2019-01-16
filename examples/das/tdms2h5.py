@@ -14,13 +14,13 @@ def usage():
 
 def tdms2ht(input_tdms_file, output_hdf_file, hdf_dataset, compression_flag):
     tdms_file = TdmsFile(input_tdms_file)
-    df=tdms_file.as_dataframe().astype(float)
+    df=tdms_file.as_dataframe()
     f = h5py.File(output_hdf_file, "w")
 
     if compression_flag == True:
-        f.create_dataset(hdf_dataset, data=df.values, dtype='f4',  compression="gzip")
+        f.create_dataset(hdf_dataset, data=df.values, dtype='i2',  compression="gzip")
     else:
-        f.create_dataset(hdf_dataset, data=df.values, dtype='f4')
+        f.create_dataset(hdf_dataset, data=df.values, dtype='i2')
 
     f.close()
 
