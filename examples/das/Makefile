@@ -3,7 +3,7 @@
 
 
 .PHONY:all
-all:das-correlation h5-vds-merge
+all:das-correlation h5-vds-merge tdms2h5
 
 das-correlation:das-correlation.cpp  
 	mpiCC -o das-correlation das-correlation.cpp -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
@@ -11,6 +11,9 @@ das-correlation:das-correlation.cpp
 h5-vds-merge:h5-vds-merge.c  
 	mpiCC -o h5-vds-merge h5-vds-merge.c -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
 
+tdms2h5:tdms2h5.c
+	#echo $(HDF5_DIR)
+	mpiCC -o tdms2h5 tdms2h5.c  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
 
 clean:
-	rm das-correlation h5-vds-merge
+	rm das-correlation h5-vds-merge tdms2h5

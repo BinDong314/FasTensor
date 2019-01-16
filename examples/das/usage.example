@@ -1,21 +1,15 @@
 
 
 Overview:
-1) use tdms2h5.py to convert tdms files into HDF5 files
-2) use h5-vds-merge to group all HDF5 files into a single HDF5
-3) run das-correlation on the sinle HDF5 to calculate local similarity 
+1) use "tdms2h5" to convert TDMS files into HDF5 files
+2) use "h5-vds-merge" to group all HDF5 files into a single HDF5
+3) run "das-correlation" on the single HDF5 to calculate local similarity 
 
    * All tests are performed on snowbear.lbl.gov
 
 
-Preparing steps:
-
-  1) nptdms  
-    > module purge
-    > module load  python/3.5.1
-    > pip3 install nptdms
-      * Find more info about nptdms at : https://github.com/adamreeve/npTDMS
-  2) ArrayUDF
+1. Preparing steps:
+  1.1. ArrayUDF
     > module purge
     > module load gcc/4.8.5 openmpi/3.1.2-gcc hdf5/1.11.3-gcc-p arrayudf/1.0.0-gcc git
     > git clone https://bitbucket.org/dbin_sdm/arrayudf-test.git
@@ -23,10 +17,12 @@ Preparing steps:
     > make clean 
     > make
     > ls
-      * Make sure that "das-correlation" and "h5-vds-merge" are generated successfully 
+      * Make sure that "tdms2h5", "das-correlation" and "h5-vds-merge" are generated successfully 
 
 
-* Assume "~/testTDMSdata" directory contains all  *tdms files
+2. Usage
+
+* Assume "~/testTDMSdata" directory contains all  TDMS files
 * Merged file "westSac_merged.h5p" is under your home directory ~/
 
 Step1: convert TDMS files (all in a directory ) to HDF5 files (in another directory)
@@ -35,11 +31,11 @@ Step1: convert TDMS files (all in a directory ) to HDF5 files (in another direct
           westSac_170728224510.tdms westSac_170728224710.tdms
    > mkdir ~/testH5data
   
-   > module load  python/3.5.1
-  
-   > python3 tdms2h5.py -i ~/testTDMSdata/ -o ~/testH5data -b
-       * it takes a while
-    
+   > mpirun -n 2 tdms2h5 -i ~/testTDMSdata/ -o ~/testH5data -b
+      * Depends on the files under testTDMSdata, you can 
+      * change "-n 2" to have proper parallel
+      * Please refer to Section 4 for metadata
+
 Step2: merge HDF5 files into a single HDF5 file
    > ls ~/testH5data/
       westSac_170728224410.h5p  westSac_170728224610.h5p
@@ -62,10 +58,11 @@ Step3: ArrayUDF Code
    > cd arrayudf-test/examples/das/
   
    > rm  ~/westSac_merged_arrayudf.h5p
-     * Always remove the output file and will be more smart soon
+     *  Please remove the output file first
   
    > mpirun -n 4  ./das-correlation -i ~/westSac_merged.h5p -o ~/westSac_merged_arrayudf.h5p -g / -d /DataByChannelTime -n 2 -c 120000,32 -t 0,20 -s 1000,1 -e 500 -w 300 -l 10
-  
+     *  See Section 3 for meaning of parameters 
+
    > h5dump -A ~/westSac_merged_arrayudf.h5p 
      GROUP "/" {
      DATASET "DataByChannelTime" {
@@ -74,13 +71,13 @@ Step3: ArrayUDF Code
      }}}
 
 
-Step3: 
+Step4: 
   > plot.py
   
 
 So far, you make it and the "westSac_merged_arrayudf.h5p" is the result file
 
-Parameters for das-correlation
+3. Parameters for das-correlation
 
 -i input HDF5 file
 -o output HDF5 file
@@ -89,142 +86,70 @@ Parameters for das-correlation
 -n the dimension of input dataset, it is always 2 for das data
 -c chunk size which breaks the input data into subsets for parallel processing
 
--t overlap among chunks (to be aligned with -l paramter)
--s skip points, e.g., 1000,1 computes local similarity eavy 1000 points on first dimension 
+-t overlap among chunks (to be aligned with -l parameters)
+-s skip points, e.g., 1000,1 computes local similarity every 1000 points on first dimension 
 -e size of time window along single channel 
--w counts of windes along single channel
+-w counts of windows along single channel
 -l channel offset ()
 
 
 
+4. Metadata 
+
+  Overall, "tdms2h5" tries to extract all metadata from the header of TDMS file and store 
+  them as attributes (or groups) in HDF5. In a TDMS file,  it has 28 byte fixed 
+  LEADIN header and user-customized metadata. The user-customized metadata has over two 
+  levels, object and property (of object). Corresponding, we use HDF5 to represent object 
+  in TDMS and attach property as HDF5 attribute for group. By default, the root group '/'
+  in HDF5 is the "/" object in TDMS file.  "/Measurement" is the object (group) under the 
+  root '/' object (group). "/Measurement/1" is another object (group) under "/Measurement".
+
+
+  In case of missing something in our code, we also store the whole raw metadata section as 
+  a single dataset "/RawMetadataTDMS" with "H5T_OPAQUE". So, users can explain the TDMS 
+  metadata by themselves. 
+
+  Example of metadata can be found: 
+
+  > h5dump  -A test.tdms.h5
+  
+  HDF5 "test.tdms.h5" {
+  GROUP "/" {
+    ATTRIBUTE "Acoustic Output" {
+        DATATYPE  H5T_STRING {
+          STRSIZE 12;
+          STRPAD H5T_STR_NULLTERM;
+          CSET H5T_CSET_ASCII;
+          CTYPE H5T_C_S1;
+        }
+        DATASPACE  SCALAR
+        DATA {
+        (0): "Differential"
+        }
+    }
+    ATTRIBUTE "Attenuator Voltage (V)" {
+        DATATYPE  H5T_IEEE_F64BE
+        DATASPACE  SIMPLE { ( 1 ) / ( 1 ) }
+        DATA {
+        (0): 2.29042
+        }
+    }
+
+      ....
+      DATASET "DataTimeChannel" {
+        DATATYPE  H5T_STD_I16BE
+        DATASPACE  SIMPLE { ( 30000, 11648 ) / ( 30000, 11648 ) }
+    }
+    DATASET "RawMetadataTDMS" {
+        DATATYPE  H5T_OPAQUE {
+          OPAQUE_TAG "RAW Metadata from TDMS file as OPAQUE type";
+        }
+        DATASPACE  SIMPLE { ( 577536 ) / ( 577536 ) }
+    }
 
 
 
 
-
-
-================= =======
-Old usage.example 
-================= =======
-
-
-
-
-Something to know before:
- * The h5py and ArrayUDF uses two different versions of HDF5
- *  The major reason is that h5py can not work on latest HDF5
- *  But, the ArrayUDf needs latest HDF5 for parallel virtual dataset reading.
-
-
-Preparing steps (on snowbear only):
-
-  1) nptdms  
-    > module purge
-    > module load  python/3.5.1
-    > pip3 install nptdms
-      * Find more info about nptdms at : https://github.com/adamreeve/npTDMS
-
-  2) h5py 
-    >  module purge
-    >  module load  gcc/4.8.5 hdf5/1.10.1-gcc-s python/3.5.1 
-    >  wget https://github.com/h5py/h5py/archive/master.zip
-         * Note: "git clone h5py" does not work on snowbear
-    >  pip3 install cython --user
-    >  python3 setup.py configure  --reset
-         * you may need this step if --reset find wrong HDF5
-         * python3 setup.py configure  --hdf5=/usr/local/software/sl-6.x86_64/modules/hdf5/1.10.1-gcc-s
-         * For paralle h5py you need use --mpi. We are here fine with sequantial one
-    >  python3 setup.py build
-    >  python3 setup.py install --user
-
-
-Three steps to start with sample data. More advanced features can be obtained by "-h"
-  * Assume "~/testTDMSdata" directory contains all your *tdms files
-  * Merged file "westSac_merged.h5p" is under your home directory ~/
-
-Step1: convert TDMS files (all in a directory ) to HDF5 files (in another directory)
-
-   > ls   ~/testTDMSdata/
-          westSac_170728224410.tdms	westSac_170728224610.tdms
-	        westSac_170728224510.tdms	westSac_170728224710.tdms
-   > mkdir testH5data
-   > python3 tdms2h5.py -i ~/testTDMSdata/ -o ~/testH5data -b
-       * it takes a while
-    
-Step2: merge HDF5 files into a single HDF5 file
-
-   > ls ~/testH5data/
-      westSac_170728224410.h5p	westSac_170728224610.h5p
-      westSac_170728224510.h5p	westSac_170728224710.h5p
-   > python h5-merge.py -i ~/testH5data/ -o ~/westSac_merged.h5p
-   > h5dump -A westSac_merged.h5p
-     HDF5 "westSac_merged.h5p" {
-     	  GROUP "/" {
-	     DATASET "DataByChannelTime" {
-	           DATATYPE  H5T_STD_I16LE
-		         DATASPACE  SIMPLE { ( 120000, 11648 ) / ( 120000, 11648 ) }
-     }}}
-
-
-Step3: ArrayUDF Code
-  > module purge
-  > module load gcc/4.8.5 openmpi/3.1.2-gcc hdf5/1.11.3-gcc-p arrayudf/1.0.0-gcc git
-     *Note here: you need a different version of HDF5 
-  > git clone https://bitbucket.org/dbin_sdm/arrayudf-test.git
-  > cd arrayudf-test/examples/das/   
-  > make clean 
-  > make
-  > mpirun -n 4  ./das-correlation -i ~/westSac_merged.h5p -o ~/westSac_merged_arrayudf.h5p -g / -d /DataByChannelTime -n 2 -c 30000,
-32 -t 0,20 -s 1000,1 -e 500 -w 300 -l 10
-  > h5dump -A ~/westSac_merged_arrayudf.h5p 
-    GROUP "/" {
-     DATASET "DataByChannelTime" {
-      DATATYPE  H5T_IEEE_F32LE
-      DATASPACE  SIMPLE { ( 120, 11648 ) / ( 120, 11648 ) }
-   }}}
-
-
-Others:
-
-How to install New HDF5 for ArrayUDF by yourself:
-
-        git clone https://bitbucket.hdfgroup.org/scm/hdffv/hdf5.git
-        cd hdf5
-        git checkout parallel_vds_develop
-
-        module load gcc/4.8.5
-        module load openmpi/3.1.2-gcc
-        module load libtool/2.4.6
-        module load automake/1.15
-
-        ./autogen.sh
-        ./configure --enable-parallel --prefix=/bearbin-data3/home/dbin/soft/hdf5/build 
-        make
-        make install
-        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/soft/hdf5/build/lib/
-
-
-
-
-
-Others:
-
-How to install New HDF5 for ArrayUDF by yourself:
-
-        git clone https://bitbucket.hdfgroup.org/scm/hdffv/hdf5.git
-        cd hdf5
-        git checkout parallel_vds_develop
-
-        module load gcc/4.8.5
-        module load openmpi/3.1.2-gcc
-        module load libtool/2.4.6
-        module load automake/1.15
-
-        ./autogen.sh
-        ./configure --enable-parallel --prefix=/bearbin-data3/home/dbin/soft/hdf5/build 
-        make
-        make install
-        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/soft/hdf5/build/lib/
 
 
 
