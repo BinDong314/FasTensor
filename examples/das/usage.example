@@ -1,8 +1,8 @@
 
 
 Overview:
-1) use "tdms2h5" to convert TDMS files into HDF5 files
-2) use "h5-vds-merge" to group all HDF5 files into a single HDF5
+1) run "tdms2h5" to convert TDMS files into HDF5 files
+2) run "h5-vds-merge" to group all HDF5 files into a single HDF5
 3) run "das-correlation" on the single HDF5 to calculate local similarity 
 
    * All tests are performed on snowbear.lbl.gov
