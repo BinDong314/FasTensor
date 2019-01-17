@@ -33,25 +33,27 @@ Step1: convert TDMS files (all in a directory ) to HDF5 files (in another direct
   
    > mpirun -n 2 tdms2h5 -i ~/testTDMSdata/ -o ~/testH5data -b
       * Depends on the files under testTDMSdata, you can 
-      * change "-n 2" to have proper parallel
+      * change "-n 2" to have different parallel
       * Please refer to Section 4 for metadata
+     
+      * Data is stored as a 2D dataset namely "/DataTimeChannel"
+      * in output HDF5 file
 
 Step2: merge HDF5 files into a single HDF5 file
    > ls ~/testH5data/
-      westSac_170728224410.h5p  westSac_170728224610.h5p
-      westSac_170728224510.h5p  westSac_170728224710.h5p
+        westSac_170728224410.tdms.h5  westSac_170728224610.tdms.h5
+        westSac_170728224510.tdms.h5  westSac_170728224710.tdms.h5
   
    > cd arrayudf-test/examples/das/
   
-   > ./h5-vds-merge -i ~/testH5data/  -o ~/westSac_merged.h5p
+   > ./h5-vds-merge -i ~/testH5data/  -o ~/westSac_merged.h5
   
-   > h5dump -A westSac_merged.h5p
-     HDF5 "westSac_merged.h5p" {
-        GROUP "/" {
-       DATASET "DataByChannelTime" {
-             DATATYPE  H5T_STD_I16LE
-             DATASPACE  SIMPLE { ( 120000, 11648 ) / ( 120000, 11648 ) }
-     }}}
+   >  h5dump  -A ~/westSac_merged.h5
+      GROUP "/" {
+      DATASET "DataTimeChannel" {
+          DATATYPE  H5T_IEEE_F32LE
+          DATASPACE  SIMPLE { ( 120000, 11648 ) / ( 120000, 11648 ) }
+      }}}
 
 
 Step3: ArrayUDF Code
@@ -60,20 +62,22 @@ Step3: ArrayUDF Code
    > rm  ~/westSac_merged_arrayudf.h5p
      *  Please remove the output file first
   
-   > mpirun -n 4  ./das-correlation -i ~/westSac_merged.h5p -o ~/westSac_merged_arrayudf.h5p -g / -d /DataByChannelTime -n 2 -c 120000,32 -t 0,20 -s 1000,1 -e 500 -w 300 -l 10
+   > mpirun -n 8  ./das-correlation -i ~/westSac_merged.h5 -o ~/westSac_merged_arrayudf.h5 -g / -d /DataTimeChannel -n 2 -c 120000,32 -t 0,20 -s 1000,1 -e 500 -w 300 -l 10
      *  See Section 3 for meaning of parameters 
 
-   > h5dump -A ~/westSac_merged_arrayudf.h5p 
-     GROUP "/" {
-     DATASET "DataByChannelTime" {
-      DATATYPE  H5T_IEEE_F32LE
-      DATASPACE  SIMPLE { ( 120, 11648 ) / ( 120, 11648 ) }
-     }}}
+   > h5dump  -A  ~/westSac_merged_arrayudf.h5
+      GROUP "/" {
+      DATASET "DataTimeChannel" {
+          DATATYPE  H5T_IEEE_F32LE
+          DATASPACE  SIMPLE { ( 120, 11648 ) / ( 120, 11648 ) }
+      }}}
 
 
-Step4: 
-  > plot.py
-  
+Step4: Simple test with the result with "plot.py"
+  > module load python/3.5.1
+  > python3 plot.py
+    * you may need to edit plot.py's "filename" to point right file
+    * Also, you may need "ssh -Y username@snowbear.lbl.gov" to see the figure 
 
 So far, you make it and the "westSac_merged_arrayudf.h5p" is the result file
 
