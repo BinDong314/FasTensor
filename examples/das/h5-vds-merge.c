@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
   char output_file[NAME_LENGTH] = "./testHDF5data-merged.h5p";
   char filter_str[NAME_LENGTH] = "";
   char group[NAME_LENGTH] = "/"; //both input and output file share the same group and dataset name
-  char dataset[NAME_LENGTH] = "/DataByChannelTime";
+  char dataset[NAME_LENGTH] = "/DataTimeChannel";
 
   int filter_flag = 0;
   int copt;

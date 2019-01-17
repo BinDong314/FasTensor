@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
   char  i_file[NAME_LENGTH]="/global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake.h5";
   char  o_file[NAME_LENGTH]="/global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake-udf.h5";
   char  group[NAME_LENGTH]="/";  //both input and output file share the same group and dataset name
-  char  dataset[NAME_LENGTH]="/dat";
+  char  dataset[NAME_LENGTH]="/DataTimeChannel";
   char  ghost_size_str[NAME_LENGTH];
   char  chunk_size_str[NAME_LENGTH];
   char  strip_size_str[NAME_LENGTH];

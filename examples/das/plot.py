@@ -12,9 +12,9 @@ from matplotlib.backends.backend_pdf import PdfPages
 #}
 #}
 
-filename='westSac_merged_arrayudf.h5p'
+filename='westSac_merged_arrayudf.h5'
 file    = h5py.File(filename, 'r')   # 'r' means
-dataset = file['/DataByChannelTime']
+dataset = file['/DataTimeChannel']
 
 
 
