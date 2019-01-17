@@ -17,26 +17,26 @@ void  printf_help(char *cmd);
 
 using namespace std;
 #define SQRT_M(XV, NN,  sqSum_X){\
-    sqSum_X = 0; \	
-   for(int iiii=0; iiii<NN; iiii++){ \
-       sqSum_X = sqSum_X + XV[iiii]*XV[iiii]; \
-   } \
-    sqSum_X = sqrt(sqSum_X); \
+sqSum_X = 0;\
+for(int iiii=0; iiii<NN; iiii++){\
+sqSum_X = sqSum_X + XV[iiii]*XV[iiii];\
+}\
+sqSum_X = sqrt(sqSum_X);\
 }
 
 #define SQRT_SUM_M(CW, X1, X2, NN, sum_CWX1, sum_CWX2, sq_X1, sq_X2, neighbor_window_start){\
-   sum_CWX1=0; \
-   sum_CWX2=0; \
-   sq_X1=0;  \
-   sq_X2=0;  \	
-   for(int i=0; i<NN; i++){ \
-        sum_CWX1 = sum_CWX1 + CW[i]*X1[i+neighbor_window_start];\
-	sum_CWX2 = sum_CWX2 + CW[i]*X2[i+neighbor_window_start];\
-	sq_X1    = sq_X1 + X1[i+neighbor_window_start]*X1[i+neighbor_window_start]; \
-	sq_X2    = sq_X2 + X2[i+neighbor_window_start]*X2[i+neighbor_window_start]; \
-   }\
-   sq_X1=sqrt(sq_X1);\
-   sq_X2=sqrt(sq_X2);\
+sum_CWX1=0;\
+sum_CWX2=0;\
+sq_X1=0;\
+sq_X2=0;\
+for(int i=0; i<NN; i++){\
+sum_CWX1 = sum_CWX1 + CW[i]*X1[i+neighbor_window_start];\
+sum_CWX2 = sum_CWX2 + CW[i]*X2[i+neighbor_window_start];\
+sq_X1    = sq_X1 + X1[i+neighbor_window_start]*X1[i+neighbor_window_start];\
+sq_X2    = sq_X2 + X2[i+neighbor_window_start]*X2[i+neighbor_window_start];\
+}\
+sq_X1=sqrt(sq_X1);\
+sq_X2=sqrt(sq_X2);\
 }
 
 
@@ -51,7 +51,7 @@ int    CELL_OFFSET = 500, CELL_TOTAL = 2*500+1, CHANNEL_OFFSET = 10, WINDOW_OFFS
 float *current_window=NULL, *neighbor_window1=NULL, *neighbor_window2=NULL;
 int    neighbor_window_start;
 
-inline float CorrelationUDF(const Stencil<float> &c){
+inline float CorrelationUDF(const Stencil<int> &c){
   float max_correlation1 = 0, max_correlation2 = 0, temp_correlation1, temp_correlation2;
   float current_sqSum = 0, neighbor_sqSum1 = 0,neighbor_sqSum2 = 0, cn_Sum1 = 0, cn_Sum2 =0 ;
   for(int i = - CELL_OFFSET; i  <= CELL_OFFSET; i++){
@@ -78,13 +78,13 @@ inline float CorrelationUDF(const Stencil<float> &c){
 
 int main(int argc, char *argv[])
 {
-  char  i_file[NAME_LENGTH]=      "/global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake.h5";
-  char  o_file[NAME_LENGTH]=      "/global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake-udf.h5";
+  char  i_file[NAME_LENGTH]="/global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake.h5";
+  char  o_file[NAME_LENGTH]="/global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake-udf.h5";
   char  group[NAME_LENGTH]="/";  //both input and output file share the same group and dataset name
   char  dataset[NAME_LENGTH]="/dat";
-  char     ghost_size_str[NAME_LENGTH];
-  char     chunk_size_str[NAME_LENGTH];
-  char     strip_size_str[NAME_LENGTH];
+  char  ghost_size_str[NAME_LENGTH];
+  char  chunk_size_str[NAME_LENGTH];
+  char  strip_size_str[NAME_LENGTH];
   std::vector<int>     ghost_size;
   std::vector<int>     chunk_size;
   std::vector<int>     strip_size;
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
 
   MPI_Init(&argc, &argv);
   //Array<float> *A = new Array<float>(AU_NVS,  AU_HDF5, i_file, group, dataset, chunk_size, overlap_size);
-  Array<int, float> * IFILE = new Array<int, float>(AU_NVS,       AU_HDF5, i_file, group, dataset, chunk_size, ghost_size);
+  Array<int,float> * IFILE = new Array<int,float>(AU_NVS,       AU_HDF5, i_file, group, dataset, chunk_size, ghost_size);
   Array<float>      * OFILE = new Array<float>(AU_COMPUTED,  AU_HDF5, o_file, group, dataset, chunk_size, ghost_size);
   
   if(strip_flag) IFILE->SetApplyStripSize(strip_size); 
@@ -205,20 +205,20 @@ void convert_str_vector(int n, char *str,  int *vector){
 }
 
 void  printf_help(char *cmd){
-  char *msg="Usage: %s [OPTION] \n\
+  char *msg=  (char *) "Usage: %s [OPTION]\n\
       	  -h help (--help)\n\
-          -i input file \n\
-          -o output file \n\
-          -g group name (path) \n\ 
-          -d dataset name \n\
-          -c chunk size (seperate by comma , ) \n\
-          -t ghost szie (seperate by comma ,) \n\
-          -n number of array dimension \n\
-          -s strip size (seperate by comma ,) \n\
-          -e cell offset  \n\
-          -w window offset \n\
-          -l channel offset  \n\
-          Example: srun -n 128 -N 4 %s -i /global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake.h5 -o /global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake-arrayudf.h5  -g / -d /dat -n 2 -c 180001,20 -t 0,11  -e 500 -w 50 -l 10 \n";
+          -i input file\n\
+          -o output file\n\
+	  -g group name (path)\n\
+          -d dataset name\n\
+          -c chunk size (seperate by comma ,)\n\
+          -t ghost szie (seperate by comma ,)\n\
+          -n number of array dimension\n\
+          -s strip size (seperate by comma,)\n\
+          -e cell offset\n\
+          -w window offset\n\
+          -l channel offset \n\
+          Example: srun -n 128 -N 4 %s -i /global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake.h5 -o /global/cscratch1/sd/dbin/de-test-all-osts/DAS/data_earthquake-arrayudf.h5  -g / -d /dat -n 2 -c 180001,20 -t 0,11  -e 500 -w 50 -l 10\n";
 
   fprintf(stdout, msg, cmd, cmd);
 }

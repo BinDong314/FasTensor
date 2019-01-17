@@ -226,7 +226,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #endif
 
    //Write number_of_objects to HDF5
-   attach_attribute_non_string(file_id, "NumberOfObjects", H5T_STD_I32BE, H5T_NATIVE_INT, &number_of_objects);
+   attach_attribute_non_string(file_id, (char *)"NumberOfObjects", H5T_STD_I32BE, H5T_NATIVE_INT, &number_of_objects);
 
    int length_of_first_object_path;
    fread(&length_of_first_object_path, sizeof(uint32_t), 1, fp);
@@ -262,7 +262,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #endif
 
    //write "number_of_properties" to the "/" as property
-   attach_attribute_non_string(file_id, "NumberOfProperties", H5T_STD_I32BE, H5T_NATIVE_INT, &number_of_properties);
+   attach_attribute_non_string(file_id, (char *)"NumberOfProperties", H5T_STD_I32BE, H5T_NATIVE_INT, &number_of_properties);
    int properties_name_length, properties_value_length, properties_value_type, properties_value_type_code;
    char *properties_name;
    void *properties_value;
@@ -277,7 +277,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    {
       //Name Length and name
       fread(&properties_name_length, sizeof(uint32_t), 1, fp);
-      properties_name = malloc(properties_name_length * sizeof(char) + 1);
+      properties_name = (char *)malloc(properties_name_length * sizeof(char) + 1);
       memset(properties_name, '\0', properties_name_length * sizeof(char) + 1);
 
       fread(properties_name, sizeof(char), properties_name_length, fp);
@@ -380,7 +380,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
          time_sec_and_sec_fract[0] = seconds_v;
          time_sec_and_sec_fract[1] = seconds_v_frac;
          char *temp_name;
-         temp_name = malloc(sizeof(char) * strlen(properties_name) + 10);
+         temp_name = (char *)malloc(sizeof(char) * strlen(properties_name) + 10);
          sprintf(temp_name, "%s(approx.)", properties_name);
          attach_attribute_timestamp(file_id, properties_name, H5T_STD_U64BE, H5T_NATIVE_ULLONG, time_sec_and_sec_fract, temp_name, buff, 40);
 #ifdef OUTPUT_META_TO_SCREEN
@@ -400,7 +400,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #ifdef DEBUG_OUTPUT
    printf("length_of_object_path : %d \n", length_of_object_path);
 #endif
-   char *object_path_str = malloc(sizeof(char) * length_of_object_path);
+   char *object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
    fread(object_path_str, sizeof(char), length_of_object_path, fp);
 #ifdef OUTPUT_META_TO_SCREEN
    printf("object_path : %s \n", object_path_str);
@@ -431,7 +431,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #ifdef DEBUG_OUTPUT
       printf("length_of_object_path : %d \n", length_of_object_path);
 #endif
-      object_path_str = malloc(sizeof(char) * length_of_object_path);
+      object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
       memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
       fread(object_path_str, sizeof(char), length_of_object_path, fp);
 #ifdef OUTPUT_META_TO_SCREEN
@@ -462,10 +462,10 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #ifdef OUTPUT_META_TO_SCREEN
       printf("number_of_properties : %d \n", number_of_properties);
 #endif
-      attach_attribute_non_string(group_id_temp, "DataTypeCode", H5T_STD_U32BE, H5T_NATIVE_UINT, &index_data_type);
-      attach_attribute_non_string(group_id_temp, "ArrayDimension ", H5T_STD_U32BE, H5T_NATIVE_UINT, &array_dimensions);
-      attach_attribute_non_string(group_id_temp, "NumberOfRawDataValues ", H5T_STD_U64BE, H5T_NATIVE_ULONG, &Number_of_values);
-      attach_attribute_non_string(group_id_temp, "NumberOfProperties", H5T_STD_U32BE, H5T_NATIVE_INT, &number_of_properties);
+      attach_attribute_non_string(group_id_temp, (char *)"DataTypeCode", H5T_STD_U32BE, H5T_NATIVE_UINT, &index_data_type);
+      attach_attribute_non_string(group_id_temp, (char *)"ArrayDimension ", H5T_STD_U32BE, H5T_NATIVE_UINT, &array_dimensions);
+      attach_attribute_non_string(group_id_temp, (char *)"NumberOfRawDataValues ", H5T_STD_U64BE, H5T_NATIVE_ULONG, &Number_of_values);
+      attach_attribute_non_string(group_id_temp, (char *)"NumberOfProperties", H5T_STD_U32BE, H5T_NATIVE_INT, &number_of_properties);
 
       H5Gclose(group_id_temp);
    }
@@ -510,7 +510,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    //Start to read the data and store it into HDF5
    int16_t *data;
-   data = malloc(sizeof(int16_t) * nTrace * nPoint);
+   data = (int16_t *)malloc(sizeof(int16_t) * nTrace * nPoint);
 
    fseek(fp, nByte_header, SEEK_SET);
    fread(data, sizeof(int16_t), nTrace * nPoint, fp);
