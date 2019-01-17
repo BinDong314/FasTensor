@@ -9,11 +9,15 @@
 #include <dirent.h>
 #include <mpi.h>
 
+//#define OUTPUT_META_TO_SCREEN 1
+//#define DEBUG_OUTPUT 1
+
+
+
+//Don't change below values
 #define NBYTE_LEADIN 28
 #define EPOCH_DIFF 2082844800 //seconds from epoch(1904, Mac HFS+ ) to epoch (1970, Unix)
 #define NBYTE_PER_DATUM 2
-//#define OUTPUT_META_TO_SCREEN 1
-//#define DEBUG_OUTPUT 1
 
 typedef enum
 {
@@ -426,7 +430,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    int index_data_type, array_dimensions;
    uint64_t Number_of_values;
    for (int jj = 0; jj < number_of_objects - 2; jj++)
-   {
+ {
       fread(&length_of_object_path, sizeof(uint32_t), 1, fp);
 #ifdef DEBUG_OUTPUT
       printf("length_of_object_path : %d \n", length_of_object_path);
@@ -437,10 +441,10 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #ifdef OUTPUT_META_TO_SCREEN
       printf("object_path : %s \n", object_path_str);
 #endif
-      free(object_path_str);
 
       hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
+      free(object_path_str);
       fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
 #ifdef DEBUG_OUTPUT
       printf("raw_data_index_int : 0x%.8X, lenght of indiex %d \n", raw_data_index_int, raw_data_index_int);
