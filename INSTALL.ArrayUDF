@@ -21,7 +21,7 @@ Please jump to the section 4 for instructions for Python interface.
 2, Install ArrayUDF
    1), ./configure  --with-hdf5=HDF5_INSTALLATION_DIR
       Note: 1) you might need to run "chmod a+x ./autogen.sh; ./autogench".
-            2) you might need to add configure with "CC= HDF5_INSTALLATION_DIR/bin/mpicc CXX=CC= HDF5_INSTALLATION_DIR/bin/mpicxx"
+            2) you might need to add configure with "CC= HDF5_INSTALLATION_DIR/bin/mpicc CXX=HDF5_INSTALLATION_DIR/bin/mpicxx"
    2), make
 
 

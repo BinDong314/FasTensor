@@ -1,9 +1,11 @@
 AUTOMAKE_OPTIONS=gnu
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/  @ARRAYUDF_CPPFLAGS@  -std=c++11 -std=c++0x
-AM_CFLAGS   = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -std=c++11 -std=c++0x
+AM_CPPFLAGS = -I$(top_srcdir)/src/  @ARRAYUDF_CPPFLAGS@  
+AM_CFLAGS   = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  
 AM_CXXFLAGS = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -std=c++11 -std=c++0x
-AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++11 -std=c++0x
+AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++11 
+
+#-std=c++0x
 
 #-fopenmp -openmp -DENABLE_OPENMP -g -O0 -std=c++11 -std=c++0x
 #bin_PROGRAMS=conv  fake-hdf5-data udf-example-new inter-xyz conv
