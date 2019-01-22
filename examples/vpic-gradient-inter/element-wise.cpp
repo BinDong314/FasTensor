@@ -130,11 +130,11 @@ inline float squared_absJ_UDF(const Stencil<float> &hp)
 int main(int argc, char *argv[])
 {
 
-  char i_file_field[1024] = "/Users/dbin/work/vpic-hdf5/vpic/build/testdir/field_hdf5/T.50/fields_50.h5";
-  char i_file_electron[1024] = "/Users/dbin/work/vpic-hdf5/vpic/build/testdir/hydro_hdf5/T.50/hydro_electron_50.h5";
-  char i_file_ion[1024] = "/Users/dbin/work/vpic-hdf5/vpic/build/testdir/hydro_hdf5/T.50/hydro_ion_50.h5";
+  char i_file_field[1024] = "./fields_50.h5";
+  char i_file_electron[1024] = "./hydro_electron_50.h5";
+  char i_file_ion[1024] = "./hydro_ion_50.h5";
 
-  char o_file[1024] = "/Users/dbin/work/vpic-hdf5/vpic/build/testdir/fields_50_field_element.h5";
+  char o_file[1024] = "./fields_50_field_element.h5";
 
   char group[64] = "/Timestep_50";
   char dsetEX[64] = "/Timestep_50/ex";

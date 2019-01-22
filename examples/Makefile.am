@@ -1,9 +1,9 @@
 AUTOMAKE_OPTIONS=gnu
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/  @ARRAYUDF_CPPFLAGS@  
-AM_CFLAGS   = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  
-AM_CXXFLAGS = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -std=c++11 -std=c++0x
-AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++11 
+AM_CPPFLAGS = -I$(top_srcdir)/src/  @ARRAYUDF_CPPFLAGS@   -ldl
+AM_CFLAGS   = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -ldl
+AM_CXXFLAGS = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -std=c++11 -std=c++0x -ldl
+AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++11  -ldl
 
 #-std=c++0x
 
