@@ -81,12 +81,15 @@ public:
     if (is_vector_type<T>())
       vector_type_flag = 1;
 
+    MPI_Barrier(MPI_COMM_WORLD);
+
     fid = H5Fopen(fn.c_str(), H5F_ACC_RDONLY, plist_id);
     if (fid < 0)
     {
       std::cout << "Error happens in open file " << fn << std::endl;
       exit(-1);
     }
+    MPI_Barrier(MPI_COMM_WORLD);
 
     std::string root_dir = "/";
     if (gn != root_dir)
@@ -165,6 +168,7 @@ public:
       offset[i] = start[i];
       count[i] = end[i] - start[i] + 1; //Starting from zero
     }
+
     memspace_id = H5Screate_simple(rank, &count[0], NULL);
     H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
 

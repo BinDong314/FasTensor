@@ -164,6 +164,7 @@ int main(int argc, char *argv[])
 
   //Orginal data sets
   Array<float> *EX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEX, chunk_size, overlap_size);
+
   Array<float> *EY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEY, chunk_size, overlap_size);
   Array<float> *EZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEZ, chunk_size, overlap_size);
   Array<float> *BX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetBX, chunk_size, overlap_size);
