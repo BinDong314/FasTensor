@@ -96,8 +96,8 @@ inline float X_UDF(const Stencil<Particle> &p)
   int nx_v = nx->operator()(domain_index);
   float dx_v = dx->operator()(domain_index);
   float x0_v = x00->operator()(domain_index);
-
-  return (domain_index % (nx_v + 2) + (pt.dX - 1) / 2.0) * dx_v + x0_v;
+  int inti = (int)(p(0).i);
+  return (inti % (nx_v + 2) + (pt.dX - 1) / 2.0) * dx_v + x0_v;
 }
 
 inline float Y_UDF(const Stencil<Particle> &p)
@@ -105,10 +105,12 @@ inline float Y_UDF(const Stencil<Particle> &p)
   Particle pt = p(0);
   int domain_index = (int)(pt.domain_id);
   int ny_v = ny->operator()(domain_index);
-  int nx_v = ny->operator()(domain_index);
+  int nx_v = nx->operator()(domain_index);
   float dy_v = dy->operator()(domain_index);
   float y0_v = y00->operator()(domain_index);
-  return ((domain_index / (nx_v + 2)) % (ny_v + 2) + (pt.dY - 1) / 2.0) * dy_v + y0_v;
+  int inti = (int)(p(0).i);
+
+  return ((inti / (nx_v + 2)) % (ny_v + 2) + (pt.dY - 1) / 2.0) * dy_v + y0_v;
 }
 
 inline float Z_UDF(const Stencil<Particle> &p)
@@ -122,7 +124,9 @@ inline float Z_UDF(const Stencil<Particle> &p)
   int ny_v = ny->operator()(domain_index);
   int nz_v = nz->operator()(domain_index);
   //printf("domain_index = %d, dz_v = %f, z0_v = %f, nx_v = %d, ny_v = %d, nz_v = %d, pt.dZ = %f \n " , domain_index,  dz_v, z0_v, nx_v, ny_v, nz_v, pt.dZ);
-  return (domain_index / ((nx_v + 2) * (ny_v + 2)) + (pt.dZ - 1) / 2.0) * dz_v + z0_v;
+  int inti = (int)(p(0).i);
+
+  return (inti / ((nx_v + 2) * (ny_v + 2)) + (pt.dZ - 1) / 2.0) * dz_v + z0_v;
 }
 
 //UDF One: create new labels
@@ -138,11 +142,10 @@ int main(int argc, char *argv[])
   int convert_flag = 0, copt;
   int c_size = 3277, o_size = 0;
 
-  char p_file[1024] = "/Users/dbin/work/vpic-hdf5/vpic/build/testdir/particle_hdf5/T.50/electron_50.h5";
-  char m_file[1024] = "/Users/dbin/work/vpic-hdf5/vpic/build/testdir/particle_hdf5/T.50/grid_metadata_electron_50.h5";
+  char p_file[1024] = "./electron_50.h5";
+  char m_file[1024] = "./grid_metadata_electron_50.h5";
 
   char group[1024] = "/Timestep_50";
-  ;
 
   while ((copt = getopt(argc, argv, "cs:h:p:m:g:m:o:")) != -1)
     switch (copt)

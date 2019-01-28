@@ -1,10 +1,9 @@
 AU_HOME=/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/build
 HDF5_DIR=/Users/dbin/work/soft/hdf5-1.8.18/build/
-CCC=mpic++-mpich-mp
+CCC=mpicxx
 
 .PHONY:all
-all:element-wise 
-##vpic-xyz-global-position particles-interpolation
+all:element-wise vpic-xyz-global-position particles-interpolation
 
 element-wise:element-wise.cpp  
 	$(CCC) -o  element-wise   element-wise.cpp    -g   -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
@@ -16,5 +15,4 @@ particles-interpolation:particles-interpolation.cpp
 	$(CCC) -o particles-interpolation  particles-interpolation.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
 
 clean:
-	rm element-wise 
-#vpic-xyz-global-position particles-interpolation
+	rm element-wise vpic-xyz-global-position particles-interpolation
