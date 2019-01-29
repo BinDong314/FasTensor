@@ -8,6 +8,8 @@
 
 #include "array_udf.h"
 
+void print_help();
+
 using namespace std;
 
 struct Particle
@@ -48,11 +50,10 @@ struct Particle
 //It is duplicated at each mpi rank
 Array<float> *EX, *EY, *EZ, *BX, *BY, *BZ;
 
-const float total_cells[3] = {64, 1, 64}; //Two domains
-const float cells_per_domain[3] = {32, 1, 64};
-const float dxdydz_per_cell[3] = {11.7188, 375, 4.88281};
-const float dxdydz_per_domain[3] = {375.0016, 375, 312.49984}; //cells_per_domain * dxdydz_per_cell
-const float xyz_shitf[3] = {0, 187.5, 156};                    //x0
+float total_cells[3] = {64, 1, 64}; //Two domains
+float cells_per_domain[3] = {32, 1, 64};
+float dxdydz_per_cell[3] = {11.7188, 375, 4.88281};
+float xyz_shitf[3] = {0, 187.5, 156}; //|x0| |y0| |z0|
 
 //Eq. 35 in Section 7.6
 inline float InterEX(const Stencil<Particle> &p)
@@ -313,16 +314,49 @@ int main(int argc, char *argv[])
 {
   char i_file_field[1024] = "./test-file/fields_50.h5";
   char i_file_particle[1024] = "./test-file/electron_50.h5";
+  char i_file_metadata[1024] = "./test-file/grid_metadata_electron_50.h5";
 
   char group[64] = "/Timestep_50";
-  char dsetEX[64] = "/Timestep_50/ex";
-  char dsetEY[64] = "/Timestep_50/ey";
-  char dsetEZ[64] = "/Timestep_50/ez";
-  char dsetBX[64] = "/Timestep_50/cbx";
-  char dsetBY[64] = "/Timestep_50/cby";
-  char dsetBZ[64] = "/Timestep_50/cbz";
+  char o_file[1024] = "./test-file/electron_50.h5";
 
   int c_size = 3277, o_size = 0;
+  int copt;
+
+  while ((copt = getopt(argc, argv, "hm:f:p:g:r:c:o:")) != -1)
+    switch (copt)
+    {
+    case 'f':
+      memset(i_file_field, 0, sizeof(i_file_field));
+      strcpy(i_file_field, optarg);
+      break;
+    case 'p':
+      memset(i_file_particle, 0, sizeof(i_file_particle));
+      strcpy(i_file_particle, optarg);
+      break;
+    case 'm':
+      memset(i_file_metadata, 0, sizeof(i_file_metadata));
+      strcpy(i_file_metadata, optarg);
+      break;
+    case 'g':
+      memset(group, 0, sizeof(group));
+      strcpy(group, optarg);
+      break;
+    case 'r':
+      memset(o_file, 0, sizeof(o_file));
+      strcpy(o_file, optarg);
+      break;
+    case 'c':
+      c_size = atoi(optarg);
+      break;
+    case 'o':
+      o_size = atoi(optarg);
+      break;
+    case 'h':
+      print_help();
+      exit(0);
+    default:
+      break;
+    }
 
   std::vector<int> chunk_size(1);
   std::vector<int> overlap_size(1);
@@ -331,14 +365,24 @@ int main(int argc, char *argv[])
 
   MPI_Init(&argc, &argv);
 
+  //float total_cells[3] = {64, 1, 64}; //Two domains
+  //float cells_per_domain[3] = {32, 1, 64};
+  //float dxdydz_per_cell[3] = {11.7188, 375, 4.88281};
+  //float xyz_shitf[3] = {0, 187.5, 156}; //|x0| |y0| |z0|
+
+  //1: nx/ny/nz    2: dxdydz   3: |x0| |y0| |z0|
+  get_metadata(i_file_metadata, group, 1, cells_per_domain);
+  get_metadata(i_file_metadata, group, 2, dxdydz_per_cell);
+  get_metadata(i_file_metadata, group, 3, xyz_shitf);
+
   //Pre load all filed vairables.
   //We can load one by one too
-  EX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEX, AU_PRELOAD);
-  EY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEY, AU_PRELOAD);
-  EZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEZ, AU_PRELOAD);
-  BX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetBX, AU_PRELOAD);
-  BY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetBY, AU_PRELOAD);
-  BZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetBZ, AU_PRELOAD);
+  EX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "ex", AU_PRELOAD);
+  EY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "ey", AU_PRELOAD);
+  EZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "ez", AU_PRELOAD);
+  BX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "cbx", AU_PRELOAD);
+  BY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "cby", AU_PRELOAD);
+  BZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "cbz", AU_PRELOAD);
 
   //printf("f000 = %.10f, f001 = %.10f, f002 = %.10f,  f62_0_0 = %f \n",  F->operator()(0, 0, 0), F->operator()(0, 0, 1),  F->operator()(0, 0, 2), F->operator()(62, 0, 0));
 
@@ -356,22 +400,22 @@ int main(int argc, char *argv[])
   //std::cout <<  "P : x = " << p.x << ", y = " << p.y << ", z = " << p.z << std::endl;
 
   //Results data sets
-  Array<float> *R_EX = new Array<float>(AU_COMPUTED, AU_HDF5, i_file_particle, group, "ex", chunk_size, overlap_size);
+  Array<float> *R_EX = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "ex", chunk_size, overlap_size);
   P->Apply(InterEX, R_EX);
 
-  Array<float> *R_EY = new Array<float>(AU_COMPUTED, AU_HDF5, i_file_particle, group, "ey", chunk_size, overlap_size);
+  Array<float> *R_EY = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "ey", chunk_size, overlap_size);
   P->Apply(InterEY, R_EY);
 
-  Array<float> *R_EZ = new Array<float>(AU_COMPUTED, AU_HDF5, i_file_particle, group, "ez", chunk_size, overlap_size);
+  Array<float> *R_EZ = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "ez", chunk_size, overlap_size);
   P->Apply(InterEZ, R_EZ);
 
-  Array<float> *R_BX = new Array<float>(AU_COMPUTED, AU_HDF5, i_file_particle, group, "bx", chunk_size, overlap_size);
+  Array<float> *R_BX = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "bx", chunk_size, overlap_size);
   P->Apply(InterBX, R_BX);
 
-  Array<float> *R_BY = new Array<float>(AU_COMPUTED, AU_HDF5, i_file_particle, group, "by", chunk_size, overlap_size);
+  Array<float> *R_BY = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "by", chunk_size, overlap_size);
   P->Apply(InterBY, R_BY);
 
-  Array<float> *R_BZ = new Array<float>(AU_COMPUTED, AU_HDF5, i_file_particle, group, "bz", chunk_size, overlap_size);
+  Array<float> *R_BZ = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "bz", chunk_size, overlap_size);
   P->Apply(InterBZ, R_BZ);
 
   //Clear
@@ -395,4 +439,50 @@ int main(int argc, char *argv[])
   MPI_Finalize();
 
   return 0;
+}
+
+void print_help()
+{
+  const char *msg = "Usage: %s [OPTION] \n\
+      	  -h help \n\
+          -p particle file \n\
+          -f field file  \n\
+          -r result file \n\
+          -g group(or step) name \n\
+          -c chunk size string (1D) \n\
+          -o overlap (ghost zone) size (1D). \n\
+          Example: mpirun -n 2 ./particles-interpolation  -f ./test-file/fields_50.h5 -p ./test-file/electron_50.h5  -r ./test-file/fields_50.h5 -g /Timestep_50 -c 3277\n";
+
+  fprintf(stdout, msg, "particles-interpolation");
+}
+
+//1: nx/ny/nz    2: dxdydz   3: |x0| |y0| |z0|
+void get_metadata(char *file, char *group, int op, float *values)
+{
+
+  Array<float> *t1, *t2, *t3;
+  swtich(op)
+  {
+  case 1:
+    t1 = new Array<float>(AU_NVS, AU_HDF5, m_file, group, "nx", AU_PRELOAD);
+    t2 = new Array<float>(AU_NVS, AU_HDF5, m_file, group, "ny", AU_PRELOAD);
+    t3 = new Array<float>(AU_NVS, AU_HDF5, m_file, group, "nz", AU_PRELOAD);
+    break;
+  case 2:
+    t1 = new Array<float>(AU_NVS, AU_HDF5, m_file, group, "dx", AU_PRELOAD);
+    t2 = new Array<float>(AU_NVS, AU_HDF5, m_file, group, "dy", AU_PRELOAD);
+    t3 = new Array<float>(AU_NVS, AU_HDF5, m_file, group, "dz", AU_PRELOAD);
+    break;
+  case 3:
+    t1 = new Array<float>(AU_NVS, AU_HDF5, m_file, group, "x0", AU_PRELOAD);
+    t2 = new Array<float>(AU_NVS, AU_HDF5, m_file, group, "y0", AU_PRELOAD);
+    t3 = new Array<float>(AU_NVS, AU_HDF5, m_file, group, "z0", AU_PRELOAD);
+    break;
+  default:
+    printf("Not supported op in %f: %d \n", __FILE__, __LINE__);
+    exit(-1);
+  }
+  values[0] = t1->operator()(0);
+  values[1] = t2->operator()(0);
+  values[2] = t3->operator()(0);
 }

@@ -11,11 +11,11 @@
 
 #include "array_udf.h"
 
+//Some help funcitons
 using namespace std;
-
-void create_xdmf_file(char *xml_output_file, char *dimensions, char *origin_dxdydz_dimensions, char *origin, char *dxdydz,
-                      char *attribute_name1, char *attribute_name2, char *attribute_name3, char *attribute_name4,
-                      char *hdf5_file_dataset1, char *hdf5_file_dataset2, char *hdf5_file_dataset3, char *hdf5_file_dataset4);
+void find_value_3D(std::vector<int> &value, char *value_str, int dims);
+void print_help();
+void create_xdmf_file(char *xml_output_file, char *dimensions, char *origin_dxdydz_dimensions, char *origin, char *dxdydz, char *attribute_name1, char *attribute_name2, char *attribute_name3, char *attribute_name4, char *hdf5_file_dataset1, char *hdf5_file_dataset2, char *hdf5_file_dataset3, char *hdf5_file_dataset4);
 
 //Define a compund data strcuture
 struct CompundPoint
@@ -163,20 +163,7 @@ int main(int argc, char *argv[])
   char i_file_ion[1024] = "./test-file/hydro_ion_50.h5";
 
   char o_file[1024] = "./test-file/fields_50.h5"; //  "./fields_50_field_element.h5";
-
   char group[64] = "/Timestep_50";
-  char dsetEX[64] = "/Timestep_50/ex";
-  char dsetEY[64] = "/Timestep_50/ey";
-  char dsetEZ[64] = "/Timestep_50/ez";
-  char dsetBX[64] = "/Timestep_50/cbx";
-  char dsetBY[64] = "/Timestep_50/cby";
-  char dsetBZ[64] = "/Timestep_50/cbz";
-  char dsetEJX[64] = "/Timestep_50/jx";
-  char dsetEJY[64] = "/Timestep_50/jy";
-  char dsetEJZ[64] = "/Timestep_50/jz";
-  char dsetIJX[64] = "/Timestep_50/jx";
-  char dsetIJY[64] = "/Timestep_50/jy";
-  char dsetIJZ[64] = "/Timestep_50/jz";
 
   //Split array into chunks for parallel processing
   std::vector<int> chunk_size(3);
@@ -188,23 +175,61 @@ int main(int argc, char *argv[])
   overlap_size[1] = 0;
   overlap_size[2] = 0;
 
+  int copt;
+  while ((copt = getopt(argc, argv, "f:e:i:r:g:c:o:h")) != -1)
+    switch (copt)
+    {
+    case 'f':
+      memset(i_file_field, 0, sizeof(i_file_field));
+      strcpy(i_file_field, optarg);
+      break;
+    case 'e':
+      memset(i_file_electron, 0, sizeof(i_file_electron));
+      strcpy(i_file_electron, optarg);
+      break;
+    case 'i':
+      memset(i_file_ion, 0, sizeof(i_file_ion));
+      strcpy(i_file_ion, optarg);
+      break;
+    case 'r':
+      memset(o_file, 0, sizeof(o_file));
+      strcpy(o_file, optarg);
+      break;
+    case 'g':
+      memset(group, 0, sizeof(group));
+      strcpy(group, optarg);
+      break;
+    case 'c':
+      find_value_3D(chunk_size, optarg, 3);
+      break;
+    case 'o':
+      find_value_3D(overlap_size, optarg, 3);
+      break;
+    case 'h':
+      print_help();
+      exit(0);
+    default:
+      break;
+    }
+
   MPI_Init(&argc, &argv);
 
   //Orginal data sets
-  Array<float> *EX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEX, chunk_size, overlap_size);
-  Array<float> *EY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEY, chunk_size, overlap_size);
-  Array<float> *EZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEZ, chunk_size, overlap_size);
-  Array<float> *BX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetBX, chunk_size, overlap_size);
-  Array<float> *BY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetBY, chunk_size, overlap_size);
-  Array<float> *BZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetBZ, chunk_size, overlap_size);
+  Array<float> *EX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "ex", chunk_size, overlap_size);
+  Array<float> *EY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "ey", chunk_size, overlap_size);
+  Array<float> *EZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "ez", chunk_size, overlap_size);
 
-  Array<float> *EJX = new Array<float>(AU_NVS, AU_HDF5, i_file_electron, group, dsetEJX, chunk_size, overlap_size);
-  Array<float> *EJY = new Array<float>(AU_NVS, AU_HDF5, i_file_electron, group, dsetEJY, chunk_size, overlap_size);
-  Array<float> *EJZ = new Array<float>(AU_NVS, AU_HDF5, i_file_electron, group, dsetEJZ, chunk_size, overlap_size);
+  Array<float> *BX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "cbx", chunk_size, overlap_size);
+  Array<float> *BY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "cby", chunk_size, overlap_size);
+  Array<float> *BZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "cbz", chunk_size, overlap_size);
 
-  Array<float> *IJX = new Array<float>(AU_NVS, AU_HDF5, i_file_ion, group, dsetIJX, chunk_size, overlap_size);
-  Array<float> *IJY = new Array<float>(AU_NVS, AU_HDF5, i_file_ion, group, dsetIJY, chunk_size, overlap_size);
-  Array<float> *IJZ = new Array<float>(AU_NVS, AU_HDF5, i_file_ion, group, dsetIJZ, chunk_size, overlap_size);
+  Array<float> *EJX = new Array<float>(AU_NVS, AU_HDF5, i_file_electron, group, "jx", chunk_size, overlap_size);
+  Array<float> *EJY = new Array<float>(AU_NVS, AU_HDF5, i_file_electron, group, "jy", chunk_size, overlap_size);
+  Array<float> *EJZ = new Array<float>(AU_NVS, AU_HDF5, i_file_electron, group, "jz", chunk_size, overlap_size);
+
+  Array<float> *IJX = new Array<float>(AU_NVS, AU_HDF5, i_file_ion, group, "jx", chunk_size, overlap_size);
+  Array<float> *IJY = new Array<float>(AU_NVS, AU_HDF5, i_file_ion, group, "jy", chunk_size, overlap_size);
+  Array<float> *IJZ = new Array<float>(AU_NVS, AU_HDF5, i_file_ion, group, "jz", chunk_size, overlap_size);
 
   //Create a compound data strucutre to include JX/JY/JZ/....
   Array<CompundPoint, float> *XYZ = new Array<CompundPoint, float>(AU_VIRTUAL);
@@ -382,4 +407,45 @@ void create_xdmf_file(char *xml_output_file, char *dimensions, char *origin_dxdy
           attribute_name3, dimensions, hdf5_file_dataset3,
           attribute_name4, dimensions, hdf5_file_dataset4);
   fclose(fp);
+}
+
+void find_value_3D(std::vector<int> &value, char *value_str, int dims)
+{
+  int i;
+  char *pch;
+  char temp[1024];
+
+  if (dims == 1)
+  {
+    value[0] = atoi(value_str);
+  }
+  else
+  {
+    strcpy(temp, value_str);
+    pch = strtok(temp, ",");
+    i = 0;
+    while (pch != NULL)
+    {
+      //printf("%s \n", pch);
+      value[i] = atoi(pch);
+      pch = strtok(NULL, ",");
+      i++;
+    }
+  }
+}
+
+void print_help()
+{
+  const char *msg = "Usage: %s [OPTION] \n\
+      	  -h help \n\
+          -f field file \n\
+          -e hydro electron file \n\
+          -i hydro ion file \n\
+          -r result file \n\
+          -g group(or step) name \n\
+          -c chunk size string (3D, e.g. \"32,1,32\") \n\
+          -o overlap (ghost zone) size (3D, e.g. \"0,0,0\"). \n\
+          Example: mpirun -n 2 ./element-wise  -f ./test-file/fields_50.h5 -e ./test-file/hydro_electron_50.h5  -i ./test-file/hydro_ion_50.h5 -r ./test-file/fields_50.h5 -g /Timestep_50 -c  \"32,1,32\"\n";
+
+  fprintf(stdout, msg, "element-wise");
 }
