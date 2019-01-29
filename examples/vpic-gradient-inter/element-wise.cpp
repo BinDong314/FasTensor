@@ -93,30 +93,22 @@ struct CompundPoint
   }
 };
 
+// Section 7.1 Total Current
 inline float totalCurrent_UDF(const Stencil<CompundPoint> &hp)
 {
   CompundPoint hpt = hp(0, 0, 0);
   return (hpt.ejx + hpt.ijx) + (hpt.ejy + hpt.ijy) + (hpt.ejz + hpt.ijz);
 }
 
+// Section 7.2  Absolute Vlues of Current
 inline float absJ_UDF(const Stencil<CompundPoint> &hp)
 {
   CompundPoint hpt = hp(0, 0, 0);
   return sqrt((hpt.ejx + hpt.ijx) * (hpt.ejx + hpt.ijx) + (hpt.ejy + hpt.ijy) * (hpt.ejy + hpt.ijy) + (hpt.ejz + hpt.ijz) * (hpt.ejz + hpt.ijz));
 }
 
-inline float DotEJ_UDF(const Stencil<CompundPoint> &hp)
-{
-  CompundPoint hpt = hp(0, 0, 0);
-  return hpt.ex * (hpt.ejx + hpt.ijx) + hpt.ey * (hpt.ejy + hpt.ijy) + hpt.ez * (hpt.ejz + hpt.ijz);
-}
-
-inline float Eparallel_UDF(const Stencil<CompundPoint> &hp)
-{
-  CompundPoint hpt = hp(0, 0, 0);
-  return (hpt.ex * hpt.bx + hpt.ey * hpt.by + hpt.ez * hpt.bz) / sqrt(hpt.bx * hpt.bx + hpt.by * hpt.by + hpt.bz * hpt.bz);
-}
-
+//Section 7.3 RMS Fluctions of absJ
+//It follows by a reduce in main()
 float local_sum = 0;
 unsigned long local_n = 0;
 inline float squared_absJ_UDF(const Stencil<float> &hp)
@@ -127,6 +119,42 @@ inline float squared_absJ_UDF(const Stencil<float> &hp)
   return 0; //Actually, we return nothing here
 }
 
+//Section 7.4 Work done be Paticles
+inline float DotEJ_UDF(const Stencil<CompundPoint> &hp)
+{
+  CompundPoint hpt = hp(0, 0, 0);
+  return hpt.ex * (hpt.ejx + hpt.ijx) + hpt.ey * (hpt.ejy + hpt.ijy) + hpt.ez * (hpt.ejz + hpt.ijz);
+}
+
+//Section 7.5 Parallel Electric Field
+// Simple version Eq: 27
+inline float Eparallel_UDF(const Stencil<CompundPoint> &hp)
+{
+  CompundPoint hpt = hp(0, 0, 0);
+  return (hpt.ex * hpt.bx + hpt.ey * hpt.by + hpt.ez * hpt.bz) / sqrt(hpt.bx * hpt.bx + hpt.by * hpt.by + hpt.bz * hpt.bz);
+}
+
+//Section 7.5 Parallel Electric Field
+// Simple version Eq: 28 - 34
+inline float Eparallel_UDF_V2(const Stencil<CompundPoint> &hp)
+{
+  //Eq 28
+  float ex_p = ((hp(0, 0, 0).ex + hp(0, 1, 0).ex + hp(0, 0, 1).ex + hp(0, 1, 1).ex)) / 4.0;
+  //Eq 29
+  float ey_p = ((hp(0, 0, 0).ey + hp(1, 0, 0).ey + hp(0, 0, 1).ey + hp(1, 0, 1).ey)) / 4.0;
+  //Eq 30
+  float ez_p = ((hp(0, 0, 0).ez + hp(1, 0, 0).ez + hp(0, 1, 0).ez + hp(1, 1, 0).ez)) / 4.0;
+
+  //Eq 31
+  float bx_p = (hp(0, 0, 0).bx + hp(1, 0, 0).bx) / 2.0;
+  //Eq 32
+  float by_p = (hp(0, 0, 0).by + hp(0, 1, 0).by) / 2.0;
+  //Eq 33
+  float bz_p = (hp(0, 0, 0).bz + hp(0, 0, 1).bz) / 2.0;
+
+  return (ex_p * bx_p + ey_p * by_p + ez_p * bz_p) / sqrt(bx_p * bx_p + by_p * by_p + bz_p * bz_p);
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -134,7 +162,7 @@ int main(int argc, char *argv[])
   char i_file_electron[1024] = "./hydro_electron_50.h5";
   char i_file_ion[1024] = "./hydro_ion_50.h5";
 
-  char o_file[1024] = "./fields_50_field_element.h5";
+  char o_file[1024] = "./fields_50.h5"; //  "./fields_50_field_element.h5";
 
   char group[64] = "/Timestep_50";
   char dsetEX[64] = "/Timestep_50/ex";
@@ -164,7 +192,6 @@ int main(int argc, char *argv[])
 
   //Orginal data sets
   Array<float> *EX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEX, chunk_size, overlap_size);
-
   Array<float> *EY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEY, chunk_size, overlap_size);
   Array<float> *EZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetEZ, chunk_size, overlap_size);
   Array<float> *BX = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, dsetBX, chunk_size, overlap_size);
@@ -209,6 +236,13 @@ int main(int argc, char *argv[])
   Array<float> *R4 = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, dsetR, chunk_size, overlap_size);
   XYZ->Apply(Eparallel_UDF, R4);
   delete R4;
+
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  sprintf(dsetR, "%s/%s", group, "EparallelV2");
+  Array<float> *R5 = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, dsetR, chunk_size, overlap_size);
+  XYZ->Apply(Eparallel_UDF_V2, R5);
+  delete R5;
 
   //Compute   squared_absJ
   int mpi_rank;
