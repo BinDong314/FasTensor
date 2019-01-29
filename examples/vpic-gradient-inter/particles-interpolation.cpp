@@ -311,8 +311,8 @@ inline float InterBZ(const Stencil<Particle> &p)
 
 int main(int argc, char *argv[])
 {
-  char i_file_field[1024] = "./fields_50.h5";
-  char i_file_particle[1024] = "./electron_50.h5";
+  char i_file_field[1024] = "./test-file/fields_50.h5";
+  char i_file_particle[1024] = "./test-file/electron_50.h5";
 
   char group[64] = "/Timestep_50";
   char dsetEX[64] = "/Timestep_50/ex";

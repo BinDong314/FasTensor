@@ -73,7 +73,7 @@ inline float ParallelEB(const Stencil<Particle> &hp)
 
 int main(int argc, char *argv[])
 {
-    char i_file_particle[1024] = "./electron_50.h5";
+    char i_file_particle[1024] = "./test-file/electron_50.h5";
     char group[64] = "/Timestep_50";
 
     int c_size = 3277, o_size = 0;
