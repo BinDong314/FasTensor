@@ -5,20 +5,15 @@ It analyzes the data dumped by VPIC using the HDF5 interface (please see ./hdf5-
 
 The analysis codes has four files:
 
-field-element-wise-op.cpp	
-particle-global-xyz.cpp
-particle-interpolation.cpp
-parallel-eb-at-particle.cpp	
-
-
+        field-element-wise-op.cpp	
+        particle-global-xyz.cpp
+        particle-interpolation.cpp
+        parallel-eb-at-particle.cpp	
 
 "field-element-wise-op.cpp" perform a few element-wise operations on field data.
 "particle-global-xyz.cpp" calculates global location (x/y/z) for each particle.
 "particle-interpolation.cpp" interpolates the field data to each particle.
 "parallel-eb-at-particle.cpp" calculates the interpolated filed for each particle.
-
-
-Usually, these files should be ran following the order listed above.
 
 All files have the same structure:
 
@@ -39,7 +34,8 @@ All files have the same structure:
             ....
         }
 
-1.0 Compile and Run the code
+Usually, these files should be ran by  the order listed above.
+
    > change "CCC" in Makefile to your compiler
    > make
    > mpirun -n 2 field-element-wise-op 
