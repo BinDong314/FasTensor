@@ -5,10 +5,12 @@
 #include <stdlib.h>
 #include <math.h> /* ceil  and floor*/
 #include <cstring>
-
 #include "array_udf.h"
 
 using namespace std;
+
+//Help functions
+void print_help();
 
 struct Particle
 {
@@ -76,12 +78,49 @@ int main(int argc, char *argv[])
     char i_file_particle[1024] = "./test-file/electron_50.h5";
     char group[64] = "/Timestep_50";
 
+    char o_file[1024] = "./test-file/electron_50.h5";
+
     int c_size = 3277, o_size = 0;
+    int copt, has_set_output_flag = 0;
+
+    while ((copt = getopt(argc, argv, "hp:g:r:c:o:")) != -1)
+        switch (copt)
+        {
+        case 'p':
+            memset(i_file_particle, 0, sizeof(i_file_particle));
+            strcpy(i_file_particle, optarg);
+            break;
+        case 'g':
+            memset(group, 0, sizeof(group));
+            strcpy(group, optarg);
+            break;
+        case 'r':
+            has_set_output_flag = 1;
+            memset(o_file, 0, sizeof(o_file));
+            strcpy(o_file, optarg);
+            break;
+        case 'c':
+            c_size = atoi(optarg);
+            break;
+        case 'o':
+            o_size = atoi(optarg);
+            break;
+        case 'h':
+            print_help();
+            exit(0);
+        default:
+            break;
+        }
 
     std::vector<int> chunk_size(1);
     std::vector<int> overlap_size(1);
     chunk_size[0] = c_size;
     overlap_size[0] = o_size;
+    if (has_set_output_flag == 0)
+    {
+        memset(o_file, 0, sizeof(o_file));
+        strcpy(o_file, i_file_particle);
+    }
 
     MPI_Init(&argc, &argv);
 
@@ -100,7 +139,7 @@ int main(int argc, char *argv[])
     //std::cout <<  "P : x = " << p.x << ", y = " << p.y << ", z = " << p.z << std::endl;
 
     //Results data sets
-    Array<float> *R = new Array<float>(AU_COMPUTED, AU_HDF5, i_file_particle, group, "eparallel", chunk_size, overlap_size);
+    Array<float> *R = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "eparallel", chunk_size, overlap_size);
     P->Apply(ParallelEB, R);
 
     //Clear
@@ -116,4 +155,18 @@ int main(int argc, char *argv[])
     MPI_Finalize();
 
     return 0;
+}
+
+void print_help()
+{
+    const char *msg = "Usage: %s [OPTION] \n\
+      	  -h help \n\
+          -p particle file \n\
+          -r result file \n\
+          -g group(or step) name \n\
+          -c chunk size (1D) \n\
+          -o overlap (ghost zone) size (1D). \n\
+          Example: mpirun -n 2 ./parallel-eb-at-particle  -p ./test-file/electron_50.h5 -r ./test-file/electron_50.h5 -g /Timestep_50 -c 3277\n";
+
+    fprintf(stdout, msg, "parallel-eb-at-particle");
 }

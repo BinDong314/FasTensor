@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
   overlap_size[1] = 0;
   overlap_size[2] = 0;
 
-  int copt;
+  int copt, has_set_output_flag = 0;
   while ((copt = getopt(argc, argv, "f:e:i:r:g:c:o:h")) != -1)
     switch (copt)
     {
@@ -192,6 +192,7 @@ int main(int argc, char *argv[])
       strcpy(i_file_ion, optarg);
       break;
     case 'r':
+      has_set_output_flag = 1;
       memset(o_file, 0, sizeof(o_file));
       strcpy(o_file, optarg);
       break;
@@ -211,6 +212,12 @@ int main(int argc, char *argv[])
     default:
       break;
     }
+
+  if (has_set_output_flag == 0)
+  {
+    memset(o_file, 0, sizeof(o_file));
+    strcpy(o_file, i_file_field);
+  }
 
   MPI_Init(&argc, &argv);
 

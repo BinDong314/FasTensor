@@ -147,7 +147,7 @@ inline float I_UDF(const Stencil<int> &c)
 
 int main(int argc, char *argv[])
 {
-  int copt;
+  int copt, has_set_output_flag = 0;
   int c_size = 3277, o_size = 0;
 
   char p_file[1024] = "./test-file/electron_50.h5";
@@ -172,6 +172,7 @@ int main(int argc, char *argv[])
       strcpy(group, optarg);
       break;
     case 'r':
+      has_set_output_flag = 1;
       memset(o_file, 0, sizeof(o_file));
       strcpy(o_file, optarg);
       break;
@@ -192,6 +193,12 @@ int main(int argc, char *argv[])
   std::vector<int> overlap_size(1);
   chunk_size[0] = c_size;
   overlap_size[0] = o_size;
+
+  if (has_set_output_flag == 0)
+  {
+    memset(o_file, 0, sizeof(o_file));
+    strcpy(o_file, p_file);
+  }
 
   MPI_Init(&argc, &argv);
 

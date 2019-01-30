@@ -52,6 +52,7 @@ struct Particle
 //It is duplicated at each mpi rank
 Array<float> *EX, *EY, *EZ, *BX, *BY, *BZ;
 
+//Will be updated by get_metadata() with provided metadata file
 std::vector<float> total_cells{64, 1, 64}; //Two domains
 std::vector<float> dxdydz_per_cell{11.7188, 375, 4.88281};
 std::vector<float> xyz_shitf{0, 187.5, 156}; //|x0| |y0| |z0|
@@ -321,7 +322,7 @@ int main(int argc, char *argv[])
   char o_file[1024] = "./test-file/electron_50.h5";
 
   int c_size = 3277, o_size = 0;
-  int copt;
+  int copt, has_set_output_flag = 0;
 
   while ((copt = getopt(argc, argv, "hm:f:p:g:r:c:o:")) != -1)
     switch (copt)
@@ -343,6 +344,7 @@ int main(int argc, char *argv[])
       strcpy(group, optarg);
       break;
     case 'r':
+      has_set_output_flag = 1;
       memset(o_file, 0, sizeof(o_file));
       strcpy(o_file, optarg);
       break;
@@ -363,6 +365,12 @@ int main(int argc, char *argv[])
   std::vector<int> overlap_size(1);
   chunk_size[0] = c_size;
   overlap_size[0] = o_size;
+
+  if (has_set_output_flag == 0)
+  {
+    memset(o_file, 0, sizeof(o_file));
+    strcpy(o_file, i_file_particle);
+  }
 
   MPI_Init(&argc, &argv);
 
@@ -452,7 +460,7 @@ void print_help()
           -m metadata (grid) file \n\
           -r result file \n\
           -g group(or step) name \n\
-          -c chunk size string (1D) \n\
+          -c chunk size (1D) \n\
           -o overlap (ghost zone) size (1D). \n\
           Example: mpirun -n 2 ./particles-interpolation  -f ./test-file/fields_50.h5 -p ./test-file/electron_50.h5  -m ./test-file/grid_metadata_electron_50.h5 -r ./test-file/fields_50.h5 -g /Timestep_50 -c 3277\n";
 
