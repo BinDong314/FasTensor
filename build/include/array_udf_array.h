@@ -130,6 +130,9 @@ private:
   int apply_writeback_flag = 0;
   int preload_flag = 0;
 
+  std::vector<T> cpp_vec_input;
+  int cpp_vec_flag = 0;
+
 public:
   //Do Nothing
   Array(){};
@@ -769,6 +772,18 @@ public:
     current_chunk_id = mpi_rank; //Each process deal with one chunk one time, starting from its rank
   };
 
+  Array(std::vector<T> &vec)
+  {
+    //Using the c++'s std::vector to intialize Array
+    int len = vec.size();
+    cpp_vec_input.resize(len);
+
+    for (int i = 0; i < len; i++)
+      cpp_vec_input[i] = vec[i];
+
+    cpp_vec_flag = 1;
+  }
+
   ~Array()
   {
 #ifdef DEBUG
@@ -1040,6 +1055,33 @@ public:
     for (int i = 0; i < 100; i++)
       std::cout << current_chunk_data[i] << std::endl;
     return;
+  }
+
+  //Only for test
+  void ApplyV(T (*UDF)(const Stencil<T> &), std::vector<T> &result)
+  {
+    int len_cpp_vector_input = cpp_vec_input.size();
+    std::vector<unsigned long long> cell_coordinate(1);
+    std::vector<unsigned long long> chunk_size(1);
+    chunk_size[0] = len_cpp_vector_input;
+
+    T cell_return_value;
+    result.resize(len_cpp_vector_input);
+    for (int i = 0; i < len_cpp_vector_input; i++)
+    {
+      cell_coordinate[0] = i;
+      Stencil<T> cell_target(0, &cpp_vec_input[0], cell_coordinate, chunk_size);
+      cell_return_value = UDF(cell_target); // Called by python
+      result[0] = cell_return_value;
+    }
+  }
+
+  void UpdateCPPVector(std::vector<T> &v)
+  {
+    int len = v.size();
+    cpp_vec_input.resize(len);
+    for (int i = 0; i < len; i++)
+      cpp_vec_input[i] = v[i];
   }
 
 //The interface to accept UDF function.

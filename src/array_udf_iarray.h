@@ -105,13 +105,13 @@ public:
 
   int Create(int data_dims, std::vector<unsigned long long> &data_dims_size, AUType data_type_class, std::vector<int> data_overlap_size, std::vector<int> data_chunk_size_t)
   {
-    //#ifdef DEBUG
+#ifdef DEBUG
     if (mpi_rank == 0)
     {
       printf("Debug: create iArray, in udf_ga. ghost size = (%d) \n", data_overlap_size[0]);
       fflush(stdout);
     }
-    //#endif
+#endif
     rank = data_dims;
     type = data_type_class;
     dims.resize(rank);

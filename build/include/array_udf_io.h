@@ -447,7 +447,7 @@ public:
     data_v.resize(part_striping_size);
     nvs_f_handle->ReOpenAsReadOnly();
     nvs_f_handle->ReadDataAll(data_v);
-    std::cout << "rank : " << mpi_rank << ", start: " << start[0] << ", end: " << end[0] << ", strip size = " << part_striping_size << ", at start = " << data_v[start[0]] << ", at end-1 =" << data_v[end[0] - 1] << ", at end=" << data_v[end[0]] << std::endl;
+    //std::cout << "rank : " << mpi_rank << ", start: " << start[0] << ", end: " << end[0] << ", strip size = " << part_striping_size << ", at start = " << data_v[start[0]] << ", at end-1 =" << data_v[end[0] - 1] << ", at end=" << data_v[end[0]] << std::endl;
 
     //vs_f_handle->WriteData(start, end, data_v);
     //This write will go to local memory of each mpi_rank

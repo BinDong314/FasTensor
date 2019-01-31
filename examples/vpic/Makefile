@@ -3,7 +3,7 @@ HDF5_DIR=/Users/dbin/work/soft/hdf5-1.8.18/build/
 CCC=mpicxx
 
 .PHONY:all
-all:field-element-wise-op particle-global-xyz particle-interpolation parallel-eb-at-particle
+all:field-element-wise-op particle-global-xyz particle-interpolation parallel-eb-at-particle mag-field
 
 field-element-wise-op:field-element-wise-op.cpp 
 	$(CCC) -o  field-element-wise-op   field-element-wise-op.cpp     -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
@@ -16,5 +16,7 @@ particle-interpolation:particle-interpolation.cpp
 
 parallel-eb-at-particle: parallel-eb-at-particle.cpp
 	$(CCC) -o parallel-eb-at-particle parallel-eb-at-particle.cpp -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
+mag-field:mag-field.cpp
+	$(CCC) -o mag-field mag-field.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
 clean:
-	rm field-element-wise-op particle-global-xyz particle-interpolation parallel-eb-at-particle
+	rm field-element-wise-op particle-global-xyz particle-interpolation parallel-eb-at-particle mag-field
