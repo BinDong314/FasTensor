@@ -119,7 +119,7 @@ private:
   T padding_value;
   std::vector<int> padding_size;
   int vector_type_flag = 0;
-  int filter_amount;
+  int filter_amount; // see blow output_vector_size
   int output_element_different_type_flag = 0;
   int output_element_type_class;
   int mirror_value_flag = 0;
@@ -132,6 +132,9 @@ private:
 
   std::vector<T> cpp_vec_input;
   int cpp_vec_flag = 0;
+
+  int output_vector_size = 0;
+  int output_vector_flat_direction_index = 0;
 
 public:
   //Do Nothing
@@ -365,10 +368,40 @@ public:
     time_nonvolatile = 0;
     d_orig = d_orig_p;
     nvs_f = nvs_f_p;
+
+    typedef typename extract_value_type<T>::value_type value_type;
+
     if (is_vector_type<AttrType>())
     {
       vector_type_flag = 1;
-      //std::cout << "Vector_type_flag : " << vector_type_flag << std::endl;
+      //std::cout << "Vector has same type as T : " << is_base_type_T<AttrType, T>() << std::endl;
+      if (is_base_type_T<AttrType, T>() == 0)
+      {
+        output_element_different_type_flag = 1;
+        if (is_base_type_T<AttrType, int>())
+        {
+          if (!mpi_rank)
+            printf("In Array init: output element type is int \n ");
+          output_element_type_class = H5T_INTEGER;
+        }
+        else if (is_base_type_T<AttrType, float>())
+        {
+          if (!mpi_rank)
+            printf("In Array init: output element type is float \n ");
+          output_element_type_class = H5T_FLOAT;
+        }
+        else if (is_base_type_T<AttrType, std::complex<float>>())
+        {
+          if (!mpi_rank)
+            printf("In Array init: output element type is std::complex<float> \n ");
+          output_element_type_class = H5T_COMPOUND;
+        }
+        else
+        {
+          printf("In Array init: not support type: %s:%d \n ", __FILE__, __LINE__);
+          exit(-1);
+        }
+      }
     }
     else
     {
@@ -400,6 +433,7 @@ public:
       data = new Data<T>(fn, gn, dn, d_orig_p, nvs_f_p);
       return;
     }
+
     //Data is from disk file
     data = new Data<T>(fn, gn, dn, d_orig_p, nvs_f_p);
     data_chunk_size = cs;
@@ -1154,7 +1188,7 @@ public:
     {
       if (skip_flag == 1)
       {
-        //Todo: do we need to consider data_overlap size
+        //Todo:  need to consider data_overlap size
         if (vector_type_flag == 0)
         {
           if (output_element_different_type_flag == 0)
@@ -1167,25 +1201,44 @@ public:
             B->CreateStorageSpace(data_dims, skiped_dims_size, skiped_chunk_size, data_overlap_size, output_element_type_class, data_total_chunks);
           }
         }
-        else
-        { //vector_type_flag == 1
+        else //skip_flag == 1 and vector_type_flag == 1
+        {
           int data_dims_t;
-          data_dims_t = data_dims + 1;
           std::vector<unsigned long long> skiped_dims_size_t;
-          skiped_dims_size_t.resize(data_dims_t);
           std::vector<int> skiped_chunk_size_t;
           std::vector<int> data_overlap_size_t;
-          skiped_chunk_size_t.resize(data_dims_t);
-          data_overlap_size_t.resize(data_dims_t);
-          for (int k = 0; k < data_dims; k++)
-          {
-            skiped_dims_size_t[k] = skiped_dims_size[k];
-            data_overlap_size_t[k] = data_overlap_size[k];
-            skiped_chunk_size_t[k] = skiped_chunk_size[k];
+
+          if (output_vector_flat_direction_index > (data_dims - 1))
+          { //We save the output vector as new dimensions
+            data_dims_t = data_dims + 1;
+            skiped_dims_size_t.resize(data_dims_t);
+            skiped_chunk_size_t.resize(data_dims_t);
+            data_overlap_size_t.resize(data_dims_t);
+            for (int k = 0; k < data_dims; k++)
+            {
+              skiped_dims_size_t[k] = skiped_dims_size[k];
+              data_overlap_size_t[k] = data_overlap_size[k];
+              skiped_chunk_size_t[k] = skiped_chunk_size[k];
+            }
+            skiped_dims_size_t[data_dims] = output_vector_size;
+            data_overlap_size_t[data_dims] = 0;
+            skiped_chunk_size_t[data_dims] = output_vector_size;
           }
-          skiped_dims_size_t[data_dims] = filter_amount;
-          data_overlap_size_t[data_dims] = 0;
-          skiped_chunk_size_t[data_dims] = filter_amount;
+          else
+          { //We save the output vector within existing dimensions
+            data_dims_t = data_dims;
+            skiped_dims_size_t.resize(data_dims_t);
+            skiped_chunk_size_t.resize(data_dims_t);
+            data_overlap_size_t.resize(data_dims_t);
+            for (int k = 0; k < data_dims; k++)
+            {
+              skiped_dims_size_t[k] = skiped_dims_size[k];
+              if (k == output_vector_flat_direction_index)
+                skiped_dims_size_t[k] = skiped_dims_size_t[k] * output_vector_size;
+              data_overlap_size_t[k] = data_overlap_size[k];
+              skiped_chunk_size_t[k] = skiped_chunk_size[k];
+            }
+          }
 
           if (output_element_different_type_flag == 0)
           {
@@ -1195,7 +1248,8 @@ public:
           {
             B->CreateStorageSpace(data_dims_t, skiped_dims_size_t, skiped_chunk_size_t, data_overlap_size_t, output_element_type_class, data_total_chunks);
           }
-          B->SetFilterAmount(filter_amount);
+          //B->SetFilterAmount(filter_amount);
+          B->SetOutputVectorIO(output_vector_size, output_vector_flat_direction_index);
         }
       }
       else
@@ -1211,25 +1265,45 @@ public:
             B->CreateStorageSpace(data_dims, data_dims_size, data_chunk_size, data_overlap_size, output_element_type_class, data_total_chunks);
           }
         }
-        else
+        else //skip_flag == 0 and vector_type_flag == 1
         {
           int data_dims_t;
-          data_dims_t = data_dims + 1;
           std::vector<unsigned long long> dims_size_t;
           std::vector<int> chunk_size_t;
           std::vector<int> data_overlap_size_t;
-          dims_size_t.resize(data_dims_t);
-          chunk_size_t.resize(data_dims_t);
-          data_overlap_size_t.resize(data_dims_t);
-          for (int k = 0; k < data_dims; k++)
+
+          if (output_vector_flat_direction_index > (data_dims - 1))
           {
-            dims_size_t[k] = data_dims_size[k];
-            chunk_size_t[k] = data_chunk_size[k];
-            data_overlap_size_t[k] = data_overlap_size[k];
+            data_dims_t = data_dims + 1;
+            dims_size_t.resize(data_dims_t);
+            chunk_size_t.resize(data_dims_t);
+            data_overlap_size_t.resize(data_dims_t);
+            for (int k = 0; k < data_dims; k++)
+            {
+              dims_size_t[k] = data_dims_size[k];
+              chunk_size_t[k] = data_chunk_size[k];
+              data_overlap_size_t[k] = data_overlap_size[k];
+            }
+            dims_size_t[data_dims] = output_vector_size;
+            data_overlap_size_t[data_dims] = 0;
+            chunk_size_t[data_dims] = output_vector_size;
           }
-          dims_size_t[data_dims] = filter_amount;
-          data_overlap_size_t[data_dims] = 0;
-          chunk_size_t[data_dims] = filter_amount;
+          else
+          {
+            data_dims_t = data_dims;
+            dims_size_t.resize(data_dims_t);
+            chunk_size_t.resize(data_dims_t);
+            data_overlap_size_t.resize(data_dims_t);
+            for (int k = 0; k < data_dims; k++)
+            {
+              dims_size_t[k] = data_dims_size[k];
+              if (k == output_vector_flat_direction_index)
+                dims_size_t[k] = dims_size_t[k] * output_vector_size;
+              // dims_size_t[k] = data_dims_size[k] * output_vector_size;
+              chunk_size_t[k] = data_chunk_size[k];
+              data_overlap_size_t[k] = data_overlap_size[k];
+            }
+          }
           if (output_element_different_type_flag == 0)
           {
             B->CreateStorageSpace(data_dims_t, dims_size_t, chunk_size_t, data_overlap_size_t, data->GetTypeClass(), data_total_chunks);
@@ -1238,7 +1312,7 @@ public:
           {
             B->CreateStorageSpace(data_dims_t, dims_size_t, chunk_size_t, data_overlap_size_t, output_element_type_class, data_total_chunks);
           }
-          B->SetFilterAmount(filter_amount);
+          B->SetOutputVectorIO(output_vector_size, output_vector_flat_direction_index);
         }
       }
       if (data_total_chunks % mpi_size != 0)
@@ -1535,6 +1609,7 @@ public:
       else
       {
         //Write result to A
+        // i.e., overwrite the original data
         if (skip_flag == 0)
         {
           //SaveResult(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
@@ -1862,7 +1937,11 @@ void SetApplyStripSize(std::vector<int> skip_size_p)
   }
 
   if (mpi_rank == 0)
-    PrintVector<unsigned long long>("After setting skip_size ", skip_size);
+  {
+    PrintVector<unsigned long long>("After setting skip_size", skip_size);
+    PrintVector<unsigned long long>("After setting skiped_dims_size ", skiped_dims_size);
+    //PrintVector<int>("After setting skiped_chunk_size ", skiped_chunk_size);
+  }
 
   skip_flag = 1;
 }
@@ -1892,6 +1971,7 @@ void SetApplyDirection(int direction_t)
   }
 }
 
+//Replaced by "SetOutputVector"
 void SetApplyFilters(int filters)
 {
   vector_type_flag = 1;
@@ -1901,6 +1981,30 @@ void SetApplyFilters(int filters)
 #endif
 }
 
+//This function tells ArrayUDF that the output of each UDF is a
+// vector and also sets the size of output vector by a single UDF
+// Now, we assume a single UDF has 1D vector as output
+// It is a generic version of "SetApplyFilters"
+//
+// The "direction" specify how to flat output vector
+// For example, when running a UDF on a cell (i, j) of a 2D array
+//  flat_direction_index = 0: store result vector in (i : i + vsize, j)
+//  flat_direction_index = 1: store result vector in (i,             j: j + vsize)
+//  flat_direction_index = 2: store result vector as new dimension of a 3D array (i, j, 0:vsize)
+//
+//Todo: we can infer "vsize" in futher version
+//      we can also support multiple dimensional vector
+void SetOutputVector(int vsize, int flat_direction_index)
+{
+  vector_type_flag = 1;
+  output_vector_size = vsize;
+  output_vector_flat_direction_index = flat_direction_index;
+#ifdef DEBUG
+  printf("Set output vector size : %d, %d \n", vsize, direction);
+#endif
+}
+
+//Not finished yet
 void SetApplyPadding(T padding_value_p, std::vector<int> padding_size_p)
 {
   padding_value_set_flag = 1;
@@ -2357,6 +2461,11 @@ Data<T> *GetDataHandle()
 void SetFilterAmount(int p)
 {
   data->SetFilterAmount(p);
+}
+
+void SetOutputVectorIO(int vsize, int flat_direction_index)
+{
+  data->SetOutputVector(vsize, flat_direction_index);
 }
 
 int GetCreatedFlag()

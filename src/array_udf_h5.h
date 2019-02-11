@@ -29,6 +29,12 @@
 
 using namespace std;
 
+typedef struct
+{
+  float re; /*real part */
+  float im; /*imaginary part */
+} complex_t;
+
 //These information are HDF5 related.
 template <class T>
 class H5Data
@@ -43,6 +49,9 @@ private:
   hid_t plist_id = -1, plist_cio_id = -1;
   int vector_type_flag = 0;
   int filter_amount;
+
+  int output_vector_size = 0;
+  int output_vector_flat_direction_index = 0;
 
 public:
   H5Data(){};
@@ -139,7 +148,12 @@ public:
     if (did > 0)
       H5Dclose(did);
     if (gid > 0)
-      H5Gclose(gid);
+    {
+      std::string root_dir = "/";
+      if (gn_str != root_dir)
+        H5Gclose(gid);
+    }
+
     if (fid > 0)
     {
       H5Fflush(fid, H5F_SCOPE_GLOBAL);
@@ -186,7 +200,7 @@ public:
       //dataset.read(data, PredType::NATIVE_FLOAT, memspace, dataspace);
       break;
     default:
-      std::cout << "Unsupported datatype in SDS_UDF_IO Class/Read Data ! " << std::endl;
+      std::cout << "Unsupported datatype in  " << __FILE__ << __LINE__ << std::endl;
       exit(-1);
       break;
     }
@@ -338,19 +352,57 @@ public:
     std::vector<unsigned long long> offset, count;
     offset.resize(rank); //rank might be start.size()+1 when T is vector
     count.resize(rank);
-    for (int i = 0; i < start.size(); i++)
-    {
-      offset[i] = start[i];
-      count[i] = end[i] - start[i] + 1; //Starting from zero
-    }
+    int data_rank = start.size();
+
     if (vector_type_flag == 1)
     {
-      offset[rank - 1] = 0;
-      count[rank - 1] = filter_amount; //data[0].size();
+      if (output_vector_flat_direction_index > (data_rank - 1))
+      { //Add new dimension
+        assert(rank > data_rank);
+        for (int i = 0; i < data_rank; i++)
+        {
+          offset[i] = start[i];
+          count[i] = end[i] - start[i] + 1; //Starting from zero
+        }
+        offset[rank - 1] = 0;
+        count[rank - 1] = output_vector_size; //data[0].size();
+      }
+      else
+      {
+        for (int i = 0; i < data_rank; i++)
+        {
+          offset[i] = start[i];
+          if (i == output_vector_flat_direction_index)
+          {
+            count[i] = (end[i] - start[i] + 1) * output_vector_size;
+          }
+          else
+          {
+            count[i] = end[i] - start[i] + 1;
+          }
+        }
+        //printf("output_vector_flat_direction_index = %d \n", output_vector_flat_direction_index);
+        //printf("output_vector_size = %d \n", output_vector_size);
+        //PrintVector<unsigned long long>(" offset", offset);
+        //PrintVector<unsigned long long>(" count", count);
+      }
+    }
+    else
+    { //vector_type_flag == 0
+      for (int i = 0; i < data_rank; i++)
+      {
+        offset[i] = start[i];
+        count[i] = end[i] - start[i] + 1; //Starting from zero
+      }
     }
 
     memspace_id = H5Screate_simple(rank, &count[0], NULL);
     H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
+
+    complex_t tmp; /*used only to compute offsets */
+    hid_t complex_id = H5Tcreate(H5T_COMPOUND, sizeof(complex_t));
+    H5Tinsert(complex_id, "real", HOFFSET(complex_t, re), H5T_NATIVE_FLOAT);
+    H5Tinsert(complex_id, "imaginary", HOFFSET(complex_t, im), H5T_NATIVE_FLOAT);
 
     //
     //
@@ -387,8 +439,25 @@ public:
       }
     }
     break;
+    case H5T_COMPOUND:
+    {
+      if (vector_type_flag == 1)
+      {
+        //void *float_new_data_ptr = vv2v(data);
+        void *float_new_data_ptr = flat_vector(data, 1);
+        ret = H5Dwrite(did, complex_id, memspace_id, dataspace_id, plist_cio_id, float_new_data_ptr);
+        if (float_new_data_ptr != NULL)
+          free(float_new_data_ptr);
+      }
+      else
+      {
+        ret = H5Dwrite(did, complex_id, memspace_id, dataspace_id, plist_cio_id, &data[0]);
+      }
+    }
+    break;
+
     default:
-      std::cout << "Unsupported datatype in SDS_UDF_IO Class/Read Data ! " << std::endl;
+      std::cout << "Unsupported datatype in  " << __FILE__ << ": " << __LINE__ << std::endl;
       exit(-1);
       break;
     }
@@ -448,6 +517,7 @@ public:
       }*/
     if (gn_str != root_dir)
     {
+      //printf("Debug: %s:%d\n", __FILE__, __LINE__);
       if (H5Lexists(fid, gn_str.c_str(), H5P_DEFAULT) == 0)
       {
         gid = H5Gcreate(fid, gn_str.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
@@ -457,12 +527,23 @@ public:
         gid = H5Gopen(fid, gn_str.c_str(), H5P_DEFAULT);
       }
     }
+    else
+    {
+      gid = fid;
+    }
+
+    //printf("Debug: %s:%d\n", __FILE__, __LINE__);
 
     type_class = (H5T_class_t)data_type_class;
     rank = data_dims;
     dims_out = data_dims_size;
     hid_t ts_id;
     ts_id = H5Screate_simple(rank, &dims_out[0], NULL);
+
+    complex_t tmp; /*used only to compute offsets */
+    hid_t complex_id = H5Tcreate(H5T_COMPOUND, sizeof(complex_t));
+    H5Tinsert(complex_id, "real", HOFFSET(complex_t, re), H5T_NATIVE_FLOAT);
+    H5Tinsert(complex_id, "imaginary", HOFFSET(complex_t, im), H5T_NATIVE_FLOAT);
 
     switch (type_class)
     {
@@ -514,8 +595,32 @@ public:
         }
       }
       break;
+    case H5T_COMPOUND:
+      if (gn_str != root_dir)
+      {
+        if (H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) == 0)
+        {
+          did = H5Dcreate(gid, dn_str.c_str(), complex_id, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+        }
+        else
+        {
+          did = H5Dopen(gid, dn_str.c_str(), H5P_DEFAULT);
+        }
+      }
+      else
+      {
+        if (H5Lexists(fid, dn_str.c_str(), H5P_DEFAULT) == 0)
+        {
+          did = H5Dcreate(fid, dn_str.c_str(), complex_id, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+        }
+        else
+        {
+          did = H5Dopen(fid, dn_str.c_str(), H5P_DEFAULT);
+        }
+      }
+      break;
     default:
-      std::cout << "Unsupported datatype in SDS_UDF_IO Class/Read Data ! " << std::endl;
+      std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
       exit(-1);
       break;
     }
@@ -558,6 +663,13 @@ public:
   void SetFilterAmount(int p)
   {
     filter_amount = p;
+  }
+
+  void SetOutputVector(int vsize, int flat_direction_index)
+  {
+    vector_type_flag = 1;
+    output_vector_size = vsize;
+    output_vector_flat_direction_index = flat_direction_index;
   }
 
   void ReOpenAsReadOnly()

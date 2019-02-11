@@ -53,6 +53,9 @@ private:
   int filter_amount;
   int create_storage_space_flag = 0;
 
+  int output_vector_size = 0;
+  int output_vector_flat_direction_index = 0;
+
 public:
   Data(){};
 
@@ -365,6 +368,22 @@ public:
     else
     {
       return vs_f_handle->SetFilterAmount(p);
+    }
+  }
+
+  void SetOutputVector(int vsize, int flat_direction_index)
+  {
+    vector_type_flag = 1;
+    output_vector_size = vsize;
+    output_vector_flat_direction_index = flat_direction_index;
+
+    if (cache_flag == AU_NOCACHE)
+    {
+      return nvs_f_handle->SetOutputVector(vsize, flat_direction_index);
+    }
+    else
+    {
+      return vs_f_handle->SetOutputVector(vsize, flat_direction_index);
     }
   }
 

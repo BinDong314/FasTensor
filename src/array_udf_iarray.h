@@ -47,6 +47,9 @@ private:
   int ghost_flag = 0;
   AUType data_type_class_t;
 
+  int output_vector_size = 0;
+  int output_vector_flat_direction_index = 0;
+
 public:
   IArrayData(std::string fn_p, std::string gn_p, std::string dn_p)
   {
@@ -222,16 +225,38 @@ public:
     std::vector<unsigned long long> global_count, global_start;
     global_count.resize(rank);
     global_start.resize(rank);
-    for (int i = 0; i < start.size(); i++)
-    {
-      global_count[i] = end[i] - start[i] + 1;
-      global_start[i] = start[i];
-    }
+    int data_rank = start.size();
+
     void *temp_ptr;
     if (vector_type_flag == 1)
     {
-      global_start[rank - 1] = 0;
-      global_count[rank - 1] = filter_amount;
+      if (output_vector_flat_direction_index > (data_rank - 1))
+      {
+        assert(rank > data_rank);
+        for (int i = 0; i < data_rank; i++)
+        {
+          global_count[i] = end[i] - start[i] + 1;
+          global_start[i] = start[i];
+        }
+        global_start[rank - 1] = 0;
+        global_count[rank - 1] = output_vector_size;
+      }
+      else
+      {
+        for (int i = 0; i < data_rank; i++)
+        {
+          if (output_vector_flat_direction_index == i)
+          {
+            global_count[i] = (end[i] - start[i] + 1) * output_vector_size;
+          }
+          else
+          {
+            global_count[i] = (end[i] - start[i] + 1);
+          }
+          global_start[i] = start[i];
+        }
+      }
+
       temp_ptr = vv2v(data);
       if (temp_ptr != NULL)
       {
@@ -241,6 +266,11 @@ public:
     }
     else
     {
+      for (int i = 0; i < data_rank; i++)
+      {
+        global_count[i] = end[i] - start[i] + 1;
+        global_start[i] = start[i];
+      }
       iArray_write_local(iarray_handle, global_start, global_count, &data[0]);
     }
     return 1;
@@ -359,6 +389,13 @@ public:
   void SetFilterAmount(int p)
   {
     filter_amount = p;
+  }
+
+  void SetOutputVector(int vsize, int flat_direction_index)
+  {
+    vector_type_flag = 1;
+    output_vector_size = vsize;
+    output_vector_flat_direction_index = flat_direction_index;
   }
 
   int GetHandle()

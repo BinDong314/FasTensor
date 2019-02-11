@@ -1,19 +1,22 @@
-#AU_HOME=/bearbin-data3/home/dbin/soft/arrayudf-test-new/build
-#HDF5_DIR=/bearbin-data3/home/dbin/soft/hdf5/build
+AU_HOME=/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/build
+HDF5_DIR=/Users/dbin/work/soft/hdf5-1.8.18/build/
 
 
 .PHONY:all
-all:das-correlation h5-vds-merge tdms2h5
+all:das-correlation h5-vds-merge tdms2h5 das-fft
 
 das-correlation:das-correlation.cpp  
-	mpiCC -o das-correlation das-correlation.cpp -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
+	mpicxx -o das-correlation das-correlation.cpp -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
 
 h5-vds-merge:h5-vds-merge.c  
-	mpiCC -o h5-vds-merge h5-vds-merge.c -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
+	mpicc -o h5-vds-merge h5-vds-merge.c -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  
 
 tdms2h5:tdms2h5.c
 	#echo $(HDF5_DIR)
-	mpiCC -o tdms2h5 tdms2h5.c  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
+	mpicc -o tdms2h5 tdms2h5.c  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
+
+das-fft:das-fft.cpp
+	mpicxx -o das-fft fft/kiss_fft.c das-fft.cpp -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
 
 clean:
-	rm das-correlation h5-vds-merge tdms2h5
+	rm das-correlation h5-vds-merge tdms2h5 das-fft
