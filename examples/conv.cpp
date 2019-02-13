@@ -24,9 +24,9 @@
 
 using namespace std;
 
-#define FILTERS 8
-#define FILTER_WEIGHT 2
-#define FILTER_HEIGHT 2
+#define FILTERS 1
+#define FILTER_WEIGHT 3
+#define FILTER_HEIGHT 3
 
 //Weight array; each row is a filter
 Array<int> *W;

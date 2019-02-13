@@ -9,7 +9,14 @@
 #include <math.h> /* ceil  and floor*/
 #include <cstring>
 #include <complex> // std::complex
+
+//#define FFTW_LIB_AVAILABLE 1
+
+#ifndef FFTW_LIB_AVAILABLE
 #include "fft/kiss_fft.h"
+#else
+#include <fftw3.h>
+#endif
 #include "array_udf.h"
 
 #define NAME_LENGTH 1024
@@ -118,8 +125,8 @@ int main(int argc, char *argv[])
     unsigned long long user_window_size;
     int set_chunk_size_flag = 0;
     int set_window_size_flag = 0;
-    int copt;
-    while ((copt = getopt(argc, argv, "o:i:g:t:x:c:m:h")) != -1)
+    int copt, mpi_rank;
+    while ((copt = getopt(argc, argv, "o:i:g:t:x:c:m:w:h")) != -1)
         switch (copt)
         {
         case 'o':
@@ -176,6 +183,7 @@ int main(int argc, char *argv[])
     m_TIME_SERIESE_LENGTH = chunk_size[0]; //chunk size = window size
 
     MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     Array<int, std::vector<float>> *IFILE = new Array<int, std::vector<float>>(AU_NVS, AU_HDF5, i_file, group, i_dataset, chunk_size, ghost_size);
     Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, group, o_dataset, chunk_size, ghost_size);
 
@@ -195,6 +203,10 @@ int main(int argc, char *argv[])
             if (chunk_size[0] % user_window_size == 0)
             {
                 window_batch = chunk_size[0] / user_window_size;
+                if (!mpi_rank)
+                {
+                    printf("user_window_size = %lld, window_batch = %d \n", user_window_size, window_batch);
+                }
             }
             else
             {
@@ -212,7 +224,8 @@ int main(int argc, char *argv[])
     //For each window
     x_GATHER_X_CORR_LENGTH = 2 * m_TIME_SERIESE_LENGTH - 1;
     M_TIME_SERIESE_LENGTH_EXTENDED = find_m(x_GATHER_X_CORR_LENGTH);
-    printf("M value is : %lld\n", M_TIME_SERIESE_LENGTH_EXTENDED);
+    if (!mpi_rank)
+        printf("M value is : %lld\n", M_TIME_SERIESE_LENGTH_EXTENDED);
 
     x_GATHER_X_CORR_LENGTH_total = x_GATHER_X_CORR_LENGTH * window_batch;
     M_TIME_SERIESE_LENGTH_EXTENDED_total = M_TIME_SERIESE_LENGTH_EXTENDED * window_batch;
@@ -275,9 +288,9 @@ unsigned long long find_m(unsigned long long minimum_m)
 void fft_help(const std::vector<float> fft_in, std::vector<std::complex<float>> &fft_out, unsigned long long extended_size)
 {
     unsigned long long fft_in_size = fft_in.size();
-
     assert(fft_out.size() == extended_size);
 
+#ifndef FFTW_LIB_AVAILABLE
     kiss_fft_cpx *fft_in_temp = (kiss_fft_cpx *)malloc(extended_size * sizeof(kiss_fft_cpx));
     kiss_fft_cpx *fft_out_temp = (kiss_fft_cpx *)malloc(extended_size * sizeof(kiss_fft_cpx));
 
@@ -318,11 +331,48 @@ void fft_help(const std::vector<float> fft_in, std::vector<std::complex<float>> 
     }
     free(fft_in_temp);
     free(fft_out_temp);
+#else
+    fftw_complex *fft_in_temp, *fft_out_temp;
+    fftw_plan fft_p;
+    fft_in_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * extended_size);
+    fft_out_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * extended_size);
+
+    if (fft_in_temp == NULL || fft_out_temp == NULL)
+    {
+        printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
+        exit(-1);
+    }
+
+    for (int i = 0; i < fft_in_size; i++)
+    {
+        fft_in_temp[i][0] = fft_in[i];
+        fft_in_temp[i][1] = 0;
+    }
+
+    for (int i = fft_in_size; i < extended_size; i++)
+    {
+        fft_in_temp[i][0] = 0;
+        fft_in_temp[i][1] = 0;
+    }
+
+    fft_p = fftw_plan_dft_1d(extended_size, fft_in_temp, fft_out_temp, FFTW_FORWARD, FFTW_ESTIMATE);
+
+    fftw_execute(fft_p);
+
+    for (int i = 0; i < extended_size; i++)
+    {
+        fft_out[i].real(fft_out_temp[i][0]);
+        fft_out[i].imag(fft_out_temp[i][1]);
+    }
+    fftw_destroy_plan(fft_p);
+#endif
 }
 
 inline void ifft_help(std::vector<std::complex<float>> &fft_in_out)
 {
     unsigned long long fft_in_size = fft_in_out.size();
+
+#ifndef FFTW_LIB_AVAILABLE
 
     kiss_fft_cpx *fft_in_temp = (kiss_fft_cpx *)malloc(fft_in_size * sizeof(kiss_fft_cpx));
     kiss_fft_cpx *fft_out_temp = (kiss_fft_cpx *)malloc(fft_in_size * sizeof(kiss_fft_cpx));
@@ -357,6 +407,36 @@ inline void ifft_help(std::vector<std::complex<float>> &fft_in_out)
     }
     free(fft_in_temp);
     free(fft_out_temp);
+#else
+    fftw_complex *fft_in_temp, *fft_out_temp;
+    fftw_plan fft_p;
+    fft_in_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * fft_in_size);
+    fft_out_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * fft_in_size);
+
+    if (fft_in_temp == NULL || fft_out_temp == NULL)
+    {
+        printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
+        exit(-1);
+    }
+
+    for (int i = 0; i < fft_in_size; i++)
+    {
+        fft_in_temp[i][0] = fft_in_out[i].real();
+        fft_in_temp[i][1] = fft_in_out[i].imag();
+    }
+
+    fft_p = fftw_plan_dft_1d(fft_in_size, fft_in_temp, fft_out_temp, FFTW_BACKWARD, FFTW_ESTIMATE);
+
+    fftw_execute(fft_p);
+
+    for (int i = 0; i < fft_in_size; i++)
+    {
+        fft_in_out[i].real(fft_out_temp[i][0]);
+        fft_in_out[i].imag(fft_out_temp[i][1]);
+    }
+
+    fftw_destroy_plan(fft_p);
+#endif
 }
 
 void convert_str_vector(int n, char *str, int *vector)
@@ -397,9 +477,9 @@ void printf_help(char *cmd)
           -x dataset name for output correlation \n\
           -c chunk size (seperate by comma ',')\n\
              chunk_size[0] is used as window size by default \n\
-          -w window size (sued when window size is different from chunk_size[0]) \n\
-          -m index of master channel \n\
-          Example: mpirun -n 4 %s -i ./test-data/test1.tdms.h5 -o ./test-data/test1.tdms.fft.h5  -g / -t /DataTimeChannel -x Xcorr -c 30000,2912\n";
+          -w window size (only used when window size is different from chunk_size[0]) \n\
+          -m index of master channel (0 by default )\n\
+          Example: mpirun -n 4 %s -i ./test-data/test1.tdms.h5 -o ./test-data/test1.tdms.fft.h5  -g / -t /DataTimeChannel -x /Xcorr -c 30000,2912\n";
 
     fprintf(stdout, msg, cmd, cmd);
 }

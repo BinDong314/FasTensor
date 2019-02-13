@@ -374,20 +374,20 @@ public:
     if (is_vector_type<AttrType>())
     {
       vector_type_flag = 1;
-      std::cout << "Vector has same type as T : " << is_base_type_T<AttrType, T>() << std::endl;
+      //std::cout << "Vector has same type as T : " << is_base_type_T<AttrType, T>() << std::endl;
       if (is_base_type_T<AttrType, T>() == 0)
       {
         output_element_different_type_flag = 1;
         if (is_base_type_T<AttrType, int>())
         {
-          if (!mpi_rank)
-            printf("In Array init: output element type is int \n ");
+          //if (!mpi_rank)
+          //  printf("In Array init: output element type is int \n ");
           output_element_type_class = H5T_INTEGER;
         }
         else if (is_base_type_T<AttrType, float>())
         {
-          if (!mpi_rank)
-            printf("In Array init: output element type is float \n ");
+          //if (!mpi_rank)
+           // printf("In Array init: output element type is float \n ");
           output_element_type_class = H5T_FLOAT;
         }
         else if (is_base_type_T<AttrType, std::complex<float>>())
@@ -410,14 +410,13 @@ public:
         output_element_different_type_flag = 1;
         if (is_same_types<AttrType, int>())
         {
-          if (!mpi_rank)
-            printf("In Array init: output element type is int \n ");
+          //if (!mpi_rank) printf("In Array init: output element type is int \n ");
           output_element_type_class = H5T_INTEGER;
         }
         else if (is_same_types<AttrType, float>())
         {
-          if (!mpi_rank)
-            printf("In Array init: output element type is float \n ");
+          //if (!mpi_rank)
+          //  printf("In Array init: output element type is float \n ");
           output_element_type_class = H5T_FLOAT;
         }
         else
@@ -1381,7 +1380,7 @@ public:
     processed_chunks_count = processed_chunks_count + 1;
     unsigned long long cell_target_g_location_rm;
     result_vector_index = 0;
-    t_start = MPI_Wtime();
+    //t_start = MPI_Wtime();
     //Start to process a chunk
     if (set_apply_direction_flag == 0)
     { //in row-major direction
@@ -1454,7 +1453,13 @@ public:
 #ifdef PY_ARRAYUDF
             cell_return_value = UDF(&cell_target); // Called by python
 #else
+
+            t_start = MPI_Wtime();
+
             cell_return_value = UDF(cell_target); // Called by C++
+
+            t_end = MPI_Wtime();
+            time_udf = t_end - t_start + time_udf;
 #endif
 #endif
 
@@ -1581,8 +1586,8 @@ public:
     //////////////////////////////////////
     //end of processing on a single chunk
     /////////////////////////////////////
-    t_end = MPI_Wtime();
-    time_udf = t_end - t_start + time_udf;
+    //t_end = MPI_Wtime();
+    //time_udf = t_end - t_start + time_udf;
 
     //MPI_Barrier(MPI_COMM_WORLD);
     //#ifdef DEBUG
@@ -1936,12 +1941,14 @@ void SetApplyStripSize(std::vector<int> skip_size_p)
     skip_size[i] = skip_size_p[i];
   }
 
+#ifdef DEBUG
   if (mpi_rank == 0)
   {
     PrintVector<unsigned long long>("After setting skip_size", skip_size);
     PrintVector<unsigned long long>("After setting skiped_dims_size ", skiped_dims_size);
     //PrintVector<int>("After setting skiped_chunk_size ", skiped_chunk_size);
   }
+#endif
 
   skip_flag = 1;
 }

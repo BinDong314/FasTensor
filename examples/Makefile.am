@@ -11,7 +11,7 @@ AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++11  -ldl
 #bin_PROGRAMS=conv  fake-hdf5-data udf-example-new inter-xyz conv
 #bin_PROGRAMS= fake-hdf5-data udf-example udf-example-new ccl-pc-new  inter hist  udf-test 
 #bin_PROGRAMS= fake-hdf5-data ccl-pc-new conv inter-xyz conv-micro-test vpic-gradient-decent vpic-xyz-global-position
-bin_PROGRAMS=  ccl-pc-new fake-hdf5-data udf-example-new udf-example
+bin_PROGRAMS=  ccl-pc-new fake-hdf5-data udf-example-new udf-example conv2d
 
 
 #vpic_xyz_global_position_SOURCES=vpic-xyz-global-position.cpp
@@ -69,9 +69,14 @@ ccl_pc_new_LDADD=../src/libArrayUDF.la
 #hist_LDADD=../src/libArrayUDF.la
 
 
-#conv_SOURCES=conv.cpp
-#conv_DEPENDENCIES=../src/libArrayUDF.la
-#conv_LDADD=../src/libArrayUDF.la
+conv_SOURCES=conv.cpp
+conv_DEPENDENCIES=../src/libArrayUDF.la
+conv_LDADD=../src/libArrayUDF.la
+
+conv2d_SOURCES=conv-2d.cpp
+conv2d_DEPENDENCIES=../src/libArrayUDF.la
+conv2d_LDADD=../src/libArrayUDF.la
+
 
 #conv_micro_test_SOURCES=conv-micro-test.cpp
 #conv_micro_test_DEPENDENCIES=../src/libArrayUDF.la

@@ -89,7 +89,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = ccl-pc-new$(EXEEXT) fake-hdf5-data$(EXEEXT) \
-	udf-example-new$(EXEEXT) udf-example$(EXEEXT)
+	udf-example-new$(EXEEXT) udf-example$(EXEEXT) conv2d$(EXEEXT)
 subdir = examples
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -111,6 +111,8 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+am_conv2d_OBJECTS = conv-2d.$(OBJEXT)
+conv2d_OBJECTS = $(am_conv2d_OBJECTS)
 am_fake_hdf5_data_OBJECTS = fake-HDF5-data.$(OBJEXT)
 fake_hdf5_data_OBJECTS = $(am_fake_hdf5_data_OBJECTS)
 am_udf_example_OBJECTS = udf-example.$(OBJEXT)
@@ -132,7 +134,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/ccl-pc-new.Po \
+am__depfiles_remade = ./$(DEPDIR)/ccl-pc-new.Po ./$(DEPDIR)/conv-2d.Po \
 	./$(DEPDIR)/fake-HDF5-data.Po ./$(DEPDIR)/udf-example-new.Po \
 	./$(DEPDIR)/udf-example.Po
 am__mv = mv -f
@@ -172,10 +174,12 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(ccl_pc_new_SOURCES) $(fake_hdf5_data_SOURCES) \
-	$(udf_example_SOURCES) $(udf_example_new_SOURCES)
-DIST_SOURCES = $(ccl_pc_new_SOURCES) $(fake_hdf5_data_SOURCES) \
-	$(udf_example_SOURCES) $(udf_example_new_SOURCES)
+SOURCES = $(ccl_pc_new_SOURCES) $(conv2d_SOURCES) \
+	$(fake_hdf5_data_SOURCES) $(udf_example_SOURCES) \
+	$(udf_example_new_SOURCES)
+DIST_SOURCES = $(ccl_pc_new_SOURCES) $(conv2d_SOURCES) \
+	$(fake_hdf5_data_SOURCES) $(udf_example_SOURCES) \
+	$(udf_example_new_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -378,6 +382,24 @@ udf_example_new_LDADD = ../src/libArrayUDF.la
 ccl_pc_new_SOURCES = ccl-pc-new.cpp
 ccl_pc_new_DEPENDENCIES = ../src/libArrayUDF.la
 ccl_pc_new_LDADD = ../src/libArrayUDF.la
+
+#inter_SOURCES=inter.cpp
+#inter_DEPENDENCIES=../src/libArrayUDF.la
+#inter_LDADD=../src/libArrayUDF.la
+
+#inter_xyz_SOURCES=inter-xyz.cpp
+#inter_xyz_DEPENDENCIES=../src/libArrayUDF.la
+#inter_xyz_LDADD=../src/libArrayUDF.la
+
+#hist_SOURCES=hist.cpp
+#hist_DEPENDENCIES=../src/libArrayUDF.la
+#hist_LDADD=../src/libArrayUDF.la
+conv_SOURCES = conv.cpp
+conv_DEPENDENCIES = ../src/libArrayUDF.la
+conv_LDADD = ../src/libArrayUDF.la
+conv2d_SOURCES = conv-2d.cpp
+conv2d_DEPENDENCIES = ../src/libArrayUDF.la
+conv2d_LDADD = ../src/libArrayUDF.la
 all: all-am
 
 .SUFFIXES:
@@ -465,6 +487,10 @@ ccl-pc-new$(EXEEXT): $(ccl_pc_new_OBJECTS) $(ccl_pc_new_DEPENDENCIES) $(EXTRA_cc
 	@rm -f ccl-pc-new$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(ccl_pc_new_OBJECTS) $(ccl_pc_new_LDADD) $(LIBS)
 
+conv2d$(EXEEXT): $(conv2d_OBJECTS) $(conv2d_DEPENDENCIES) $(EXTRA_conv2d_DEPENDENCIES) 
+	@rm -f conv2d$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(conv2d_OBJECTS) $(conv2d_LDADD) $(LIBS)
+
 fake-hdf5-data$(EXEEXT): $(fake_hdf5_data_OBJECTS) $(fake_hdf5_data_DEPENDENCIES) $(EXTRA_fake_hdf5_data_DEPENDENCIES) 
 	@rm -f fake-hdf5-data$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(fake_hdf5_data_OBJECTS) $(fake_hdf5_data_LDADD) $(LIBS)
@@ -484,6 +510,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ccl-pc-new.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/conv-2d.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fake-HDF5-data.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/udf-example-new.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/udf-example.Po@am__quote@ # am--include-marker
@@ -676,6 +703,7 @@ clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/ccl-pc-new.Po
+	-rm -f ./$(DEPDIR)/conv-2d.Po
 	-rm -f ./$(DEPDIR)/fake-HDF5-data.Po
 	-rm -f ./$(DEPDIR)/udf-example-new.Po
 	-rm -f ./$(DEPDIR)/udf-example.Po
@@ -725,6 +753,7 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/ccl-pc-new.Po
+	-rm -f ./$(DEPDIR)/conv-2d.Po
 	-rm -f ./$(DEPDIR)/fake-HDF5-data.Po
 	-rm -f ./$(DEPDIR)/udf-example-new.Po
 	-rm -f ./$(DEPDIR)/udf-example.Po
@@ -764,22 +793,6 @@ uninstall-am: uninstall-binPROGRAMS
 
 .PRECIOUS: Makefile
 
-
-#inter_SOURCES=inter.cpp
-#inter_DEPENDENCIES=../src/libArrayUDF.la
-#inter_LDADD=../src/libArrayUDF.la
-
-#inter_xyz_SOURCES=inter-xyz.cpp
-#inter_xyz_DEPENDENCIES=../src/libArrayUDF.la
-#inter_xyz_LDADD=../src/libArrayUDF.la
-
-#hist_SOURCES=hist.cpp
-#hist_DEPENDENCIES=../src/libArrayUDF.la
-#hist_LDADD=../src/libArrayUDF.la
-
-#conv_SOURCES=conv.cpp
-#conv_DEPENDENCIES=../src/libArrayUDF.la
-#conv_LDADD=../src/libArrayUDF.la
 
 #conv_micro_test_SOURCES=conv-micro-test.cpp
 #conv_micro_test_DEPENDENCIES=../src/libArrayUDF.la

@@ -1,5 +1,6 @@
 AU_HOME=/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/build
 HDF5_DIR=/Users/dbin/work/soft/hdf5-1.8.18/build/
+FFTW_DIR=/opt/local/
 
 
 .PHONY:all
@@ -16,7 +17,7 @@ tdms2h5:tdms2h5.c
 	mpicc -o tdms2h5 tdms2h5.c  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
 
 das-fft:das-fft.cpp
-	mpicxx -o das-fft fft/kiss_fft.c das-fft.cpp -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
+	mpicxx -o das-fft fft/kiss_fft.c das-fft.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3
 
 clean:
 	rm das-correlation h5-vds-merge tdms2h5 das-fft
