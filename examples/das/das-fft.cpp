@@ -10,7 +10,7 @@
 #include <cstring>
 #include <complex> // std::complex
 
-//#define FFTW_LIB_AVAILABLE 1
+#define FFTW_LIB_AVAILABLE 1
 
 #ifndef FFTW_LIB_AVAILABLE
 #include "fft/kiss_fft.h"
@@ -52,7 +52,7 @@ std::vector<float> ts;
 std::vector<std::complex<float>> temp_fft_v;
 std::vector<float> gatherXcorr_per_batch;
 
-inline std::vector<float> FFT_UDF(const Stencil<int> &c)
+inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 {
     std::vector<float> gatherXcorr_final;
     gatherXcorr_final.resize(x_GATHER_X_CORR_LENGTH_total);
@@ -76,10 +76,15 @@ inline std::vector<float> FFT_UDF(const Stencil<int> &c)
         //IFFT, result_v also holds the result
         ifft_help(temp_fft_v);
 
+        printf("ifft \n");
+        fflush(stdout);
         //Subset specXcorr
         unsigned long long gatherXcorr_index = 0;
         for (unsigned long long k = M_TIME_SERIESE_LENGTH_EXTENDED - m_TIME_SERIESE_LENGTH + 1; k < M_TIME_SERIESE_LENGTH_EXTENDED; k++)
         {
+
+            if (k < M_TIME_SERIESE_LENGTH_EXTENDED - m_TIME_SERIESE_LENGTH + 1 + 10)
+                std::cout << temp_fft_v[k].real() << std::endl;
             gatherXcorr_per_batch[gatherXcorr_index] = temp_fft_v[k].real();
             gatherXcorr_index++;
         }
@@ -184,7 +189,7 @@ int main(int argc, char *argv[])
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
-    Array<int, std::vector<float>> *IFILE = new Array<int, std::vector<float>>(AU_NVS, AU_HDF5, i_file, group, i_dataset, chunk_size, ghost_size);
+    Array<float, std::vector<float>> *IFILE = new Array<float, std::vector<float>>(AU_NVS, AU_HDF5, i_file, group, i_dataset, chunk_size, ghost_size);
     Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, group, o_dataset, chunk_size, ghost_size);
 
     std::vector<unsigned long long> i_file_dim = IFILE->GetDimSize();
@@ -243,7 +248,7 @@ int main(int argc, char *argv[])
     {
         for (int i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
-            master_vector_per_batch[0] = IFILE->operator()(i, MASTER_INDEX);
+            master_vector_per_batch[i] = IFILE->operator()(i, MASTER_INDEX);
         }
         fft_help(master_vector_per_batch, master_vector_fft_per_batch, M_TIME_SERIESE_LENGTH_EXTENDED);
         std::copy_n(master_vector_fft_per_batch.begin(), M_TIME_SERIESE_LENGTH_EXTENDED, master_vector_fft.begin() + bi * m_TIME_SERIESE_LENGTH);
@@ -400,9 +405,10 @@ inline void ifft_help(std::vector<std::complex<float>> &fft_in_out)
         exit(-1);
     }
 
+    //https://stackoverflow.com/questions/39109615/fftw-c-computes-fft-wrong-compared-to-matlab
     for (int i = 0; i < fft_in_size; i++)
     {
-        fft_in_out[i].real(fft_out_temp[i].r);
+        fft_in_out[i].real(fft_out_temp[i].r / fft_in_size);
         fft_in_out[i].imag(fft_out_temp[i].i);
     }
     free(fft_in_temp);
@@ -429,12 +435,13 @@ inline void ifft_help(std::vector<std::complex<float>> &fft_in_out)
 
     fftw_execute(fft_p);
 
+    //https://stackoverflow.com/questions/39109615/fftw-c-computes-fft-wrong-compared-to-matlab
     for (int i = 0; i < fft_in_size; i++)
     {
-        fft_in_out[i].real(fft_out_temp[i][0]);
+        fft_in_out[i].real(fft_out_temp[i][0] / fft_in_size);
         fft_in_out[i].imag(fft_out_temp[i][1]);
     }
-
+    fflush(stdout);
     fftw_destroy_plan(fft_p);
 #endif
 }

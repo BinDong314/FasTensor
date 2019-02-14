@@ -197,6 +197,15 @@ void InsertIntoVirtualVector(const std::vector<std::vector<float>> &insert_vecto
   exit(-1);
 }
 
+//T1: std::vector<float>
+//T2: float
+template <>
+void InsertIntoVirtualVector(const std::vector<std::vector<float>> &insert_vector, std::vector<float> &virtual_vector, int index)
+{
+  printf("Not supported  at %s :%d \n", __FILE__, __LINE__);
+  exit(-1);
+}
+
 //T1: std::vector<std::complex<float>>
 //T2: int
 template <>
@@ -358,24 +367,30 @@ void *vv2v(std::vector<T> &v)
 template <typename T>
 void *flat_vector(std::vector<std::vector<T>> &v, int direction)
 {
-  //printf("In new fat !\n");
-  T *rv = (T *)malloc(v.size() * v[0].size() * sizeof(T)); //Assuming all rows have the same size
-  if (rv == NULL)
+  if (direction == 1)
   {
-    printf("Not enough memory (in *vv2v) !\n");
-    exit(-1);
-  }
-  for (unsigned i = 0; i < v[0].size(); i++)
-  {
-    for (unsigned j = 0; j < v.size(); j++)
+    //printf("In new fat !\n");
+    T *rv = (T *)malloc(v.size() * v[0].size() * sizeof(T)); //Assuming all rows have the same size
+    if (rv == NULL)
     {
-      memcpy(rv + v.size() * i + j, &(v[j][i]), sizeof(T));
+      printf("Not enough memory (in *vv2v) !\n");
+      exit(-1);
     }
+    for (unsigned i = 0; i < v[0].size(); i++)
+    {
+      for (unsigned j = 0; j < v.size(); j++)
+      {
+        memcpy(rv + v.size() * i + j, &(v[j][i]), sizeof(T));
+      }
+    }
+    return (void *)rv;
+  }
+  else
+  {
+    return vv2v(v);
   }
 
   //printf("size = %d , %f , %f, %f \n", v[0].size(), rv[0], rv[1], rv);
-
-  return (void *)rv;
 }
 
 template <typename T>

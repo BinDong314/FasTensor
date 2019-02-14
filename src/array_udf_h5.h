@@ -428,7 +428,15 @@ public:
     {
       if (vector_type_flag == 1)
       {
-        void *float_new_data_ptr = vv2v(data);
+        void *float_new_data_ptr;
+        if (output_vector_flat_direction_index == 0)
+        {
+          float_new_data_ptr = flat_vector(data, 1);
+        }
+        else
+        {
+          float_new_data_ptr = vv2v(data);
+        }
         ret = H5Dwrite(did, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, plist_cio_id, float_new_data_ptr);
         if (float_new_data_ptr != NULL)
           free(float_new_data_ptr);
