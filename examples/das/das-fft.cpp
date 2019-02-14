@@ -10,7 +10,7 @@
 #include <cstring>
 #include <complex> // std::complex
 
-#define FFTW_LIB_AVAILABLE 1
+//#define FFTW_LIB_AVAILABLE 1
 
 #ifndef FFTW_LIB_AVAILABLE
 #include "fft/kiss_fft.h"
