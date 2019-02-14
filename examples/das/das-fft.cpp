@@ -481,7 +481,7 @@ void printf_help(char *cmd)
              chunk_size[0] is used as window size by default \n\
           -w window size (only used when window size is different from chunk_size[0]) \n\
           -m index of master channel (0 by default )\n\
-          Example: mpirun -n 4 %s -i ./test-data/test1.tdms.h5 -o ./test-data/test1.tdms.fft.h5  -g / -t /DataTimeChannel -x /Xcorr -c 30000,2912\n";
+          Example: mpirun -n 1 %s -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /dat -x /Xcorr -c 7500,101\n";
 
     fprintf(stdout, msg, cmd, cmd);
 }

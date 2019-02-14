@@ -56,7 +56,7 @@ Step2: merge HDF5 files into a single HDF5 file
       }}}
 
 
-Step3: ArrayUDF Code
+Step3: ArrayUDF Code: das-correlation
    > cd arrayudf-test/examples/das/
   
    > rm  ~/westSac_merged_arrayudf.h5p
@@ -73,13 +73,37 @@ Step3: ArrayUDF Code
       }}}
 
 
-Step4: Simple test with the result with "plot.py"
-  > module load python/3.5.1
-  > python3 plot.py
-    * you may need to edit plot.py's "filename" to point right file
-    * Also, you may need "ssh -Y username@snowbear.lbl.gov" to see the figure 
+    > Simple test with the result with "plot.py"
+    > module load python/3.5.1
+    > python3 plot.py
+      * you may need to edit plot.py's "filename" to point right file
+      * Also, you may need "ssh -Y username@snowbear.lbl.gov" to see the figure 
 
-So far, you make it and the "westSac_merged_arrayudf.h5p" is the result file
+    So far, you make it and the "westSac_merged_arrayudf.h5p" is the result file
+
+  Step4: ArrayUDF Code: das-fft
+    das-fft can be compiled with the same commands in Step3.
+    > mpirun -n 1 ./das-fft -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /dat -x /Xcorr -c 7500,101
+    > h5dump  -d /Xcorr -s 0,0 -c 4,4 ./test-data/fft-test.arrayudf.h5
+      HDF5 "./test-data/fft-test.arrayudf.h5" {
+      DATASET "/Xcorr" {
+        DATATYPE  H5T_IEEE_F32LE
+        DATASPACE  SIMPLE { ( 14999, 101 ) / ( 14999, 101 ) }
+        SUBSET {
+            START ( 0, 0 );
+            STRIDE ( 1, 1 );
+            COUNT ( 4, 4 );
+            BLOCK ( 1, 1 );
+            DATA {
+            (0,0): 4.71574e-05, 8.80479e-05, 1.17999e-06, -4.70807e-06,
+            (1,0): 8.27977e-05, 0.000147256, 1.76964e-05, -4.86011e-06,
+            (2,0): 6.25906e-05, 9.84364e-05, 8.96957e-06, -4.6792e-06,
+            (3,0): 5.10183e-05, 3.64967e-05, -3.38699e-06, 2.81772e-05
+            }
+        }
+      }
+      }
+
 
 3. Parameters for das-correlation
 
