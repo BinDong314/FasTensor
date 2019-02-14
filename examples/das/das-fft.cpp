@@ -99,10 +99,10 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 
 int main(int argc, char *argv[])
 {
-    char i_file[NAME_LENGTH] = "test-data/test1.tdms.h5";
-    char o_file[NAME_LENGTH] = "test-data/test1.tdms.fft.h5";
+    char i_file[NAME_LENGTH] = "test-data/fft-test.h5";
+    char o_file[NAME_LENGTH] = "fft-test.arrayudf.h5";
     char group[NAME_LENGTH] = "/"; //both input and output file share the same group and dataset name
-    char i_dataset[NAME_LENGTH] = "/DataTimeChannel";
+    char i_dataset[NAME_LENGTH] = "/dat";
     char o_dataset[NAME_LENGTH] = "/Xcorr";
 
     char chunk_size_str[NAME_LENGTH];
