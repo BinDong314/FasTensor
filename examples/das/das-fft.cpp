@@ -76,15 +76,10 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         //IFFT, result_v also holds the result
         ifft_help(temp_fft_v);
 
-        printf("ifft \n");
-        fflush(stdout);
         //Subset specXcorr
         unsigned long long gatherXcorr_index = 0;
         for (unsigned long long k = M_TIME_SERIESE_LENGTH_EXTENDED - m_TIME_SERIESE_LENGTH + 1; k < M_TIME_SERIESE_LENGTH_EXTENDED; k++)
         {
-
-            if (k < M_TIME_SERIESE_LENGTH_EXTENDED - m_TIME_SERIESE_LENGTH + 1 + 10)
-                std::cout << temp_fft_v[k].real() << std::endl;
             gatherXcorr_per_batch[gatherXcorr_index] = temp_fft_v[k].real();
             gatherXcorr_index++;
         }

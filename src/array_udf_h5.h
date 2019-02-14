@@ -51,7 +51,7 @@ private:
   int filter_amount;
 
   int output_vector_size = 0;
-  int output_vector_flat_direction_index = 0;
+  int output_vector_flat_direction_index = -1;
 
 public:
   H5Data(){};
