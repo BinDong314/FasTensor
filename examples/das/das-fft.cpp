@@ -57,14 +57,20 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 {
     for (int bi = 0; bi < window_batch; bi++)
     {
+        double start = au_current_time();
         //Get the input time series on a single channel
         for (unsigned long long i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
             ts[i] = c(i, 0);
         }
+        double end = au_current_time();
+        au_reduce_time(end - start, "read data ");
 
         //FFT on the channel
         fft_help(ts, temp_fft_v, M_TIME_SERIESE_LENGTH_EXTENDED);
+
+        double fft_end = au_current_time();
+        au_reduce_time(fft_end - end, "fft_help time ");
 
         return gatherXcorr_final;
 
