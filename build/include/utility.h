@@ -364,6 +364,7 @@ void *vv2v(std::vector<T> &v)
 //     v[0][0] v[1][0] v[0][1] v[1][1]
 //Lots of todo:
 //  We need a dimension infomation to guide flat when v is flat with different directions
+//  Basically, we need to support direction
 template <typename T>
 void *flat_vector(std::vector<std::vector<T>> &v, int direction)
 {

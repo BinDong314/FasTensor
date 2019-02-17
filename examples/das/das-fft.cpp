@@ -42,7 +42,7 @@ unsigned long long MASTER_INDEX = 0;
 std::vector<std::complex<float>> master_vector_fft;
 
 //Some help functions
-inline void fft_help(const std::vector<float> fft_in, std::vector<std::complex<float>> &fft_out, unsigned long long extend_size);
+inline void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>> &fft_out, unsigned long long extend_size);
 inline void ifft_help(std::vector<std::complex<float>> &fft_in_out);
 unsigned long long find_m(unsigned long long minimum_m);
 
@@ -66,6 +66,8 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         //FFT on the channel
         fft_help(ts, temp_fft_v, M_TIME_SERIESE_LENGTH_EXTENDED);
 
+	return gatherXcorr_final;
+
         //specXcorr
         for (unsigned long long j = 0; j < M_TIME_SERIESE_LENGTH_EXTENDED; j++)
         {
@@ -75,6 +77,8 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         //IFFT, result_v also holds the result
         ifft_help(temp_fft_v);
 
+        
+	/* Get copy of our VOL info from FAPL */
         //Subset specXcorr
         unsigned long long gatherXcorr_index = 0;
         for (unsigned long long k = M_TIME_SERIESE_LENGTH_EXTENDED - m_TIME_SERIESE_LENGTH + 1; k < M_TIME_SERIESE_LENGTH_EXTENDED; k++)
@@ -285,7 +289,7 @@ unsigned long long find_m(unsigned long long minimum_m)
     return minimum_m;
 }
 
-void fft_help(const std::vector<float> fft_in, std::vector<std::complex<float>> &fft_out, unsigned long long extended_size)
+void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>> &fft_out, unsigned long long extended_size)
 {
     unsigned long long fft_in_size = fft_in.size();
     assert(fft_out.size() == extended_size);
@@ -300,16 +304,16 @@ void fft_help(const std::vector<float> fft_in, std::vector<std::complex<float>> 
         exit(-1);
     }
 
-    for (int i = 0; i < fft_in_size; i++)
-    {
-        fft_in_temp[i].r = fft_in[i];
-        fft_in_temp[i].i = 0;
-    }
 
-    for (int i = fft_in_size; i < extended_size; i++)
+    for (int i = 0; i < extended_size; i++)
     {
-        fft_in_temp[i].r = 0;
-        fft_in_temp[i].i = 0;
+	if(i  < fft_in_size ){ 
+	        fft_in_temp[i].r = fft_in[i];
+	        fft_in_temp[i].i = 0;	
+	}else{	
+                fft_in_temp[i].r = 0;
+        	fft_in_temp[i].i = 0;
+	}
     }
 
     kiss_fft_cfg cfg;
