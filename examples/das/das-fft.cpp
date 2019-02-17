@@ -63,6 +63,8 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
             ts[i] = c(i, 0);
         }
 
+        return gatherXcorr_final;
+
         //FFT on the channel
         fft_help(ts, temp_fft_v, M_TIME_SERIESE_LENGTH_EXTENDED);
 
