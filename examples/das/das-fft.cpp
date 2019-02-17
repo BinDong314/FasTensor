@@ -362,10 +362,14 @@ void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>>
         fft_in_temp[i][1] = 0;
     }
 
+    double start = au_current_time();
+
     fft_p = fftw_plan_dft_1d(extended_size, fft_in_temp, fft_out_temp, FFTW_FORWARD, FFTW_ESTIMATE);
 
     fftw_execute(fft_p);
 
+    double end = au_current_time();
+    au_reduce_time(end - start, "fftw time/step: ");
     for (int i = 0; i < extended_size; i++)
     {
         fft_out[i].real(fft_out_temp[i][0]);
