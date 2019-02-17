@@ -435,4 +435,26 @@ int file_exist(const char *filename)
   return (stat(filename, &buffer) == 0);
 }
 
+double au_current_time()
+{
+  return MPI_Wtime();
+}
+void au_reduce_time(double time_per_rank, char *info_str)
+{
+
+  int mpi_rank, mpi_size;
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
+  MPI_Allreduce(&time_per_rank, &time_max, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+  MPI_Allreduce(&time_per_rank, &time_min, 1, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
+  MPI_Allreduce(&time_per_rank, &time_sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
+  if (mpi_rank == 0)
+  {
+    printf(" %s :  max = %f, min = %f, ave = %f, rank 0=  \n ", info_str, time_max, time_min, time_sum / mpi_size, time_per_rank);
+    fflush(stdout);
+  }
+}
+
 #endif

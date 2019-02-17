@@ -66,7 +66,7 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         //FFT on the channel
         fft_help(ts, temp_fft_v, M_TIME_SERIESE_LENGTH_EXTENDED);
 
-	return gatherXcorr_final;
+        return gatherXcorr_final;
 
         //specXcorr
         for (unsigned long long j = 0; j < M_TIME_SERIESE_LENGTH_EXTENDED; j++)
@@ -77,8 +77,7 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         //IFFT, result_v also holds the result
         ifft_help(temp_fft_v);
 
-        
-	/* Get copy of our VOL info from FAPL */
+        /* Get copy of our VOL info from FAPL */
         //Subset specXcorr
         unsigned long long gatherXcorr_index = 0;
         for (unsigned long long k = M_TIME_SERIESE_LENGTH_EXTENDED - m_TIME_SERIESE_LENGTH + 1; k < M_TIME_SERIESE_LENGTH_EXTENDED; k++)
@@ -304,18 +303,21 @@ void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>>
         exit(-1);
     }
 
-
     for (int i = 0; i < extended_size; i++)
     {
-	if(i  < fft_in_size ){ 
-	        fft_in_temp[i].r = fft_in[i];
-	        fft_in_temp[i].i = 0;	
-	}else{	
-                fft_in_temp[i].r = 0;
-        	fft_in_temp[i].i = 0;
-	}
+        if (i < fft_in_size)
+        {
+            fft_in_temp[i].r = fft_in[i];
+            fft_in_temp[i].i = 0;
+        }
+        else
+        {
+            fft_in_temp[i].r = 0;
+            fft_in_temp[i].i = 0;
+        }
     }
 
+    double start = au_current_time();
     kiss_fft_cfg cfg;
     if ((cfg = kiss_fft_alloc(extended_size, 0, NULL, NULL)) != NULL)
     {
@@ -327,7 +329,8 @@ void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>>
         printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
         exit(-1);
     }
-
+    double end = au_current_time();
+    au_reduce_time(end - start, "fft time per ");
     for (int i = 0; i < extended_size; i++)
     {
         fft_out[i].real(fft_out_temp[i].r);
