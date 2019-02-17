@@ -51,11 +51,10 @@ unsigned long long find_m(unsigned long long minimum_m);
 std::vector<float> ts;
 std::vector<std::complex<float>> temp_fft_v;
 std::vector<float> gatherXcorr_per_batch;
+std::vector<float> gatherXcorr_final;
 
 inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 {
-    std::vector<float> gatherXcorr_final;
-    gatherXcorr_final.resize(x_GATHER_X_CORR_LENGTH_total);
     for (int bi = 0; bi < window_batch; bi++)
     {
         //Get the input time series on a single channel
@@ -263,6 +262,7 @@ int main(int argc, char *argv[])
     ts.resize(m_TIME_SERIESE_LENGTH);
     temp_fft_v.resize(M_TIME_SERIESE_LENGTH_EXTENDED);
     gatherXcorr_per_batch.resize(x_GATHER_X_CORR_LENGTH);
+    gatherXcorr_final.resize(x_GATHER_X_CORR_LENGTH_total);
 
     //Run FFT
     IFILE->Apply(FFT_UDF, OFILE);
