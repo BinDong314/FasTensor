@@ -443,6 +443,7 @@ void au_reduce_time(double time_per_rank, char *info_str)
 {
 
   int mpi_rank, mpi_size;
+  double time_max, time_min, time_sum;
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
   MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
