@@ -437,9 +437,9 @@ inline void ifft_help(std::vector<std::complex<float>> &fft_in_out)
     for (int i = 0; i < fft_in_size; i++)
     {
         fft_in_out[i].real(fft_out_temp[i][0] / fft_in_size);
-        fft_in_out[i].imag(fft_out_temp[i][1]); //coment out for performance
+        //fft_in_out[i].imag(fft_out_temp[i][1]); //coment out for performance
     }
-    fflush(stdout);
+    //fflush(stdout);
     fftw_destroy_plan(fft_p);
 #endif
 }
