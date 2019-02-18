@@ -57,20 +57,13 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 {
     for (int bi = 0; bi < window_batch; bi++)
     {
-        //double start = au_current_time();
         //Get the input time series on a single channel
         for (unsigned long long i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
             ts[i] = c(i, 0);
         }
-        //double end = au_current_time();
         //FFT on the channel
         fft_help(ts, temp_fft_v, M_TIME_SERIESE_LENGTH_EXTENDED);
-
-        //double fft_end = au_current_time();
-        //au_reduce_time(fft_end - end, "fft_help time ");
-
-        //return gatherXcorr_final;
 
         //specXcorr
         for (unsigned long long j = 0; j < M_TIME_SERIESE_LENGTH_EXTENDED; j++)
@@ -78,13 +71,9 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
             temp_fft_v[j] = master_vector_fft[j] * std::conj(temp_fft_v[j]);
         }
 
-        double ifft_start = au_current_time();
-        //IFFT, result_v also holds the result
+        //IFFT, result_v also holds the result (only real part for performance)
         ifft_help(temp_fft_v);
-        double ifft_end = au_current_time();
-        au_reduce_time(ifft_end - ifft_start, "ifft_help time ");
 
-        /* Get copy of our VOL info from FAPL */
         //Subset specXcorr
         unsigned long long gatherXcorr_index = 0;
         for (unsigned long long k = M_TIME_SERIESE_LENGTH_EXTENDED - m_TIME_SERIESE_LENGTH + 1; k < M_TIME_SERIESE_LENGTH_EXTENDED; k++)
@@ -324,7 +313,6 @@ void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>>
         }
     }
 
-    double start = au_current_time();
     kiss_fft_cfg cfg;
     if ((cfg = kiss_fft_alloc(extended_size, 0, NULL, NULL)) != NULL)
     {
@@ -336,8 +324,7 @@ void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>>
         printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
         exit(-1);
     }
-    double end = au_current_time();
-    au_reduce_time(end - start, "fft time per ");
+
     for (int i = 0; i < extended_size; i++)
     {
         fft_out[i].real(fft_out_temp[i].r);
@@ -357,26 +344,24 @@ void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>>
         exit(-1);
     }
 
-    for (int i = 0; i < fft_in_size; i++)
+    for (int i = 0; i < extended_size; i++)
     {
-        fft_in_temp[i][0] = fft_in[i];
-        fft_in_temp[i][1] = 0;
+        if (i < fft_in_size)
+        {
+            fft_in_temp[i][0] = fft_in[i];
+            fft_in_temp[i][1] = 0;
+        }
+        else
+        {
+            fft_in_temp[i][0] = 0;
+            fft_in_temp[i][1] = 0;
+        }
     }
-
-    for (int i = fft_in_size; i < extended_size; i++)
-    {
-        fft_in_temp[i][0] = 0;
-        fft_in_temp[i][1] = 0;
-    }
-
-    double start = au_current_time();
 
     fft_p = fftw_plan_dft_1d(extended_size, fft_in_temp, fft_out_temp, FFTW_FORWARD, FFTW_ESTIMATE);
 
     fftw_execute(fft_p);
 
-    double end = au_current_time();
-    au_reduce_time(end - start, "fftw time/step: ");
     for (int i = 0; i < extended_size; i++)
     {
         fft_out[i].real(fft_out_temp[i][0]);
@@ -422,7 +407,7 @@ inline void ifft_help(std::vector<std::complex<float>> &fft_in_out)
     for (int i = 0; i < fft_in_size; i++)
     {
         fft_in_out[i].real(fft_out_temp[i].r / fft_in_size);
-        fft_in_out[i].imag(fft_out_temp[i].i);
+        //fft_in_out[i].imag(fft_out_temp[i].i); //coment out for performance
     }
     free(fft_in_temp);
     free(fft_out_temp);
@@ -452,7 +437,7 @@ inline void ifft_help(std::vector<std::complex<float>> &fft_in_out)
     for (int i = 0; i < fft_in_size; i++)
     {
         fft_in_out[i].real(fft_out_temp[i][0] / fft_in_size);
-        fft_in_out[i].imag(fft_out_temp[i][1]);
+        fft_in_out[i].imag(fft_out_temp[i][1]); //coment out for performance
     }
     fflush(stdout);
     fftw_destroy_plan(fft_p);
