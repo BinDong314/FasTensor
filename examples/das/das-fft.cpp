@@ -140,18 +140,19 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         for (unsigned long long k = M_TIME_SERIESE_LENGTH_EXTENDED - m_TIME_SERIESE_LENGTH + 1; k < M_TIME_SERIESE_LENGTH_EXTENDED; k++)
         {
 #ifndef FFTW_LIB_AVAILABLE
-            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[k].r;
+            //https://stackoverflow.com/questions/39109615/fftw-c-computes-fft-wrong-compared-to-matlab
+            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[k].r / M_TIME_SERIESE_LENGTH_EXTENDED;
 #else
-            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[k][0];
+            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[k][0] / M_TIME_SERIESE_LENGTH_EXTENDED;
 #endif
             gatherXcorr_index++;
         }
         for (unsigned long long l = 0; l < m_TIME_SERIESE_LENGTH; l++)
         {
 #ifndef FFTW_LIB_AVAILABLE
-            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[l].r;
+            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[l].r / M_TIME_SERIESE_LENGTH_EXTENDED;
 #else
-            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[l][0];
+            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[l][0] / M_TIME_SERIESE_LENGTH_EXTENDED;
 #endif
             if (l < 10)
                 printf("xcoor: %f \n", gatherXcorr_per_batch[gatherXcorr_index]);
