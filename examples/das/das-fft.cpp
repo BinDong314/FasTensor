@@ -347,7 +347,7 @@ int main(int argc, char *argv[])
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][0] = fft_out_temp[j][0];
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][1] = fft_out_temp[j][1];
             if (j < 10)
-                printf("master: %f + %f i\n", master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][0], master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][1]);
+                printf("master fft: %f + %f i\n", master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][0], master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][1]);
 #endif
         }
     }
