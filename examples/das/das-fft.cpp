@@ -115,8 +115,12 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
             fft_in_temp[j].i = master_vector_fft[j].i * fft_out_temp[j].r - master_vector_fft[j].r * fft_out_temp[j].i;
 
 #else
+            if (j < 10)
+                printf("fft: %f + %f i\n", fft_out_temp[j][0], fft_out_temp[j][1]);
             fft_in_temp[j][0] = master_vector_fft[j][0] * fft_out_temp[j][0] + master_vector_fft[j][1] * fft_out_temp[j][1];
             fft_in_temp[j][1] = master_vector_fft[j][1] * fft_out_temp[j][0] - master_vector_fft[j][0] * fft_out_temp[j][1];
+            if (j < 10)
+                printf("conj: %f + %f i\n", fft_in_temp[j][0], fft_in_temp[j][1]);
 #endif
         }
 
@@ -342,6 +346,8 @@ int main(int argc, char *argv[])
 #else
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][0] = fft_out_temp[j][0];
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][1] = fft_out_temp[j][1];
+            if (j < 10)
+                printf("master: %f + %f i\n", master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][0], master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][1]);
 #endif
         }
     }
