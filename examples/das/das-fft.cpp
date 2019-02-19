@@ -93,8 +93,6 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
             fft_in_temp[i][1] = 0;
 #endif
         }
-        double end = au_current_time();
-        au_reduce_time(end - start, "read data:");
 
         //FFT on the channel
 #ifndef FFTW_LIB_AVAILABLE
@@ -103,27 +101,18 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_FORWARD);
 #endif
 
-        double end_fft = au_current_time();
-        au_reduce_time(end_fft - end, "fft :");
-
         //specXcorr
-        memset(fft_in_temp, 0, fft_in_legnth);
-
         for (unsigned long long j = 0; j < M_TIME_SERIESE_LENGTH_EXTENDED; j++)
         {
 #ifndef FFTW_LIB_AVAILABLE
-            //temp_fft_v[j] = master_vector_fft[j] * std::conj(temp_fft_v[j]);
             fft_in_temp[j].r = master_vector_fft[j].r * fft_out_temp[j].r + master_vector_fft[j].i * fft_out_temp[j].i;
             fft_in_temp[j].i = master_vector_fft[j].i * fft_out_temp[j].r - master_vector_fft[j].r * fft_out_temp[j].i;
 #else
             fft_in_temp[j][0] = master_vector_fft[j][0] * fft_out_temp[j][0] + master_vector_fft[j][1] * fft_out_temp[j][1];
             fft_in_temp[j][1] = master_vector_fft[j][1] * fft_out_temp[j][0] - master_vector_fft[j][0] * fft_out_temp[j][1];
-            if (j < 10)
-                printf("fft in: %f + %f i, master: %f + %f i, fft out: %f + %f i \n", fft_out_temp[j][0], fft_out_temp[j][1], master_vector_fft[j][0], master_vector_fft[j][1], fft_in_temp[j][0], fft_in_temp[j][1]);
 #endif
         }
 
-        start = au_current_time();
         memset(fft_out_temp, 0, fft_in_legnth);
         //IFFT, result_v also holds the result (only real part for performance)
 #ifndef FFTW_LIB_AVAILABLE
@@ -131,9 +120,6 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 #else
         FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_BACKWARD);
 #endif
-
-        double end_ifft = au_current_time();
-        au_reduce_time(end_ifft - start, "ifft:");
 
         //Subset specXcorr
         unsigned long long gatherXcorr_index = 0;
@@ -154,8 +140,6 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 #else
             gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[l][0] / M_TIME_SERIESE_LENGTH_EXTENDED;
 #endif
-            if (l < 10)
-                printf("xcoor: %f \n", gatherXcorr_per_batch[gatherXcorr_index]);
             gatherXcorr_index++;
         }
 
