@@ -321,6 +321,8 @@ int main(int argc, char *argv[])
     memset(fft_in_temp, 0, fft_in_legnth);
     memset(fft_out_temp, 0, fft_in_legnth);
 
+    printf("I am here before !\n");
+
     for (int bi = 0; bi < window_batch; bi++)
     {
         for (int i = 0; i < m_TIME_SERIESE_LENGTH; i++)
@@ -333,6 +335,8 @@ int main(int argc, char *argv[])
             fft_in_temp[i][1] = 0;
 #endif
         }
+        printf("I am here middle !\n");
+
 #ifndef FFTW_LIB_AVAILABLE
         FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 0)
 #else
