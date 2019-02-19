@@ -103,12 +103,12 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         {
 #ifndef FFTW_LIB_AVAILABLE
             //temp_fft_v[j] = master_vector_fft[j] * std::conj(temp_fft_v[j]);
-            fft_in_temp[j][0] = master_vector_fft[j][0] * fft_out_temp[j][0] + master_vector_fft[j][1] * fft_out_temp[j][1];
-            fft_in_temp[j][1] = master_vector_fft[j][1] * fft_out_temp[j][0] - master_vector_fft[j][0] * fft_out_temp[j][1];
-#else
             fft_in_temp[j].r = master_vector_fft[j].r * fft_out_temp[j].r + master_vector_fft[j].i * fft_out_temp[j].i;
             fft_in_temp[j].i = master_vector_fft[j].i * fft_out_temp[j].r - master_vector_fft[j].r * fft_out_temp[j].i;
 
+#else
+            fft_in_temp[j][0] = master_vector_fft[j][0] * fft_out_temp[j][0] + master_vector_fft[j][1] * fft_out_temp[j][1];
+            fft_in_temp[j][1] = master_vector_fft[j][1] * fft_out_temp[j][0] - master_vector_fft[j][0] * fft_out_temp[j][1];
 #endif
         }
 
@@ -133,9 +133,9 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         for (unsigned long long l = 0; l < m_TIME_SERIESE_LENGTH; l++)
         {
 #ifndef FFTW_LIB_AVAILABLE
-            gatherXcorr_per_batch[gatherXcorr_index] = temp_fft_v[l].r;
+            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[l].r;
 #else
-            gatherXcorr_per_batch[gatherXcorr_index] = temp_fft_v[l][0];
+            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[l][0];
 #endif
 
             gatherXcorr_index++;
@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
             fft_in_temp[i].r = IFILE->operator()(i, MASTER_INDEX); //ts[i] = c(i, 0);
             fft_in_temp[i].i = 0;
 #else
-            fft_in_temp[i][0] = c(i, 0);
+            fft_in_temp[i][0] = IFILE->operator()(i, MASTER_INDEX);
             fft_in_temp[i][1] = 0;
 #endif
         }
