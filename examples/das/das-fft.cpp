@@ -84,7 +84,7 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         for (unsigned long long i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
 #ifndef FFTW_LIB_AVAILABLE
-            fft_in_temp[i].r = c(i, 0); //ts[i] = c(i, 0);
+            fft_in_temp[i].r = c(i, 0);
             fft_in_temp[i].i = 0;
 #else
             fft_in_temp[i][0] = c(i, 0);
@@ -284,12 +284,16 @@ int main(int argc, char *argv[])
 
 #ifndef FFTW_LIB_AVAILABLE
     fft_in_legnth = M_TIME_SERIESE_LENGTH_EXTENDED * sizeof(kiss_fft_cpx);
-    fft_in_temp = (kiss_fft_cpx *)malloc(M_TIME_SERIESE_LENGTH_EXTENDED * sizeof(kiss_fft_cpx));
-    fft_out_temp = (kiss_fft_cpx *)malloc(M_TIME_SERIESE_LENGTH_EXTENDED * sizeof(kiss_fft_cpx));
+    fft_in_temp = (kiss_fft_cpx *)malloc(fft_in_legnth);
+    fft_out_temp = (kiss_fft_cpx *)malloc(fft_in_legnth);
+    master_vector_fft = (kiss_fft_cpx *)malloc(sizeof(kiss_fft_cpx) * M_TIME_SERIESE_LENGTH_EXTENDED_total);
+    memset(master_vector_fft, 0, sizeof(kiss_fft_cpx) * M_TIME_SERIESE_LENGTH_EXTENDED_total);
 #else
     fft_in_legnth = sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED;
-    fft_in_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED);
-    fft_out_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED);
+    fft_in_temp = (fftw_complex *)malloc(fft_in_legnth);
+    fft_out_temp = (fftw_complex *)malloc(fft_in_legnth);
+    master_vector_fft = (fftw_complex *)malloc(sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED_total);
+    memset(master_vector_fft, 0, sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED_total);
 #endif
     if (fft_in_temp == NULL || fft_out_temp == NULL)
     {
@@ -306,7 +310,7 @@ int main(int argc, char *argv[])
         for (int i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
 #ifndef FFTW_LIB_AVAILABLE
-            fft_in_temp[i].r = IFILE->operator()(i, MASTER_INDEX); //ts[i] = c(i, 0);
+            fft_in_temp[i].r = IFILE->operator()(i, MASTER_INDEX);
             fft_in_temp[i].i = 0;
 #else
             fft_in_temp[i][0] = IFILE->operator()(i, MASTER_INDEX);
@@ -321,11 +325,11 @@ int main(int argc, char *argv[])
         for (int j = 0; j++; j < M_TIME_SERIESE_LENGTH_EXTENDED)
         {
 #ifndef FFTW_LIB_AVAILABLE
-            master_vector_fft[bi * m_TIME_SERIESE_LENGTH + j].r = fft_out_temp[j].r;
-            master_vector_fft[bi * m_TIME_SERIESE_LENGTH + j].i = fft_out_temp[j].i;
+            master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j].r = fft_out_temp[j].r;
+            master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j].i = fft_out_temp[j].i;
 #else
-            master_vector_fft[bi * m_TIME_SERIESE_LENGTH + j][0] = fft_out_temp[j][0];
-            master_vector_fft[bi * m_TIME_SERIESE_LENGTH + j][1] = fft_out_temp[j][1];
+            master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][0] = fft_out_temp[j][0];
+            master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][1] = fft_out_temp[j][1];
 #endif
         }
     }
