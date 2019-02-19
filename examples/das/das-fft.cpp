@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
 #endif
         }
     }
-
+    fflush(stdout);
     //Set the strip size and output vector size before the run
     IFILE->SetApplyStripSize(strip_size);
     IFILE->SetOutputVector(x_GATHER_X_CORR_LENGTH_total, 0);
