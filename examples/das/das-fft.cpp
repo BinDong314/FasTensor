@@ -341,10 +341,11 @@ int main(int argc, char *argv[])
         for (int j = 0; j++; j < M_TIME_SERIESE_LENGTH_EXTENDED)
         {
 #ifndef FFTW_LIB_AVAILABLE
+            printf("I am here K !\n");
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j].r = fft_out_temp[j].r;
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j].i = fft_out_temp[j].i;
 #else
-            printf("I am here !\n");
+            printf("I am here W !\n");
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][0] = fft_out_temp[j][0];
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][1] = fft_out_temp[j][1];
             if (j < 10)
