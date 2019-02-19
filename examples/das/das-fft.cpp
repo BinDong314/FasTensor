@@ -61,12 +61,12 @@ unsigned long long find_m(unsigned long long minimum_m);
     }
 
 //direction: 0,  1
-#define FFT_HELP_K(N, fft_in, fft_out, direction) \
-    {                                             \
-        kiss_fft_cfg cfg;                         \
-        cfg = kiss_fft_alloc(N, 0, NULL, NULL);   \
-        kiss_fft(cfg, fft_in, fft_out);           \
-        free(cfg);                                \
+#define FFT_HELP_K(N, fft_in, fft_out, direction)       \
+    {                                                   \
+        kiss_fft_cfg cfg;                               \
+        cfg = kiss_fft_alloc(N, direction, NULL, NULL); \
+        kiss_fft(cfg, fft_in, fft_out);                 \
+        free(cfg);                                      \
     }
 
 //Variable used by FFT_UDF
@@ -107,15 +107,15 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         au_reduce_time(end_fft - end, "fft :");
 
         //specXcorr
+        memset(fft_in_temp, 0, fft_in_legnth);
+
         for (unsigned long long j = 0; j < M_TIME_SERIESE_LENGTH_EXTENDED; j++)
         {
 #ifndef FFTW_LIB_AVAILABLE
             //temp_fft_v[j] = master_vector_fft[j] * std::conj(temp_fft_v[j]);
             fft_in_temp[j].r = master_vector_fft[j].r * fft_out_temp[j].r + master_vector_fft[j].i * fft_out_temp[j].i;
             fft_in_temp[j].i = master_vector_fft[j].i * fft_out_temp[j].r - master_vector_fft[j].r * fft_out_temp[j].i;
-
 #else
-
             fft_in_temp[j][0] = master_vector_fft[j][0] * fft_out_temp[j][0] + master_vector_fft[j][1] * fft_out_temp[j][1];
             fft_in_temp[j][1] = master_vector_fft[j][1] * fft_out_temp[j][0] - master_vector_fft[j][0] * fft_out_temp[j][1];
             if (j < 10)
@@ -124,6 +124,7 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         }
 
         start = au_current_time();
+        memset(fft_out_temp, 0, fft_in_legnth);
         //IFFT, result_v also holds the result (only real part for performance)
 #ifndef FFTW_LIB_AVAILABLE
         FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 1);
@@ -152,7 +153,8 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 #else
             gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[l][0];
 #endif
-
+            if (l < 10)
+                printf("xcoor: %f \n", gatherXcorr_per_batch[gatherXcorr_index]);
             gatherXcorr_index++;
         }
 
@@ -165,9 +167,9 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 int main(int argc, char *argv[])
 {
     char i_file[NAME_LENGTH] = "test-data/fft-test.h5";
-    char o_file[NAME_LENGTH] = "fft-test.arrayudf.h5";
+    char o_file[NAME_LENGTH] = "test-data/fft-test.arrayudf.h5";
     char group[NAME_LENGTH] = "/"; //both input and output file share the same group and dataset name
-    char i_dataset[NAME_LENGTH] = "/dat";
+    char i_dataset[NAME_LENGTH] = "/white";
     char o_dataset[NAME_LENGTH] = "/Xcorr";
 
     char chunk_size_str[NAME_LENGTH];
@@ -180,10 +182,10 @@ int main(int argc, char *argv[])
     ghost_size[0] = 0;
     ghost_size[1] = 0;
     chunk_size.resize(array_ranks);
-    chunk_size[0] = 30000;
-    chunk_size[1] = 2912;
+    chunk_size[0] = 7500;
+    chunk_size[1] = 101;
     strip_size.resize(array_ranks);
-    strip_size[0] = 30000;
+    strip_size[0] = 7500;
     strip_size[1] = 1;
     m_TIME_SERIESE_LENGTH = chunk_size[0];
 
