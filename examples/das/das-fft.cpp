@@ -311,6 +311,7 @@ int main(int argc, char *argv[])
     master_vector_fft = (fftw_complex *)malloc(sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED_total);
     memset(master_vector_fft, 0, sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED_total);
 #endif
+
     if (fft_in_temp == NULL || fft_out_temp == NULL || master_vector_fft == NULL)
     {
         printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
@@ -320,8 +321,6 @@ int main(int argc, char *argv[])
     //Get the mater vector and its fft
     memset(fft_in_temp, 0, fft_in_legnth);
     memset(fft_out_temp, 0, fft_in_legnth);
-
-    printf("I am here before !\n");
 
     for (int bi = 0; bi < window_batch; bi++)
     {
@@ -335,25 +334,20 @@ int main(int argc, char *argv[])
             fft_in_temp[i][1] = 0;
 #endif
         }
-        printf("I am here middle !\n");
 
 #ifndef FFTW_LIB_AVAILABLE
         FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 0)
 #else
         FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_FORWARD)
 #endif
-        for (int j = 0; j++; j < M_TIME_SERIESE_LENGTH_EXTENDED)
+        for (int j = 0; j < M_TIME_SERIESE_LENGTH_EXTENDED; j++)
         {
 #ifndef FFTW_LIB_AVAILABLE
-            printf("I am here K !\n");
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j].r = fft_out_temp[j].r;
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j].i = fft_out_temp[j].i;
 #else
-            printf("I am here W !\n");
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][0] = fft_out_temp[j][0];
             master_vector_fft[bi * M_TIME_SERIESE_LENGTH_EXTENDED + j][1] = fft_out_temp[j][1];
-            if (j < 10)
-                printf("master fft: %f + %f i\n", fft_out_temp[j][0], fft_out_temp[j][1]);
 #endif
         }
     }
