@@ -10,13 +10,22 @@
 #include <cstring>
 #include <complex> // std::complex
 
-//#define FFTW_LIB_AVAILABLE 1
+#define FFTW_LIB_AVAILABLE 1
 
 #ifndef FFTW_LIB_AVAILABLE
 #include "fft/kiss_fft.h"
+kiss_fft_cpx *fft_in_temp;
+kiss_fft_cpx *fft_out_temp;
+kiss_fft_cpx *master_vector_fft;
+unsigned int fft_in_legnth;
 #else
 #include <fftw3.h>
+fftw_complex *fft_in_temp;
+fftw_complex *fft_out_temp;
+fftw_complex *master_vector_fft;
+unsigned int fft_in_legnth;
 #endif
+
 #include "array_udf.h"
 
 #define NAME_LENGTH 1024
@@ -37,19 +46,31 @@ unsigned long long x_GATHER_X_CORR_LENGTH_total = x_GATHER_X_CORR_LENGTH * windo
 unsigned long long M_TIME_SERIESE_LENGTH_EXTENDED_total = M_TIME_SERIESE_LENGTH_EXTENDED * window_batch;
 
 //FFT for channel 0 or n
-//master_vector_fft is filled before we run FFT_UDF
 unsigned long long MASTER_INDEX = 0;
-std::vector<std::complex<float>> master_vector_fft;
 
 //Some help functions
-inline void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>> &fft_out, unsigned long long extend_size);
-inline void ifft_help(std::vector<std::complex<float>> &fft_in_out);
 unsigned long long find_m(unsigned long long minimum_m);
+
+//direction: FFTW_FORWARD,  FFTW_BACKWARD
+#define FFT_HELP_W(N, fft_in, fft_out, direction)                               \
+    {                                                                           \
+        fftw_plan fft_p;                                                        \
+        fft_p = fftw_plan_dft_1d(N, fft_in, fft_out, direction, FFTW_ESTIMATE); \
+        fftw_execute(fft_p);                                                    \
+        fftw_destroy_plan(fft_p);                                               \
+    }
+
+//direction: 0,  1
+#define FFT_HELP_K(N, fft_in, fft_out, direction) \
+    {                                             \
+        kiss_fft_cfg cfg;                         \
+        cfg = kiss_fft_alloc(N, 0, NULL, NULL);   \
+        kiss_fft(cfg, fft_in, fft_out);           \
+        free(cfg);                                \
+    }
 
 //Variable used by FFT_UDF
 //Put here for performnace resason
-std::vector<float> ts;
-std::vector<std::complex<float>> temp_fft_v;
 std::vector<float> gatherXcorr_per_batch;
 std::vector<float> gatherXcorr_final;
 
@@ -58,40 +79,71 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
     for (int bi = 0; bi < window_batch; bi++)
     {
         //Get the input time series on a single channel
+        memset(fft_in_temp, 0, fft_in_legnth);
+        memset(fft_out_temp, 0, fft_in_legnth);
         for (unsigned long long i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
-            ts[i] = c(i, 0);
+#ifndef FFTW_LIB_AVAILABLE
+            fft_in_temp[i].r = c(i, 0); //ts[i] = c(i, 0);
+            fft_in_temp[i].i = 0;
+#else
+            fft_in_temp[i][0] = c(i, 0);
+            fft_in_temp[i][1] = 0;
+#endif
         }
-        //FFT on the channel
-        fft_help(ts, temp_fft_v, M_TIME_SERIESE_LENGTH_EXTENDED);
 
+        //FFT on the channel
+#ifndef FFTW_LIB_AVAILABLE
+        FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 0);
+#else
+        FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_FORWARD);
+#endif
         //specXcorr
         for (unsigned long long j = 0; j < M_TIME_SERIESE_LENGTH_EXTENDED; j++)
         {
-            temp_fft_v[j] = master_vector_fft[j] * std::conj(temp_fft_v[j]);
+#ifndef FFTW_LIB_AVAILABLE
+            //temp_fft_v[j] = master_vector_fft[j] * std::conj(temp_fft_v[j]);
+            fft_in_temp[j][0] = master_vector_fft[j][0] * fft_out_temp[j][0] + master_vector_fft[j][1] * fft_out_temp[j][1];
+            fft_in_temp[j][1] = master_vector_fft[j][1] * fft_out_temp[j][0] - master_vector_fft[j][0] * fft_out_temp[j][1];
+#else
+            fft_in_temp[j].r = master_vector_fft[j].r * fft_out_temp[j].r + master_vector_fft[j].i * fft_out_temp[j].i;
+            fft_in_temp[j].i = master_vector_fft[j].i * fft_out_temp[j].r - master_vector_fft[j].r * fft_out_temp[j].i;
+
+#endif
         }
 
         //IFFT, result_v also holds the result (only real part for performance)
-        ifft_help(temp_fft_v);
+#ifndef FFTW_LIB_AVAILABLE
+        FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 1);
+#else
+        FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_BACKWARD);
+#endif
 
         //Subset specXcorr
         unsigned long long gatherXcorr_index = 0;
         for (unsigned long long k = M_TIME_SERIESE_LENGTH_EXTENDED - m_TIME_SERIESE_LENGTH + 1; k < M_TIME_SERIESE_LENGTH_EXTENDED; k++)
         {
-            gatherXcorr_per_batch[gatherXcorr_index] = temp_fft_v[k].real();
+#ifndef FFTW_LIB_AVAILABLE
+            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[k].r;
+#else
+            gatherXcorr_per_batch[gatherXcorr_index] = fft_out_temp[k][0];
+#endif
             gatherXcorr_index++;
         }
         for (unsigned long long l = 0; l < m_TIME_SERIESE_LENGTH; l++)
         {
-            gatherXcorr_per_batch[gatherXcorr_index] = temp_fft_v[l].real();
+#ifndef FFTW_LIB_AVAILABLE
+            gatherXcorr_per_batch[gatherXcorr_index] = temp_fft_v[l].r;
+#else
+            gatherXcorr_per_batch[gatherXcorr_index] = temp_fft_v[l][0];
+#endif
+
             gatherXcorr_index++;
         }
 
         assert(gatherXcorr_index == x_GATHER_X_CORR_LENGTH);
-
         std::copy_n(gatherXcorr_per_batch.begin(), x_GATHER_X_CORR_LENGTH, gatherXcorr_final.begin() + bi * x_GATHER_X_CORR_LENGTH);
     }
-
     return gatherXcorr_final;
 }
 
@@ -123,7 +175,7 @@ int main(int argc, char *argv[])
     unsigned long long user_window_size;
     int set_chunk_size_flag = 0;
     int set_window_size_flag = 0;
-    int copt, mpi_rank;
+    int copt, mpi_rank, mpi_size;
     while ((copt = getopt(argc, argv, "o:i:g:t:x:c:m:w:h")) != -1)
         switch (copt)
         {
@@ -182,6 +234,8 @@ int main(int argc, char *argv[])
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
     Array<float, std::vector<float>> *IFILE = new Array<float, std::vector<float>>(AU_NVS, AU_HDF5, i_file, group, i_dataset, chunk_size, ghost_size);
     Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, group, o_dataset, chunk_size, ghost_size);
 
@@ -228,38 +282,59 @@ int main(int argc, char *argv[])
     x_GATHER_X_CORR_LENGTH_total = x_GATHER_X_CORR_LENGTH * window_batch;
     M_TIME_SERIESE_LENGTH_EXTENDED_total = M_TIME_SERIESE_LENGTH_EXTENDED * window_batch;
 
+#ifndef FFTW_LIB_AVAILABLE
+    fft_in_legnth = M_TIME_SERIESE_LENGTH_EXTENDED * sizeof(kiss_fft_cpx);
+    fft_in_temp = (kiss_fft_cpx *)malloc(M_TIME_SERIESE_LENGTH_EXTENDED * sizeof(kiss_fft_cpx));
+    fft_out_temp = (kiss_fft_cpx *)malloc(M_TIME_SERIESE_LENGTH_EXTENDED * sizeof(kiss_fft_cpx));
+#else
+    fft_in_legnth = sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED;
+    fft_in_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED);
+    fft_out_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * M_TIME_SERIESE_LENGTH_EXTENDED);
+#endif
+    if (fft_in_temp == NULL || fft_out_temp == NULL)
+    {
+        printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
+        exit(-1);
+    }
+
     //Get the mater vector and its fft
-    std::vector<float> master_vector_per_batch;
-    master_vector_per_batch.resize(m_TIME_SERIESE_LENGTH);
-
-    std::vector<std::complex<float>> master_vector_fft_per_batch;
-    master_vector_fft_per_batch.resize(M_TIME_SERIESE_LENGTH_EXTENDED);
-
-    master_vector_fft.resize(M_TIME_SERIESE_LENGTH_EXTENDED_total);
+    memset(fft_in_temp, 0, fft_in_legnth);
+    memset(fft_out_temp, 0, fft_in_legnth);
 
     for (int bi = 0; bi < window_batch; bi++)
     {
         for (int i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
-            master_vector_per_batch[i] = IFILE->operator()(i, MASTER_INDEX);
+#ifndef FFTW_LIB_AVAILABLE
+            fft_in_temp[i].r = IFILE->operator()(i, MASTER_INDEX); //ts[i] = c(i, 0);
+            fft_in_temp[i].i = 0;
+#else
+            fft_in_temp[i][0] = c(i, 0);
+            fft_in_temp[i][1] = 0;
+#endif
         }
-        fft_help(master_vector_per_batch, master_vector_fft_per_batch, M_TIME_SERIESE_LENGTH_EXTENDED);
-        std::copy_n(master_vector_fft_per_batch.begin(), M_TIME_SERIESE_LENGTH_EXTENDED, master_vector_fft.begin() + bi * m_TIME_SERIESE_LENGTH);
+#ifndef FFTW_LIB_AVAILABLE
+        FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp)
+#else
+        FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp)
+#endif
+        for (int j = 0; j++; j < M_TIME_SERIESE_LENGTH_EXTENDED)
+        {
+#ifndef FFTW_LIB_AVAILABLE
+            master_vector_fft[bi * m_TIME_SERIESE_LENGTH + j].r = fft_out_temp[j].r;
+            master_vector_fft[bi * m_TIME_SERIESE_LENGTH + j].i = fft_out_temp[j].i;
+#else
+            master_vector_fft[bi * m_TIME_SERIESE_LENGTH + j][0] = fft_out_temp[j][0];
+            master_vector_fft[bi * m_TIME_SERIESE_LENGTH + j][1] = fft_out_temp[j][1];
+#endif
+        }
     }
-
-    //release the memory
-    master_vector_fft_per_batch.clear();
-    master_vector_fft_per_batch.shrink_to_fit();
-    master_vector_per_batch.clear();
-    master_vector_per_batch.shrink_to_fit();
 
     //Set the strip size and output vector size before the run
     IFILE->SetApplyStripSize(strip_size);
     IFILE->SetOutputVector(x_GATHER_X_CORR_LENGTH_total, 0);
 
-    //Allocate some space for FFT_UDF
-    ts.resize(m_TIME_SERIESE_LENGTH);
-    temp_fft_v.resize(M_TIME_SERIESE_LENGTH_EXTENDED);
+    //Allocate spaces for FFT_UDF for performance
     gatherXcorr_per_batch.resize(x_GATHER_X_CORR_LENGTH);
     gatherXcorr_final.resize(x_GATHER_X_CORR_LENGTH_total);
 
@@ -269,6 +344,9 @@ int main(int argc, char *argv[])
 
     delete IFILE;
     delete OFILE;
+
+    free(fft_in_temp);
+    free(fft_out_temp);
     MPI_Finalize();
     return 0;
 }
@@ -282,166 +360,6 @@ unsigned long long find_m(unsigned long long minimum_m)
         minimum_m = minimum_m + 1;
     }
     return minimum_m;
-}
-
-void fft_help(const std::vector<float> &fft_in, std::vector<std::complex<float>> &fft_out, unsigned long long extended_size)
-{
-    unsigned long long fft_in_size = fft_in.size();
-    assert(fft_out.size() == extended_size);
-
-#ifndef FFTW_LIB_AVAILABLE
-    kiss_fft_cpx *fft_in_temp = (kiss_fft_cpx *)malloc(extended_size * sizeof(kiss_fft_cpx));
-    kiss_fft_cpx *fft_out_temp = (kiss_fft_cpx *)malloc(extended_size * sizeof(kiss_fft_cpx));
-
-    if (fft_in_temp == NULL || fft_out_temp == NULL)
-    {
-        printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
-        exit(-1);
-    }
-
-    for (int i = 0; i < extended_size; i++)
-    {
-        if (i < fft_in_size)
-        {
-            fft_in_temp[i].r = fft_in[i];
-            fft_in_temp[i].i = 0;
-        }
-        else
-        {
-            fft_in_temp[i].r = 0;
-            fft_in_temp[i].i = 0;
-        }
-    }
-
-    kiss_fft_cfg cfg;
-    if ((cfg = kiss_fft_alloc(extended_size, 0, NULL, NULL)) != NULL)
-    {
-        kiss_fft(cfg, fft_in_temp, fft_out_temp);
-        free(cfg);
-    }
-    else
-    {
-        printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
-        exit(-1);
-    }
-
-    for (int i = 0; i < extended_size; i++)
-    {
-        fft_out[i].real(fft_out_temp[i].r);
-        fft_out[i].imag(fft_out_temp[i].i);
-    }
-    free(fft_in_temp);
-    free(fft_out_temp);
-#else
-    fftw_complex *fft_in_temp, *fft_out_temp;
-    fftw_plan fft_p;
-    fft_in_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * extended_size);
-    fft_out_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * extended_size);
-
-    if (fft_in_temp == NULL || fft_out_temp == NULL)
-    {
-        printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
-        exit(-1);
-    }
-
-    for (int i = 0; i < extended_size; i++)
-    {
-        if (i < fft_in_size)
-        {
-            fft_in_temp[i][0] = fft_in[i];
-            fft_in_temp[i][1] = 0;
-        }
-        else
-        {
-            fft_in_temp[i][0] = 0;
-            fft_in_temp[i][1] = 0;
-        }
-    }
-
-    fft_p = fftw_plan_dft_1d(extended_size, fft_in_temp, fft_out_temp, FFTW_FORWARD, FFTW_ESTIMATE);
-
-    fftw_execute(fft_p);
-
-    for (int i = 0; i < extended_size; i++)
-    {
-        fft_out[i].real(fft_out_temp[i][0]);
-        fft_out[i].imag(fft_out_temp[i][1]);
-    }
-    fftw_destroy_plan(fft_p);
-#endif
-}
-
-inline void ifft_help(std::vector<std::complex<float>> &fft_in_out)
-{
-    unsigned long long fft_in_size = fft_in_out.size();
-
-#ifndef FFTW_LIB_AVAILABLE
-
-    kiss_fft_cpx *fft_in_temp = (kiss_fft_cpx *)malloc(fft_in_size * sizeof(kiss_fft_cpx));
-    kiss_fft_cpx *fft_out_temp = (kiss_fft_cpx *)malloc(fft_in_size * sizeof(kiss_fft_cpx));
-
-    if (fft_in_temp == NULL || fft_out_temp == NULL)
-    {
-        printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
-        exit(-1);
-    }
-
-    for (int i = 0; i < fft_in_size; i++)
-    {
-        fft_in_temp[i].r = fft_in_out[i].real();
-        fft_in_temp[i].i = fft_in_out[i].imag();
-    }
-    kiss_fft_cfg cfg;
-    if ((cfg = kiss_fft_alloc(fft_in_size, 1, NULL, NULL)) != NULL)
-    {
-        kiss_fft(cfg, fft_in_temp, fft_out_temp);
-        free(cfg);
-    }
-    else
-    {
-        printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
-        exit(-1);
-    }
-
-    //https://stackoverflow.com/questions/39109615/fftw-c-computes-fft-wrong-compared-to-matlab
-    for (int i = 0; i < fft_in_size; i++)
-    {
-        fft_in_out[i].real(fft_out_temp[i].r / fft_in_size);
-        //fft_in_out[i].imag(fft_out_temp[i].i); //coment out for performance
-    }
-    free(fft_in_temp);
-    free(fft_out_temp);
-#else
-    fftw_complex *fft_in_temp, *fft_out_temp;
-    fftw_plan fft_p;
-    fft_in_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * fft_in_size);
-    fft_out_temp = (fftw_complex *)malloc(sizeof(fftw_complex) * fft_in_size);
-
-    if (fft_in_temp == NULL || fft_out_temp == NULL)
-    {
-        printf("not enough memory, in %s:%d\n", __FILE__, __LINE__);
-        exit(-1);
-    }
-
-    for (int i = 0; i < fft_in_size; i++)
-    {
-        fft_in_temp[i][0] = fft_in_out[i].real();
-        fft_in_temp[i][1] = fft_in_out[i].imag();
-    }
-
-    fft_p = fftw_plan_dft_1d(fft_in_size, fft_in_temp, fft_out_temp, FFTW_BACKWARD, FFTW_ESTIMATE);
-
-    fftw_execute(fft_p);
-
-    //https://stackoverflow.com/questions/39109615/fftw-c-computes-fft-wrong-compared-to-matlab
-    for (int i = 0; i < fft_in_size; i++)
-    {
-        fft_in_out[i].real(fft_out_temp[i][0] / fft_in_size);
-        //fft_in_out[i].imag(fft_out_temp[i][1]); //coment out for performance
-    }
-    //fflush(stdout);
-    fftw_destroy_plan(fft_p);
-#endif
 }
 
 void convert_str_vector(int n, char *str, int *vector)
