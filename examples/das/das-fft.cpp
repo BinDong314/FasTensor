@@ -81,6 +81,8 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         //Get the input time series on a single channel
         memset(fft_in_temp, 0, fft_in_legnth);
         memset(fft_out_temp, 0, fft_in_legnth);
+
+        double start = au_current_time();
         for (unsigned long long i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
 #ifndef FFTW_LIB_AVAILABLE
@@ -91,6 +93,8 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
             fft_in_temp[i][1] = 0;
 #endif
         }
+        double end = au_current_time();
+        au_reduce_time(end - start, "read data:");
 
         //FFT on the channel
 #ifndef FFTW_LIB_AVAILABLE
@@ -98,6 +102,10 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 #else
         FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_FORWARD);
 #endif
+
+        double end_fft = au_current_time();
+        au_reduce_time(end_fft - end, "fft :");
+
         //specXcorr
         for (unsigned long long j = 0; j < M_TIME_SERIESE_LENGTH_EXTENDED; j++)
         {
@@ -112,12 +120,16 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 #endif
         }
 
+        start = au_current_time();
         //IFFT, result_v also holds the result (only real part for performance)
 #ifndef FFTW_LIB_AVAILABLE
         FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 1);
 #else
         FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_BACKWARD);
 #endif
+
+        double end_ifft = au_current_time();
+        au_reduce_time(end_ifft - start, "ifft:");
 
         //Subset specXcorr
         unsigned long long gatherXcorr_index = 0;
