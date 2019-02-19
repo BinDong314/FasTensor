@@ -314,9 +314,9 @@ int main(int argc, char *argv[])
 #endif
         }
 #ifndef FFTW_LIB_AVAILABLE
-        FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp)
+        FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 0)
 #else
-        FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp)
+        FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_FORWARD)
 #endif
         for (int j = 0; j++; j < M_TIME_SERIESE_LENGTH_EXTENDED)
         {
