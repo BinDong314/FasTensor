@@ -113,7 +113,7 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 #endif
         }
 
-        memset(fft_out_temp, 0, fft_in_legnth);
+        //memset(fft_out_temp, 0, fft_in_legnth);
         //IFFT, result_v also holds the result (only real part for performance)
 #ifndef FFTW_LIB_AVAILABLE
         FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 1);
