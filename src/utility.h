@@ -435,13 +435,16 @@ int file_exist(const char *filename)
   return (stat(filename, &buffer) == 0);
 }
 
-double au_current_time()
+double au_timer_global__inside_use = 0;
+void au_time_start()
 {
-  return MPI_Wtime();
+  au_timer_global__inside_use = MPI_Wtime();
 }
-void au_reduce_time(double time_per_rank, char *info_str)
+
+void au_time_elap(char *info_str)
 {
 
+  double time_per_rank = MPI_Wtime() - au_timer_global__inside_use;
   int mpi_rank, mpi_size;
   double time_max, time_min, time_sum;
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
@@ -453,9 +456,11 @@ void au_reduce_time(double time_per_rank, char *info_str)
 
   if (mpi_rank == 0)
   {
-    printf(" %s :  max = %f, min = %f, ave = %f, rank 0= %f \n ", info_str, time_max, time_min, time_sum / mpi_size, time_per_rank);
+    printf(" %s:max=%f, min=%f, ave=%f, rank 0=%f\n", info_str, time_max, time_min, time_sum / mpi_size, time_per_rank);
     fflush(stdout);
   }
-}
 
+  //reset to current time
+  au_timer_global__inside_use = MPI_Wtime();
+}
 #endif

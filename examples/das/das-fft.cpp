@@ -82,7 +82,7 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
         memset(fft_in_temp, 0, fft_in_legnth);
         memset(fft_out_temp, 0, fft_in_legnth);
 
-        double start = au_current_time();
+        au_time_start();
         for (unsigned long long i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
 #ifndef FFTW_LIB_AVAILABLE
@@ -93,6 +93,7 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
             fft_in_temp[i][1] = 0;
 #endif
         }
+        au_time_elap("Read data");
 
         //FFT on the channel
 #ifndef FFTW_LIB_AVAILABLE
@@ -100,6 +101,8 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 #else
         FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_FORWARD);
 #endif
+
+        au_time_elap("FFT");
 
         //specXcorr
         for (unsigned long long j = 0; j < M_TIME_SERIESE_LENGTH_EXTENDED; j++)
@@ -113,6 +116,8 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 #endif
         }
 
+        au_time_elap("CONJ");
+
         //memset(fft_out_temp, 0, fft_in_legnth);
         //IFFT, result_v also holds the result (only real part for performance)
 #ifndef FFTW_LIB_AVAILABLE
@@ -120,6 +125,8 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 #else
         FFT_HELP_W(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, FFTW_BACKWARD);
 #endif
+
+        au_time_elap("IFFT");
 
         //Subset specXcorr
         unsigned long long gatherXcorr_index = 0;
@@ -145,6 +152,7 @@ inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 
         assert(gatherXcorr_index == x_GATHER_X_CORR_LENGTH);
         std::copy_n(gatherXcorr_per_batch.begin(), x_GATHER_X_CORR_LENGTH, gatherXcorr_final.begin() + bi * x_GATHER_X_CORR_LENGTH);
+        au_time_elap("COPY");
     }
     return gatherXcorr_final;
 }
