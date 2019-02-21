@@ -431,9 +431,10 @@ void printf_help(char *cmd)
           -x dataset name for output correlation \n\
           -c chunk size (seperate by comma ',')\n\
              chunk_size[0] is used as window size by default \n\
+             (it is auto setup now) \n\
           -w window size (only used when window size is different from chunk_size[0]) \n\
           -m index of master channel (0 by default )\n\
-          Example: mpirun -n 1 %s -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /white -x /Xcorr -c 7500,101\n";
+          Example: mpirun -n 1 %s -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /white -x /Xcorr\n";
 
     fprintf(stdout, msg, cmd, cmd);
 }
