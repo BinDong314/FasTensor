@@ -2458,8 +2458,8 @@ std::vector<int> GetChunkSize()
 int SetChunkSize(std::vector<int> cs)
 {
   data_total_chunks = 1;
-  assert(data_chunk_size.size() == cs.size());
-
+  //assert(data_chunk_size.size() == cs.size());
+  data_chunk_size.resize(cs.size());
   for (int i = 0; i < data_dims; i++)
   {
     data_chunk_size[i] = cs[i];

@@ -250,7 +250,6 @@ int main(int argc, char *argv[])
         chunk_size[1] = i_file_dim[1] / mpi_size + 1;
     }
     IFILE->SetChunkSize(chunk_size);
-    OFILE->SetChunkSize(chunk_size);
 
     //Be defuat values
     strip_size[0] = chunk_size[0];         //skip per chunk
