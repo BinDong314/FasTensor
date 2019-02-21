@@ -1,8 +1,15 @@
-#! /bin/bash
+#!/bin/bash
 
-if [ -x libtoolize ]; then
+exists()
+{
+  command -v "$1" >/dev/null 2>&1
+}
+
+if exists libtoolize  ; then
+	echo "libtoolize"
 	libtoolize --force
 elif [ -x glibtoolize ]; then
+	echo "glibtoolize"
 	glibtoolize --force
 fi
 
