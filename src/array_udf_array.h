@@ -2455,6 +2455,43 @@ std::vector<int> GetChunkSize()
   return data_chunk_size;
 }
 
+int SetChunkSize(std::vector<int> cs)
+{
+  data_total_chunks = 1;
+  assert(data_chunk_size.size() == cs.size());
+
+  for (int i = 0; i < data_dims; i++)
+  {
+    data_chunk_size[i] = cs[i];
+    if (data_dims_size[i] % data_chunk_size[i] == 0)
+    {
+      data_chunked_dims_size[i] = data_dims_size[i] / data_chunk_size[i];
+    }
+    else
+    {
+      data_chunked_dims_size[i] = data_dims_size[i] / data_chunk_size[i] + 1;
+    }
+    data_total_chunks = data_total_chunks * data_chunked_dims_size[i];
+  }
+
+  //#ifdef DEBUG
+  if (mpi_rank == 0)
+  {
+    std::cout << "Chunk size (after set)  = ";
+    for (int i = 0; i < data_dims; i++)
+    {
+      std::cout << ", " << data_chunk_size[i];
+    }
+    std::cout << std::endl;
+    std::cout << "Total chunks (after set) =  " << data_total_chunks << std::endl;
+  }
+  //#endif
+  if (data_total_chunks % mpi_size != 0)
+  {
+    data->DisableCollectivIO();
+  }
+}
+
 std::vector<int> GetOverlapSize()
 {
   return data_overlap_size;

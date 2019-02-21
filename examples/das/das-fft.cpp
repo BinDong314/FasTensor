@@ -226,11 +226,6 @@ int main(int argc, char *argv[])
         convert_str_vector(array_ranks, chunk_size_str, &(chunk_size[0]));
     }
 
-    //Be defuat values
-    strip_size[0] = chunk_size[0];         //skip per chunk
-    strip_size[1] = 1;                     //per channel
-    m_TIME_SERIESE_LENGTH = chunk_size[0]; //chunk size = window size
-
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
@@ -239,11 +234,28 @@ int main(int argc, char *argv[])
     Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, group, o_dataset, chunk_size, ghost_size);
 
     std::vector<unsigned long long> i_file_dim = IFILE->GetDimSize();
-    if (i_file_dim[0] != chunk_size[0])
+    //if (i_file_dim[0] != chunk_size[0])
+    //{
+    //printf("Chunk size must be equal to the size of first dimension: %lld \n", i_file_dim[0]);
+    //exit(-1);
+    //}
+
+    chunk_size[0] = i_file_dim[0];
+    if (i_file_dim[1] % mpi_size == 0)
     {
-        printf("Chunk size must be equal to the size of first dimension: %lld \n", i_file_dim[0]);
-        exit(-1);
+        chunk_size[1] = i_file_dim[1] / mpi_size;
     }
+    else
+    {
+        chunk_size[1] = i_file_dim[1] / mpi_size + 1;
+    }
+    IFILE->SetChunkSize(chunk_size);
+    OFILE->SetChunkSize(chunk_size);
+
+    //Be defuat values
+    strip_size[0] = chunk_size[0];         //skip per chunk
+    strip_size[1] = 1;                     //per channel
+    m_TIME_SERIESE_LENGTH = chunk_size[0]; //chunk size = window size
 
     window_batch = 1;
     if (set_window_size_flag && (user_window_size != chunk_size[0]))
@@ -312,7 +324,7 @@ int main(int argc, char *argv[])
 
     for (int bi = 0; bi < window_batch; bi++)
     {
-        printf("Start to read master chunk !\n");
+        //printf("Start to read master chunk !\n");
         master_start[0] = 0 + bi * m_TIME_SERIESE_LENGTH;
         master_start[1] = MASTER_INDEX;
         master_end[0] = master_start[0] + m_TIME_SERIESE_LENGTH - 1;
@@ -331,7 +343,7 @@ int main(int argc, char *argv[])
 #endif
         }
 
-        printf("End of reading master chunk !\n");
+        //printf("End of reading master chunk !\n");
 
 #ifndef FFTW_LIB_AVAILABLE
         FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 0)
