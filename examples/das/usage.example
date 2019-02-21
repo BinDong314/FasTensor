@@ -179,9 +179,22 @@ Step3: ArrayUDF Code: das-correlation
 
 
 
+5. Compile ArrayUDF on Snowbear
 
+  module purge
+  module load gcc/4.8.5           
+  module load openmpi/3.1.2-gcc   
+  module load hdf5/1.11.3-gcc-p  
+  module load fftw/3.3.4-gcc
+  module unload openmpi/1.10.2-gcc
+  module load automake
 
-
+ > ./autogen.sh
+ >  CXX=mpiCC FC=mpif90 ./configure --prefix=$PWD/build --with-hdf5=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p --enable-shared
+ > make install
+ > cd example/das
+ > edit Makefile to have correct HDF5/MPICC etc.
+ > make 
 
 
 

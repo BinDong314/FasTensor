@@ -304,17 +304,29 @@ int main(int argc, char *argv[])
     //Get the mater vector and its fft
     memset(fft_in_temp, 0, fft_in_legnth);
     memset(fft_out_temp, 0, fft_in_legnth);
+    std::vector<float> master_v_per_batch;
+    master_v_per_batch.resize(m_TIME_SERIESE_LENGTH);
+    std::vector<unsigned long long> master_start, master_end;
+    master_start.resize(2);
+    master_end.resize(2);
 
     for (int bi = 0; bi < window_batch; bi++)
     {
         printf("Start to read master chunk !\n");
+        master_start[0] = 0 + bi * m_TIME_SERIESE_LENGTH;
+        master_start[1] = MASTER_INDEX;
+        master_end[0] = master_start[0] + m_TIME_SERIESE_LENGTH - 1;
+        master_end[1] = MASTER_INDEX;
+
+        IFILE->ReadData(master_start, master_end, master_v_per_batch);
+
         for (int i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
 #ifndef FFTW_LIB_AVAILABLE
-            fft_in_temp[i].r = IFILE->operator()(i, MASTER_INDEX);
+            fft_in_temp[i].r = master_v_per_batch[i]; //IFILE->operator()(m_TIME_SERIESE_LENGTH *bi + i, MASTER_INDEX);
             fft_in_temp[i].i = 0;
 #else
-            fft_in_temp[i][0] = IFILE->operator()(i, MASTER_INDEX);
+            fft_in_temp[i][0] = master_v_per_batch[i]; //IFILE->operator()(m_TIME_SERIESE_LENGTH *bi + i, MASTER_INDEX);
             fft_in_temp[i][1] = 0;
 #endif
         }
@@ -410,7 +422,7 @@ void printf_help(char *cmd)
              chunk_size[0] is used as window size by default \n\
           -w window size (only used when window size is different from chunk_size[0]) \n\
           -m index of master channel (0 by default )\n\
-          Example: mpirun -n 1 %s -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /dat -x /Xcorr -c 7500,101\n";
+          Example: mpirun -n 1 %s -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /white -x /Xcorr -c 7500,101\n";
 
     fprintf(stdout, msg, cmd, cmd);
 }

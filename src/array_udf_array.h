@@ -387,7 +387,7 @@ public:
         else if (is_base_type_T<AttrType, float>())
         {
           //if (!mpi_rank)
-           // printf("In Array init: output element type is float \n ");
+          // printf("In Array init: output element type is float \n ");
           output_element_type_class = H5T_FLOAT;
         }
         else if (is_base_type_T<AttrType, std::complex<float>>())
@@ -2055,6 +2055,11 @@ inline T operator()(const int idx) const
     //std::cout << "Size of T :  " << sizeof(T) << ", Size of AttrType :  " << sizeof(AttrType) << std::endl;
     return result;
   }
+}
+
+int ReadData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<T> &data_v)
+{
+  return data->ReadData(start, end, data_v);
 }
 
 inline T operator()(int idx, int idy) const
