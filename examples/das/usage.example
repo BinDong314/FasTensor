@@ -11,13 +11,14 @@ Overview:
 1. Preparing steps:
   1.1. ArrayUDF
     > module purge
-    > module load gcc/4.8.5 openmpi/3.1.2-gcc hdf5/1.11.3-gcc-p arrayudf/1.0.0-gcc git
+    > module load gcc/4.8.5 openmpi/3.1.2-gcc hdf5/1.11.3-gcc-p arrayudf/1.0.1-gcc  fftw/3.3.4-gcc git
+    > module unload openmpi/1.10.2-gcc
     > git clone https://bitbucket.org/dbin_sdm/arrayudf-test.git
     > cd arrayudf-test/examples/das/   
     > make clean 
     > make
     > ls
-      * Make sure that "tdms2h5", "das-correlation" and "h5-vds-merge" are generated successfully 
+      * Make sure that "tdms2h5", "das-correlation" , "h5-vds-merge" and "das-fft" are generated successfully 
 
 
 2. Usage
@@ -83,7 +84,8 @@ Step3: ArrayUDF Code: das-correlation
 
   Step4: ArrayUDF Code: das-fft
     das-fft can be compiled with the same commands in Step3.
-    > mpirun -n 1 ./das-fft -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /dat -x /Xcorr -c 7500,101
+
+    > mpirun  -n 1 ./das-fft -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /white -x /Xcorr
     > h5dump  -d /Xcorr -s 0,0 -c 4,4 ./test-data/fft-test.arrayudf.h5
       HDF5 "./test-data/fft-test.arrayudf.h5" {
       DATASET "/Xcorr" {
@@ -107,22 +109,33 @@ Step3: ArrayUDF Code: das-correlation
 
 3. Parameters for das-correlation
 
--i input HDF5 file
--o output HDF5 file
--g group within HDF5
--d dataset within HDF5
--n the dimension of input dataset, it is always 2 for das data
--c chunk size which breaks the input data into subsets for parallel processing
+  -i input HDF5 file
+  -o output HDF5 file
+  -g group within HDF5
+  -d dataset within HDF5
+  -n the dimension of input dataset, it is always 2 for das data
+  -c chunk size which breaks the input data into subsets for parallel processing
 
--t overlap among chunks (to be aligned with -l parameters)
--s skip points, e.g., 1000,1 computes local similarity every 1000 points on first dimension 
--e size of time window along single channel 
--w counts of windows along single channel
--l channel offset ()
+  -t overlap among chunks (to be aligned with -l parameters)
+  -s skip points, e.g., 1000,1 computes local similarity every 1000 points on first dimension 
+  -e size of time window along single channel 
+  -w counts of windows along single channel
+  -l channel offset ()
 
 
+4. Parameters for das-fft
 
-4. Metadata 
+  -h help (--help)
+  -i input file
+  -o output file
+	-g group name (path) for both input and output
+  -t dataset name for input time series
+  -x dataset name for output correlation
+  -w window size (only used when window size is different from chunk_size[0])
+  -m index of master channel (0 by default )
+  Example: mpirun -n 1 ./das-fft -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /white -x /Xcorr
+
+5. Metadata 
 
   Overall, "tdms2h5" tries to extract all metadata from the header of TDMS file and store 
   them as attributes (or groups) in HDF5. In a TDMS file,  it has 28 byte fixed 
@@ -179,7 +192,7 @@ Step3: ArrayUDF Code: das-correlation
 
 
 
-5. Compile ArrayUDF on Snowbear
+6. Compile ArrayUDF on Snowbear
 
   module purge
   module load gcc/4.8.5           
