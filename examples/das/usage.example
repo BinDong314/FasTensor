@@ -18,7 +18,7 @@ Overview:
     > make clean 
     > make
     > ls
-      * Make sure that "tdms2h5", "das-correlation" and "h5-vds-merge" are generated successfully 
+      * Make sure that "tdms2h5", "das-correlation" , "h5-vds-merge" and "das-fft" are generated successfully 
 
 
 2. Usage
