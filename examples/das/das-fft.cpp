@@ -1,15 +1,30 @@
-// overload_array.cpp
-// overloading the c++ array subscript operator []
-//http://neondataskills.org/HDF5/TimeSeries-Data-In-HDF5-Using-R/
-
+//
+// This Code is for calculating the FFT/IFFT for DAS data
+// It is on top of ArrayUDF with the main strucutre:
+//       A: DAS array
+//       A->Apply(FFT_UDF) : the TTF_UDF is the main function for FFT/IFFT on each channel
+// Please use the "-h" to get the usage information
+// Major steps
+//      1, get master vector and its FFT on each MPI processes
+//      2, Run FFT_UDF on each channel, parallized on all MPI processes
+//         2.1  Get data of each channel
+//         2.2  FFT
+//         2.3  spec Correlation with  master
+//         2.4  IFFT
+//         2.5  Subset correlation
+//
+// Author: Bin Dong  2019 (Reviewed by Xin Xing)
+//
 #include <iostream>
 #include <stdarg.h>
 #include <vector>
 #include <stdlib.h>
 #include <math.h> /* ceil  and floor*/
 #include <cstring>
-#include <complex> // std::complex
+#include "array_udf.h"
 
+//Comment out if you don't have FFTW
+//In that case, we use Kiss FFT (included already in this distribution)
 #define FFTW_LIB_AVAILABLE 1
 
 #ifndef FFTW_LIB_AVAILABLE
@@ -26,17 +41,11 @@ fftw_complex *master_vector_fft;
 unsigned int fft_in_legnth;
 #endif
 
-#include "array_udf.h"
-
-#define NAME_LENGTH 1024
-void convert_str_vector(int n, char *str, int *vector);
-void printf_help(char *cmd);
-
 using namespace std;
 
 //Some global variables
 unsigned long long m_TIME_SERIESE_LENGTH = 30000;                              //window size
-unsigned long long M_TIME_SERIESE_LENGTH_EXTENDED = m_TIME_SERIESE_LENGTH * 2; //size of windoe for FFT
+unsigned long long M_TIME_SERIESE_LENGTH_EXTENDED = m_TIME_SERIESE_LENGTH * 2; //size of extended window for FFT/IFFT
 unsigned long long x_GATHER_X_CORR_LENGTH = m_TIME_SERIESE_LENGTH * 2 - 1;     //Result size
 
 //When time series is spelit into windows
@@ -45,11 +54,16 @@ int window_batch = 1;
 unsigned long long x_GATHER_X_CORR_LENGTH_total = x_GATHER_X_CORR_LENGTH * window_batch;
 unsigned long long M_TIME_SERIESE_LENGTH_EXTENDED_total = M_TIME_SERIESE_LENGTH_EXTENDED * window_batch;
 
-//FFT for channel 0 or n
+//Maste channel
 unsigned long long MASTER_INDEX = 0;
 
-//Some help functions
+/*
+ *Some help functions
+ */
 unsigned long long find_m(unsigned long long minimum_m);
+#define NAME_LENGTH 1024
+void convert_str_vector(int n, char *str, int *vector);
+void printf_help(char *cmd);
 
 //direction: FFTW_FORWARD,  FFTW_BACKWARD
 #define FFT_HELP_W(N, fft_in, fft_out, direction)                               \
@@ -59,7 +73,6 @@ unsigned long long find_m(unsigned long long minimum_m);
         fftw_execute(fft_p);                                                    \
         fftw_destroy_plan(fft_p);                                               \
     }
-
 //direction: 0,  1
 #define FFT_HELP_K(N, fft_in, fft_out, direction)       \
     {                                                   \
@@ -69,19 +82,25 @@ unsigned long long find_m(unsigned long long minimum_m);
         free(cfg);                                      \
     }
 
-//Variable used by FFT_UDF
+//Variable used inside FFT_UDF
 //Put here for performnace resason
 std::vector<float> gatherXcorr_per_batch;
 std::vector<float> gatherXcorr_final;
 
+/*
+ * This function is the place implement FFT/IFFT
+ *  Actually, it describes the operation per channel
+ *  The return value is a coorelation vector
+ */
 inline std::vector<float> FFT_UDF(const Stencil<float> &c)
 {
     for (int bi = 0; bi < window_batch; bi++)
     {
-        //Get the input time series on a single channel
+        //Clear memory for new analysis
         memset(fft_in_temp, 0, fft_in_legnth);
         memset(fft_out_temp, 0, fft_in_legnth);
 
+        //Get the input time series on a single channel
         for (unsigned long long i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
 #ifndef FFTW_LIB_AVAILABLE
@@ -172,10 +191,9 @@ int main(int argc, char *argv[])
     m_TIME_SERIESE_LENGTH = chunk_size[0];
 
     unsigned long long user_window_size;
-    int set_chunk_size_flag = 0;
     int set_window_size_flag = 0;
     int copt, mpi_rank, mpi_size;
-    while ((copt = getopt(argc, argv, "o:i:g:t:x:c:m:w:h")) != -1)
+    while ((copt = getopt(argc, argv, "o:i:g:t:x:m:w:h")) != -1)
         switch (copt)
         {
         case 'o':
@@ -202,11 +220,6 @@ int main(int argc, char *argv[])
             set_window_size_flag = 1;
             user_window_size = atoll(optarg);
             break;
-        case 'c':
-            set_chunk_size_flag = 1;
-            memset(chunk_size_str, 0, NAME_LENGTH);
-            strcpy(chunk_size_str, optarg);
-            break;
         case 'm':
             MASTER_INDEX = atoi(optarg);
             break;
@@ -221,25 +234,18 @@ int main(int argc, char *argv[])
             break;
         }
 
-    if (set_chunk_size_flag)
-    {
-        convert_str_vector(array_ranks, chunk_size_str, &(chunk_size[0]));
-    }
-
+    //Do some intializatin work
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
+    //Declare the input and output array
     Array<float, std::vector<float>> *IFILE = new Array<float, std::vector<float>>(AU_NVS, AU_HDF5, i_file, group, i_dataset, chunk_size, ghost_size);
     Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, group, o_dataset, chunk_size, ghost_size);
 
     std::vector<unsigned long long> i_file_dim = IFILE->GetDimSize();
-    //if (i_file_dim[0] != chunk_size[0])
-    //{
-    //printf("Chunk size must be equal to the size of first dimension: %lld \n", i_file_dim[0]);
-    //exit(-1);
-    //}
 
+    //Find and set chunks_size to split array for parallel processing
     chunk_size[0] = i_file_dim[0];
     if (i_file_dim[1] % mpi_size == 0)
     {
@@ -251,11 +257,12 @@ int main(int argc, char *argv[])
     }
     IFILE->SetChunkSize(chunk_size);
 
-    //Be defuat values
+    //Set other parameters for parallel processng
     strip_size[0] = chunk_size[0];         //skip per chunk
     strip_size[1] = 1;                     //per channel
-    m_TIME_SERIESE_LENGTH = chunk_size[0]; //chunk size = window size
+    m_TIME_SERIESE_LENGTH = chunk_size[0]; // window size = chunk_size[0] by default
 
+    //If user provides a window size and it is not cover the whole time domain per channel
     window_batch = 1;
     if (set_window_size_flag && (user_window_size != chunk_size[0]))
     {
@@ -283,7 +290,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    //For each window
+    //Find out the result size and extended vector size of FFT.
     x_GATHER_X_CORR_LENGTH = 2 * m_TIME_SERIESE_LENGTH - 1;
     M_TIME_SERIESE_LENGTH_EXTENDED = find_m(x_GATHER_X_CORR_LENGTH);
     if (!mpi_rank)
@@ -292,6 +299,7 @@ int main(int argc, char *argv[])
     x_GATHER_X_CORR_LENGTH_total = x_GATHER_X_CORR_LENGTH * window_batch;
     M_TIME_SERIESE_LENGTH_EXTENDED_total = M_TIME_SERIESE_LENGTH_EXTENDED * window_batch;
 
+    //Allocate some space for FFT/iFFT (for each channel and master channel)
 #ifndef FFTW_LIB_AVAILABLE
     fft_in_legnth = M_TIME_SERIESE_LENGTH_EXTENDED * sizeof(kiss_fft_cpx);
     fft_in_temp = (kiss_fft_cpx *)malloc(fft_in_legnth);
@@ -320,17 +328,15 @@ int main(int argc, char *argv[])
     std::vector<unsigned long long> master_start, master_end;
     master_start.resize(2);
     master_end.resize(2);
-
     for (int bi = 0; bi < window_batch; bi++)
     {
-        //printf("Start to read master chunk !\n");
         master_start[0] = 0 + bi * m_TIME_SERIESE_LENGTH;
         master_start[1] = MASTER_INDEX;
         master_end[0] = master_start[0] + m_TIME_SERIESE_LENGTH - 1;
         master_end[1] = MASTER_INDEX;
-
+        //Get master chunk's data
         IFILE->ReadData(master_start, master_end, master_v_per_batch);
-
+        //Get the FFT of master
         for (int i = 0; i < m_TIME_SERIESE_LENGTH; i++)
         {
 #ifndef FFTW_LIB_AVAILABLE
@@ -341,9 +347,6 @@ int main(int argc, char *argv[])
             fft_in_temp[i][1] = 0;
 #endif
         }
-
-        //printf("End of reading master chunk !\n");
-
 #ifndef FFTW_LIB_AVAILABLE
         FFT_HELP_K(M_TIME_SERIESE_LENGTH_EXTENDED, fft_in_temp, fft_out_temp, 0)
 #else
@@ -360,7 +363,7 @@ int main(int argc, char *argv[])
 #endif
         }
     }
-    fflush(stdout);
+
     //Set the strip size and output vector size before the run
     IFILE->SetApplyStripSize(strip_size);
     IFILE->SetOutputVector(x_GATHER_X_CORR_LENGTH_total, 0);
@@ -429,9 +432,6 @@ void printf_help(char *cmd)
 	      -g group name (path) for both input and output \n\
           -t dataset name for intput time series \n\
           -x dataset name for output correlation \n\
-          -c chunk size (seperate by comma ',')\n\
-             chunk_size[0] is used as window size by default \n\
-             (it is auto setup now) \n\
           -w window size (only used when window size is different from chunk_size[0]) \n\
           -m index of master channel (0 by default )\n\
           Example: mpirun -n 1 %s -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /white -x /Xcorr\n";
