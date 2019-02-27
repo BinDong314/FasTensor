@@ -1508,7 +1508,7 @@ public:
       } //finish the processing on a single chunk in row-major direction
     }
     else
-    { //go to reverse direction
+    { //go to reverse direction set_apply_direction_flag == 1
       AttrType cell_return_value;
       Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
       for (long long i = current_chunk_cells - 1; i >= 0; i--)
@@ -1756,6 +1756,14 @@ void ReportTime()
     std::cout << "Nonvol..  time (s) : max = " << time_nonvolatile_max << ", min = " << time_nonvolatile_min << ", ave = " << time_nonvolatile_sum / mpi_size << std::endl;
     fflush(stdout);
   }
+
+  //reset timer to zero
+  time_read = 0;
+  time_write = 0;
+  time_udf = 0;
+  time_create = 0;
+  time_sync = 0;
+  time_nonvolatile = 0;
 }
 
 int CreateStorageSpace(int data_dims_t, std::vector<unsigned long long> data_dims_size_t, std::vector<int> data_chunk_size_t, std::vector<int> data_overlap_size_t, int type_class_t, unsigned long long data_total_chunks_p_t)

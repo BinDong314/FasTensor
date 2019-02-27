@@ -74,60 +74,64 @@ Array<int> *ny;
 Array<int> *nz;
 
 //Find the global X
-int pre_domain_index_x = -1;
-int nx_v;
-float dx_v;
-float x0_v;
-Particle pt;
-int inti;
-int domain_index;
-
 inline float X_UDF(const Stencil<Particle> &p)
 {
-  pt = p(0);
-  inti = (int)(pt.i);
-  domain_index = (int)(pt.domain_id);
-
-  if (pre_domain_index_x != domain_index)
+  Particle pt = p(0);
+  static int x_domain_index = -1; //Assing -1 to force
+  static int nx_v;
+  static float dx_v;
+  static float x0_v;
+  if (x_domain_index != (int)(pt.domain_id))
   {
-    nx_v = nx->operator()(domain_index);
-    dx_v = dx->operator()(domain_index);
-    x0_v = x00->operator()(domain_index);
-    pre_domain_index_x = domain_index;
+    x_domain_index = (int)(pt.domain_id);
+    nx_v = nx->operator()(x_domain_index);
+    dx_v = dx->operator()(x_domain_index);
+    x0_v = x00->operator()(x_domain_index);
   }
-
-  return (inti % (nx_v + 2) + (pt.dX - 1) / 2.0) * dx_v + x0_v;
+  return (((int)(pt.i)) % (nx_v + 2) + (pt.dX - 1) / 2.0) * dx_v + x0_v;
 }
 
 //Find the global Y
 inline float Y_UDF(const Stencil<Particle> &p)
 {
   Particle pt = p(0);
-  int domain_index = (int)(pt.domain_id);
-  int ny_v = ny->operator()(domain_index);
-  int nx_v = nx->operator()(domain_index);
-  float dy_v = dy->operator()(domain_index);
-  float y0_v = y00->operator()(domain_index);
-  int inti = (int)(p(0).i);
-
-  return ((inti / (nx_v + 2)) % (ny_v + 2) + (pt.dY - 1) / 2.0) * dy_v + y0_v;
+  static int y_domain_index = -1;
+  static int ny_v;
+  static int nx_v;
+  static float dy_v;
+  static float y0_v;
+  if (y_domain_index != (int)(pt.domain_id))
+  {
+    y_domain_index = (int)(pt.domain_id);
+    ny_v = ny->operator()(y_domain_index);
+    nx_v = nx->operator()(y_domain_index);
+    dy_v = dy->operator()(y_domain_index);
+    y0_v = y00->operator()(y_domain_index);
+  }
+  return ((((int)(p(0).i)) / (nx_v + 2)) % (ny_v + 2) + (pt.dY - 1) / 2.0) * dy_v + y0_v;
 }
 
 //Find the global Z
 inline float Z_UDF(const Stencil<Particle> &p)
 {
   Particle pt = p(0);
-  int domain_index = (int)(pt.domain_id);
-  float dz_v = dz->operator()(domain_index);
-  float z0_v = z00->operator()(domain_index);
-
-  int nx_v = nx->operator()(domain_index);
-  int ny_v = ny->operator()(domain_index);
-  int nz_v = nz->operator()(domain_index);
+  static int z_domain_index = -1;
+  static float dz_v;
+  static float z0_v;
+  static int nx_v;
+  static int ny_v;
+  if (z_domain_index != (int)(pt.domain_id))
+  {
+    z_domain_index = (int)(pt.domain_id);
+    dz_v = dz->operator()(z_domain_index);
+    z0_v = z00->operator()(z_domain_index);
+    nx_v = nx->operator()(z_domain_index);
+    ny_v = ny->operator()(z_domain_index);
+    //nz_v = nz->operator()(domain_index);
+  }
   //printf("domain_index = %d, dz_v = %f, z0_v = %f, nx_v = %d, ny_v = %d, nz_v = %d, pt.dZ = %f \n " , domain_index,  dz_v, z0_v, nx_v, ny_v, nz_v, pt.dZ);
-  int inti = (int)(p(0).i);
 
-  return (inti / ((nx_v + 2) * (ny_v + 2)) + (pt.dZ - 1) / 2.0) * dz_v + z0_v;
+  return (((int)(p(0).i)) / ((nx_v + 2) * (ny_v + 2)) + (pt.dZ - 1) / 2.0) * dz_v + z0_v;
 }
 
 /*
@@ -135,59 +139,27 @@ inline float Z_UDF(const Stencil<Particle> &p)
   */
 //Find the domain id for each particle
 int np_total_domains; //This is intilized in main
-
-/*
-int pre_domain_index = 0;
-unsigned long long pre_np_local_acc = 0;
-int prev_domain_size = 0;
 inline float Domain_UDF(const Stencil<float> &p)
 {
   unsigned long long particle_offset = p.get_id();
-  unsigned long long np_local_acc = pre_np_local_acc, prev_domain_size;
 
-  for (int domain_index = pre_domain_index; domain_index < np_total_domains; domain_index++)
+  static unsigned long long np_local_acc = 0, next_domain_size = 0;
+  static int domain_index = 0;
+
+  for (; domain_index < np_total_domains; domain_index++)
   {
-    prev_domain_size = np_local->operator()(domain_index);
-    if (particle_offset >= np_local_acc && particle_offset < (np_local_acc + prev_domain_size))
-    {
-      pre_domain_index = domain_index;
-      pre_np_local_acc = np_local_acc;
-      break;
-    }
-    np_local_acc = np_local_acc + prev_domain_size;
-  }
-
-  return (float)pre_domain_index;
-}*/
-
-int prev_domain_index = 0;
-unsigned long long prev_np_local_acc = 0;
-int prev_np_local_acc_temp = 0;
-inline float Domain_UDF(const Stencil<float> &p)
-{
-  unsigned long long particle_offset = p.get_id();
-  if (particle_offset >= prev_np_local_acc && particle_offset < (prev_np_local_acc + prev_np_local_acc_temp))
-    return (float)prev_domain_index;
-
-  int domain_index;
-  unsigned long long np_local_acc = 0;
-  int np_local_acc_temp;
-  for (int i = prev_domain_index; i < np_total_domains; i++)
-  {
-    domain_index = i;
-    np_local_acc_temp = np_local->operator()(i);
-    if (particle_offset >= np_local_acc && particle_offset < (np_local_acc + np_local_acc_temp))
+    if (particle_offset >= np_local_acc && particle_offset < (np_local_acc + next_domain_size))
     {
       break;
     }
-    np_local_acc = np_local_acc + np_local_acc_temp;
+    else
+    {
+      np_local_acc = np_local_acc + next_domain_size;
+      next_domain_size = np_local->operator()(domain_index);
+    }
   }
 
-  prev_domain_index = domain_index;
-  prev_np_local_acc = np_local_acc;
-  prev_np_local_acc_temp = np_local_acc_temp;
-
-  return (float)(domain_index);
+  return (float)(domain_index - 1);
 }
 
 //Convert int typed "i" to float typed "i"
@@ -304,8 +276,12 @@ int main(int argc, char *argv[])
   Array<float> *Z = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "z", chunk_size, overlap_size);
 
   P->Apply(X_UDF, X);
+  P->ReportTime();
+
   P->Apply(Y_UDF, Y);
+  P->ReportTime();
   P->Apply(Z_UDF, Z);
+  P->ReportTime();
 
   //Clear
   delete dX;
