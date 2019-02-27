@@ -78,12 +78,15 @@ int pre_domain_index_x = -1;
 int nx_v;
 float dx_v;
 float x0_v;
+Particle pt;
+int inti;
+int domain_index;
 
 inline float X_UDF(const Stencil<Particle> &p)
 {
-  Particle pt = p(0);
-  int inti = (int)(p(0).i);
-  int domain_index = (int)(pt.domain_id);
+  pt = p(0);
+  inti = (int)(pt.i);
+  domain_index = (int)(pt.domain_id);
 
   if (pre_domain_index_x != domain_index)
   {
