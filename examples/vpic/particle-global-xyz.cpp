@@ -165,9 +165,7 @@ inline float Domain_UDF(const Stencil<float> &p)
 //Convert int typed "i" to float typed "i"
 inline float I_UDF(const Stencil<int> &c)
 {
-  float i_v_float;
-  i_v_float = (float)(c(0));
-  return i_v_float;
+  return (float)(c(0));
 }
 
 int main(int argc, char *argv[])
@@ -225,7 +223,9 @@ int main(int argc, char *argv[])
     strcpy(o_file, p_file);
   }
 
+  int mpi_rank;
   MPI_Init(&argc, &argv);
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
 
   //Do some preparation work
   {
@@ -237,7 +237,9 @@ int main(int argc, char *argv[])
 
     np_local = new Array<int>(AU_NVS, AU_HDF5, m_file, group, "np_local", AU_PRELOAD);
     np_total_domains = np_local->GetDims()[0];
-    printf("Totoal domains = %d \n", np_total_domains);
+
+    if (!mpi_rank)
+      printf("Totoal domains = %d \n", np_total_domains);
     Array<float> *domainID = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "domain_id", chunk_size, overlap_size);
     iFLOAT->Apply(Domain_UDF, domainID);
     iFLOAT->ReportTime();
