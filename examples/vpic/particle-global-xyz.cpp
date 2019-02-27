@@ -123,23 +123,25 @@ inline float Z_UDF(const Stencil<Particle> &p)
 int np_total_domains; //This is intilized in main
 int pre_domain_index = 0;
 unsigned long long pre_np_local_acc = 0;
+int prev_domain_size = 0;
 inline float Domain_UDF(const Stencil<float> &p)
 {
   unsigned long long particle_offset = p.get_id();
-  unsigned long long np_local_acc = pre_np_local_acc, current_domain_size;
+  unsigned long long np_local_acc = pre_np_local_acc, prev_domain_size;
+
   for (int domain_index = pre_domain_index; domain_index < np_total_domains; domain_index++)
   {
-    current_domain_size = np_local->operator()(domain_index);
-    if (particle_offset >= np_local_acc && particle_offset < (np_local_acc + current_domain_size))
+    prev_domain_size = np_local->operator()(domain_index);
+    if (particle_offset >= np_local_acc && particle_offset < (np_local_acc + prev_domain_size))
     {
       pre_domain_index = domain_index;
       pre_np_local_acc = np_local_acc;
       break;
     }
-    np_local_acc = np_local_acc + current_domain_size;
+    np_local_acc = np_local_acc + prev_domain_size;
   }
 
-  return (float)domain_index;
+  return (float)pre_domain_index;
 }
 
 //Convert int typed "i" to float typed "i"
