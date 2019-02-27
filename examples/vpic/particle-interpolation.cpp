@@ -412,21 +412,27 @@ int main(int argc, char *argv[])
   //Results data sets
   Array<float> *R_EX = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "ex", chunk_size, overlap_size);
   P->Apply(InterEX, R_EX);
+  P->ReportTime();
 
   Array<float> *R_EY = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "ey", chunk_size, overlap_size);
   P->Apply(InterEY, R_EY);
+  P->ReportTime();
 
   Array<float> *R_EZ = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "ez", chunk_size, overlap_size);
   P->Apply(InterEZ, R_EZ);
+  P->ReportTime();
 
   Array<float> *R_BX = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "bx", chunk_size, overlap_size);
   P->Apply(InterBX, R_BX);
+  P->ReportTime();
 
   Array<float> *R_BY = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "by", chunk_size, overlap_size);
   P->Apply(InterBY, R_BY);
+  P->ReportTime();
 
   Array<float> *R_BZ = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "bz", chunk_size, overlap_size);
   P->Apply(InterBZ, R_BZ);
+  P->ReportTime();
 
   //Clear
   delete X;
