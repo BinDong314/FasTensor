@@ -120,28 +120,34 @@ inline float Z_UDF(const Stencil<Particle> &p)
   * Following are two help UDFs 
   */
 //Find the domain id for each particle
-int np_total_domains; //This is intilized in main
-int pre_domain_index = 0;
-unsigned long long pre_np_local_acc = 0;
-int prev_domain_size = 0;
+int prev_domain_index = 0;
+unsigned long long prev_np_local_acc = 0;
+int prev_np_local_acc_temp = 0;
 inline float Domain_UDF(const Stencil<float> &p)
 {
   unsigned long long particle_offset = p.get_id();
-  unsigned long long np_local_acc = pre_np_local_acc, prev_domain_size;
+  if (particle_offset >= prev_np_local_acc && particle_offset < (prev_np_local_acc + prev_np_local_acc_temp))
+    return (float)prev_domain_index;
 
-  for (int domain_index = pre_domain_index; domain_index < np_total_domains; domain_index++)
+  int domain_index;
+  unsigned long long np_local_acc = 0;
+  int np_local_acc_temp;
+  for (int i = prev_domain_index; i < DOMAIN_NUM; i++)
   {
-    prev_domain_size = np_local->operator()(domain_index);
-    if (particle_offset >= np_local_acc && particle_offset < (np_local_acc + prev_domain_size))
+    domain_index = i;
+    np_local_acc_temp = np_local->operator()(i);
+    if (particle_offset >= np_local_acc && particle_offset < (np_local_acc + np_local_acc_temp))
     {
-      pre_domain_index = domain_index;
-      pre_np_local_acc = np_local_acc;
       break;
     }
-    np_local_acc = np_local_acc + prev_domain_size;
+    np_local_acc = np_local_acc + np_local_acc_temp;
   }
 
-  return (float)pre_domain_index;
+  prev_domain_index = domain_index;
+  prev_np_local_acc = np_local_acc;
+  prev_np_local_acc_temp = np_local_acc_temp;
+
+  return (float)(domain_index);
 }
 
 //Convert int typed "i" to float typed "i"
