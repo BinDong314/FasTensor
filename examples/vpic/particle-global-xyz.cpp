@@ -74,14 +74,25 @@ Array<int> *ny;
 Array<int> *nz;
 
 //Find the global X
+int pre_domain_index_x = -1;
+int nx_v;
+float dx_v;
+float x0_v;
+
 inline float X_UDF(const Stencil<Particle> &p)
 {
   Particle pt = p(0);
-  int domain_index = (int)(pt.domain_id);
-  int nx_v = nx->operator()(domain_index);
-  float dx_v = dx->operator()(domain_index);
-  float x0_v = x00->operator()(domain_index);
   int inti = (int)(p(0).i);
+  int domain_index = (int)(pt.domain_id);
+
+  if (pre_domain_index_x != domain_index)
+  {
+    nx_v = nx->operator()(domain_index);
+    dx_v = dx->operator()(domain_index);
+    x0_v = x00->operator()(domain_index);
+    pre_domain_index_x == domain_index
+  }
+
   return (inti % (nx_v + 2) + (pt.dX - 1) / 2.0) * dx_v + x0_v;
 }
 
