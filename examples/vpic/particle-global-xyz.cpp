@@ -90,7 +90,7 @@ inline float X_UDF(const Stencil<Particle> &p)
     nx_v = nx->operator()(domain_index);
     dx_v = dx->operator()(domain_index);
     x0_v = x00->operator()(domain_index);
-    pre_domain_index_x == domain_index
+    pre_domain_index_x = domain_index;
   }
 
   return (inti % (nx_v + 2) + (pt.dX - 1) / 2.0) * dx_v + x0_v;
