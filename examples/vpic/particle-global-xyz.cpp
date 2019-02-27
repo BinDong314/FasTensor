@@ -121,19 +121,24 @@ inline float Z_UDF(const Stencil<Particle> &p)
   */
 //Find the domain id for each particle
 int np_total_domains; //This is intilized in main
+int pre_domain_index = 0;
+unsigned long long pre_np_local_acc = 0;
 inline float Domain_UDF(const Stencil<float> &p)
 {
   unsigned long long particle_offset = p.get_id();
-  int domain_index;
-  unsigned long long np_local_acc = 0;
-  for (domain_index = 0; domain_index < np_total_domains; domain_index++)
+  unsigned long long np_local_acc = pre_np_local_acc, current_domain_size;
+  for (int domain_index = pre_domain_index; domain_index < np_total_domains; domain_index++)
   {
-    if (particle_offset >= np_local_acc && particle_offset < (np_local_acc + np_local->operator()(domain_index)))
+    current_domain_size = np_local->operator()(domain_index);
+    if (particle_offset >= np_local_acc && particle_offset < (np_local_acc + current_domain_size))
     {
+      pre_domain_index = domain_index;
+      pre_np_local_acc = np_local_acc;
       break;
     }
-    np_local_acc = np_local_acc + np_local->operator()(domain_index);
+    np_local_acc = np_local_acc + current_domain_size;
   }
+
   return (float)domain_index;
 }
 
@@ -207,6 +212,7 @@ int main(int argc, char *argv[])
     Array<int, float> *iINT = new Array<int, float>(AU_NVS, AU_HDF5, p_file, group, "i", chunk_size, overlap_size);
     Array<float> *iFLOAT = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "if", chunk_size, overlap_size);
     iINT->Apply(I_UDF, iFLOAT);
+    iINT->ReportTime();
     delete iINT;
 
     np_local = new Array<int>(AU_NVS, AU_HDF5, m_file, group, "np_local", AU_PRELOAD);
@@ -214,6 +220,7 @@ int main(int argc, char *argv[])
     printf("Totoal domains = %d \n", np_total_domains);
     Array<float> *domainID = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, "domain_id", chunk_size, overlap_size);
     iFLOAT->Apply(Domain_UDF, domainID);
+    iFLOAT->ReportTime();
 
     delete np_local;
     delete iFLOAT;
