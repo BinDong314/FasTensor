@@ -1,4 +1,4 @@
-AU_HOME=../../build
+AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
 HDF5_DIR=/opt/cray/pe/hdf5-parallel/1.10.1.1/GNU/5.1
 FFTW_DIR=/global/homes/d/dbin/software/fftw-3.3.8/build
 CCC=mpiCC
