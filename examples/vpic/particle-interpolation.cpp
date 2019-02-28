@@ -510,4 +510,8 @@ void get_metadata(char *file, char *group, int op, std::vector<float> &values)
     values[1] = t2->operator()(0);
     values[2] = t3->operator()(0);
   }
+
+  delete t1;
+  delete t2;
+  delete t3;
 }
