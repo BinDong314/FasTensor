@@ -373,6 +373,8 @@ int main(int argc, char *argv[])
   }
 
   MPI_Init(&argc, &argv);
+  int mpi_rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
 
   //  1: dxdydz   2: |x0| |y0| |z0|
   get_metadata(i_file_metadata, group, 1, dxdydz_per_cell);
@@ -388,7 +390,8 @@ int main(int argc, char *argv[])
   for (int i = 0; i < 3; i++)
     total_cells[i] = temp_v[i];
 
-  //printf("total_cells       = (%f, %f, %f) \n", total_cells[0], total_cells[1], total_cells[2]);
+  if (!mpi_rank)
+    printf("total_cells       = (%f, %f, %f) \n", total_cells[0], total_cells[1], total_cells[2]);
 
   EY = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "ey", AU_PRELOAD);
   EZ = new Array<float>(AU_NVS, AU_HDF5, i_file_field, group, "ez", AU_PRELOAD);
