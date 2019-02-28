@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <math.h> /* ceil  and floor*/
 #include <cstring>
-
+#include <algorithm>
 #include "array_udf.h"
 
 //Some help function
@@ -65,39 +65,29 @@ inline float InterEX(const Stencil<Particle> &p)
   int i, j, k;
 
   //Adjust x, y z here to be positive
-  i = floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]);
-  j = floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]);
-  k = floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]);
-
   //Check if xyz1 is beyond the boundary of the volume.
   //This may be the case for particles located at the boundary of the volume.
-
-  if (i < 0)
-    i = 0;
-  if (j < 0)
-    j = 0;
-  if (k < 0)
-    k = 0;
-
-  if (i >= total_cells[0])
-    i = total_cells[0] - 1;
-
-  if (j >= total_cells[1])
-    j = total_cells[1] - 1;
-
-  if (k >= total_cells[2])
-    k = total_cells[2] - 1;
+  i = min(max((float)floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]), (float)0.0), total_cells[0] - 1);
+  j = min(max((float)floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]), (float)0.0), total_cells[1] - 1);
+  k = min(max((float)floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]), (float)0.0), total_cells[2] - 1);
 
   float dx, dy, dz;
   dx = fmodf(pt.x, dxdydz_per_cell[0]) / dxdydz_per_cell[0];
   dy = fmodf(pt.y, dxdydz_per_cell[1]) / dxdydz_per_cell[1];
   dz = fmodf(pt.z, dxdydz_per_cell[2]) / dxdydz_per_cell[2];
 
-  float ex000, ex010, ex001, ex011;
-  ex000 = EX->operator()(i, j, k);
-  ex010 = EX->operator()(i, j + 1, k);
-  ex001 = EX->operator()(i, j, k + 1);
-  ex011 = EX->operator()(i, j + 1, k + 1);
+  static float ex000, ex010, ex001, ex011;
+  static int i_ex_p = -1, j_ex_p = -1, k_ex_p = -1;
+  if (i_ex_p != i && j_ex_p != j && k_ex_p != k)
+  {
+    ex000 = EX->operator()(i, j, k);
+    ex010 = EX->operator()(i, j + 1, k);
+    ex001 = EX->operator()(i, j, k + 1);
+    ex011 = EX->operator()(i, j + 1, k + 1);
+    i_ex_p = i;
+    j_ex_p = j;
+    k_ex_p = k;
+  }
   //printf(" xyz = (%f, %f, %f), ijk = (%d, %d, %d), dx/dy/dz=(%f, %f, %f), ex000=%f, ex010=%f, ex001=%f, ex011=%f \n ", pt.x, pt.y, pt.z, i, j, k, dx, dy, dz, ex000, ex010, ex001, ex011);
   return ((1 - dy) * (1 - dz) * ex000 + (1 + dy) * (1 - dz) * ex010 + (1 - dy) * (1 + dz) * ex001 + (1 + dy) * (1 + dz) * ex011) / 4.0;
 }
@@ -109,40 +99,29 @@ inline float InterEY(const Stencil<Particle> &p)
   //printf("Particle x: %f, y: %f, z: %f \n", pt.x, pt.y, pt.z);
   int i, j, k;
 
-  //Adjust x, y z here to be positive
-  i = floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]);
-  j = floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]);
-  k = floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]);
-
   //Check if xyz1 is beyond the boundary of the volume.
   //This may be the case for particles located at the boundary of the volume.
-
-  if (i < 0)
-    i = 0;
-  if (j < 0)
-    j = 0;
-  if (k < 0)
-    k = 0;
-
-  if (i >= total_cells[0])
-    i = total_cells[0] - 1;
-
-  if (j >= total_cells[1])
-    j = total_cells[1] - 1;
-
-  if (k >= total_cells[2])
-    k = total_cells[2] - 1;
+  i = min(max((float)floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]), (float)0.0), total_cells[0] - 1);
+  j = min(max((float)floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]), (float)0.0), total_cells[1] - 1);
+  k = min(max((float)floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]), (float)0.0), total_cells[2] - 1);
 
   float dx, dy, dz;
   dx = fmodf(pt.x, dxdydz_per_cell[0]) / dxdydz_per_cell[0];
   dy = fmodf(pt.y, dxdydz_per_cell[1]) / dxdydz_per_cell[1];
   dz = fmodf(pt.z, dxdydz_per_cell[2]) / dxdydz_per_cell[2];
 
-  float ey000, ey010, ey001, ey011;
-  ey000 = EY->operator()(i, j, k);
-  ey010 = EY->operator()(i + 1, j, k);
-  ey001 = EY->operator()(i, j, k + 1);
-  ey011 = EY->operator()(i + 1, j, k + 1);
+  static float ey000, ey010, ey001, ey011;
+  static int i_ey_p = -1, j_ey_p = -1, k_ey_p = -1;
+  if (i_ey_p != i && j_ey_p != j && k_ey_p != k)
+  {
+    ey000 = EY->operator()(i, j, k);
+    ey010 = EY->operator()(i + 1, j, k);
+    ey001 = EY->operator()(i, j, k + 1);
+    ey011 = EY->operator()(i + 1, j, k + 1);
+    i_ey_p = i;
+    j_ey_p = j;
+    k_ey_p = k;
+  }
   //printf(" xyz = (%f, %f, %f), ijk = (%d, %d, %d), dx/dy/dz=(%f, %f, %f), ex000=%f, ex010=%f, ex001=%f, ex011=%f \n ", pt.x, pt.y, pt.z, i, j, k, dx, dy, dz, ex000, ex010, ex001, ex011);
   return ((1 - dx) * (1 - dz) * ey000 + (1 + dx) * (1 - dz) * ey010 + (1 - dx) * (1 + dz) * ey001 + (1 + dx) * (1 + dz) * ey011) / 4.0;
 }
@@ -155,39 +134,29 @@ inline float InterEZ(const Stencil<Particle> &p)
   //printf("Particle x: %f, y: %f, z: %f \n", pt.x, pt.y, pt.z);
   int i, j, k;
 
-  //Adjust x, y z here to be positive
-  i = floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]);
-  j = floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]);
-  k = floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]);
-
   //Check if xyz1 is beyond the boundary of the volume.
   //This may be the case for particles located at the boundary of the volume.
-  if (i < 0)
-    i = 0;
-  if (j < 0)
-    j = 0;
-  if (k < 0)
-    k = 0;
-
-  if (i >= total_cells[0])
-    i = total_cells[0] - 1;
-
-  if (j >= total_cells[1])
-    j = total_cells[1] - 1;
-
-  if (k >= total_cells[2])
-    k = total_cells[2] - 1;
+  i = min(max((float)floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]), (float)0.0), total_cells[0] - 1);
+  j = min(max((float)floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]), (float)0.0), total_cells[1] - 1);
+  k = min(max((float)floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]), (float)0.0), total_cells[2] - 1);
 
   float dx, dy, dz;
   dx = fmodf(pt.x, dxdydz_per_cell[0]) / dxdydz_per_cell[0];
   dy = fmodf(pt.y, dxdydz_per_cell[1]) / dxdydz_per_cell[1];
   dz = fmodf(pt.z, dxdydz_per_cell[2]) / dxdydz_per_cell[2];
 
-  float ez000, ez010, ez001, ez011;
-  ez000 = EZ->operator()(i, j, k);
-  ez010 = EZ->operator()(i + 1, j, k);
-  ez001 = EZ->operator()(i, j + 1, k);
-  ez011 = EZ->operator()(i + 1, j + 1, k);
+  static float ez000, ez010, ez001, ez011;
+  static int i_ez_p = -1, j_ez_p = -1, k_ez_p = -1;
+  if (i_ez_p != i && j_ez_p != j && k_ez_p != k)
+  {
+    ez000 = EZ->operator()(i, j, k);
+    ez010 = EZ->operator()(i + 1, j, k);
+    ez001 = EZ->operator()(i, j + 1, k);
+    ez011 = EZ->operator()(i + 1, j + 1, k);
+    i_ez_p = i;
+    j_ez_p = j;
+    k_ez_p = k;
+  }
   //printf(" xyz = (%f, %f, %f), ijk = (%d, %d, %d), dx/dy/dz=(%f, %f, %f), ex000=%f, ex010=%f, ex001=%f, ex011=%f \n ", pt.x, pt.y, pt.z, i, j, k, dx, dy, dz, ex000, ex010, ex001, ex011);
   return ((1 - dx) * (1 - dy) * ez000 + (1 + dx) * (1 - dy) * ez010 + (1 - dx) * (1 + dy) * ez001 + (1 + dx) * (1 + dy) * ez011) / 4.0;
 }
@@ -199,35 +168,25 @@ inline float InterBX(const Stencil<Particle> &p)
   //printf("Particle x: %f, y: %f, z: %f \n", pt.x, pt.y, pt.z);
   int i, j, k;
 
-  //Adjust x, y z here to be positive
-  i = floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]);
-  j = floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]);
-  k = floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]);
-
   //Check if xyz1 is beyond the boundary of the volume.
   //This may be the case for particles located at the boundary of the volume.
-  if (i < 0)
-    i = 0;
-  if (j < 0)
-    j = 0;
-  if (k < 0)
-    k = 0;
-
-  if (i >= total_cells[0])
-    i = total_cells[0] - 1;
-
-  if (j >= total_cells[1])
-    j = total_cells[1] - 1;
-
-  if (k >= total_cells[2])
-    k = total_cells[2] - 1;
+  i = min(max((float)floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]), (float)0.0), total_cells[0] - 1);
+  j = min(max((float)floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]), (float)0.0), total_cells[1] - 1);
+  k = min(max((float)floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]), (float)0.0), total_cells[2] - 1);
 
   float dx;
   dx = fmodf(pt.x, dxdydz_per_cell[0]) / dxdydz_per_cell[0];
 
-  float bx000, bx100;
-  bx000 = BX->operator()(i, j, k);
-  bx100 = BX->operator()(i + 1, j, k);
+  static float bx000, bx100;
+  static int i_bx_p = -1, j_bx_p = -1, k_bx_p = -1;
+  if (i_bx_p != i && j_bx_p != j && k_bx_p != k)
+  {
+    bx000 = BX->operator()(i, j, k);
+    bx100 = BX->operator()(i + 1, j, k);
+    i_bx_p = i;
+    j_bx_p = j;
+    k_bx_p = k;
+  }
   //printf(" xyz = (%f, %f, %f), ijk = (%d, %d, %d), dx/dy/dz=(%f, %f, %f), ex000=%f, ex010=%f, ex001=%f, ex011=%f \n ", pt.x, pt.y, pt.z, i, j, k, dx, dy, dz, ex000, ex010, ex001, ex011);
   return ((1 - dx) * bx000 + (1 + dx) * bx100) / 2.0;
 }
@@ -239,35 +198,25 @@ inline float InterBY(const Stencil<Particle> &p)
   //printf("Particle x: %f, y: %f, z: %f \n", pt.x, pt.y, pt.z);
   int i, j, k;
 
-  //Adjust x, y z here to be positive
-  i = floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]);
-  j = floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]);
-  k = floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]);
-
   //Check if xyz1 is beyond the boundary of the volume.
   //This may be the case for particles located at the boundary of the volume.
-  if (i < 0)
-    i = 0;
-  if (j < 0)
-    j = 0;
-  if (k < 0)
-    k = 0;
-
-  if (i >= total_cells[0])
-    i = total_cells[0] - 1;
-
-  if (j >= total_cells[1])
-    j = total_cells[1] - 1;
-
-  if (k >= total_cells[2])
-    k = total_cells[2] - 1;
+  i = min(max((float)floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]), (float)0.0), total_cells[0] - 1);
+  j = min(max((float)floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]), (float)0.0), total_cells[1] - 1);
+  k = min(max((float)floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]), (float)0.0), total_cells[2] - 1);
 
   float dy;
   dy = fmodf(pt.y, dxdydz_per_cell[1]) / dxdydz_per_cell[1];
 
-  float by000, by100;
-  by000 = BY->operator()(i, j, k);
-  by100 = BY->operator()(i, j + 1, k);
+  static float by000, by100;
+  static int i_by_p = -1, j_by_p = -1, k_by_p = -1;
+  if (i_by_p != i && j_by_p != j && k_by_p != k)
+  {
+    by000 = BY->operator()(i, j, k);
+    by100 = BY->operator()(i, j + 1, k);
+    i_by_p = i;
+    j_by_p = j;
+    k_by_p = k;
+  }
   //printf(" xyz = (%f, %f, %f), ijk = (%d, %d, %d), dx/dy/dz=(%f, %f, %f), ex000=%f, ex010=%f, ex001=%f, ex011=%f \n ", pt.x, pt.y, pt.z, i, j, k, dx, dy, dz, ex000, ex010, ex001, ex011);
   return ((1 - dy) * by000 + (1 + dy) * by100) / 2.0;
 }
@@ -279,35 +228,25 @@ inline float InterBZ(const Stencil<Particle> &p)
   //printf("Particle x: %f, y: %f, z: %f \n", pt.x, pt.y, pt.z);
   int i, j, k;
 
-  //Adjust x, y z here to be positive
-  i = floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]);
-  j = floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]);
-  k = floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]);
-
   //Check if xyz1 is beyond the boundary of the volume.
   //This may be the case for particles located at the boundary of the volume.
-  if (i < 0)
-    i = 0;
-  if (j < 0)
-    j = 0;
-  if (k < 0)
-    k = 0;
-
-  if (i >= total_cells[0])
-    i = total_cells[0] - 1;
-
-  if (j >= total_cells[1])
-    j = total_cells[1] - 1;
-
-  if (k >= total_cells[2])
-    k = total_cells[2] - 1;
+  i = min(max((float)floor((pt.x + xyz_shitf[0]) / dxdydz_per_cell[0]), (float)0.0), total_cells[0] - 1);
+  j = min(max((float)floor((pt.y + xyz_shitf[1]) / dxdydz_per_cell[1]), (float)0.0), total_cells[1] - 1);
+  k = min(max((float)floor((pt.z + xyz_shitf[2]) / dxdydz_per_cell[2]), (float)0.0), total_cells[2] - 1);
 
   float dz;
   dz = fmodf(pt.z, dxdydz_per_cell[2]) / dxdydz_per_cell[2];
 
-  float bz000, bz100;
-  bz000 = BZ->operator()(i, j, k);
-  bz100 = BZ->operator()(i, j, k + 1);
+  static float bz000, bz100;
+  static int i_bz_p = -1, j_bz_p = -1, k_bz_p = -1;
+  if (i_bz_p != i && j_bz_p != j && k_bz_p != k)
+  {
+    bz000 = BZ->operator()(i, j, k);
+    bz100 = BZ->operator()(i, j, k + 1);
+    i_bz_p = i;
+    j_bz_p = j;
+    k_bz_p = k;
+  }
   //printf(" xyz = (%f, %f, %f), ijk = (%d, %d, %d), dx/dy/dz=(%f, %f, %f), ex000=%f, ex010=%f, ex001=%f, ex011=%f \n ", pt.x, pt.y, pt.z, i, j, k, dx, dy, dz, ex000, ex010, ex001, ex011);
   return ((1 - dz) * bz000 + (1 + dz) * bz100) / 2.0;
 }
