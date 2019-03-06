@@ -1,7 +1,22 @@
+
+
+#Bin's Mac
+#AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
+#HDF5_DIR=/opt/cray/pe/hdf5-parallel/1.10.1.1/GNU/5.1
+#FFTW_DIR=/global/homes/d/dbin/software/fftw-3.3.8/build
+#CCC=mpiCC
+
+#Snowbear
 AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
-HDF5_DIR=/opt/cray/pe/hdf5-parallel/1.10.1.1/GNU/5.1
-FFTW_DIR=/global/homes/d/dbin/software/fftw-3.3.8/build
-CCC=mpiCC
+HDF5_DIR=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p
+FFTW_DIR=/global/software/sl-6.x86_64/modules/gcc/4.8.5/fftw/3.3.4-gcc
+CCC=mpicxx
+
+#Cori at NERSC
+#AU_HOME=../../build
+#HDF5_DIR=/usr/common/software/hdf5-parallel/1.10.2/intel
+#FFTW_DIR=
+#CCC=CC
 
 .PHONY:all
 all:das-fft das-correlation h5-vds-merge tdms2h5 
