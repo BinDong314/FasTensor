@@ -1,16 +1,16 @@
 
 
 #Bin's Mac
-#AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
-#HDF5_DIR=/opt/cray/pe/hdf5-parallel/1.10.1.1/GNU/5.1
-#FFTW_DIR=/global/homes/d/dbin/software/fftw-3.3.8/build
-#CCC=mpiCC
+AU_HOME=../../build
+HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
+FFTW_DIR=/opt/local/
+CCC=mpicxx
 
 #Snowbear
-AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
-HDF5_DIR=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p
-FFTW_DIR=/global/software/sl-6.x86_64/modules/gcc/4.8.5/fftw/3.3.4-gcc
-CCC=mpicxx
+#AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
+#HDF5_DIR=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p
+#FFTW_DIR=/global/software/sl-6.x86_64/modules/gcc/4.8.5/fftw/3.3.4-gcc
+#CCC=mpicxx
 
 #Cori at NERSC
 #AU_HOME=../../build
@@ -19,7 +19,7 @@ CCC=mpicxx
 #CCC=CC
 
 .PHONY:all
-all:das-fft das-correlation h5-vds-merge tdms2h5 
+all:das-fft das-correlation h5-vds-merge tdms2h5 das-fft-full
 
 das-correlation:das-correlation.cpp  
 	$(CCC) -o das-correlation das-correlation.cpp -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 -lhdf5_hl -lz
@@ -33,5 +33,8 @@ tdms2h5:tdms2h5.c
 das-fft:das-fft.cpp
 	$(CCC) -o das-fft fft/kiss_fft.c das-fft.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3
 
+das-fft-full:das-fft-full.cpp
+	$(CCC) -o das-fft-full fft/kiss_fft.c das-fft-full.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3
+
 clean:
-	rm das-correlation h5-vds-merge tdms2h5 das-fft
+	rm das-correlation h5-vds-merge tdms2h5 das-fft das-fft-full
