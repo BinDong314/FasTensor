@@ -155,21 +155,19 @@ std::vector<float> gatherXcorr;
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                              \
         for (int j = 0; j < nfft; j++)                                                                \
         {                                                                                             \
-            master_fft[j][0] = fft_out[j][0];                                                         \
-            master_fft[j][1] = fft_out[j][1];                                                         \
             fft_in[j][0] = master_fft[j][0] * fft_out[j][0] + master_fft[j][1] * fft_out[j][1];       \
             fft_in[j][1] = master_fft[j][1] * fft_out[j][0] - master_fft[j][0] * fft_out[j][1];       \
         }                                                                                             \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                             \
-        unsigned long long gatherXcorr_index = 0;                                                     \
+        int gatherXcorr_index = 0;                                                                    \
         for (int k = nfft - nPoint + 1; k < nfft; k++)                                                \
         {                                                                                             \
-            gatherXcorr[gatherXcorr_index] = fft_out[k][0] / (double)nfft;                            \
+            gatherXcorr[gatherXcorr_index] = (float)(fft_out[k][0] / (double)nfft);                   \
             gatherXcorr_index++;                                                                      \
         }                                                                                             \
         for (int l = 0; l < nPoint; l++)                                                              \
         {                                                                                             \
-            gatherXcorr[gatherXcorr_index] = fft_out[l][0] / (double)nfft;                            \
+            gatherXcorr[gatherXcorr_index] = (float)(fft_out[l][0] / (double)nfft);                   \
             gatherXcorr_index++;                                                                      \
         }                                                                                             \
     }

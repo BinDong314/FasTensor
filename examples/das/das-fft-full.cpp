@@ -48,7 +48,7 @@ inline std::vector<float> FFT_UDF(const Stencil<int> &c)
     TC.resize(nfft);
     for (int i = 0; i < n0; i++)
     {
-        X[i] = c(i, 0);
+        X[i] = (double)c(i, 0);
     }
 
     //X is the input
@@ -159,9 +159,8 @@ int main(int argc, char *argv[])
     IFILE->SetOutputVector(nXCORR, 0); //output vector size
 
     int window_batch = 1;
-    std::vector<int> masterv, masterv_pp;
+    std::vector<int> masterv;
     masterv.resize(n0);
-    masterv_pp.resize(n0);
     std::vector<double> mastervf, masterv_ppf;
     mastervf.resize(n0);
     masterv_ppf.resize(n0);
@@ -181,13 +180,15 @@ int main(int argc, char *argv[])
             mastervf[i] = masterv[i];
 
         FFT_PREPROCESSING(mastervf, masterv_ppf);
-        INIT_FFTW(fft_in, masterv_ppf, masterv_pp.size(), nfft, fft_out);
+        INIT_FFTW(fft_in, masterv_ppf, masterv_ppf.size(), nfft, fft_out);
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);
 
         for (int j = 0; j < n0; j++)
         {
             master_fft[bi * n0 + j][0] = fft_out[j][0];
             master_fft[bi * n0 + j][1] = fft_out[j][1];
+            //master_fft[bi * n0 + j][0] = 1.0;
+            //master_fft[bi * n0 + j][1] = 1.0;
         }
     }
 
