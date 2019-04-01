@@ -251,7 +251,10 @@ void filtfilt(vectord B, vectord A, const vectord &X, vectord &Y)
     int nfact = 3 * (nfilt - 1); // length of edge transients
 
     if (len <= nfact)
+    {
+        printf("len = %d, nfact = %d \n", len, nfact);
         throw std::domain_error("Input data too short! Data must have length more than 3 times filter order.");
+    }
 
     // set up filter's initial conditions to remove DC offset problems at the
     // beginning and end of the sequence

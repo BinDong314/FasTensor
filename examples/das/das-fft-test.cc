@@ -55,37 +55,46 @@ int main()
         1.093265669039484,
         1.109273297614398,
     };
+    n0 = 1000000;
     X.resize(n0);
+    srand(time(NULL));
     for (int i = 0; i < n0; i++)
     {
-        X[i] = testdata[i];
+        X[i] = ((double)rand()) / ((double)n0) + 1.0;
+        //X[i] = testdata[i];
     }
 
-    for (auto i : X)
-        cout << i << ", ";
-    cout << endl;
+    //for (auto i : X)
+    //    cout << i << ", ";
+    //cout << endl;
 
     INIT_PARS();
-    /*
+
     nPoint_hal_win = 1;
     fNyquist = 62.5;
     INTERP_ZF[5] = fNyquist;
     df = 2.0 * fNyquist / (double)nfft;
-    */
 
     INIT_SPACE();
 
-    cout << "shapingFilt(S =  " << shapingFilt.size() << " ) : ";
-    for (auto i : shapingFilt)
-        cout << i << ", ";
-    cout << endl;
+    //cout << "shapingFilt(S =  " << shapingFilt.size() << " ) : ";
+    //for (auto i : shapingFilt)
+    //    cout << i << ", ";
+    //cout << endl;
 
     //fft_pre_processing_test(X, TC);
 
-    PRE_PROCESSING(X, TC);
+    FFT_PROCESSING(X, TC);
 
-    cout << "After fft/ifft(S =  " << TC.size() << " ) : ";
-    for (auto i : TC)
-        cout << i << ", ";
+    //cout << "After fft/ifft(S =  " << TC.size() << " ) : ";
+    //for (auto i : TC)
+    //    cout << i << ", ";
+    //cout << endl;
+
+    cout << "After gatherXcorr(S =  " << gatherXcorr.size() << " ) : ";
+    for (int i = 0; i < 10; i++)
+        cout << gatherXcorr[i] << ", ";
     cout << endl;
+
+    CLEAR_SPACE();
 }
