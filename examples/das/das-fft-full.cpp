@@ -25,7 +25,7 @@
 #include "array_udf.h"
 
 /*
- * Note that: das-fft.h contains all parameters & used variables. 
+ * Note that: das-fft.h contains all parameters & used variables & functions. 
  *            Go to "das-fft.h" to find more details
  */
 #include "das-fft.h"
@@ -36,14 +36,12 @@ using namespace std;
 void printf_help(char *cmd);
 
 /*
- * This function is the place implement FFT/IFFT
- *  Actually, it describes the operation per channel
+ * This function describes the operation per channel
  *  The return value is a coorelation vector
+ * See more details at das-fft.h
  */
 inline std::vector<float> FFT_UDF(const Stencil<int> &c)
 {
-
-    //printf("n0 = %d in UDF \n", n0);
     X.resize(n0);
     TC.resize(nfft);
     for (int i = 0; i < n0; i++)
@@ -67,22 +65,9 @@ int main(int argc, char *argv[])
     char i_dataset[NAME_LENGTH] = "/DataTimeChannel";
     char o_dataset[NAME_LENGTH] = "/Xcorr";
 
-    char chunk_size_str[NAME_LENGTH];
-    std::vector<int> ghost_size;
-    std::vector<int> chunk_size;
-    std::vector<int> strip_size;
-    int array_ranks = 2;
-
-    ghost_size.resize(array_ranks);
-    ghost_size[0] = 0;
-    ghost_size[1] = 0;
-    chunk_size.resize(array_ranks);
-    chunk_size[0] = 7500;
-    chunk_size[1] = 101;
-    strip_size.resize(array_ranks);
-    strip_size[0] = 7500;
-    strip_size[1] = 1;
-    n0 = chunk_size[0];
+    std::vector<int> ghost_size{0, 0};
+    std::vector<int> chunk_size{7500, 7500};
+    std::vector<int> strip_size(2);
 
     unsigned long long user_window_size;
     int set_window_size_flag = 0;
@@ -153,17 +138,19 @@ int main(int argc, char *argv[])
     strip_size[1] = 1;                    //per channel
     IFILE->SetApplyStripSize(strip_size); //skip some cell
 
-    n0 = chunk_size[0]; // window size = chunk_size[0] by default
-    INIT_PARS();
+    //Assign the n0 with the size of the first dimension
+    n0 = chunk_size[0];
+    INIT_PARS(mpi_rank);
     INIT_SPACE();
     IFILE->SetOutputVector(nXCORR, 0); //output vector size
 
+    //Get FFT of master vector
     int window_batch = 1;
     std::vector<int> masterv;
     masterv.resize(n0);
     std::vector<double> mastervf, masterv_ppf;
     mastervf.resize(n0);
-    masterv_ppf.resize(n0);
+    masterv_ppf.resize(nfft);
     std::vector<unsigned long long> master_start, master_end;
     master_start.resize(2);
     master_end.resize(2);
@@ -177,20 +164,21 @@ int main(int argc, char *argv[])
         IFILE->ReadData(master_start, master_end, masterv);
         //Get the FFT of master
         for (int i = 0; i < n0; i++)
-            mastervf[i] = masterv[i];
-
+        {
+            mastervf[i] = (double)(masterv[i]);
+        }
         FFT_PREPROCESSING(mastervf, masterv_ppf);
-        INIT_FFTW(fft_in, masterv_ppf, masterv_ppf.size(), nfft, fft_out);
+        //master_processing(mastervf, masterv_ppf);
+        INIT_FFTW(fft_in, masterv_ppf, nPoint, nfft, fft_out);
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);
-
         for (int j = 0; j < n0; j++)
         {
             master_fft[bi * n0 + j][0] = fft_out[j][0];
             master_fft[bi * n0 + j][1] = fft_out[j][1];
-            //master_fft[bi * n0 + j][0] = 1.0;
-            //master_fft[bi * n0 + j][1] = 1.0;
         }
     }
+    masterv_ppf.clear();
+    mastervf.clear();
 
     //Run FFT
     IFILE->Apply(FFT_UDF, OFILE);

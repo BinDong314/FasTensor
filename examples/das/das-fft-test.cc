@@ -68,7 +68,7 @@ int main()
     //    cout << i << ", ";
     //cout << endl;
 
-    INIT_PARS();
+    INIT_PARS(0);
 
     nPoint_hal_win = 1;
     fNyquist = 62.5;

@@ -2,13 +2,32 @@
 #include <fftw3.h>
 #define NAME_LENGTH 1024
 
+#define INIT_FFTW(FFT_IN_V, XXX_P, XN_P, NFFT_P, FFT_OUT_V) \
+    {                                                       \
+        for (int iii = 0; iii < NFFT_P; iii++)              \
+        {                                                   \
+            if (iii < XN_P)                                 \
+            {                                               \
+                FFT_IN_V[iii][0] = XXX_P[iii];              \
+                FFT_IN_V[iii][1] = 0;                       \
+            }                                               \
+            else                                            \
+            {                                               \
+                FFT_IN_V[iii][0] = 0;                       \
+                FFT_IN_V[iii][1] = 0;                       \
+            }                                               \
+            FFT_OUT_V[iii][0] = 0;                          \
+            FFT_OUT_V[iii][1] = 0;                          \
+        }                                                   \
+    }
+
 //direction: FFTW_FORWARD,  FFTW_BACKWARD
-#define FFT_HELP_W(N, fft_in, fft_out, direction)                               \
-    {                                                                           \
-        fftw_plan fft_p;                                                        \
-        fft_p = fftw_plan_dft_1d(N, fft_in, fft_out, direction, FFTW_ESTIMATE); \
-        fftw_execute(fft_p);                                                    \
-        fftw_destroy_plan(fft_p);                                               \
+#define FFT_HELP_W(NNN, fft_in_p, fft_out_p, direction_p)                               \
+    {                                                                                   \
+        fftw_plan fft_p;                                                                \
+        fft_p = fftw_plan_dft_1d(NNN, fft_in_p, fft_out_p, direction_p, FFTW_ESTIMATE); \
+        fftw_execute(fft_p);                                                            \
+        fftw_destroy_plan(fft_p);                                                       \
     }
 
 //#include "fft/kiss_fft.h"
@@ -49,9 +68,9 @@
             }                                                       \
                                                                     \
             double norm_denom = 0;                                  \
-            for (int j = index1; j <= index2; ++j)                  \
+            for (int j = index1; j <= index2; j++)                  \
             {                                                       \
-                norm_denom = norm_denom + std::abs(X[j]);           \
+                norm_denom = norm_denom + std::abs(XV[j]);          \
             }                                                       \
             YV[xi] = XV[xi] / (norm_denom / (index2 - index1 + 1)); \
         }                                                           \
@@ -73,25 +92,6 @@
         {                              \
             F_LHS[i] = DF * (i + 1);   \
         }                              \
-    }
-
-#define INIT_FFTW(FFT_IN_V, X, XN, NFFT, FFT_OUT_V) \
-    {                                               \
-        for (int iii = 0; iii < NFFT; iii++)        \
-        {                                           \
-            if (iii < XN)                           \
-            {                                       \
-                FFT_IN_V[iii][0] = X[iii];          \
-                FFT_IN_V[iii][1] = 0;               \
-            }                                       \
-            else                                    \
-            {                                       \
-                FFT_IN_V[iii][0] = 0;               \
-                FFT_IN_V[iii][1] = 0;               \
-            }                                       \
-            FFT_OUT_V[iii][0] = 0;                  \
-            FFT_OUT_V[iii][1] = 0;                  \
-        }                                           \
     }
 
 template <typename T>

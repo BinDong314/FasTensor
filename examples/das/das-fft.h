@@ -50,22 +50,27 @@ double df;
 unsigned long long MASTER_INDEX = 0;
 
 //Using n0 as intial intput
-#define INIT_PARS()                                                       \
-    {                                                                     \
-        nPoint = ceil(n0 / (DT_NEW / DT));                                \
-        FIND_M_POWER2(nPoint, nfft);                                      \
-        nXCORR = 2 * nPoint - 1;                                          \
-        fNyquist = 0.5 / DT;                                              \
-        nPoint_hal_win = floor((2 * floor(WINLEN_SEC / DT / 2) + 1) / 2); \
-        INTERP_ZF[5] = fNyquist;                                          \
-        df = 2.0 * fNyquist / (double)nfft;                               \
-        printf("            n0 = %d \n", n0);                             \
-        printf("        nPoint = %d \n", nPoint);                         \
-        printf("          nfft = %d \n", nfft);                           \
-        printf("      fNyquist = %f \n", fNyquist);                       \
-        printf("nPoint_hal_win = %d \n", nPoint_hal_win);                 \
-        printf("            df = %f \n", df);                             \
-        printf("        nXCORR = %d \n", nXCORR);                         \
+#define INIT_PARS(MR)                                                         \
+    {                                                                         \
+        nPoint = ceil(n0 / (DT_NEW / DT));                                    \
+        FIND_M_POWER2(nPoint, nfft);                                          \
+        nXCORR = 2 * nPoint - 1;                                              \
+        fNyquist = 0.5 / DT_NEW;                                              \
+        nPoint_hal_win = floor((2 * floor(WINLEN_SEC / DT_NEW / 2) + 1) / 2); \
+        INTERP_ZF[5] = fNyquist;                                              \
+        df = 2.0 * fNyquist / (double)nfft;                                   \
+        if (MR == 0)                                                          \
+        {                                                                     \
+            printf("\n Some parameters for DAS:\n");                          \
+            printf("    n0(intput size) = %d \n", n0);                        \
+            printf("             nPoint = %d \n", nPoint);                    \
+            printf("               nfft = %d \n", nfft);                      \
+            printf("           fNyquist = %f \n", fNyquist);                  \
+            printf("     nPoint_hal_win = %d \n", nPoint_hal_win);            \
+            printf("                 df = %f \n", df);                        \
+            printf("nXCORR(output size) = %d \n", nXCORR);                    \
+            printf("                 \n");                                    \
+        }                                                                     \
     }
 
 //Pre-allocated data space, to save time
@@ -79,48 +84,48 @@ fftw_complex *master_fft;
 //Final results
 std::vector<float> gatherXcorr;
 
-#define INIT_SHAPINGFILT()                                                        \
-    {                                                                             \
-        std::vector<double> F_LHS;                                                \
-        F_LHS.resize(nfft / 2);                                                   \
-        for (int i = 0; i < nfft / 2; i++)                                        \
-        {                                                                         \
-            F_LHS[i] = df * (i + 1);                                              \
-        }                                                                         \
-        interp1(INTERP_ZF, INTERP_Z, F_LHS, shapingFilt);                         \
-        std::reverse_copy(shapingFilt.begin(), shapingFilt.end(), F_LHS.begin()); \
-        shapingFilt.insert(shapingFilt.end(), F_LHS.begin(), F_LHS.end());        \
-        F_LHS.clear();                                                            \
-    }
-
-//R = dt_new/dt
 #define INIT_SPACE()                                                             \
     {                                                                            \
         X.resize(n0);                                                            \
         TC.resize(nfft);                                                         \
-        shapingFilt.resize(nfft / 2);                                            \
-        fft_in = (fftw_complex *)malloc(nfft * sizeof(fftw_complex));            \
-        fft_out = (fftw_complex *)malloc(nfft * sizeof(fftw_complex));           \
-        master_fft = (fftw_complex *)malloc(nfft * sizeof(fftw_complex));        \
+        shapingFilt.resize(nfft);                                                \
+        fft_in = fftw_alloc_complex(nfft);                                       \
+        fft_out = fftw_alloc_complex(nfft);                                      \
+        master_fft = fftw_alloc_complex(nfft);                                   \
         if (fft_in == NULL || fft_out == NULL || master_fft == NULL)             \
         {                                                                        \
             printf("not enough memory for fft, in %s:%d\n", __FILE__, __LINE__); \
             exit(-1);                                                            \
         }                                                                        \
         gatherXcorr.resize(nXCORR);                                              \
-        INIT_SHAPINGFILT();                                                      \
+        std::vector<double> FF_LHS, LHS;                                         \
+        FF_LHS.resize(nfft / 2);                                                 \
+        LHS.resize(nfft / 2);                                                    \
+        for (int i = 0; i < nfft / 2; i++)                                       \
+        {                                                                        \
+            FF_LHS[i] = df * (i + 1);                                            \
+        }                                                                        \
+        interp1(INTERP_ZF, INTERP_Z, FF_LHS, LHS);                               \
+        int nfft_half = nfft / 2;                                                \
+        for (int i = 0; i < nfft_half; i++)                                      \
+        {                                                                        \
+            shapingFilt[i] = LHS[i];                                             \
+            shapingFilt[i + nfft_half] = LHS[nfft_half - i - 1];                 \
+        }                                                                        \
+        FF_LHS.clear();                                                          \
+        LHS.clear();                                                             \
     }
 
 //R = dt_new/dt
-#define CLEAR_SPACE()        \
-    {                        \
-        X.clear();           \
-        TC.clear();          \
-        shapingFilt.clear(); \
-        free(fft_in);        \
-        free(fft_out);       \
-        free(master_fft);    \
-        gatherXcorr.clear(); \
+#define CLEAR_SPACE()          \
+    {                          \
+        X.clear();             \
+        TC.clear();            \
+        shapingFilt.clear();   \
+        fftw_free(fft_in);     \
+        fftw_free(fft_out);    \
+        fftw_free(master_fft); \
+        gatherXcorr.clear();   \
     }
 
 /*
@@ -128,13 +133,13 @@ std::vector<float> gatherXcorr;
  *  X.size() == R * XX.size()
  *  R  = dt_new / dt = (0.008/0.002)
  */
-#define FFT_PROCESSING(X, Y)                                                                          \
+#define FFT_PROCESSING(XX, YY)                                                                        \
     {                                                                                                 \
-        detrend(&(X[0]), X.size());                                                                   \
-        filtfilt(BUTTER_A, BUTTER_B, X, Y);                                                           \
-        resample(1, DT_NEW / DT, Y, X);                                                               \
-        MOVING_MEAN(X, Y, nPoint_hal_win);                                                            \
-        INIT_FFTW(fft_in, Y, nPoint, nfft, fft_out);                                                  \
+        detrend(&(XX[0]), XX.size());                                                                 \
+        filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                         \
+        resample(1, DT_NEW / DT, YY, XX);                                                             \
+        MOVING_MEAN(XX, YY, nPoint_hal_win);                                                          \
+        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                 \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                              \
         double temp_f;                                                                                \
         for (int ii = 0; ii < nfft; ii++)                                                             \
@@ -146,17 +151,19 @@ std::vector<float> gatherXcorr;
             fft_out[ii][1] = 0;                                                                       \
         }                                                                                             \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                             \
-        Y.resize(nPoint);                                                                             \
+        YY.resize(nPoint);                                                                            \
         for (int i = 0; i < nPoint; i++)                                                              \
         {                                                                                             \
-            Y[i] = fft_out[i][0] / ((double)nfft);                                                    \
+            YY[i] = fft_out[i][0] / ((double)nfft);                                                   \
         }                                                                                             \
-        INIT_FFTW(fft_in, Y, nPoint, nfft, fft_out);                                                  \
+        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                 \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                              \
         for (int j = 0; j < nfft; j++)                                                                \
         {                                                                                             \
             fft_in[j][0] = master_fft[j][0] * fft_out[j][0] + master_fft[j][1] * fft_out[j][1];       \
             fft_in[j][1] = master_fft[j][1] * fft_out[j][0] - master_fft[j][0] * fft_out[j][1];       \
+            fft_out[j][0] = 0;                                                                        \
+            fft_out[j][1] = 0;                                                                        \
         }                                                                                             \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                             \
         int gatherXcorr_index = 0;                                                                    \
@@ -172,13 +179,13 @@ std::vector<float> gatherXcorr;
         }                                                                                             \
     }
 
-#define FFT_PREPROCESSING(X, Y)                                                                       \
+#define FFT_PREPROCESSING(XPP, YPP)                                                                   \
     {                                                                                                 \
-        detrend(&(X[0]), X.size());                                                                   \
-        filtfilt(BUTTER_A, BUTTER_B, X, Y);                                                           \
-        resample(1, DT_NEW / DT, Y, X);                                                               \
-        MOVING_MEAN(X, Y, nPoint_hal_win);                                                            \
-        INIT_FFTW(fft_in, Y, nPoint, nfft, fft_out);                                                  \
+        detrend(&(XPP[0]), XPP.size());                                                               \
+        filtfilt(BUTTER_A, BUTTER_B, XPP, YPP);                                                       \
+        resample(1, DT_NEW / DT, YPP, XPP);                                                           \
+        MOVING_MEAN(XPP, YPP, nPoint_hal_win);                                                        \
+        INIT_FFTW(fft_in, YPP, nPoint, nfft, fft_out);                                                \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                              \
         double temp_f;                                                                                \
         for (int ii = 0; ii < nfft; ii++)                                                             \
@@ -190,10 +197,110 @@ std::vector<float> gatherXcorr;
             fft_out[ii][1] = 0;                                                                       \
         }                                                                                             \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                             \
-        Y.resize(nPoint);                                                                             \
+        YPP.resize(nPoint);                                                                           \
         for (int i = 0; i < nPoint; i++)                                                              \
         {                                                                                             \
-            Y[i] = fft_out[i][0] / ((double)nfft);                                                    \
+            YPP[i] = fft_out[i][0] / ((double)nfft);                                                  \
         }                                                                                             \
     }
+
+//For debug only
+void master_processing(std::vector<double> XPP, std::vector<double> &YPP)
+{
+    for (int i = 0; i < 100; i++)
+    {
+        printf("master_processing shapingFilt [%d] = %f\n", i, shapingFilt[i]);
+    }
+    detrend(&(XPP[0]), XPP.size());
+    for (int i = 0; i < 10; i++)
+    {
+        printf("detrend (%d): %f \n", i, XPP[i]);
+    }
+    for (int i = 2999; i < 3010; i++)
+    {
+        printf("detrend (%d): %f, nfft =%d, nPoint =%d \n", i, XPP[i], nfft, nPoint);
+    }
+
+    for (int i = nPoint - 10 - 1; i < nPoint; i++)
+    {
+        printf("detrend (%d): %f, nfft =%d, nPoint =%d \n", i, XPP[i], nfft, nPoint);
+    }
+
+    filtfilt(BUTTER_A, BUTTER_B, XPP, YPP);
+    for (int i = 0; i < 10; i++)
+    {
+        printf("filtfilt (%d): %f \n", i, YPP[i]);
+    }
+    for (int i = 2999; i < 3010; i++)
+    {
+        printf("filtfilt (%d): %f, nfft =%d, nPoint =%d \n", i, YPP[i], nfft, nPoint);
+    }
+
+    for (int i = nPoint - 10 - 1; i < nPoint; i++)
+    {
+        printf("filtfilt (%d): %f, nfft =%d, nPoint =%d \n", i, YPP[i], nfft, nPoint);
+    }
+    resample(1, DT_NEW / DT, YPP, XPP);
+    MOVING_MEAN(XPP, YPP, nPoint_hal_win);
+    for (int i = 0; i < 10; i++)
+    {
+        printf("MOVING_MEAN (%d): %f \n", i, YPP[i]);
+    }
+    for (int i = 2999; i < 3010; i++)
+    {
+        printf("MOVING_MEAN (%d): %f, nfft =%d, nPoint =%d \n", i, YPP[i], nfft, nPoint);
+    }
+
+    for (int i = nPoint - 10 - 1; i < nPoint; i++)
+    {
+        printf("MOVING_MEAN (%d): %f, nfft =%d, nPoint =%d \n", i, YPP[i], nfft, nPoint);
+    }
+
+    for (int i = 0; i < 100; i++)
+    {
+        printf("After MOVING_MEAN shapingFilt [%d] = %f\n", i, shapingFilt[i]);
+    }
+    fftw_complex *fft_in_temp;
+    fftw_complex *fft_out_temp;
+    fft_in_temp = fftw_alloc_complex(nfft);
+    fft_out_temp = fftw_alloc_complex(nfft);
+    for (int i = 0; i < nfft; i++)
+    {
+        if (i < nPoint)
+        {
+            fft_in_temp[i][0] = YPP[i];
+            fft_in_temp[i][1] = 0;
+        }
+        else
+        {
+            fft_in_temp[i][0] = 0;
+            fft_in_temp[i][1] = 0;
+        }
+        fft_out_temp[i][0] = 0;
+        fft_out_temp[i][1] = 0;
+    }
+    //INIT_FFTW(fft_in, YPP, nPoint, nfft, fft_out);
+    FFT_HELP_W(nfft, fft_in_temp, fft_out_temp, FFTW_FORWARD);
+    double temp_f;
+    for (int ii = 0; ii < nfft; ii++)
+    {
+        if (ii < 10)
+            printf("fft: %f + %f i , shapingFilt = %f \n", fft_out_temp[ii][0], fft_out_temp[ii][1], shapingFilt[ii]);
+        temp_f = sqrt(fft_out_temp[ii][0] * fft_out_temp[ii][0] + fft_out_temp[ii][1] * fft_out_temp[ii][1]) + 0.001;
+        fft_in_temp[ii][0] = (fft_out_temp[ii][0] + 0.001) / temp_f * shapingFilt[ii];
+        fft_in_temp[ii][1] = (fft_out_temp[ii][1]) / temp_f * shapingFilt[ii];
+        fft_out_temp[ii][0] = 0;
+        fft_out_temp[ii][1] = 0;
+    }
+    FFT_HELP_W(nfft, fft_in_temp, fft_out_temp, FFTW_BACKWARD);
+    YPP.resize(nPoint);
+    for (int i = 0; i < nPoint; i++)
+    {
+        YPP[i] = fft_out_temp[i][0] / ((double)nfft);
+        if (i < 10)
+            printf("White: %f \n", YPP[i]);
+    }
+    fftw_free(fft_in_temp);
+    fftw_free(fft_out_temp);
+}
 #endif
