@@ -1,18 +1,24 @@
 //
-// This Code is for calculating the FFT/IFFT for DAS data
-// It is on top of ArrayUDF with the main strucutre:
-//       A: DAS array
-//       A->Apply(FFT_UDF) : the TTF_UDF is the main function for FFT/IFFT on each channel
+// This ArrayUDF example code is for calculating the FFT/IFFT for DAS data
+// with a few pre-processing steps and post-porcessing steps.
+// The pre-proccsing steps include
+//     detread
+//     filtfilt
+//     esample
+//     MOVING_MEAN
+//     interp1
+//     Spectral whitening
+// The post-processing steps are:
+//     frequency domain cross-correlation
+//
+// The code has below structure
+//      TTF_UDF(){....}           : define function for each channel
+//                                : include all pre-processing steps, FFT/IFFT, post-porcessing steps
+//      Array A( ...HDF5 file..)  : define pointer to DAS data in HDF5 file
+//      A->Apply(FFT_UDF)         : run TTF_UDF over all channels
+//
 // Please use the "-h" to get the usage information
-// Major steps
-//      1, get master vector and its FFT on each MPI processes
-//      2, Run FFT_UDF on each channel, parallized on all MPI processes
-//         2.1  Get data of each channel
-//         2.2  Preprocessing
-//         2.3  FFT
-//         2.4  spec Correlation with  master
-//         2.5  IFFT
-//         2.6  Subset correlation
+//
 //
 // Author: Bin Dong  2019 (Reviewed by Xin Xing)
 //
@@ -160,18 +166,17 @@ int main(int argc, char *argv[])
         master_start[1] = MASTER_INDEX;
         master_end[0] = master_start[0] + n0 - 1;
         master_end[1] = MASTER_INDEX;
-        //Get master chunk's data
+        //Get master chunk's data and store in double type vector
         IFILE->ReadData(master_start, master_end, masterv);
-        //Get the FFT of master
         for (int i = 0; i < n0; i++)
         {
             mastervf[i] = (double)(masterv[i]);
         }
-        FFT_PREPROCESSING(mastervf, masterv_ppf);
+        FFT_PREPROCESSING(mastervf, masterv_ppf); //masterv_ppf is result
         //master_processing(mastervf, masterv_ppf);
         INIT_FFTW(fft_in, masterv_ppf, nPoint, nfft, fft_out);
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);
-        for (int j = 0; j < n0; j++)
+        for (int j = 0; j < nfft; j++)
         {
             master_fft[bi * n0 + j][0] = fft_out[j][0];
             master_fft[bi * n0 + j][1] = fft_out[j][1];
