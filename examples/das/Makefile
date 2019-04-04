@@ -12,7 +12,7 @@ AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
 HDF5_DIR=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p
 FFTW_DIR=/global/software/sl-6.x86_64/modules/gcc/4.8.5/fftw/3.3.4-gcc
 CCC=mpicxx
-OTHER_FLAGS=-I/bearbin-data3/home/dbin/test-code/arrayudf-test/examples/das/fft-header/  -lboost_program_options-mt
+OTHER_FLAGS=-I./fft-header/  -lboost_program_options-mt
 
 
 #Cori at NERSC
