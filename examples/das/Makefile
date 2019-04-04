@@ -5,7 +5,7 @@
 #HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
 #FFTW_DIR=/opt/local/
 #CCC=mpicxx
-OTHER_FLAGS=-I/opt/local/include/eigen2/ -L/opt/local/lib -lboost_program_options-mt
+#OTHER_FLAGS=-I/opt/local/include/eigen2/ -L/opt/local/lib -lboost_program_options-mt
 
 #Snowbear
 AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
