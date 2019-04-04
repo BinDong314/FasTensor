@@ -11,8 +11,11 @@
 // The post-processing steps are:
 //     frequency domain cross-correlation
 //
-// The code has below structure
-//      TTF_UDF(){....}           : define function for each channel
+// All these steps are documented in "doc/preprocess.pdf" by Xin Xing
+// The das-fft.h contains the code for the these steps.
+//
+// The code below has following structure:
+//      TTF_UDF(){....}           : define function for each channel,
 //                                : include all pre-processing steps, FFT/IFFT, post-porcessing steps
 //      Array A( ...HDF5 file..)  : define pointer to DAS data in HDF5 file
 //      A->Apply(FFT_UDF)         : run TTF_UDF over all channels
