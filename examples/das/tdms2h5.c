@@ -12,8 +12,6 @@
 //#define OUTPUT_META_TO_SCREEN 1
 //#define DEBUG_OUTPUT 1
 
-
-
 //Don't change below values
 #define NBYTE_LEADIN 28
 #define EPOCH_DIFF 2082844800 //seconds from epoch(1904, Mac HFS+ ) to epoch (1970, Unix)
@@ -50,6 +48,8 @@ void attach_attribute_string(hid_t obj_id, char *name, void *value_str, int valu
 void attach_attribute_timestamp(hid_t obj_id, char *name, hid_t type_create, hid_t type_write, void *value_sec_and_secfrac, char *name2, void *time_as_str, int time_as_str_length);
 int convert_file(char *filename_output, char *filename_input, int compression_flag);
 void printf_help(char *cmd);
+void transpose_data(int16_t *src, int16_t *dst, const int N, const int M);
+int transpose_flag = 0;
 
 int main(int argc, char *argv[])
 {
@@ -57,10 +57,9 @@ int main(int argc, char *argv[])
    char filename_output[1024] = "./test.tdms.h5";
    int batch_flag = 0;
    int compression_flag = 0;
-
    int copt;
    char *res;
-   while ((copt = getopt(argc, argv, "o:i:hbc")) != -1)
+   while ((copt = getopt(argc, argv, "o:i:thbc")) != -1)
       switch (copt)
       {
       case 'o':
@@ -76,6 +75,9 @@ int main(int argc, char *argv[])
          break;
       case 'c':
          compression_flag = 1;
+         break;
+      case 't':
+         transpose_flag = 1;
          break;
       case 'h':
          printf_help(argv[0]);
@@ -430,7 +432,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    int index_data_type, array_dimensions;
    uint64_t Number_of_values;
    for (int jj = 0; jj < number_of_objects - 2; jj++)
- {
+   {
       fread(&length_of_object_path, sizeof(uint32_t), 1, fp);
 #ifdef DEBUG_OUTPUT
       printf("length_of_object_path : %d \n", length_of_object_path);
@@ -513,7 +515,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #endif
 
    //Start to read the data and store it into HDF5
-   int16_t *data;
+   int16_t *data, *data_transposed;
    data = (int16_t *)malloc(sizeof(int16_t) * nTrace * nPoint);
 
    fseek(fp, nByte_header, SEEK_SET);
@@ -532,26 +534,58 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #endif
 
    hsize_t dims[2];
-   dims[0] = nPoint;
-   dims[1] = nTrace;
+
+   if (transpose_flag)
+   {
+      dims[0] = nTrace;
+      dims[1] = nPoint;
+   }
+   else
+   {
+      dims[0] = nPoint;
+      dims[1] = nTrace;
+   }
    dataspace_id = H5Screate_simple(2, dims, NULL);
    hid_t dataset_plist_id = H5Pcreate(H5P_DATASET_CREATE);
 
    hsize_t cdims[2];
    if (compression_flag == 1)
    {
-      cdims[0] = nPoint / 100;
-      cdims[1] = nTrace / 16;
+      if (transpose_flag)
+      {
+         cdims[0] = nTrace / 16;
+         cdims[1] = nPoint / 100;
+      }
+      else
+      {
+         cdims[0] = nPoint / 100;
+         cdims[1] = nTrace / 16;
+      }
+
       H5Pset_chunk(dataset_plist_id, 2, cdims);
       H5Pset_deflate(dataset_plist_id, 6);
    }
+   if (transpose_flag)
+   {
+      data_transposed = (int16_t *)malloc(sizeof(int16_t) * nTrace * nPoint);
+      transpose_data(data, data_transposed, nPoint, nTrace);
+   }
 
-   dataset_id = H5Dcreate(file_id, "/DataTimeChannel", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
-   H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+   if (transpose_flag)
+   {
+      dataset_id = H5Dcreate(file_id, "/DataChannelTime", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
+      H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_transposed);
+   }
+   else
+   {
+      dataset_id = H5Dcreate(file_id, "/DataTimeChannel", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
+      H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+   }
    H5Sclose(dataspace_id);
    H5Dclose(dataset_id);
-
    free(data);
+   if (transpose_flag)
+      free(data_transposed);
 
    /*
    * Store all header of TDMS as a H5T_OPAQUE type
@@ -625,6 +659,15 @@ void attach_attribute_timestamp(hid_t obj_id, char *name, hid_t type_create, hid
    H5Tclose(attribute_str_type);
 }
 
+void transpose_data(int16_t *src, int16_t *dst, const int N, const int M)
+{
+   for (int n = 0; n < N * M; n++)
+   {
+      int i = n / N;
+      int j = n % N;
+      dst[n] = src[M * j + i];
+   }
+}
 void printf_help(char *cmd)
 {
    char *msg = (char *)"Usage: %s [OPTION] \n\
@@ -633,6 +676,7 @@ void printf_help(char *cmd)
           -o output file/directory for HDF5 file(s)\n\
           -b batch mode (i.e., both input and output are directory)\n\
           -p parallel conversion on MPI\n\
+          -t transpose matrix (by default, it is [Time] by [Channel])\n\
           Example: %s -i test.tdms -o test.tdms.h5\n";
    fprintf(stdout, msg, cmd, cmd);
 }

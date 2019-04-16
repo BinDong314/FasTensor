@@ -2498,6 +2498,7 @@ int SetChunkSize(std::vector<int> cs)
   {
     data->DisableCollectivIO();
   }
+  return 0;
 }
 
 std::vector<int> GetOverlapSize()

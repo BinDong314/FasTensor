@@ -51,18 +51,31 @@ void printf_help(char *cmd);
  */
 inline std::vector<float> FFT_UDF(const Stencil<int> &c)
 {
-    X.resize(n0);
-    TC.resize(nfft);
-    for (int i = 0; i < n0; i++)
+    for (int bi = 0; bi < window_batch; bi++)
     {
-        X[i] = (double)c(i, 0);
+        X.resize(n0);
+        TC.resize(nfft);
+        for (int i = 0; i < n0; i++)
+        {
+            if (row_major_flag == 0)
+            {
+                X[i] = (double)c(i + bi * n0, 0);
+            }
+            else
+            {
+                X[i] = (double)c(0, i + bi * n0);
+            }
+        }
+
+        //X is the input
+        //TC is a extra cache space for calculation
+        //gatherXcorr_per_batch is output
+        //master_fft is the FFT for master
+        //bi is the index of the current window
+        //nfft is the size of current window
+        FFT_PROCESSING(X, TC, gatherXcorr_per_batch, master_fft, bi, nfft);
+        std::copy_n(gatherXcorr_per_batch.begin(), nXCORR, gatherXcorr.begin() + bi * nXCORR);
     }
-
-    //X is the input
-    //gatherXcorr is output
-    //TC is a extra space for calculation
-    FFT_PROCESSING(X, TC);
-
     return gatherXcorr;
 }
 
@@ -74,14 +87,8 @@ int main(int argc, char *argv[])
     char i_dataset[NAME_LENGTH] = "/DataTimeChannel";
     char o_dataset[NAME_LENGTH] = "/Xcorr";
 
-    std::vector<int> ghost_size{0, 0};
-    std::vector<int> chunk_size{7500, 7500};
-    std::vector<int> strip_size(2);
-
-    unsigned long long user_window_size;
-    int set_window_size_flag = 0;
     int copt, mpi_rank, mpi_size;
-    while ((copt = getopt(argc, argv, "o:i:g:t:x:m:w:h")) != -1)
+    while ((copt = getopt(argc, argv, "o:i:g:t:x:m:w:rh")) != -1)
         switch (copt)
         {
         case 'o':
@@ -106,10 +113,13 @@ int main(int argc, char *argv[])
             break;
         case 'w':
             set_window_size_flag = 1;
-            user_window_size = atoll(optarg);
+            user_window_size = atoi(optarg);
             break;
         case 'm':
             MASTER_INDEX = atoi(optarg);
+            break;
+        case 'r':
+            row_major_flag = 1;
             break;
         case 'h':
             printf_help(argv[0]);
@@ -133,28 +143,22 @@ int main(int argc, char *argv[])
 
     //Find and set chunks_size to split array for parallel processing
     std::vector<unsigned long long> i_file_dim = IFILE->GetDimSize();
-    chunk_size[0] = i_file_dim[0];
-    if (i_file_dim[1] % mpi_size == 0)
+
+    //Assign the n0 with the size of the first dimension
+    INIT_PARS(mpi_rank, mpi_size, i_file_dim);
+    INIT_SPACE();
+    IFILE->SetChunkSize(chunk_size);
+    IFILE->SetApplyStripSize(strip_size);
+    if (row_major_flag == 0)
     {
-        chunk_size[1] = i_file_dim[1] / mpi_size;
+        IFILE->SetOutputVector(nXCORR * window_batch, 0); //output vector size
     }
     else
     {
-        chunk_size[1] = i_file_dim[1] / mpi_size + 1;
+        IFILE->SetOutputVector(nXCORR * window_batch, 1); //output vector size
     }
-    IFILE->SetChunkSize(chunk_size);
-    strip_size[0] = chunk_size[0];        //skip per chunk
-    strip_size[1] = 1;                    //per channel
-    IFILE->SetApplyStripSize(strip_size); //skip some cell
-
-    //Assign the n0 with the size of the first dimension
-    n0 = chunk_size[0];
-    INIT_PARS(mpi_rank);
-    INIT_SPACE();
-    IFILE->SetOutputVector(nXCORR, 0); //output vector size
 
     //Get FFT of master vector
-    int window_batch = 1;
     std::vector<int> masterv;
     masterv.resize(n0);
     std::vector<double> mastervf, masterv_ppf;
@@ -165,10 +169,20 @@ int main(int argc, char *argv[])
     master_end.resize(2);
     for (int bi = 0; bi < window_batch; bi++)
     {
-        master_start[0] = 0 + bi * n0;
-        master_start[1] = MASTER_INDEX;
-        master_end[0] = master_start[0] + n0 - 1;
-        master_end[1] = MASTER_INDEX;
+        if (row_major_flag == 0)
+        {
+            master_start[0] = 0 + bi * n0;
+            master_start[1] = MASTER_INDEX;
+            master_end[0] = master_start[0] + n0 - 1;
+            master_end[1] = MASTER_INDEX;
+        }
+        else
+        {
+            master_start[0] = MASTER_INDEX;
+            master_start[1] = 0 + bi * n0;
+            master_end[0] = MASTER_INDEX;
+            master_end[1] = master_start[0] + n0 - 1;
+        }
         //Get master chunk's data and store in double type vector
         IFILE->ReadData(master_start, master_end, masterv);
         for (int i = 0; i < n0; i++)
@@ -181,12 +195,13 @@ int main(int argc, char *argv[])
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);
         for (int j = 0; j < nfft; j++)
         {
-            master_fft[bi * n0 + j][0] = fft_out[j][0];
-            master_fft[bi * n0 + j][1] = fft_out[j][1];
+            master_fft[bi * nfft + j][0] = fft_out[j][0];
+            master_fft[bi * nfft + j][1] = fft_out[j][1];
         }
     }
     masterv_ppf.clear();
     mastervf.clear();
+    masterv.clear();
 
     //Run FFT
     IFILE->Apply(FFT_UDF, OFILE);
@@ -211,7 +226,8 @@ void printf_help(char *cmd)
           -t dataset name for intput time series \n\
           -x dataset name for output correlation \n\
           -w window size (only used when window size is different from chunk_size[0]) \n\
-          -m index of master channel (0 by default )\n\
+          -m index of Master channel (0 by default )\n\
+          -r FFT in [Row]-direction([Column]-direction by default) \n\
           Example: mpirun -n 1 %s -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /white -x /Xcorr\n";
 
     fprintf(stdout, msg, cmd, cmd);

@@ -49,28 +49,111 @@ double df;
 //Maste channel
 unsigned long long MASTER_INDEX = 0;
 
+//Parameters for ArrayUDF
+std::vector<int> ghost_size{0, 0};
+std::vector<int> chunk_size{7500, 7500};
+std::vector<int> strip_size(2);
+
+//Parameters to enable "window" operation
+int user_window_size = 1;
+int set_window_size_flag = 0;
+int window_batch = 1;
+
+//Flag to have FFT in row-direction
+int row_major_flag = 0;
+
 //Using n0 as intial intput
-#define INIT_PARS(MR)                                                         \
-    {                                                                         \
-        nPoint = ceil(n0 / (DT_NEW / DT));                                    \
-        FIND_M_POWER2(nPoint, nfft);                                          \
-        nXCORR = 2 * nPoint - 1;                                              \
-        fNyquist = 0.5 / DT_NEW;                                              \
-        nPoint_hal_win = floor((2 * floor(WINLEN_SEC / DT_NEW / 2) + 1) / 2); \
-        INTERP_ZF[5] = fNyquist;                                              \
-        df = 2.0 * fNyquist / (double)nfft;                                   \
-        if (MR == 0)                                                          \
-        {                                                                     \
-            printf("\n Some parameters for DAS:\n");                          \
-            printf("    n0(intput size) = %d \n", n0);                        \
-            printf("             nPoint = %d \n", nPoint);                    \
-            printf("               nfft = %d \n", nfft);                      \
-            printf("           fNyquist = %f \n", fNyquist);                  \
-            printf("     nPoint_hal_win = %d \n", nPoint_hal_win);            \
-            printf("                 df = %f \n", df);                        \
-            printf("nXCORR(output size) = %d \n", nXCORR);                    \
-            printf("                 \n");                                    \
-        }                                                                     \
+//MR: mpi rank
+//MS: mpi size
+//DATADIMS: size of 2D data
+#define INIT_PARS(MR, MS, DATADIMS)                                                     \
+    {                                                                                   \
+        if (row_major_flag == 0)                                                        \
+        {                                                                               \
+            chunk_size[0] = DATADIMS[0];                                                \
+            if (DATADIMS[1] % MS == 0)                                                  \
+            {                                                                           \
+                chunk_size[1] = DATADIMS[1] / MS;                                       \
+            }                                                                           \
+            else                                                                        \
+            {                                                                           \
+                chunk_size[1] = DATADIMS[1] / MS + 1;                                   \
+            }                                                                           \
+            strip_size[0] = chunk_size[0];                                              \
+            strip_size[1] = 1;                                                          \
+            if (set_window_size_flag == 0)                                              \
+            {                                                                           \
+                n0 = chunk_size[0];                                                     \
+            }                                                                           \
+            else                                                                        \
+            {                                                                           \
+                assert(user_window_size > 0 && user_window_size < DATADIMS[0]);         \
+                n0 = user_window_size;                                                  \
+                if (DATADIMS[0] % user_window_size == 0)                                \
+                {                                                                       \
+                    window_batch = DATADIMS[0] / user_window_size;                      \
+                }                                                                       \
+                else                                                                    \
+                {                                                                       \
+                    window_batch = DATADIMS[0] / user_window_size + 1;                  \
+                }                                                                       \
+            }                                                                           \
+        }                                                                               \
+        else                                                                            \
+        {                                                                               \
+            chunk_size[1] = DATADIMS[1];                                                \
+            if (DATADIMS[0] % MS == 0)                                                  \
+            {                                                                           \
+                chunk_size[0] = DATADIMS[0] / MS;                                       \
+            }                                                                           \
+            else                                                                        \
+            {                                                                           \
+                chunk_size[0] = DATADIMS[0] / MS + 1;                                   \
+            }                                                                           \
+            strip_size[0] = 1;                                                          \
+            strip_size[1] = chunk_size[1];                                              \
+            if (set_window_size_flag == 0)                                              \
+            {                                                                           \
+                n0 = chunk_size[1];                                                     \
+            }                                                                           \
+            else                                                                        \
+            {                                                                           \
+                assert(user_window_size > 0 && user_window_size < DATADIMS[1]);         \
+                n0 = user_window_size;                                                  \
+                if (DATADIMS[1] % user_window_size == 0)                                \
+                {                                                                       \
+                    window_batch = DATADIMS[1] / user_window_size;                      \
+                }                                                                       \
+                else                                                                    \
+                {                                                                       \
+                    window_batch = DATADIMS[1] / user_window_size + 1;                  \
+                }                                                                       \
+            }                                                                           \
+        }                                                                               \
+        nPoint = ceil(n0 / (DT_NEW / DT));                                              \
+        FIND_M_POWER2(nPoint, nfft);                                                    \
+        nXCORR = 2 * nPoint - 1;                                                        \
+        fNyquist = 0.5 / DT_NEW;                                                        \
+        nPoint_hal_win = floor((2 * floor(WINLEN_SEC / DT_NEW / 2) + 1) / 2);           \
+        INTERP_ZF[5] = fNyquist;                                                        \
+        df = 2.0 * fNyquist / (double)nfft;                                             \
+        if (MR == 0)                                                                    \
+        {                                                                               \
+            printf("\n Some parameters for DAS:\n");                                    \
+            printf("    n0(intput size) = %d \n", n0);                                  \
+            printf("             nPoint = %d \n", nPoint);                              \
+            printf("               nfft = %d \n", nfft);                                \
+            printf("           fNyquist = %f \n", fNyquist);                            \
+            printf("     nPoint_hal_win = %d \n", nPoint_hal_win);                      \
+            printf("                 df = %f \n", df);                                  \
+            printf("nXCORR(output size) = %d \n", nXCORR);                              \
+            printf("                 \n");                                              \
+            printf("ArrayUDF chunk  size  = (%d, %d)\n", chunk_size[0], chunk_size[1]); \
+            printf("ArrayUDF strip  size  = (%d, %d)\n", strip_size[0], strip_size[1]); \
+            printf("ArrayUDF window size  = %d\n", user_window_size);                   \
+            printf("ArrayUDF window batch = %d\n", window_batch);                       \
+            printf("                 \n");                                              \
+        }                                                                               \
     }
 
 //Pre-allocated data space, to save time
@@ -83,7 +166,9 @@ fftw_complex *master_fft;
 
 //Final results
 std::vector<float> gatherXcorr;
+std::vector<float> gatherXcorr_per_batch;
 
+//WS: window size
 #define INIT_SPACE()                                                             \
     {                                                                            \
         X.resize(n0);                                                            \
@@ -91,13 +176,14 @@ std::vector<float> gatherXcorr;
         shapingFilt.resize(nfft);                                                \
         fft_in = fftw_alloc_complex(nfft);                                       \
         fft_out = fftw_alloc_complex(nfft);                                      \
-        master_fft = fftw_alloc_complex(nfft);                                   \
+        master_fft = fftw_alloc_complex(nfft * window_batch);                    \
         if (fft_in == NULL || fft_out == NULL || master_fft == NULL)             \
         {                                                                        \
             printf("not enough memory for fft, in %s:%d\n", __FILE__, __LINE__); \
             exit(-1);                                                            \
         }                                                                        \
-        gatherXcorr.resize(nXCORR);                                              \
+        gatherXcorr_per_batch.resize(nXCORR);                                    \
+        gatherXcorr.resize(nXCORR *window_batch);                                \
         std::vector<double> FF_LHS, LHS;                                         \
         FF_LHS.resize(nfft / 2);                                                 \
         LHS.resize(nfft / 2);                                                    \
@@ -117,66 +203,67 @@ std::vector<float> gatherXcorr;
     }
 
 //R = dt_new/dt
-#define CLEAR_SPACE()          \
-    {                          \
-        X.clear();             \
-        TC.clear();            \
-        shapingFilt.clear();   \
-        fftw_free(fft_in);     \
-        fftw_free(fft_out);    \
-        fftw_free(master_fft); \
-        gatherXcorr.clear();   \
+#define CLEAR_SPACE()                  \
+    {                                  \
+        X.clear();                     \
+        TC.clear();                    \
+        shapingFilt.clear();           \
+        fftw_free(fft_in);             \
+        fftw_free(fft_out);            \
+        fftw_free(master_fft);         \
+        gatherXcorr.clear();           \
+        gatherXcorr_per_batch.clear(); \
     }
 
 /*
- * X is the input data and Y is the output
- *  X.size() == R * XX.size()
- *  R  = dt_new / dt = (0.008/0.002)
+ * XX is the input data 
+ * YY is used as cache
+ * GX is the result
  */
-#define FFT_PROCESSING(XX, YY)                                                                        \
-    {                                                                                                 \
-        detrend(&(XX[0]), XX.size());                                                                 \
-        filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                         \
-        resample(1, DT_NEW / DT, YY, XX);                                                             \
-        MOVING_MEAN(XX, YY, nPoint_hal_win);                                                          \
-        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                 \
-        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                              \
-        double temp_f;                                                                                \
-        for (int ii = 0; ii < nfft; ii++)                                                             \
-        {                                                                                             \
-            temp_f = sqrt(fft_out[ii][0] * fft_out[ii][0] + fft_out[ii][1] * fft_out[ii][1]) + 0.001; \
-            fft_in[ii][0] = (fft_out[ii][0] + 0.001) / temp_f * shapingFilt[ii];                      \
-            fft_in[ii][1] = (fft_out[ii][1]) / temp_f * shapingFilt[ii];                              \
-            fft_out[ii][0] = 0;                                                                       \
-            fft_out[ii][1] = 0;                                                                       \
-        }                                                                                             \
-        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                             \
-        YY.resize(nPoint);                                                                            \
-        for (int i = 0; i < nPoint; i++)                                                              \
-        {                                                                                             \
-            YY[i] = fft_out[i][0] / ((double)nfft);                                                   \
-        }                                                                                             \
-        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                 \
-        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                              \
-        for (int j = 0; j < nfft; j++)                                                                \
-        {                                                                                             \
-            fft_in[j][0] = master_fft[j][0] * fft_out[j][0] + master_fft[j][1] * fft_out[j][1];       \
-            fft_in[j][1] = master_fft[j][1] * fft_out[j][0] - master_fft[j][0] * fft_out[j][1];       \
-            fft_out[j][0] = 0;                                                                        \
-            fft_out[j][1] = 0;                                                                        \
-        }                                                                                             \
-        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                             \
-        int gatherXcorr_index = 0;                                                                    \
-        for (int k = nfft - nPoint + 1; k < nfft; k++)                                                \
-        {                                                                                             \
-            gatherXcorr[gatherXcorr_index] = (float)(fft_out[k][0] / (double)nfft);                   \
-            gatherXcorr_index++;                                                                      \
-        }                                                                                             \
-        for (int l = 0; l < nPoint; l++)                                                              \
-        {                                                                                             \
-            gatherXcorr[gatherXcorr_index] = (float)(fft_out[l][0] / (double)nfft);                   \
-            gatherXcorr_index++;                                                                      \
-        }                                                                                             \
+#define FFT_PROCESSING(XX, YY, GX, MFFT, BI, BS)                                                        \
+    {                                                                                                   \
+        detrend(&(XX[0]), XX.size());                                                                   \
+        filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                           \
+        resample(1, DT_NEW / DT, YY, XX);                                                               \
+        MOVING_MEAN(XX, YY, nPoint_hal_win);                                                            \
+        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                   \
+        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                \
+        double temp_f;                                                                                  \
+        for (int ii = 0; ii < nfft; ii++)                                                               \
+        {                                                                                               \
+            temp_f = sqrt(fft_out[ii][0] * fft_out[ii][0] + fft_out[ii][1] * fft_out[ii][1]) + 0.001;   \
+            fft_in[ii][0] = (fft_out[ii][0] + 0.001) / temp_f * shapingFilt[ii];                        \
+            fft_in[ii][1] = (fft_out[ii][1]) / temp_f * shapingFilt[ii];                                \
+            fft_out[ii][0] = 0;                                                                         \
+            fft_out[ii][1] = 0;                                                                         \
+        }                                                                                               \
+        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                               \
+        YY.resize(nPoint);                                                                              \
+        for (int i = 0; i < nPoint; i++)                                                                \
+        {                                                                                               \
+            YY[i] = fft_out[i][0] / ((double)nfft);                                                     \
+        }                                                                                               \
+        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                   \
+        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                \
+        for (int j = 0; j < nfft; j++)                                                                  \
+        {                                                                                               \
+            fft_in[j][0] = MFFT[j + BI * BS][0] * fft_out[j][0] + MFFT[j + BI * BS][1] * fft_out[j][1]; \
+            fft_in[j][1] = MFFT[j + BI * BS][1] * fft_out[j][0] - MFFT[j + BI * BS][0] * fft_out[j][1]; \
+            fft_out[j][0] = 0;                                                                          \
+            fft_out[j][1] = 0;                                                                          \
+        }                                                                                               \
+        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                               \
+        int gatherXcorr_index = 0;                                                                      \
+        for (int k = nfft - nPoint + 1; k < nfft; k++)                                                  \
+        {                                                                                               \
+            GX[gatherXcorr_index] = (float)(fft_out[k][0] / (double)nfft);                              \
+            gatherXcorr_index++;                                                                        \
+        }                                                                                               \
+        for (int l = 0; l < nPoint; l++)                                                                \
+        {                                                                                               \
+            GX[gatherXcorr_index] = (float)(fft_out[l][0] / (double)nfft);                              \
+            gatherXcorr_index++;                                                                        \
+        }                                                                                               \
     }
 
 #define FFT_PREPROCESSING(XPP, YPP)                                                                   \
