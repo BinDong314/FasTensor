@@ -2458,6 +2458,54 @@ void SetAttributes(Array<AttrType> *a1, Array<AttrType> *a2, Array<AttrType> *a3
   }
 }
 
+void SetAttributes(std::vector<Array<AttrType> *> attribute_list)
+{
+  //Save the attributes
+
+  int attribute_list_length = attribute_list.size();
+  assert(attribute_list_length != 0);
+  attributes.resize(attribute_list_length);
+  for (int i = 0; i < attribute_list_length; i++)
+    attributes[i] = attribute_list[i];
+
+  //Todo: check the dimenson of a1 = a2 = a3
+
+  //Extract some information from a1 ... a2.
+  data_chunk_size = attributes[0]->GetChunkSize();
+  data_overlap_size = attributes[0]->GetOverlapSize();
+  data_dims_size = attributes[0]->GetDimSize();
+
+  data_dims = data_dims_size.size();
+  current_chunk_start_offset.resize(data_dims);
+  current_chunk_end_offset.resize(data_dims);
+  current_chunk_size.resize(data_dims);
+
+  current_result_chunk_start_offset.resize(data_dims);
+  current_result_chunk_end_offset.resize(data_dims);
+
+  current_chunk_ol_start_offset.resize(data_dims);
+  current_chunk_ol_end_offset.resize(data_dims);
+  current_chunk_ol_size.resize(data_dims);
+
+  data_chunked_dims_size.resize(data_dims);
+  ol_origin_offset.resize(data_dims);
+
+  data_total_chunks = 1;
+
+  for (int i = 0; i < data_dims; i++)
+  {
+    if (data_dims_size[i] % data_chunk_size[i] == 0)
+    {
+      data_chunked_dims_size[i] = data_dims_size[i] / data_chunk_size[i];
+    }
+    else
+    {
+      data_chunked_dims_size[i] = data_dims_size[i] / data_chunk_size[i] + 1;
+    }
+    data_total_chunks = data_total_chunks * data_chunked_dims_size[i];
+  }
+}
+
 std::vector<int> GetChunkSize()
 {
   return data_chunk_size;
