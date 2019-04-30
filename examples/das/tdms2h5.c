@@ -50,6 +50,9 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 void printf_help(char *cmd);
 void transpose_data(int16_t *src, int16_t *dst, const int N, const int M);
 int transpose_flag = 0;
+int channel_togo = 1;
+int start_channel = 0;
+int subset_flag = 0;
 
 int main(int argc, char *argv[])
 {
@@ -59,7 +62,7 @@ int main(int argc, char *argv[])
    int compression_flag = 0;
    int copt;
    char *res;
-   while ((copt = getopt(argc, argv, "o:i:thbc")) != -1)
+   while ((copt = getopt(argc, argv, "o:i:thbcs:g:")) != -1)
       switch (copt)
       {
       case 'o':
@@ -78,6 +81,13 @@ int main(int argc, char *argv[])
          break;
       case 't':
          transpose_flag = 1;
+         break;
+      case 's':
+         start_channel = atoi(optarg);
+         break;
+      case 'g':
+         channel_togo = atoi(optarg);
+         subset_flag = 1;
          break;
       case 'h':
          printf_help(argv[0]);
@@ -515,7 +525,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #endif
 
    //Start to read the data and store it into HDF5
-   int16_t *data, *data_transposed;
+   int16_t *data, *data_transposed, *data_subset;
    data = (int16_t *)malloc(sizeof(int16_t) * nTrace * nPoint);
 
    fseek(fp, nByte_header, SEEK_SET);
@@ -534,6 +544,23 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #endif
 
    hsize_t dims[2];
+
+   int nTrace_before_subset = nTrace;
+   if (subset_flag)
+   {
+      printf("Subset: channel %d -> channel %d (non included)\n", start_channel, start_channel + channel_togo);
+      nTrace = channel_togo;
+      data_subset = (int16_t *)malloc(sizeof(int16_t) * nTrace * nPoint);
+      for (int i = 0; i < nPoint; i++)
+      {
+         for (int j = start_channel; j < channel_togo + start_channel; j++)
+         {
+            data_subset[i * nTrace + j - start_channel] = data[i * nTrace_before_subset + j];
+         }
+      }
+      free(data);
+      data = data_subset;
+   }
 
    if (transpose_flag)
    {
@@ -677,6 +704,8 @@ void printf_help(char *cmd)
           -b batch mode (i.e., both input and output are directory)\n\
           -p parallel conversion on MPI\n\
           -t transpose matrix (by default, it is [Time] by [Channel])\n\
+          -s start channel (zero based) \n\
+          -g counts of channels to go \n\
           Example: %s -i test.tdms -o test.tdms.h5\n";
    fprintf(stdout, msg, cmd, cmd);
 }
