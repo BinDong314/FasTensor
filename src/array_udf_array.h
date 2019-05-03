@@ -83,8 +83,11 @@ private:
   unsigned long long data_total_chunks;                   //The total number of chunks (global)
   std::vector<unsigned long long> data_chunked_dims_size; //The number of chunks per dimenstion
 
-  int current_chunk_id;              //Id of the current chunk (in memory) to apply UDF
-  std::vector<T> current_chunk_data; //Pointer to data of current chunk
+  int current_chunk_id;                    //Id of the current chunk (in memory) to apply UDF
+  std::vector<T> current_chunk_data;       //Pointer to data of current chunk
+  std::vector<T> current_chunk_data_cache; //Pointer to data of current chunk
+  std::vector<unsigned long long> current_chunk_ol_start_offset_cache;
+  std::vector<unsigned long long> current_chunk_ol_end_offset_cache;
 
   std::vector<unsigned long long> current_chunk_start_offset; //Start offset on disk
   std::vector<unsigned long long> current_chunk_end_offset;   //End offset on disk
@@ -1025,22 +1028,33 @@ public:
     }
     else
     {
-      int n = attributes.size();
-      Data<AttrType> *ah;
-      unsigned long long hym_count = 1;
-      std::vector<AttrType> current_chunk_data_temp;
-      current_chunk_data_temp.resize(current_chunk_ol_cells);
-      for (int i = 0; i < n; i++)
+      if (current_chunk_ol_start_offset_cache == current_chunk_ol_start_offset && current_chunk_ol_end_offset_cache == current_chunk_ol_end_offset)
       {
-        ah = attributes[i]->GetDataHandle();
-        //ah->ReadDataStripingMem(current_chunk_ol_start_offset, current_chunk_ol_end_offset, &current_chunk_data[0], i, n, hym_count);
-        ah->ReadData(current_chunk_ol_start_offset, current_chunk_ol_end_offset, current_chunk_data_temp);
-        // printf("Load attribute %s,  i=%d (n=%d): value =  %f, %f\n", ah->GetDatasetName().c_str(), i, n, current_chunk_data_temp[0], current_chunk_data_temp[1]);
-        InsertIntoVirtualVector<AttrType, T>(current_chunk_data_temp, current_chunk_data, i);
-        //std::cout << current_chunk_data[0] << std::endl;
-        //std::cout << current_chunk_data[1] << std::endl;
+        current_chunk_data = current_chunk_data_cache;
       }
-      current_chunk_data_temp.resize(0);
+      else
+      {
+        int n = attributes.size();
+        Data<AttrType> *ah;
+        unsigned long long hym_count = 1;
+        std::vector<AttrType> current_chunk_data_temp;
+        current_chunk_data_temp.resize(current_chunk_ol_cells);
+        for (int i = 0; i < n; i++)
+        {
+          ah = attributes[i]->GetDataHandle();
+          //ah->ReadDataStripingMem(current_chunk_ol_start_offset, current_chunk_ol_end_offset, &current_chunk_data[0], i, n, hym_count);
+          ah->ReadData(current_chunk_ol_start_offset, current_chunk_ol_end_offset, current_chunk_data_temp);
+          // printf("Load attribute %s,  i=%d (n=%d): value =  %f, %f\n", ah->GetDatasetName().c_str(), i, n, current_chunk_data_temp[0], current_chunk_data_temp[1]);
+          InsertIntoVirtualVector<AttrType, T>(current_chunk_data_temp, current_chunk_data, i);
+          //std::cout << current_chunk_data[0] << std::endl;
+          //std::cout << current_chunk_data[1] << std::endl;
+        }
+        current_chunk_data_temp.resize(0);
+        current_chunk_data_cache = current_chunk_data;
+        current_chunk_ol_start_offset_cache = current_chunk_ol_start_offset;
+        current_chunk_ol_end_offset_cache = current_chunk_ol_end_offset;
+      }
+
       return 1;
     }
   }
