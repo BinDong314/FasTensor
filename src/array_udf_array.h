@@ -1030,7 +1030,10 @@ public:
     {
       if (current_chunk_ol_start_offset_cache == current_chunk_ol_start_offset && current_chunk_ol_end_offset_cache == current_chunk_ol_end_offset)
       {
+
         current_chunk_data = current_chunk_data_cache;
+        if (mpi_rank == 0)
+          printf("Read cached data (test)!!!\n");
       }
       else
       {
