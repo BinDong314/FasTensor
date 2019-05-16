@@ -15,6 +15,9 @@
 
 #include "fft-header/resample.h"
 #include "fft-header/das-fft-help.cc"
+#include "fft-header/liir.c"
+#include "fft-header/bwlp.cc"
+#include "fft-header/config-reader.cc"
 
 //#define DEBUG_VERBOSE 0
 using namespace std;
@@ -29,8 +32,13 @@ int nfft;
 int nXCORR;
 
 //Paramters fom butter(3, 2*0.25, 'low'), for filtfilt
-vector<double> BUTTER_A{0.031689343849711, 0.095068031549133, 0.095068031549133, 0.031689343849711};
-vector<double> BUTTER_B{1.000000000000000, -1.459029062228061, 0.910369000290069, -0.197825187264319};
+int butter_order = 3;
+double cut_frequency_low = 0.25;
+vector<double> BUTTER_A;
+vector<double> BUTTER_B;
+
+//vector<double> BUTTER_A{0.031689343849711, 0.095068031549133, 0.095068031549133, 0.031689343849711};
+//vector<double> BUTTER_B{1.000000000000000, -1.459029062228061, 0.910369000290069, -0.197825187264319};
 
 //For resample, R = dt_new/dt
 double DT = 0.002;
@@ -45,6 +53,7 @@ double fNyquist; //250
 std::vector<double> INTERP_Z{0, 0.5, 1, 1, 0.5, 0};
 std::vector<double> INTERP_ZF{0, 0.002, 0.006, 14.5, 15, fNyquist};
 double df;
+double eCoeff = 1.0;
 
 //Maste channel
 unsigned long long MASTER_INDEX = 0;
@@ -68,6 +77,7 @@ int row_major_flag = 0;
 //DATADIMS: size of 2D data
 #define INIT_PARS(MR, MS, DATADIMS)                                                     \
     {                                                                                   \
+        read_config_file("./das-fft-full.config");                                      \
         if (row_major_flag == 0)                                                        \
         {                                                                               \
             chunk_size[0] = DATADIMS[0];                                                \
@@ -137,6 +147,8 @@ int row_major_flag = 0;
         nPoint_hal_win = floor((2 * floor(WINLEN_SEC / DT_NEW / 2) + 1) / 2);           \
         INTERP_ZF[5] = fNyquist;                                                        \
         df = 2.0 * fNyquist / (double)nfft;                                             \
+        cut_frequency_low = (0.5 / DT_NEW) / (0.5 / DT);                                \
+        butter_low(butter_order, cut_frequency_low, BUTTER_A, BUTTER_B);                \
         if (MR == 0)                                                                    \
         {                                                                               \
             printf("\n Some parameters for DAS:\n");                                    \
@@ -147,6 +159,19 @@ int row_major_flag = 0;
             printf("     nPoint_hal_win = %d \n", nPoint_hal_win);                      \
             printf("                 df = %f \n", df);                                  \
             printf("nXCORR(output size) = %d \n", nXCORR);                              \
+            printf("Butter cut freq     = %f \n", cut_frequency_low);                   \
+            printf("           BUTTER_A = ");                                           \
+            for (int iii = 0; iii < BUTTER_A.size(); iii++)                             \
+            {                                                                           \
+                printf(" %1.7f , ", BUTTER_A[iii]);                                     \
+            }                                                                           \
+            printf(" \n");                                                              \
+            printf("           BUTTER_B = ");                                           \
+            for (int iii = 0; iii < BUTTER_B.size(); iii++)                             \
+            {                                                                           \
+                printf(" %1.7f , ", BUTTER_B[iii]);                                     \
+            }                                                                           \
+            printf(" \n");                                                              \
             printf("                 \n");                                              \
             printf("ArrayUDF chunk  size  = (%d, %d)\n", chunk_size[0], chunk_size[1]); \
             printf("ArrayUDF strip  size  = (%d, %d)\n", strip_size[0], strip_size[1]); \
@@ -220,50 +245,50 @@ std::vector<float> gatherXcorr_per_batch;
  * YY is used as cache
  * GX is the result
  */
-#define FFT_PROCESSING(XX, YY, GX, MFFT, BI, BS)                                                        \
-    {                                                                                                   \
-        detrend(&(XX[0]), XX.size());                                                                   \
-        filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                           \
-        resample(1, DT_NEW / DT, YY, XX);                                                               \
-        MOVING_MEAN(XX, YY, nPoint_hal_win);                                                            \
-        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                   \
-        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                \
-        double temp_f;                                                                                  \
-        for (int ii = 0; ii < nfft; ii++)                                                               \
-        {                                                                                               \
-            temp_f = sqrt(fft_out[ii][0] * fft_out[ii][0] + fft_out[ii][1] * fft_out[ii][1]) + 0.001;   \
-            fft_in[ii][0] = (fft_out[ii][0] + 0.001) / temp_f * shapingFilt[ii];                        \
-            fft_in[ii][1] = (fft_out[ii][1]) / temp_f * shapingFilt[ii];                                \
-            fft_out[ii][0] = 0;                                                                         \
-            fft_out[ii][1] = 0;                                                                         \
-        }                                                                                               \
-        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                               \
-        YY.resize(nPoint);                                                                              \
-        for (int i = 0; i < nPoint; i++)                                                                \
-        {                                                                                               \
-            YY[i] = fft_out[i][0] / ((double)nfft);                                                     \
-        }                                                                                               \
-        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                   \
-        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                \
-        for (int j = 0; j < nfft; j++)                                                                  \
-        {                                                                                               \
-            fft_in[j][0] = MFFT[j + BI * BS][0] * fft_out[j][0] + MFFT[j + BI * BS][1] * fft_out[j][1]; \
-            fft_in[j][1] = MFFT[j + BI * BS][1] * fft_out[j][0] - MFFT[j + BI * BS][0] * fft_out[j][1]; \
-            fft_out[j][0] = 0;                                                                          \
-            fft_out[j][1] = 0;                                                                          \
-        }                                                                                               \
-        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                               \
-        int gatherXcorr_index = 0;                                                                      \
-        for (int k = nfft - nPoint + 1; k < nfft; k++)                                                  \
-        {                                                                                               \
-            GX[gatherXcorr_index] = (float)(fft_out[k][0] / (double)nfft);                              \
-            gatherXcorr_index++;                                                                        \
-        }                                                                                               \
-        for (int l = 0; l < nPoint; l++)                                                                \
-        {                                                                                               \
-            GX[gatherXcorr_index] = (float)(fft_out[l][0] / (double)nfft);                              \
-            gatherXcorr_index++;                                                                        \
-        }                                                                                               \
+#define FFT_PROCESSING(XX, YY, GX, MFFT, BI, BS)                                                                   \
+    {                                                                                                              \
+        detrend(&(XX[0]), XX.size());                                                                              \
+        filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                                      \
+        resample(1, DT_NEW / DT, YY, XX);                                                                          \
+        MOVING_MEAN(XX, YY, nPoint_hal_win);                                                                       \
+        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                              \
+        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                           \
+        double temp_f;                                                                                             \
+        for (int ii = 0; ii < nfft; ii++)                                                                          \
+        {                                                                                                          \
+            temp_f = pow(sqrt(fft_out[ii][0] * fft_out[ii][0] + fft_out[ii][1] * fft_out[ii][1]), eCoeff) + 0.001; \
+            fft_in[ii][0] = (fft_out[ii][0] + 0.001) / temp_f * shapingFilt[ii];                                   \
+            fft_in[ii][1] = (fft_out[ii][1]) / temp_f * shapingFilt[ii];                                           \
+            fft_out[ii][0] = 0;                                                                                    \
+            fft_out[ii][1] = 0;                                                                                    \
+        }                                                                                                          \
+        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                                          \
+        YY.resize(nPoint);                                                                                         \
+        for (int i = 0; i < nPoint; i++)                                                                           \
+        {                                                                                                          \
+            YY[i] = fft_out[i][0] / ((double)nfft);                                                                \
+        }                                                                                                          \
+        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                              \
+        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                           \
+        for (int j = 0; j < nfft; j++)                                                                             \
+        {                                                                                                          \
+            fft_in[j][0] = MFFT[j + BI * BS][0] * fft_out[j][0] + MFFT[j + BI * BS][1] * fft_out[j][1];            \
+            fft_in[j][1] = MFFT[j + BI * BS][1] * fft_out[j][0] - MFFT[j + BI * BS][0] * fft_out[j][1];            \
+            fft_out[j][0] = 0;                                                                                     \
+            fft_out[j][1] = 0;                                                                                     \
+        }                                                                                                          \
+        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                                          \
+        int gatherXcorr_index = 0;                                                                                 \
+        for (int k = nfft - nPoint + 1; k < nfft; k++)                                                             \
+        {                                                                                                          \
+            GX[gatherXcorr_index] = (float)(fft_out[k][0] / (double)nfft);                                         \
+            gatherXcorr_index++;                                                                                   \
+        }                                                                                                          \
+        for (int l = 0; l < nPoint; l++)                                                                           \
+        {                                                                                                          \
+            GX[gatherXcorr_index] = (float)(fft_out[l][0] / (double)nfft);                                         \
+            gatherXcorr_index++;                                                                                   \
+        }                                                                                                          \
     }
 
 #define FFT_PREPROCESSING(XPP, YPP)                                                                   \

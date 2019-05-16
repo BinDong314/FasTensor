@@ -463,4 +463,5 @@ void au_time_elap(char *info_str)
   //reset to current time
   au_timer_global__inside_use = MPI_Wtime();
 }
+
 #endif

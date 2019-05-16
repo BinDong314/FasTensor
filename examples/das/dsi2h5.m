@@ -25,11 +25,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 
-test_dsi_file='./fft-full-test/DSI_westSac_170802100007_CH4000_4101.mat';
-test_h5_file='./fft-full-test/DSI_westSac_170802100007_CH4000_4101.h5';
+test_dsi_file='./fft-full-test/Dsi_30min_xcorr.mat';
+test_h5_file='./fft-full-test/Dsi_30min_xcorr.h5';
 test_h5_dset_name='DataTimeChannel'
-test_type_str = 'int16'
+test_type_str = 'single'
 
+%importdata(test_dsi_file);
 dsi2h5(test_dsi_file, test_h5_file , test_h5_dset_name, test_type_str);
 
 

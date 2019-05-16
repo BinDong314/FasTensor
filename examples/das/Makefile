@@ -1,18 +1,18 @@
 
 
 #Bin's Mac
-#AU_HOME=../../build
-#HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
-#FFTW_DIR=/opt/local/
-#CCC=mpicxx
-#OTHER_FLAGS=-I/opt/local/include/eigen2/ -L/opt/local/lib -lboost_program_options-mt
+AU_HOME=../../build
+HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
+FFTW_DIR=/opt/local/
+CCC=mpicxx
+OTHER_FLAGS=-I/opt/local/include/eigen2/ -L/opt/local/lib -lboost_program_options-mt
 
 #Snowbear
-AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
-HDF5_DIR=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p
-FFTW_DIR=/global/software/sl-6.x86_64/modules/gcc/4.8.5/fftw/3.3.4-gcc
-CCC=mpicxx
-OTHER_FLAGS=-I./fft-header/  -lboost_program_options-mt
+#AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
+#HDF5_DIR=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p
+#FFTW_DIR=/global/software/sl-6.x86_64/modules/gcc/4.8.5/fftw/3.3.4-gcc
+#CCC=mpicxx
+#OTHER_FLAGS=-I./fft-header/  -lboost_program_options-mt
 
 
 #Cori at NERSC

@@ -238,9 +238,34 @@ int main(int argc, char *argv[])
   Array<float> *IJY = new Array<float>(AU_NVS, AU_HDF5, i_file_ion, group, "jy", chunk_size, overlap_size);
   Array<float> *IJZ = new Array<float>(AU_NVS, AU_HDF5, i_file_ion, group, "jz", chunk_size, overlap_size);
 
+  std::vector<Array<float> *> Attributes_list;
+  Attributes_list.push_back(EX);
+  Attributes_list.push_back(EY);
+  Attributes_list.push_back(EZ);
+  Attributes_list.push_back(BX);
+  Attributes_list.push_back(BY);
+  Attributes_list.push_back(BZ);
+  Attributes_list.push_back(EJX);
+  Attributes_list.push_back(EJY);
+  Attributes_list.push_back(EJZ);
+  Attributes_list.push_back(IJX);
+  Attributes_list.push_back(IJY);
+  Attributes_list.push_back(IJZ);
+
+  Array<CompundPoint, float> *XYZ_LIST = new Array<CompundPoint, float>(AU_VIRTUAL);
+  XYZ_LIST->SetAttributes(Attributes_list);
+
+  char dsetR2[1024];
+  sprintf(dsetR2, "%s/%s", group, "totalCurrent_from_list");
+  Array<float> *R12 = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, group, dsetR2, chunk_size, overlap_size);
+  XYZ_LIST->Apply(totalCurrent_UDF, R12);
+  delete R12;
+  delete XYZ_LIST;
+
   //Create a compound data strucutre to include JX/JY/JZ/....
   Array<CompundPoint, float> *XYZ = new Array<CompundPoint, float>(AU_VIRTUAL);
   XYZ->SetAttributes(EX, EY, EZ, BX, BY, BZ, EJX, EJY, EJZ, IJX, IJY, IJZ);
+
   char dsetR[1024];
 
   sprintf(dsetR, "%s/%s", group, "totalCurrent");
