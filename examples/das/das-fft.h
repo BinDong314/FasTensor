@@ -12,6 +12,7 @@
 #include <math.h> /* ceil  and floor*/
 #include <cstring>
 #include <numeric>
+#include <iomanip> // std::setprecision
 
 #include "fft-header/resample.h"
 #include "fft-header/das-fft-help.cc"
@@ -77,7 +78,6 @@ int row_major_flag = 0;
 //DATADIMS: size of 2D data
 #define INIT_PARS(MR, MS, DATADIMS)                                                     \
     {                                                                                   \
-        read_config_file("./das-fft-full.config");                                      \
         if (row_major_flag == 0)                                                        \
         {                                                                               \
             chunk_size[0] = DATADIMS[0];                                                \
@@ -159,14 +159,14 @@ int row_major_flag = 0;
             printf("     nPoint_hal_win = %d \n", nPoint_hal_win);                      \
             printf("                 df = %f \n", df);                                  \
             printf("nXCORR(output size) = %d \n", nXCORR);                              \
-            printf("Butter cut freq     = %f \n", cut_frequency_low);                   \
-            printf("           BUTTER_A = ");                                           \
+            printf("    butter low freq = %f \n", cut_frequency_low);                   \
+            printf("           butter_A = ");                                           \
             for (int iii = 0; iii < BUTTER_A.size(); iii++)                             \
             {                                                                           \
                 printf(" %1.7f , ", BUTTER_A[iii]);                                     \
             }                                                                           \
             printf(" \n");                                                              \
-            printf("           BUTTER_B = ");                                           \
+            printf("           butter_B = ");                                           \
             for (int iii = 0; iii < BUTTER_B.size(); iii++)                             \
             {                                                                           \
                 printf(" %1.7f , ", BUTTER_B[iii]);                                     \
@@ -179,6 +179,7 @@ int row_major_flag = 0;
             printf("ArrayUDF window batch = %d\n", window_batch);                       \
             printf("                 \n");                                              \
         }                                                                               \
+        fflush(stdout);                                                                 \
     }
 
 //Pre-allocated data space, to save time
@@ -415,4 +416,5 @@ void master_processing(std::vector<double> XPP, std::vector<double> &YPP)
     fftw_free(fft_in_temp);
     fftw_free(fft_out_temp);
 }
+
 #endif

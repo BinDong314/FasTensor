@@ -79,37 +79,39 @@ inline std::vector<float> FFT_UDF(const Stencil<int> &c)
     return gatherXcorr;
 }
 
+std::string i_file("./westSac_170802100007.h5");
+std::string o_file("./westSac_170802100007_AF.h5");
+std::string i_group("/");
+std::string o_group("/");
+std::string i_dataset("DataTimeChannel");
+std::string o_dataset("Xcorr");
+
 int main(int argc, char *argv[])
 {
-    char i_file[NAME_LENGTH] = "./westSac_170802100007.h5";
-    char o_file[NAME_LENGTH] = "./westSac_170802100007_AF.h5";
-    char group[NAME_LENGTH] = "/"; //both input and output file share the same group and dataset name
-    char i_dataset[NAME_LENGTH] = "/DataTimeChannel";
-    char o_dataset[NAME_LENGTH] = "/Xcorr";
+    int config_file_set_flag = 0;
+    char config_file[NAME_LENGTH] = "./das-fft-full.config";
 
     int copt, mpi_rank, mpi_size;
-    while ((copt = getopt(argc, argv, "o:i:g:t:x:m:w:rh")) != -1)
+    while ((copt = getopt(argc, argv, "o:i:g:u:t:x:m:w:rhc:")) != -1)
         switch (copt)
         {
         case 'o':
-            memset(o_file, 0, sizeof(o_file));
-            strcpy(o_file, optarg);
+            o_file.assign(optarg);
             break;
         case 'i':
-            memset(i_file, 0, sizeof(i_file));
-            strcpy(i_file, optarg);
+            i_file.assign(optarg);
             break;
         case 'g':
-            memset(group, 0, sizeof(group));
-            strcpy(group, optarg);
+            i_group.assign(optarg);
+            break;
+        case 'u':
+            o_group.assign(optarg);
             break;
         case 't':
-            memset(i_dataset, 0, sizeof(i_dataset));
-            strcpy(i_dataset, optarg);
+            i_dataset.assign(optarg);
             break;
         case 'x':
-            memset(o_dataset, 0, sizeof(o_dataset));
-            strcpy(o_dataset, optarg);
+            o_dataset.assign(optarg);
             break;
         case 'w':
             set_window_size_flag = 1;
@@ -125,6 +127,11 @@ int main(int argc, char *argv[])
             printf_help(argv[0]);
             exit(0);
             break;
+        case 'c':
+            memset(config_file, 0, sizeof(config_file));
+            strcpy(config_file, optarg);
+            config_file_set_flag = 1;
+            break;
         default:
             printf("Wrong option [%c] for %s \n", copt, argv[0]);
             printf_help(argv[0]);
@@ -137,9 +144,12 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
+    if (config_file_set_flag)
+        read_config_file(config_file, mpi_rank);
+
     //Declare the input and output array
-    Array<int, std::vector<float>> *IFILE = new Array<int, std::vector<float>>(AU_NVS, AU_HDF5, i_file, group, i_dataset, chunk_size, ghost_size);
-    Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, group, o_dataset, chunk_size, ghost_size);
+    Array<int, std::vector<float>> *IFILE = new Array<int, std::vector<float>>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, chunk_size, ghost_size);
+    Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, o_group, o_dataset, chunk_size, ghost_size);
 
     //Find and set chunks_size to split array for parallel processing
     std::vector<unsigned long long> i_file_dim = IFILE->GetDimSize();
@@ -222,12 +232,14 @@ void printf_help(char *cmd)
       	  -h help (--help)\n\
           -i input file\n\
           -o output file\n\
-	      -g group name (path) for both input and output \n\
+	      -g group name (path) for input dataset \n\
+          -u group name (path) for output dataset \n\
           -t dataset name for intput time series \n\
           -x dataset name for output correlation \n\
           -w window size (only used when window size is different from chunk_size[0]) \n\
           -m index of Master channel (0 by default )\n\
           -r FFT in [Row]-direction([Column]-direction by default) \n\
+          -c file for parameters (has high priority than commands if existing) \n\
           Example: mpirun -n 1 %s -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /white -x /Xcorr\n";
 
     fprintf(stdout, msg, cmd, cmd);
