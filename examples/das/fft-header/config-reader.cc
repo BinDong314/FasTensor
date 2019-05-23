@@ -23,13 +23,17 @@ extern std::string o_group;
 extern std::string i_dataset;
 extern std::string o_dataset;
 
+extern bool enable_view_flag;
+extern std::vector<unsigned long long> view_start;
+extern std::vector<unsigned long long> view_count;
+
 int read_config_file(std::string file_name, int mpi_rank)
 {
     INIReader reader(file_name);
 
     if (reader.ParseError() < 0)
     {
-        std::cout << "Can't load 'das-fft-full.config'\n";
+        std::cout << "Can't load [" << file_name << " ]\n";
         return 1;
     }
 
@@ -125,6 +129,53 @@ int read_config_file(std::string file_name, int mpi_rank)
         if (!mpi_rank)
             std::cout << "\n    output_dataset = " << o_dataset << std::endl;
     }
+
+    enable_view_flag = reader.GetBoolean("parameter", "view_enable_flag", false);
+    if (enable_view_flag)
+    {
+        if (!mpi_rank)
+            std::cout << "      View_enabled = true";
+        std::string temp_str_veiw_start = reader.Get("parameter", "view_start", "0,0");
+        std::stringstream iss(temp_str_veiw_start);
+        unsigned long long number;
+        std::vector<unsigned long long> Z;
+        while (iss >> number)
+        {
+            Z.push_back(number);
+            if (iss.peek() == ',')
+                iss.ignore();
+        }
+        view_start = Z;
+
+        std::string temp_str_veiw_count = reader.Get("parameter", "view_count", "30000, 11648");
+        std::stringstream iss2(temp_str_veiw_count);
+        unsigned long long number2;
+        std::vector<unsigned long long> C;
+        while (iss2 >> number2)
+        {
+            C.push_back(number2);
+            if (iss2.peek() == ',')
+                iss2.ignore();
+        }
+        view_count = C;
+
+        if (!mpi_rank)
+        {
+            std::cout << "\n        View_start = ";
+            for (int i = 0; i < view_start.size(); i++)
+            {
+                std::cout << view_start[i] << ", ";
+            }
+
+            std::cout << "\n        View_count = ";
+            for (int i = 0; i < view_count.size(); i++)
+            {
+                std::cout << view_count[i] << ", ";
+            }
+            std::cout << "\n\n";
+        }
+    }
+
     fflush(stdout);
 
     return 0;

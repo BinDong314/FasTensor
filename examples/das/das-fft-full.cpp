@@ -148,16 +148,27 @@ int main(int argc, char *argv[])
         read_config_file(config_file, mpi_rank);
 
     //Declare the input and output array
-    Array<int, std::vector<float>> *IFILE = new Array<int, std::vector<float>>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, chunk_size, ghost_size);
-    Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, o_group, o_dataset, chunk_size, ghost_size);
+    Array<int, std::vector<float>> *IFILE = new Array<int, std::vector<float>>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, auto_chunk_dims_index);
+    Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, o_group, o_dataset, auto_chunk_dims_index);
 
     //Find and set chunks_size to split array for parallel processing
-    std::vector<unsigned long long> i_file_dim = IFILE->GetDimSize();
+    std::vector<unsigned long long> i_file_dim;
 
-    //Assign the n0 with the size of the first dimension
+    //SelectView must be called before ApplyStripSize
+    if (enable_view_flag)
+    {
+        IFILE->SelectView(view_start, view_count, view_os_size, auto_chunk_dims_index);
+        i_file_dim = view_count;
+    }
+    else
+    {
+        i_file_dim = IFILE->GetDimSize();
+    }
+
+    //After this step, n0 is the size of input time series
     INIT_PARS(mpi_rank, mpi_size, i_file_dim);
     INIT_SPACE();
-    IFILE->SetChunkSize(chunk_size);
+
     IFILE->SetApplyStripSize(strip_size);
     if (row_major_flag == 0)
     {
@@ -181,6 +192,8 @@ int main(int argc, char *argv[])
     {
         if (row_major_flag == 0)
         {
+            if (enable_view_flag)
+                MASTER_INDEX = view_start[1] + MASTER_INDEX;
             master_start[0] = 0 + bi * n0;
             master_start[1] = MASTER_INDEX;
             master_end[0] = master_start[0] + n0 - 1;
@@ -188,6 +201,8 @@ int main(int argc, char *argv[])
         }
         else
         {
+            if (enable_view_flag)
+                MASTER_INDEX = view_start[0] + MASTER_INDEX;
             master_start[0] = MASTER_INDEX;
             master_start[1] = 0 + bi * n0;
             master_end[0] = MASTER_INDEX;

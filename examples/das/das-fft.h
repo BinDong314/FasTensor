@@ -60,8 +60,7 @@ double eCoeff = 1.0;
 unsigned long long MASTER_INDEX = 0;
 
 //Parameters for ArrayUDF
-std::vector<int> ghost_size{0, 0};
-std::vector<int> chunk_size{7500, 7500};
+int auto_chunk_dims_index = 1;
 std::vector<int> strip_size(2);
 
 //Parameters to enable "window" operation
@@ -69,8 +68,15 @@ int user_window_size = 1;
 int set_window_size_flag = 0;
 int window_batch = 1;
 
-//Flag to have FFT in row-direction
+//Flag to have FFT in row-direction (first dimension)
+//By default, it work in column-direction (second dimension)
 int row_major_flag = 0;
+
+//View's parameter
+bool enable_view_flag = 0;
+std::vector<unsigned long long> view_start{0, 0};
+std::vector<unsigned long long> view_count{30000, 11648};
+std::vector<int> view_os_size{0, 0};
 
 //Using n0 as intial intput
 //MR: mpi rank
@@ -80,20 +86,12 @@ int row_major_flag = 0;
     {                                                                                   \
         if (row_major_flag == 0)                                                        \
         {                                                                               \
-            chunk_size[0] = DATADIMS[0];                                                \
-            if (DATADIMS[1] % MS == 0)                                                  \
-            {                                                                           \
-                chunk_size[1] = DATADIMS[1] / MS;                                       \
-            }                                                                           \
-            else                                                                        \
-            {                                                                           \
-                chunk_size[1] = DATADIMS[1] / MS + 1;                                   \
-            }                                                                           \
-            strip_size[0] = chunk_size[0];                                              \
+            auto_chunk_dims_index = 0;                                                  \
+            strip_size[0] = DATADIMS[0];                                                \
             strip_size[1] = 1;                                                          \
             if (set_window_size_flag == 0)                                              \
             {                                                                           \
-                n0 = chunk_size[0];                                                     \
+                n0 = DATADIMS[0];                                                       \
             }                                                                           \
             else                                                                        \
             {                                                                           \
@@ -111,20 +109,12 @@ int row_major_flag = 0;
         }                                                                               \
         else                                                                            \
         {                                                                               \
-            chunk_size[1] = DATADIMS[1];                                                \
-            if (DATADIMS[0] % MS == 0)                                                  \
-            {                                                                           \
-                chunk_size[0] = DATADIMS[0] / MS;                                       \
-            }                                                                           \
-            else                                                                        \
-            {                                                                           \
-                chunk_size[0] = DATADIMS[0] / MS + 1;                                   \
-            }                                                                           \
+            auto_chunk_dims_index = 1;                                                  \
             strip_size[0] = 1;                                                          \
-            strip_size[1] = chunk_size[1];                                              \
+            strip_size[1] = DATADIMS[1];                                                \
             if (set_window_size_flag == 0)                                              \
             {                                                                           \
-                n0 = chunk_size[1];                                                     \
+                n0 = DATADIMS[1];                                                       \
             }                                                                           \
             else                                                                        \
             {                                                                           \
@@ -160,20 +150,7 @@ int row_major_flag = 0;
             printf("                 df = %f \n", df);                                  \
             printf("nXCORR(output size) = %d \n", nXCORR);                              \
             printf("    butter low freq = %f \n", cut_frequency_low);                   \
-            printf("           butter_A = ");                                           \
-            for (int iii = 0; iii < BUTTER_A.size(); iii++)                             \
-            {                                                                           \
-                printf(" %1.7f , ", BUTTER_A[iii]);                                     \
-            }                                                                           \
-            printf(" \n");                                                              \
-            printf("           butter_B = ");                                           \
-            for (int iii = 0; iii < BUTTER_B.size(); iii++)                             \
-            {                                                                           \
-                printf(" %1.7f , ", BUTTER_B[iii]);                                     \
-            }                                                                           \
-            printf(" \n");                                                              \
             printf("                 \n");                                              \
-            printf("ArrayUDF chunk  size  = (%d, %d)\n", chunk_size[0], chunk_size[1]); \
             printf("ArrayUDF strip  size  = (%d, %d)\n", strip_size[0], strip_size[1]); \
             printf("ArrayUDF window size  = %d\n", user_window_size);                   \
             printf("ArrayUDF window batch = %d\n", window_batch);                       \

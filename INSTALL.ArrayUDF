@@ -18,6 +18,9 @@ Please jump to the section 4 for instructions for Python interface.
    -- HDF5 from https://www.hdfgroup.org/
       (tested version: https://support.hdfgroup.org/ftp/HDF5/current18/src/hdf5-1.8.18.tar)
 
+   -- please use "bash" instead of "csh/tcsh"
+      Node: it may report errors at NERSC machines like Cori. 
+
 2, Install ArrayUDF
    1), ./configure  --with-hdf5=HDF5_INSTALLATION_DIR
       Note: 1) you might need to run "chmod a+x ./autogen.sh; ./autogench".
