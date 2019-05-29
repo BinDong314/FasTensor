@@ -1207,6 +1207,170 @@ public:
     cpp_vec_flag = 1;
   }
 
+  //Input:
+  //cs and os: user defined chunk size and overlap size
+  // A generic version of C/C++ in memory vector
+  //d_orig_p: It only accepts AU_NV_VECTOR
+  //gs:  global size of the data on all mpi ranks
+  //cs:  is the size of data at local(wihtout ghost zone)
+  //os:  is the size of ghost zone for local data
+  //data: is the data (all the process must have equally sized data)
+  Array(DataOrigin d_orig_p, std::vector<int> gs, std::vector<int> cs, std::vector<int> os, std::vector<T> &data)
+  {
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
+    time_read = 0;
+    time_write = 0;
+    time_udf = 0;
+    time_create = 0;
+    time_sync = 0;
+    time_nonvolatile = 0;
+    d_orig = d_orig_p;
+    nvs_f = nvs_f_p;
+
+    typedef typename extract_value_type<T>::value_type value_type;
+
+    if (is_vector_type<AttrType>())
+    {
+      vector_type_flag = 1;
+      //std::cout << "Vector has same type as T : " << is_base_type_T<AttrType, T>() << std::endl;
+      if (is_base_type_T<AttrType, T>() == 0)
+      {
+        output_element_different_type_flag = 1;
+        if (is_base_type_T<AttrType, int>())
+        {
+          //if (!mpi_rank)
+          //  printf("In Array init: output element type is int \n ");
+          output_element_type_class = H5T_INTEGER;
+        }
+        else if (is_base_type_T<AttrType, float>())
+        {
+          //if (!mpi_rank)
+          // printf("In Array init: output element type is float \n ");
+          output_element_type_class = H5T_FLOAT;
+        }
+        else if (is_base_type_T<AttrType, std::complex<float>>())
+        {
+          if (!mpi_rank)
+            printf("In Array init: output element type is std::complex<float> \n ");
+          output_element_type_class = H5T_COMPOUND;
+        }
+        else
+        {
+          printf("In Array init: not support type: %s:%d \n ", __FILE__, __LINE__);
+          exit(-1);
+        }
+      }
+    }
+    else
+    {
+      if (is_same_types<AttrType, T>() == false)
+      {
+        output_element_different_type_flag = 1;
+        if (is_same_types<AttrType, int>())
+        {
+          //if (!mpi_rank) printf("In Array init: output element type is int \n ");
+          output_element_type_class = H5T_INTEGER;
+        }
+        else if (is_same_types<AttrType, float>())
+        {
+          //if (!mpi_rank)
+          //  printf("In Array init: output element type is float \n ");
+          output_element_type_class = H5T_FLOAT;
+        }
+        else
+        {
+          printf("In Array init: not support type \n ");
+          exit(-1);
+        }
+      }
+    }
+    //Data is computed from another file
+    if (AU_NV_VECTOR != d_orig_p)
+    {
+      std::cout << "Only allow AU_NV_VECTOR to use in memory vector" << std::endl;
+      exit(-1);
+    }
+
+    //Copy data into cpp_vec_input as temporary place to storage
+    int len = vec.size();
+    cpp_vec_input.resize(len);
+    for (int i = 0; i < len; i++)
+      cpp_vec_input[i] = vec[i];
+    cpp_vec_flag = 1;
+
+    //Do the same intialization as other arrays
+    data_chunk_size = cs;
+    data_overlap_size = os;
+    data_dims_size = gs;
+    data_dims = data_dims_size.size();
+
+    current_chunk_start_offset.resize(data_dims);
+    current_chunk_end_offset.resize(data_dims);
+    current_chunk_size.resize(data_dims);
+
+    current_result_chunk_start_offset.resize(data_dims);
+    current_result_chunk_end_offset.resize(data_dims);
+
+    current_chunk_ol_start_offset.resize(data_dims);
+    current_chunk_ol_end_offset.resize(data_dims);
+    current_chunk_ol_size.resize(data_dims);
+
+    data_chunked_dims_size.resize(data_dims);
+    ol_origin_offset.resize(data_dims);
+
+    data_total_chunks = 1;
+
+    for (int i = 0; i < data_dims; i++)
+    {
+      if (data_dims_size[i] % data_chunk_size[i] == 0)
+      {
+        data_chunked_dims_size[i] = data_dims_size[i] / data_chunk_size[i];
+      }
+      else
+      {
+        data_chunked_dims_size[i] = data_dims_size[i] / data_chunk_size[i] + 1;
+      }
+      data_total_chunks = data_total_chunks * data_chunked_dims_size[i];
+    }
+
+    //#ifdef DEBUG
+    if (mpi_rank == 0)
+    {
+      std::cout << "In memory C++ array:  " << std::endl;
+      std::cout << "data size  = ";
+      for (int i = 0; i < data_dims; i++)
+      {
+        std::cout << ", " << data_dims_size[i];
+      }
+      std::cout << std::endl;
+
+      std::cout << "chunk size  = ";
+      for (int i = 0; i < data_dims; i++)
+      {
+        std::cout << ", " << data_chunk_size[i];
+      }
+      std::cout << std::endl;
+
+      std::cout << "overlap size = ";
+      for (int i = 0; i < data_dims; i++)
+      {
+        std::cout << ", " << os[i];
+      }
+      std::cout << std::endl;
+      std::cout << "Total chunks =  " << data_total_chunks << std::endl;
+    }
+    //#endif
+
+    if (data_total_chunks % mpi_size != 0)
+    {
+      data->DisableCollectivIO();
+    }
+
+    current_chunk_id = mpi_rank; //Each process deal with one chunk one time, starting from its rank
+  };
+
   ~Array()
   {
 #ifdef DEBUG
@@ -1217,6 +1381,12 @@ public:
       delete data;
       data = NULL;
     }
+
+    if (cpp_vec_flag == 1)
+    {
+      current_chunk_data.resize(0);
+    }
+    current_chunk_data_cache.resize(0);
   }
 
   void DisableCache()
@@ -1412,6 +1582,11 @@ public:
       }
     }
 
+    //Assume cpp_vec_flag read the whole data once
+    if (cpp_vec_flag == 1)
+    {
+      current_chunk_data = cpp_vec_input;
+    }
     //Return  1, data read into   local_chunk_data
     //Return  0, end of file (no data left to handle)
     //Return -1: error happen

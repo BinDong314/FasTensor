@@ -19,53 +19,60 @@
 #define ARRAY_UDF_ATTRIBUTE
 
 //See https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h
-//for reference 
-typedef enum AUType {
-    AU_NO_TYPE         = -1,  /*error                                      */
-    AU_INTEGER          = 0,   /*integer types                              */
-    AU_FLOAT            = 1,   /*floating-point types                       */
-    AU_TIME             = 2,   /*date and time types                        */
-    AU_STRING           = 3,   /*character string types                     */
-    AU_BITFIELD         = 4,   /*bit field types                            */
-    AU_OPAQUE           = 5,   /*opaque types                               */
-    AU_COMPOUND         = 6,   /*compound types                             */
-    AU_REFERENCE        = 7,   /*reference types                            */
-    AU_ENUM		 = 8,	/*enumeration types                          */
-    AU_VLEN		 = 9,	/*Variable-Length types                      */
-    AU_NCLASSES                /*this must be last                          */
-}AUType ;
+//for reference
+typedef enum AUType
+{
+  AU_NO_TYPE = -1,  /*error                                      */
+  AU_INTEGER = 0,   /*integer types                              */
+  AU_FLOAT = 1,     /*floating-point types                       */
+  AU_TIME = 2,      /*date and time types                        */
+  AU_STRING = 3,    /*character string types                     */
+  AU_BITFIELD = 4,  /*bit field types                            */
+  AU_OPAQUE = 5,    /*opaque types                               */
+  AU_COMPOUND = 6,  /*compound types                             */
+  AU_REFERENCE = 7, /*reference types                            */
+  AU_ENUM = 8,      /*enumeration types                          */
+  AU_VLEN = 9,      /*Variable-Length types                      */
+  AU_NCLASSES       /*this must be last                          */
+} AUType;
 
-typedef enum NVSFile{
-  AU_HDF5=0,        //Data comes HDF5
-  AU_NETCDF=1,      //Data comes NETCDF
-  AU_AUDIOS=2,      //Data comes AUDIOS
-  AU_BINARY=3,      //Data comes from binary file
-}NVSFile;
+typedef enum NVSFile
+{
+  AU_HDF5 = 0,   //Data comes HDF5
+  AU_NETCDF = 1, //Data comes NETCDF
+  AU_AUDIOS = 2, //Data comes AUDIOS
+  AU_BINARY = 3, //Data comes from binary file
+} NVSFile;
 
-typedef enum DataOrigin{
-  AU_NVS=0,         //Data comes from/to disk
-  AU_COMPUTED=1,    //Data comes from UDF
-  AU_NV=2,          //Data comes from memory
-  AU_VIRTUAL=3,     //It is a virtual array with attributes as array.
-}DataOrigin;
+typedef enum DataOrigin
+{
+  AU_NVS = 0,       //Data comes from/to disk
+  AU_COMPUTED = 1,  //Data comes from UDF
+  AU_NV = 2,        //Data comes from memory
+  AU_VIRTUAL = 3,   //It is a virtual array with attributes as array.
+  AU_NV_VECTOR = 4, //It is C++ vector (in memory)
+} DataOrigin;
 
-typedef enum CacheFlag{
-  AU_NOCACHE=0,
-  AU_CACHED=1, //All data are stored in memory as global array. 
-}CacheFlag;
+typedef enum CacheFlag
+{
+  AU_NOCACHE = 0,
+  AU_CACHED = 1, //All data are stored in memory as global array.
+} CacheFlag;
 
-typedef enum GlobalArrayOperation{
-  AU_PRELOAD=0,
-}GlobalArrayOperation;
-  
-typedef struct UDFAttribute{
-  void  *gs_data_r; //global shared data for reading. It's better to be an array in Global Array Toolkit;
-  void  *gs_data_w; //global shared data for writing. It's better to be an array in Global Array Toolkit;
-  void  *local_reduce_var;
+typedef enum GlobalArrayOperation
+{
+  AU_PRELOAD = 0,
+} GlobalArrayOperation;
+
+typedef struct UDFAttribute
+{
+  void *gs_data_r; //global shared data for reading. It's better to be an array in Global Array Toolkit;
+  void *gs_data_w; //global shared data for writing. It's better to be an array in Global Array Toolkit;
+  void *local_reduce_var;
   MPI_Op local_reduce_op;
-  int   *skip_before;
-  int   *skip_after;
-}UDFAttribute;
+  int *skip_before;
+  int *skip_after;
+} UDFAttribute;
 
 /*
 //NVS: non volatile storage
@@ -108,6 +115,5 @@ typedef struct ArrayAttribute{
 
 #define INIT_ARRAYATTRIBUTE {AU_DISK, NULL, AU_NOCACHE, NULL, 0, NULL, NULL, NULL, NULL}
 */
-
 
 #endif
