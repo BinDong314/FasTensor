@@ -1,18 +1,18 @@
 
 
 #Bin's Mac
-AU_HOME=../../build
-HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
-FFTW_DIR=/opt/local/
-CCC=mpicxx
-OTHER_FLAGS=-I/opt/local/include/eigen2/ -L/opt/local/lib -lboost_program_options-mt
+#AU_HOME=../../build
+#HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
+#FFTW_DIR=/opt/local/
+#CCC=mpicxx
+#OTHER_FLAGS=-I/opt/local/include/eigen2/ -L/opt/local/lib -lboost_program_options-mt
 
 #Snowbear
-#AU_HOME=/usr/local/software/sl-6.x86_64/modules/arrayudf/1.0.1-gcc/build
-#HDF5_DIR=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p
-#FFTW_DIR=/global/software/sl-6.x86_64/modules/gcc/4.8.5/fftw/3.3.4-gcc
-#CCC=mpicxx
-#OTHER_FLAGS=-I./fft-header/  -lboost_program_options-mt
+AU_HOME=../../build
+HDF5_DIR=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p
+FFTW_DIR=/global/software/sl-6.x86_64/modules/gcc/4.8.5/fftw/3.3.4-gcc
+CCC=mpicxx
+OTHER_FLAGS=-I./fft-header/  -lboost_program_options-mt -std=c++11 -std=gnu++11
 
 
 #Cori at NERSC
@@ -28,7 +28,7 @@ das-correlation:das-correlation.cpp
 	$(CCC) -o das-correlation das-correlation.cpp -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 -lhdf5_hl -lz
 
 h5-vds-merge:h5-vds-merge.c  
-	$(CCC) -o h5-vds-merge h5-vds-merge.c -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz
+	$(CCC) -o h5-vds-merge h5-vds-merge.c -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz $(OTHER_FLAGS)
 
 tdms2h5:tdms2h5.c
 	$(CCC) -o tdms2h5 tdms2h5.c  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 -lhdf5_hl -lz 
