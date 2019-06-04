@@ -1296,7 +1296,7 @@ public:
     int len = data.size();
     cpp_vec_input.resize(len);
     for (int i = 0; i < len; i++)
-      cpp_vec_input[i] = vec[i];
+      cpp_vec_input[i] = data[i];
     cpp_vec_flag = 1;
 
     //Do the same intialization as other arrays
