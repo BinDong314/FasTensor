@@ -1227,7 +1227,6 @@ public:
     time_sync = 0;
     time_nonvolatile = 0;
     d_orig = d_orig_p;
-    nvs_f = nvs_f_p;
 
     typedef typename extract_value_type<T>::value_type value_type;
 
@@ -1294,7 +1293,7 @@ public:
     }
 
     //Copy data into cpp_vec_input as temporary place to storage
-    int len = vec.size();
+    int len = data.size();
     cpp_vec_input.resize(len);
     for (int i = 0; i < len; i++)
       cpp_vec_input[i] = vec[i];
