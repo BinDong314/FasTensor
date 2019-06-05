@@ -1061,10 +1061,7 @@ public:
     time_sync = 0;
     time_nonvolatile = 0;
     d_orig = d_orig_p;
-<<<<<<< HEAD
     //nvs_f = nvs_f_p;
-=======
->>>>>>> a886b47c6498f62e31e748dde0170c5a9ddf1c7c
 
     typedef typename extract_value_type<T>::value_type value_type;
 
