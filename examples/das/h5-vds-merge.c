@@ -283,7 +283,11 @@ void printf_help(char *cmd)
           -c counts of files after start filter \n\
           -e regex filter string (more on: http://www.cplusplus.com/reference/regex/ECMAScript/)\n\
           Example 1: %s -i ./testH5data -o ./testHDF5data-merged.h5p  -g / -d /DataByChannelTime\n\
+                     PS: all files under ./testH5Data \n\
           Example 2: %s -i ./testH5data -o ./testHDF5data-merged.h5p  -g / -d /DataByChannelTime -s westSac_170728224510.h5p -c 2 \n\
-          Example 3: %s -i ./testH5data -o ./testHDF5data-merged.h5p  -g / -d /DataByChannelTime -e 170728224[567]10\n";
+                     PS: Example 2 merge two files after westSac_170728224510.h5p (including) under ./testH5Data  \n\
+          Example 3: %s -i ./testH5data -o ./testHDF5data-merged.h5p  -g / -d /DataByChannelTime -e 170728224[567]10\n\
+                     PS: Example 3 merge all files matched regex pattern [170728224[567]10]\n ";
+          
   fprintf(stdout, msg, cmd, cmd, cmd, cmd);
 }
