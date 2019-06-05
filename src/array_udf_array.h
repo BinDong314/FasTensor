@@ -1071,7 +1071,7 @@ public:
       std::cout << "Only allow AU_NV_VECTOR to use in memory vector" << std::endl;
       exit(-1);
     }
-
+    //
     //Copy data into cpp_vec_input as temporary place to storage
     int len = data.size();
     cpp_vec_input.resize(len);
