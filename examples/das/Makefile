@@ -22,10 +22,8 @@ OTHER_FLAGS=-I/opt/local/include/eigen2/ -L/opt/local/lib -lboost_program_option
 #CCC=CC
 
 .PHONY:all
-all:das-fft das-correlation h5-vds-merge tdms2h5 das-fft-full
+all:h5-vds-merge tdms2h5 das-fft-full
 
-das-correlation:das-correlation.cpp  
-	$(CCC) -o das-correlation das-correlation.cpp -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 -lhdf5_hl -lz
 
 h5-vds-merge:h5-vds-merge.c  
 	$(CCC) -o h5-vds-merge h5-vds-merge.c -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz
@@ -33,8 +31,6 @@ h5-vds-merge:h5-vds-merge.c
 tdms2h5:tdms2h5.c
 	$(CCC) -o tdms2h5 tdms2h5.c  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 -lhdf5_hl -lz 
 
-das-fft:das-fft.cpp
-	$(CCC) -o das-fft fft/kiss_fft.c das-fft.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3
 
 das-fft-full:das-fft-full.cpp
 	$(CCC) -o das-fft-full fft-header/resample.cpp fft/kiss_fft.c das-fft-full.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3 $(OTHER_FLAGS)

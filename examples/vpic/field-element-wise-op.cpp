@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
 
   Array<float> *absJ = new Array<float>(AU_NVS, AU_HDF5, o_file, group, "/Timestep_50/absJ", chunk_size, overlap_size);
-  absJ->Apply(squared_absJ_UDF, NULL);
+  absJ->Apply(squared_absJ_UDF);
   delete absJ;
   float global_sum, final_squared_absJ;
   MPI_Reduce(&local_sum, &global_sum, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);

@@ -1,10 +1,10 @@
 AUTOMAKE_OPTIONS=gnu
 
 # -fopenmp -openmp -DENABLE_OPENMP -g -O0 -std=c++11 -std=c++0x
-AM_CPPFLAGS = @ARRAYUDF_CPPFLAGS@  -std=c++11 -std=c++0x
-AM_CFLAGS = @ARRAYUDF_CFLAGS@  -std=c++11 -std=c++0x
-AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@  -std=c++11 -std=c++0x
-AM_LDFLAGS = =@ARRAYUDF_LIBS@   -all-static   -std=c++11 -std=c++0x
+AM_CPPFLAGS = @ARRAYUDF_CPPFLAGS@  
+AM_CFLAGS = @ARRAYUDF_CFLAGS@  
+AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@  -std=c++17 
+AM_LDFLAGS = =@ARRAYUDF_LIBS@   -all-static   -std=c++17 
 
 lib_LTLIBRARIES=libArrayUDF.la
 libArrayUDF_la_SOURCES=array_udf_array.h array_udf_stencil.h array_udf_io.h utility.h iarray-helper.h iarray.h iarray.cpp 

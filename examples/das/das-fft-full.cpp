@@ -148,8 +148,8 @@ int main(int argc, char *argv[])
         read_config_file(config_file, mpi_rank);
 
     //Declare the input and output array
-    Array<int, std::vector<float>> *IFILE = new Array<int, std::vector<float>>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, auto_chunk_dims_index);
-    Array<std::vector<float>> *OFILE = new Array<std::vector<float>>(AU_COMPUTED, AU_HDF5, o_file, o_group, o_dataset, auto_chunk_dims_index);
+    Array<int> *IFILE = new Array<int>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, auto_chunk_dims_index);
+    Array<float> *OFILE = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, o_group, o_dataset, auto_chunk_dims_index);
 
     //Find and set chunks_size to split array for parallel processing
     std::vector<unsigned long long> i_file_dim;

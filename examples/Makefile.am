@@ -1,17 +1,16 @@
 AUTOMAKE_OPTIONS=gnu
 
 AM_CPPFLAGS = -I$(top_srcdir)/src/  @ARRAYUDF_CPPFLAGS@   -ldl
-AM_CFLAGS   = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -ldl
-AM_CXXFLAGS = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -std=c++11 -std=c++0x -ldl
-AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++11  -ldl
+AM_CFLAGS   = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@   -ldl
+AM_CXXFLAGS = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -std=c++17 -ldl
+AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static -std=c++17  -ldl
 
-#-std=c++0x
 
 #-fopenmp -openmp -DENABLE_OPENMP -g -O0 -std=c++11 -std=c++0x
 #bin_PROGRAMS=conv  fake-hdf5-data udf-example-new inter-xyz conv
 #bin_PROGRAMS= fake-hdf5-data udf-example udf-example-new ccl-pc-new  inter hist  udf-test 
 #bin_PROGRAMS= fake-hdf5-data ccl-pc-new conv inter-xyz conv-micro-test vpic-gradient-decent vpic-xyz-global-position
-bin_PROGRAMS=  ccl-pc-new fake-hdf5-data udf-example-new udf-example conv2d
+bin_PROGRAMS= ccl-pc-new  fake-hdf5-data udf-example-new udf-example conv2d
 
 
 #vpic_xyz_global_position_SOURCES=vpic-xyz-global-position.cpp

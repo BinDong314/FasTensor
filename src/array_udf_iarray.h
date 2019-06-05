@@ -220,7 +220,8 @@ public:
 
   //To start a asio
   //https://gist.github.com/rsms/771059
-  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<T> data)
+  template <class DataType>
+  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<DataType> data)
   {
     std::vector<unsigned long long> global_count, global_start;
     global_count.resize(rank);

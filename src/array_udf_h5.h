@@ -347,8 +347,10 @@ public:
     return 1;
   }
 
-  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<T> data)
+  template <class DataType>
+  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<DataType> data)
   {
+    Open(H5F_ACC_RDWR);
     std::vector<unsigned long long> offset, count;
     offset.resize(rank); //rank might be start.size()+1 when T is vector
     count.resize(rank);
@@ -482,6 +484,8 @@ public:
     //flush data onto disk
     H5Fflush(fid, H5F_SCOPE_GLOBAL);
     return 1;
+
+    Close();
   }
 
   void DisableCollectivIO()
@@ -535,10 +539,10 @@ public:
         gid = H5Gopen(fid, gn_str.c_str(), H5P_DEFAULT);
       }
     }
-    else
+    /*else
     {
       gid = fid;
-    }
+    }*/
 
     //printf("Debug: %s:%d\n", __FILE__, __LINE__);
 
@@ -569,13 +573,13 @@ public:
       }
       else
       {
-        if (H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) == 0)
+        if (H5Lexists(fid, dn_str.c_str(), H5P_DEFAULT) == 0)
         {
           did = H5Dcreate(fid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
         }
         else
         {
-          did = H5Dopen(gid, dn_str.c_str(), H5P_DEFAULT);
+          did = H5Dopen(fid, dn_str.c_str(), H5P_DEFAULT);
         }
       }
       break;
@@ -635,6 +639,9 @@ public:
     //datatype  = H5Dget_type(did);     /* datatype handle */
     //type_class     = H5Tget_class(datatype);
     dataspace_id = H5Dget_space(did);
+
+    //Close all created file/group/data for Coumpund output
+    Close();
     return 0;
   }
 
@@ -731,6 +738,89 @@ public:
     //#else
     plist_cio_id = H5P_DEFAULT;
     //#endif
+  }
+
+  void Close()
+  {
+    if (plist_id > 0)
+      H5Pclose(plist_id);
+    if (plist_cio_id > 0)
+      H5Pclose(plist_cio_id);
+    if (dataspace_id > 0)
+      H5Sclose(dataspace_id);
+    if (memspace_id > 0)
+      H5Sclose(memspace_id);
+    if (did > 0)
+      H5Dclose(did);
+    if (gid > 0)
+      H5Gclose(gid);
+    if (fid > 0)
+      H5Fclose(fid);
+    plist_id = -1;
+    plist_cio_id = -1;
+    dataspace_id = -1;
+    memspace_id = -1;
+    did = -1;
+    gid = -1;
+    fid = -1;
+  }
+
+  //H5F_ACC_RDWR
+  //H5F_ACC_RDONLY
+  //H5F_ACC_SWMR_WRITE
+  //H5F_ACC_SWMR_READ
+  void Open(int flag)
+  {
+    //make sure it is closed
+    if (plist_id > 0)
+      H5Pclose(plist_id);
+    if (plist_cio_id > 0)
+      H5Pclose(plist_cio_id);
+    if (dataspace_id > 0)
+      H5Sclose(dataspace_id);
+    if (memspace_id > 0)
+      H5Sclose(memspace_id);
+    if (did > 0)
+      H5Dclose(did);
+    if (gid > 0)
+      H5Gclose(gid);
+    if (fid > 0)
+      H5Fclose(fid);
+
+    plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+
+    fid = H5Fopen(fn_str.c_str(), flag, plist_id);
+    if (fid < 0)
+    {
+      std::cout << "Error happens in open file " << fn_str << std::endl;
+      exit(-1);
+    }
+
+    std::string root_dir = "/";
+    if (gn_str != root_dir)
+    {
+      //std::cout << "Open Group : " << gn << std::endl;
+      gid = H5Gopen(fid, gn_str.c_str(), H5P_DEFAULT);
+      did = H5Dopen(gid, dn_str.c_str(), H5P_DEFAULT);
+    }
+    else
+    {
+      did = H5Dopen(fid, dn_str.c_str(), H5P_DEFAULT);
+    }
+    datatype = H5Dget_type(did); /* datatype handle */
+    type_class = H5Tget_class(datatype);
+    dataspace_id = H5Dget_space(did);
+    rank = H5Sget_simple_extent_ndims(dataspace_id);
+    dims_out.resize(rank);
+    H5Sget_simple_extent_dims(dataspace_id, &dims_out[0], NULL);
+
+#ifdef SDS_UDF_COLLECTIVE_IO
+    plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
+    H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
+#else
+    plist_cio_id = H5P_DEFAULT;
+#endif
   }
 };
 

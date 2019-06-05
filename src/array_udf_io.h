@@ -189,7 +189,8 @@ public:
     }
   }
 
-  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<T> data)
+  template <class DataType>
+  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<DataType> data)
   {
     if (cache_flag == AU_NOCACHE)
     {

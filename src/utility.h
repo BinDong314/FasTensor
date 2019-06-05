@@ -243,6 +243,68 @@ void InsertIntoVirtualVector(const std::vector<int> &insert_vector, std::vector<
   exit(-1);
 }
 
+template <class T1, class T2>
+void ExtractFromVirtualVector(std::vector<T1> &extract_vector, const std::vector<T2> &virtual_vector, int index)
+{
+  assert(extract_vector.size() == virtual_vector.size());
+  size_t n = extract_vector.size();
+  T2 temp_v;
+  for (size_t i = 0; i < n; i++)
+  {
+    temp_v = virtual_vector[i];
+    extract_vector[i] = temp_v.get_value(index);
+  }
+}
+
+template <>
+void ExtractFromVirtualVector(std::vector<int> &extract_vector, const std::vector<std::vector<float>> &virtual_vector, int index)
+{
+  printf("Not supported  at %s :%d \n", __FILE__, __LINE__);
+  exit(-1);
+}
+
+template <>
+void ExtractFromVirtualVector(std::vector<float> &extract_vector, const std::vector<std::vector<float>> &virtual_vector, int index)
+{
+  printf("Not supported  at %s :%d \n", __FILE__, __LINE__);
+  exit(-1);
+}
+
+template <>
+void ExtractFromVirtualVector(std::vector<float> &extract_vector, const std::vector<std::vector<std::vector<float>>> &virtual_vector, int index)
+{
+  printf("Not supported  at %s :%d \n", __FILE__, __LINE__);
+  exit(-1);
+}
+
+template <>
+void ExtractFromVirtualVector(std::vector<int> &extract_vector, const std::vector<float> &virtual_vector, int index)
+{
+  printf("Not supported  at %s :%d \n", __FILE__, __LINE__);
+  exit(-1);
+}
+
+template <>
+void ExtractFromVirtualVector(std::vector<int> &extract_vector, const std::vector<int> &virtual_vector, int index)
+{
+  printf("Not supported  at %s :%d \n", __FILE__, __LINE__);
+  exit(-1);
+}
+
+template <>
+void ExtractFromVirtualVector(std::vector<float> &extract_vector, const std::vector<int> &virtual_vector, int index)
+{
+  printf("Not supported  at %s :%d \n", __FILE__, __LINE__);
+  exit(-1);
+}
+
+template <>
+void ExtractFromVirtualVector(std::vector<float> &extract_vector, const std::vector<float> &virtual_vector, int index)
+{
+  printf("Not supported  at %s :%d \n", __FILE__, __LINE__);
+  exit(-1);
+}
+
 template <typename VT>
 inline void PrintVector(std::string name, std::vector<VT> v)
 {
@@ -462,6 +524,45 @@ void au_time_elap(char *info_str)
 
   //reset to current time
   au_timer_global__inside_use = MPI_Wtime();
+}
+
+//for more HDF5 types
+//https://support.hdfgroup.org/HDF5/doc1.6/UG/11_Datatypes.html
+//We'd better to have it as ArrayUDF type
+template <class UDFOutputType, class BOutputType>
+void type_infer(int &vector_type_flag, int &output_element_type_class)
+{
+  if (is_vector_type<UDFOutputType>())
+  {
+    vector_type_flag = 1;
+  }
+  else
+  {
+    vector_type_flag = 0;
+  }
+
+  if (is_same_types<BOutputType, int>())
+  {
+    //if (!mpi_rank) printf("In Array init: output element type is int \n ");
+    output_element_type_class = H5T_INTEGER;
+  }
+  else if (is_same_types<BOutputType, float>())
+  {
+    //if (!mpi_rank)
+    //  printf("In Array init: output element type is float \n ");
+    output_element_type_class = H5T_FLOAT;
+  }
+  else if (is_same_types<BOutputType, double>())
+  {
+    //if (!mpi_rank)
+    //  printf("In Array init: output element type is float \n ");
+    output_element_type_class = H5T_NATIVE_DOUBLE;
+  }
+  else
+  {
+    printf("In Array init: not support type \n ");
+    exit(-1);
+  }
 }
 
 #endif

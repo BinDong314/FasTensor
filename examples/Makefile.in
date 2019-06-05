@@ -347,9 +347,9 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = gnu
 AM_CPPFLAGS = -I$(top_srcdir)/src/  @ARRAYUDF_CPPFLAGS@   -ldl
-AM_CFLAGS = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -ldl
-AM_CXXFLAGS = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -std=c++11 -std=c++0x -ldl
-AM_LDFLAGS = @ARRAYUDF_LIBS@  -all-static -std=c++11  -ldl
+AM_CFLAGS = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@   -ldl
+AM_CXXFLAGS = -I$(top_srcdir)/src/ @ARRAYUDF_CFLAGS@  -std=c++17 -ldl
+AM_LDFLAGS = @ARRAYUDF_LIBS@  -all-static -std=c++17  -ldl
 
 #vpic_xyz_global_position_SOURCES=vpic-xyz-global-position.cpp
 #vpic_xyz_global_position_DEPENDENCIES=../src/libArrayUDF.la

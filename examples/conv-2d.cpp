@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
   //Orginal data set
   Array<int, int> *X = new Array<int, int>(AU_NVS, AU_HDF5, i_file, group, dataset, chunk_size, overlap_size);
-  X->Apply(ConvUDF, NULL);
+  X->Apply(ConvUDF);
   X->ReportTime();
 
   //Clear

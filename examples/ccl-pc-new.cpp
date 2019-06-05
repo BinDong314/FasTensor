@@ -188,9 +188,9 @@ int main(int argc, char *argv[])
     do{
       convergeFlag = 1;
       B->SetApplyDirection(0);
-      B->Apply(fsyncLabelUDF, NULL);
+      B->Apply(fsyncLabelUDF);
       B->SetApplyDirection(1);
-      B->Apply(bsyncLabelUDF, NULL);
+      B->Apply(bsyncLabelUDF);
       ite++;
       MPI_Allreduce(&convergeFlag, &convergeFlag_global, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
     }while(convergeFlag_global == 0);
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
     do{
       convergeFlag = 1;
       B->SetApplyDirection(0);
-      B->Apply(allcheckUDF, NULL);
+      B->Apply(allcheckUDF);
       ite++;
       if(ite%50 == 0) printf("Ite = %d \n", ite);
       MPI_Allreduce(&convergeFlag, &convergeFlag_global, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
