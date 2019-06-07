@@ -1754,12 +1754,12 @@ public:
       current_chunk_start_offset.resize(1);
       current_chunk_end_offset.resize(1);
       current_chunk_start_offset[0] = my_offset;
-      current_chunk_end_offset[0] = current_chunk_start_offset[0] + global_current_result_chunk_data_index - 1;
+      current_chunk_end_offset[0] = my_offset + current_result_chunk_data_index - 1;
 
       current_result_chunk_start_offset.resize(1);
       current_result_chunk_end_offset.resize(1);
       current_result_chunk_start_offset[0] = my_offset;
-      current_result_chunk_end_offset[0] = current_chunk_start_offset[0] + global_current_result_chunk_data_index - 1;
+      current_result_chunk_end_offset[0] = my_offset + current_result_chunk_data_index - 1;
 
       t_start = MPI_Wtime();
       if (B != nullptr)
