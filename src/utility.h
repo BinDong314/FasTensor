@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <optional>
 
 using namespace std;
 
@@ -256,6 +257,19 @@ void ExtractFromVirtualVector(std::vector<T1> &extract_vector, const std::vector
   }
 }
 
+template <class T1, class T2>
+void ExtractFromVirtualVector(std::vector<T1> &extract_vector, const std::vector<std::optional<T2>> &virtual_vector, int index)
+{
+  assert(extract_vector.size() == virtual_vector.size());
+  size_t n = extract_vector.size();
+  T2 temp_v;
+  for (size_t i = 0; i < n; i++)
+  {
+    temp_v = virtual_vector[i];
+    extract_vector[i] = temp_v.get_value(index);
+  }
+}
+
 template <>
 void ExtractFromVirtualVector(std::vector<int> &extract_vector, const std::vector<std::vector<float>> &virtual_vector, int index)
 {
@@ -374,6 +388,24 @@ template <typename T>
 int is_vector_type()
 {
   return is_vector<T>{};
+}
+
+template <typename T>
+struct is_optional : public std::false_type
+{
+};
+
+template <typename T>
+struct is_optional<std::optional<T>> : public std::true_type
+{
+};
+
+//1: vector type
+//0: other types
+template <typename T>
+int is_optional_type()
+{
+  return is_optional<T>{};
 }
 
 //http://coliru.stacked-crooked.com/view?id=e579b7d68ba42805cfde5a309e2a23e5-e54ee7a04e4b807da0930236d4cc94dc
