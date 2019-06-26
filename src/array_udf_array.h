@@ -31,6 +31,12 @@
 #include "array_udf_attribute.h"
 //#include "array_udf_ga.h"
 #include "array_udf_h5.h"
+#include <optional> //Need c++17
+
+//see more detail in third_party/cista.h
+#define AU_UDT_INIT(A) \
+  CISTA_PRINTABLE(A)   \
+  CISTA_COMPARABLE()
 
 //#define ENABLE_OPENMP 1
 //#ifdef ENABLE_OPENMP
@@ -1163,6 +1169,16 @@ public:
       current_chunk_data.resize(0);
     }
     current_chunk_data_cache.resize(0);
+
+    if (virtual_array_flag == 1)
+    {
+      int n = attributes.size();
+      for (int i = 0; i < n; i++)
+      {
+        delete attributes[i];
+        attributes[i] = NULL;
+      }
+    }
   }
 
   void DisableCache()
@@ -1391,6 +1407,9 @@ public:
         for (int i = 0; i < n; i++)
         {
           ah = attributes[i]->GetDataHandle();
+          if (mpi_rank == 0)
+            std::cout << "Read " << i << "th attribute: " << attributes[i]->GetDatasetName() << " \n";
+
           //ah->ReadDataStripingMem(current_chunk_ol_start_offset, current_chunk_ol_end_offset, &current_chunk_data[0], i, n, hym_count);
           ah->ReadData(current_chunk_ol_start_offset, current_chunk_ol_end_offset, current_chunk_data_temp);
           // printf("Load attribute %s,  i=%d (n=%d): value =  %f, %f\n", ah->GetDatasetName().c_str(), i, n, current_chunk_data_temp[0], current_chunk_data_temp[1]);
@@ -2446,6 +2465,9 @@ public:
               {
                 aa = B->GetAttributes(i);
                 ah = aa->GetDataHandle();
+
+                if (mpi_rank == 0)
+                  std::cout << "Write " << i << "th attribute: " << aa->GetDatasetName() << " \n";
                 //UDFOutputType
                 //ExtractFromVirtualVector<BAttributeType, BType>(current_chunk_data_temp, current_result_chunk_data, i);
                 ExtractFromVirtualVector<BAttributeType, UDFOutputType>(current_chunk_data_temp, current_result_chunk_data, i);

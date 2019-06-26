@@ -27,6 +27,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <optional>
+#include <tuple>
+#include "cista.h"
 
 using namespace std;
 
@@ -182,10 +184,24 @@ void InsertIntoVirtualVector(const std::vector<T1> &insert_vector, std::vector<T
 {
   assert(insert_vector.size() == virtual_vector.size());
   size_t n = insert_vector.size();
+  const int index_const = index;
   for (size_t i = 0; i < n; i++)
   {
     //memcpy(&(virtual_vector[i])+sizeof(T1)*index, &(insert_vector[i]), sizeof(T1));
-    virtual_vector[i].set_value(index, insert_vector[i]);
+    //virtual_vector[i].set_value(index, insert_vector[i]);
+    //get<0>(to_tuple(a1)) = 5;
+    //std::get<0>(cista::to_tuple(virtual_vector[i])) = insert_vector[i];
+
+    T1 insert_vector_temp = insert_vector[i];
+    int m_index = 0;
+    cista::for_each_field(virtual_vector[i], [&m_index, index, insert_vector_temp](auto &&m) {
+      if (m_index == index)
+      {
+        m = insert_vector_temp;
+        return;
+      }
+      m_index++;
+    });
   }
 }
 
@@ -244,16 +260,24 @@ void InsertIntoVirtualVector(const std::vector<int> &insert_vector, std::vector<
   exit(-1);
 }
 
+int debug_once = 0;
 template <class T1, class T2>
 void ExtractFromVirtualVector(std::vector<T1> &extract_vector, const std::vector<T2> &virtual_vector, int index)
 {
   assert(extract_vector.size() == virtual_vector.size());
   size_t n = extract_vector.size();
-  T2 temp_v;
   for (size_t i = 0; i < n; i++)
   {
-    temp_v = virtual_vector[i];
-    extract_vector[i] = temp_v.get_value(index);
+    int m_index = 0;
+    T1 temp_v;
+    cista::for_each_field(virtual_vector[i], [&m_index, index, &temp_v](auto &&m) {
+      if (m_index == index)
+      {
+        temp_v = m;
+      }
+      m_index++;
+    });
+    extract_vector[i] = temp_v;
   }
 }
 
@@ -262,11 +286,20 @@ void ExtractFromVirtualVector(std::vector<T1> &extract_vector, const std::vector
 {
   assert(extract_vector.size() == virtual_vector.size());
   size_t n = extract_vector.size();
-  T2 temp_v;
+
   for (size_t i = 0; i < n; i++)
   {
-    temp_v = virtual_vector[i];
-    extract_vector[i] = temp_v.get_value(index);
+    T1 temp_v;
+    int m_index = 0;
+    cista::for_each_field(virtual_vector[i], [&m_index, index, &temp_v](auto &&m) {
+      if (m_index == index)
+      {
+        temp_v = m;
+        return;
+      }
+      m_index++;
+    });
+    extract_vector[i] = temp_v;
   }
 }
 

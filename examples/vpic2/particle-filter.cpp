@@ -16,57 +16,10 @@ using namespace std;
 
 struct Particle
 {
+    AU_UDT_INIT(Particle)
     float x;
     float y;
     float z;
-    friend std::ostream &operator<<(std::ostream &os, Particle &p) //test
-    {
-        os << p.x << '/' << p.y << '/' << p.z;
-        return os;
-    }
-    friend bool operator==(Particle &lp, Particle &rp)
-    {
-        return (lp.x == rp.x && lp.y == rp.y && lp.z == rp.z);
-    }
-    void set_value(int index, float value)
-    {
-        switch (index)
-        {
-        case 0:
-            x = value;
-            break;
-        case 1:
-            y = value;
-            break;
-        case 2:
-            z = value;
-            break;
-        default:
-            printf("The object only has three variables !\n");
-            exit(-1);
-            break;
-        }
-    }
-
-    float get_value(int index)
-    {
-        switch (index)
-        {
-        case 0:
-            return x;
-            break;
-        case 1:
-            return y;
-            break;
-        case 2:
-            return z;
-            break;
-        default:
-            printf("The object only has three variables !\n");
-            exit(-1);
-        }
-        return 0;
-    }
 };
 
 //Find the global Z

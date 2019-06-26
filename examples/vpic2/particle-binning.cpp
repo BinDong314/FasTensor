@@ -16,57 +16,10 @@ using namespace std;
 
 struct Particle
 {
+    AU_UDT_INIT(Particle)
     float Ux;
     float Uy;
     float Uz;
-    friend std::ostream &operator<<(std::ostream &os, Particle &p) //test
-    {
-        os << p.Ux << '/' << p.Uy << '/' << p.Uz;
-        return os;
-    }
-    friend bool operator==(Particle &lp, Particle &rp)
-    {
-        return (lp.Ux == rp.Ux && lp.Uy == rp.Uy && lp.Uz == rp.Uz);
-    }
-    void set_value(int index, float value)
-    {
-        switch (index)
-        {
-        case 0:
-            Ux = value;
-            break;
-        case 1:
-            Uy = value;
-            break;
-        case 2:
-            Uz = value;
-            break;
-        default:
-            printf("The object only has three variables !\n");
-            exit(-1);
-            break;
-        }
-    }
-
-    float get_value(int index)
-    {
-        switch (index)
-        {
-        case 0:
-            return Ux;
-            break;
-        case 1:
-            return Uy;
-            break;
-        case 2:
-            return Uz;
-            break;
-        default:
-            printf("The object only has three variables !\n");
-            exit(-1);
-        }
-        return 0;
-    }
 };
 
 int n_bins = 10;
