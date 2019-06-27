@@ -16,12 +16,10 @@ const float mi_me = 1836.2;
 
 using namespace std;
 
-void create_xdmf_file(char *xml_output_file, char *dimensions, char *origin_dxdydz_dimensions, char *origin, char *dxdydz,
-                      char *attribute_name1, char *attribute_name2, char *attribute_name3, char *attribute_name4,
-                      char *hdf5_file_dataset1, char *hdf5_file_dataset2, char *hdf5_file_dataset3, char *hdf5_file_dataset4);
 //Define a compund data strcuture
 struct CompoundPoint
 {
+    //Add this to expose to ArrayUDF
     AU_UDT_INIT(CompoundPoint)
     //Field dump
     float ex, ey, ez;
@@ -46,6 +44,7 @@ struct CompoundPoint
 
 struct OutputCompoundPoint
 {
+    //Add this to expose to ArrayUDF
     AU_UDT_INIT(OutputCompoundPoint)
     float ex, ey, ez;
     float Eidealx, Eidealy, Eidealz;
@@ -67,8 +66,6 @@ struct OutputCompoundPoint
     float jx, jy, jz;
     float absJ;
 };
-
-int debug_index = 0;
 
 inline OutputCompoundPoint extract_All_UDF(const Stencil<CompoundPoint> &hp)
 {
@@ -497,8 +494,6 @@ int main(int argc, char *argv[])
     //const int timestep = 1000;
     for (int timestep = 1000; timestep <= 1001; timestep += 1000)
     {
-        //for(int timestep = 0; timestep <= 2000; timestep += 1000) {
-
         std::string timestepdir = "T." + to_string(timestep) + "/";
         std::string i_file_field = field_dir + timestepdir + "fields_" + to_string(timestep) + ".h5";
         std::string i_file_electron1 = hydro_dir + timestepdir + "electron1_" + to_string(timestep) + ".h5";
