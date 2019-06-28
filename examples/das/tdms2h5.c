@@ -137,10 +137,10 @@ int main(int argc, char *argv[])
          }
       }
       MPI_Barrier(MPI_COMM_WORLD);
-#ifdef DEBUG_OUTPUT
+//#ifdef DEBUG_OUTPUT
       if (mpi_rank == 0)
          printf("Count of files under %s :  %d \n", filename_input, namelist_length);
-#endif
+//#endif
 
       int my_current_file_index = mpi_rank;
       int total_batch;
@@ -166,9 +166,9 @@ int main(int argc, char *argv[])
             memset(temp_input_filename, '\0', strlen(filename_output) + max_file_name_legnth + 5);
             sprintf(temp_output_filename, "%s/%s.h5", filename_output, namelist[my_current_file_index]->d_name);
             sprintf(temp_input_filename, "%s/%s", filename_input, namelist[my_current_file_index]->d_name);
-#ifdef DEBUG_OUTPUT
+//#ifdef DEBUG_OUTPUT
             printf("mpi rank = %d, input file: %s, output file: %s \n", mpi_rank, temp_input_filename, temp_output_filename);
-#endif
+//#endif
             convert_file(temp_output_filename, temp_input_filename, compression_flag);
          }
          my_current_file_index = my_current_file_index + mpi_size;
@@ -608,6 +608,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       dataset_id = H5Dcreate(file_id, "/DataTimeChannel", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
       H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
    }
+   H5Pclose(dataset_plist_id);
    H5Sclose(dataspace_id);
    H5Dclose(dataset_id);
    free(data);
@@ -631,8 +632,11 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    hid_t metadata_dset = H5Dcreate(file_id, "/RawMetadataTDMS", metadata_dtype, metadata_space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
    H5Dwrite(metadata_dset, metadata_dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, metadata_buf);
-
+   
+   H5Sclose(metadata_space);
+   H5Dclose(metadata_dset);
    free(metadata_buf);
+   H5Fflush(file_id, H5F_SCOPE_GLOBAL);
    H5Fclose(file_id);
    fclose(fp);
 
