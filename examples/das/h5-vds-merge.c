@@ -13,6 +13,7 @@
 #include <iostream>
 #include <string>
 #include <regex>
+#include <fstream>
 
 void printf_help(char *cmd);
 
@@ -144,6 +145,12 @@ int main(int argc, char *argv[])
         break;
       }
     }
+
+    if (find_file_to_merge == 0)
+    {
+      std::cout << "Cann't find filer: " << filter_start_str << " \n";
+      exit(-1);
+    }
   }
   else if (filter_flag_regex)
   {
@@ -167,12 +174,18 @@ int main(int argc, char *argv[])
     exit(0);
   }
 
+  std::string output_file_meata;
+  output_file_meata = output_file.c_str() + ".vds-meta";
+  ofstream output_file_stream;
+  output_file_stream.open(output_file_meata);
+
   printf("List of files to merge (count = [%ld): \n", file_to_merge_list.size());
   for (int i = 0; i < file_to_merge_list.size(); i++)
   {
     std::cout << file_to_merge_list[i] << std::endl;
+    output_file_stream << input_dir << "/" << file_to_merge_list[i] << std::endl
   }
-
+  output_file_stream.close();
   std::string temp_file;
   temp_file = input_dir + "/" + file_to_merge_list[0];
   //printf("Use %s as template to create virtual file.\n", temp_file.c_str());
@@ -288,6 +301,6 @@ void printf_help(char *cmd)
                      PS: Example 2 merge two files after westSac_170728224510.h5p (including) under ./testH5Data  \n\
           Example 3: %s -i ./testH5data -o ./testHDF5data-merged.h5p  -g / -d /DataByChannelTime -e 170728224[567]10\n\
                      PS: Example 3 merge all files matched regex pattern [170728224[567]10]\n ";
-          
+
   fprintf(stdout, msg, cmd, cmd, cmd, cmd);
 }
