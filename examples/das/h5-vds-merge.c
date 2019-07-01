@@ -175,15 +175,15 @@ int main(int argc, char *argv[])
   }
 
   std::string output_file_meata;
-  output_file_meata = output_file.c_str() + ".vds-meta";
-  ofstream output_file_stream;
+  output_file_meata = output_file + ".vds-meta";
+  std::ofstream output_file_stream;
   output_file_stream.open(output_file_meata);
 
   printf("List of files to merge (count = [%ld): \n", file_to_merge_list.size());
   for (int i = 0; i < file_to_merge_list.size(); i++)
   {
     std::cout << file_to_merge_list[i] << std::endl;
-    output_file_stream << input_dir << "/" << file_to_merge_list[i] << std::endl
+    output_file_stream << input_dir << "/" << file_to_merge_list[i] << std::endl;
   }
   output_file_stream.close();
   std::string temp_file;
