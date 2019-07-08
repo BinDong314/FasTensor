@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
             break;
         case 'r':
             row_major_flag = 1;
+            auto_chunk_dims_index = 0;
             break;
         case 'h':
             printf_help(argv[0]);
