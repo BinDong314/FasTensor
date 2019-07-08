@@ -21,6 +21,32 @@
         }                                                   \
     }
 
+#define INIT_FFTW_FILL(FFT_IN_V, XXX_P, XN_P, NFFT_P) \
+    {                                                 \
+        for (int iii = 0; iii < NFFT_P; iii++)        \
+        {                                             \
+            if (iii < XN_P)                           \
+            {                                         \
+                FFT_IN_V[iii][0] = XXX_P[iii];        \
+                FFT_IN_V[iii][1] = 0;                 \
+            }                                         \
+            else                                      \
+            {                                         \
+                FFT_IN_V[iii][0] = 0;                 \
+                FFT_IN_V[iii][1] = 0;                 \
+            }                                         \
+        }                                             \
+    }
+
+#define INIT_FFTW_V_ZERO(FFT_IN_V, NFFT_P)     \
+    {                                          \
+        for (int iii = 0; iii < NFFT_P; iii++) \
+        {                                      \
+            FFT_IN_V[iii][0] = 0;              \
+            FFT_IN_V[iii][1] = 0;              \
+        }                                      \
+    }
+
 //direction: FFTW_FORWARD,  FFTW_BACKWARD
 #define FFT_HELP_W(NNN, fft_in_p, fft_out_p, direction_p)                               \
     {                                                                                   \

@@ -174,6 +174,10 @@ public:
 
   int ReadData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<T> &data)
   {
+    if (is_VDS())
+    {
+      std:: << "I am reading a VDS file" << std::endl;
+    }
     std::vector<unsigned long long> offset, count;
     offset.resize(rank);
     count.resize(rank);
@@ -821,6 +825,12 @@ public:
 #else
     plist_cio_id = H5P_DEFAULT;
 #endif
+  }
+
+  int is_VDS()
+  {
+    struct stat buffer;
+    return (stat(fn_str.c_str(), &buffer) == 0);
   }
 };
 

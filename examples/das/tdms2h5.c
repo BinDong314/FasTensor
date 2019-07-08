@@ -633,6 +633,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    H5Dwrite(metadata_dset, metadata_dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, metadata_buf);
 
    free(metadata_buf);
+   H5Fflush(file_id, H5F_SCOPE_GLOBAL);
    H5Fclose(file_id);
    fclose(fp);
 

@@ -227,6 +227,9 @@ int main(int argc, char *argv[])
     masterv_ppf.clear();
     mastervf.clear();
     masterv.clear();
+    std::vector<double>().swap(masterv_ppf);
+    std::vector<double>().swap(mastervf);
+    std::vector<double>().swap(masterv);
 
     //Run FFT
     IFILE->Apply(FFT_UDF, OFILE);
