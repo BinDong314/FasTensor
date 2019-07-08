@@ -21,6 +21,7 @@
         }                                                   \
     }
 
+//Add function to init FFT_IN
 #define INIT_FFTW_FILL(FFT_IN_V, XXX_P, XN_P, NFFT_P) \
     {                                                 \
         for (int iii = 0; iii < NFFT_P; iii++)        \
