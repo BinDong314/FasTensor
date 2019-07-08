@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
     masterv.clear();
     std::vector<double>().swap(masterv_ppf);
     std::vector<double>().swap(mastervf);
-    std::vector<double>().swap(masterv);
+    std::vector<int>().swap(masterv);
 
     //Run FFT
     IFILE->Apply(FFT_UDF, OFILE);
