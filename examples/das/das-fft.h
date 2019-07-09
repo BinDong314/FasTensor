@@ -171,19 +171,16 @@ fftw_complex *master_fft;
 std::vector<float> gatherXcorr;
 std::vector<float> gatherXcorr_per_batch;
 
-// Comment out from INIT_SPACE to reduce memeory presure
-//      X.resize(n0);                                                            \
-//      TC.resize(nfft);
-//  fft_in = fftw_alloc_complex(nfft);                                       \
-//        fft_out = fftw_alloc_complex(nfft);                                      \
-                                                            \
-
 //WS: window size
 #define INIT_SPACE()                                                             \
     {                                                                            \
+        X.resize(n0);                                                            \
+        TC.resize(nfft);                                                         \
         shapingFilt.resize(nfft);                                                \
+        fft_in = fftw_alloc_complex(nfft);                                       \
+        fft_out = fftw_alloc_complex(nfft);                                      \
         master_fft = fftw_alloc_complex(nfft * window_batch);                    \
-        if (master_fft == NULL)                                                  \
+        if (fft_in == NULL || fft_out == NULL || master_fft == NULL)             \
         {                                                                        \
             printf("not enough memory for fft, in %s:%d\n", __FILE__, __LINE__); \
             exit(-1);                                                            \
@@ -206,8 +203,6 @@ std::vector<float> gatherXcorr_per_batch;
         }                                                                        \
         FF_LHS.clear();                                                          \
         LHS.clear();                                                             \
-        std::vector<double>().swap(FF_LHS);                                      \
-        std::vector<double>().swap(LHS);                                         \
     }
 
 //R = dt_new/dt
@@ -216,6 +211,8 @@ std::vector<float> gatherXcorr_per_batch;
         X.clear();                     \
         TC.clear();                    \
         shapingFilt.clear();           \
+        fftw_free(fft_in);             \
+        fftw_free(fft_out);            \
         fftw_free(master_fft);         \
         gatherXcorr.clear();           \
         gatherXcorr_per_batch.clear(); \
@@ -232,14 +229,7 @@ std::vector<float> gatherXcorr_per_batch;
         filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                                      \
         resample(1, DT_NEW / DT, YY, XX);                                                                          \
         MOVING_MEAN(XX, YY, nPoint_hal_win);                                                                       \
-        XX.resize(0);                                                                                              \
-        std::vector<double>().swap(XX);                                                                            \
-        fft_in = fftw_alloc_complex(nfft);                                                                         \
-        INIT_FFTW_FILL(fft_in, YY, nPoint, nfft);                                                                  \
-        YY.resize(0);                                                                                              \
-        std::vector<double>().swap(YY);                                                                            \
-        fft_out = fftw_alloc_complex(nfft);                                                                        \
-        INIT_FFTW_V_ZERO(fft_out, nfft);                                                                           \
+        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                              \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                           \
         double temp_f;                                                                                             \
         for (int ii = 0; ii < nfft; ii++)                                                                          \
@@ -251,12 +241,12 @@ std::vector<float> gatherXcorr_per_batch;
             fft_out[ii][1] = 0;                                                                                    \
         }                                                                                                          \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                                          \
-        INIT_FFTW_V_ZERO(fft_in, nfft);                                                                            \
+        YY.resize(nPoint);                                                                                         \
         for (int i = 0; i < nPoint; i++)                                                                           \
         {                                                                                                          \
-            fft_in[i][0] = fft_out[i][0] / ((double)nfft);                                                         \
+            YY[i] = fft_out[i][0] / ((double)nfft);                                                                \
         }                                                                                                          \
-        INIT_FFTW_V_ZERO(fft_out, nfft);                                                                           \
+        INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                              \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                           \
         for (int j = 0; j < nfft; j++)                                                                             \
         {                                                                                                          \
@@ -277,8 +267,6 @@ std::vector<float> gatherXcorr_per_batch;
             GX[gatherXcorr_index] = (float)(fft_out[l][0] / (double)nfft);                                         \
             gatherXcorr_index++;                                                                                   \
         }                                                                                                          \
-        fftw_free(fft_in);                                                                                         \
-        fftw_free(fft_out);                                                                                        \
     }
 
 #define FFT_PREPROCESSING(XPP, YPP)                                                                   \
@@ -287,10 +275,6 @@ std::vector<float> gatherXcorr_per_batch;
         filtfilt(BUTTER_A, BUTTER_B, XPP, YPP);                                                       \
         resample(1, DT_NEW / DT, YPP, XPP);                                                           \
         MOVING_MEAN(XPP, YPP, nPoint_hal_win);                                                        \
-        XPP.resize(0);                                                                                \
-        std::vector<double>().swap(XPP);                                                              \
-        fft_in = fftw_alloc_complex(nfft);                                                            \
-        fft_out = fftw_alloc_complex(nfft);                                                           \
         INIT_FFTW(fft_in, YPP, nPoint, nfft, fft_out);                                                \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                              \
         double temp_f;                                                                                \
@@ -308,8 +292,6 @@ std::vector<float> gatherXcorr_per_batch;
         {                                                                                             \
             YPP[i] = fft_out[i][0] / ((double)nfft);                                                  \
         }                                                                                             \
-        fftw_free(fft_in);                                                                            \
-        fftw_free(fft_out);                                                                           \
     }
 
 //For debug only
