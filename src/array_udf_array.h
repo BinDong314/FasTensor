@@ -33,6 +33,11 @@
 #include "array_udf_h5.h"
 #include <optional> //Need c++17
 
+double time_of_update_host_zone = 0;
+
+namespace AU
+{
+
 //see more detail in third_party/cista.h
 #define AU_UDT_INIT(A) \
   CISTA_PRINTABLE(A)   \
@@ -52,8 +57,6 @@ int row_major_chunk_flag = 0;
 unsigned long long per_core_mem_size_limit = 1073741824; // 1GB,  240 000 000; // Try a smller size 24000000000; //50GB/24 per core Byte
 //https://stackoverflow.com/questions/150355/programmatically-find-the-number-of-cores-on-a-machine
 //https://stackoverflow.com/questions/349889/how-do-you-determine-the-amount-of-linux-system-ram-in-c
-
-double time_of_update_host_zone = 0;
 
 //Comment out following test codes
 //int      arraystoreloadflat    = 0;
@@ -3781,3 +3784,4 @@ public:
 };
 
 #endif
+}

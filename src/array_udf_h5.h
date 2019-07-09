@@ -174,10 +174,10 @@ public:
 
   int ReadData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<T> &data)
   {
-    if (is_VDS())
+    /* if (is_VDS())
     {
-      std:: << "I am reading a VDS file" << std::endl;
-    }
+      std::cout << "I am reading a VDS file" << std::endl;
+    }*/
     std::vector<unsigned long long> offset, count;
     offset.resize(rank);
     count.resize(rank);

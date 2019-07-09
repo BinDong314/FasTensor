@@ -62,6 +62,8 @@ unsigned long long MASTER_INDEX = 0;
 //Parameters for ArrayUDF
 int auto_chunk_dims_index = 1;
 std::vector<int> strip_size(2);
+std::vector<int> chunk_size(2);
+int chunked_batch_factor = 32; //To enable a large chunk
 
 //Parameters to enable "window" operation
 int user_window_size = 1;

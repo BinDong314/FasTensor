@@ -5,8 +5,8 @@ AU_HOME=../../build
 HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
 FFTW_DIR=/opt/local/
 CCC=mpicxx
-OTHER_FLAGS=-I/opt/local/include/eigen2/ -L/opt/local/lib -lboost_program_options-mt
-
+OTHER_FLAGS= -I./fft-header/ -L/opt/local/lib -lboost_program_options-mt -I/opt/local/include/eigen3/ -g
+#-I./fft-header/Eigen/include/eigen3/ 
 #Snowbear
 #AU_HOME=../../build
 #HDF5_DIR=/usr/local/software/sl-6.x86_64/modules/hdf5/1.11.3-gcc-p
@@ -33,7 +33,6 @@ tdms2h5:tdms2h5.c
 
 
 das-fft-full:das-fft-full.cpp
-	$(CCC) -o das-fft-full fft-header/resample.cpp fft/kiss_fft.c das-fft-full.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++11 -std=gnu++11 -lArrayUDF -O3 -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3 $(OTHER_FLAGS)
-
+	$(CCC) -o das-fft-full fft-header/resample.cpp fft/kiss_fft.c das-fft-full.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++17 -lArrayUDF  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  $(OTHER_FLAGS) -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3 
 clean:
 	rm das-correlation h5-vds-merge tdms2h5 das-fft das-fft-full

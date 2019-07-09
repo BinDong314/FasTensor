@@ -85,14 +85,14 @@ std::string i_group("/");
 std::string o_group("/");
 std::string i_dataset("DataTimeChannel");
 std::string o_dataset("Xcorr");
-
+int chunk_size_on_split_dim = 1;
 int main(int argc, char *argv[])
 {
     int config_file_set_flag = 0;
     char config_file[NAME_LENGTH] = "./das-fft-full.config";
 
     int copt, mpi_rank, mpi_size;
-    while ((copt = getopt(argc, argv, "o:i:g:u:t:x:m:w:rhc:")) != -1)
+    while ((copt = getopt(argc, argv, "o:i:g:u:t:x:m:w:rhc:k:")) != -1)
         switch (copt)
         {
         case 'o':
@@ -120,9 +120,11 @@ int main(int argc, char *argv[])
         case 'm':
             MASTER_INDEX = atoi(optarg);
             break;
+        case 'k':
+            chunk_size_on_split_dim = atoi(optarg);
+            break;
         case 'r':
             row_major_flag = 1;
-            auto_chunk_dims_index = 0;
             break;
         case 'h':
             printf_help(argv[0]);
@@ -148,9 +150,9 @@ int main(int argc, char *argv[])
     if (config_file_set_flag)
         read_config_file(config_file, mpi_rank);
 
-    //Declare the input and output array
-    Array<int> *IFILE = new Array<int>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, auto_chunk_dims_index);
-    Array<float> *OFILE = new Array<float>(AU_COMPUTED, AU_HDF5, o_file, o_group, o_dataset, auto_chunk_dims_index);
+    //Declare the input and output AU::Array
+    AU::Array<int> *IFILE = new AU::Array<int>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, auto_chunk_dims_index);
+    AU::Array<float> *OFILE = new AU::Array<float>(AU_COMPUTED, AU_HDF5, o_file, o_group, o_dataset, auto_chunk_dims_index);
 
     //Find and set chunks_size to split array for parallel processing
     std::vector<unsigned long long> i_file_dim;
@@ -170,7 +172,20 @@ int main(int argc, char *argv[])
     INIT_PARS(mpi_rank, mpi_size, i_file_dim);
     INIT_SPACE();
 
-    IFILE->SetApplyStripSize(strip_size);
+    if (row_major_flag)
+    {
+        strip_size[0] = chunk_size_on_split_dim;
+        IFILE->SetChunkSize(strip_size);
+        strip_size[0] = 1;
+        IFILE->SetApplyStripSize(strip_size);
+    }
+    else
+    {
+        strip_size[1] = chunk_size_on_split_dim;
+        IFILE->SetChunkSize(strip_size);
+        strip_size[1] = 1;
+        IFILE->SetApplyStripSize(strip_size);
+    }
     if (row_major_flag == 0)
     {
         IFILE->SetOutputVector(nXCORR * window_batch, 0); //output vector size
@@ -228,9 +243,8 @@ int main(int argc, char *argv[])
     masterv_ppf.clear();
     mastervf.clear();
     masterv.clear();
-    std::vector<double>().swap(masterv_ppf);
-    std::vector<double>().swap(mastervf);
-    std::vector<int>().swap(masterv);
+    if (!mpi_rank)
+        std::cout << "Finish the processing on Master block \n";
 
     //Run FFT
     IFILE->Apply(FFT_UDF, OFILE);

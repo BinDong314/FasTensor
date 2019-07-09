@@ -18,7 +18,6 @@
 #ifndef ARRAY_UDF
 #define ARRAY_UDF
 
-
 //#define GACXX 1
 
 //#ifdef GACXX
@@ -42,9 +41,11 @@
 #include <omp.h>
 #endif
 
+using namespace AU;
 
-void AU_Init(int argc, char *argv[]){
-    
+void AU_Init(int argc, char *argv[])
+{
+
   //#ifdef GACXX
   //int heap=300000, stack=300000;
   //GA::Initialize(argc, argv, heap, stack, MT_F_REAL, 0);
@@ -59,18 +60,17 @@ void AU_Init(int argc, char *argv[]){
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
   MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
-
 #ifdef ENABLE_OPENMP
-  if(mpi_rank  == 0){
-    int     nthreads = omp_get_num_threads();
+  if (mpi_rank == 0)
+  {
+    int nthreads = omp_get_num_threads();
     printf("OpenMPI threds' number = %d \n", nthreads);
   }
 #endif
- 
-
 }
 
-void AU_Finalize(){
+void AU_Finalize()
+{
   //#ifdef GACXX
   //GA::Terminate();
   //#else
@@ -78,6 +78,5 @@ void AU_Finalize(){
   MPI_Finalize();
   //#endif
 }
-
 
 #endif
