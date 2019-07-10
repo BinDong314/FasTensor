@@ -22,9 +22,9 @@ void printf_help(char *cmd);
 int main(int argc, char *argv[])
 {
   std::string input_dir("./testH5data");
-  std::string output_file("./testHDF5data-merged.h5p");
+  std::string output_file("./testHDF5data-merged.h5");
   std::string group("/"); //both input and output file share the same group and dataset name
-  std::string dataset("/DataTimeChannel");
+  std::string dataset("/DataTC");
 
   char tmp_path[NAME_LENGTH];
 
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
   std::ofstream output_file_stream;
   output_file_stream.open(output_file_meata);
 
-  printf("List of files to merge (count = [%ld): \n", file_to_merge_list.size());
+  printf("List of files to merge (# = %ld): \n", file_to_merge_list.size());
   for (int i = 0; i < file_to_merge_list.size(); i++)
   {
     std::cout << file_to_merge_list[i] << std::endl;
@@ -295,11 +295,11 @@ void printf_help(char *cmd)
           -s the file name (string) to start filter   \n\
           -c counts of files after start filter \n\
           -e regex filter string (more on: http://www.cplusplus.com/reference/regex/ECMAScript/)\n\
-          Example 1: %s -i ./testH5data -o ./testHDF5data-merged.h5p  -g / -d /DataByChannelTime\n\
+          Example 1: %s -i ./testH5data -o ./testHDF5data-merged.h5  -g / -d /DataCT\n\
                      PS: all files under ./testH5Data \n\
-          Example 2: %s -i ./testH5data -o ./testHDF5data-merged.h5p  -g / -d /DataByChannelTime -s westSac_170728224510.h5p -c 2 \n\
-                     PS: Example 2 merge two files after westSac_170728224510.h5p (including) under ./testH5Data  \n\
-          Example 3: %s -i ./testH5data -o ./testHDF5data-merged.h5p  -g / -d /DataByChannelTime -e 170728224[567]10\n\
+          Example 2: %s -i ./testH5data -o ./testHDF5data-merged.h5  -g / -d /DataCT -s westSac_170728224510.h5 -c 2 \n\
+                     PS: Example 2 merge two files after westSac_170728224510.h5 (including) under ./testH5Data  \n\
+          Example 3: %s -i ./testH5data -o ./testHDF5data-merged.h5  -g / -d /DataCT -e 170728224[567]10\n\
                      PS: Example 3 merge all files matched regex pattern [170728224[567]10]\n ";
 
   fprintf(stdout, msg, cmd, cmd, cmd, cmd);

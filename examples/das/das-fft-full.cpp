@@ -273,7 +273,7 @@ void printf_help(char *cmd)
           -m index of Master channel (0 by default )\n\
           -r FFT in [Row]-direction([Column]-direction by default) \n\
           -c file for parameters (has high priority than commands if existing) \n\
-          Example: mpirun -n 1 %s -i ./test-data/fft-test.h5 -o ./test-data/fft-test.arrayudf.h5  -g / -t /white -x /Xcorr\n";
+          Example: mpirun -n 1 %s -i fft-test.h5 -o fft-test.arrayudf.h5  -g / -t /DataCT -x /Xcorr\n";
 
     fprintf(stdout, msg, cmd, cmd);
 }

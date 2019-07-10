@@ -21,6 +21,7 @@
 #include "hdf5.h" //right now, we only have code for HDF5
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include "utility.h"
 
@@ -52,6 +53,10 @@ private:
 
   int output_vector_size = 0;
   int output_vector_flat_direction_index = -1;
+  int mpi_rank, mpi_size;
+
+  //For VDS file list;
+  std::vector<std::string> FileVDSList;
 
 public:
   H5Data(){};
@@ -75,6 +80,9 @@ public:
 #else
     plist_cio_id = H5P_DEFAULT;
 #endif
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
   }
 
   //For read : if file exists, if open it
@@ -127,11 +135,26 @@ public:
 #else
     plist_cio_id = H5P_DEFAULT;
 #endif
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
+    if (is_VDS())
+    {
+      std::string output_file_meata;
+      output_file_meata = fn_str + ".vds-meta";
+
+      std::cout << "I am reading a VDS file" << std::endl;
+      getFileVDSList(output_file_meata, FileVDSList);
+    }
   };
 
-  H5Data(std::string fn, std::string gn, std::string dn, int data_dims, std::vector<unsigned long long> data_dims_size, std::vector<int> data_chunk_size){
-      //Create a new file  with data_dims, data_dims_size, data_chunk_size
+  H5Data(std::string fn, std::string gn, std::string dn, int data_dims, std::vector<unsigned long long> data_dims_size, std::vector<int> data_chunk_size)
+  {
+    //Create a new file  with data_dims, data_dims_size, data_chunk_size
 
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
   };
 
   ~H5Data()
@@ -174,49 +197,90 @@ public:
 
   int ReadData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<T> &data)
   {
-    /* if (is_VDS())
+    if (is_VDS())
     {
-      std::cout << "I am reading a VDS file" << std::endl;
-    }*/
-    std::vector<unsigned long long> offset, count;
-    offset.resize(rank);
-    count.resize(rank);
-    for (int i = 0; i < rank; i++)
-    {
-      offset[i] = start[i];
-      count[i] = end[i] - start[i] + 1; //Starting from zero
-    }
+      if (!mpi_rank)
+        std::cout << "Read VDS: group= " << gn_str << ", dset =" << dn_str << ", file list:" << std::endl;
 
-    memspace_id = H5Screate_simple(rank, &count[0], NULL);
-    H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
+      //Starting from here, we assume the VDS datasets ordered in row order
+      //  |-----|------|
+      //  |VDS1 | VDS1 | ....
+      //  |_____|______|
+      //We may need to deal with column order
+      //
+      //We also assume read acorss all VDSs
+      //See example/das/das-fft-full.cpp for access pattern
+      if (FileVDSList.size() <= 0)
+      {
+        std::cout << "Can not find VDS datasets to read \n";
+        exit(-1);
+      }
 
-    int ret;
-    switch (type_class)
-    {
-    case H5T_INTEGER:
-      // ret = H5Dread(did, H5T_NATIVE_INT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
-      ret = H5Dread(did, H5T_NATIVE_INT, memspace_id, dataspace_id, plist_cio_id, &data[0]);
-      //dataset.read(data, PredType::NATIVE_INT, memspace, dataspace);
-      break;
-    case H5T_FLOAT:
-      //ret = H5Dread(did, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
-      ret = H5Dread(did, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, plist_cio_id, &data[0]);
-      //dataset.read(data, PredType::NATIVE_FLOAT, memspace, dataspace);
-      break;
-    default:
-      std::cout << "Unsupported datatype in  " << __FILE__ << __LINE__ << std::endl;
-      exit(-1);
-      break;
+      if (((end[1] + 1) % FileVDSList.size()) != 0)
+      {
+        std::cout << "# of VDS datasets does not match the size of merged array\n";
+        exit(-1);
+      }
+
+      std::vector<unsigned long long> v_end(2);
+      v_end[0] = end[0];
+      v_end[1] = ((end[1] + 1) / FileVDSList.size()) - 1;
+      std::vector<T> v_data;
+      v_data.resize((v_end[1] - start[1] + 1) * (v_end[0] - start[0] + 1));
+      for (int i = 0; i < FileVDSList.size(); i++)
+      {
+        if (!mpi_rank)
+          std::cout << FileVDSList[i] << std::endl;
+        OpenReadCloseSingleFile(FileVDSList[i], gn_str, dn_str, start, v_end, v_data);
+        InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
+      }
+      v_data.resize(0);
+      return 1;
     }
+    else
+    {
+      std::vector<unsigned long long> offset, count;
+      offset.resize(rank);
+      count.resize(rank);
+      for (int i = 0; i < rank; i++)
+      {
+        offset[i] = start[i];
+        count[i] = end[i] - start[i] + 1; //Starting from zero
+      }
+
+      memspace_id = H5Screate_simple(rank, &count[0], NULL);
+      H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
+
+      int ret;
+      switch (type_class)
+      {
+      case H5T_INTEGER:
+        // ret = H5Dread(did, H5T_NATIVE_INT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
+        ret = H5Dread(did, H5T_NATIVE_INT, memspace_id, dataspace_id, plist_cio_id, &data[0]);
+        //dataset.read(data, PredType::NATIVE_INT, memspace, dataspace);
+        break;
+      case H5T_FLOAT:
+        //ret = H5Dread(did, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
+        ret = H5Dread(did, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, plist_cio_id, &data[0]);
+        //dataset.read(data, PredType::NATIVE_FLOAT, memspace, dataspace);
+        break;
+      default:
+        std::cout << "Unsupported datatype in  " << __FILE__ << __LINE__ << std::endl;
+        exit(-1);
+        break;
+      }
 
 #ifdef DEBUG
-    for (auto i = data.begin(); i != data.end(); ++i)
-      std::cout << *i << ' ';
+      for (auto i = data.begin(); i != data.end(); ++i)
+        std::cout << *i << ' ';
 #endif
 
-    if (ret < 0)
-    {
-      return -1;
+      if (ret < 0)
+      {
+        return -1;
+      }
+
+      return 1;
     }
 
     return 1;
@@ -404,6 +468,7 @@ public:
 
     memspace_id = H5Screate_simple(rank, &count[0], NULL);
     H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
+    printf("Write: start = %lld, %lld, end = %lld, %lld, offset = %lld %lld, count = %lld  %lld, output_vector_size = %d\n", start[0], start[1], end[0], end[1], offset[0], offset[1], count[0], count[1], output_vector_size);
 
     complex_t tmp; /*used only to compute offsets */
     hid_t complex_id = H5Tcreate(H5T_COMPOUND, sizeof(complex_t));
@@ -556,84 +621,53 @@ public:
     hid_t ts_id;
     ts_id = H5Screate_simple(rank, &dims_out[0], NULL);
 
-    complex_t tmp; /*used only to compute offsets */
-    hid_t complex_id = H5Tcreate(H5T_COMPOUND, sizeof(complex_t));
-    H5Tinsert(complex_id, "real", HOFFSET(complex_t, re), H5T_NATIVE_FLOAT);
-    H5Tinsert(complex_id, "imaginary", HOFFSET(complex_t, im), H5T_NATIVE_FLOAT);
+    // complex_t tmp; /*used only to compute offsets */
+    //hid_t complex_id = H5Tcreate(H5T_COMPOUND, sizeof(complex_t));
+    //H5Tinsert(complex_id, "real", HOFFSET(complex_t, re), H5T_NATIVE_FLOAT);
+    //H5Tinsert(complex_id, "imaginary", HOFFSET(complex_t, im), H5T_NATIVE_FLOAT);
 
     switch (type_class)
     {
     case H5T_INTEGER:
       if (gn_str != root_dir)
       {
-        if (H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) == 0)
+        if (H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) > 0)
         {
-          did = H5Dcreate(gid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+          H5Ldelete(gid, dn_str.c_str(), H5P_DEFAULT); //we delete
         }
-        else
-        {
-          did = H5Dopen(gid, dn_str.c_str(), H5P_DEFAULT);
-        }
+        did = H5Dcreate(gid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       }
       else
       {
-        if (H5Lexists(fid, dn_str.c_str(), H5P_DEFAULT) == 0)
+        if (H5Lexists(fid, dn_str.c_str(), H5P_DEFAULT) > 0)
         {
-          did = H5Dcreate(fid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+          H5Ldelete(fid, dn_str.c_str(), H5P_DEFAULT); //we delete
         }
-        else
-        {
-          did = H5Dopen(fid, dn_str.c_str(), H5P_DEFAULT);
-        }
+        did = H5Dcreate(fid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       }
       break;
     case H5T_FLOAT:
       if (gn_str != root_dir)
       {
-        if (H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) == 0)
+        if (H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) > 0)
         {
-          did = H5Dcreate(gid, dn_str.c_str(), H5T_IEEE_F32LE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+          H5Ldelete(gid, dn_str.c_str(), H5P_DEFAULT); //we delete
         }
-        else
-        {
-          did = H5Dopen(gid, dn_str.c_str(), H5P_DEFAULT);
-        }
+
+        did = H5Dcreate(gid, dn_str.c_str(), H5T_IEEE_F32LE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       }
       else
       {
-        if (H5Lexists(fid, dn_str.c_str(), H5P_DEFAULT) == 0)
+        if (H5Lexists(fid, dn_str.c_str(), H5P_DEFAULT) > 0)
         {
-          did = H5Dcreate(fid, dn_str.c_str(), H5T_IEEE_F32LE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+          H5Ldelete(fid, dn_str.c_str(), H5P_DEFAULT); //we delete
         }
-        else
-        {
-          did = H5Dopen(fid, dn_str.c_str(), H5P_DEFAULT);
-        }
+        did = H5Dcreate(fid, dn_str.c_str(), H5T_IEEE_F32LE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       }
       break;
     case H5T_COMPOUND:
-      if (gn_str != root_dir)
-      {
-        if (H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) == 0)
-        {
-          did = H5Dcreate(gid, dn_str.c_str(), complex_id, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-        }
-        else
-        {
-          did = H5Dopen(gid, dn_str.c_str(), H5P_DEFAULT);
-        }
-      }
-      else
-      {
-        if (H5Lexists(fid, dn_str.c_str(), H5P_DEFAULT) == 0)
-        {
-          did = H5Dcreate(fid, dn_str.c_str(), complex_id, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-        }
-        else
-        {
-          did = H5Dopen(fid, dn_str.c_str(), H5P_DEFAULT);
-        }
-      }
+      std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+      exit(-1);
       break;
     default:
       std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
@@ -829,8 +863,146 @@ public:
 
   int is_VDS()
   {
+    std::string output_file_meata;
+    output_file_meata = fn_str + ".vds-meta";
     struct stat buffer;
-    return (stat(fn_str.c_str(), &buffer) == 0);
+    return (stat(output_file_meata.c_str(), &buffer) == 0);
+  }
+
+  //Used to read VDS's file list
+  //One file at a time and all processes read the same file
+  //Each process figure out is own start/end
+  template <class DataType>
+  int OpenReadCloseSingleFile(std::string fna, std::string gna, std::string dna, std::vector<unsigned long long> starta, std::vector<unsigned long long> enda, std::vector<DataType> &dataa)
+  {
+
+    hid_t v_fid = -1, v_gid = -1, v_did = -1, v_plist_id;
+    v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    H5Pset_fapl_mpio(v_plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+
+    v_fid = H5Fopen(fna.c_str(), H5F_ACC_RDONLY, v_plist_id);
+    if (v_fid < 0)
+    {
+      std::cout << "Error happens in open file " << fna << std::endl;
+      exit(-1);
+    }
+
+    std::string root_dir = "/";
+    if (gna != root_dir)
+    {
+      //std::cout << "Open Group : " << gn << std::endl;
+      v_gid = H5Gopen(v_fid, gna.c_str(), H5P_DEFAULT);
+      v_did = H5Dopen(v_gid, dna.c_str(), H5P_DEFAULT);
+    }
+    else
+    {
+      v_did = H5Dopen(v_fid, dna.c_str(), H5P_DEFAULT);
+    }
+
+    hid_t v_datatype = H5Dget_type(v_did); /* datatype handle */
+    H5T_class_t v_type_class = H5Tget_class(v_datatype);
+    hid_t v_dataspace_id = H5Dget_space(v_did);
+    int v_rank = H5Sget_simple_extent_ndims(v_dataspace_id);
+
+    //printf("Constructor in H5Data: plist_id= %d, did=%d, fid=%d !\n", plist_id, did, fid);
+
+    hid_t v_plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
+    H5Pset_dxpl_mpio(v_plist_cio_id, H5FD_MPIO_COLLECTIVE);
+    std::vector<unsigned long long> v_offset, v_count;
+    v_offset.resize(v_rank);
+    v_count.resize(v_rank);
+    for (int i = 0; i < v_rank; i++)
+    {
+      v_offset[i] = starta[i];
+      v_count[i] = enda[i] - starta[i] + 1; //Starting from zero
+    }
+
+    hid_t v_memspace_id = H5Screate_simple(v_rank, &v_count[0], NULL);
+    H5Sselect_hyperslab(v_dataspace_id, H5S_SELECT_SET, &v_offset[0], NULL, &v_count[0], NULL);
+
+    int ret;
+    switch (v_type_class)
+    {
+    case H5T_INTEGER:
+      // ret = H5Dread(did, H5T_NATIVE_INT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
+      ret = H5Dread(v_did, H5T_NATIVE_INT, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
+      //dataset.read(data, PredType::NATIVE_INT, memspace, dataspace);
+      break;
+    case H5T_FLOAT:
+      //ret = H5Dread(did, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
+      ret = H5Dread(v_did, H5T_NATIVE_FLOAT, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
+      //dataset.read(data, PredType::NATIVE_FLOAT, memspace, dataspace);
+      break;
+    default:
+      std::cout << "Unsupported datatype in  " << __FILE__ << __LINE__ << std::endl;
+      exit(-1);
+      break;
+    }
+
+    H5Sclose(v_memspace_id);
+    H5Sclose(v_dataspace_id);
+    H5Pclose(v_plist_id);
+    H5Pclose(v_plist_cio_id);
+    H5Dclose(v_did);
+    if (v_gid > 0)
+      H5Gclose(v_gid);
+    H5Fclose(v_fid);
+
+    if (ret < 0)
+    {
+      printf("Some error happen in reading HDF5 \n");
+      exit(-1);
+    }
+    return 1;
+  }
+
+  //Read the file into FileVDSList
+  bool getFileVDSList(std::string fileName, std::vector<std::string> &FileVDSList)
+  {
+
+    // Open the File
+    std::ifstream in(fileName.c_str());
+
+    // Check if object is valid
+    if (!in)
+    {
+      std::cerr << "Cannot open the File : " << fileName << std::endl;
+      return false;
+    }
+
+    std::string str;
+    // Read the next line from File untill it reaches the end.
+    while (std::getline(in, str))
+    {
+      // Line contains string of length > 0 then save it in vector
+      if (str.size() > 0)
+        FileVDSList.push_back(str);
+    }
+    //Close The File
+    in.close();
+    return true;
+  }
+
+  //Still assume row order
+  template <class DataType>
+  void InsertVDSIntoGlobalSpace(int v_index, std::vector<unsigned long long> &v_start, std::vector<unsigned long long> &v_end, std::vector<DataType> &v_data, std::vector<DataType> &g_data, std::vector<unsigned long long> &g_start, std::vector<unsigned long long> &g_end)
+  {
+    //for row
+    unsigned long long v_vector_start, v_cols, v_rows, g_vector_start, g_cols;
+    v_cols = v_end[1] - v_start[1] + 1;
+    g_cols = g_end[1] - g_start[1] + 1;
+    v_rows = v_end[0] - v_start[0] + 1;
+    for (int i = 0; i < v_rows; i++)
+    {
+      g_vector_start = i * g_cols + v_index * v_cols;
+      v_vector_start = i * v_cols;
+
+      //std::copy(v_data + v_vector_start, v_data + v_vector_start + v_cols, g_data + g_vector_start);
+      for (int j = 0; j < v_cols; j++)
+      {
+        g_data[g_vector_start + j] = v_data[v_vector_start + j];
+      }
+    }
   }
 };
 

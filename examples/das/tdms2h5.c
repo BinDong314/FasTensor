@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
    int compression_flag = 0;
    int copt;
    char *res;
-   while ((copt = getopt(argc, argv, "o:i:thbcs:g:")) != -1)
+   while ((copt = getopt(argc, argv, "o:i:rhbcs:g:")) != -1)
       switch (copt)
       {
       case 'o':
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
       case 'c':
          compression_flag = 1;
          break;
-      case 't':
+      case 'r':
          transpose_flag = 1;
          break;
       case 's':
@@ -600,12 +600,14 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    if (transpose_flag)
    {
-      dataset_id = H5Dcreate(file_id, "/DataChannelTime", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
+      ///DataTC = /DataChannelTime
+      dataset_id = H5Dcreate(file_id, "/DataCT", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
       H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_transposed);
    }
    else
    {
-      dataset_id = H5Dcreate(file_id, "/DataTimeChannel", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
+      ///DataTC = /DataTimeChannel
+      dataset_id = H5Dcreate(file_id, "/DataTC", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
       H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
    }
    H5Sclose(dataspace_id);
@@ -704,7 +706,7 @@ void printf_help(char *cmd)
           -o output file/directory for HDF5 file(s)\n\
           -b batch mode (i.e., both input and output are directory)\n\
           -p parallel conversion on MPI\n\
-          -t transpose matrix (by default, it is [Time] by [Channel])\n\
+          -r transpose data matrix to row order (by default, it is [Time] by [Channel])\n\
           -s start channel (zero based) \n\
           -g counts of channels to go \n\
           Example: %s -i test.tdms -o test.tdms.h5\n";
