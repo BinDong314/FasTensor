@@ -229,8 +229,8 @@ public:
       v_data.resize((v_end[1] - start[1] + 1) * (v_end[0] - start[0] + 1));
       for (int i = 0; i < FileVDSList.size(); i++)
       {
-        if (!mpi_rank)
-          std::cout << FileVDSList[i] << std::endl;
+        if ((!mpi_rank) && (i % 100 == 0))
+          std::cout << "VDS index " << i << ", " << FileVDSList[i] << std::endl;
         OpenReadCloseSingleFile(FileVDSList[i], gn_str, dn_str, start, v_end, v_data);
         InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
       }
