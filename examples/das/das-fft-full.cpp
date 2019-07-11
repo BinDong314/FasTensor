@@ -53,9 +53,7 @@ inline std::vector<float> FFT_UDF(const Stencil<int> &c)
 {
     for (int bi = 0; bi < window_batch; bi++)
     {
-        double t_start, t_end;
-        t_start = MPI_Wtime();
-
+        au_time_start();
         X.resize(n0);
         TC.resize(nfft);
         for (int i = 0; i < n0; i++)
@@ -70,9 +68,7 @@ inline std::vector<float> FFT_UDF(const Stencil<int> &c)
             }
         }
 
-        t_end = MPI_Wtime();
-        if (!mpi_rank)
-            printf("Read Stencil data on rank 0: %1.2f\n", t_end - t_start);
+        au_time_elap("Read Stencil ");
 
         //X is the input
         //TC is a extra cache space for calculation
@@ -82,9 +78,7 @@ inline std::vector<float> FFT_UDF(const Stencil<int> &c)
         //nfft is the size of current window
         FFT_PROCESSING(X, TC, gatherXcorr_per_batch, master_fft, bi, nfft);
 
-        t_start = MPI_Wtime();
-        if (!mpi_rank)
-            printf("FFT on Stencil data on rank 0: %1.2f\n", t_start - t_end);
+        au_time_elap("Run FFT ");
 
         std::copy_n(gatherXcorr_per_batch.begin(), nXCORR, gatherXcorr.begin() + bi * nXCORR);
     }
