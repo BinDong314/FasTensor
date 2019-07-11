@@ -568,7 +568,7 @@ void au_time_start()
   au_timer_global__inside_use = MPI_Wtime();
 }
 
-void au_time_elap(char *info_str)
+void au_time_elap(std::string info_str)
 {
 
   double time_per_rank = MPI_Wtime() - au_timer_global__inside_use;
@@ -583,7 +583,7 @@ void au_time_elap(char *info_str)
 
   if (mpi_rank == 0)
   {
-    printf(" %s:max=%f, min=%f, ave=%f, rank 0=%f\n ", info_str, time_max, time_min, time_sum / mpi_size, time_per_rank);
+    printf(" %s:max=%f, min=%f, ave=%f, rank 0=%f\n", info_str.c_str(), time_max, time_min, time_sum / mpi_size, time_per_rank);
     fflush(stdout);
   }
 
