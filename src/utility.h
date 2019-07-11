@@ -583,7 +583,7 @@ void au_time_elap(std::string info_str)
 
   if (mpi_rank == 0)
   {
-    printf(" %s:max=%f, min=%f, ave=%f, rank 0=%f\n", info_str.c_str(), time_max, time_min, time_sum / mpi_size, time_per_rank);
+    printf("  %s:max=%f, min=%f, ave=%f, rank 0=%f\n", info_str.c_str(), time_max, time_min, time_sum / mpi_size, time_per_rank);
     fflush(stdout);
   }
 
