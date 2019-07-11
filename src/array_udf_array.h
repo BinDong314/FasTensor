@@ -2442,7 +2442,7 @@ public:
       //MPI_Barrier(MPI_COMM_WORLD);
       //#ifdef DEBUG
       if (mpi_rank == 0)
-        std::cout << "Process data of chunk [ " << current_chunk_id << "] at rank 0 ... done !" << std::endl;
+        std::cout << "Finished current chunk and go to [ " << current_chunk_id << "] at rank 0 !" << std::endl;
       //#endif
       //if(single_step_flag == 1)    // goto report_results_mark;
       t_start = MPI_Wtime();

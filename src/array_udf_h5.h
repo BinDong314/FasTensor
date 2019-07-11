@@ -544,6 +544,8 @@ public:
     H5Tinsert(complex_id, "real", HOFFSET(complex_t, re), H5T_NATIVE_FLOAT);
     H5Tinsert(complex_id, "imaginary", HOFFSET(complex_t, im), H5T_NATIVE_FLOAT);
 
+    au_time_start();
+
     //
     //
     int ret;
@@ -621,9 +623,10 @@ public:
 
     //flush data onto disk
     H5Fflush(fid, H5F_SCOPE_GLOBAL);
-    return 1;
-
     Close();
+    au_time_elap("Write data ");
+
+    return 1;
   }
 
   void DisableCollectivIO()
