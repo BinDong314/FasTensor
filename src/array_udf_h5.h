@@ -286,14 +286,14 @@ public:
       v_end[1] = ((end[1] + 1) / FileVDSList.size()) - 1;
       std::vector<T> v_data;
       v_data.resize((v_end[1] - start[1] + 1) * (v_end[0] - start[0] + 1));
-      H5Data<T> *h5p;
+      //H5Data<T> *h5p;
       for (int i = 0; i < FileVDSList.size(); i++)
       {
         if ((!mpi_rank) && (i % 400 == 0))
           std::cout << "VDS index " << i << ", " << FileVDSList[i] << std::endl;
-        //OpenReadCloseSingleFile(FileVDSList[i], gn_str, dn_str, start, v_end, v_data);
-        h5p = FileVDSPList[i];
-        h5p->ReadData(start, v_end, v_data);
+        OpenReadCloseSingleFile(FileVDSList[i], gn_str, dn_str, start, v_end, v_data);
+        //h5p = FileVDSPList[i];
+        //h5p->ReadData(start, v_end, v_data);
         InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
       }
       v_data.resize(0);
@@ -1040,7 +1040,7 @@ public:
       if (str.size() > 0)
       {
         FileVDSList.push_back(str);
-        FileVDSPList.push_back(new H5Data<T>(str, gn_str, dn_str, 0, 0));
+        //FileVDSPList.push_back(new H5Data<T>(str, gn_str, dn_str, 0, 0));
       }
     }
     //Close The File
