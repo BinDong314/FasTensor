@@ -145,9 +145,67 @@ public:
       std::string output_file_meata;
       output_file_meata = fn_str + ".vds-meta";
 
-      std::cout << "I am reading a VDS file" << std::endl;
+      if (!mpi_rank)
+        std::cout << "I am openning a VDS file" << std::endl;
       getFileVDSList(output_file_meata, FileVDSList);
     }
+  };
+
+  //For read : if file exists, if open it
+  //The "i"  is useless, just to be called by getFileVDSList
+  //To avoid recursive calling
+  H5Data(std::string fn, std::string gn, std::string dn, int i)
+  {
+    fn_str = fn;
+    gn_str = gn;
+    dn_str = dn;
+
+    plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+
+    if (is_vector_type<T>())
+      vector_type_flag = 1;
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    fid = H5Fopen(fn.c_str(), H5F_ACC_RDONLY, plist_id);
+    if (fid < 0)
+    {
+      std::cout << "Error happens in open file " << fn << std::endl;
+      exit(-1);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    std::string root_dir = "/";
+    if (gn != root_dir)
+    {
+      //std::cout << "Open Group : " << gn << std::endl;
+      gid = H5Gopen(fid, gn.c_str(), H5P_DEFAULT);
+      did = H5Dopen(gid, dn.c_str(), H5P_DEFAULT);
+    }
+    else
+    {
+      did = H5Dopen(fid, dn.c_str(), H5P_DEFAULT);
+    }
+
+    datatype = H5Dget_type(did); /* datatype handle */
+    type_class = H5Tget_class(datatype);
+    dataspace_id = H5Dget_space(did);
+    rank = H5Sget_simple_extent_ndims(dataspace_id);
+    dims_out.resize(rank);
+    H5Sget_simple_extent_dims(dataspace_id, &dims_out[0], NULL);
+
+    //printf("Constructor in H5Data: plist_id= %d, did=%d, fid=%d !\n", plist_id, did, fid);
+
+#ifdef SDS_UDF_COLLECTIVE_IO
+    plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
+    H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
+#else
+    plist_cio_id = H5P_DEFAULT;
+#endif
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
   };
 
   H5Data(std::string fn, std::string gn, std::string dn, int data_dims, std::vector<unsigned long long> data_dims_size, std::vector<int> data_chunk_size)
@@ -982,7 +1040,7 @@ public:
       if (str.size() > 0)
       {
         FileVDSList.push_back(str);
-        FileVDSPList.push_back(new H5Data<T>(str, gn_str, dn_str));
+        FileVDSPList.push_back(new H5Data<T>(str, gn_str, dn_str, 0));
       }
     }
     //Close The File
