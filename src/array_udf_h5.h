@@ -294,7 +294,7 @@ public:
         OpenReadCloseSingleFile(FileVDSList[i], gn_str, dn_str, start, v_end, v_data);
         //h5p = FileVDSPList[i];
         //h5p->ReadData(start, v_end, v_data);
-        InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
+        //InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
       }
       v_data.resize(0);
       return 1;
