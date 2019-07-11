@@ -152,9 +152,9 @@ public:
   };
 
   //For read : if file exists, if open it
-  //The "i"  is useless, just to be called by getFileVDSList
+  //The "i" and "j" is useless, just to be called by getFileVDSList
   //To avoid recursive calling
-  H5Data(std::string fn, std::string gn, std::string dn, int i)
+  H5Data(std::string fn, std::string gn, std::string dn, int i, int j)
   {
     fn_str = fn;
     gn_str = gn;
@@ -1040,7 +1040,7 @@ public:
       if (str.size() > 0)
       {
         FileVDSList.push_back(str);
-        FileVDSPList.push_back(new H5Data<T>(str, gn_str, dn_str, 0));
+        FileVDSPList.push_back(new H5Data<T>(str, gn_str, dn_str, 0, 0));
       }
     }
     //Close The File
