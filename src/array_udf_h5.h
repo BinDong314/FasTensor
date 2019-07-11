@@ -281,6 +281,9 @@ public:
         exit(-1);
       }
 
+      double t_start, t_end;
+      t_start = MPI_Wtime();
+
       std::vector<unsigned long long> v_end(2);
       v_end[0] = end[0];
       v_end[1] = ((end[1] + 1) / FileVDSList.size()) - 1;
@@ -294,9 +297,13 @@ public:
         OpenReadCloseSingleFile(FileVDSList[i], gn_str, dn_str, start, v_end, v_data);
         //h5p = FileVDSPList[i];
         //h5p->ReadData(start, v_end, v_data);
-        //InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
+        InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
       }
       v_data.resize(0);
+      t_end = MPI_Wtime();
+      if (!mpi_rank)
+        printf("Read data time  on rank 0: %1.2f\n", t_end - t_start);
+      fflush(stdout);
       return 1;
     }
     else
