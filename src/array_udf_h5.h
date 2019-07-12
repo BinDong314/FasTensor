@@ -1068,11 +1068,11 @@ public:
       g_vector_start = i * g_cols + v_index * v_cols;
       v_vector_start = i * v_cols;
 
-      //std::copy(v_data + v_vector_start, v_data + v_vector_start + v_cols, g_data + g_vector_start);
-      for (int j = 0; j < v_cols; j++)
+      std::copy(v_data.begin() + v_vector_start, v_data.begin() + v_vector_start + v_cols, g_data.begin() + g_vector_start);
+      /*for (int j = 0; j < v_cols; j++)
       {
         g_data[g_vector_start + j] = v_data[v_vector_start + j];
-      }
+      }*/
     }
   }
 };

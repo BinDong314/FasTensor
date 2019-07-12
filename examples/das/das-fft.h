@@ -227,22 +227,27 @@ std::vector<float> gatherXcorr_per_batch;
  */
 #define FFT_PROCESSING(XX, YY, GX, MFFT, BI, BS)                                                                   \
     {                                                                                                              \
+        au_time_start();                                                                                           \
         detrend(&(XX[0]), XX.size());                                                                              \
         filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                                      \
         resample(1, DT_NEW / DT, YY, XX);                                                                          \
         MOVING_MEAN(XX, YY, nPoint_hal_win);                                                                       \
         INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                              \
+        au_time_elap(" ++ Before fft ");                                                                           \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                           \
-        double temp_f;                                                                                             \
+        au_time_elap(" ++ First fft ");                                                                            \
         for (int ii = 0; ii < nfft; ii++)                                                                          \
         {                                                                                                          \
+            double temp_f;                                                                                         \
             temp_f = pow(sqrt(fft_out[ii][0] * fft_out[ii][0] + fft_out[ii][1] * fft_out[ii][1]), eCoeff) + 0.001; \
             fft_in[ii][0] = (fft_out[ii][0] + 0.001) / temp_f * shapingFilt[ii];                                   \
             fft_in[ii][1] = (fft_out[ii][1]) / temp_f * shapingFilt[ii];                                           \
             fft_out[ii][0] = 0;                                                                                    \
             fft_out[ii][1] = 0;                                                                                    \
         }                                                                                                          \
+        au_time_elap(" ++ Corr fft ");                                                                             \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                                          \
+        au_time_elap(" ++ Rev fft ");                                                                              \
         YY.resize(nPoint);                                                                                         \
         for (int i = 0; i < nPoint; i++)                                                                           \
         {                                                                                                          \
