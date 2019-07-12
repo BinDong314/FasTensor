@@ -49,7 +49,7 @@ void printf_help(char *cmd);
  *  The return value is a coorelation vector
  * See more details at das-fft.h
  */
-inline std::vector<float> FFT_UDF(const Stencil<int> &c)
+inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 {
     for (int bi = 0; bi < window_batch; bi++)
     {
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
         read_config_file(config_file, mpi_rank);
 
     //Declare the input and output AU::Array
-    AU::Array<int> *IFILE = new AU::Array<int>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, auto_chunk_dims_index);
+    AU::Array<short> *IFILE = new AU::Array<short>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, auto_chunk_dims_index);
     AU::Array<float> *OFILE = new AU::Array<float>(AU_COMPUTED, AU_HDF5, o_file, o_group, o_dataset, auto_chunk_dims_index);
 
     //Find and set chunks_size to split array for parallel processing

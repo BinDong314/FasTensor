@@ -992,14 +992,11 @@ public:
     switch (v_type_class)
     {
     case H5T_INTEGER:
-      // ret = H5Dread(did, H5T_NATIVE_INT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
-      ret = H5Dread(v_did, H5T_NATIVE_INT, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
-      //dataset.read(data, PredType::NATIVE_INT, memspace, dataspace);
+      //ret = H5Dread(v_did, H5T_NATIVE_INT, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
+      ret = H5Dread(v_did, H5T_NATIVE_SHORT, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
       break;
     case H5T_FLOAT:
-      //ret = H5Dread(did, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
       ret = H5Dread(v_did, H5T_NATIVE_FLOAT, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
-      //dataset.read(data, PredType::NATIVE_FLOAT, memspace, dataspace);
       break;
     default:
       std::cout << "Unsupported datatype in  " << __FILE__ << __LINE__ << std::endl;

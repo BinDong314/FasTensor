@@ -227,7 +227,6 @@ std::vector<float> gatherXcorr_per_batch;
  */
 #define FFT_PROCESSING(XX, YY, GX, MFFT, BI, BS)                                                                   \
     {                                                                                                              \
-        au_time_start();                                                                                           \
         detrend(&(XX[0]), XX.size());                                                                              \
         filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                                      \
         resample(1, DT_NEW / DT, YY, XX);                                                                          \
