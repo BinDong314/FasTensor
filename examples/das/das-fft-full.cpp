@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
     }
 
     //Get FFT of master vector
-    std::vector<int> masterv;
+    std::vector<short> masterv;
     masterv.resize(n0);
     std::vector<double> mastervf, masterv_ppf;
     mastervf.resize(n0);
