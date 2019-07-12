@@ -703,7 +703,7 @@ public:
         {
           H5Ldelete(gid, dn_str.c_str(), H5P_DEFAULT); //we delete
         }
-        did = H5Dcreate(gid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+        did = H5Dcreate(gid, dn_str.c_str(), H5T_STD_I32LE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       }
       else
       {
@@ -711,7 +711,7 @@ public:
         {
           H5Ldelete(fid, dn_str.c_str(), H5P_DEFAULT); //we delete
         }
-        did = H5Dcreate(fid, dn_str.c_str(), H5T_STD_I32BE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+        did = H5Dcreate(fid, dn_str.c_str(), H5T_STD_I32LE, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       }
       break;
     case H5T_FLOAT:

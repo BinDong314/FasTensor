@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
   /* Set VDS creation property. */
   hid_t dcpl = H5Pcreate(H5P_DATASET_CREATE);
   float fill_value = 0;
-  H5Pset_fill_value(dcpl, H5T_STD_I16BE, &fill_value);
+  H5Pset_fill_value(dcpl, H5T_STD_I16LE, &fill_value);
 
   hid_t src_space = H5Screate_simple(rank, dims_per_dset, NULL);
   int src_index = 0;
@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
   }
 
   /* Create a virtual dataset. */
-  hid_t vir_dset = H5Dcreate(vir_file_id, dataset.c_str(), H5T_STD_I16BE, vir_space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
+  hid_t vir_dset = H5Dcreate(vir_file_id, dataset.c_str(), H5T_STD_I16LE, vir_space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
 
   H5Sclose(vir_space);
   H5Sclose(src_space);

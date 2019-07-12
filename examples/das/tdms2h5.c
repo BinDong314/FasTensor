@@ -601,13 +601,13 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    if (transpose_flag)
    {
       ///DataTC = /DataChannelTime
-      dataset_id = H5Dcreate(file_id, "/DataCT", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
+      dataset_id = H5Dcreate(file_id, "/DataCT", H5T_STD_I16LE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
       H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_transposed);
    }
    else
    {
       ///DataTC = /DataTimeChannel
-      dataset_id = H5Dcreate(file_id, "/DataTC", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
+      dataset_id = H5Dcreate(file_id, "/DataTC", H5T_STD_I16LE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
       H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
    }
    H5Sclose(dataspace_id);
