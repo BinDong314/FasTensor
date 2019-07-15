@@ -205,10 +205,14 @@ void detrend_mp(T *y, int m)
     *********************************/
     xmean = 0;
     ymean = 0;
-#pragma omp parallel for shared(xmean, ymean, x, y) reduction(+ \
-                                                              : xmean, ymean)
+
+#pragma omp parallel for shared(x, y) reduction(+ \
+                                                : xmean, ymean)
     for (i = 0; i < m; i++)
     {
+        const int nthreads = omp_get_num_threads();
+        const int ithread = omp_get_thread_num();
+        printf("nthreads = %d,ithread = %d\n ", nthreads, ithread);
         xmean += x[i];
         ymean += y[i];
     }
