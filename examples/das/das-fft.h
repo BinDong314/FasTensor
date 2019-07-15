@@ -228,11 +228,15 @@ std::vector<float> gatherXcorr_per_batch;
 #define FFT_PROCESSING(XX, YY, GX, MFFT, BI, BS)                                                                   \
     {                                                                                                              \
         detrend(&(XX[0]), XX.size());                                                                              \
+        au_time_elap(" ++ detrend ");                                                                              \
         filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                                      \
+        au_time_elap(" ++ filtfilt ");                                                                             \
         resample(1, DT_NEW / DT, YY, XX);                                                                          \
+        au_time_elap(" ++ resample ");                                                                             \
         MOVING_MEAN(XX, YY, nPoint_hal_win);                                                                       \
+        au_time_elap(" ++ MOVING_MEAN ");                                                                          \
         INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                              \
-        au_time_elap(" ++ Before fft ");                                                                           \
+        au_time_elap(" ++ Init fft ");                                                                             \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                           \
         au_time_elap(" ++ First fft ");                                                                            \
         for (int ii = 0; ii < nfft; ii++)                                                                          \
