@@ -27,7 +27,7 @@ int main()
     time(&end);
 
     double dif = difftime(end, start);
-    printf("detrend_mp:  %.2lf seconds.", dif);
+    printf("detrend_mp:  %.2lf seconds. \n", dif);
 
     std::vector<float> veridata;
     veridata.resize(N);
@@ -41,7 +41,7 @@ int main()
     detrend(&veridata[0], N);
     time(&end);
     dif = difftime(end, start);
-    printf("detrend:  %.2lf seconds.", dif);
+    printf("detrend:  %.2lf seconds. \n", dif);
 
     int find_missing_value_flag = 0;
     for (int i = 0; i < N; i++)
