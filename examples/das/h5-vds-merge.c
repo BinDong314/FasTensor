@@ -271,9 +271,23 @@ int main(int argc, char *argv[])
     src_index++;
   }
 
+  hid_t vir_dset, vir_group;
+  if (group != "/")
+  {
+    vir_group = H5Gcreate(vir_file_id, group.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    vir_dset = H5Dcreate(vir_group, dataset.c_str(), H5T_STD_I16LE, vir_space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
+  }
+  else
+  {
+    vir_dset = H5Dcreate(vir_file_id, dataset.c_str(), H5T_STD_I16LE, vir_space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
+  }
   /* Create a virtual dataset. */
-  hid_t vir_dset = H5Dcreate(vir_file_id, dataset.c_str(), H5T_STD_I16LE, vir_space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
+  // hid_t vir_dset = H5Dcreate(vir_file_id, dataset.c_str(), H5T_STD_I16LE, vir_space, H5P_DEFAULT, dcpl, H5P_DEFAULT);
 
+  if (group != "/")
+  {
+    H5Gclose(vir_group);
+  }
   H5Sclose(vir_space);
   H5Sclose(src_space);
   H5Dclose(vir_dset);

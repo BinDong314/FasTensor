@@ -66,7 +66,10 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
             {
                 X[i] = (double)c(0, i + bi * n0);
             }
+            //std::cout << X[i] << ", ";
         }
+
+        //std::cout << "\n";
 
         au_time_elap("Read Stencil ");
 
