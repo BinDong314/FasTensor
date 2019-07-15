@@ -192,6 +192,9 @@ void detrend_mp(T *y, int m)
     T yint;
 
     std::unique_ptr<T[]> x(new T[m]);
+    const int nthreads = omp_get_num_threads();
+    const int ithread = omp_get_thread_num();
+    printf("nthreads = %d,ithread = %d\n ", nthreads, ithread);
 
 /********************************
     Set the X axis Liner Values
@@ -210,9 +213,7 @@ void detrend_mp(T *y, int m)
                                                 : xmean, ymean)
     for (i = 0; i < m; i++)
     {
-        const int nthreads = omp_get_num_threads();
-        const int ithread = omp_get_thread_num();
-        printf("nthreads = %d,ithread = %d\n ", nthreads, ithread);
+
         xmean += x[i];
         ymean += y[i];
     }
