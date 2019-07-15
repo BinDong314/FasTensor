@@ -1,5 +1,12 @@
 #include <omp.h>
 #include <time.h>
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <cstdio>
+#include <fstream>
+#include <cassert>
+#include <functional>
 
 #include "das-fft-help.cc"
 
