@@ -5,7 +5,7 @@ AU_HOME=../../build
 HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
 FFTW_DIR=/opt/local/
 CCC=mpicxx
-OTHER_FLAGS= -I./fft-header/ -L/opt/local/lib -lboost_program_options-mt -I/opt/local/include/eigen3/ -g
+OTHER_FLAGS= -I./fft-header/ -L/opt/local/lib -lboost_program_options-mt -I/opt/local/include/eigen3/ -g3 -fopenmp
 #-I./fft-header/Eigen/include/eigen3/ 
 #Snowbear
 #AU_HOME=../../build

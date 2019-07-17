@@ -45,7 +45,7 @@ namespace AU
 
 //#define ENABLE_OPENMP 1
 //#ifdef ENABLE_OPENMP
-//#include <omp.h>
+#include <omp.h>
 //#else
 //#define omp_get_thread_num() 0
 //#endif
@@ -1273,6 +1273,7 @@ public:
         {
           current_result_chunk_start_offset[i] = skiped_dims_size[i];
         }
+
         if (current_result_chunk_start_offset[i] + skiped_chunk_size[i] - 1 < skiped_dims_size[i])
         {
           current_result_chunk_end_offset[i] = current_result_chunk_start_offset[i] + skiped_chunk_size[i] - 1;
@@ -2215,12 +2216,12 @@ public:
     time_read = time_read + t_end - t_start;
 
     MPI_Barrier(MPI_COMM_WORLD);
-#ifdef DEBUG
-    if (mpi_rank < 1)
+    //#ifdef DEBUG
+    if (!mpi_rank)
     {
-      std::cout << "At mpi rank =" << mpi_rank << ", Loading the first chunk ... done ! current_chunk_cells = " << current_chunk_cells << ", next_chunk_id =  " << current_chunk_id << std::endl;
+      std::cout << "Rank 0, Loading the first chunk ... done ! current_result_chunk_data_size = " << current_result_chunk_data_size << ", next_chunk_id =  " << current_chunk_id << std::endl;
     }
-#endif
+    //#endif
 
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -2243,119 +2244,130 @@ public:
         UDFOutputType cell_return_value;
         //unsigned long long lrm;
         Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
-        //#ifdef  ENABLE_OPENMP
-        //#pragma omp parallel
-        //{
-        //#pragma omp for firstprivate(cell_target, cell_coordinate , global_cell_coordinate, offset_ol, cell_return_value, cell_coordinate_ol, is_mirror_value, t_start, t_end)
-        for (unsigned long long i = 0; i < current_chunk_cells; i++)
+
+#pragma omp parallel
         {
-          //Get the coordinate (HDF5 uses row major layout)
-          //cell_coordinate = RowMajorOrderReverse(i, current_chunk_size);
-          ROW_MAJOR_ORDER_REVERSE_MACRO(i, current_chunk_size, current_chunk_size.size(), cell_coordinate)
-          if (skip_flag == 1)
+          int ithread = omp_get_thread_num();
+          int nthreads = omp_get_num_threads();
+#pragma omp single
           {
-            if (SkipIt(cell_coordinate, skip_size) == 1)
-              continue;
-            assert(i < current_chunk_cells);
+            printf("nthreads = %d, my rank = %d \n", nthreads, ithread);
           }
 
-          //Get the coodinate with overlapping
-          //Also, get the global coodinate of the cell in original array
-          for (int ii = 0; ii < data_dims; ii++)
+#pragma omp for firstprivate(cell_coordinate, cell_coordinate_ol, global_cell_coordinate, offset_ol, cell_target_g_location_rm, cell_return_value, is_mirror_value, t_start, t_end)
+          for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
-            if (cell_coordinate[ii] + ol_origin_offset[ii] < current_chunk_ol_size[ii])
+            //Get the coordinate (HDF5 uses row major layout)
+            //cell_coordinate = RowMajorOrderReverse(i, current_chunk_size);
+            ROW_MAJOR_ORDER_REVERSE_MACRO(i, current_chunk_size, current_chunk_size.size(), cell_coordinate)
+            if (skip_flag == 1)
             {
-              cell_coordinate_ol[ii] = cell_coordinate[ii] + ol_origin_offset[ii];
+              if (SkipIt(cell_coordinate, skip_size) == 1)
+                continue;
+              assert(i < current_chunk_cells);
             }
-            else
-            {
-              cell_coordinate_ol[ii] = current_chunk_ol_size[ii] - 1;
-            }
-            //get the global coordinate
-            global_cell_coordinate[ii] = current_chunk_start_offset[ii] + cell_coordinate[ii];
-          }
 
-          //Update the offset with overlapping
-          //offset_ol = RowMajorOrder(current_chunk_ol_size, cell_coordinate_ol);
-          ROW_MAJOR_ORDER_MACRO(current_chunk_ol_size, current_chunk_ol_size.size(), cell_coordinate_ol, offset_ol);
-          cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size);
-          //Set the global coodinate of the cell as the ID of the cell
-          //Disable it for performance.
-          //RowMajorOrder(data_dims_size, global_cell_coordinate)
-          ROW_MAJOR_ORDER_MACRO(data_dims_size, data_dims_size.size(), global_cell_coordinate, cell_target_g_location_rm)
-          cell_target.set_my_g_location_rm(cell_target_g_location_rm);
-          is_mirror_value = 0;
-          if (mirror_value_flag == 1)
-          {
-            for (int iii = 0; iii < mirror_values.size(); iii++)
+            //Get the coodinate with overlapping
+            //Also, get the global coodinate of the cell in original array
+            for (int ii = 0; ii < data_dims; ii++)
             {
-              if (current_chunk_data[offset_ol] == mirror_values[iii])
+              if (cell_coordinate[ii] + ol_origin_offset[ii] < current_chunk_ol_size[ii])
               {
-                is_mirror_value = 1;
-                break;
+                cell_coordinate_ol[ii] = cell_coordinate[ii] + ol_origin_offset[ii];
+              }
+              else
+              {
+                cell_coordinate_ol[ii] = current_chunk_ol_size[ii] - 1;
+              }
+              //get the global coordinate
+              global_cell_coordinate[ii] = current_chunk_start_offset[ii] + cell_coordinate[ii];
+            }
+
+            //Update the offset with overlapping
+            //offset_ol = RowMajorOrder(current_chunk_ol_size, cell_coordinate_ol);
+            ROW_MAJOR_ORDER_MACRO(current_chunk_ol_size, current_chunk_ol_size.size(), cell_coordinate_ol, offset_ol);
+            cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size);
+            //Set the global coodinate of the cell as the ID of the cell
+            //Disable it for performance.
+            //RowMajorOrder(data_dims_size, global_cell_coordinate)
+            ROW_MAJOR_ORDER_MACRO(data_dims_size, data_dims_size.size(), global_cell_coordinate, cell_target_g_location_rm)
+            cell_target.set_my_g_location_rm(cell_target_g_location_rm);
+            is_mirror_value = 0;
+            if (mirror_value_flag == 1)
+            {
+              for (int iii = 0; iii < mirror_values.size(); iii++)
+              {
+                if (current_chunk_data[offset_ol] == mirror_values[iii])
+                {
+                  is_mirror_value = 1;
+                  break;
+                }
               }
             }
-          }
 
-          //Just for the test of performnace
-          //if(cell_coordinate[0] >= 16383 || cell_coordinate[1] >= 16383)
+            //Just for the test of performnace
+            //if(cell_coordinate[0] >= 16383 || cell_coordinate[1] >= 16383)
 
-          if (is_mirror_value == 0)
-          {
-            //Not mirrow value, we need to run the UDF to get results
+            if (is_mirror_value == 0)
+            {
+              //Not mirrow value, we need to run the UDF to get results
 #ifdef PY_ARRAYUDF
-            cell_return_value = UDF(&cell_target); // Called by python
+              cell_return_value = UDF(&cell_target); // Called by python
 #else
 
-            t_start = MPI_Wtime();
+              t_start = MPI_Wtime();
 
-            cell_return_value = UDF(cell_target); // Called by C++
+              cell_return_value = UDF(cell_target); // Called by C++
 
-            t_end = MPI_Wtime();
-            time_udf = t_end - t_start + time_udf;
+              t_end = MPI_Wtime();
+              time_udf = t_end - t_start + time_udf;
 #endif
 
 #ifdef DEBUG
-            if (current_chunk_id == 1)
-            {
-              std::cout << "cell_coordinate    = " << cell_coordinate[0] << ", " << cell_coordinate[1] << std::endl;
-              std::cout << "ol_origin_offsest  = " << ol_origin_offset[0] << ", " << ol_origin_offset[1] << std::endl;
-              std::cout << "cell_coordinate_ol = " << cell_coordinate_ol[0] << ", " << cell_coordinate_ol[1] << std::endl;
-              std::cout << "offset_ol = " << offset_ol << std::endl;
-              std::cout << std::endl;
-            }
+              if (current_chunk_id == 1)
+              {
+                std::cout << "cell_coordinate    = " << cell_coordinate[0] << ", " << cell_coordinate[1] << std::endl;
+                std::cout << "ol_origin_offsest  = " << ol_origin_offset[0] << ", " << ol_origin_offset[1] << std::endl;
+                std::cout << "cell_coordinate_ol = " << cell_coordinate_ol[0] << ", " << cell_coordinate_ol[1] << std::endl;
+                std::cout << "offset_ol = " << offset_ol << std::endl;
+                std::cout << std::endl;
+              }
 #endif
-          }
-          else
-          {
-            //This is a mirrow value, copy it into result directly
-            //Using memcpy to avail error in template of T
-            memset(&cell_return_value, 0, sizeof(T));
-            std::memcpy(&cell_return_value, &current_chunk_data[offset_ol], sizeof(T));
-          }
-
-          if (save_result_flag == 1)
-          {
-            if (skip_flag == 1)
-            {
-              current_result_chunk_data[result_vector_index] = cell_return_value;
-              result_vector_index = result_vector_index + 1;
-              //When skip_flag is set, there is no need to have apply_replace_flag
-              //Todo: in future
-              //if(apply_replace_flag == 1){
-              //  current_chunk_data[i] = cell_return_value; //Replace the orginal data
-              //}
             }
             else
             {
-              current_result_chunk_data[i] = cell_return_value; //cell_return =  cell_return.
-              if (apply_replace_flag == 1)
+              //This is a mirrow value, copy it into result directly
+              //Using memcpy to avail error in template of T
+              memset(&cell_return_value, 0, sizeof(T));
+              std::memcpy(&cell_return_value, &current_chunk_data[offset_ol], sizeof(T));
+            }
+
+            if (save_result_flag == 1)
+            {
+              if (skip_flag == 1)
               {
-                std::memcpy(&current_chunk_data[offset_ol], &cell_return_value, sizeof(T));
+#pragma omp critical
+                {
+                  current_result_chunk_data[result_vector_index] = cell_return_value;
+                  result_vector_index = result_vector_index + 1;
+                }
+                //When skip_flag is set, there is no need to have apply_replace_flag
+                //Todo: in future
+                //if(apply_replace_flag == 1){
+                //  current_chunk_data[i] = cell_return_value; //Replace the orginal data
+                //}
+              }
+              else
+              {
+                current_result_chunk_data[i] = cell_return_value; //cell_return =  cell_return.
+                if (apply_replace_flag == 1)
+                {
+                  std::memcpy(&current_chunk_data[offset_ol], &cell_return_value, sizeof(T));
+                }
               }
             }
-          }
-        } //finish the processing on a single chunk in row-major direction
+          } //finish the processing on a single chunk in row-major direction
+        }
       }
       else
       { //go to reverse direction set_apply_direction_flag == 1
@@ -3781,7 +3793,7 @@ public:
 
     //return cell_return_value;
   }
-};
+}; // namespace AU
 
 #endif
 }
