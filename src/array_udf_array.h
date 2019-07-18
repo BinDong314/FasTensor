@@ -2225,25 +2225,20 @@ public:
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-    std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
-    unsigned long long offset_ol;
-
     //Start real UDF function running
     unsigned long long result_vector_index = 0;
-    int is_mirror_value = 0;
     //Apply UDF to eah cell of local chunk, untill no chunk
     while (load_ret == 1)
     {
       processed_chunks_count = processed_chunks_count + 1;
       unsigned long long cell_target_g_location_rm;
       result_vector_index = 0;
+
       //t_start = MPI_Wtime();
       //Start to process a chunk
       if (set_apply_direction_flag == 0)
       { //in row-major direction
-        UDFOutputType cell_return_value;
         //unsigned long long lrm;
-        Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
         t_start = MPI_Wtime();
 
         //int ithread = omp_get_thread_num();
@@ -2253,6 +2248,13 @@ public:
 
 #pragma omp parallel default(shared)
         {
+          std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
+          unsigned long long offset_ol;
+          Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
+          UDFOutputType cell_return_value;
+          unsigned long long cell_target_g_location_rm;
+          int is_mirror_value = 0;
+
           int ithread = omp_get_thread_num();
           int nthreads = omp_get_num_threads();
 #pragma omp single
@@ -2261,7 +2263,7 @@ public:
             prefix[0] = 0;
           }
           std::vector<UDFOutputType> vec_private;
-#pragma omp for nowait schedule(static) firstprivate(cell_coordinate, cell_coordinate_ol, global_cell_coordinate, offset_ol, cell_target_g_location_rm, cell_return_value, cell_target, is_mirror_value)
+#pragma omp for nowait schedule(static, 64)
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
             //Get the coordinate (HDF5 uses row major layout)
@@ -2377,7 +2379,7 @@ public:
                 }
               }
             }
-          } //finish the processing on a single chunk in row-major direction
+          } //end for loop, finish the processing on a single chunk in row-major direction
           prefix[ithread + 1] = vec_private.size();
 #pragma omp barrier
 #pragma omp single
@@ -2401,8 +2403,11 @@ public:
       }
       else
       { //go to reverse direction set_apply_direction_flag == 1
+        int is_mirror_value = 0;
         UDFOutputType cell_return_value;
+        std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
         Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
+        unsigned long long offset_ol;
         for (long long i = current_chunk_cells - 1; i >= 0; i--)
         { //
           //Get the coordinate (HDF5 uses row major layout)
