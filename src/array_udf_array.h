@@ -2261,7 +2261,7 @@ public:
             prefix[0] = 0;
           }
           std::vector<UDFOutputType> vec_private;
-#pragma omp parallel for nowait schedule(static) default(shared) firstprivate(cell_coordinate, cell_coordinate_ol, global_cell_coordinate, offset_ol, cell_target_g_location_rm, cell_return_value, cell_target, is_mirror_value)
+#pragma omp for nowait schedule(static) default(shared) firstprivate(cell_coordinate, cell_coordinate_ol, global_cell_coordinate, offset_ol, cell_target_g_location_rm, cell_return_value, cell_target, is_mirror_value)
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
             //Get the coordinate (HDF5 uses row major layout)
