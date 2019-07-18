@@ -2275,9 +2275,7 @@ public:
                 continue;
               assert(i < current_chunk_cells);
             }
-
             int iithread = omp_get_thread_num();
-            int nthreads = omp_get_num_threads();
             printf("i = %lld on thread # = %d (/%d), current_chunk_cells = %lld \n", i, iithread, nthreads, current_chunk_cells);
 
             //Get the coodinate with overlapping
@@ -2385,12 +2383,18 @@ public:
 #pragma omp single
           {
             for (int i = 1; i < (nthreads + 1); i++)
+            {
+              std::cout << "prefix[" << i >> "] =" << prefix[i] << "\n";
               prefix[i] += prefix[i - 1];
-            current_result_chunk_data.resize(prefix[nthreads]);
-          }
-
+            }
+            //current_result_chunk_data.resize(current_result_chunk_data.size() + prefix[nthreads]);
+            if (current_result_chunk_data.size() != prefix[nthreads])
+            {
+              std::cout << "Wrong output size ! prefix[nthreads] =" << prefix[nthreads] << ", current.size() = " << current_result_chunk_data.size() << " \n ";
+            }
+          } //end of omp for
           std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
-        }
+        } //end of omp para
 
         t_end = MPI_Wtime();
         time_udf = t_end - t_start + time_udf;
