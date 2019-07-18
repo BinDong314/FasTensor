@@ -2264,8 +2264,9 @@ public:
               continue;
             assert(i < current_chunk_cells);
           }
-          //int iithread = omp_get_thread_num();
-          //printf("i = %lld on thread # = %d , current_chunk_cells = %lld \n", i, iithread, current_chunk_cells);
+          int iithread = omp_get_thread_num();
+          int nthreads = omp_get_num_threads();
+          printf("i = %lld on thread # = %d (/%d), current_chunk_cells = %lld \n", i, iithread, nthreads, current_chunk_cells);
 
           //Get the coodinate with overlapping
           //Also, get the global coodinate of the cell in original array
