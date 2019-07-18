@@ -2386,7 +2386,7 @@ public:
           {
             for (int i = 1; i < (nthreads + 1); i++)
               prefix[i] += prefix[i - 1];
-            vec.resize(vec.size() + prefix[nthreads]);
+            current_result_chunk_data.resize(prefix[nthreads]);
           }
 
           std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
