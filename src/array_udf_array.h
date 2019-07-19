@@ -2245,7 +2245,7 @@ public:
         //int nthreads = omp_get_num_threads();
         //printf("nthreads = %d, my rank = %d \n", nthreads, ithread);
         size_t *prefix;
-        omp_set_schedule(omp_sched_static, 64);
+        //omp_set_schedule(omp_sched_static, 64);
 #pragma omp parallel default(shared)
         {
           std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
@@ -2263,7 +2263,7 @@ public:
             prefix[0] = 0;
           }
           std::vector<UDFOutputType> vec_private;
-#pragma omp for
+#pragma omp for schedule(static) nowait
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
             //Get the coordinate (HDF5 uses row major layout)

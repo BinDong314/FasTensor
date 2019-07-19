@@ -22,7 +22,7 @@ OTHER_FLAGS= -I./fft-header/ -L/opt/local/lib -lboost_program_options-mt -I/opt/
 #CCC=CC
 
 .PHONY:all
-all:h5-vds-merge tdms2h5 das-fft-full
+all:h5-vds-merge tdms2h5 das-fft-full das-fft-full-omp
 
 
 h5-vds-merge:h5-vds-merge.c  
@@ -34,5 +34,10 @@ tdms2h5:tdms2h5.c
 
 das-fft-full:das-fft-full.cpp
 	$(CCC) -o das-fft-full fft-header/resample.cpp fft/kiss_fft.c das-fft-full.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++17 -lArrayUDF  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  $(OTHER_FLAGS) -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3 
+
+
+das-fft-full-omp:das-fft-full-omp.cpp
+	$(CCC) -o das-fft-full-omp fft-header/resample.cpp fft/kiss_fft.c das-fft-full-omp.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++17 -lArrayUDF  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  $(OTHER_FLAGS) -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3 
+	
 clean:
 	rm das-correlation h5-vds-merge tdms2h5 das-fft das-fft-full

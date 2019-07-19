@@ -205,6 +205,32 @@ std::vector<float> gatherXcorr_per_batch;
         }                                                                        \
         FF_LHS.clear();                                                          \
         LHS.clear();                                                             \
+        std::vector<double>().swap(FF_LHS);                                      \
+        std::vector<double>().swap(LHS);                                         \
+    }
+
+//WS: window size
+#define INIT_SPACE_OMP()                                         \
+    {                                                            \
+        shapingFilt.resize(nfft);                                \
+        std::vector<double> FF_LHS, LHS;                         \
+        FF_LHS.resize(nfft / 2);                                 \
+        LHS.resize(nfft / 2);                                    \
+        for (int i = 0; i < nfft / 2; i++)                       \
+        {                                                        \
+            FF_LHS[i] = df * (i + 1);                            \
+        }                                                        \
+        interp1(INTERP_ZF, INTERP_Z, FF_LHS, LHS);               \
+        int nfft_half = nfft / 2;                                \
+        for (int i = 0; i < nfft_half; i++)                      \
+        {                                                        \
+            shapingFilt[i] = LHS[i];                             \
+            shapingFilt[i + nfft_half] = LHS[nfft_half - i - 1]; \
+        }                                                        \
+        FF_LHS.clear();                                          \
+        LHS.clear();                                             \
+        std::vector<double>().swap(FF_LHS);                      \
+        std::vector<double>().swap(LHS);                         \
     }
 
 //R = dt_new/dt
@@ -219,6 +245,24 @@ std::vector<float> gatherXcorr_per_batch;
         gatherXcorr.clear();           \
         gatherXcorr_per_batch.clear(); \
     }
+
+//R = dt_new/dt
+#define CLEAR_SPACE_OMP()    \
+    {                        \
+        shapingFilt.clear(); \
+    }
+
+#define MALLOC_FFT(PFFT, NFFT)                                               \
+    PFFT = fftw_alloc_complex(NFFT);                                         \
+    if (PFFT == NULL)                                                        \
+    {                                                                        \
+        printf("not enough memory for fft, in %s:%d\n", __FILE__, __LINE__); \
+        exit(-1);                                                            \
+    }
+
+#define FREE_FFT(PFFT) \
+    fftw_free(PFFT);   \
+    PFFT = NULL
 
 /*
  * XX is the input data 
