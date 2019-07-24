@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <math.h> /* ceil  and floor*/
 #include <cstring>
+#include <fftw3.h>
 #include "array_udf.h"
 
 /*
@@ -49,6 +50,7 @@ void printf_help(char *cmd);
  *  The return value is a coorelation vector
  * See more details at das-fft.h
  */
+int debug_index = 0;
 inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 {
     std::vector<float> gatherXcorr_l(nXCORR);
@@ -56,10 +58,12 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 
     std::vector<double> X_l(n0);
     std::vector<double> C_l(nfft); //temp cache
-    fftw_complex *fft_in_l;
-    fftw_complex *fft_out_l;
-    MALLOC_FFT(fft_in_l, nfft);
-    MALLOC_FFT(fft_out_l, nfft);
+    //fftw_complex *fft_in_l;
+    //fftw_complex *fft_out_l;
+    FFT_DATA_TYPEP fft_in_l;
+    FFT_DATA_TYPEP fft_out_l;
+    ALLOCATE_FFT(fft_in_l, nfft);
+    ALLOCATE_FFT(fft_out_l, nfft);
 
     for (int bi = 0; bi < window_batch; bi++)
     {
@@ -92,58 +96,87 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
         MOVING_MEAN(X_l, C_l, nPoint_hal_win);
         au_time_elap(" ++ MOVING_MEAN ");
 
-        INIT_FFTW(fft_in_l, C_l, nPoint, nfft, fft_out_l);
+        PREPARE_FFT(fft_in_l, C_l, nPoint, nfft, fft_out_l);
         au_time_elap(" ++ Init fft ");
 
-        FFT_HELP_W(nfft, fft_in_l, fft_out_l, FFTW_FORWARD);
+        RUN_FFT(nfft, fft_in_l, fft_out_l, FORWARD_FLAG);
         au_time_elap(" ++ First fft ");
 
         for (int ii = 0; ii < nfft; ii++)
         {
             double temp_f;
+#ifdef FFTW_AVAI
+
             temp_f = pow(sqrt(fft_out_l[ii][0] * fft_out_l[ii][0] + fft_out_l[ii][1] * fft_out_l[ii][1]), eCoeff) + 0.001;
             fft_in_l[ii][0] = (fft_out_l[ii][0] + 0.001) / temp_f * shapingFilt[ii];
             fft_in_l[ii][1] = (fft_out_l[ii][1]) / temp_f * shapingFilt[ii];
             fft_out_l[ii][0] = 0;
             fft_out_l[ii][1] = 0;
+#else
+            temp_f = pow(sqrt(fft_out_l[ii].r * fft_out_l[ii].r + fft_out_l[ii].i * fft_out_l[ii].i), eCoeff) + 0.001;
+            fft_in_l[ii].r = (fft_out_l[ii].r + 0.001) / temp_f * shapingFilt[ii];
+            fft_in_l[ii].i = (fft_out_l[ii].i) / temp_f * shapingFilt[ii];
+            fft_out_l[ii].r = 0;
+            fft_out_l[ii].i = 0;
+#endif
         }
         au_time_elap(" ++ Shapping ");
 
-        FFT_HELP_W(nfft, fft_in_l, fft_out_l, FFTW_BACKWARD);
+        RUN_FFT(nfft, fft_in_l, fft_out_l, BACKWARD_FLAG);
         au_time_elap(" ++ First Rev fft ");
 
         C_l.resize(nPoint);
         for (int i = 0; i < nPoint; i++)
         {
+#ifdef FFTW_AVAI
             C_l[i] = fft_out_l[i][0] / ((double)nfft);
+#else
+            C_l[i] = fft_out_l[i].r / ((double)nfft);
+#endif
         }
-        INIT_FFTW(fft_in_l, C_l, nPoint, nfft, fft_out_l);
-        FFT_HELP_W(nfft, fft_in_l, fft_out_l, FFTW_FORWARD);
+        PREPARE_FFT(fft_in_l, C_l, nPoint, nfft, fft_out_l);
+        RUN_FFT(nfft, fft_in_l, fft_out_l, FORWARD_FLAG);
 
         au_time_elap(" ++ Second fft ");
 
         for (int j = 0; j < nfft; j++)
         {
+#ifdef FFTW_AVAI
             fft_in_l[j][0] = master_fft[j + bi * nfft][0] * fft_out_l[j][0] + master_fft[j + bi * nfft][1] * fft_out_l[j][1];
             fft_in_l[j][1] = master_fft[j + bi * nfft][1] * fft_out_l[j][0] - master_fft[j + bi * nfft][0] * fft_out_l[j][1];
             fft_out_l[j][0] = 0;
             fft_out_l[j][1] = 0;
+#else
+            fft_in_l[j].r = master_fft[j + bi * nfft][0] * fft_out_l[j].r + master_fft[j + bi * nfft][1] * fft_out_l[j].i;
+            fft_in_l[j].i = master_fft[j + bi * nfft][1] * fft_out_l[j].r - master_fft[j + bi * nfft][0] * fft_out_l[j].i;
+            fft_out_l[j].r = 0;
+            fft_out_l[j].i = 0;
+#endif
         }
         au_time_elap(" ++ XCorr ");
 
-        FFT_HELP_W(nfft, fft_in_l, fft_out_l, FFTW_BACKWARD);
+        RUN_FFT(nfft, fft_in_l, fft_out_l, BACKWARD_FLAG);
 
         au_time_elap(" ++ Second rev fft ");
 
         int gatherXcorr_index = 0;
         for (int k = nfft - nPoint + 1; k < nfft; k++)
         {
+#ifdef FFTW_AVAI
             gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[k][0] / (double)nfft);
+#else
+            gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[k].r / (double)nfft);
+#endif
             gatherXcorr_index++;
         }
         for (int l = 0; l < nPoint; l++)
         {
+#ifdef FFTW_AVAI
             gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[l][0] / (double)nfft);
+#else
+            gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[l].r / (double)nfft);
+
+#endif
             gatherXcorr_index++;
         }
 
@@ -151,8 +184,8 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
         au_time_elap(" ++ Gather result ");
     }
 
-    FREE_FFT(fft_in_l);
-    FREE_FFT(fft_out_l);
+    CLEAR_FFT(fft_in_l);
+    CLEAR_FFT(fft_out_l);
     return gatherXcorr_l;
 }
 
@@ -165,7 +198,9 @@ std::string o_dataset("Xcorr");
 int chunk_size_on_split_dim = 1;
 int main(int argc, char *argv[])
 {
+    fftw_make_planner_thread_safe();
     int config_file_set_flag = 0;
+
     char config_file[NAME_LENGTH] = "./das-fft-full.config";
 
     int copt, mpi_rank, mpi_size;

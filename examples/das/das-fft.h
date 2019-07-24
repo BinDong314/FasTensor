@@ -252,18 +252,6 @@ std::vector<float> gatherXcorr_per_batch;
         shapingFilt.clear(); \
     }
 
-#define MALLOC_FFT(PFFT, NFFT)                                               \
-    PFFT = fftw_alloc_complex(NFFT);                                         \
-    if (PFFT == NULL)                                                        \
-    {                                                                        \
-        printf("not enough memory for fft, in %s:%d\n", __FILE__, __LINE__); \
-        exit(-1);                                                            \
-    }
-
-#define FREE_FFT(PFFT) \
-    fftw_free(PFFT);   \
-    PFFT = NULL
-
 /*
  * XX is the input data 
  * YY is used as cache

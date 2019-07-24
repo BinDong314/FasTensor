@@ -2246,7 +2246,7 @@ public:
         //printf("nthreads = %d, my rank = %d \n", nthreads, ithread);
         size_t *prefix;
         //omp_set_schedule(omp_sched_static, 64);
-#pragma omp parallel default(shared)
+#pragma omp parallel
         {
           std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
           unsigned long long offset_ol;
@@ -2381,13 +2381,15 @@ public:
             }
           } //end for loop, finish the processing on a single chunk in row-major direction
           prefix[ithread + 1] = vec_private.size();
+          std::cout << "vec_private[" << ithread + 1 << "] =" << vec_private.size() << "\n";
+
 #pragma omp barrier
 #pragma omp single
           {
             for (int i = 1; i < (nthreads + 1); i++)
             {
-              std::cout << "prefix[" << i << "] =" << prefix[i] << "\n";
               prefix[i] += prefix[i - 1];
+              std::cout << "prefix[" << i << "] =" << prefix[i] << ",  nthreads = " << nthreads << "\n";
             }
             //current_result_chunk_data.resize(current_result_chunk_data.size() + prefix[nthreads]);
             if (current_result_chunk_data.size() != prefix[nthreads])
@@ -2398,6 +2400,7 @@ public:
           std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
         } //end of omp para
 
+        delete[] prefix;
         t_end = MPI_Wtime();
         time_udf = t_end - t_start + time_udf;
       }
