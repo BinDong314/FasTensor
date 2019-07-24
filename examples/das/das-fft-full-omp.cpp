@@ -54,7 +54,8 @@ int debug_index = 0;
 inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 {
     std::vector<float> gatherXcorr_l(nXCORR);
-    std::vector<float> gatherXcorr_per_batch_l(nXCORR * window_batch);
+    //    std::vector<float> gatherXcorr_per_batch_l(nXCORR * window_batch);
+    std::vector<float>::iterator gatherXcorr_per_batch_l;
 
     std::vector<double> X_l(n0);
     std::vector<double> C_l(nfft); //temp cache
@@ -159,28 +160,34 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 
         au_time_elap(" ++ Second rev fft ");
 
-        int gatherXcorr_index = 0;
+        gatherXcorr_per_batch_l = gatherXcorr_l.begin() + bi * nXCORR;
+        //int gatherXcorr_index = 0;
         for (int k = nfft - nPoint + 1; k < nfft; k++)
         {
 #ifdef FFTW_AVAI
-            gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[k][0] / (double)nfft);
+            //gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[k][0] / (double)nfft);
+            *gatherXcorr_per_batch_l = (float)(fft_out_l[k][0] / (double)nfft);
 #else
-            gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[k].r / (double)nfft);
+            //gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[k].r / (double)nfft);
+            *gatherXcorr_per_batch_l = (float)(fft_out_l[k].r / (double)nfft);
 #endif
-            gatherXcorr_index++;
+            //gatherXcorr_index++;
+            gatherXcorr_per_batch_l++;
         }
         for (int l = 0; l < nPoint; l++)
         {
 #ifdef FFTW_AVAI
-            gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[l][0] / (double)nfft);
+            //gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[l][0] / (double)nfft);
+            *gatherXcorr_per_batch_l = (float)(fft_out_l[l][0] / (double)nfft);
 #else
-            gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[l].r / (double)nfft);
+            //gatherXcorr_per_batch_l[gatherXcorr_index] = (float)(fft_out_l[l].r / (double)nfft);
+            *gatherXcorr_per_batch_l = (float)(fft_out_l[l].r / (double)nfft);
 
 #endif
-            gatherXcorr_index++;
+            //gatherXcorr_index++;
+            gatherXcorr_per_batch_l++;
         }
-
-        std::copy_n(gatherXcorr_per_batch_l.begin(), nXCORR, gatherXcorr_l.begin() + bi * nXCORR);
+        //std::copy_n(gatherXcorr_per_batch_l.begin(), nXCORR, gatherXcorr_l.begin() + bi * nXCORR);
         au_time_elap(" ++ Gather result ");
     }
 
@@ -282,7 +289,7 @@ int main(int argc, char *argv[])
 
     //After this step, n0 is the size of input time series
     INIT_PARS(mpi_rank, mpi_size, i_file_dim);
-    INIT_SPACE();
+    INIT_SPACE_OMP();
 
     if (row_major_flag)
     {
@@ -316,6 +323,9 @@ int main(int argc, char *argv[])
     std::vector<unsigned long long> master_start, master_end;
     master_start.resize(2);
     master_end.resize(2);
+    ALLOCATE_FFT(fft_in, nfft);
+    ALLOCATE_FFT(fft_out, nfft);
+    ALLOCATE_FFT(master_fft, nfft * window_batch);
     for (int bi = 0; bi < window_batch; bi++)
     {
         if (row_major_flag == 0)
@@ -342,8 +352,9 @@ int main(int argc, char *argv[])
         {
             mastervf[i] = (double)(masterv[i]);
         }
+
         FFT_PREPROCESSING(mastervf, masterv_ppf); //masterv_ppf is result
-        //master_processing(mastervf, masterv_ppf);
+        //master_processing(mastervf, masterv_ppf); //for debug
         INIT_FFTW(fft_in, masterv_ppf, nPoint, nfft, fft_out);
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);
         for (int j = 0; j < nfft; j++)
@@ -352,9 +363,14 @@ int main(int argc, char *argv[])
             master_fft[bi * nfft + j][1] = fft_out[j][1];
         }
     }
-    masterv_ppf.clear();
-    mastervf.clear();
-    masterv.clear();
+    //masterv_ppf.clear();
+    //mastervf.clear();
+    //masterv.clear();
+    clear_vector(masterv_ppf);
+    clear_vector(mastervf);
+    clear_vector(masterv);
+    CLEAR_FFT(fft_in);
+    CLEAR_FFT(fft_out);
     if (!mpi_rank)
         std::cout << "Finish the processing on Master block \n";
 
@@ -365,7 +381,7 @@ int main(int argc, char *argv[])
     delete IFILE;
     delete OFILE;
 
-    CLEAR_SPACE();
+    CLEAR_SPACE_OMP();
 
     MPI_Finalize();
     return 0;

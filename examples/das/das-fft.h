@@ -247,9 +247,10 @@ std::vector<float> gatherXcorr_per_batch;
     }
 
 //R = dt_new/dt
-#define CLEAR_SPACE_OMP()    \
-    {                        \
-        shapingFilt.clear(); \
+#define CLEAR_SPACE_OMP()                        \
+    {                                            \
+        shapingFilt.clear();                     \
+        std::vector<double>().swap(shapingFilt); \
     }
 
 /*

@@ -591,6 +591,29 @@ void au_time_elap(std::string info_str)
   au_timer_global__inside_use = MPI_Wtime();
 }
 
+void au_time_elap(std::string info_str, int omp_rank)
+{
+
+  double time_per_rank = MPI_Wtime() - au_timer_global__inside_use;
+  int mpi_rank, mpi_size;
+  double time_max, time_min, time_sum;
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
+  MPI_Allreduce(&time_per_rank, &time_max, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+  MPI_Allreduce(&time_per_rank, &time_min, 1, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
+  MPI_Allreduce(&time_per_rank, &time_sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
+  if (mpi_rank == 0 && omp_rank == 0)
+  {
+    printf("  %s:max=%f, min=%f, ave=%f, rank 0=%f (omp_rank=0)\n", info_str.c_str(), time_max, time_min, time_sum / mpi_size, time_per_rank);
+    fflush(stdout);
+  }
+
+  //reset to current time
+  au_timer_global__inside_use = MPI_Wtime();
+}
+
 //for more HDF5 types
 //https://support.hdfgroup.org/HDF5/doc1.6/UG/11_Datatypes.html
 //We'd better to have it as ArrayUDF type
@@ -628,6 +651,13 @@ void type_infer(int &vector_type_flag, int &output_element_type_class)
     printf("In Array init: not support type \n ");
     exit(-1);
   }
+}
+
+template <class T>
+inline void clear_vector(std::vector<T> v)
+{
+  v.clear();
+  std::vector<T>().swap(v);
 }
 
 #endif
