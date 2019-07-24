@@ -627,7 +627,8 @@ public:
 
   void DisableCollectivIO()
   {
-    H5Pclose(plist_cio_id);
+    if (plist_cio_id > 0)
+      H5Pclose(plist_cio_id);
     plist_cio_id = H5P_DEFAULT;
   }
 
@@ -1070,6 +1071,114 @@ public:
       {
         g_data[g_vector_start + j] = v_data[v_vector_start + j];
       }*/
+    }
+  }
+
+  //https://support.hdfgroup.org/HDF5/Tutor/datatypes.html
+  int find_mem_type()
+  {
+    if (std::is_same<T, int>::value)
+    {
+      return H5T_NATIVE_INT;
+    }
+
+    if (std::is_same<T, short>::value)
+    {
+      return H5T_NATIVE_SHORT;
+    }
+
+    if (std::is_same<T, long>::value)
+    {
+      return H5T_NATIVE_LONG;
+    }
+
+    if (std::is_same<T, long long>::value)
+    {
+      return H5T_NATIVE_LLONG;
+    }
+
+    if (std::is_same<T, unsigned int>::value)
+    {
+      return H5T_NATIVE_UINT;
+    }
+
+    if (std::is_same<T, unsigned short>::value)
+    {
+      return H5T_NATIVE_USHORT;
+    }
+
+    if (std::is_same<T, unsigned long>::value)
+    {
+      return H5T_NATIVE_ULONG;
+    }
+
+    if (std::is_same<T, unsigned long long>::value)
+    {
+      return H5T_NATIVE_ULLONG;
+    }
+
+    if (std::is_same<T, float>::value)
+    {
+      return H5T_NATIVE_FLOAT;
+    }
+
+    if (std::is_same<T, double>::value)
+    {
+      return H5T_NATIVE_DOUBLE;
+    }
+  }
+
+  //https://support.hdfgroup.org/HDF5/Tutor/datatypes.html
+  int find_data_type()
+  {
+    if (std::is_same<T, int>::value)
+    {
+      return H5T_STD_I32LE;
+    }
+
+    if (std::is_same<T, short>::value)
+    {
+      return H5T_STD_I16LE;
+    }
+
+    if (std::is_same<T, long>::value)
+    {
+      return H5T_STD_I64LE;
+    }
+
+    if (std::is_same<T, long long>::value)
+    {
+      return H5T_STD_I64LE;
+    }
+
+    if (std::is_same<T, unsigned int>::value)
+    {
+      return H5T_STD_U32LE;
+    }
+
+    if (std::is_same<T, unsigned short>::value)
+    {
+      return H5T_STD_U16LE;
+    }
+
+    if (std::is_same<T, unsigned long>::value)
+    {
+      return H5T_STD_U64LE;
+    }
+
+    if (std::is_same<T, unsigned long long>::value)
+    {
+      return H5T_STD_U64LE;
+    }
+
+    if (std::is_same<T, float>::value)
+    {
+      return H5T_IEEE_F32LE;
+    }
+
+    if (std::is_same<T, double>::value)
+    {
+      return H5T_IEEE_F64LE;
     }
   }
 };

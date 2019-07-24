@@ -568,6 +568,7 @@ void au_time_start()
   au_timer_global__inside_use = MPI_Wtime();
 }
 
+#define OMP_ENABLED 1
 void au_time_elap(std::string info_str)
 {
 
@@ -576,10 +577,11 @@ void au_time_elap(std::string info_str)
   double time_max, time_min, time_sum;
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
   MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
-
+#ifndef OMP_ENABLED
   MPI_Allreduce(&time_per_rank, &time_max, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
   MPI_Allreduce(&time_per_rank, &time_min, 1, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
   MPI_Allreduce(&time_per_rank, &time_sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+#endif
 
   if (mpi_rank == 0)
   {
