@@ -577,7 +577,6 @@ void au_time_elap(std::string info_str)
   double time_max, time_min, time_sum;
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
   MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
-  int ithread = omp_get_thread_num();
 
 #ifndef OMP_ENABLED
   MPI_Allreduce(&time_per_rank, &time_max, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
@@ -585,7 +584,7 @@ void au_time_elap(std::string info_str)
   MPI_Allreduce(&time_per_rank, &time_sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 #endif
 
-  if (mpi_rank == 0 && ithread == 0)
+  if (mpi_rank == 0)
   {
     printf("  %s:max=%f, min=%f, ave=%f, rank 0=%f\n", info_str.c_str(), time_max, time_min, time_sum / mpi_size, time_per_rank);
     fflush(stdout);
