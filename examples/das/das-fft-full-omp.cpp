@@ -66,7 +66,7 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 
     for (int bi = 0; bi < window_batch; bi++)
     {
-        au_time_start();
+        //au_time_start();
 
         X_l.resize(n0);
         C_l.resize(nfft);
@@ -81,29 +81,29 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
                 X_l[i] = (double)c(0, i + bi * n0);
             }
         }
-        au_time_elap(" ++ Read Stencil ");
+        //au_time_elap(" ++ Read Stencil ");
 
         detrend(&(X_l[0]), X_l.size());
-        au_time_elap(" ++ detrend ");
+        //au_time_elap(" ++ detrend ");
 
         filtfilt(BUTTER_A, BUTTER_B, X_l, C_l);
-        au_time_elap(" ++ filtfilt ");
+        //au_time_elap(" ++ filtfilt ");
 
         resample(1, DT_NEW / DT, C_l, X_l);
-        au_time_elap(" ++ resample ");
+        //au_time_elap(" ++ resample ");
 
         MOVING_MEAN(X_l, C_l, nPoint_hal_win);
-        au_time_elap(" ++ MOVING_MEAN ");
+        //au_time_elap(" ++ MOVING_MEAN ");
 
         clear_vector(X_l);
         ALLOCATE_FFT(fft_in_l, nfft);
         ALLOCATE_FFT(fft_out_l, nfft);
 
         PREPARE_FFT(fft_in_l, C_l, nPoint, nfft, fft_out_l);
-        au_time_elap(" ++ Init fft ");
+        //au_time_elap(" ++ Init fft ");
 
         RUN_FFT(nfft, fft_in_l, fft_out_l, FORWARD_FLAG);
-        au_time_elap(" ++ First fft ");
+        //au_time_elap(" ++ First fft ");
 
         for (int ii = 0; ii < nfft; ii++)
         {
@@ -123,10 +123,10 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
             fft_out_l[ii].i = 0;
 #endif
         }
-        au_time_elap(" ++ Shapping ");
+        //au_time_elap(" ++ Shapping ");
 
         RUN_FFT(nfft, fft_in_l, fft_out_l, BACKWARD_FLAG);
-        au_time_elap(" ++ First Rev fft ");
+        //au_time_elap(" ++ First Rev fft ");
 
         C_l.resize(nPoint);
         for (int i = 0; i < nPoint; i++)
@@ -140,7 +140,7 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
         PREPARE_FFT(fft_in_l, C_l, nPoint, nfft, fft_out_l);
         RUN_FFT(nfft, fft_in_l, fft_out_l, FORWARD_FLAG);
 
-        au_time_elap(" ++ Second fft ");
+        //au_time_elap(" ++ Second fft ");
 
         for (int j = 0; j < nfft; j++)
         {
@@ -156,11 +156,11 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
             fft_out_l[j].i = 0;
 #endif
         }
-        au_time_elap(" ++ XCorr ");
+        //au_time_elap(" ++ XCorr ");
 
         RUN_FFT(nfft, fft_in_l, fft_out_l, BACKWARD_FLAG);
 
-        au_time_elap(" ++ Second rev fft ");
+        //au_time_elap(" ++ Second rev fft ");
 
         gatherXcorr_per_batch_l = gatherXcorr_l.begin() + bi * nXCORR;
         //int gatherXcorr_index = 0;
@@ -190,7 +190,7 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
             gatherXcorr_per_batch_l++;
         }
         //std::copy_n(gatherXcorr_per_batch_l.begin(), nXCORR, gatherXcorr_l.begin() + bi * nXCORR);
-        au_time_elap(" ++ Gather result ");
+        //au_time_elap(" ++ Gather result ");
         CLEAR_FFT(fft_in_l);
         CLEAR_FFT(fft_out_l);
     }

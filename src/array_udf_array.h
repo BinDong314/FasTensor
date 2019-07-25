@@ -2278,7 +2278,7 @@ public:
               assert(i < current_chunk_cells);
             }
             int iithread = omp_get_thread_num();
-            printf("i = %lld on thread # = %d (/%d), current_chunk_cells = %lld \n", i, iithread, nthreads, current_chunk_cells);
+            //printf("i = %lld on thread # = %d (/%d), current_chunk_cells = %lld \n", i, iithread, nthreads, current_chunk_cells);
 
             //Get the coodinate with overlapping
             //Also, get the global coodinate of the cell in original array
@@ -2381,7 +2381,7 @@ public:
             }
           } //end for loop, finish the processing on a single chunk in row-major direction
           prefix[ithread + 1] = vec_private.size();
-          std::cout << "vec_private[" << ithread + 1 << "] =" << vec_private.size() << "\n";
+          //std::cout << "vec_private[" << ithread + 1 << "] =" << vec_private.size() << "\n";
 
 #pragma omp barrier
 #pragma omp single
