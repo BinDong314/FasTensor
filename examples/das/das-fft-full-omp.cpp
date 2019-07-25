@@ -194,6 +194,8 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
         CLEAR_FFT(fft_in_l);
         CLEAR_FFT(fft_out_l);
     }
+
+    clear_vector(C_l);
     return gatherXcorr_l;
 }
 

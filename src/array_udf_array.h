@@ -2398,6 +2398,7 @@ public:
             }
           } //end of omp for
           std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
+          clear_vector(vec_private);
         } //end of omp para
 
         delete[] prefix;
