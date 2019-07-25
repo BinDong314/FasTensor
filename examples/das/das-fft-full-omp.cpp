@@ -63,8 +63,6 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
     //fftw_complex *fft_out_l;
     FFT_DATA_TYPEP fft_in_l;
     FFT_DATA_TYPEP fft_out_l;
-    ALLOCATE_FFT(fft_in_l, nfft);
-    ALLOCATE_FFT(fft_out_l, nfft);
 
     for (int bi = 0; bi < window_batch; bi++)
     {
@@ -96,6 +94,10 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 
         MOVING_MEAN(X_l, C_l, nPoint_hal_win);
         au_time_elap(" ++ MOVING_MEAN ");
+
+        clear_vector(X_l);
+        ALLOCATE_FFT(fft_in_l, nfft);
+        ALLOCATE_FFT(fft_out_l, nfft);
 
         PREPARE_FFT(fft_in_l, C_l, nPoint, nfft, fft_out_l);
         au_time_elap(" ++ Init fft ");
@@ -189,10 +191,9 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
         }
         //std::copy_n(gatherXcorr_per_batch_l.begin(), nXCORR, gatherXcorr_l.begin() + bi * nXCORR);
         au_time_elap(" ++ Gather result ");
+        CLEAR_FFT(fft_in_l);
+        CLEAR_FFT(fft_out_l);
     }
-
-    CLEAR_FFT(fft_in_l);
-    CLEAR_FFT(fft_out_l);
     return gatherXcorr_l;
 }
 
