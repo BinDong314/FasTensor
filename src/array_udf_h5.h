@@ -55,6 +55,10 @@ private:
   int output_vector_flat_direction_index = -1;
   int mpi_rank, mpi_size;
 
+  //h5_mem_type for read/write
+  //h5_disk_type for create
+  hid_t h5_mem_type, h5_disk_type;
+
   //For VDS file list;
   std::vector<std::string> FileVDSList;
   std::vector<H5Data<T> *> FileVDSPList;
@@ -71,6 +75,7 @@ public:
       gn_str = gn;
       dn_str = dn;
     }
+    find_h5_type(h5_mem_type, h5_disk_type);
 
     if (is_vector_type<T>())
       vector_type_flag = 1;
@@ -92,6 +97,8 @@ public:
     fn_str = fn;
     gn_str = gn;
     dn_str = dn;
+
+    find_h5_type(h5_mem_type, h5_disk_type);
 
     plist_id = H5Pcreate(H5P_FILE_ACCESS);
     H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
@@ -299,6 +306,7 @@ public:
         InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
       }
       v_data.resize(0);
+      clear_vector(v_data);
       au_time_elap("Read data ");
       return 1;
     }
@@ -317,6 +325,7 @@ public:
       H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
 
       int ret;
+      /*
       switch (type_class)
       {
       case H5T_INTEGER:
@@ -333,7 +342,8 @@ public:
         std::cout << "Unsupported datatype in  " << __FILE__ << __LINE__ << std::endl;
         exit(-1);
         break;
-      }
+      }*/
+      ret = H5Dread(did, h5_mem_type, memspace_id, dataspace_id, plist_cio_id, &data[0]);
 
 #ifdef DEBUG
       for (auto i = data.begin(); i != data.end(); ++i)
@@ -533,7 +543,7 @@ public:
 
     memspace_id = H5Screate_simple(rank, &count[0], NULL);
     H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
-    printf("Write: start = %lld, %lld, end = %lld, %lld, offset = %lld %lld, count = %lld  %lld, output_vector_size = %d\n", start[0], start[1], end[0], end[1], offset[0], offset[1], count[0], count[1], output_vector_size);
+    printf("Write: start = %lld, %lld, end = %lld, %lld, offset = %lld %lld, count = %lld  %lld, output_vector_size = %d, data.size = %d \n", start[0], start[1], end[0], end[1], offset[0], offset[1], count[0], count[1], output_vector_size, data.size());
 
     complex_t tmp; /*used only to compute offsets */
     hid_t complex_id = H5Tcreate(H5T_COMPOUND, sizeof(complex_t));
@@ -545,6 +555,7 @@ public:
     //
     //
     int ret;
+    /*
     switch (type_class)
     {
     case H5T_INTEGER:
@@ -606,6 +617,27 @@ public:
       std::cout << "Unsupported datatype in  " << __FILE__ << ": " << __LINE__ << std::endl;
       exit(-1);
       break;
+    }
+    */
+
+    if (vector_type_flag == 1)
+    {
+      void *float_new_data_ptr;
+      if (output_vector_flat_direction_index == 0)
+      {
+        float_new_data_ptr = flat_vector(data, 1);
+      }
+      else
+      {
+        float_new_data_ptr = vv2v(data);
+      }
+      ret = H5Dwrite(did, h5_mem_type, memspace_id, dataspace_id, plist_cio_id, float_new_data_ptr);
+      if (float_new_data_ptr != NULL)
+        free(float_new_data_ptr);
+    }
+    else
+    {
+      ret = H5Dwrite(did, h5_mem_type, memspace_id, dataspace_id, plist_cio_id, &data[0]);
     }
     // free(int_new_data_ptr);
     //
@@ -695,6 +727,7 @@ public:
     //H5Tinsert(complex_id, "real", HOFFSET(complex_t, re), H5T_NATIVE_FLOAT);
     //H5Tinsert(complex_id, "imaginary", HOFFSET(complex_t, im), H5T_NATIVE_FLOAT);
 
+    /*
     switch (type_class)
     {
     case H5T_INTEGER:
@@ -742,6 +775,25 @@ public:
       std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
       exit(-1);
       break;
+    }
+    */
+
+    if (gn_str != root_dir)
+    {
+      if (H5Lexists(gid, dn_str.c_str(), H5P_DEFAULT) > 0)
+      {
+        H5Ldelete(gid, dn_str.c_str(), H5P_DEFAULT); //we delete
+      }
+
+      did = H5Dcreate(gid, dn_str.c_str(), h5_disk_type, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    }
+    else
+    {
+      if (H5Lexists(fid, dn_str.c_str(), H5P_DEFAULT) > 0)
+      {
+        H5Ldelete(fid, dn_str.c_str(), H5P_DEFAULT); //we delete
+      }
+      did = H5Dcreate(fid, dn_str.c_str(), h5_disk_type, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     }
     //datatype  = H5Dget_type(did);     /* datatype handle */
     //type_class     = H5Tget_class(datatype);
@@ -1075,110 +1127,72 @@ public:
   }
 
   //https://support.hdfgroup.org/HDF5/Tutor/datatypes.html
-  int find_mem_type()
+  //mem_type: for read/write
+  //disk_type: for create
+  void find_h5_type(hid_t &mem_type, hid_t &disk_type)
   {
     if (std::is_same<T, int>::value)
     {
-      return H5T_NATIVE_INT;
+      mem_type = H5T_NATIVE_INT;
+      disk_type = H5T_STD_I32LE;
     }
-
-    if (std::is_same<T, short>::value)
+    else if (std::is_same<T, short>::value)
     {
-      return H5T_NATIVE_SHORT;
+      mem_type = H5T_NATIVE_SHORT;
+      disk_type = H5T_STD_I16LE;
     }
-
-    if (std::is_same<T, long>::value)
+    else if (std::is_same<T, long>::value)
     {
-      return H5T_NATIVE_LONG;
+      mem_type = H5T_NATIVE_LONG;
+      disk_type = H5T_STD_I64LE;
     }
-
-    if (std::is_same<T, long long>::value)
+    else if (std::is_same<T, long long>::value)
     {
-      return H5T_NATIVE_LLONG;
+      mem_type = H5T_NATIVE_LLONG;
+      disk_type = H5T_STD_I64LE;
     }
-
-    if (std::is_same<T, unsigned int>::value)
+    else if (std::is_same<T, unsigned int>::value)
     {
-      return H5T_NATIVE_UINT;
+      mem_type = H5T_NATIVE_UINT;
+      disk_type = H5T_STD_U32LE;
     }
-
-    if (std::is_same<T, unsigned short>::value)
+    else if (std::is_same<T, unsigned short>::value)
     {
-      return H5T_NATIVE_USHORT;
+      mem_type = H5T_NATIVE_USHORT;
+      disk_type = H5T_STD_U16LE;
     }
-
-    if (std::is_same<T, unsigned long>::value)
+    else if (std::is_same<T, unsigned long>::value)
     {
-      return H5T_NATIVE_ULONG;
+      mem_type = H5T_NATIVE_ULONG;
+      disk_type = H5T_STD_U64LE;
     }
-
-    if (std::is_same<T, unsigned long long>::value)
+    else if (std::is_same<T, unsigned long long>::value)
     {
-      return H5T_NATIVE_ULLONG;
+      mem_type = H5T_NATIVE_ULLONG;
+      disk_type = H5T_STD_U64LE;
     }
-
-    if (std::is_same<T, float>::value)
+    else if (std::is_same<T, float>::value)
     {
-      return H5T_NATIVE_FLOAT;
+      mem_type = H5T_NATIVE_FLOAT;
+      disk_type = H5T_IEEE_F32LE;
+      if (mpi_rank == 0)
+      {
+        std::cout << "H5 type is [float] , H5T_IEEE_F32LE =" << H5T_IEEE_F32LE << " \n";
+      }
     }
-
-    if (std::is_same<T, double>::value)
+    else if (std::is_same<T, double>::value)
     {
-      return H5T_NATIVE_DOUBLE;
+      mem_type = H5T_NATIVE_DOUBLE;
+      disk_type = H5T_IEEE_F64LE;
+      if (mpi_rank == 0)
+      {
+        std::cout << "H5 type is [double] \n";
+      }
     }
-  }
-
-  //https://support.hdfgroup.org/HDF5/Tutor/datatypes.html
-  int find_data_type()
-  {
-    if (std::is_same<T, int>::value)
+    else
     {
-      return H5T_STD_I32LE;
-    }
-
-    if (std::is_same<T, short>::value)
-    {
-      return H5T_STD_I16LE;
-    }
-
-    if (std::is_same<T, long>::value)
-    {
-      return H5T_STD_I64LE;
-    }
-
-    if (std::is_same<T, long long>::value)
-    {
-      return H5T_STD_I64LE;
-    }
-
-    if (std::is_same<T, unsigned int>::value)
-    {
-      return H5T_STD_U32LE;
-    }
-
-    if (std::is_same<T, unsigned short>::value)
-    {
-      return H5T_STD_U16LE;
-    }
-
-    if (std::is_same<T, unsigned long>::value)
-    {
-      return H5T_STD_U64LE;
-    }
-
-    if (std::is_same<T, unsigned long long>::value)
-    {
-      return H5T_STD_U64LE;
-    }
-
-    if (std::is_same<T, float>::value)
-    {
-      return H5T_IEEE_F32LE;
-    }
-
-    if (std::is_same<T, double>::value)
-    {
-      return H5T_IEEE_F64LE;
+      std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+      exit(-1);
     }
   }
 };

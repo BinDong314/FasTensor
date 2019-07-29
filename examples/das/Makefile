@@ -40,4 +40,4 @@ das-fft-full-omp:das-fft-full-omp.cpp
 	$(CCC) -o das-fft-full-omp fft-header/resample.cpp fft/kiss_fft.c das-fft-full-omp.cpp  -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++17 -lArrayUDF  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  $(OTHER_FLAGS) -I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3_threads
 	
 clean:
-	rm das-correlation h5-vds-merge tdms2h5 das-fft das-fft-full
+	rm das-correlation h5-vds-merge tdms2h5 das-fft das-fft-full das-fft-full-omp
