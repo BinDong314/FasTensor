@@ -2490,6 +2490,11 @@ public:
       //t_end = MPI_Wtime();
       //time_udf = t_end - t_start + time_udf;
 
+      //We can clear somespace if no chunk to process
+      if (!HasNextChunk())
+      {
+        clear_vector(current_chunk_data);
+      }
       //MPI_Barrier(MPI_COMM_WORLD);
       //#ifdef DEBUG
       if (mpi_rank == 0)
@@ -3831,6 +3836,17 @@ public:
     cell_return_value = cell_return_value + current_chunk_data[offset_ol] * 4;
 
     //return cell_return_value;
+  }
+
+  //1: has
+  //0: no
+  int HasNextChunk()
+  {
+    if (current_chunk_id >= data_total_chunks)
+    {
+      return 0;
+    }
+    return 1;
   }
 }; // namespace AU
 

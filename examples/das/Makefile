@@ -1,10 +1,11 @@
 
 
 #Bin's Mac
+export PATH=$PATH;/opt/local/bin
 AU_HOME=../../build
 HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
 FFTW_DIR=/opt/local/
-CCC=mpicxx
+CCC=/opt/local/bin/mpicxx
 OTHER_FLAGS= -I./fft-header/ -L/opt/local/lib -lboost_program_options-mt -I/opt/local/include/eigen3/ -g3 -fopenmp 
 #-I./fft-header/Eigen/include/eigen3/ 
 #Snowbear
