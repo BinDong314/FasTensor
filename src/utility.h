@@ -89,7 +89,7 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
 }
 
 template <class T>
-inline void clear_vector(std::vector<T> v)
+inline void clear_vector(std::vector<T> &v)
 {
   v.clear();
   std::vector<T>().swap(v);
