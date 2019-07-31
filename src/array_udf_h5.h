@@ -629,8 +629,8 @@ public:
       }
       else
       {
-        //float_new_data_ptr = vv2v(data);
-        float_new_data_ptr = vv2v_mem_e(data);
+        float_new_data_ptr = vv2v(data);
+        //float_new_data_ptr = vv2v_mem_e(data);
       }
       ret = H5Dwrite(did, h5_mem_type, memspace_id, dataspace_id, plist_cio_id, float_new_data_ptr);
       if (float_new_data_ptr != NULL)
