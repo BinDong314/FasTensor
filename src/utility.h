@@ -491,7 +491,7 @@ void *vv2v_mem_e(std::vector<std::vector<T>> &v)
 
   for (unsigned i = 0; i < v.size(); i++)
   {
-    rv.insert(rv.end(), v[i].start(), v[i].end());
+    rv.insert(rv.end(), v[i].begin(), v[i].end());
     clear_vector(v[i]);
     //memcpy(rv + v[i].size() * i, &(v[i][0]), v[i].size() * sizeof(T));
   }
