@@ -194,13 +194,6 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
         CLEAR_FFT(fft_in_l);
         CLEAR_FFT(fft_out_l);
     }
-
-#pragma omp barrier
-#pragma omp single
-    {
-        CLEAR_FFT(master_fft);
-    }
-
     clear_vector(C_l);
     return gatherXcorr_l;
 }

@@ -88,6 +88,13 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
   return original_coordinate;
 }
 
+template <class T>
+inline void clear_vector(std::vector<T> v)
+{
+  v.clear();
+  std::vector<T>().swap(v);
+}
+
 inline std::vector<unsigned long long> NextCoordinateAfterSkipWithinChunk(std::vector<unsigned long long> coordinate_at_chunk, std::vector<unsigned long long> skip_size, std::vector<unsigned long long> skiped_chunks_per_orig_chunk)
 {
   int rank = coordinate_at_chunk.size();
@@ -477,6 +484,31 @@ void *vv2v(std::vector<std::vector<T>> &v)
 }
 
 template <typename T>
+void *vv2v_mem_e(std::vector<std::vector<T>> &v)
+{
+
+  std::vector<T> rv;
+
+  for (unsigned i = 0; i < v.size(); i++)
+  {
+    rv.insert(rv.end(), v[i].start(), v[i].end());
+    clear_vector(v[i]);
+    //memcpy(rv + v[i].size() * i, &(v[i][0]), v[i].size() * sizeof(T));
+  }
+
+  //printf("size = %d , %f , %f, %f \n", v[0].size(), rv[0], rv[1], rv);
+  //return (void *)rv;
+  return (void *)&rv[0];
+}
+
+template <typename T>
+void *vv2v_mem_e(std::vector<T> &v)
+{
+  printf("Not supported %s:%d \n", __FILE__, __LINE__);
+  return NULL;
+}
+
+template <typename T>
 void *vv2v(std::vector<T> &v)
 {
   printf("Not supported %s:%d \n", __FILE__, __LINE__);
@@ -654,13 +686,6 @@ void type_infer(int &vector_type_flag, int &output_element_type_class)
     printf("In Array init: not support type \n ");
     exit(-1);
   }
-}
-
-template <class T>
-inline void clear_vector(std::vector<T> v)
-{
-  v.clear();
-  std::vector<T>().swap(v);
 }
 
 #endif
