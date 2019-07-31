@@ -195,6 +195,12 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
         CLEAR_FFT(fft_out_l);
     }
 
+#pragma omp barrier
+#pragma omp single
+    {
+        CLEAR_FFT(master_fft);
+    }
+
     clear_vector(C_l);
     return gatherXcorr_l;
 }
@@ -380,6 +386,8 @@ int main(int argc, char *argv[])
     //Run FFT
     IFILE->Apply(FFT_UDF, OFILE);
     IFILE->ReportTime();
+
+    CLEAR_FFT(master_fft);
 
     delete IFILE;
     delete OFILE;
