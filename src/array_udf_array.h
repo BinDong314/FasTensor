@@ -2262,6 +2262,8 @@ public:
           unsigned long long cell_target_g_location_rm;
           int is_mirror_value = 0;
 
+#if defined(_OPENMP)
+
           int ithread = omp_get_thread_num();
           int nthreads = omp_get_num_threads();
 #pragma omp single
@@ -2270,6 +2272,8 @@ public:
             prefix[0] = 0;
           }
           std::vector<UDFOutputType> vec_private;
+#endif
+
 #pragma omp for schedule(static) nowait
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
@@ -2361,16 +2365,12 @@ public:
             {
               if (skip_flag == 1)
               {
-                {
-                  //In DAS usecase (row major), this should work because all
-                  // real work (non-skip cells) should be on thread 0
-                  // All other work (skpped clells) on other threads
-                  // So, only thread 0 access result_vector_index and current_result_chunk_data
-                  //But, in other it has conflict
-                  //current_result_chunk_data[result_vector_index] = cell_return_value;
-                  //result_vector_index = result_vector_index + 1;
-                  vec_private.push_back(cell_return_value);
-                }
+#if defined(_OPENMP)
+                vec_private.push_back(cell_return_value);
+#else
+                current_result_chunk_data[result_vector_index] = cell_return_value;
+                result_vector_index = result_vector_index + 1;
+#endif
                 //When skip_flag is set, there is no need to have apply_replace_flag
                 //Todo: in future
                 //if(apply_replace_flag == 1){
@@ -2387,18 +2387,15 @@ public:
               }
             }
           } //end for loop, finish the processing on a single chunk in row-major direction
+#if defined(_OPENMP)
           prefix[ithread + 1] = vec_private.size();
-          //std::cout << "vec_private[" << ithread + 1 << "] =" << vec_private.size() << "\n";
-
 #pragma omp barrier
 #pragma omp single
           {
             for (int i = 1; i < (nthreads + 1); i++)
             {
               prefix[i] += prefix[i - 1];
-              //std::cout << "prefix[" << i << "] =" << prefix[i] << ",  nthreads = " << nthreads << "\n";
             }
-            //current_result_chunk_data.resize(current_result_chunk_data.size() + prefix[nthreads]);
             if (current_result_chunk_data.size() != prefix[nthreads])
             {
               std::cout << "Wrong output size ! prefix[nthreads] =" << prefix[nthreads] << ", current.size() = " << current_result_chunk_data.size() << " \n ";
@@ -2406,9 +2403,12 @@ public:
           } //end of omp for
           std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
           clear_vector(vec_private);
+#endif
         } //end of omp para
 
+#if defined(_OPENMP)
         delete[] prefix;
+#endif
         t_end = MPI_Wtime();
         time_udf = t_end - t_start + time_udf;
       }
@@ -2465,7 +2465,7 @@ public:
 #ifdef PY_ARRAYUDF
             cell_return_value = UDF(&cell_target); // Called by python
 #else
-            cell_return_value = UDF(cell_target);   // Called by C++
+            cell_return_value = UDF(cell_target); // Called by C++
 #endif
             //t_end   =  MPI_Wtime();
             //time_udf = t_end-t_start + time_udf;
