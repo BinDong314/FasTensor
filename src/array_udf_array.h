@@ -2288,7 +2288,7 @@ public:
                 continue;
               assert(i < current_chunk_cells);
             }
-            int iithread = omp_get_thread_num();
+            //int iithread = omp_get_thread_num();
             //printf("i = %lld on thread # = %d (/%d), current_chunk_cells = %lld \n", i, iithread, nthreads, current_chunk_cells);
 
             //Get the coodinate with overlapping
