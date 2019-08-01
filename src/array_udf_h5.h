@@ -543,7 +543,7 @@ public:
 
     memspace_id = H5Screate_simple(rank, &count[0], NULL);
     H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
-    printf("Write: start = %lld, %lld, end = %lld, %lld, offset = %lld %lld, count = %lld  %lld, output_vector_size = %d, data.size = %d \n", start[0], start[1], end[0], end[1], offset[0], offset[1], count[0], count[1], output_vector_size, data.size());
+    //printf("Write: start = %lld, %lld, end = %lld, %lld, offset = %lld %lld, count = %lld  %lld, output_vector_size = %d, data.size = %d \n", start[0], start[1], end[0], end[1], offset[0], offset[1], count[0], count[1], output_vector_size, data.size());
 
     //complex_t tmp; /*used only to compute offsets */
     //hid_t complex_id = H5Tcreate(H5T_COMPOUND, sizeof(complex_t));

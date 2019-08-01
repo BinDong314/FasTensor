@@ -2389,7 +2389,7 @@ public:
             for (int i = 1; i < (nthreads + 1); i++)
             {
               prefix[i] += prefix[i - 1];
-              std::cout << "prefix[" << i << "] =" << prefix[i] << ",  nthreads = " << nthreads << "\n";
+              //std::cout << "prefix[" << i << "] =" << prefix[i] << ",  nthreads = " << nthreads << "\n";
             }
             //current_result_chunk_data.resize(current_result_chunk_data.size() + prefix[nthreads]);
             if (current_result_chunk_data.size() != prefix[nthreads])
