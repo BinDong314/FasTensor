@@ -45,10 +45,17 @@ namespace AU
 
 //#define ENABLE_OPENMP 1
 //#ifdef ENABLE_OPENMP
-#include <omp.h>
+//#include <omp.h>
 //#else
 //#define omp_get_thread_num() 0
 //#endif
+
+#if defined(_OPENMP)
+#include <omp.h>
+extern const bool parallelism_enabled = true;
+#else
+extern const bool parallelism_enabled = false;
+#endif
 
 //#define DEBUG 1
 int save_result_flag = 1;
@@ -2246,7 +2253,7 @@ public:
         //printf("nthreads = %d, my rank = %d \n", nthreads, ithread);
         size_t *prefix;
         //omp_set_schedule(omp_sched_static, 64);
-#pragma omp parallel
+#pragma omp parallel if (parallelism_enabled)
         {
           std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
           unsigned long long offset_ol;
