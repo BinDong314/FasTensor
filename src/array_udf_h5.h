@@ -1062,8 +1062,31 @@ public:
     hid_t v_memspace_id = H5Screate_simple(v_rank, &v_count[0], NULL);
     H5Sselect_hyperslab(v_dataspace_id, H5S_SELECT_SET, &v_offset[0], NULL, &v_count[0], NULL);
 
-    int ret;
-    switch (v_type_class)
+    int ret = 1;
+
+    if (mpi_size > 1 && is_equal_vecotr_parallel(starta) == 1 && is_equal_vecotr_parallel(enda) == 1)
+    { //read and broadcast
+      if (!mpi_rank)
+      {
+        std::cout << "All ranks read the same data, only rank 0 reads data \n";
+        ret = H5Dread(v_did, h5_mem_type, v_memspace_id, v_dataspace_id, H5P_DEFAULT, &dataa[0]);
+      }
+
+      int data_size = 1;
+      for (int i = 0; i < rank; i++)
+      {
+        data_size = data_size * count[i];
+      }
+      MPI_Datatype mpi_data_type;
+      find_mpi_type(mpi_data_type);
+      MPI_Bcast(&dataa[0], data_size, mpi_data_type, 0, MPI_COMM_WORLD);
+    }
+    else
+    {
+      ret = H5Dread(v_did, h5_mem_type, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
+    }
+
+    /*switch (v_type_class)
     {
     case H5T_INTEGER:
       //ret = H5Dread(v_did, H5T_NATIVE_INT, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
@@ -1076,7 +1099,7 @@ public:
       std::cout << "Unsupported datatype in  " << __FILE__ << __LINE__ << std::endl;
       exit(-1);
       break;
-    }
+    }*/
 
     H5Sclose(v_memspace_id);
     H5Sclose(v_dataspace_id);
