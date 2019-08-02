@@ -145,7 +145,7 @@ inline std::vector<unsigned long long> NextCoordinateAfterSkipWithinChunk(std::v
 //Return
 // 1: yes, skip this point
 // 0: no,  run computing on it
-inline int SkipIt(std::vector<unsigned long long> coordinate_at_chunk, std::vector<unsigned long long> skip_size)
+inline int SkipIt(const std::vector<unsigned long long> &coordinate_at_chunk, const std::vector<unsigned long long> &skip_size)
 {
   int rank = coordinate_at_chunk.size();
   //Determine if coodinate_at_chunk is the first element of the the the skip chunk (not partition chunk)
