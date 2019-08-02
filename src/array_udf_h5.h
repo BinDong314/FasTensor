@@ -1075,7 +1075,7 @@ public:
       int data_size = 1;
       for (int i = 0; i < rank; i++)
       {
-        data_size = data_size * count[i];
+        data_size = data_size * v_count[i];
       }
       MPI_Datatype mpi_data_type;
       find_mpi_type(mpi_data_type);
