@@ -1068,7 +1068,7 @@ public:
     { //read and broadcast
       if (!mpi_rank)
       {
-        std::cout << "All ranks read the same data, only rank 0 reads data \n";
+        //std::cout << "All ranks read the same data, only rank 0 reads data \n";
         ret = H5Dread(v_did, h5_mem_type, v_memspace_id, v_dataspace_id, H5P_DEFAULT, &dataa[0]);
       }
 
