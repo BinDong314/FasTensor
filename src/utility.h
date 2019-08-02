@@ -688,4 +688,32 @@ void type_infer(int &vector_type_flag, int &output_element_type_class)
   }
 }
 
+//1: vector has same value
+//0: vector has different values
+inline int is_equal_vecotr_parallel(std::vector<unsigned long long> &v_local)
+{
+  unsigned long long global_max, local_value;
+  int equal_flag_local = 0, equal_flag_global_min = 0;
+  //Todo: Make sure the v_local is equal to each other
+  for (int i = 0; i < v_local.size(); i++)
+  {
+    local_value = v_local[i];
+    equal_flag_local = 0;
+    MPI_Allreduce(&local_value, &global_max, 1, MPI_UNSIGNED_LONG_LONG, MPI_MAX, MPI_COMM_WORLD);
+    if (global_max == local_value)
+    {
+      equal_flag_local = 1;
+    }
+
+    equal_flag_global_min = 1;
+    MPI_Allreduce(&equal_flag_local, &equal_flag_global_min, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+    if (equal_flag_global_min == 0)
+    {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
 #endif

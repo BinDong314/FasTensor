@@ -324,7 +324,7 @@ public:
       memspace_id = H5Screate_simple(rank, &count[0], NULL);
       H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
 
-      int ret;
+      int ret = 1;
       /*
       switch (type_class)
       {
@@ -343,7 +343,27 @@ public:
         exit(-1);
         break;
       }*/
-      ret = H5Dread(did, h5_mem_type, memspace_id, dataspace_id, plist_cio_id, &data[0]);
+      if (mpi_size > 1 && is_equal_vecotr_parallel(start) == 1 && is_equal_vecotr_parallel(end) == 1)
+      { //read and broadcast
+        if (!mpi_rank)
+        {
+          std::cout << "All ranks read the same data, only rank 0 reads data \n";
+          ret = H5Dread(did, h5_mem_type, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
+        }
+
+        int data_size = 1;
+        for (int i = 0; i < rank; i++)
+        {
+          data_size = data_size * count[i];
+        }
+        MPI_Datatype mpi_data_type;
+        find_mpi_type(mpi_data_type);
+        MPI_Bcast(&data[0], data_size, mpi_data_type, 0, MPI_COMM_WORLD);
+      }
+      else
+      { //all read
+        ret = H5Dread(did, h5_mem_type, memspace_id, dataspace_id, plist_cio_id, &data[0]);
+      }
 
 #ifdef DEBUG
       for (auto i = data.begin(); i != data.end(); ++i)
@@ -1189,6 +1209,51 @@ public:
       {
         std::cout << "H5 type is [double] \n";
       }
+    }
+    else
+    {
+      std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+      exit(-1);
+    }
+  }
+
+  void find_mpi_type(MPI_Datatype &data_type)
+  {
+    if (std::is_same<T, int>::value)
+    {
+      data_type = MPI_INT;
+    }
+    else if (std::is_same<T, short>::value)
+    {
+      data_type = MPI_SHORT;
+    }
+    else if (std::is_same<T, long>::value)
+    {
+      data_type = MPI_LONG;
+    }
+    else if (std::is_same<T, long long>::value)
+    {
+      data_type = MPI_LONG_LONG_INT;
+    }
+    else if (std::is_same<T, unsigned int>::value)
+    {
+      data_type = MPI_UNSIGNED;
+    }
+    else if (std::is_same<T, unsigned short>::value)
+    {
+      data_type = MPI_UNSIGNED_SHORT;
+    }
+    else if (std::is_same<T, unsigned long>::value)
+    {
+      data_type = MPI_UNSIGNED_LONG;
+    }
+    else if (std::is_same<T, float>::value)
+    {
+      data_type = MPI_FLOAT;
+    }
+    else if (std::is_same<T, double>::value)
+    {
+      data_type = MPI_DOUBLE;
     }
     else
     {
