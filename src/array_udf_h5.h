@@ -1057,8 +1057,8 @@ public:
 
     //printf("Constructor in H5Data: plist_id= %d, did=%d, fid=%d !\n", plist_id, did, fid);
 
-    hid_t v_plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
-    H5Pset_dxpl_mpio(v_plist_cio_id, H5FD_MPIO_COLLECTIVE);
+    //hid_t v_plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
+    //H5Pset_dxpl_mpio(v_plist_cio_id, H5FD_MPIO_COLLECTIVE);
     std::vector<unsigned long long> v_offset, v_count;
     v_offset.resize(v_rank);
     v_count.resize(v_rank);
@@ -1092,7 +1092,7 @@ public:
     }
     else
     {*/
-    ret = H5Dread(v_did, h5_mem_type, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
+    ret = H5Dread(v_did, h5_mem_type, v_memspace_id, v_dataspace_id, plist_cio_id, &dataa[0]);
     //}
 
     /*switch (v_type_class)
@@ -1113,7 +1113,7 @@ public:
     H5Sclose(v_memspace_id);
     H5Sclose(v_dataspace_id);
     H5Pclose(v_plist_id);
-    H5Pclose(v_plist_cio_id);
+    //H5Pclose(v_plist_cio_id);
     H5Dclose(v_did);
     if (v_gid > 0)
       H5Gclose(v_gid);
