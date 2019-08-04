@@ -343,7 +343,7 @@ public:
         exit(-1);
         break;
       }*/
-      if (mpi_size > 1 && is_equal_vecotr_parallel(start) == 1 && is_equal_vecotr_parallel(end) == 1)
+      /*if (mpi_size > 1 && is_equal_vecotr_parallel(start) == 1 && is_equal_vecotr_parallel(end) == 1)
       { //read and broadcast
         if (!mpi_rank)
         {
@@ -361,9 +361,9 @@ public:
         MPI_Bcast(&data[0], data_size, mpi_data_type, 0, MPI_COMM_WORLD);
       }
       else
-      { //all read
-        ret = H5Dread(did, h5_mem_type, memspace_id, dataspace_id, plist_cio_id, &data[0]);
-      }
+      { //all read*/
+      ret = H5Dread(did, h5_mem_type, memspace_id, dataspace_id, plist_cio_id, &data[0]);
+      //}
 
 #ifdef DEBUG
       for (auto i = data.begin(); i != data.end(); ++i)
@@ -683,6 +683,15 @@ public:
     if (plist_cio_id > 0)
       H5Pclose(plist_cio_id);
     plist_cio_id = H5P_DEFAULT;
+  }
+
+  void EnableCollectivIO()
+  {
+    if (plist_cio_id > 0)
+      H5Pclose(plist_cio_id);
+
+    plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
+    H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
   }
 
   int CreateNVSFile(int data_dims, std::vector<unsigned long long> &data_dims_size, int data_type_class, std::vector<int> data_overlap_size)
@@ -1064,7 +1073,7 @@ public:
 
     int ret = 1;
 
-    if (mpi_size > 1 && is_equal_vecotr_parallel(starta) == 1 && is_equal_vecotr_parallel(enda) == 1)
+    /*if (mpi_size > 1 && is_equal_vecotr_parallel(starta) == 1 && is_equal_vecotr_parallel(enda) == 1)
     { //read and broadcast
       if (!mpi_rank)
       {
@@ -1082,9 +1091,9 @@ public:
       MPI_Bcast(&dataa[0], data_size, mpi_data_type, 0, MPI_COMM_WORLD);
     }
     else
-    {
-      ret = H5Dread(v_did, h5_mem_type, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
-    }
+    {*/
+    ret = H5Dread(v_did, h5_mem_type, v_memspace_id, v_dataspace_id, v_plist_cio_id, &dataa[0]);
+    //}
 
     /*switch (v_type_class)
     {
@@ -1219,19 +1228,11 @@ public:
     {
       mem_type = H5T_NATIVE_FLOAT;
       disk_type = H5T_IEEE_F32LE;
-      if (mpi_rank == 0)
-      {
-        std::cout << "H5 type is [float] , H5T_IEEE_F32LE =" << H5T_IEEE_F32LE << " \n";
-      }
     }
     else if (std::is_same<T, double>::value)
     {
       mem_type = H5T_NATIVE_DOUBLE;
       disk_type = H5T_IEEE_F64LE;
-      if (mpi_rank == 0)
-      {
-        std::cout << "H5 type is [double] \n";
-      }
     }
     else
     {

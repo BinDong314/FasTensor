@@ -222,6 +222,14 @@ public:
     }
   }
 
+  void EnableCollectivIO()
+  {
+    if (cache_flag == AU_NOCACHE)
+    {
+      return nvs_f_handle->EnableCollectivIO();
+    }
+  }
+
   int CreateStorageSpace(int data_dims, std::vector<unsigned long long> &data_dims_size, int data_type_class, std::vector<int> data_overlap_size, std::vector<int> data_chunk_size_t)
   {
 

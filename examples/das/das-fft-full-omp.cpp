@@ -328,28 +328,40 @@ int main(int argc, char *argv[])
     ALLOCATE_FFT(fft_in, nfft);
     ALLOCATE_FFT(fft_out, nfft);
     ALLOCATE_FFT(master_fft, nfft * window_batch);
+
+    //Dis enable collective IO  to only allow rank 0 to read data
+    IFILE->DisableCollO();
     for (int bi = 0; bi < window_batch; bi++)
     {
-        if (row_major_flag == 0)
+        if (mpi_rank == 0)
         {
-            if (enable_view_flag)
-                MASTER_INDEX = view_start[1] + MASTER_INDEX;
-            master_start[0] = 0 + bi * n0;
-            master_start[1] = MASTER_INDEX;
-            master_end[0] = master_start[0] + n0 - 1;
-            master_end[1] = MASTER_INDEX;
+            if (row_major_flag == 0)
+            {
+                if (enable_view_flag)
+                    MASTER_INDEX = view_start[1] + MASTER_INDEX;
+                master_start[0] = 0 + bi * n0;
+                master_start[1] = MASTER_INDEX;
+                master_end[0] = master_start[0] + n0 - 1;
+                master_end[1] = MASTER_INDEX;
+            }
+            else
+            {
+                if (enable_view_flag)
+                    MASTER_INDEX = view_start[0] + MASTER_INDEX;
+                master_start[0] = MASTER_INDEX;
+                master_start[1] = 0 + bi * n0;
+                master_end[0] = MASTER_INDEX;
+                master_end[1] = master_start[0] + n0 - 1;
+            }
+            //Get master chunk's data and store in double type vector
+            IFILE->ReadData(master_start, master_end, masterv);
         }
-        else
-        {
-            if (enable_view_flag)
-                MASTER_INDEX = view_start[0] + MASTER_INDEX;
-            master_start[0] = MASTER_INDEX;
-            master_start[1] = 0 + bi * n0;
-            master_end[0] = MASTER_INDEX;
-            master_end[1] = master_start[0] + n0 - 1;
-        }
-        //Get master chunk's data and store in double type vector
-        IFILE->ReadData(master_start, master_end, masterv);
+
+        //Only mpi_rank 0 to get the master channel
+        //Broadcast to all other mpi ranks.
+        MPI_Barrier(MPI_COMM_WORLD);
+        MPI_Bcast(&masterv[0], n0, MPI_SHORT, 0, MPI_COMM_WORLD);
+
         for (int i = 0; i < n0; i++)
         {
             mastervf[i] = (double)(masterv[i]);
@@ -365,6 +377,8 @@ int main(int argc, char *argv[])
             master_fft[bi * nfft + j][1] = fft_out[j][1];
         }
     }
+    //Re enable collective IO  to make following read faster
+    IFILE->EnableCollIO();
     //masterv_ppf.clear();
     //mastervf.clear();
     //masterv.clear();

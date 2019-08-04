@@ -2814,6 +2814,25 @@ public:
     }
   }
 
+  void EnableCollectivIO(std::string fn)
+  {
+    data->EnableCollectivIO();
+    if (mpi_rank == 0)
+    {
+      std::cout << "Enable Collective IO for " << fn << std::endl;
+    }
+  }
+
+  void DisableCollO()
+  {
+    data->DisableCollectivIO();
+  }
+
+  void EnableCollIO()
+  {
+    data->EnableCollectivIO();
+  }
+
   template <class DataElementType>
   int SaveResult(std::vector<unsigned long long> current_chunk_start_offset, std::vector<unsigned long long> current_chunk_end_offset, std::vector<DataElementType> current_result_chunk_data_p)
   {
