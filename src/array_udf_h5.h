@@ -697,7 +697,7 @@ public:
     v_plist_id = H5P_DEFAULT;
     if (mpi_rank == 0)
     {
-      std::cout << "Diable coll IO in h5 \n";
+      std::cout << "Diable coll IO in h5, at rank : " << mpi_rank << "\n";
     }
   }
 
