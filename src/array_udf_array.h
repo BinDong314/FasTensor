@@ -2282,10 +2282,31 @@ public:
             //printf("i = %lld \n", i);
 
             ROW_MAJOR_ORDER_REVERSE_MACRO(i, current_chunk_size, current_chunk_size.size(), cell_coordinate)
+
             if (skip_flag == 1)
             {
-              if (SkipIt(cell_coordinate, skip_size) == 1)
-                continue;
+              //See SkipIt in utility.h for more details
+
+              //if (SkipIt(cell_coordinate, skip_size) == 1)
+              //  continue;
+              //assert(i < current_chunk_cells);
+
+              std::vector<unsigned long long> chunk_coordinate(data_dims, 0), chunk_coordinate_start(data_dims, 0);
+              int skip_flag_on_cell = 0;
+              for (int i = 0; i < data_dims; i++)
+              {
+                //The coordinate of the skip chunk this coordinate belong to
+                chunk_coordinate[i] = std::floor(cell_coordinate[i] / skip_size[i]);
+                chunk_coordinate_start[i] = chunk_coordinate[i] * skip_size[i]; //first cell's coodinate of this skip chunk
+                if (chunk_coordinate_start[i] != cell_coordinate[i])
+                { //we only run on the first  element of this skip chunk
+                  skip_flag_on_cell = 1;
+                  break;
+                }
+              }
+
+              if (skip_flag_on_cell == 1)
+                continue; //          for (unsigned long long i = 0; i < current_chunk_cells; i++)
               assert(i < current_chunk_cells);
             }
             //int iithread = omp_get_thread_num();
