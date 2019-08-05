@@ -695,8 +695,10 @@ public:
       H5Pclose(v_plist_id);
     //v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
     v_plist_id = H5P_DEFAULT;
-    if (!mpi_rank)
+    if (mpi_rank == 0)
+    {
       std::cout << "Diable coll IO in h5 \n";
+    }
   }
 
   void EnableCollectivIO()
@@ -706,10 +708,11 @@ public:
 
     plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
     H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
+
     if (v_plist_id > 0)
       H5Pclose(v_plist_id);
     v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
-    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+    H5Pset_fapl_mpio(v_plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
   }
 
   int CreateNVSFile(int data_dims, std::vector<unsigned long long> &data_dims_size, int data_type_class, std::vector<int> data_overlap_size)
