@@ -2261,6 +2261,8 @@ public:
           UDFOutputType cell_return_value;
           unsigned long long cell_target_g_location_rm;
           int is_mirror_value = 0;
+          std::vector<unsigned long long> skip_chunk_coordinate(data_dims, 0), skip_chunk_coordinate_start(data_dims, 0);
+          int skip_flag_on_cell = 0;
 
 #if defined(_OPENMP)
 
@@ -2291,14 +2293,13 @@ public:
               //  continue;
               //assert(i < current_chunk_cells);
 
-              std::vector<unsigned long long> chunk_coordinate(data_dims, 0), chunk_coordinate_start(data_dims, 0);
-              int skip_flag_on_cell = 0;
+              skip_flag_on_cell = 0;
               for (int i = 0; i < data_dims; i++)
               {
                 //The coordinate of the skip chunk this coordinate belong to
-                chunk_coordinate[i] = std::floor(cell_coordinate[i] / skip_size[i]);
-                chunk_coordinate_start[i] = chunk_coordinate[i] * skip_size[i]; //first cell's coodinate of this skip chunk
-                if (chunk_coordinate_start[i] != cell_coordinate[i])
+                skip_chunk_coordinate[i] = std::floor(cell_coordinate[i] / skip_size[i]);
+                skip_chunk_coordinate_start[i] = skip_chunk_coordinate[i] * skip_size[i]; //first cell's coodinate of this skip chunk
+                if (skip_chunk_coordinate_start[i] != cell_coordinate[i])
                 { //we only run on the first  element of this skip chunk
                   skip_flag_on_cell = 1;
                   break;
