@@ -62,6 +62,7 @@ private:
   //For VDS file list;
   std::vector<std::string> FileVDSList;
   std::vector<H5Data<T> *> FileVDSPList;
+  hid_t v_plist_id = -1;
 
 public:
   H5Data(){};
@@ -149,6 +150,9 @@ public:
 
     if (is_VDS())
     {
+      v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
+      H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+
       std::string output_file_meata;
       output_file_meata = fn_str + ".vds-meta";
 
@@ -248,6 +252,10 @@ public:
       H5Fflush(fid, H5F_SCOPE_GLOBAL);
       H5Fclose(fid);
     }
+
+    if (v_plist_id > 0)
+      H5Pclose(v_plist_id);
+    v_plist_id = -1;
     plist_id = -1;
     plist_cio_id = -1;
     dataspace_id = -1;
@@ -683,6 +691,9 @@ public:
     if (plist_cio_id > 0)
       H5Pclose(plist_cio_id);
     plist_cio_id = H5P_DEFAULT;
+    if (v_plist_id > 0)
+      H5Pclose(v_plist_id);
+    v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
   }
 
   void EnableCollectivIO()
@@ -692,6 +703,10 @@ public:
 
     plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
     H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
+    if (v_plist_id > 0)
+      H5Pclose(v_plist_id);
+    v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
   }
 
   int CreateNVSFile(int data_dims, std::vector<unsigned long long> &data_dims_size, int data_type_class, std::vector<int> data_overlap_size)
@@ -1027,9 +1042,9 @@ public:
   int OpenReadCloseSingleFile(std::string fna, std::string gna, std::string dna, std::vector<unsigned long long> starta, std::vector<unsigned long long> enda, std::vector<DataType> &dataa)
   {
 
-    hid_t v_fid = -1, v_gid = -1, v_did = -1, v_plist_id;
-    v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
-    H5Pset_fapl_mpio(v_plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+    hid_t v_fid = -1, v_gid = -1, v_did = -1;
+    //v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    //H5Pset_fapl_mpio(v_plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
     v_fid = H5Fopen(fna.c_str(), H5F_ACC_RDONLY, v_plist_id);
     if (v_fid < 0)
@@ -1112,7 +1127,7 @@ public:
 
     H5Sclose(v_memspace_id);
     H5Sclose(v_dataspace_id);
-    H5Pclose(v_plist_id);
+    //H5Pclose(v_plist_id);
     //H5Pclose(v_plist_cio_id);
     H5Dclose(v_did);
     if (v_gid > 0)
