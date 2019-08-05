@@ -693,7 +693,10 @@ public:
     plist_cio_id = H5P_DEFAULT;
     if (v_plist_id > 0)
       H5Pclose(v_plist_id);
-    v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    //v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    v_plist_id = H5P_DEFAULT;
+    if (!mpi_rank)
+      std::cout << "Diable coll IO \n";
   }
 
   void EnableCollectivIO()
