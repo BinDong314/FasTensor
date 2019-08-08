@@ -437,6 +437,9 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    //Create the group "/Measurement"
    hid_t group_id = H5Gcreate(file_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
    free(object_path_str);
+   H5Fflush(file_id, H5F_SCOPE_GLOBAL);
+
+   H5Grefresh(group_id);
 
    //Create all sub-groups for left objects
    int index_data_type, array_dimensions;
@@ -454,7 +457,6 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       printf("object_path : %s \n", object_path_str);
 #endif
 
-      H5Grefresh(group_id);
       hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       H5Grefresh(group_id_temp);
       free(object_path_str);
