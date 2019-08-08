@@ -420,21 +420,25 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    char *object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
    memset(object_path_str, 0, sizeof(char) * length_of_object_path);
    fread(object_path_str, sizeof(char), length_of_object_path, fp);
+   if (strcmp(object_path_str, "/'Measurement'") != 0)
+   {
+      sprintf(object_path_str, "%s", "/'Measurement'");
+   }
    //#ifdef OUTPUT_META_TO_SCREEN
    printf("object_path : %s \n", object_path_str);
    //#endif
 
    int raw_data_index_int;
    fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
-   //#ifdef DEBUG_OUTPUT
+#ifdef DEBUG_OUTPUT
    printf("raw_data_index_int : 0x%.8X\n", raw_data_index_int);
-   //#endif
+#endif
 
    //int number_of_properties;
    fread(&number_of_properties, sizeof(uint32_t), 1, fp);
-   //#ifdef OUTPUT_META_TO_SCREEN
+#ifdef OUTPUT_META_TO_SCREEN
    printf("number_of_properties : %d \n", number_of_properties);
-   //#endif
+#endif
 
    //Create the group "/Measurement"
    hid_t group_id = H5Gcreate(file_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
