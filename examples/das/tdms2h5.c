@@ -460,8 +460,8 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       printf("object_path : %s \n", object_path_str);
       //#endif
 
-      hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-      assert(group_id_temp >= 0);
+      //hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+      //assert(group_id_temp >= 0);
       //H5Grefresh(group_id_temp);
       free(object_path_str);
       fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
@@ -490,7 +490,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       //attach_attribute_non_string(group_id_temp, (char *)"NumberOfRawDataValues ", H5T_STD_U64BE, H5T_NATIVE_ULONG, &Number_of_values);
       //attach_attribute_non_string(group_id_temp, (char *)"NumberOfProperties", H5T_STD_U32BE, H5T_NATIVE_INT, &number_of_properties);
 
-      H5Gclose(group_id_temp);
+      //H5Gclose(group_id_temp);
    }
 
    H5Gclose(group_id);
