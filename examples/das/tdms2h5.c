@@ -442,6 +442,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    H5Grefresh(group_id);
 
    //Create all sub-groups for left objects
+   /*
    int index_data_type, array_dimensions;
    uint64_t Number_of_values;
    for (int jj = 0; jj < number_of_objects - 2; jj++)
@@ -488,6 +489,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
       H5Gclose(group_id_temp);
    }
+   */
    H5Gclose(group_id);
 
    /*
