@@ -437,12 +437,11 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    //Create the group "/Measurement"
    hid_t group_id = H5Gcreate(file_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
    free(object_path_str);
-   H5Fflush(file_id, H5F_SCOPE_GLOBAL);
-
-   H5Grefresh(group_id);
+   //H5Fflush(file_id, H5F_SCOPE_GLOBAL);
+   //H5Grefresh(group_id);
 
    //Create all sub-groups for left objects
-   /*
+
    int index_data_type, array_dimensions;
    uint64_t Number_of_values;
    for (int jj = 0; jj < number_of_objects - 2; jj++)
@@ -458,8 +457,8 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       printf("object_path : %s \n", object_path_str);
 #endif
 
-      hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-      H5Grefresh(group_id_temp);
+      // hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+      //H5Grefresh(group_id_temp);
       free(object_path_str);
       fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
 #ifdef DEBUG_OUTPUT
@@ -482,14 +481,14 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #ifdef OUTPUT_META_TO_SCREEN
       printf("number_of_properties : %d \n", number_of_properties);
 #endif
-      attach_attribute_non_string(group_id_temp, (char *)"DataTypeCode", H5T_STD_U32BE, H5T_NATIVE_UINT, &index_data_type);
-      attach_attribute_non_string(group_id_temp, (char *)"ArrayDimension ", H5T_STD_U32BE, H5T_NATIVE_UINT, &array_dimensions);
-      attach_attribute_non_string(group_id_temp, (char *)"NumberOfRawDataValues ", H5T_STD_U64BE, H5T_NATIVE_ULONG, &Number_of_values);
-      attach_attribute_non_string(group_id_temp, (char *)"NumberOfProperties", H5T_STD_U32BE, H5T_NATIVE_INT, &number_of_properties);
+      //attach_attribute_non_string(group_id_temp, (char *)"DataTypeCode", H5T_STD_U32BE, H5T_NATIVE_UINT, &index_data_type);
+      //attach_attribute_non_string(group_id_temp, (char *)"ArrayDimension ", H5T_STD_U32BE, H5T_NATIVE_UINT, &array_dimensions);
+      //attach_attribute_non_string(group_id_temp, (char *)"NumberOfRawDataValues ", H5T_STD_U64BE, H5T_NATIVE_ULONG, &Number_of_values);
+      //attach_attribute_non_string(group_id_temp, (char *)"NumberOfProperties", H5T_STD_U32BE, H5T_NATIVE_INT, &number_of_properties);
 
-      H5Gclose(group_id_temp);
+      //H5Gclose(group_id_temp);
    }
-   */
+
    H5Gclose(group_id);
 
    /*
