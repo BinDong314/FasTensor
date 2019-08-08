@@ -237,10 +237,10 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    int number_of_objects;
    fread(&number_of_objects, sizeof(uint32_t), 1, fp);
 
-   //#ifdef OUTPUT_META_TO_SCREEN
+#ifdef OUTPUT_META_TO_SCREEN
    printf("Metadata: \n");
    printf("Number of objects : %d \n", number_of_objects);
-   //#endif
+#endif
 
    //Write number_of_objects to HDF5
    attach_attribute_non_string(file_id, (char *)"NumberOfObjects", H5T_STD_I32BE, H5T_NATIVE_INT, &number_of_objects);
@@ -424,9 +424,9 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    {
       sprintf(object_path_str, "%s", "/'Measurement'");
    }
-   //#ifdef OUTPUT_META_TO_SCREEN
+#ifdef OUTPUT_META_TO_SCREEN
    printf("object_path : %s \n", object_path_str);
-   //#endif
+#endif
 
    int raw_data_index_int;
    fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
@@ -460,9 +460,9 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
       memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
       fread(object_path_str, sizeof(char), length_of_object_path, fp);
-      //#ifdef OUTPUT_META_TO_SCREEN
+#ifdef OUTPUT_META_TO_SCREEN
       printf("object_path : %s \n", object_path_str);
-      //#endif
+#endif
 
       //hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       //assert(group_id_temp >= 0);
