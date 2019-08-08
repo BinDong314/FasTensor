@@ -431,9 +431,9 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    //int number_of_properties;
    fread(&number_of_properties, sizeof(uint32_t), 1, fp);
-#ifdef OUTPUT_META_TO_SCREEN
+   //#ifdef OUTPUT_META_TO_SCREEN
    printf("number_of_properties : %d \n", number_of_properties);
-#endif
+   //#endif
 
    //Create the group "/Measurement"
    hid_t group_id = H5Gcreate(file_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
