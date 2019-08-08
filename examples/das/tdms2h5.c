@@ -454,8 +454,9 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       printf("object_path : %s \n", object_path_str);
 #endif
 
+      H5Grefresh(group_id);
       hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-
+      H5Grefresh(group_id_temp);
       free(object_path_str);
       fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
 #ifdef DEBUG_OUTPUT
