@@ -236,10 +236,10 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    int number_of_objects;
    fread(&number_of_objects, sizeof(uint32_t), 1, fp);
 
-#ifdef OUTPUT_META_TO_SCREEN
+   //#ifdef OUTPUT_META_TO_SCREEN
    printf("Metadata: \n");
    printf("Number of objects : %d \n", number_of_objects);
-#endif
+   //#endif
 
    //Write number_of_objects to HDF5
    attach_attribute_non_string(file_id, (char *)"NumberOfObjects", H5T_STD_I32BE, H5T_NATIVE_INT, &number_of_objects);
@@ -425,9 +425,9 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    int raw_data_index_int;
    fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
-#ifdef DEBUG_OUTPUT
+   //#ifdef DEBUG_OUTPUT
    printf("raw_data_index_int : 0x%.8X\n", raw_data_index_int);
-#endif
+   //#endif
 
    //int number_of_properties;
    fread(&number_of_properties, sizeof(uint32_t), 1, fp);
@@ -437,6 +437,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    //Create the group "/Measurement"
    hid_t group_id = H5Gcreate(file_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+   assert(group_id >= 0);
    free(object_path_str);
    //H5Fflush(file_id, H5F_SCOPE_GLOBAL);
    //H5Grefresh(group_id);
@@ -458,7 +459,8 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       printf("object_path : %s \n", object_path_str);
 #endif
 
-      // hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+      hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+      assert(group_id_temp >= 0);
       //H5Grefresh(group_id_temp);
       free(object_path_str);
       fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
@@ -487,7 +489,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       //attach_attribute_non_string(group_id_temp, (char *)"NumberOfRawDataValues ", H5T_STD_U64BE, H5T_NATIVE_ULONG, &Number_of_values);
       //attach_attribute_non_string(group_id_temp, (char *)"NumberOfProperties", H5T_STD_U32BE, H5T_NATIVE_INT, &number_of_properties);
 
-      //H5Gclose(group_id_temp);
+      H5Gclose(group_id_temp);
    }
 
    H5Gclose(group_id);
