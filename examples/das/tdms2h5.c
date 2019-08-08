@@ -456,9 +456,9 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
       memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
       fread(object_path_str, sizeof(char), length_of_object_path, fp);
-#ifdef OUTPUT_META_TO_SCREEN
+      //#ifdef OUTPUT_META_TO_SCREEN
       printf("object_path : %s \n", object_path_str);
-#endif
+      //#endif
 
       hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       assert(group_id_temp >= 0);
