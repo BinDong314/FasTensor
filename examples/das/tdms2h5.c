@@ -8,6 +8,7 @@
 #include <getopt.h>
 #include <dirent.h>
 #include <mpi.h>
+#include <assert.h>
 
 //#define OUTPUT_META_TO_SCREEN 1
 //#define DEBUG_OUTPUT 1
