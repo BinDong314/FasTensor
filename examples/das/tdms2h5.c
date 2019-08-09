@@ -417,7 +417,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    //#ifdef DEBUG_OUTPUT
    printf("length_of_object_path : %d \n", length_of_object_path);
    //#endif
-   char *object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
+   char *object_path_str = (char *)malloc(sizeof(char) * length_of_object_path + 1);
    memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
    fread(object_path_str, sizeof(char), length_of_object_path, fp);
    /* if (strcmp(object_path_str, "/'Measurement'") != 0)
@@ -458,7 +458,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #ifdef DEBUG_OUTPUT
       printf("length_of_object_path : %d \n", length_of_object_path);
 #endif
-      object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
+      object_path_str = (char *)malloc(sizeof(char) * length_of_object_path + 1);
       memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
       fread(object_path_str, sizeof(char), length_of_object_path, fp);
       //#ifdef OUTPUT_META_TO_SCREEN
