@@ -414,19 +414,16 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    int length_of_object_path;
    fread(&length_of_object_path, sizeof(uint32_t), 1, fp);
-   //#ifdef DEBUG_OUTPUT
+#ifdef DEBUG_OUTPUT
    printf("length_of_object_path : %d \n", length_of_object_path);
-   //#endif
+#endif
    char *object_path_str = (char *)malloc(sizeof(char) * length_of_object_path + 1);
    memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
    fread(object_path_str, sizeof(char), length_of_object_path, fp);
-   /* if (strcmp(object_path_str, "/'Measurement'") != 0)
-   {
-      sprintf(object_path_str, "%s", "/'Measurement'");
-   }*/
-   //#ifdef OUTPUT_META_TO_SCREEN
+
+#ifdef OUTPUT_META_TO_SCREEN
    printf("object_path : %s \n", object_path_str);
-   //#endif
+#endif
 
    int raw_data_index_int;
    fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
@@ -451,7 +448,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    int index_data_type, array_dimensions;
    uint64_t Number_of_values;
-   int debug_print_index = 0;
+   //int debug_print_index = 0;
    for (int jj = 0; jj < number_of_objects - 2; jj++)
    {
       fread(&length_of_object_path, sizeof(uint32_t), 1, fp);
@@ -461,13 +458,9 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       object_path_str = (char *)malloc(sizeof(char) * length_of_object_path + 1);
       memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
       fread(object_path_str, sizeof(char), length_of_object_path, fp);
-      //#ifdef OUTPUT_META_TO_SCREEN
-      if (debug_print_index < 5)
-      {
-         printf("object_path : %s \n", object_path_str);
-         debug_print_index++;
-      }
-      //#endif
+#ifdef OUTPUT_META_TO_SCREEN
+      printf("object_path : %s \n", object_path_str);
+#endif
 
       hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
       assert(group_id_temp >= 0);
