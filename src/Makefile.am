@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS=gnu
 # -fopenmp -openmp -DENABLE_OPENMP -g -O0 -std=c++11 -std=c++0x
 AM_CPPFLAGS = @ARRAYUDF_CPPFLAGS@  -I./third_part
 AM_CFLAGS = @ARRAYUDF_CFLAGS@  -I./third_part
-AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@  -std=c++17  -I./third_part -fopenmp -DENABLE_OPENMP
+AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@  -std=c++17  -I./third_part 
 AM_LDFLAGS = =@ARRAYUDF_LIBS@   -all-static   -std=c++17  -I./third_part
 
 lib_LTLIBRARIES=libArrayUDF.la

@@ -52,9 +52,9 @@ namespace AU
 
 #if defined(_OPENMP)
 #include <omp.h>
-extern const bool parallelism_enabled = true;
+const bool parallelism_enabled = true;
 #else
-extern const bool parallelism_enabled = false;
+const bool parallelism_enabled = false;
 #endif
 
 //#define DEBUG 1
@@ -2248,10 +2248,9 @@ public:
         //unsigned long long lrm;
         t_start = MPI_Wtime();
 
-        //int ithread = omp_get_thread_num();
-        //int nthreads = omp_get_num_threads();
-        //printf("nthreads = %d, my rank = %d \n", nthreads, ithread);
+#if defined(_OPENMP)
         size_t *prefix;
+#endif
         //omp_set_schedule(omp_sched_static, 64);
 #pragma omp parallel if (parallelism_enabled)
         {
@@ -2265,11 +2264,14 @@ public:
           int skip_flag_on_cell = 0;
 
 #if defined(_OPENMP)
-
           int ithread = omp_get_thread_num();
           int nthreads = omp_get_num_threads();
 #pragma omp single
           {
+            if (mpi_rank == 0)
+            {
+              std::cout << "OpenMP is enabled in Apply, Total # of threads = " << nthreads << std::endl;
+            }
             prefix = new size_t[nthreads + 1];
             prefix[0] = 0;
           }

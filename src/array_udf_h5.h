@@ -315,6 +315,7 @@ public:
       }
       v_data.resize(0);
       clear_vector(v_data);
+
       au_time_elap("Read data ");
       return 1;
     }
