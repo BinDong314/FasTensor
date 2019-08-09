@@ -414,19 +414,19 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    int length_of_object_path;
    fread(&length_of_object_path, sizeof(uint32_t), 1, fp);
-#ifdef DEBUG_OUTPUT
+   //#ifdef DEBUG_OUTPUT
    printf("length_of_object_path : %d \n", length_of_object_path);
-#endif
+   //#endif
    char *object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
-   memset(object_path_str, 0, sizeof(char) * length_of_object_path);
+   memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
    fread(object_path_str, sizeof(char), length_of_object_path, fp);
-   if (strcmp(object_path_str, "/'Measurement'") != 0)
+   /* if (strcmp(object_path_str, "/'Measurement'") != 0)
    {
       sprintf(object_path_str, "%s", "/'Measurement'");
-   }
-#ifdef OUTPUT_META_TO_SCREEN
+   }*/
+   //#ifdef OUTPUT_META_TO_SCREEN
    printf("object_path : %s \n", object_path_str);
-#endif
+   //#endif
 
    int raw_data_index_int;
    fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
@@ -451,6 +451,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    int index_data_type, array_dimensions;
    uint64_t Number_of_values;
+   int debug_print_index = 0;
    for (int jj = 0; jj < number_of_objects - 2; jj++)
    {
       fread(&length_of_object_path, sizeof(uint32_t), 1, fp);
@@ -460,12 +461,16 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
       memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
       fread(object_path_str, sizeof(char), length_of_object_path, fp);
-#ifdef OUTPUT_META_TO_SCREEN
-      printf("object_path : %s \n", object_path_str);
-#endif
+      //#ifdef OUTPUT_META_TO_SCREEN
+      if (debug_print_index < 5)
+      {
+         printf("object_path : %s \n", object_path_str);
+         debug_print_index++;
+      }
+      //#endif
 
-      //hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-      //assert(group_id_temp >= 0);
+      hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+      assert(group_id_temp >= 0);
       //H5Grefresh(group_id_temp);
       free(object_path_str);
       fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
@@ -489,12 +494,12 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #ifdef OUTPUT_META_TO_SCREEN
       printf("number_of_properties : %d \n", number_of_properties);
 #endif
-      //attach_attribute_non_string(group_id_temp, (char *)"DataTypeCode", H5T_STD_U32BE, H5T_NATIVE_UINT, &index_data_type);
-      //attach_attribute_non_string(group_id_temp, (char *)"ArrayDimension ", H5T_STD_U32BE, H5T_NATIVE_UINT, &array_dimensions);
-      //attach_attribute_non_string(group_id_temp, (char *)"NumberOfRawDataValues ", H5T_STD_U64BE, H5T_NATIVE_ULONG, &Number_of_values);
-      //attach_attribute_non_string(group_id_temp, (char *)"NumberOfProperties", H5T_STD_U32BE, H5T_NATIVE_INT, &number_of_properties);
+      attach_attribute_non_string(group_id_temp, (char *)"DataTypeCode", H5T_STD_U32BE, H5T_NATIVE_UINT, &index_data_type);
+      attach_attribute_non_string(group_id_temp, (char *)"ArrayDimension ", H5T_STD_U32BE, H5T_NATIVE_UINT, &array_dimensions);
+      attach_attribute_non_string(group_id_temp, (char *)"NumberOfRawDataValues ", H5T_STD_U64BE, H5T_NATIVE_ULONG, &Number_of_values);
+      attach_attribute_non_string(group_id_temp, (char *)"NumberOfProperties", H5T_STD_U32BE, H5T_NATIVE_INT, &number_of_properties);
 
-      //H5Gclose(group_id_temp);
+      H5Gclose(group_id_temp);
    }
 
    H5Gclose(group_id);
