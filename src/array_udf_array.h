@@ -2179,17 +2179,35 @@ public:
       }
       else //B->isVirtualArray() == 1
       {
-        Array<BAttributeType> *aa; //attribute array
-        Data<BAttributeType> *aah;
-        for (int i = 0; i < B->GetAttributesSize(); i++)
+        if (skip_flag == 1)
         {
-          aa = B->GetAttributes(i);
-          aah = aa->GetDataHandle();
-          aa->CreateStorageSpace(data_dims, data_dims_size, data_chunk_size, data_overlap_size, output_element_type_class, data_total_chunks);
-          if (data_total_chunks % mpi_size != 0)
+          Array<BAttributeType> *aa; //attribute array
+          Data<BAttributeType> *aah;
+          for (int i = 0; i < B->GetAttributesSize(); i++)
           {
-            aa->DisableCollectivIO(aah->GetFileName());
-          };
+            aa = B->GetAttributes(i);
+            aah = aa->GetDataHandle();
+            aa->CreateStorageSpace(data_dims, skiped_dims_size, data_chunk_size, data_overlap_size, output_element_type_class, data_total_chunks);
+            if (data_total_chunks % mpi_size != 0)
+            {
+              aa->DisableCollectivIO(aah->GetFileName());
+            };
+          }
+        }
+        else
+        {
+          Array<BAttributeType> *aa; //attribute array
+          Data<BAttributeType> *aah;
+          for (int i = 0; i < B->GetAttributesSize(); i++)
+          {
+            aa = B->GetAttributes(i);
+            aah = aa->GetDataHandle();
+            aa->CreateStorageSpace(data_dims, data_dims_size, data_chunk_size, data_overlap_size, output_element_type_class, data_total_chunks);
+            if (data_total_chunks % mpi_size != 0)
+            {
+              aa->DisableCollectivIO(aah->GetFileName());
+            };
+          }
         }
       }
     }

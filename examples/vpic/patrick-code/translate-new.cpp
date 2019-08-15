@@ -516,7 +516,7 @@ int main(int argc, char *argv[])
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "ex", 0);
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "ey", 0);
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "ez", 0);
-        
+
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "cbx", 0);
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "cby", 0);
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "cbz", 0);
