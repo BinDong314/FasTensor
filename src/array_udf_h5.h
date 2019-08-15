@@ -298,23 +298,112 @@ public:
 
       au_time_start();
 
-      std::vector<unsigned long long> v_end(2);
-      v_end[0] = end[0];
-      v_end[1] = ((end[1] + 1) / FileVDSList.size()) - 1;
-      std::vector<T> v_data;
-      v_data.resize((v_end[1] - start[1] + 1) * (v_end[0] - start[0] + 1));
-      //H5Data<T> *h5p;
-      for (int i = 0; i < FileVDSList.size(); i++)
+      if (end[0] - start[0] < mpi_size)
       {
-        if ((!mpi_rank) && (i % 400 == 0))
-          std::cout << "VDS index " << i << ", " << FileVDSList[i] << std::endl;
-        OpenReadCloseSingleFile(FileVDSList[i], gn_str, dn_str, start, v_end, v_data);
-        //h5p = FileVDSPList[i];
-        //h5p->ReadData(start, v_end, v_data);
-        InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
+        std::vector<unsigned long long> v_end(2);
+        v_end[0] = end[0];
+        v_end[1] = ((end[1] + 1) / FileVDSList.size()) - 1;
+        std::vector<T> v_data;
+        v_data.resize((v_end[1] - start[1] + 1) * (v_end[0] - start[0] + 1));
+        //H5Data<T> *h5p;
+        for (int i = 0; i < FileVDSList.size(); i++)
+        {
+          if ((!mpi_rank) && (i % 400 == 0))
+            std::cout << "VDS index " << i << ", " << FileVDSList[i] << std::endl;
+          OpenReadCloseSingleFile(FileVDSList[i], gn_str, dn_str, start, v_end, v_data);
+          //h5p = FileVDSPList[i];
+          //h5p->ReadData(start, v_end, v_data);
+          InsertVDSIntoGlobalSpace(i, start, v_end, v_data, data, start, end);
+        }
+        v_data.resize(0);
+        clear_vector(v_data);
       }
-      v_data.resize(0);
-      clear_vector(v_data);
+      else
+      {
+
+        //Another veverson of above code to use mpi_all2allv
+        //Get the size of each VD
+
+        std::vector<hsize_t> v_size_per_file(2);
+        GetSingleFileSize(FileVDSList[0], gn_str, dn_str, v_size_per_file);
+
+        std::vector<T> v_data_per_file;
+
+        int *sendcounts, *recvcounts, *rdispls, *sdispls;
+
+        sendcounts = (int *)malloc(mpi_size * sizeof(int));
+        recvcounts = (int *)malloc(mpi_size * sizeof(int));
+        rdispls = (int *)malloc(mpi_size * sizeof(int));
+        sdispls = (int *)malloc(mpi_size * sizeof(int));
+        if (!sendcounts || !recvcounts || !rdispls || !sdispls)
+        {
+          fprintf(stderr, "Could not allocate arg items!\n");
+          fflush(stderr);
+          exit(-1);
+        }
+
+        int all_to_all_batches;
+        if (FileVDSList.size() % mpi_size == 0)
+        {
+          all_to_all_batches = FileVDSList.size() / mpi_size;
+        }
+        else
+        {
+          all_to_all_batches = FileVDSList.size() % mpi_size + 1;
+        }
+
+        //Here we assume that each file is equalled partitioned among all mpi ranks
+        hsize_t v_size_per_file_ll = v_size_per_file[0] * v_size_per_file[1];
+
+        if (v_size_per_file_ll % mpi_size != 0)
+        {
+          printf("It only supoorts alligned access here in read VDS data");
+          exit(-1);
+        }
+
+        unsigned long long exchange_counts = v_size_per_file_ll / mpi_size;
+        for (int j = 0; j < mpi_size; j++)
+        {
+          sendcounts[j] = exchange_counts;
+          recvcounts[j] = exchange_counts;
+          rdispls[j] = j * exchange_counts;
+          sdispls[j] = j * exchange_counts;
+        }
+
+        if (!mpi_rank)
+          printf("Use MPI_all2allv, size/file = (%lld, %lld), exchange_counts = %lld\n", v_size_per_file[0], v_size_per_file[1], exchange_counts);
+
+        MPI_Datatype mpi_data_type;
+        find_mpi_type(mpi_data_type);
+
+        v_data_per_file.resize(v_size_per_file_ll);
+
+        int my_file_index = mpi_rank;
+        for (int i = 0; i < all_to_all_batches; i++)
+        {
+          if (my_file_index < FileVDSList.size())
+          {
+            OpenReadCloseSingleFileWhole(FileVDSList[my_file_index], gn_str, dn_str, v_data_per_file);
+          }
+          else
+          {
+            //For the last batch, some MPI ranks may not have data
+            //But we still need them to join MPI_Alltoallv with zero size
+            int jjj = my_file_index % mpi_size;
+            for (int j = 0; j < mpi_size; j++)
+            {
+              sendcounts[j] = 0;
+              if (j > jjj)
+                recvcounts[jjj] = 0;
+              //rdispls[jjj] = 0;
+              //sdispls[jjj] = 0;
+            }
+          }
+
+          MPI_Alltoallv(&v_data_per_file[0], sendcounts, sdispls, mpi_data_type, &data[0] + i * v_size_per_file_ll, recvcounts, rdispls, mpi_data_type, MPI_COMM_WORLD);
+          my_file_index = my_file_index + mpi_size;
+        }
+      }
 
       au_time_elap("Read data ");
       return 1;
@@ -1136,6 +1225,102 @@ public:
     H5Sclose(v_dataspace_id);
     //H5Pclose(v_plist_id);
     //H5Pclose(v_plist_cio_id);
+    H5Dclose(v_did);
+    if (v_gid > 0)
+      H5Gclose(v_gid);
+    H5Fclose(v_fid);
+
+    if (ret < 0)
+    {
+      printf("Some error happen in reading HDF5 \n");
+      exit(-1);
+    }
+    return 1;
+  }
+
+  int GetSingleFileSize(std::string fna, std::string gna, std::string dna, std::vector<hsize_t> &v_dims_out)
+  {
+    hid_t v_fid = -1, v_gid = -1, v_did = -1;
+
+    v_fid = H5Fopen(fna.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+    if (v_fid < 0)
+    {
+      std::cout << "Error happens in open file " << fna << std::endl;
+      exit(-1);
+    }
+
+    std::string root_dir = "/";
+    if (gna != root_dir)
+    {
+      //std::cout << "Open Group : " << gn << std::endl;
+      v_gid = H5Gopen(v_fid, gna.c_str(), H5P_DEFAULT);
+      v_did = H5Dopen(v_gid, dna.c_str(), H5P_DEFAULT);
+    }
+    else
+    {
+      v_did = H5Dopen(v_fid, dna.c_str(), H5P_DEFAULT);
+    }
+
+    hid_t v_datatype = H5Dget_type(v_did);
+    H5T_class_t v_type_class = H5Tget_class(v_datatype);
+    hid_t v_dataspace_id = H5Dget_space(v_did);
+    int v_rank = H5Sget_simple_extent_ndims(v_dataspace_id);
+
+    H5Sget_simple_extent_dims(v_dataspace_id, &v_dims_out[0], NULL);
+
+    H5Dclose(v_did);
+    if (v_gid > 0)
+      H5Gclose(v_gid);
+    H5Fclose(v_fid);
+
+    return 1;
+  }
+  //Used to read VDS's file list
+  //One file at a time and all processes read the same file
+  //Each process figure out is own start/end
+  template <class DataType>
+  int OpenReadCloseSingleFileWhole(std::string fna, std::string gna, std::string dna, std::vector<DataType> &dataa)
+  {
+
+    hid_t v_fid = -1, v_gid = -1, v_did = -1;
+    //v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    //H5Pset_fapl_mpio(v_plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+
+    v_fid = H5Fopen(fna.c_str(), H5F_ACC_RDONLY, v_plist_id);
+    if (v_fid < 0)
+    {
+      std::cout << "Error happens in open file " << fna << std::endl;
+      exit(-1);
+    }
+
+    std::string root_dir = "/";
+    if (gna != root_dir)
+    {
+      //std::cout << "Open Group : " << gn << std::endl;
+      v_gid = H5Gopen(v_fid, gna.c_str(), H5P_DEFAULT);
+      v_did = H5Dopen(v_gid, dna.c_str(), H5P_DEFAULT);
+    }
+    else
+    {
+      v_did = H5Dopen(v_fid, dna.c_str(), H5P_DEFAULT);
+    }
+
+    /*
+    hid_t v_datatype = H5Dget_type(v_did); 
+    H5T_class_t v_type_class = H5Tget_class(v_datatype);
+    hid_t v_dataspace_id = H5Dget_space(v_did);
+    int v_rank = H5Sget_simple_extent_ndims(v_dataspace_id);
+
+    std::vector<hsize_t> v_dims_out;
+
+    v_dims_out.resize(v_rank);
+    H5Sget_simple_extent_dims(v_dataspace_id, &v_dims_out[0], NULL);
+    */
+
+    int ret = 1;
+
+    ret = H5Dread(v_did, h5_mem_type, H5S_ALL, H5S_ALL, plist_cio_id, &dataa[0]);
+
     H5Dclose(v_did);
     if (v_gid > 0)
       H5Gclose(v_gid);
