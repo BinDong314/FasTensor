@@ -2568,7 +2568,33 @@ public:
           }
           else
           {
-            B->SaveResult(current_result_chunk_start_offset, current_result_chunk_end_offset, current_result_chunk_data);
+
+            if (!B->isVirtualArray())
+            {
+              B->SaveResult(current_result_chunk_start_offset, current_result_chunk_end_offset, current_result_chunk_data);
+              //B->SaveResult(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
+            }
+            else
+            {
+              Array<BAttributeType> *aa;
+              Data<BAttributeType> *ah;
+              std::vector<BAttributeType> current_chunk_data_temp;
+              current_chunk_data_temp.resize(current_result_chunk_data.size());
+              int n = B->GetAttributesSize();
+              for (int i = 0; i < n; i++)
+              {
+                aa = B->GetAttributes(i);
+                ah = aa->GetDataHandle();
+
+                if (mpi_rank == 0)
+                  std::cout << "Write " << i << "th attribute: " << aa->GetDatasetName() << " \n";
+                //UDFOutputType
+                //ExtractFromVirtualVector<BAttributeType, BType>(current_chunk_data_temp, current_result_chunk_data, i);
+                ExtractFromVirtualVector<BAttributeType, UDFOutputType>(current_chunk_data_temp, current_result_chunk_data, i);
+                ah->WriteData(current_result_chunk_start_offset, current_result_chunk_end_offset, current_chunk_data_temp);
+              }
+              current_chunk_data_temp.resize(0);
+            }
           }
         }
         else

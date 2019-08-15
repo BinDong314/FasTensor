@@ -8,7 +8,7 @@ CCC=mpicxx
 all:translate-new translate
 
 translate-new :translate-new.cpp 
-	$(CCC)   -o  translate-new   translate-new.cpp    -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++17 -lArrayUDF -O3  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
+	$(CCC)   -o  translate-new   translate-new.cpp    -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++17 -lArrayUDF -g3  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 
 
 translate :translate.cpp 
 	$(CCC)   -o  translate   translate.cpp    -I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++17 -lArrayUDF -O3  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 

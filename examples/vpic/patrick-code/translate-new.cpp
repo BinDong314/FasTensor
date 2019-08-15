@@ -516,7 +516,7 @@ int main(int argc, char *argv[])
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "ex", 0);
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "ey", 0);
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "ez", 0);
-
+        
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "cbx", 0);
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "cby", 0);
         XYZ->PushBackAttribute(AU_NVS, AU_HDF5, i_file_field, group, "cbz", 0);
@@ -658,6 +658,8 @@ int main(int argc, char *argv[])
 
         XYZ_OUTPUT->PushBackAttribute(AU_COMPUTED, AU_HDF5, o_file, group, "absJ", 0);
 
+        std::vector<int> strip_size = {4, 1, 5};
+        XYZ->SetApplyStripSize(strip_size);
         XYZ->Apply(extract_All_UDF, XYZ_OUTPUT);
 
         XYZ->ReportTime();
