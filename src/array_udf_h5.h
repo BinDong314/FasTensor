@@ -520,7 +520,7 @@ public:
   }
 
   template <class DataType>
-  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<DataType> data)
+  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<DataType> &data)
   {
     Open(H5F_ACC_RDWR);
     std::vector<unsigned long long> offset, count;
@@ -579,7 +579,7 @@ public:
     //H5Tinsert(complex_id, "real", HOFFSET(complex_t, re), H5T_NATIVE_FLOAT);
     //H5Tinsert(complex_id, "imaginary", HOFFSET(complex_t, im), H5T_NATIVE_FLOAT);
 
-    au_time_start();
+    //au_time_start();
 
     //
     //
@@ -682,7 +682,7 @@ public:
     //flush data onto disk
     H5Fflush(fid, H5F_SCOPE_GLOBAL);
     Close();
-    au_time_elap("Write data ");
+    //au_time_elap("Write data ");
 
     return 1;
   }

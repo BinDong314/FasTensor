@@ -2902,7 +2902,7 @@ public:
   }
 
   template <class DataElementType>
-  int SaveResult(std::vector<unsigned long long> current_chunk_start_offset, std::vector<unsigned long long> current_chunk_end_offset, std::vector<DataElementType> current_result_chunk_data_p)
+  int SaveResult(std::vector<unsigned long long> current_chunk_start_offset, std::vector<unsigned long long> current_chunk_end_offset, std::vector<DataElementType> &current_result_chunk_data_p)
   {
     return data->WriteData(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data_p);
   }
