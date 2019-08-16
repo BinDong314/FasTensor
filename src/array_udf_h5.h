@@ -1286,7 +1286,7 @@ public:
     //v_plist_id = H5Pcreate(H5P_FILE_ACCESS);
     //H5Pset_fapl_mpio(v_plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
-    v_fid = H5Fopen(fna.c_str(), H5F_ACC_RDONLY, v_plist_id);
+    v_fid = H5Fopen(fna.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
     if (v_fid < 0)
     {
       std::cout << "Error happens in open file " << fna << std::endl;
@@ -1319,7 +1319,7 @@ public:
 
     int ret = 1;
 
-    ret = H5Dread(v_did, h5_mem_type, H5S_ALL, H5S_ALL, plist_cio_id, &dataa[0]);
+    ret = H5Dread(v_did, h5_mem_type, H5S_ALL, H5S_ALL, H5P_DEFAULT, &dataa[0]);
 
     H5Dclose(v_did);
     if (v_gid > 0)
