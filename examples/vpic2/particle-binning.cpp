@@ -89,7 +89,6 @@ int main(int argc, char *argv[])
     P->Apply(Binning_UDF);
 
     //Get the global hist
-    //MPI_Gather(&local_hist[0], n_bins, MPI_INT, &global_hist[0], n_bins, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Reduce(&local_hist[0], &global_hist[0], n_bins, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     if (!mpi_rank)
     {
