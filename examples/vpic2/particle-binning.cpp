@@ -65,23 +65,40 @@ int main(int argc, char *argv[])
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
 
+    //Create the data pointer (to actuall data)
     Array<Particle, float> *P = new Array<Particle, float>(AU_VIRTUAL);
 
     P->PushBackAttribute(AU_NVS, AU_HDF5, p_file, group, "Ux", 0);
     P->PushBackAttribute(AU_NVS, AU_HDF5, p_file, group, "Uy", 0);
     P->PushBackAttribute(AU_NVS, AU_HDF5, p_file, group, "Uz", 0);
 
+    //Run an UDF function to find min/max, local first and reduce to get all
     P->Apply(MinMax_UDF);
     MPI_Allreduce(&local_max, &global_max, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
-    MPI_Allreduce(&local_min, &global_min, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_min, &global_min, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
 
+    if (!mpi_rank)
+    {
+        std::cout << " global_max =  " << global_max << ", global_min = " << global_min << "\n";
+    }
+
+    //Get the inverval of hist
     hist_interval = (global_max - global_min) / n_bins;
 
+    //Get the local hist
     P->Apply(Binning_UDF);
 
-    MPI_Gather(&local_hist[0], n_bins, MPI_INT, &global_hist[0], n_bins, MPI_INT, 0, MPI_COMM_WORLD);
-    for (int i = 0; i < n_bins; i++)
-        std::cout << i << " : " << global_hist[i] << "\n";
+    //Get the global hist
+    //MPI_Gather(&local_hist[0], n_bins, MPI_INT, &global_hist[0], n_bins, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&local_hist[0], &global_hist[0], n_bins, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    if (!mpi_rank)
+    {
+        std::cout << "\n Histgram on Ux: \n";
+        for (int i = 0; i < n_bins; i++)
+            std::cout
+                << " ---  " << i << " : " << global_hist[i] << "\n";
+        std::cout << "\n";
+    }
 
     P->ReportTime();
 

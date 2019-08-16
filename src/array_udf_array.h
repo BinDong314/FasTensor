@@ -2399,8 +2399,12 @@ public:
             {
               //This is a mirrow value, copy it into result directly
               //Using memcpy to avail error in template of T
-              memset(&cell_return_value, 0, sizeof(T));
-              std::memcpy(&cell_return_value, &current_chunk_data[offset_ol], sizeof(T));
+              if (sizeof(cell_return_value) == sizeof(T))
+              {
+                memset(&cell_return_value, 0, sizeof(T));
+                std::memcpy(&cell_return_value, &current_chunk_data[offset_ol], sizeof(T));
+              }
+              //cell_return_value = current_chunk_data[offset_ol];
             }
 
             if (save_result_flag == 1)
@@ -2515,8 +2519,11 @@ public:
           else
           {
             //This is a mirro value , copy the result into result directly
-            memset(&cell_return_value, 0, sizeof(T));
-            std::memcpy(&cell_return_value, &current_chunk_data[offset_ol], sizeof(T));
+            if (sizeof(cell_return_value) == sizeof(T))
+            {
+              memset(&cell_return_value, 0, sizeof(T));
+              std::memcpy(&cell_return_value, &current_chunk_data[offset_ol], sizeof(T));
+            }
           }
 
           if (save_result_flag == 1)
