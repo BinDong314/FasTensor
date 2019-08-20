@@ -28,6 +28,8 @@
 #define DELAY_TO_CREATE 1
 #define SDS_UDF_COLLECTIVE_IO 1
 
+int disable_mpi_all2allv = 0;
+
 using namespace std;
 
 typedef struct
@@ -274,7 +276,7 @@ public:
     if (is_VDS())
     {
       if (!mpi_rank)
-        std::cout << "Read VDS: group= " << gn_str << ", dset =" << dn_str << ", file list:" << std::endl;
+        std::cout << "Read VDS: group= " << gn_str << ", dset =" << dn_str << ", file list (count = " << FileVDSList.size() << " ):" << std::endl;
 
       //Starting from here, we assume the VDS datasets ordered in row order
       //  |-----|------|
@@ -292,14 +294,19 @@ public:
 
       if (((end[1] + 1) % FileVDSList.size()) != 0)
       {
-        std::cout << "# of VDS datasets does not match the size of merged array\n";
+        std::cout << "# of VDS datasets does not match the size of merged array: end[1] =" << end[1] + 1 << ", FileVDSList.size() = " << FileVDSList.size() << "\n";
         exit(-1);
       }
 
       au_time_start();
 
-      if (end[0] - start[0] < mpi_size)
+      //int channels_on_dim0 = end[0] - start[0] + 1;
+      //int global_channels_on_dim0;
+      //MPI_Allreduce(&channels_on_dim0, &global_channels_on_dim0, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+      //printf("rank = %d, end[0] - start[0] = %d \n", mpi_rank, end[0] - start[0]);
+      if (end[0] - start[0] == 0 || disable_mpi_all2allv)
       {
+        //Only rank 0 will come here (read master channel)
         std::vector<unsigned long long> v_end(2);
         v_end[0] = end[0];
         v_end[1] = ((end[1] + 1) / FileVDSList.size()) - 1;
@@ -317,17 +324,21 @@ public:
         }
         v_data.resize(0);
         clear_vector(v_data);
-      }
-      else
+
+        for (int ii = 0; ii < 10; ii++)
+        {
+          for (int jj = 0; jj < 10; jj++)
+          {
+            std::cout << data[ii * 120000 + jj] << " , ";
+          }
+          std::cout << "\n";
+        }
+
+      }    //else of end[0] - start[0] == 0
+      else //Read the whole data, chunk by chunk and in parallel
       {
-
-        //Another veverson of above code to use mpi_all2allv
-        //Get the size of each VD
-
         std::vector<hsize_t> v_size_per_file(2);
         GetSingleFileSize(FileVDSList[0], gn_str, dn_str, v_size_per_file);
-
-        std::vector<T> v_data_per_file;
 
         int *sendcounts, *recvcounts, *rdispls, *sdispls;
 
@@ -362,6 +373,7 @@ public:
         }
 
         unsigned long long exchange_counts = v_size_per_file_ll / mpi_size;
+        //int data_offset;
         for (int j = 0; j < mpi_size; j++)
         {
           sendcounts[j] = exchange_counts;
@@ -371,41 +383,63 @@ public:
         }
 
         if (!mpi_rank)
-          printf("Use MPI_all2allv, size/file = (%lld, %lld), exchange_counts = %lld\n", v_size_per_file[0], v_size_per_file[1], exchange_counts);
+          printf("Use MPI_all2allv, size/file = (%lld, %lld), exchange_counts = %lld, all_to_all_batches = %d\n", v_size_per_file[0], v_size_per_file[1], exchange_counts, all_to_all_batches);
 
         MPI_Datatype mpi_data_type;
         find_mpi_type(mpi_data_type);
 
+        std::vector<T> v_data_per_file;
         v_data_per_file.resize(v_size_per_file_ll);
+        std::vector<T> v_data_per_file_temp;
+        v_data_per_file_temp.resize(v_size_per_file_ll);
 
         int my_file_index = mpi_rank;
+
+        std::vector<unsigned long long> vv_start(2);
+        std::vector<unsigned long long> vv_end(2);
+        for (int vi = 0; vi < rank; vi++)
+        {
+          vv_start[vi] = 0;
+          vv_end[vi] = v_size_per_file[vi] - 1;
+        }
+
         for (int i = 0; i < all_to_all_batches; i++)
         {
           if (my_file_index < FileVDSList.size())
           {
+            //data_offset = i * v_size_per_file_ll;
             OpenReadCloseSingleFileWhole(FileVDSList[my_file_index], gn_str, dn_str, v_data_per_file);
           }
           else
           {
+            //data_offset = data.size() - 1;
             //For the last batch, some MPI ranks may not have data
             //But we still need them to join MPI_Alltoallv with zero size
             int jjj = my_file_index % mpi_size;
             for (int j = 0; j < mpi_size; j++)
             {
               sendcounts[j] = 0;
+              sdispls[j] = 0;
               if (j > jjj)
-                recvcounts[jjj] = 0;
-              //rdispls[jjj] = 0;
-              //sdispls[jjj] = 0;
+              {
+                recvcounts[j] = 0;
+                rdispls[j] = 0;
+              }
             }
           }
+          //printf("Before alltoallv: rank = %d, batch = #%d \n", mpi_rank, i);
+          MPI_Alltoallv(&v_data_per_file[0], sendcounts, sdispls, mpi_data_type, &v_data_per_file_temp[0], recvcounts, rdispls, mpi_data_type, MPI_COMM_WORLD);
+          //Todo
+          // when my_file_index is bigger than FileVDSList.size()
+          InsertVDSIntoGlobalSpace(i, vv_start, vv_end, v_data_per_file_temp, data, start, end);
 
-          MPI_Alltoallv(&v_data_per_file[0], sendcounts, sdispls, mpi_data_type, &data[0] + i * v_size_per_file_ll, recvcounts, rdispls, mpi_data_type, MPI_COMM_WORLD);
           my_file_index = my_file_index + mpi_size;
-        }
-      }
 
-      au_time_elap("Read data ");
+        } //end of for
+        clear_vector(v_data_per_file);
+        clear_vector(v_data_per_file_temp);
+      } //end of end[0] - start[0] == 0
+      au_time_elap("Read VDS data ");
       return 1;
     }
     else
@@ -423,56 +457,15 @@ public:
       H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
 
       int ret = 1;
-      /*
-      switch (type_class)
-      {
-      case H5T_INTEGER:
-        // ret = H5Dread(did, H5T_NATIVE_INT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
-        ret = H5Dread(did, H5T_NATIVE_SHORT, memspace_id, dataspace_id, plist_cio_id, &data[0]);
-        //dataset.read(data, PredType::NATIVE_INT, memspace, dataspace);
-        break;
-      case H5T_FLOAT:
-        //ret = H5Dread(did, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
-        ret = H5Dread(did, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, plist_cio_id, &data[0]);
-        //dataset.read(data, PredType::NATIVE_FLOAT, memspace, dataspace);
-        break;
-      default:
-        std::cout << "Unsupported datatype in  " << __FILE__ << __LINE__ << std::endl;
-        exit(-1);
-        break;
-      }*/
-      /*if (mpi_size > 1 && is_equal_vecotr_parallel(start) == 1 && is_equal_vecotr_parallel(end) == 1)
-      { //read and broadcast
-        if (!mpi_rank)
-        {
-          std::cout << "All ranks read the same data, only rank 0 reads data \n";
-          ret = H5Dread(did, h5_mem_type, memspace_id, dataspace_id, H5P_DEFAULT, &data[0]);
-        }
-
-        int data_size = 1;
-        for (int i = 0; i < rank; i++)
-        {
-          data_size = data_size * count[i];
-        }
-        MPI_Datatype mpi_data_type;
-        find_mpi_type(mpi_data_type);
-        MPI_Bcast(&data[0], data_size, mpi_data_type, 0, MPI_COMM_WORLD);
-      }
-      else
-      { //all read*/
       ret = H5Dread(did, h5_mem_type, memspace_id, dataspace_id, plist_cio_id, &data[0]);
-      //}
-
 #ifdef DEBUG
       for (auto i = data.begin(); i != data.end(); ++i)
         std::cout << *i << ' ';
 #endif
-
       if (ret < 0)
       {
         return -1;
       }
-
       return 1;
     }
 
@@ -1365,6 +1358,11 @@ public:
   }
 
   //Still assume row order
+  //Invert v_data into g_data
+  //v_data size is (v_start = 0, v_end), i.e., size of v_data
+  //g_data size is (g_start = 0, g_end), i.e., size of g_data
+  //v_index is the starting place of v_data in g_data
+  //v_index * v_cols is the start place
   template <class DataType>
   void InsertVDSIntoGlobalSpace(int v_index, std::vector<unsigned long long> &v_start, std::vector<unsigned long long> &v_end, std::vector<DataType> &v_data, std::vector<DataType> &g_data, std::vector<unsigned long long> &g_start, std::vector<unsigned long long> &g_end)
   {
@@ -1456,6 +1454,7 @@ public:
     }
     else if (std::is_same<T, short>::value)
     {
+      printf("MPI_SHORT \n");
       data_type = MPI_SHORT;
     }
     else if (std::is_same<T, long>::value)

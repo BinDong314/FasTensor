@@ -72,7 +72,7 @@ int window_batch = 1;
 
 //Flag to have FFT in row-direction (first dimension)
 //By default, it work in column-direction (second dimension)
-int row_major_flag = 0;
+int row_major_flag = 1;
 
 //View's parameter
 bool enable_view_flag = 0;

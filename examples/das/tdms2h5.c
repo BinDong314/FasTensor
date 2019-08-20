@@ -50,7 +50,7 @@ void attach_attribute_timestamp(hid_t obj_id, char *name, hid_t type_create, hid
 int convert_file(char *filename_output, char *filename_input, int compression_flag);
 void printf_help(char *cmd);
 void transpose_data(int16_t *src, int16_t *dst, const int N, const int M);
-int transpose_flag = 0;
+int transpose_flag = 1;
 int channel_togo = 1;
 int start_channel = 0;
 int subset_flag = 0;
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
    int compression_flag = 0;
    int copt;
    char *res;
-   while ((copt = getopt(argc, argv, "o:i:rhbcs:g:")) != -1)
+   while ((copt = getopt(argc, argv, "o:i:lhbcs:g:")) != -1)
       switch (copt)
       {
       case 'o':
@@ -80,8 +80,8 @@ int main(int argc, char *argv[])
       case 'c':
          compression_flag = 1;
          break;
-      case 'r':
-         transpose_flag = 1;
+      case 'l':
+         transpose_flag = 0;
          break;
       case 's':
          start_channel = atoi(optarg);
@@ -716,7 +716,7 @@ void printf_help(char *cmd)
           -o output file/directory for HDF5 file(s)\n\
           -b batch mode (i.e., both input and output are directory)\n\
           -p parallel conversion on MPI\n\
-          -r transpose data matrix to row order (by default, it is [Time] by [Channel])\n\
+          -l use column order (by default tranposed to row order as [Channel]x[[Time])\n\
           -s start channel (zero based) \n\
           -g counts of channels to go \n\
           Example: %s -i test.tdms -o test.tdms.h5\n";

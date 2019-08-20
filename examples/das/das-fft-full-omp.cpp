@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
     char config_file[NAME_LENGTH] = "./das-fft-full.config";
 
     int copt, mpi_rank, mpi_size;
-    while ((copt = getopt(argc, argv, "o:i:g:u:t:x:m:w:rhc:k:")) != -1)
+    while ((copt = getopt(argc, argv, "o:i:g:u:t:x:m:w:lhc:k:")) != -1)
         switch (copt)
         {
         case 'o':
@@ -244,8 +244,8 @@ int main(int argc, char *argv[])
         case 'k':
             chunk_size_on_split_dim = atoi(optarg);
             break;
-        case 'r':
-            row_major_flag = 1;
+        case 'l':
+            row_major_flag = 0;
             break;
         case 'h':
             printf_help(argv[0]);
@@ -417,7 +417,7 @@ void printf_help(char *cmd)
           -x dataset name for output correlation \n\
           -w window size (only used when window size is different from chunk_size[0]) \n\
           -m index of Master channel (0 by default )\n\
-          -r FFT in [Row]-direction([Column]-direction by default) \n\
+          -l FFT in [Column]-direction([Row]-direction by default) \n\
           -c file for parameters (has high priority than commands if existing) \n\
           Example: mpirun -n 1 %s -i fft-test.h5 -o fft-test.arrayudf.h5  -g / -t /DataCT -x /Xcorr\n";
 
