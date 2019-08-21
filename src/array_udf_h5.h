@@ -324,16 +324,6 @@ public:
         }
         v_data.resize(0);
         clear_vector(v_data);
-
-        for (int ii = 0; ii < 10; ii++)
-        {
-          for (int jj = 0; jj < 10; jj++)
-          {
-            std::cout << data[ii * 120000 + jj] << " , ";
-          }
-          std::cout << "\n";
-        }
-
       }    //else of end[0] - start[0] == 0
       else //Read the whole data, chunk by chunk and in parallel
       {
@@ -403,6 +393,12 @@ public:
           vv_end[vi] = v_size_per_file[vi] - 1;
         }
 
+        std::vector<unsigned long long> v_data_per_file_temp_size(2), data_size(2), v_data_start_address(2);
+        v_data_per_file_temp_size[0] = v_size_per_file[0];
+        v_data_per_file_temp_size[1] = v_size_per_file[1];
+        data_size[0] = end[0] - start[0] + 1;
+        data_size[1] = end[1] - start[1] + 1;
+
         for (int i = 0; i < all_to_all_batches; i++)
         {
           if (my_file_index < FileVDSList.size())
@@ -431,13 +427,48 @@ public:
           MPI_Alltoallv(&v_data_per_file[0], sendcounts, sdispls, mpi_data_type, &v_data_per_file_temp[0], recvcounts, rdispls, mpi_data_type, MPI_COMM_WORLD);
           //Todo
           // when my_file_index is bigger than FileVDSList.size()
-          InsertVDSIntoGlobalSpace(i, vv_start, vv_end, v_data_per_file_temp, data, start, end);
-
+          //InsertVDSIntoGlobalSpace(i, vv_start, vv_end, v_data_per_file_temp, data, start, end);
+          v_data_start_address[0] = 0;
+          v_data_start_address[1] = v_size_per_file[1] * i * mpi_size;
+          if (mpi_rank == 0)
+          {
+            std::cout << "v_size = (" << v_data_per_file_temp_size[0] << " , " << v_data_per_file_temp_size[1]
+                      << ", data_size = (" << data_size[0] << "," << data_size[1] << ")"
+                      << ", s_addre = (" << v_data_start_address[0] << "," << v_data_start_address[1] << ") \n";
+          }
+          InsertVDSIntoGlobalSpace2(v_data_per_file_temp, v_data_per_file_temp_size, data, data_size, v_data_start_address);
           my_file_index = my_file_index + mpi_size;
 
         } //end of for
         clear_vector(v_data_per_file);
         clear_vector(v_data_per_file_temp);
+
+        if (mpi_rank == 0)
+        {
+          std::cout << "Head : \n";
+          for (int k = 0; k < 10; k++)
+          {
+            std::cout << "(" << k << "," << 0 << ") : ";
+            for (int l = 0; l < 10; l++)
+            {
+              std::cout << " ," << data[k * 120000 + l];
+            }
+            std::cout << "\n";
+          }
+          std::cout << "Tail : \n";
+          //5824, 120000
+          for (int k = 5824 - 11; k < 5824; k++)
+          {
+            std::cout << "(" << k << "," << 120000 - 11 << ") :  ";
+
+            for (int l = 120000 - 11; l < 120000; l++)
+            {
+              std::cout << " ," << data[k * 120000 + l];
+            }
+            std::cout << " .... \n";
+          }
+        }
+
       } //end of end[0] - start[0] == 0
       au_time_elap("Read VDS data ");
       return 1;
@@ -1298,18 +1329,6 @@ public:
       v_did = H5Dopen(v_fid, dna.c_str(), H5P_DEFAULT);
     }
 
-    /*
-    hid_t v_datatype = H5Dget_type(v_did); 
-    H5T_class_t v_type_class = H5Tget_class(v_datatype);
-    hid_t v_dataspace_id = H5Dget_space(v_did);
-    int v_rank = H5Sget_simple_extent_ndims(v_dataspace_id);
-
-    std::vector<hsize_t> v_dims_out;
-
-    v_dims_out.resize(v_rank);
-    H5Sget_simple_extent_dims(v_dataspace_id, &v_dims_out[0], NULL);
-    */
-
     int ret = 1;
 
     ret = H5Dread(v_did, h5_mem_type, H5S_ALL, H5S_ALL, H5P_DEFAULT, &dataa[0]);
@@ -1384,6 +1403,39 @@ public:
     }
   }
 
+  //A generic version of InsertVDSIntoGlobalSpace
+  //v_data, the data to be inserted
+  //v_size, size of the v_data
+  //g_data, the data to store the inserted data
+  //g_size, the size of g_data
+  //insert_start, the starting address to insert v_data into g_data
+  //all patrameteres are 2D
+  //Row-major order
+  template <class DataType>
+  void InsertVDSIntoGlobalSpace2(std::vector<DataType> &v_data, std::vector<unsigned long long> &v_size, std::vector<DataType> &g_data, std::vector<unsigned long long> &g_size, std::vector<unsigned long long> &insert_start)
+  {
+    //for row
+    unsigned long long v_vector_start, v_cols, v_rows, g_vector_start, g_cols, g_rows, rows_batch, v_rows_per_batch;
+    v_cols = v_size[1];
+    v_rows = v_size[0];
+    g_cols = g_size[1];
+    g_rows = g_size[0];
+
+    rows_batch = v_rows / g_rows;
+    v_rows_per_batch = v_rows / rows_batch;
+
+    for (int j = 0; j < rows_batch; j++)
+    {
+      for (int i = 0; i < v_rows_per_batch; i++)
+      {
+        g_vector_start = (i + insert_start[0]) * g_cols + insert_start[1] + j * v_cols;
+        v_vector_start = i * v_cols + v_rows_per_batch * j;
+
+        std::copy(v_data.begin() + v_vector_start, v_data.begin() + v_vector_start + v_cols, g_data.begin() + g_vector_start);
+      }
+    }
+  }
+
   //https://support.hdfgroup.org/HDF5/Tutor/datatypes.html
   //mem_type: for read/write
   //disk_type: for create
@@ -1454,7 +1506,6 @@ public:
     }
     else if (std::is_same<T, short>::value)
     {
-      printf("MPI_SHORT \n");
       data_type = MPI_SHORT;
     }
     else if (std::is_same<T, long>::value)
