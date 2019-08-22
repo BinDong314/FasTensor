@@ -373,8 +373,9 @@ public:
         }
 
         if (!mpi_rank)
+        {
           printf("Use MPI_all2allv, size/file = (%lld, %lld), exchange_counts = %lld, all_to_all_batches = %d\n", v_size_per_file[0], v_size_per_file[1], exchange_counts, all_to_all_batches);
-
+        }
         MPI_Datatype mpi_data_type;
         find_mpi_type(mpi_data_type);
 
@@ -430,44 +431,13 @@ public:
           //InsertVDSIntoGlobalSpace(i, vv_start, vv_end, v_data_per_file_temp, data, start, end);
           v_data_start_address[0] = 0;
           v_data_start_address[1] = v_size_per_file[1] * i * mpi_size;
-          if (mpi_rank == 0)
-          {
-            std::cout << "v_size = (" << v_data_per_file_temp_size[0] << " , " << v_data_per_file_temp_size[1]
-                      << ", data_size = (" << data_size[0] << "," << data_size[1] << ")"
-                      << ", s_addre = (" << v_data_start_address[0] << "," << v_data_start_address[1] << ") \n";
-          }
+
           InsertVDSIntoGlobalSpace2(v_data_per_file_temp, v_data_per_file_temp_size, data, data_size, v_data_start_address);
           my_file_index = my_file_index + mpi_size;
 
         } //end of for
         clear_vector(v_data_per_file);
         clear_vector(v_data_per_file_temp);
-
-        if (mpi_rank == 0)
-        {
-          std::cout << "Head : \n";
-          for (int k = 0; k < 10; k++)
-          {
-            std::cout << "(" << k << "," << 0 << ") : ";
-            for (int l = 0; l < 10; l++)
-            {
-              std::cout << " ," << data[k * 120000 + l];
-            }
-            std::cout << "\n";
-          }
-          std::cout << "Tail : \n";
-          //5824, 120000
-          for (int k = 5824 - 11; k < 5824; k++)
-          {
-            std::cout << "(" << k << "," << 120000 - 11 << ") :  ";
-
-            for (int l = 120000 - 11; l < 120000; l++)
-            {
-              std::cout << " ," << data[k * 120000 + l];
-            }
-            std::cout << " .... \n";
-          }
-        }
 
       } //end of end[0] - start[0] == 0
       au_time_elap("Read VDS data ");
@@ -1426,10 +1396,10 @@ public:
 
     for (int j = 0; j < rows_batch; j++)
     {
-      for (int i = 0; i < v_rows_per_batch; i++)
+      for (int i = 0; i < g_rows; i++)
       {
         g_vector_start = (i + insert_start[0]) * g_cols + insert_start[1] + j * v_cols;
-        v_vector_start = i * v_cols + v_rows_per_batch * j;
+        v_vector_start = i * v_cols + v_rows_per_batch * j * v_cols;
 
         std::copy(v_data.begin() + v_vector_start, v_data.begin() + v_vector_start + v_cols, g_data.begin() + g_vector_start);
       }
