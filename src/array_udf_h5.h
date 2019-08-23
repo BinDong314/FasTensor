@@ -343,14 +343,16 @@ public:
           exit(-1);
         }
 
-        int all_to_all_batches;
+        int all_to_all_batches, has_last_small_batch;
         if (FileVDSList.size() % mpi_size == 0)
         {
           all_to_all_batches = FileVDSList.size() / mpi_size;
+          has_last_small_batch = 0;
         }
         else
         {
-          all_to_all_batches = FileVDSList.size() % mpi_size + 1;
+          all_to_all_batches = FileVDSList.size() / mpi_size;
+          has_last_small_batch = 1;
         }
 
         //Here we assume that each file is equalled partitioned among all mpi ranks
@@ -372,10 +374,10 @@ public:
           sdispls[j] = j * exchange_counts;
         }
 
-        if (!mpi_rank)
+        /*if (!mpi_rank)
         {
           printf("Use MPI_all2allv, size/file = (%lld, %lld), exchange_counts = %lld, all_to_all_batches = %d\n", v_size_per_file[0], v_size_per_file[1], exchange_counts, all_to_all_batches);
-        }
+        }*/
         MPI_Datatype mpi_data_type;
         find_mpi_type(mpi_data_type);
 
@@ -383,8 +385,6 @@ public:
         v_data_per_file.resize(v_size_per_file_ll);
         std::vector<T> v_data_per_file_temp;
         v_data_per_file_temp.resize(v_size_per_file_ll);
-
-        int my_file_index = mpi_rank;
 
         std::vector<unsigned long long> vv_start(2);
         std::vector<unsigned long long> vv_end(2);
@@ -400,51 +400,80 @@ public:
         data_size[0] = end[0] - start[0] + 1;
         data_size[1] = end[1] - start[1] + 1;
 
+        int my_file_index = mpi_rank;
+
         for (int i = 0; i < all_to_all_batches; i++)
         {
+          // (my_file_index < FileVDSList.size())
+          OpenReadCloseSingleFileWhole(FileVDSList[my_file_index], gn_str, dn_str, v_data_per_file);
+          MPI_Alltoallv(&v_data_per_file[0], sendcounts, sdispls, mpi_data_type, &v_data_per_file_temp[0], recvcounts, rdispls, mpi_data_type, MPI_COMM_WORLD);
+          v_data_start_address[0] = 0;
+          v_data_start_address[1] = v_size_per_file[1] * i * mpi_size;
+          InsertVDSIntoGlobalSpace2(v_data_per_file_temp, v_data_per_file_temp_size, data, data_size, v_data_start_address);
+          my_file_index = my_file_index + mpi_size;
+        } //end of for
+
+        if (has_last_small_batch)
+        {
+          int files_left = FileVDSList.size() % mpi_size;
           if (my_file_index < FileVDSList.size())
           {
-            //data_offset = i * v_size_per_file_ll;
             OpenReadCloseSingleFileWhole(FileVDSList[my_file_index], gn_str, dn_str, v_data_per_file);
+            for (int jj = files_left; jj < mpi_size; jj++)
+            {
+              recvcounts[jj] = 0;
+              rdispls[jj] = 0;
+            }
+            //sendcounts and sdispls has the default values
           }
           else
           {
-            //data_offset = data.size() - 1;
-            //For the last batch, some MPI ranks may not have data
-            //But we still need them to join MPI_Alltoallv with zero size
-            int jjj = my_file_index % mpi_size;
-            for (int j = 0; j < mpi_size; j++)
+            for (int jj = 0; jj < mpi_size; jj++)
             {
-              sendcounts[j] = 0;
-              sdispls[j] = 0;
-              if (j > jjj)
+              if (jj < files_left)
               {
-                recvcounts[j] = 0;
-                rdispls[j] = 0;
+                recvcounts[jj] = exchange_counts;
+                rdispls[jj] = exchange_counts * jj;
               }
+              else
+              {
+                recvcounts[jj] = 0;
+                rdispls[jj] = 0;
+              }
+              sendcounts[jj] = 0;
+              sdispls[jj] = 0;
             }
           }
-          //printf("Before alltoallv: rank = %d, batch = #%d \n", mpi_rank, i);
+          /*std::cout << "rank = " << mpi_rank << " has last batch, files_left =" << files_left << ", my_file_index =" << my_file_index << "\n";
+          std::cout << "rank = " << mpi_rank
+                    << " recvcounts =" << recvcounts[0] << ", " << recvcounts[1]
+                    << " rdispls =" << rdispls[0] << ", " << rdispls[1]
+                    << " sendcounts =" << sendcounts[0] << ", " << sendcounts[1]
+                    << " sdispls =" << sdispls[0] << ", " << sdispls[1]
+                    << "\n";*/
+
+          v_data_per_file_temp.resize(v_size_per_file[0] / mpi_size * v_size_per_file[1] * files_left);
           MPI_Alltoallv(&v_data_per_file[0], sendcounts, sdispls, mpi_data_type, &v_data_per_file_temp[0], recvcounts, rdispls, mpi_data_type, MPI_COMM_WORLD);
-          //Todo
-          // when my_file_index is bigger than FileVDSList.size()
-          //InsertVDSIntoGlobalSpace(i, vv_start, vv_end, v_data_per_file_temp, data, start, end);
+
           v_data_start_address[0] = 0;
-          v_data_start_address[1] = v_size_per_file[1] * i * mpi_size;
+          v_data_start_address[1] = v_size_per_file[1] * mpi_size * all_to_all_batches;
+          v_data_per_file_temp_size[0] = v_size_per_file[0] / mpi_size * files_left;
+          v_data_per_file_temp_size[1] = v_size_per_file[1];
 
           InsertVDSIntoGlobalSpace2(v_data_per_file_temp, v_data_per_file_temp_size, data, data_size, v_data_start_address);
-          my_file_index = my_file_index + mpi_size;
-
-        } //end of for
+        }
         clear_vector(v_data_per_file);
         clear_vector(v_data_per_file_temp);
 
       } //end of end[0] - start[0] == 0
+
+      //std::cout << "rank = " << mpi_rank << " finished the read \n";
+
       au_time_elap("Read VDS data ");
       return 1;
     }
     else
-    {
+    { //(is_VDS() == 0
       std::vector<unsigned long long> offset, count;
       offset.resize(rank);
       count.resize(rank);
@@ -1405,6 +1434,19 @@ public:
       }
     }
   }
+
+  //Generic version of insert
+  /*template <class DataType>
+  void InsertVDSIntoGlobalSpace2D(std::vector<DataType> &v_data, std::vector<unsigned long long> &v_size, std::vector<DataType> &g_data, std::vector<unsigned long long> &g_size, std::vector<unsigned long long> &insert_start)
+  {
+    //row by row
+    for (int i = 0; i < v_size[0]; i++)
+    {
+      v_vector_start = i * v_size[1];
+      g_vector_start = (i + insert_start[0]) * g_size[1] + insert_start[1];
+      std::copy(v_data.begin() + v_vector_start, v_data.begin() + v_vector_start + v_size[1], g_data.begin() + g_vector_start);
+    }
+  }*/
 
   //https://support.hdfgroup.org/HDF5/Tutor/datatypes.html
   //mem_type: for read/write

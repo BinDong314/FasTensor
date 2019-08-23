@@ -205,6 +205,7 @@ std::string o_group("/");
 std::string i_dataset("DataTimeChannel");
 std::string o_dataset("Xcorr");
 int chunk_size_on_split_dim = 1;
+int user_chunk_flag = 0;
 int main(int argc, char *argv[])
 {
     fftw_make_planner_thread_safe();
@@ -243,6 +244,7 @@ int main(int argc, char *argv[])
             break;
         case 'k':
             chunk_size_on_split_dim = atoi(optarg);
+            user_chunk_flag = 1;
             break;
         case 'l':
             row_major_flag = 0;
@@ -271,6 +273,10 @@ int main(int argc, char *argv[])
     if (config_file_set_flag)
         read_config_file(config_file, mpi_rank);
 
+    if (row_major_flag == 0)
+    {
+        auto_chunk_dims_index = 1;
+    }
     //Declare the input and output AU::Array
     AU::Array<short> *IFILE = new AU::Array<short>(AU_NVS, AU_HDF5, i_file, i_group, i_dataset, auto_chunk_dims_index);
     AU::Array<float> *OFILE = new AU::Array<float>(AU_COMPUTED, AU_HDF5, o_file, o_group, o_dataset, auto_chunk_dims_index);
@@ -295,15 +301,21 @@ int main(int argc, char *argv[])
 
     if (row_major_flag)
     {
-        strip_size[0] = chunk_size_on_split_dim;
-        IFILE->SetChunkSize(strip_size);
+        if (user_chunk_flag)
+        {
+            strip_size[0] = chunk_size_on_split_dim;
+            IFILE->SetChunkSize(strip_size);
+        }
         strip_size[0] = 1;
         IFILE->SetApplyStripSize(strip_size);
     }
     else
     {
-        strip_size[1] = chunk_size_on_split_dim;
-        IFILE->SetChunkSize(strip_size);
+        if (user_chunk_flag)
+        {
+            strip_size[1] = chunk_size_on_split_dim;
+            IFILE->SetChunkSize(strip_size);
+        }
         strip_size[1] = 1;
         IFILE->SetApplyStripSize(strip_size);
     }

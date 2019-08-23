@@ -60,7 +60,7 @@ double eCoeff = 1.0;
 unsigned long long MASTER_INDEX = 0;
 
 //Parameters for ArrayUDF
-int auto_chunk_dims_index = 1;
+int auto_chunk_dims_index = 0;
 std::vector<int> strip_size(2);
 std::vector<int> chunk_size(2);
 int chunked_batch_factor = 32; //To enable a large chunk
