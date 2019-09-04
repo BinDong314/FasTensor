@@ -372,7 +372,9 @@ int main(int argc, char *argv[])
         //Only mpi_rank 0 to get the master channel
         //Broadcast to all other mpi ranks.
         MPI_Barrier(MPI_COMM_WORLD);
+        au_time_start();
         MPI_Bcast(&masterv[0], n0, MPI_SHORT, 0, MPI_COMM_WORLD);
+        au_time_elap(" MPI_Bcast master ch time :  ");
 
         for (int i = 0; i < n0; i++)
         {
