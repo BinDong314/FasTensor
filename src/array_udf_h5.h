@@ -298,8 +298,8 @@ public:
         exit(-1);
       }
 
-      au_time_start();
-
+      //au_time_start();
+      au_time_start_no_mpi();
       //int channels_on_dim0 = end[0] - start[0] + 1;
       //int global_channels_on_dim0;
       //MPI_Allreduce(&channels_on_dim0, &global_channels_on_dim0, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
@@ -469,7 +469,7 @@ public:
 
       //std::cout << "rank = " << mpi_rank << " finished the read \n";
 
-      au_time_elap("Read VDS data ");
+      au_time_elap_no_mpi("Read VDS data ");
       return 1;
     }
     else

@@ -649,6 +649,24 @@ void au_time_elap(std::string info_str, int omp_rank)
   au_timer_global__inside_use = MPI_Wtime();
 }
 
+time_t au_timer_global_start__inside_use_no_mpi = 0;
+void au_time_start_no_mpi()
+{
+  time(au_timer_global_start__inside_use_no_mpi);
+}
+
+void au_time_elap_no_mpi(std::string info_str)
+{
+  time_t current_time;
+  double time_taken = double(current_time - au_timer_global_start__inside_use_no_mpi);
+
+  cout << info_str << std::fixed << time_taken << setprecision(5);
+  cout << " sec " << endl;
+
+  //reset timer
+  time(au_timer_global_start__inside_use_no_mpi);
+}
+
 //for more HDF5 types
 //https://support.hdfgroup.org/HDF5/doc1.6/UG/11_Datatypes.html
 //We'd better to have it as ArrayUDF type
