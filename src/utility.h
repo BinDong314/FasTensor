@@ -29,6 +29,7 @@
 #include <optional>
 #include <tuple>
 #include "cista.h"
+#include <iomanip>
 
 using namespace std;
 
@@ -665,7 +666,7 @@ void au_time_elap_no_mpi(std::string info_str)
   cout << " sec " << endl;
 
   //reset timer
-  time(au_timer_global_start__inside_use_no_mpi);
+  time(&au_timer_global_start__inside_use_no_mpi);
 }
 
 //for more HDF5 types
