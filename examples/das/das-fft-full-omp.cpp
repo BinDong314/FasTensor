@@ -347,6 +347,7 @@ int main(int argc, char *argv[])
     {
         if (mpi_rank == 0)
         {
+            au_time_start_no_mpi();
             if (row_major_flag == 0)
             {
                 if (enable_view_flag)
@@ -367,6 +368,7 @@ int main(int argc, char *argv[])
             }
             //Get master chunk's data and store in double type vector
             IFILE->ReadData(master_start, master_end, masterv);
+            au_time_elap_no_mpi("  Read ch time : ");
         }
 
         //Only mpi_rank 0 to get the master channel
