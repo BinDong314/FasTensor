@@ -345,6 +345,11 @@ int main(int argc, char *argv[])
       H5Sselect_hyperslab(vir_dset_space_id, H5S_SELECT_SET, start_out, NULL, count_out, NULL);
       H5Dwrite(vir_dset, H5T_NATIVE_SHORT, memspace_id, vir_dset_space_id, H5P_DEFAULT, &data_per_file[0]);
       src_index++;
+
+      if (i % 200 == 0)
+      {
+        std::cout << src_index << " : " << temp_file << std::endl;
+      }
     }
     H5Sclose(memspace_id);
     H5Sclose(vir_dset_space_id);
