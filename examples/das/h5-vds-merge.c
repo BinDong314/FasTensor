@@ -97,12 +97,12 @@ int main(int argc, char *argv[])
   }
   if (filter_flag_sc)
   {
-    printf("Filer enabled to merge [%d] files after [%s] \n", filter_count, filter_start_str.c_str());
+    printf("Filter enabled to merge [%d] files after [%s] \n", filter_count, filter_start_str.c_str());
   }
 
   if (filter_flag_regex)
   {
-    printf("Filer enabled to merge files with pattern of %s \n", filter_regex_str.c_str());
+    printf("Filter enabled to merge files with pattern of %s \n", filter_regex_str.c_str());
   }
   //Get the list of files under input_dir
   struct dirent **namelist;
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
   int temp_index = 0;
   if (namelist_length < 2)
   {
-    printf("Input directory has not files to merge !");
+    printf("Input directory has NO files to merge !");
     exit(0);
   }
   else
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
 
     if (find_file_to_merge == 0)
     {
-      std::cout << "Cann't find filer: " << filter_start_str << " \n";
+      std::cout << "Cann't find start file for filter: " << filter_start_str << " \n";
       exit(-1);
     }
   }
@@ -376,7 +376,7 @@ void printf_help(char *cmd)
           -g group name (path) (across all HDF5 files and merged file)\n\
           -d dataset name (across all HDF5 files and merged file)\n\
           -l column order (row-order by default)\n\
-          -s the file name (string) to start filter   \n\
+          -s the file name (string) to start filter (No directory path needed)  \n\
           -c counts of files after start filter \n\
           -e regex filter string (more on: http://www.cplusplus.com/reference/regex/ECMAScript/)\n\
           -m create real merged file (mostly for test) \n\
