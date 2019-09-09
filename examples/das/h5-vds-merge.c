@@ -394,7 +394,7 @@ int main(int argc, char *argv[])
         H5Dwrite(vir_dset, H5T_NATIVE_SHORT, memspace_id_null, vir_dset_space_id, plist_cio_id, &data_per_file[0]);
         H5Sclose(memspace_id_null);
       }
-      if (i % 200 == 0)
+      if (i % 10 == 0)
       {
         std::cout << src_index << " : " << temp_file << std::endl;
       }
