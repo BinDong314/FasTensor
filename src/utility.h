@@ -30,6 +30,7 @@
 #include <tuple>
 #include "cista.h"
 #include <iomanip>
+#include <cstdlib>
 
 using namespace std;
 
@@ -734,6 +735,17 @@ inline int is_equal_vecotr_parallel(std::vector<unsigned long long> &v_local)
   }
 
   return 1;
+}
+
+bool has_env(const char *env_var)
+{
+  char *env_val = NULL;
+  env_val = std::getenv(env_var);
+
+  if (env_val != NULL)
+    return true;
+  else
+    return false;
 }
 
 #endif

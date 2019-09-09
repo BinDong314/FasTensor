@@ -273,10 +273,10 @@ public:
 
   int ReadData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<T> &data)
   {
-    if (is_VDS())
+    if (is_VDS() && !has_env("TEST_HDF5_VDS"))
     {
       if (!mpi_rank)
-        std::cout << "Read VDS: group= " << gn_str << ", dset =" << dn_str << ", file list (count = " << FileVDSList.size() << " ):" << std::endl;
+        std::cout << "++Read VDS: group++= " << gn_str << ", dset =" << dn_str << ", file list (count = " << FileVDSList.size() << " ):" << std::endl;
 
       //Starting from here, we assume the VDS datasets ordered in row order
       //  |-----|------|
@@ -472,6 +472,9 @@ public:
     }
     else
     { //(is_VDS() == 0
+      if (!mpi_rank)
+        std::cout << "++Read NON VDS++: group= " << gn_str << ", dset =" << dn_str << std::endl;
+
       std::vector<unsigned long long> offset, count;
       offset.resize(rank);
       count.resize(rank);
