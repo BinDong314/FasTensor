@@ -305,6 +305,8 @@ public:
       //printf("rank = %d, end[0] - start[0] = %d \n", mpi_rank, end[0] - start[0]);
       if (end[0] - start[0] == 0 || disable_mpi_all2allv)
       {
+        if (!mpi_rank)
+          std::cout << "++Read VDS: subfile \n";
         //Only rank 0 will come here (read master channel)
         std::vector<unsigned long long> v_end(2);
         v_end[0] = end[0];
@@ -326,6 +328,8 @@ public:
       }    //else of end[0] - start[0] == 0
       else //Read the whole data, chunk by chunk and in parallel
       {
+        if (!mpi_rank)
+          std::cout << "++Read VDS: all2allv \n";
         std::vector<hsize_t> v_size_per_file(2);
         GetSingleFileSize(FileVDSList[0], gn_str, dn_str, v_size_per_file);
 
