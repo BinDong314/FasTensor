@@ -9,6 +9,7 @@
 #include <dirent.h>
 #include <mpi.h>
 #include <assert.h>
+#include <time.h>
 
 //#define OUTPUT_META_TO_SCREEN 1
 //#define DEBUG_OUTPUT 1
@@ -538,6 +539,10 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    int16_t *data, *data_transposed, *data_subset;
    data = (int16_t *)malloc(sizeof(int16_t) * nTrace * nPoint);
 
+   time_t start, end;
+   double dif;
+   time(&start);
+
    fseek(fp, nByte_header, SEEK_SET);
    fread(data, sizeof(int16_t), nTrace * nPoint, fp);
 
@@ -602,6 +607,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       H5Pset_chunk(dataset_plist_id, 2, cdims);
       H5Pset_deflate(dataset_plist_id, 6);
    }
+
    if (transpose_flag)
    {
       data_transposed = (int16_t *)malloc(sizeof(int16_t) * nTrace * nPoint);
@@ -625,6 +631,10 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    free(data);
    if (transpose_flag)
       free(data_transposed);
+
+   time(&end);
+   dif = difftime(end, start);
+   printf("IO took %.5lf seconds to run.\n", dif);
 
    /*
    * Store all header of TDMS as a H5T_OPAQUE type

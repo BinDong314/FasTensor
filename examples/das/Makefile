@@ -45,5 +45,9 @@ das-fft-full-omp:das-fft-full-omp.cpp
 das-stack:das-stack.cpp
 	$(CCC) -o  das-stack das-stack.cpp 	-I$(AU_HOME)/include -L$(AU_HOME)/lib -std=c++17 -lArrayUDF  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  $(OTHER_FLAGS)
 
+
+h5_subset:h5_subset.cpp
+	$(CCC) -o h5_subset h5_subset.cpp  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz  $(OTHER_FLAGS)
+
 clean:
 	rm das-correlation h5-vds-merge tdms2h5 das-fft das-fft-full das-fft-full-omp das-stack

@@ -14,6 +14,7 @@
 #include <string>
 #include <regex>
 #include <fstream>
+#include <mpi.h>
 
 void printf_help(char *cmd);
 
@@ -38,7 +39,8 @@ int main(int argc, char *argv[])
   int merged_file_flag = 0;
   int copt;
   char *res;
-  while ((copt = getopt(argc, argv, "o:i:g:d:hls:c:e:m")) != -1)
+  int mpi_parallel_model = 0;
+  while ((copt = getopt(argc, argv, "o:i:g:d:hls:c:e:mp")) != -1)
     switch (copt)
     {
     case 'o':
@@ -80,6 +82,9 @@ int main(int argc, char *argv[])
     case 'm':
       merged_file_flag = 1;
       break;
+    case 'p':
+      mpi_parallel_model = 1;
+      break;
     case 'h':
       printf_help(argv[0]);
       exit(0);
@@ -89,6 +94,14 @@ int main(int argc, char *argv[])
       exit(-1);
       break;
     }
+
+  int mpi_size = 1, mpi_rank = 0;
+  if (mpi_parallel_model)
+  {
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+  }
 
   if (filter_flag_sc && filter_flag_regex)
   {
@@ -240,8 +253,16 @@ int main(int argc, char *argv[])
   H5Dclose(did);
   H5Fclose(fid);
 
+  hid_t plist_id = H5Pcreate(H5P_FILE_ACCESS);
+  if (mpi_parallel_model)
+  {
+    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+  }
+
   /* Create file in which virtual dataset will be stored. */
-  hid_t vir_file_id = H5Fcreate(output_file.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+  hid_t vir_file_id = H5Fcreate(output_file.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
+  H5Pclose(plist_id);
+
   /* Create VDS dataspace.  */
   hid_t vir_space = H5Screate_simple(rank, dims_vir_dset, NULL);
 
@@ -302,7 +323,7 @@ int main(int argc, char *argv[])
     }
   }
   else
-  {
+  { //Create real merged file
     hid_t vir_dset, vir_group;
     if (group != "/")
     {
@@ -326,31 +347,60 @@ int main(int argc, char *argv[])
     std::vector<short> data_per_file;
     data_per_file.resize(dims_per_dset[0] * dims_per_dset[1]);
 
-    int src_index = 0;
-    for (int i = 0; i < file_to_merge_list.size(); i++)
+    int mpi_batches;
+    if (file_to_merge_list.size() % mpi_size == 0)
     {
+      mpi_batches = file_to_merge_list.size() / mpi_size;
+    }
+    else
+    {
+      mpi_batches = file_to_merge_list.size() / mpi_size + 1;
+    }
 
-      temp_file = input_dir + "/" + file_to_merge_list[i];
-      if (row_major_flag == 1)
+    hid_t plist_cio_id = H5P_DEFAULT;
+    if (mpi_parallel_model)
+    {
+      plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
+      H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
+    }
+    int src_index = mpi_rank;
+    for (int i = 0; i < mpi_batches; i++)
+    {
+      if (src_index < file_to_merge_list.size())
       {
-        start_out[1] = (hsize_t)src_index * dims_per_dset[1];
+        temp_file = input_dir + "/" + file_to_merge_list[src_index];
+        if (row_major_flag == 1)
+        {
+          start_out[1] = (hsize_t)src_index * dims_per_dset[1];
+        }
+        else
+        {
+          start_out[0] = (hsize_t)src_index * dims_per_dset[0];
+        }
+        //Read all data on temp_file
+        OpenReadCloseSingleFileWhole(temp_file, group, dataset, data_per_file);
+        //Write to file
+        H5Sselect_hyperslab(vir_dset_space_id, H5S_SELECT_SET, start_out, NULL, count_out, NULL);
+        H5Dwrite(vir_dset, H5T_NATIVE_SHORT, memspace_id, vir_dset_space_id, plist_cio_id, &data_per_file[0]);
       }
       else
       {
-        start_out[0] = (hsize_t)src_index * dims_per_dset[0];
+        start_out[0] = 0;
+        start_out[1] = 0;
+        count_out[0] = 0;
+        count_out[1] = 0;
+        hid_t memspace_id_null = H5Screate_simple(rank, &count_out[0], NULL);
+        H5Sselect_hyperslab(vir_dset_space_id, H5S_SELECT_SET, start_out, NULL, count_out, NULL);
+        H5Dwrite(vir_dset, H5T_NATIVE_SHORT, memspace_id_null, vir_dset_space_id, plist_cio_id, &data_per_file[0]);
+        H5Sclose(memspace_id_null);
       }
-      //Read all data on temp_file
-      OpenReadCloseSingleFileWhole(temp_file, group, dataset, data_per_file);
-      //Write to file
-      H5Sselect_hyperslab(vir_dset_space_id, H5S_SELECT_SET, start_out, NULL, count_out, NULL);
-      H5Dwrite(vir_dset, H5T_NATIVE_SHORT, memspace_id, vir_dset_space_id, H5P_DEFAULT, &data_per_file[0]);
-      src_index++;
-
       if (i % 200 == 0)
       {
         std::cout << src_index << " : " << temp_file << std::endl;
       }
+      src_index = src_index + mpi_size;
     }
+
     H5Sclose(memspace_id);
     H5Sclose(vir_dset_space_id);
     H5Dclose(vir_dset);
@@ -362,6 +412,8 @@ int main(int argc, char *argv[])
 
   H5Sclose(vir_space);
   H5Fclose(vir_file_id);
+  if (mpi_parallel_model)
+    MPI_Finalize();
 
   free(dims_vir_dset);
   free(dims_per_dset);
@@ -380,6 +432,7 @@ void printf_help(char *cmd)
           -c counts of files after start filter \n\
           -e regex filter string (more on: http://www.cplusplus.com/reference/regex/ECMAScript/)\n\
           -m create real merged file (mostly for test) \n\
+          -p in parallel model (mostly used with -m to create merged file) \n\
           Example 1: %s -i ./testH5data -o ./testHDF5data-merged.h5  -g / -d /DataCT\n\
                      PS: all files under ./testH5Data \n\
           Example 2: %s -i ./testH5data -o ./testHDF5data-merged.h5  -g / -d /DataCT -s westSac_170728224510.h5 -c 2 \n\
