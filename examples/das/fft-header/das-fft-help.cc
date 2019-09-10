@@ -21,6 +21,33 @@
         }                                                   \
     }
 
+//Add function to init FFT_IN
+#define INIT_FFTW_FILL(FFT_IN_V, XXX_P, XN_P, NFFT_P) \
+    {                                                 \
+        for (int iii = 0; iii < NFFT_P; iii++)        \
+        {                                             \
+            if (iii < XN_P)                           \
+            {                                         \
+                FFT_IN_V[iii][0] = XXX_P[iii];        \
+                FFT_IN_V[iii][1] = 0;                 \
+            }                                         \
+            else                                      \
+            {                                         \
+                FFT_IN_V[iii][0] = 0;                 \
+                FFT_IN_V[iii][1] = 0;                 \
+            }                                         \
+        }                                             \
+    }
+
+#define INIT_FFTW_V_ZERO(FFT_IN_V, NFFT_P)     \
+    {                                          \
+        for (int iii = 0; iii < NFFT_P; iii++) \
+        {                                      \
+            FFT_IN_V[iii][0] = 0;              \
+            FFT_IN_V[iii][1] = 0;              \
+        }                                      \
+    }
+
 //direction: FFTW_FORWARD,  FFTW_BACKWARD
 #define FFT_HELP_W(NNN, fft_in_p, fft_out_p, direction_p)                               \
     {                                                                                   \
@@ -30,19 +57,84 @@
         fftw_destroy_plan(fft_p);                                                       \
     }
 
+#define MALLOC_FFT(PFFT, NFFT)                                               \
+    PFFT = fftw_alloc_complex(NFFT);                                         \
+    if (PFFT == NULL)                                                        \
+    {                                                                        \
+        printf("not enough memory for fft, in %s:%d\n", __FILE__, __LINE__); \
+        exit(-1);                                                            \
+    }
+
+#define FREE_FFT(PFFT) \
+    fftw_free(PFFT);   \
+    PFFT = NULL
+
 //#include "fft/kiss_fft.h"
 //kiss_fft_cpx *fft_in_temp;
 //kiss_fft_cpx *fft_out_temp;
 //kiss_fft_cpx *master_vector_fft;
 //unsigned int fft_in_legnth;
 //direction: 0,  1
-#define FFT_HELP_K(N, fft_in, fft_out, direction)       \
-    {                                                   \
-        kiss_fft_cfg cfg;                               \
-        cfg = kiss_fft_alloc(N, direction, NULL, NULL); \
-        kiss_fft(cfg, fft_in, fft_out);                 \
-        free(cfg);                                      \
+#define FFT_HELP_K(N_P, fft_in_P, fft_out_P, direction_P) \
+    {                                                     \
+        kiss_fft_cfg cfg;                                 \
+        cfg = kiss_fft_alloc(N_P, direction_P, 0, 0);     \
+        kiss_fft(cfg, fft_in_P, fft_out_P);               \
+        kiss_fft_free(cfg);                               \
     }
+
+#define INIT_FFTW_K(FFT_IN_V, XXX_P, XN_P, NFFT_P, FFT_OUT_V) \
+    {                                                         \
+        for (int iii = 0; iii < NFFT_P; iii++)                \
+        {                                                     \
+            if (iii < XN_P)                                   \
+            {                                                 \
+                FFT_IN_V[iii].r = XXX_P[iii];                 \
+                FFT_IN_V[iii].i = 0;                          \
+            }                                                 \
+            else                                              \
+            {                                                 \
+                FFT_IN_V[iii].r = 0;                          \
+                FFT_IN_V[iii].i = 0;                          \
+            }                                                 \
+            FFT_OUT_V[iii].r = 0;                             \
+            FFT_OUT_V[iii].i = 0;                             \
+        }                                                     \
+    }
+
+#define MALLOC_FFT_K(PFFT, NFFT)                                             \
+    PFFT = (kiss_fft_cpx *)malloc(sizeof(kiss_fft_cpx) * NFFT);              \
+    if (PFFT == NULL)                                                        \
+    {                                                                        \
+        printf("not enough memory for fft, in %s:%d\n", __FILE__, __LINE__); \
+        exit(-1);                                                            \
+    }
+
+#define FREE_FFT_K(PFFT) \
+    free(PFFT);          \
+    PFFT = NULL
+
+#define FFTW_AVAI 1
+
+#ifdef FFTW_AVAI
+#include <fftw3.h>
+typedef fftw_complex *FFT_DATA_TYPEP;
+#define PREPARE_FFT INIT_FFTW
+#define RUN_FFT FFT_HELP_W
+#define ALLOCATE_FFT MALLOC_FFT
+#define CLEAR_FFT FREE_FFT
+#define FORWARD_FLAG FFTW_FORWARD   //-1
+#define BACKWARD_FLAG FFTW_BACKWARD //1
+#else
+#include "kiss_fft.h"
+typedef kiss_fft_cpx *FFT_DATA_TYPEP;
+#define PREPARE_FFT INIT_FFTW_K
+#define RUN_FFT FFT_HELP_K
+#define ALLOCATE_FFT MALLOC_FFT_K
+#define CLEAR_FFT FREE_FFT_K
+#define FORWARD_FLAG 0
+#define BACKWARD_FLAG 1
+#endif
 
 // Use "xi >= XN - HAL_WIN - 1" to match matlab code
 #define MOVING_MEAN(XV, YV, HAL_WIN)                                \

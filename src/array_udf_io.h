@@ -190,7 +190,7 @@ public:
   }
 
   template <class DataType>
-  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<DataType> data)
+  int WriteData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<DataType> &data)
   {
     if (cache_flag == AU_NOCACHE)
     {
@@ -219,6 +219,14 @@ public:
     if (cache_flag == AU_NOCACHE)
     {
       return nvs_f_handle->DisableCollectivIO();
+    }
+  }
+
+  void EnableCollectivIO()
+  {
+    if (cache_flag == AU_NOCACHE)
+    {
+      return nvs_f_handle->EnableCollectivIO();
     }
   }
 

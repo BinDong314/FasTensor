@@ -8,6 +8,8 @@
 #include <getopt.h>
 #include <dirent.h>
 #include <mpi.h>
+#include <assert.h>
+#include <time.h>
 
 //#define OUTPUT_META_TO_SCREEN 1
 //#define DEBUG_OUTPUT 1
@@ -49,7 +51,7 @@ void attach_attribute_timestamp(hid_t obj_id, char *name, hid_t type_create, hid
 int convert_file(char *filename_output, char *filename_input, int compression_flag);
 void printf_help(char *cmd);
 void transpose_data(int16_t *src, int16_t *dst, const int N, const int M);
-int transpose_flag = 0;
+int transpose_flag = 1;
 int channel_togo = 1;
 int start_channel = 0;
 int subset_flag = 0;
@@ -62,7 +64,7 @@ int main(int argc, char *argv[])
    int compression_flag = 0;
    int copt;
    char *res;
-   while ((copt = getopt(argc, argv, "o:i:thbcs:g:")) != -1)
+   while ((copt = getopt(argc, argv, "o:i:lhbcs:g:")) != -1)
       switch (copt)
       {
       case 'o':
@@ -79,8 +81,8 @@ int main(int argc, char *argv[])
       case 'c':
          compression_flag = 1;
          break;
-      case 't':
-         transpose_flag = 1;
+      case 'l':
+         transpose_flag = 0;
          break;
       case 's':
          start_channel = atoi(optarg);
@@ -416,8 +418,10 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #ifdef DEBUG_OUTPUT
    printf("length_of_object_path : %d \n", length_of_object_path);
 #endif
-   char *object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
+   char *object_path_str = (char *)malloc(sizeof(char) * length_of_object_path + 1);
+   memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
    fread(object_path_str, sizeof(char), length_of_object_path, fp);
+
 #ifdef OUTPUT_META_TO_SCREEN
    printf("object_path : %s \n", object_path_str);
 #endif
@@ -436,18 +440,23 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    //Create the group "/Measurement"
    hid_t group_id = H5Gcreate(file_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+   assert(group_id >= 0);
    free(object_path_str);
+   //H5Fflush(file_id, H5F_SCOPE_GLOBAL);
+   //H5Grefresh(group_id);
 
    //Create all sub-groups for left objects
+
    int index_data_type, array_dimensions;
    uint64_t Number_of_values;
+   //int debug_print_index = 0;
    for (int jj = 0; jj < number_of_objects - 2; jj++)
    {
       fread(&length_of_object_path, sizeof(uint32_t), 1, fp);
 #ifdef DEBUG_OUTPUT
       printf("length_of_object_path : %d \n", length_of_object_path);
 #endif
-      object_path_str = (char *)malloc(sizeof(char) * length_of_object_path);
+      object_path_str = (char *)malloc(sizeof(char) * length_of_object_path + 1);
       memset(object_path_str, '\0', sizeof(char) * length_of_object_path + 1);
       fread(object_path_str, sizeof(char), length_of_object_path, fp);
 #ifdef OUTPUT_META_TO_SCREEN
@@ -455,7 +464,8 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 #endif
 
       hid_t group_id_temp = H5Gcreate(group_id, object_path_str, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-
+      assert(group_id_temp >= 0);
+      //H5Grefresh(group_id_temp);
       free(object_path_str);
       fread(&raw_data_index_int, sizeof(uint32_t), 1, fp);
 #ifdef DEBUG_OUTPUT
@@ -485,6 +495,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
       H5Gclose(group_id_temp);
    }
+
    H5Gclose(group_id);
 
    /*
@@ -527,6 +538,10 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    //Start to read the data and store it into HDF5
    int16_t *data, *data_transposed, *data_subset;
    data = (int16_t *)malloc(sizeof(int16_t) * nTrace * nPoint);
+
+   time_t start, end;
+   double dif;
+   time(&start);
 
    fseek(fp, nByte_header, SEEK_SET);
    fread(data, sizeof(int16_t), nTrace * nPoint, fp);
@@ -592,6 +607,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
       H5Pset_chunk(dataset_plist_id, 2, cdims);
       H5Pset_deflate(dataset_plist_id, 6);
    }
+
    if (transpose_flag)
    {
       data_transposed = (int16_t *)malloc(sizeof(int16_t) * nTrace * nPoint);
@@ -600,12 +616,14 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    if (transpose_flag)
    {
-      dataset_id = H5Dcreate(file_id, "/DataChannelTime", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
+      ///DataTC = /DataChannelTime
+      dataset_id = H5Dcreate(file_id, "/DataCT", H5T_STD_I16LE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
       H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_transposed);
    }
    else
    {
-      dataset_id = H5Dcreate(file_id, "/DataTimeChannel", H5T_STD_I16BE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
+      ///DataTC = /DataTimeChannel
+      dataset_id = H5Dcreate(file_id, "/DataTC", H5T_STD_I16LE, dataspace_id, H5P_DEFAULT, dataset_plist_id, H5P_DEFAULT);
       H5Dwrite(dataset_id, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
    }
    H5Pclose(dataset_plist_id);
@@ -614,6 +632,10 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    free(data);
    if (transpose_flag)
       free(data_transposed);
+
+   time(&end);
+   dif = difftime(end, start);
+   printf("IO took %.5lf seconds to run.\n", dif);
 
    /*
    * Store all header of TDMS as a H5T_OPAQUE type
@@ -707,7 +729,7 @@ void printf_help(char *cmd)
           -o output file/directory for HDF5 file(s)\n\
           -b batch mode (i.e., both input and output are directory)\n\
           -p parallel conversion on MPI\n\
-          -t transpose matrix (by default, it is [Time] by [Channel])\n\
+          -l use column order (by default tranposed to row order as [Channel]x[[Time])\n\
           -s start channel (zero based) \n\
           -g counts of channels to go \n\
           Example: %s -i test.tdms -o test.tdms.h5\n";

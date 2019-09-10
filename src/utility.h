@@ -26,6 +26,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <optional>
+#include <tuple>
+#include "cista.h"
+#include <iomanip>
+#include <cstdlib>
 
 using namespace std;
 
@@ -85,6 +90,13 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
   return original_coordinate;
 }
 
+template <class T>
+inline void clear_vector(std::vector<T> &v)
+{
+  v.clear();
+  std::vector<T>().swap(v);
+}
+
 inline std::vector<unsigned long long> NextCoordinateAfterSkipWithinChunk(std::vector<unsigned long long> coordinate_at_chunk, std::vector<unsigned long long> skip_size, std::vector<unsigned long long> skiped_chunks_per_orig_chunk)
 {
   int rank = coordinate_at_chunk.size();
@@ -135,7 +147,7 @@ inline std::vector<unsigned long long> NextCoordinateAfterSkipWithinChunk(std::v
 //Return
 // 1: yes, skip this point
 // 0: no,  run computing on it
-inline int SkipIt(std::vector<unsigned long long> coordinate_at_chunk, std::vector<unsigned long long> skip_size)
+inline int SkipIt(const std::vector<unsigned long long> &coordinate_at_chunk, const std::vector<unsigned long long> &skip_size)
 {
   int rank = coordinate_at_chunk.size();
   //Determine if coodinate_at_chunk is the first element of the the the skip chunk (not partition chunk)
@@ -181,10 +193,24 @@ void InsertIntoVirtualVector(const std::vector<T1> &insert_vector, std::vector<T
 {
   assert(insert_vector.size() == virtual_vector.size());
   size_t n = insert_vector.size();
+  const int index_const = index;
   for (size_t i = 0; i < n; i++)
   {
     //memcpy(&(virtual_vector[i])+sizeof(T1)*index, &(insert_vector[i]), sizeof(T1));
-    virtual_vector[i].set_value(index, insert_vector[i]);
+    //virtual_vector[i].set_value(index, insert_vector[i]);
+    //get<0>(to_tuple(a1)) = 5;
+    //std::get<0>(cista::to_tuple(virtual_vector[i])) = insert_vector[i];
+
+    T1 insert_vector_temp = insert_vector[i];
+    int m_index = 0;
+    cista::for_each_field(virtual_vector[i], [&m_index, index, insert_vector_temp](auto &&m) {
+      if (m_index == index)
+      {
+        m = insert_vector_temp;
+        return;
+      }
+      m_index++;
+    });
   }
 }
 
@@ -243,16 +269,46 @@ void InsertIntoVirtualVector(const std::vector<int> &insert_vector, std::vector<
   exit(-1);
 }
 
+int debug_once = 0;
 template <class T1, class T2>
 void ExtractFromVirtualVector(std::vector<T1> &extract_vector, const std::vector<T2> &virtual_vector, int index)
 {
   assert(extract_vector.size() == virtual_vector.size());
   size_t n = extract_vector.size();
-  T2 temp_v;
   for (size_t i = 0; i < n; i++)
   {
-    temp_v = virtual_vector[i];
-    extract_vector[i] = temp_v.get_value(index);
+    int m_index = 0;
+    T1 temp_v;
+    cista::for_each_field(virtual_vector[i], [&m_index, index, &temp_v](auto &&m) {
+      if (m_index == index)
+      {
+        temp_v = m;
+      }
+      m_index++;
+    });
+    extract_vector[i] = temp_v;
+  }
+}
+
+template <class T1, class T2>
+void ExtractFromVirtualVector(std::vector<T1> &extract_vector, const std::vector<std::optional<T2>> &virtual_vector, int index)
+{
+  assert(extract_vector.size() == virtual_vector.size());
+  size_t n = extract_vector.size();
+
+  for (size_t i = 0; i < n; i++)
+  {
+    T1 temp_v;
+    int m_index = 0;
+    cista::for_each_field(virtual_vector[i], [&m_index, index, &temp_v](auto &&m) {
+      if (m_index == index)
+      {
+        temp_v = m;
+        return;
+      }
+      m_index++;
+    });
+    extract_vector[i] = temp_v;
   }
 }
 
@@ -376,6 +432,24 @@ int is_vector_type()
   return is_vector<T>{};
 }
 
+template <typename T>
+struct is_optional : public std::false_type
+{
+};
+
+template <typename T>
+struct is_optional<std::optional<T>> : public std::true_type
+{
+};
+
+//1: vector type
+//0: other types
+template <typename T>
+int is_optional_type()
+{
+  return is_optional<T>{};
+}
+
 //http://coliru.stacked-crooked.com/view?id=e579b7d68ba42805cfde5a309e2a23e5-e54ee7a04e4b807da0930236d4cc94dc
 //Usage:     std::cout << is_same_type<int, double>() << std::endl;
 template <typename T, typename U>
@@ -398,7 +472,7 @@ void *vv2v(std::vector<std::vector<T>> &v)
   T *rv = (T *)malloc(v.size() * v[0].size() * sizeof(T)); //Assuming all rows have the same size
   if (rv == NULL)
   {
-    printf("Not enough memory (in *vv2v) !\n");
+    printf("Not enough memory (in *vv2v) v.size = %lld, v[0].size = %lld, sizeof(T) = %d!\n", v.size(), v[0].size(), sizeof(T));
     exit(-1);
   }
   for (unsigned i = 0; i < v.size(); i++)
@@ -409,6 +483,31 @@ void *vv2v(std::vector<std::vector<T>> &v)
   //printf("size = %d , %f , %f, %f \n", v[0].size(), rv[0], rv[1], rv);
 
   return (void *)rv;
+}
+
+template <typename T>
+void *vv2v_mem_e(std::vector<std::vector<T>> &v)
+{
+
+  std::vector<T> rv;
+
+  for (unsigned i = 0; i < v.size(); i++)
+  {
+    rv.insert(rv.end(), v[i].begin(), v[i].end());
+    clear_vector(v[i]);
+    //memcpy(rv + v[i].size() * i, &(v[i][0]), v[i].size() * sizeof(T));
+  }
+
+  //printf("size = %d , %f , %f, %f \n", v[0].size(), rv[0], rv[1], rv);
+  //return (void *)rv;
+  return (void *)&rv[0];
+}
+
+template <typename T>
+void *vv2v_mem_e(std::vector<T> &v)
+{
+  printf("Not supported %s:%d \n", __FILE__, __LINE__);
+  return NULL;
 }
 
 template <typename T>
@@ -503,7 +602,33 @@ void au_time_start()
   au_timer_global__inside_use = MPI_Wtime();
 }
 
-void au_time_elap(char *info_str)
+#define OMP_ENABLED 1
+void au_time_elap(std::string info_str)
+{
+
+  double time_per_rank = MPI_Wtime() - au_timer_global__inside_use;
+  int mpi_rank, mpi_size;
+  double time_max, time_min, time_sum;
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+
+  //#ifndef OMP_ENABLED
+  MPI_Allreduce(&time_per_rank, &time_max, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+  MPI_Allreduce(&time_per_rank, &time_min, 1, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
+  MPI_Allreduce(&time_per_rank, &time_sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+  //#endif
+
+  if (mpi_rank == 0)
+  {
+    printf("  %s:max=%f, min=%f, ave=%f, rank 0=%f\n", info_str.c_str(), time_max, time_min, time_sum / mpi_size, time_per_rank);
+    fflush(stdout);
+  }
+
+  //reset to current time
+  au_timer_global__inside_use = MPI_Wtime();
+}
+
+void au_time_elap(std::string info_str, int omp_rank)
 {
 
   double time_per_rank = MPI_Wtime() - au_timer_global__inside_use;
@@ -516,14 +641,33 @@ void au_time_elap(char *info_str)
   MPI_Allreduce(&time_per_rank, &time_min, 1, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
   MPI_Allreduce(&time_per_rank, &time_sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
-  if (mpi_rank == 0)
+  if (mpi_rank == 0 && omp_rank == 0)
   {
-    printf(" %s:max=%f, min=%f, ave=%f, rank 0=%f\n ", info_str, time_max, time_min, time_sum / mpi_size, time_per_rank);
+    printf("  %s:max=%f, min=%f, ave=%f, rank 0=%f (omp_rank=0)\n", info_str.c_str(), time_max, time_min, time_sum / mpi_size, time_per_rank);
     fflush(stdout);
   }
 
   //reset to current time
   au_timer_global__inside_use = MPI_Wtime();
+}
+
+time_t au_timer_global_start__inside_use_no_mpi;
+void au_time_start_no_mpi()
+{
+  time(&au_timer_global_start__inside_use_no_mpi);
+}
+
+void au_time_elap_no_mpi(std::string info_str)
+{
+  time_t current_time;
+  time(&current_time);
+  double time_taken = double(current_time - au_timer_global_start__inside_use_no_mpi);
+
+  cout << info_str << std::fixed << time_taken << std::setprecision(5);
+  cout << " sec " << endl;
+
+  //reset timer
+  time(&au_timer_global_start__inside_use_no_mpi);
 }
 
 //for more HDF5 types
@@ -563,6 +707,45 @@ void type_infer(int &vector_type_flag, int &output_element_type_class)
     printf("In Array init: not support type \n ");
     exit(-1);
   }
+}
+
+//1: vector has same value
+//0: vector has different values
+inline int is_equal_vecotr_parallel(std::vector<unsigned long long> &v_local)
+{
+  unsigned long long global_max, local_value;
+  int equal_flag_local = 0, equal_flag_global_min = 0;
+  //Todo: Make sure the v_local is equal to each other
+  for (int i = 0; i < v_local.size(); i++)
+  {
+    local_value = v_local[i];
+    equal_flag_local = 0;
+    MPI_Allreduce(&local_value, &global_max, 1, MPI_UNSIGNED_LONG_LONG, MPI_MAX, MPI_COMM_WORLD);
+    if (global_max == local_value)
+    {
+      equal_flag_local = 1;
+    }
+
+    equal_flag_global_min = 1;
+    MPI_Allreduce(&equal_flag_local, &equal_flag_global_min, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+    if (equal_flag_global_min == 0)
+    {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
+bool has_env(const char *env_var)
+{
+  char *env_val = NULL;
+  env_val = std::getenv(env_var);
+
+  if (env_val != NULL)
+    return true;
+  else
+    return false;
 }
 
 #endif

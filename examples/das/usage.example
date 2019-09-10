@@ -214,4 +214,8 @@ Step3: ArrayUDF Code: das-correlation
 
 
 
+7, Compile ArrayUDF on Larance
+ module load gcc/7.4.0
+
+
 

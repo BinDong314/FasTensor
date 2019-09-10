@@ -60,8 +60,10 @@ double eCoeff = 1.0;
 unsigned long long MASTER_INDEX = 0;
 
 //Parameters for ArrayUDF
-int auto_chunk_dims_index = 1;
+int auto_chunk_dims_index = 0;
 std::vector<int> strip_size(2);
+std::vector<int> chunk_size(2);
+int chunked_batch_factor = 32; //To enable a large chunk
 
 //Parameters to enable "window" operation
 int user_window_size = 1;
@@ -70,7 +72,7 @@ int window_batch = 1;
 
 //Flag to have FFT in row-direction (first dimension)
 //By default, it work in column-direction (second dimension)
-int row_major_flag = 0;
+int row_major_flag = 1;
 
 //View's parameter
 bool enable_view_flag = 0;
@@ -203,6 +205,32 @@ std::vector<float> gatherXcorr_per_batch;
         }                                                                        \
         FF_LHS.clear();                                                          \
         LHS.clear();                                                             \
+        std::vector<double>().swap(FF_LHS);                                      \
+        std::vector<double>().swap(LHS);                                         \
+    }
+
+//WS: window size
+#define INIT_SPACE_OMP()                                         \
+    {                                                            \
+        shapingFilt.resize(nfft);                                \
+        std::vector<double> FF_LHS, LHS;                         \
+        FF_LHS.resize(nfft / 2);                                 \
+        LHS.resize(nfft / 2);                                    \
+        for (int i = 0; i < nfft / 2; i++)                       \
+        {                                                        \
+            FF_LHS[i] = df * (i + 1);                            \
+        }                                                        \
+        interp1(INTERP_ZF, INTERP_Z, FF_LHS, LHS);               \
+        int nfft_half = nfft / 2;                                \
+        for (int i = 0; i < nfft_half; i++)                      \
+        {                                                        \
+            shapingFilt[i] = LHS[i];                             \
+            shapingFilt[i + nfft_half] = LHS[nfft_half - i - 1]; \
+        }                                                        \
+        FF_LHS.clear();                                          \
+        LHS.clear();                                             \
+        std::vector<double>().swap(FF_LHS);                      \
+        std::vector<double>().swap(LHS);                         \
     }
 
 //R = dt_new/dt
@@ -218,6 +246,13 @@ std::vector<float> gatherXcorr_per_batch;
         gatherXcorr_per_batch.clear(); \
     }
 
+//R = dt_new/dt
+#define CLEAR_SPACE_OMP()                        \
+    {                                            \
+        shapingFilt.clear();                     \
+        std::vector<double>().swap(shapingFilt); \
+    }
+
 /*
  * XX is the input data 
  * YY is used as cache
@@ -226,21 +261,29 @@ std::vector<float> gatherXcorr_per_batch;
 #define FFT_PROCESSING(XX, YY, GX, MFFT, BI, BS)                                                                   \
     {                                                                                                              \
         detrend(&(XX[0]), XX.size());                                                                              \
+        au_time_elap(" ++ detrend ");                                                                              \
         filtfilt(BUTTER_A, BUTTER_B, XX, YY);                                                                      \
+        au_time_elap(" ++ filtfilt ");                                                                             \
         resample(1, DT_NEW / DT, YY, XX);                                                                          \
+        au_time_elap(" ++ resample ");                                                                             \
         MOVING_MEAN(XX, YY, nPoint_hal_win);                                                                       \
+        au_time_elap(" ++ MOVING_MEAN ");                                                                          \
         INIT_FFTW(fft_in, YY, nPoint, nfft, fft_out);                                                              \
+        au_time_elap(" ++ Init fft ");                                                                             \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);                                                           \
-        double temp_f;                                                                                             \
+        au_time_elap(" ++ First fft ");                                                                            \
         for (int ii = 0; ii < nfft; ii++)                                                                          \
         {                                                                                                          \
+            double temp_f;                                                                                         \
             temp_f = pow(sqrt(fft_out[ii][0] * fft_out[ii][0] + fft_out[ii][1] * fft_out[ii][1]), eCoeff) + 0.001; \
             fft_in[ii][0] = (fft_out[ii][0] + 0.001) / temp_f * shapingFilt[ii];                                   \
             fft_in[ii][1] = (fft_out[ii][1]) / temp_f * shapingFilt[ii];                                           \
             fft_out[ii][0] = 0;                                                                                    \
             fft_out[ii][1] = 0;                                                                                    \
         }                                                                                                          \
+        au_time_elap(" ++ Corr fft ");                                                                             \
         FFT_HELP_W(nfft, fft_in, fft_out, FFTW_BACKWARD);                                                          \
+        au_time_elap(" ++ Rev fft ");                                                                              \
         YY.resize(nPoint);                                                                                         \
         for (int i = 0; i < nPoint; i++)                                                                           \
         {                                                                                                          \
