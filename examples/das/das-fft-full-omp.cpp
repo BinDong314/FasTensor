@@ -394,7 +394,9 @@ int main(int argc, char *argv[])
         }
     }
     //Re enable collective IO  to make following read faster
-    IFILE->EnableCollIO();
+
+    //IFILE->EnableCollIO();  //Comment out for VDS test on single node
+
     //masterv_ppf.clear();
     //mastervf.clear();
     //masterv.clear();
