@@ -104,7 +104,8 @@ public:
     find_h5_type(h5_mem_type, h5_disk_type);
 
     plist_id = H5Pcreate(H5P_FILE_ACCESS);
-    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+    //Comment out for paralle VDS test on sigle node
+    //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
     if (is_vector_type<T>())
       vector_type_flag = 1;
