@@ -117,6 +117,8 @@ int main(int argc, char *argv[])
   {
     printf("Filter enabled to merge files with pattern of %s \n", filter_regex_str.c_str());
   }
+  au_time_start_no_mpi();
+
   //Get the list of files under input_dir
   struct dirent **namelist;
   int namelist_length = scandir(input_dir.c_str(), &namelist, 0, alphasort);
@@ -187,6 +189,7 @@ int main(int argc, char *argv[])
     file_to_merge_list = file_to_merge_list_after_filter;
   }
 
+  au_time_elap_no_mpi("Search");
   if (file_to_merge_list.size() == 0)
   {
     printf("No files after filter to merge !\n");
@@ -321,6 +324,7 @@ int main(int argc, char *argv[])
     {
       H5Gclose(vir_group);
     }
+    au_time_elap_no_mpi("Create VDS file: ");
   }
   else
   { //Create real merged file
@@ -408,6 +412,8 @@ int main(int argc, char *argv[])
     {
       H5Gclose(vir_group);
     }
+
+    au_time_elap_no_mpi("Create real file:");
   }
 
   H5Sclose(vir_space);
