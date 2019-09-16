@@ -14,13 +14,13 @@ ACLOCAL_AMFLAGS=-I m4
 #endif
 
 
-#if OPENMP
+if OPENMP
 #if TRUE
-#ARRAYUDF_CPPFLAGS +=  -fopenmp -openmp -DENABLE_OPENMP
-#ARRAYUDF_CFLAGS   +=  -fopenmp -openmp -DENABLE_OPENMP
-#ARRAYUDF_CXXFLAGS +=  -fopenmp -openmp -DENABLE_OPENMP
-#ARRAYUDF_LDFLAGS  +=  -fopenmp -openmp -DENABLE_OPENMP
-#endif
+ARRAYUDF_CPPFLAGS +=  -fopenmp -openmp -DENABLE_OPENMP
+ARRAYUDF_CFLAGS   +=  -fopenmp -openmp -DENABLE_OPENMP
+ARRAYUDF_CXXFLAGS +=  -fopenmp -openmp -DENABLE_OPENMP
+ARRAYUDF_LDFLAGS  +=  -fopenmp -openmp -DENABLE_OPENMP
+endif
 
 #if BUILD_PYTHON
 #SUBDIRS=src

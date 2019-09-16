@@ -155,12 +155,14 @@ esac],
 [debug=false])
 AM_CONDITIONAL(DEBUG, test $debug=true)
 echo "debug=$debug"
-#echo "DEBUG=$DEBUG"
+echo "DEBUG=$DEBUG"
 
 AC_ARG_ENABLE(openmp,[AS_HELP_STRING([--enable-openmp], [enable OpenMP])])
 AC_MSG_CHECKING([whether to enable OpenMP])
 AS_IF([test "x${enable_openmp}" = "xyes" ], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
 AM_CONDITIONAL(OPENMP, test $enable_openmp=true)
+echo "enable_openmp=$enable_openmp"
+echo "OPENMP=$OPENMP"
 
 
 ##AC_ARG_ENABLE(openmp,

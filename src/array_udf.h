@@ -37,7 +37,7 @@
 //#define HAVE_OMP 1
 //#endif
 
-#ifdef ENABLE_OPENMP
+#if defined(_OPENMP)
 #include <omp.h>
 #endif
 
