@@ -28,8 +28,8 @@ void au_time_elap_no_mpi(std::string info_str)
   time(&current_time);
   double time_taken = double(current_time - au_timer_global_start__inside_use_no_mpi);
 
-  cout << info_str << std::fixed << time_taken << std::setprecision(5);
-  cout << " sec " << endl;
+  std::cout << info_str << std::fixed << time_taken << std::setprecision(5);
+  std::cout << " sec " << endl;
 
   //reset timer
   time(&au_timer_global_start__inside_use_no_mpi);
