@@ -15,6 +15,7 @@
 #include <regex>
 #include <fstream>
 #include <mpi.h>
+#include <iomanip>
 
 time_t au_timer_global_start__inside_use_no_mpi;
 void au_time_start_no_mpi()
