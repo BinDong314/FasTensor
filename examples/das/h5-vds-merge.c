@@ -27,7 +27,7 @@ void au_time_elap_no_mpi(std::string info_str)
 {
   time_t current_time;
   time(&current_time);
-  double time_taken = double(current_time - au_timer_global_start__inside_use_no_mpi);
+  double time_taken = difftime(current_time, au_timer_global_start__inside_use_no_mpi); //double(current_time - au_timer_global_start__inside_use_no_mpi);
 
   std::cout << info_str << std::fixed << time_taken << std::setprecision(10);
   std::cout << " sec " << std::endl;
