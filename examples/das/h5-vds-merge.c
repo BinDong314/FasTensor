@@ -16,6 +16,7 @@
 #include <fstream>
 #include <mpi.h>
 #include <iomanip>
+#include <time.h>
 
 time_t au_timer_global_start__inside_use_no_mpi;
 void au_time_start_no_mpi()
@@ -28,6 +29,8 @@ void au_time_elap_no_mpi(std::string info_str)
   time_t current_time;
   time(&current_time);
   double time_taken = difftime(current_time, au_timer_global_start__inside_use_no_mpi); //double(current_time - au_timer_global_start__inside_use_no_mpi);
+
+  printf("Elasped time is %.6lf seconds.", time_taken);
 
   std::cout << info_str << std::fixed << time_taken << std::setprecision(10);
   std::cout << " sec " << std::endl;
