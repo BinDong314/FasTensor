@@ -233,7 +233,10 @@ int main(int argc, char *argv[])
     printf("List of files to merge (# = %ld): \n", file_to_merge_list.size());
     for (int i = 0; i < file_to_merge_list.size(); i++)
     {
-      std::cout << file_to_merge_list[i] << std::endl;
+      if (i < 2 || i > file_to_merge_list.size() - 2)
+        std::cout << file_to_merge_list[i] << std::endl;
+      if (i == 2)
+        std::cout << "  .... " << std::endl;
       output_file_stream << input_dir << "/" << file_to_merge_list[i] << std::endl;
     }
     output_file_stream.close();
