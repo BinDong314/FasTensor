@@ -35,9 +35,9 @@ void au_time_elap_no_mpi(std::string info_str)
   clock_t timer_end_no_mpi = clock();
 
   double elapsed_secs = double(timer_end_no_mpi - timer_begin_no_mpi) / CLOCKS_PER_SEC;
-  std::cout << info_str << std::fixed << elapsed_secs << std::setprecision(10);
+  std::cout << info_str << " : " << std::fixed << elapsed_secs << std::setprecision(10);
   std::cout << " sec " << std::endl;
-  printf("%s  : %.6lf seconds.", info_str.c_str());
+  //printf("%s  : %.6lf seconds.", info_str.c_str());
   //reset timer
   //time(&au_timer_global_start__inside_use_no_mpi);
   timer_begin_no_mpi = clock();
