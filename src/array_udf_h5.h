@@ -498,10 +498,8 @@ public:
       for (auto i = data.begin(); i != data.end(); ++i)
         std::cout << *i << ' ';
 #endif
-      if (ret < 0)
-      {
-        return -1;
-      }
+      assert(ret >= 0);
+
       return 1;
     }
 
@@ -1233,6 +1231,7 @@ public:
     else
     {*/
     ret = H5Dread(v_did, h5_mem_type, v_memspace_id, v_dataspace_id, plist_cio_id, &dataa[0]);
+    assert(ret >= 0);
     //}
 
     /*switch (v_type_class)
@@ -1337,7 +1336,7 @@ public:
     int ret = 1;
 
     ret = H5Dread(v_did, h5_mem_type, H5S_ALL, H5S_ALL, H5P_DEFAULT, &dataa[0]);
-
+    assert(ret >= 0);
     H5Dclose(v_did);
     if (v_gid > 0)
       H5Gclose(v_gid);
