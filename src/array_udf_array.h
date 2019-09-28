@@ -2294,9 +2294,14 @@ public:
             prefix[0] = 0;
           }
           std::vector<UDFOutputType> vec_private;
+#else
+          if (mpi_rank == 0)
+          {
+            std::cout << "OpenMP is [NOT] enabled in Apply" << std::endl;
+          }
 #endif
 
-#pragma omp for schedule(static) nowait
+#pragma omp for schedule(static) nowait if (parallelism_enabled)
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
             //Get the coordinate (HDF5 uses row major layout)

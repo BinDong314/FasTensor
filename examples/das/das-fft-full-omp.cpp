@@ -208,7 +208,9 @@ int chunk_size_on_split_dim = 1;
 int user_chunk_flag = 0;
 int main(int argc, char *argv[])
 {
+#if defined(_OPENMP)
     fftw_make_planner_thread_safe();
+#endif
     int config_file_set_flag = 0;
 
     char config_file[NAME_LENGTH] = "./das-fft-full.config";
