@@ -304,7 +304,7 @@ public:
       //int global_channels_on_dim0;
       //MPI_Allreduce(&channels_on_dim0, &global_channels_on_dim0, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
       //printf("rank = %d, end[0] - start[0] = %d \n", mpi_rank, end[0] - start[0]);
-      if (end[0] - start[0] == 0 || disable_mpi_all2allv)
+      if (end[0] - start[0] == 0 || disable_mpi_all2allv || has_env("TEST_HDF5_VDS_SUBFILE"))
       {
         if (!mpi_rank)
           std::cout << "++Read VDS: subfile \n";
