@@ -28,7 +28,7 @@
 #define DELAY_TO_CREATE 1
 #define SDS_UDF_COLLECTIVE_IO 1
 
-int disable_mpi_all2allv = 0;
+int disable_mpi_all2allv = 1;
 
 using namespace std;
 
@@ -274,7 +274,7 @@ public:
 
   int ReadData(std::vector<unsigned long long> start, std::vector<unsigned long long> end, std::vector<T> &data)
   {
-    if (is_VDS() && !has_env("TEST_HDF5_VDS"))
+    if (is_VDS())
     {
       if (!mpi_rank)
         std::cout << "++Read VDS: group++= " << gn_str << ", dset =" << dn_str << ", file list (count = " << FileVDSList.size() << " ):" << std::endl;
@@ -304,7 +304,7 @@ public:
       //int global_channels_on_dim0;
       //MPI_Allreduce(&channels_on_dim0, &global_channels_on_dim0, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
       //printf("rank = %d, end[0] - start[0] = %d \n", mpi_rank, end[0] - start[0]);
-      if (end[0] - start[0] == 0 || disable_mpi_all2allv || has_env("TEST_HDF5_VDS_SUBFILE"))
+      if (end[0] - start[0] == 0 || disable_mpi_all2allv)
       {
         if (!mpi_rank)
           std::cout << "++Read VDS: subfile \n";
