@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
     char config_file[NAME_LENGTH] = "./das-fft-full.config";
 
     int copt, mpi_rank, mpi_size;
-    while ((copt = getopt(argc, argv, "o:i:g:u:t:x:m:w:lhc:k:")) != -1)
+    while ((copt = getopt(argc, argv, "o:i:g:u:t:x:m:w:lhc:k:d")) != -1)
         switch (copt)
         {
         case 'o':
@@ -260,6 +260,9 @@ int main(int argc, char *argv[])
             strcpy(config_file, optarg);
             config_file_set_flag = 1;
             break;
+        case 'd':
+            decimation_flag = 1;
+            break;
         default:
             printf("Wrong option [%c] for %s \n", copt, argv[0]);
             printf_help(argv[0]);
@@ -301,6 +304,13 @@ int main(int argc, char *argv[])
     INIT_PARS(mpi_rank, mpi_size, i_file_dim);
     INIT_SPACE_OMP();
 
+    int decimation_size ;
+    if(decimation_flag){
+      decimation_size = get_resampled_size(1, DT_NEW / DT, n0);
+      printf("decimation_size is %d \n", decimation_size);
+      return 0;
+    }
+    
     if (row_major_flag)
     {
         if (user_chunk_flag)
@@ -431,7 +441,7 @@ void printf_help(char *cmd)
       	  -h help (--help)\n\
           -i input file\n\
           -o output file\n\
-	      -g group name (path) for input dataset \n\
+	  -g group name (path) for input dataset \n\
           -u group name (path) for output dataset \n\
           -t dataset name for intput time series \n\
           -x dataset name for output correlation \n\
@@ -439,6 +449,7 @@ void printf_help(char *cmd)
           -m index of Master channel (0 by default )\n\
           -l FFT in [Column]-direction([Row]-direction by default) \n\
           -c file for parameters (has high priority than commands if existing) \n\
+          -d run untial the Decimation steps \n\
           Example: mpirun -n 1 %s -i fft-test.h5 -o fft-test.arrayudf.h5  -g / -t /DataCT -x /Xcorr\n";
 
     fprintf(stdout, msg, cmd, cmd);
