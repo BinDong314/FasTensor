@@ -139,6 +139,23 @@ void kaiser(const int order, const double bta, vector<double> &window)
     window.push_back(fabs(w[i]));
 }
 
+
+int get_resampled_size(int upFactor, int downFactor, int inputSize)
+{
+  if (upFactor <= 0 || downFactor <= 0)
+    throw std::runtime_error("factors must be positive integer");
+  int gcd = getGCD(upFactor, downFactor);
+  upFactor /= gcd;
+  downFactor /= gcd;
+
+  if (upFactor == downFactor)
+  {
+    return inputSize;
+  }
+
+  return quotientCeil(inputSize * upFactor, downFactor);
+}
+
 void resample(int upFactor, int downFactor,
               vector<double> &inputSignal, vector<double> &outputSignal)
 {

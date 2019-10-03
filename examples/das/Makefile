@@ -3,7 +3,7 @@
 #Bin's Mac
 ##export PATH=$PATH;/opt/local/bin
 AU_HOME=../../build
-HDF5_DIR=/Users/dbin/work/soft/hdf5-dev/build
+HDF5_DIR=/Users/dbin/work/soft/hdf5-1.10.5/build
 FFTW_DIR=/opt/local/
 CCC=mpicxx
 OTHER_FLAGS= -I./fft-header/ -L/opt/local/lib -lboost_program_options-mt -I/opt/local/include/eigen3/ -O3 
@@ -32,7 +32,7 @@ h5-vds-merge:h5-vds-merge.c
 	$(CCC) -o h5-vds-merge h5-vds-merge.c -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz $(OTHER_FLAGS)
 
 tdms2h5:tdms2h5.c
-	$(CCC) -o tdms2h5 tdms2h5.c  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 -lhdf5_hl -lz 
+	$(CCC) -o tdms2h5 tdms2h5.c  -I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5 -lhdf5_hl -lz  -g3
 
 
 das-fft-full:das-fft-full.cpp

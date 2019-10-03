@@ -18,3 +18,5 @@ using namespace std;
 
 void resample ( int upFactor, int downFactor, 
   vector<double>& inputSignal, vector<double>& outputSignal );
+
+int get_resampled_size(int upFactor, int downFactor, int inputSize);
