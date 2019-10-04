@@ -53,16 +53,27 @@ void printf_help(char *cmd);
 int debug_index = 0;
 inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 {
-    std::vector<float> gatherXcorr_l(nXCORR);
-    //    std::vector<float> gatherXcorr_per_batch_l(nXCORR * window_batch);
-    std::vector<float>::iterator gatherXcorr_per_batch_l;
-
     std::vector<double> X_l(n0);
     std::vector<double> C_l(nfft); //temp cache
+
+    std::vector<float> gatherXcorr_l(nXCORR);
+    //std::vector<float> gatherXcorr_per_batch_l(nXCORR * window_batch);
+    std::vector<float>::iterator gatherXcorr_per_batch_l;
     //fftw_complex *fft_in_l;
     //fftw_complex *fft_out_l;
     FFT_DATA_TYPEP fft_in_l;
     FFT_DATA_TYPEP fft_out_l;
+    
+    std::vector<float> decimation_result;
+
+    if (decimation_flag == 0)
+    {
+      gatherXcorr_l.resize(nXCORR);
+    }
+    else
+    {
+      decimation_result.resize(decimation_size * window_batch);
+    }
 
     for (int bi = 0; bi < window_batch; bi++)
     {
@@ -91,7 +102,11 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 
         resample(1, DT_NEW / DT, C_l, X_l);
         //au_time_elap(" ++ resample ");
-
+        if (decimation_flag == 0)
+        {
+            std::copy_n(X_l.begin(), decimation_size, decimation_result.begin() + bi * decimation_size);
+            continue;
+        }
         MOVING_MEAN(X_l, C_l, nPoint_hal_win);
         //au_time_elap(" ++ MOVING_MEAN ");
 
@@ -195,7 +210,14 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
         CLEAR_FFT(fft_out_l);
     }
     clear_vector(C_l);
-    return gatherXcorr_l;
+    if (decimation_flag == 0)
+    {
+        return gatherXcorr_l;
+    }
+    else
+    {
+        return decimation_result;
+    }
 }
 
 std::string i_file("./westSac_170802100007.h5");
@@ -304,13 +326,13 @@ int main(int argc, char *argv[])
     INIT_PARS(mpi_rank, mpi_size, i_file_dim);
     INIT_SPACE_OMP();
 
-    int decimation_size ;
-    if(decimation_flag){
-      decimation_size = get_resampled_size(1, DT_NEW / DT, n0);
-      printf("decimation_size is %d \n", decimation_size);
-      return 0;
+    if (decimation_flag)
+    {
+        decimation_size = get_resampled_size(1, DT_NEW / DT, n0);
+        printf("decimation_size is %d \n", decimation_size);
+        return 0;
     }
-    
+
     if (row_major_flag)
     {
         if (user_chunk_flag)
@@ -331,101 +353,114 @@ int main(int argc, char *argv[])
         strip_size[1] = 1;
         IFILE->SetApplyStripSize(strip_size);
     }
-    if (row_major_flag == 0)
+    int output_vector_size;
+    if (decimation_flag == 0)
     {
-        IFILE->SetOutputVector(nXCORR * window_batch, 0); //output vector size
+        output_vector_size = nXCORR * window_batch;
     }
     else
     {
-        IFILE->SetOutputVector(nXCORR * window_batch, 1); //output vector size
+        output_vector_size = decimation_size * window_batch;
+    }
+    if (row_major_flag == 0)
+    {
+        IFILE->SetOutputVector(output_vector_size, 0); //output vector size
+    }
+    else
+    {
+        IFILE->SetOutputVector(output_vector_size, 1); //output vector size
     }
 
     //Get FFT of master vector
-    std::vector<short> masterv;
-    masterv.resize(n0);
-    std::vector<double> mastervf, masterv_ppf;
-    mastervf.resize(n0);
-    masterv_ppf.resize(nfft);
-    std::vector<unsigned long long> master_start, master_end;
-    master_start.resize(2);
-    master_end.resize(2);
-    ALLOCATE_FFT(fft_in, nfft);
-    ALLOCATE_FFT(fft_out, nfft);
-    ALLOCATE_FFT(master_fft, nfft * window_batch);
-
-    //Dis enable collective IO  to only allow rank 0 to read data
-    IFILE->DisableCollO();
-    for (int bi = 0; bi < window_batch; bi++)
+    if (decimation_flag == 0)
     {
-        if (mpi_rank == 0)
+        std::vector<short> masterv;
+        masterv.resize(n0);
+        std::vector<double> mastervf, masterv_ppf;
+        mastervf.resize(n0);
+        masterv_ppf.resize(nfft);
+        std::vector<unsigned long long> master_start, master_end;
+        master_start.resize(2);
+        master_end.resize(2);
+        ALLOCATE_FFT(fft_in, nfft);
+        ALLOCATE_FFT(fft_out, nfft);
+        ALLOCATE_FFT(master_fft, nfft * window_batch);
+
+        //Dis enable collective IO  to only allow rank 0 to read data
+        IFILE->DisableCollO();
+        for (int bi = 0; bi < window_batch; bi++)
         {
-            au_time_start_no_mpi();
-            if (row_major_flag == 0)
+            if (mpi_rank == 0)
             {
-                if (enable_view_flag)
-                    MASTER_INDEX = view_start[1] + MASTER_INDEX;
-                master_start[0] = 0 + bi * n0;
-                master_start[1] = MASTER_INDEX;
-                master_end[0] = master_start[0] + n0 - 1;
-                master_end[1] = MASTER_INDEX;
+                au_time_start_no_mpi();
+                if (row_major_flag == 0)
+                {
+                    if (enable_view_flag)
+                        MASTER_INDEX = view_start[1] + MASTER_INDEX;
+                    master_start[0] = 0 + bi * n0;
+                    master_start[1] = MASTER_INDEX;
+                    master_end[0] = master_start[0] + n0 - 1;
+                    master_end[1] = MASTER_INDEX;
+                }
+                else
+                {
+                    if (enable_view_flag)
+                        MASTER_INDEX = view_start[0] + MASTER_INDEX;
+                    master_start[0] = MASTER_INDEX;
+                    master_start[1] = 0 + bi * n0;
+                    master_end[0] = MASTER_INDEX;
+                    master_end[1] = master_start[0] + n0 - 1;
+                }
+                //Get master chunk's data and store in double type vector
+                IFILE->ReadData(master_start, master_end, masterv);
+                au_time_elap_no_mpi("  Read ch time : ");
             }
-            else
+
+            //Only mpi_rank 0 to get the master channel
+            //Broadcast to all other mpi ranks.
+            MPI_Barrier(MPI_COMM_WORLD);
+            au_time_start();
+            MPI_Bcast(&masterv[0], n0, MPI_SHORT, 0, MPI_COMM_WORLD);
+            au_time_elap(" MPI_Bcast master ch time :  ");
+
+            for (int i = 0; i < n0; i++)
             {
-                if (enable_view_flag)
-                    MASTER_INDEX = view_start[0] + MASTER_INDEX;
-                master_start[0] = MASTER_INDEX;
-                master_start[1] = 0 + bi * n0;
-                master_end[0] = MASTER_INDEX;
-                master_end[1] = master_start[0] + n0 - 1;
+                mastervf[i] = (double)(masterv[i]);
             }
-            //Get master chunk's data and store in double type vector
-            IFILE->ReadData(master_start, master_end, masterv);
-            au_time_elap_no_mpi("  Read ch time : ");
-        }
 
-        //Only mpi_rank 0 to get the master channel
-        //Broadcast to all other mpi ranks.
-        MPI_Barrier(MPI_COMM_WORLD);
-        au_time_start();
-        MPI_Bcast(&masterv[0], n0, MPI_SHORT, 0, MPI_COMM_WORLD);
-        au_time_elap(" MPI_Bcast master ch time :  ");
-
-        for (int i = 0; i < n0; i++)
-        {
-            mastervf[i] = (double)(masterv[i]);
+            FFT_PREPROCESSING(mastervf, masterv_ppf); //masterv_ppf is result
+            //master_processing(mastervf, masterv_ppf); //for debug
+            INIT_FFTW(fft_in, masterv_ppf, nPoint, nfft, fft_out);
+            FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);
+            for (int j = 0; j < nfft; j++)
+            {
+                master_fft[bi * nfft + j][0] = fft_out[j][0];
+                master_fft[bi * nfft + j][1] = fft_out[j][1];
+            }
         }
+        //Re enable collective IO  to make following read faster
 
-        FFT_PREPROCESSING(mastervf, masterv_ppf); //masterv_ppf is result
-        //master_processing(mastervf, masterv_ppf); //for debug
-        INIT_FFTW(fft_in, masterv_ppf, nPoint, nfft, fft_out);
-        FFT_HELP_W(nfft, fft_in, fft_out, FFTW_FORWARD);
-        for (int j = 0; j < nfft; j++)
-        {
-            master_fft[bi * nfft + j][0] = fft_out[j][0];
-            master_fft[bi * nfft + j][1] = fft_out[j][1];
-        }
+        IFILE->EnableCollIO(); //Comment out for VDS test on single node
+
+        //masterv_ppf.clear();
+        //mastervf.clear();
+        //masterv.clear();
+        clear_vector(masterv_ppf);
+        clear_vector(mastervf);
+        clear_vector(masterv);
+        CLEAR_FFT(fft_in);
+        CLEAR_FFT(fft_out);
+        if (!mpi_rank)
+            std::cout << "Finish the processing on Master block \n";
     }
-    //Re enable collective IO  to make following read faster
-
-    IFILE->EnableCollIO(); //Comment out for VDS test on single node
-
-    //masterv_ppf.clear();
-    //mastervf.clear();
-    //masterv.clear();
-    clear_vector(masterv_ppf);
-    clear_vector(mastervf);
-    clear_vector(masterv);
-    CLEAR_FFT(fft_in);
-    CLEAR_FFT(fft_out);
-    if (!mpi_rank)
-        std::cout << "Finish the processing on Master block \n";
-
     //Run FFT
     IFILE->Apply(FFT_UDF, OFILE);
     IFILE->ReportTime();
 
-    CLEAR_FFT(master_fft);
-
+    if (decimation_flag == 0)
+    {
+        CLEAR_FFT(master_fft);
+    }
     delete IFILE;
     delete OFILE;
 

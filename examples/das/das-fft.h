@@ -81,6 +81,8 @@ std::vector<unsigned long long> view_count{30000, 11648};
 std::vector<int> view_os_size{0, 0};
 
 int decimation_flag = 0;
+int decimation_size;
+
 //Using n0 as intial intput
 //MR: mpi rank
 //MS: mpi size

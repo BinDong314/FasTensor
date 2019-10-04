@@ -139,10 +139,10 @@ int main(int argc, char *argv[])
          }
       }
       MPI_Barrier(MPI_COMM_WORLD);
-//#ifdef DEBUG_OUTPUT
+      //#ifdef DEBUG_OUTPUT
       if (mpi_rank == 0)
          printf("Count of files under %s :  %d \n", filename_input, namelist_length);
-//#endif
+      //#endif
 
       int my_current_file_index = mpi_rank;
       int total_batch;
@@ -168,9 +168,9 @@ int main(int argc, char *argv[])
             memset(temp_input_filename, '\0', strlen(filename_output) + max_file_name_legnth + 5);
             sprintf(temp_output_filename, "%s/%s.h5", filename_output, namelist[my_current_file_index]->d_name);
             sprintf(temp_input_filename, "%s/%s", filename_input, namelist[my_current_file_index]->d_name);
-//#ifdef DEBUG_OUTPUT
+            //#ifdef DEBUG_OUTPUT
             printf("mpi rank = %d, input file: %s, output file: %s \n", mpi_rank, temp_input_filename, temp_output_filename);
-//#endif
+            //#endif
             convert_file(temp_output_filename, temp_input_filename, compression_flag);
          }
          my_current_file_index = my_current_file_index + mpi_size;
@@ -184,7 +184,10 @@ int main(int argc, char *argv[])
 
 int convert_file(char *filename_output, char *filename_input, int compression_flag)
 {
+   //   printf("filename_output= %s , filename_input = %s \n", filename_output, filename_input);
+
    //Create output file
+
    hid_t file_id, dataset_id, dataspace_id; // attribute_dataspace_id, attribute_id;
    file_id = H5Fcreate(filename_output, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
@@ -192,6 +195,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    FILE *fp;
    fp = fopen(filename_input, "r");
 
+   //printf("");
    /*
     *Go to parse metdata, structure of the metadaa
     *   1,  28 bytes of leadin (fixed)
@@ -645,7 +649,8 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
    hid_t metadata_dtype = H5Tcreate(H5T_OPAQUE, 1);
    H5Tset_tag(metadata_dtype, "RAW Metadata from TDMS file as OPAQUE type");
 
-   hsize_t metadata_dims[1] = {nByte_header};
+   hsize_t metadata_dims[1];
+   metadata_dims[0] = nByte_header;
    hid_t metadata_space = H5Screate_simple(1, metadata_dims, NULL);
 
    void *metadata_buf = malloc(nByte_header);
@@ -654,7 +659,7 @@ int convert_file(char *filename_output, char *filename_input, int compression_fl
 
    hid_t metadata_dset = H5Dcreate(file_id, "/RawMetadataTDMS", metadata_dtype, metadata_space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
    H5Dwrite(metadata_dset, metadata_dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, metadata_buf);
-   
+
    H5Sclose(metadata_space);
    H5Dclose(metadata_dset);
    free(metadata_buf);
