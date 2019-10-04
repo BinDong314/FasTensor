@@ -45,35 +45,11 @@ using namespace std;
 // help functions
 void printf_help(char *cmd);
 
-/*
- * This function describes the operation per channel
- *  The return value is a coorelation vector
- * See more details at das-fft.h
- */
-int debug_index = 0;
-inline std::vector<float> FFT_UDF(const Stencil<short> &c)
+nline std::vector<float> DEC_UDF(const Stencil<short> &c)
 {
+    std::vector<float> dec_result(decimation_size * window_batch);
     std::vector<double> X_l(n0);
     std::vector<double> C_l(nfft); //temp cache
-
-    std::vector<float> gatherXcorr_l(nXCORR);
-    //std::vector<float> gatherXcorr_per_batch_l(nXCORR * window_batch);
-    std::vector<float>::iterator gatherXcorr_per_batch_l;
-    //fftw_complex *fft_in_l;
-    //fftw_complex *fft_out_l;
-    FFT_DATA_TYPEP fft_in_l;
-    FFT_DATA_TYPEP fft_out_l;
-
-    std::vector<float> decimation_result;
-
-    if (decimation_flag == 0)
-    {
-        gatherXcorr_l.resize(nXCORR);
-    }
-    else
-    {
-        decimation_result.resize(decimation_size * window_batch);
-    }
 
     for (int bi = 0; bi < window_batch; bi++)
     {
@@ -102,11 +78,58 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
 
         resample(1, DT_NEW / DT, C_l, X_l);
         //au_time_elap(" ++ resample ");
-        if (decimation_flag == 0)
+        std::copy(X_L.begin(), X_L.end(), dec_result.begin() + decimation_size * bi);
+    }
+
+    return dec_result;
+}
+/*
+ * This function describes the operation per channel
+ *  The return value is a coorelation vector
+ * See more details at das-fft.h
+ */
+int debug_index = 0;
+inline std::vector<float> FFT_UDF(const Stencil<short> &c)
+{
+    std::vector<double> X_l(n0);
+    std::vector<double> C_l(nfft); //temp cache
+
+    std::vector<float> gatherXcorr_l(nXCORR);
+    //std::vector<float> gatherXcorr_per_batch_l(nXCORR * window_batch);
+    std::vector<float>::iterator gatherXcorr_per_batch_l;
+    //fftw_complex *fft_in_l;
+    //fftw_complex *fft_out_l;
+    FFT_DATA_TYPEP fft_in_l;
+    FFT_DATA_TYPEP fft_out_l;
+
+    for (int bi = 0; bi < window_batch; bi++)
+    {
+        //au_time_start();
+
+        X_l.resize(n0);
+        C_l.resize(nfft);
+        for (int i = 0; i < n0; i++)
         {
-            std::copy_n(X_l.begin(), decimation_size, decimation_result.begin() + bi * decimation_size);
-            continue;
+            if (row_major_flag == 0)
+            {
+                X_l[i] = (double)c(i + bi * n0, 0);
+            }
+            else
+            {
+                X_l[i] = (double)c(0, i + bi * n0);
+            }
         }
+        //au_time_elap(" ++ Read Stencil ");
+
+        detrend(&(X_l[0]), X_l.size());
+        //au_time_elap(" ++ detrend ");
+
+        filtfilt(BUTTER_A, BUTTER_B, X_l, C_l);
+        //au_time_elap(" ++ filtfilt ");
+
+        resample(1, DT_NEW / DT, C_l, X_l);
+        //au_time_elap(" ++ resample ");
+
         MOVING_MEAN(X_l, C_l, nPoint_hal_win);
         //au_time_elap(" ++ MOVING_MEAN ");
 
@@ -210,14 +233,8 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
         CLEAR_FFT(fft_out_l);
     }
     clear_vector(C_l);
-    if (decimation_flag == 0)
-    {
-        return gatherXcorr_l;
-    }
-    else
-    {
-        return decimation_result;
-    }
+
+    return gatherXcorr_l;
 }
 
 std::string i_file("./westSac_170802100007.h5");
@@ -454,7 +471,13 @@ int main(int argc, char *argv[])
             std::cout << "Finish the processing on Master block \n";
     }
     //Run FFT
-    IFILE->Apply(FFT_UDF, OFILE);
+    if (decimation_flag == 0)
+    {
+        IFILE->Apply(FFT_UDF, OFILE);
+    }
+    {
+        IFILE->Apply(DEC_UDF, OFILE);
+    }
     IFILE->ReportTime();
 
     if (decimation_flag == 0)
