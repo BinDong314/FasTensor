@@ -45,7 +45,7 @@ using namespace std;
 // help functions
 void printf_help(char *cmd);
 
-nline std::vector<float> DEC_UDF(const Stencil<short> &c)
+inline std::vector<float> DEC_UDF(const Stencil<short> &c)
 {
     std::vector<float> dec_result(decimation_size * window_batch);
     std::vector<double> X_l(n0);
