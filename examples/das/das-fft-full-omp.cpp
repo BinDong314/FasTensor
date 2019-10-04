@@ -63,16 +63,16 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
     //fftw_complex *fft_out_l;
     FFT_DATA_TYPEP fft_in_l;
     FFT_DATA_TYPEP fft_out_l;
-    
+
     std::vector<float> decimation_result;
 
     if (decimation_flag == 0)
     {
-      gatherXcorr_l.resize(nXCORR);
+        gatherXcorr_l.resize(nXCORR);
     }
     else
     {
-      decimation_result.resize(decimation_size * window_batch);
+        decimation_result.resize(decimation_size * window_batch);
     }
 
     for (int bi = 0; bi < window_batch; bi++)
@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
     {
         decimation_size = get_resampled_size(1, DT_NEW / DT, n0);
         printf("decimation_size is %d \n", decimation_size);
-        return 0;
+        //return 0;
     }
 
     if (row_major_flag)
