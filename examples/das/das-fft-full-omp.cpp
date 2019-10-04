@@ -78,7 +78,7 @@ inline std::vector<float> DEC_UDF(const Stencil<short> &c)
 
         resample(1, DT_NEW / DT, C_l, X_l);
         //au_time_elap(" ++ resample ");
-        std::copy(X_L.begin(), X_L.end(), dec_result.begin() + decimation_size * bi);
+        std::copy(X_l.begin(), X_l.end(), dec_result.begin() + decimation_size * bi);
     }
 
     return dec_result;
