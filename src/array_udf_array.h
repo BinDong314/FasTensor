@@ -2269,8 +2269,10 @@ public:
 #if defined(_OPENMP)
         size_t *prefix;
 #endif
-        //omp_set_schedule(omp_sched_static, 64);
-        //#pragma omp parallel if (parallelism_enabled)
+//omp_set_schedule(omp_sched_static, 64);
+#if defined(_OPENMP)
+#pragma omp parallel if (parallelism_enabled)
+#endif
         {
           std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
           unsigned long long offset_ol;
@@ -2301,7 +2303,9 @@ public:
           }
 #endif
 
-          //#pragma omp for schedule(static) nowait if
+#if defined(_OPENMP)
+#pragma omp for schedule(static) nowait if
+#endif
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
             //Get the coordinate (HDF5 uses row major layout)
