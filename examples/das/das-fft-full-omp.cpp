@@ -94,11 +94,8 @@ inline std::vector<float> FFT_UDF(const Stencil<short> &c)
     std::vector<double> X_l(n0);
     std::vector<double> C_l(nfft); //temp cache
 
-    std::vector<float> gatherXcorr_l(nXCORR * window_batch);
-    //std::vector<float> gatherXcorr_per_batch_l(nXCORR * window_batch);
+    std::vector<float> gatherXcorr_l(nXCORR);
     std::vector<float>::iterator gatherXcorr_per_batch_l;
-    //fftw_complex *fft_in_l;
-    //fftw_complex *fft_out_l;
     FFT_DATA_TYPEP fft_in_l;
     FFT_DATA_TYPEP fft_out_l;
 
@@ -370,7 +367,7 @@ int main(int argc, char *argv[])
         strip_size[1] = 1;
         IFILE->SetApplyStripSize(strip_size);
     }
-    int output_vector_size;
+    int output_vector_size = nXCORR * window_batch;
     if (decimation_flag == 0)
     {
         output_vector_size = nXCORR * window_batch;
