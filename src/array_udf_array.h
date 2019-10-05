@@ -2304,7 +2304,7 @@ public:
 #endif
 
 #if defined(_OPENMP)
-#pragma omp for schedule(static) nowait if
+#pragma omp for schedule(static) nowait
 #endif
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
