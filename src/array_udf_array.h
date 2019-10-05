@@ -2269,9 +2269,9 @@ public:
 #if defined(_OPENMP)
         size_t *prefix;
 #endif
-//omp_set_schedule(omp_sched_static, 64);
+
 #if defined(_OPENMP)
-#pragma omp parallel if (parallelism_enabled)
+#pragma omp parallel
 #endif
         {
           std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
