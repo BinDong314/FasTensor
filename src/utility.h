@@ -28,7 +28,10 @@
 #include <unistd.h>
 #include <optional>
 #include <tuple>
+#if __cplusplus > 201402L
 #include "cista.h"
+#endif
+
 #include <iomanip>
 #include <cstdlib>
 
@@ -97,6 +100,8 @@ inline void clear_vector(std::vector<T> &v)
   std::vector<T>().swap(v);
 }
 
+#if __cplusplus > 201402L
+
 inline std::vector<unsigned long long> NextCoordinateAfterSkipWithinChunk(std::vector<unsigned long long> coordinate_at_chunk, std::vector<unsigned long long> skip_size, std::vector<unsigned long long> skiped_chunks_per_orig_chunk)
 {
   int rank = coordinate_at_chunk.size();
@@ -144,6 +149,8 @@ inline std::vector<unsigned long long> NextCoordinateAfterSkipWithinChunk(std::v
     return chunk_coordinate_start;
   }
 }
+#endif
+
 //Return
 // 1: yes, skip this point
 // 0: no,  run computing on it
@@ -186,6 +193,8 @@ inline int SkipIt(const std::vector<unsigned long long> &coordinate_at_chunk, co
 void InsertIntoVirtualVectorVoidP(void *insert_vector, void *virtual_vector, int index, size_t length, int type_lenght)
 {
 }
+
+#if __cplusplus > 201402L
 
 //T2 should be a compund data structure
 template <class T1, class T2>
@@ -360,6 +369,7 @@ void ExtractFromVirtualVector(std::vector<float> &extract_vector, const std::vec
   printf("Not supported  at %s :%d \n", __FILE__, __LINE__);
   exit(-1);
 }
+#endif
 
 template <typename VT>
 inline void PrintVector(std::string name, std::vector<VT> v)
@@ -432,6 +442,8 @@ int is_vector_type()
   return is_vector<T>{};
 }
 
+#if __cplusplus > 201402L
+
 template <typename T>
 struct is_optional : public std::false_type
 {
@@ -449,6 +461,8 @@ int is_optional_type()
 {
   return is_optional<T>{};
 }
+
+#endif
 
 //http://coliru.stacked-crooked.com/view?id=e579b7d68ba42805cfde5a309e2a23e5-e54ee7a04e4b807da0930236d4cc94dc
 //Usage:     std::cout << is_same_type<int, double>() << std::endl;

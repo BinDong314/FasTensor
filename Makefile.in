@@ -87,24 +87,6 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-#if DEBUG
-#if TRUE
-#ARRAYUDF_CPPFLAGS += -g -O0 -std=c++11 -std=c++0x
-#ARRAYUDF_CFLAGS   += -g -O0 
-#ARRAYUDF_CXXFLAGS += -g -O0 -std=c++11 -std=c++0x
-#ARRAYUDF_LDFLAGS  += -g -O0 -std=c++11 -std=c++0x
-#else
-#AM_CPPFLAGS = -O2 -std=c++11 -std=c++0x
-#AM_CFLAGS   = -O2 
-#AM_CXXFLAGS = -O2 -std=c++11 -std=c++0x
-#AM_LDFLAGS  = -O2 -std=c++11 -std=c++0x
-#endif
-
-#if TRUE
-@OPENMP_TRUE@am__append_1 = -fopenmp -openmp -DENABLE_OPENMP
-@OPENMP_TRUE@am__append_2 = -fopenmp -openmp -DENABLE_OPENMP
-@OPENMP_TRUE@am__append_3 = -fopenmp -openmp -DENABLE_OPENMP
-@OPENMP_TRUE@am__append_4 = -fopenmp -openmp -DENABLE_OPENMP
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -227,10 +209,10 @@ ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
-ARRAYUDF_CFLAGS = @ARRAYUDF_CFLAGS@ $(am__append_2)
-ARRAYUDF_CPPFLAGS = @ARRAYUDF_CPPFLAGS@ $(am__append_1)
-ARRAYUDF_CXXFLAGS = @ARRAYUDF_CXXFLAGS@ $(am__append_3)
-ARRAYUDF_LDFLAGS = @ARRAYUDF_LDFLAGS@ $(am__append_4)
+ARRAYUDF_CFLAGS = @ARRAYUDF_CFLAGS@
+ARRAYUDF_CPPFLAGS = @ARRAYUDF_CPPFLAGS@
+ARRAYUDF_CXXFLAGS = @ARRAYUDF_CXXFLAGS@
+ARRAYUDF_LDFLAGS = @ARRAYUDF_LDFLAGS@
 ARRAYUDF_LIBS = @ARRAYUDF_LIBS@
 ARRAY_UDF_PYTHON_ENABLED = @ARRAY_UDF_PYTHON_ENABLED@
 AUPY_CFLAGS = @AUPY_CFLAGS@
@@ -239,6 +221,7 @@ AUPY_LIBS = @AUPY_LIBS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
+AU_OLDCXX_ENABLED = @AU_OLDCXX_ENABLED@
 AWK = @AWK@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
@@ -364,10 +347,6 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = gnu
 ACLOCAL_AMFLAGS = -I m4
-
-#if BUILD_PYTHON
-#SUBDIRS=src
-#else
 SUBDIRS = src examples
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -854,7 +833,6 @@ uninstall-am:
 
 .PRECIOUS: Makefile
 
-#endif
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

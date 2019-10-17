@@ -31,7 +31,10 @@
 #include "array_udf_attribute.h"
 //#include "array_udf_ga.h"
 #include "array_udf_h5.h"
+
+#if __cplusplus > 201402L
 #include <optional> //Need c++17
+#endif
 
 double time_of_update_host_zone = 0;
 
@@ -1424,7 +1427,9 @@ public:
           //ah->ReadDataStripingMem(current_chunk_ol_start_offset, current_chunk_ol_end_offset, &current_chunk_data[0], i, n, hym_count);
           ah->ReadData(current_chunk_ol_start_offset, current_chunk_ol_end_offset, current_chunk_data_temp);
           // printf("Load attribute %s,  i=%d (n=%d): value =  %f, %f\n", ah->GetDatasetName().c_str(), i, n, current_chunk_data_temp[0], current_chunk_data_temp[1]);
+#if __cplusplus > 201402L
           InsertIntoVirtualVector<AttributeType, T>(current_chunk_data_temp, current_chunk_data, i);
+#endif
           //std::cout << current_chunk_data[0] << std::endl;
           //std::cout << current_chunk_data[1] << std::endl;
         }
@@ -1464,6 +1469,8 @@ public:
     for (int i = 0; i < len; i++)
       cpp_vec_input[i] = v[i];
   }
+
+#if __cplusplus > 201402L
 
   //A mirrored Apply of the real Apply
   //UDF may or may not have output (via std::optional<>)
@@ -2018,6 +2025,8 @@ public:
     return;
   }
 
+#endif
+
   //The interface to accept UDF function.
   //If user want to use python interface, the UDF has "void *" parameter
   //In native c++, the UDF accepts "const Stencil<T> &"
@@ -2270,8 +2279,9 @@ public:
         size_t *prefix;
 #endif
 
-//#if defined(_OPENMP)
+#if defined(_OPENMP)
 #pragma omp parallel
+#endif
         {
           std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
           unsigned long long offset_ol;
@@ -2302,8 +2312,9 @@ public:
           }
 #endif
 
-//#if defined(_OPENMP)
+#if defined(_OPENMP)
 #pragma omp for schedule(static) nowait
+#endif
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
             //Get the coordinate (HDF5 uses row major layout)
@@ -2590,9 +2601,11 @@ public:
 
                 if (mpi_rank == 0)
                   std::cout << "Write " << i << "th attribute: " << aa->GetDatasetName() << " \n";
-                //UDFOutputType
-                //ExtractFromVirtualVector<BAttributeType, BType>(current_chunk_data_temp, current_result_chunk_data, i);
+                  //UDFOutputType
+                  //ExtractFromVirtualVector<BAttributeType, BType>(current_chunk_data_temp, current_result_chunk_data, i);
+#if __cplusplus > 201402L
                 ExtractFromVirtualVector<BAttributeType, UDFOutputType>(current_chunk_data_temp, current_result_chunk_data, i);
+#endif
                 ah->WriteData(current_chunk_start_offset, current_chunk_end_offset, current_chunk_data_temp);
               }
               current_chunk_data_temp.resize(0);
@@ -2620,9 +2633,11 @@ public:
 
                 if (mpi_rank == 0)
                   std::cout << "Write " << i << "th attribute: " << aa->GetDatasetName() << " \n";
-                //UDFOutputType
-                //ExtractFromVirtualVector<BAttributeType, BType>(current_chunk_data_temp, current_result_chunk_data, i);
+                  //UDFOutputType
+                  //ExtractFromVirtualVector<BAttributeType, BType>(current_chunk_data_temp, current_result_chunk_data, i);
+#if __cplusplus > 201402L
                 ExtractFromVirtualVector<BAttributeType, UDFOutputType>(current_chunk_data_temp, current_result_chunk_data, i);
+#endif
                 ah->WriteData(current_result_chunk_start_offset, current_result_chunk_end_offset, current_chunk_data_temp);
               }
               current_chunk_data_temp.resize(0);

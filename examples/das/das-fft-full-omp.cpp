@@ -311,6 +311,9 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
+    if (!mpi_rank)
+        printf("decimation_flag =  %d \n", decimation_flag);
+
     if (config_file_set_flag)
         read_config_file(config_file, mpi_rank);
 
@@ -368,7 +371,7 @@ int main(int argc, char *argv[])
         IFILE->SetApplyStripSize(strip_size);
     }
     int output_vector_size = nXCORR * window_batch;
-    if (decimation_flag == 0)
+    if (!decimation_flag)
     {
         output_vector_size = nXCORR * window_batch;
     }
@@ -386,7 +389,7 @@ int main(int argc, char *argv[])
     }
 
     //Get FFT of master vector
-    if (decimation_flag == 0)
+    if (!decimation_flag)
     {
         std::vector<short> masterv;
         masterv.resize(n0);
@@ -468,16 +471,17 @@ int main(int argc, char *argv[])
             std::cout << "Finish the processing on Master block \n";
     }
     //Run FFT
-    if (decimation_flag == 0)
+    if (!decimation_flag)
     {
         IFILE->Apply(FFT_UDF, OFILE);
     }
+    else
     {
         IFILE->Apply(DEC_UDF, OFILE);
     }
     IFILE->ReportTime();
 
-    if (decimation_flag == 0)
+    if (!decimation_flag)
     {
         CLEAR_FFT(master_fft);
     }

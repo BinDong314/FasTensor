@@ -144,6 +144,30 @@ AC_ARG_WITH([swig],
        fi
 fi
 
+
+
+AC_SUBST(AU_OLDCXX_ENABLED)
+AU_OLDCXX_ENABLED=false
+AC_ARG_ENABLE([oldcxx], 
+[AC_HELP_STRING([--enable-oldcxx],[enable oladcxx(not to use c++17])],
+[AU_OLDCXX_ENABLED=true],
+[AU_OLDCXX_ENABLED=false])
+AM_CONDITIONAL([BUILD_OLDCXX], [test x$AU_OLDCXX_ENABLED = xtrue])
+
+
+echo "$AU_OLDCXX_ENABLED"
+AC_MSG_CHECKING([compile oldcxx])
+if test "$AU_OLDCXX_ENABLED" = "true" ; then
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++11"
+AC_MSG_RESULT([yes])	    
+else
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++17"
+AC_MSG_RESULT([no])
+fi
+
+
+
+
 AC_ARG_ENABLE(debug,
 AS_HELP_STRING([--enable-debug],
                [enable debugging, default: no]),
@@ -154,15 +178,12 @@ AS_HELP_STRING([--enable-debug],
 esac],
 [debug=false])
 AM_CONDITIONAL(DEBUG, test $debug=true)
-echo "debug=$debug"
-echo "DEBUG=$DEBUG"
+
 
 AC_ARG_ENABLE(openmp,[AS_HELP_STRING([--enable-openmp], [enable OpenMP])])
 AC_MSG_CHECKING([whether to enable OpenMP])
 AS_IF([test "x${enable_openmp}" = "xyes" ], AC_MSG_RESULT([yes]), AC_MSG_RESULT([no]))
 AM_CONDITIONAL(OPENMP, test $enable_openmp=true)
-echo "enable_openmp=$enable_openmp"
-echo "OPENMP=$OPENMP"
 
 
 ##AC_ARG_ENABLE(openmp,
