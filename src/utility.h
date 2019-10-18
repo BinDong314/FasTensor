@@ -26,9 +26,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <optional>
 #include <tuple>
+
 #if __cplusplus > 201402L
+#include <optional>
 #include "cista.h"
 #endif
 
