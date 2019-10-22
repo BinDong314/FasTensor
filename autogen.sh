@@ -8,7 +8,7 @@ exists()
 if exists libtoolize  ; then
 	echo "libtoolize"
 	libtoolize --force
-elif [ -x glibtoolize ]; then
+elif exists glibtoolize ; then
 	echo "glibtoolize"
 	glibtoolize --force
 fi
