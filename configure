@@ -636,11 +636,6 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 OPENMP_FALSE
 OPENMP_TRUE
-DEBUG_FALSE
-DEBUG_TRUE
-BUILD_OLDCXX_FALSE
-BUILD_OLDCXX_TRUE
-AU_OLDCXX_ENABLED
 SWIGCC
 pkgpyexecdir
 pyexecdir
@@ -657,6 +652,10 @@ AUPY_CFLAGS
 BUILD_PYTHON_FALSE
 BUILD_PYTHON_TRUE
 ARRAY_UDF_PYTHON_ENABLED
+AU_DEBUG_ENABLED
+BUILD_OLDCXX_FALSE
+BUILD_OLDCXX_TRUE
+AU_OLDCXX_ENABLED
 ARRAYUDF_LDFLAGS
 ARRAYUDF_LIBS
 ARRAYUDF_CXXFLAGS
@@ -797,10 +796,10 @@ with_gnu_ld
 with_sysroot
 enable_libtool_lock
 with_hdf5
-enable_python
-with_swig
 enable_oldcxx
 enable_debug
+enable_python
+with_swig
 enable_openmp
 '
       ac_precious_vars='build_alias
@@ -1448,9 +1447,9 @@ Optional Features:
   --disable-dependency-tracking
                           speeds up one-time build
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-python         enable python model for ArrayUDF
   --enable-oldcxx         enable oladcxx(not to use c++17
-  --enable-debug          enable debugging, default: no
+  --enable-debug          enable debug (-g3)
+  --enable-python         enable python model for ArrayUDF
   --enable-openmp         enable OpenMP
 
 Optional Packages:
@@ -16853,39 +16852,67 @@ else
 as_fn_error $? "no: HDF5 directory not found!" "$LINENO" 5
 fi
 
-##http://hpc.pnl.gov/globalarrays/
-##AC_ARG_WITH([ga],
-##[AS_HELP_STRING([--with-ga=DIR],
-##[use DIR as the root directory for Global Arrays (GA) Toolkit])],
-##[GA_HOME="$withval"],
-##[AC_MSG_ERROR([GA must be specified using --with-ga option])]
-##)
 
-##AC_MSG_CHECKING([for GA at $GA_HOME])
-##if test -d "$GA_HOME"   && test -d "$GA_HOME/include"  && test -d "$GA_HOME/lib"; then
-##ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$GA_HOME/include"
-##ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$GA_HOME/include"
-##ARRAYUDF_LIBS="$ARRAYUDF_LIBS         -L$GA_HOME/lib -lga -framework Accelerate -larmci"
-##AC_MSG_RESULT([yes])
-##else
-##AC_MSG_ERROR([no: Global Arrays (GA) Toolkit directory not found!])
-##fi
 
-#AC_ARG_WITH([boost],
-#[AS_HELP_STRING([--with-boost=DIR],
-#[use DIR as the root directory for C++ Boost])],
-#[BOOST_HOME="$withval"],
-#[AC_MSG_ERROR([C++ Boost must be specified using --with-boost option])]
-#)
+AU_OLDCXX_ENABLED=false
+# Check whether --enable-oldcxx was given.
+if test "${enable_oldcxx+set}" = set; then :
+  enableval=$enable_oldcxx; AU_OLDCXX_ENABLED=true
+else
+  AU_OLDCXX_ENABLED=false
+fi
 
-#AC_MSG_CHECKING([for Boost at $BOOST_HOME])
-#if test -d "$BOOST_HOME"   && test -d "$BOOST_HOME/include" ; then
-#ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$BOOST_HOME/include"
-#ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$BOOST_HOME/include"
-#AC_MSG_RESULT([yes])
-#else
-#AC_MSG_ERROR([no: C++ Boost not found!])
-#fi
+ if test x$AU_OLDCXX_ENABLED = xtrue; then
+  BUILD_OLDCXX_TRUE=
+  BUILD_OLDCXX_FALSE='#'
+else
+  BUILD_OLDCXX_TRUE='#'
+  BUILD_OLDCXX_FALSE=
+fi
+
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking compile oldcxx" >&5
+$as_echo_n "checking compile oldcxx... " >&6; }
+if test "$AU_OLDCXX_ENABLED" = "true" ; then
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++11"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++17"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+
+AU_DEBUG_ENABLED=false
+# Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then :
+  enableval=$enable_debug; AU_DEBUG_ENABLED=true
+else
+  AU_DEBUG_ENABLED=false
+fi
+
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking enable debug" >&5
+$as_echo_n "checking enable debug... " >&6; }
+if test "$AU_DEBUG_ENABLED" = "true" ; then
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS -g3"
+CFLAGS+=" -g3"
+CXXFLAGS+=" -g3"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS -O3"
+CFLAGS+=" -O3"
+CXXFLAGS+=" -O3"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
 
 #/Users/dbin/work/soft/boost_1_64_0/build/include
 #Python interface
@@ -16905,6 +16932,9 @@ else
   BUILD_PYTHON_TRUE='#'
   BUILD_PYTHON_FALSE=
 fi
+
+
+
 
 
 
@@ -17263,59 +17293,6 @@ fi
 
 
 
-AU_OLDCXX_ENABLED=false
-# Check whether --enable-oldcxx was given.
-if test "${enable_oldcxx+set}" = set; then :
-  enableval=$enable_oldcxx; AU_OLDCXX_ENABLED=true
-else
-  AU_OLDCXX_ENABLED=false
-fi
-
- if test x$AU_OLDCXX_ENABLED = xtrue; then
-  BUILD_OLDCXX_TRUE=
-  BUILD_OLDCXX_FALSE='#'
-else
-  BUILD_OLDCXX_TRUE='#'
-  BUILD_OLDCXX_FALSE=
-fi
-
-
-
-echo "$AU_OLDCXX_ENABLED"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking compile oldcxx" >&5
-$as_echo_n "checking compile oldcxx... " >&6; }
-if test "$AU_OLDCXX_ENABLED" = "true" ; then
-ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++11"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++17"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-
-
-# Check whether --enable-debug was given.
-if test "${enable_debug+set}" = set; then :
-  enableval=$enable_debug; case "${enableval}" in
-             yes) debug=true;;
-             no)  debug=false;;
-             *)   as_fn_error $? "bad value ${enableval} for --enable-debug" "$LINENO" 5 ;;
-esac
-else
-  debug=false
-fi
-
- if test $debug=true; then
-  DEBUG_TRUE=
-  DEBUG_FALSE='#'
-else
-  DEBUG_TRUE='#'
-  DEBUG_FALSE=
-fi
-
 
 
 # Check whether --enable-openmp was given.
@@ -17356,6 +17333,40 @@ fi
 #echo "OPENMP=$OPENMP"
 
 
+
+##http://hpc.pnl.gov/globalarrays/
+##AC_ARG_WITH([ga],
+##[AS_HELP_STRING([--with-ga=DIR],
+##[use DIR as the root directory for Global Arrays (GA) Toolkit])],
+##[GA_HOME="$withval"],
+##[AC_MSG_ERROR([GA must be specified using --with-ga option])]
+##)
+
+##AC_MSG_CHECKING([for GA at $GA_HOME])
+##if test -d "$GA_HOME"   && test -d "$GA_HOME/include"  && test -d "$GA_HOME/lib"; then
+##ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$GA_HOME/include"
+##ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$GA_HOME/include"
+##ARRAYUDF_LIBS="$ARRAYUDF_LIBS         -L$GA_HOME/lib -lga -framework Accelerate -larmci"
+##AC_MSG_RESULT([yes])
+##else
+##AC_MSG_ERROR([no: Global Arrays (GA) Toolkit directory not found!])
+##fi
+
+#AC_ARG_WITH([boost],
+#[AS_HELP_STRING([--with-boost=DIR],
+#[use DIR as the root directory for C++ Boost])],
+#[BOOST_HOME="$withval"],
+#[AC_MSG_ERROR([C++ Boost must be specified using --with-boost option])]
+#)
+
+#AC_MSG_CHECKING([for Boost at $BOOST_HOME])
+#if test -d "$BOOST_HOME"   && test -d "$BOOST_HOME/include" ; then
+#ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$BOOST_HOME/include"
+#ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$BOOST_HOME/include"
+#AC_MSG_RESULT([yes])
+#else
+#AC_MSG_ERROR([no: C++ Boost not found!])
+#fi
 
 
 ac_config_files="$ac_config_files Makefile src/Makefile examples/Makefile"
@@ -17501,16 +17512,12 @@ if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${BUILD_PYTHON_TRUE}" && test -z "${BUILD_PYTHON_FALSE}"; then
-  as_fn_error $? "conditional \"BUILD_PYTHON\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
 if test -z "${BUILD_OLDCXX_TRUE}" && test -z "${BUILD_OLDCXX_FALSE}"; then
   as_fn_error $? "conditional \"BUILD_OLDCXX\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${DEBUG_TRUE}" && test -z "${DEBUG_FALSE}"; then
-  as_fn_error $? "conditional \"DEBUG\" was never defined.
+if test -z "${BUILD_PYTHON_TRUE}" && test -z "${BUILD_PYTHON_FALSE}"; then
+  as_fn_error $? "conditional \"BUILD_PYTHON\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${OPENMP_TRUE}" && test -z "${OPENMP_FALSE}"; then

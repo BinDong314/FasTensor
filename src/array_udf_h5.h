@@ -1069,6 +1069,9 @@ public:
 
   void Close()
   {
+    if (fid > 0)
+      H5Fflush(fid, H5F_SCOPE_GLOBAL);
+
     if (plist_id > 0)
       H5Pclose(plist_id);
     if (plist_cio_id > 0)
@@ -1114,6 +1117,14 @@ public:
     if (fid > 0)
       H5Fclose(fid);
 
+    plist_id = -1;
+    plist_cio_id = -1;
+    dataspace_id = -1;
+    memspace_id = -1;
+    did = -1;
+    gid = -1;
+    fid = -1;
+
     plist_id = H5Pcreate(H5P_FILE_ACCESS);
     H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
@@ -1129,12 +1140,14 @@ public:
     {
       //std::cout << "Open Group : " << gn << std::endl;
       gid = H5Gopen(fid, gn_str.c_str(), H5P_DEFAULT);
+      assert(gid > 0);
       did = H5Dopen(gid, dn_str.c_str(), H5P_DEFAULT);
     }
     else
     {
       did = H5Dopen(fid, dn_str.c_str(), H5P_DEFAULT);
     }
+    assert(did > 0);
     datatype = H5Dget_type(did); /* datatype handle */
     type_class = H5Tget_class(datatype);
     dataspace_id = H5Dget_space(did);

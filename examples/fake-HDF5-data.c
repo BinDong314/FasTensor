@@ -306,7 +306,7 @@ int main(int argc, char **argv)
       }
       else
       {
-        pf[i] = 1.81 + start_value; //(float) i / (float) data_size + (float)i;
+        pf[i] = i + 1.81 + start_value; //(float) i / (float) data_size + (float)i;
         //printf("defulat value = %f \n", pf[i]);
       }
     }

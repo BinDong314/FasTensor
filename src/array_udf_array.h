@@ -2689,6 +2689,666 @@ public:
     return;
   }
 
+  template <class UDFOutputType, class BType = UDFOutputType, class BAttributeType = BType>
+  void Apply(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType, BAttributeType> *B = nullptr)
+  {
+    //#endif
+    std::vector<UDFOutputType> current_result_chunk_data;
+    unsigned long long current_result_chunk_data_size = 1;
+
+    type_infer<UDFOutputType, BAttributeType>(vector_type_flag, output_element_type_class);
+
+    if (set_apply_direction_flag == 0)
+    {
+      current_chunk_id = mpi_rank; //Reset to starting point
+    }
+    else
+    {
+      current_chunk_id = data_total_chunks - mpi_size + mpi_rank; //Reset to starting point
+    }
+
+    if (trail_run_flag == 1)
+    {
+      t_start = MPI_Wtime();
+      std::vector<T> trail_data(0);
+      Stencil<T> trail_cell(data_dims, &trail_data[0]);
+#ifdef PY_ARRAYUDF
+      UDF(&trail_cell);
+#else
+      UDF(trail_cell);
+#endif
+      trail_cell.get_trail_run_result(&data_overlap_size[0]);
+      t_end = MPI_Wtime();
+      trail_run_time = trail_run_time + t_end - t_start;
+      if (mpi_rank == 0)
+      {
+        std::cout << "Trailrun results: overlap size = : ";
+        for (int i = 0; i < data_dims; i++)
+        {
+          std::cout << ", " << data_overlap_size[i];
+        }
+        std::cout << std::endl;
+      }
+    }
+
+    t_start = MPI_Wtime();
+    if (B != nullptr)
+    {
+      if (B->isVirtualArray() == 0)
+      {
+        if (skip_flag == 1)
+        {
+          //Todo:  need to consider data_overlap size
+          if (vector_type_flag == 0)
+          {
+            B->CreateStorageSpace(data_dims, skiped_dims_size, skiped_chunk_size, data_overlap_size, output_element_type_class, data_total_chunks);
+          }
+          else //skip_flag == 1 and vector_type_flag == 1
+          {
+            int data_dims_t;
+            std::vector<unsigned long long> skiped_dims_size_t;
+            std::vector<int> skiped_chunk_size_t;
+            std::vector<int> data_overlap_size_t;
+
+            if (output_vector_flat_direction_index > (data_dims - 1))
+            { //We save the output vector as new dimensions
+              data_dims_t = data_dims + 1;
+              skiped_dims_size_t.resize(data_dims_t);
+              skiped_chunk_size_t.resize(data_dims_t);
+              data_overlap_size_t.resize(data_dims_t);
+              for (int k = 0; k < data_dims; k++)
+              {
+                skiped_dims_size_t[k] = skiped_dims_size[k];
+                data_overlap_size_t[k] = data_overlap_size[k];
+                skiped_chunk_size_t[k] = skiped_chunk_size[k];
+              }
+              skiped_dims_size_t[data_dims] = output_vector_size;
+              data_overlap_size_t[data_dims] = 0;
+              skiped_chunk_size_t[data_dims] = output_vector_size;
+            }
+            else
+            { //We save the output vector within existing dimensions
+              data_dims_t = data_dims;
+              skiped_dims_size_t.resize(data_dims_t);
+              skiped_chunk_size_t.resize(data_dims_t);
+              data_overlap_size_t.resize(data_dims_t);
+              for (int k = 0; k < data_dims; k++)
+              {
+                skiped_dims_size_t[k] = skiped_dims_size[k];
+                if (k == output_vector_flat_direction_index)
+                  skiped_dims_size_t[k] = skiped_dims_size_t[k] * output_vector_size;
+                data_overlap_size_t[k] = data_overlap_size[k];
+                skiped_chunk_size_t[k] = skiped_chunk_size[k];
+              }
+            }
+
+            B->CreateStorageSpace(data_dims_t, skiped_dims_size_t, skiped_chunk_size_t, data_overlap_size_t, output_element_type_class, data_total_chunks);
+            //B->SetFilterAmount(filter_amount);
+            B->SetOutputVectorIO(output_vector_size, output_vector_flat_direction_index);
+          }
+        }
+        else
+        { //skip_flag == 0
+          if (vector_type_flag == 0)
+          {
+            B->CreateStorageSpace(data_dims, data_dims_size, data_chunk_size, data_overlap_size, output_element_type_class, data_total_chunks);
+          }
+          else //skip_flag == 0 and vector_type_flag == 1
+          {
+            int data_dims_t;
+            std::vector<unsigned long long> dims_size_t;
+            std::vector<int> chunk_size_t;
+            std::vector<int> data_overlap_size_t;
+
+            if (output_vector_flat_direction_index > (data_dims - 1))
+            {
+              data_dims_t = data_dims + 1;
+              dims_size_t.resize(data_dims_t);
+              chunk_size_t.resize(data_dims_t);
+              data_overlap_size_t.resize(data_dims_t);
+              for (int k = 0; k < data_dims; k++)
+              {
+                dims_size_t[k] = data_dims_size[k];
+                chunk_size_t[k] = data_chunk_size[k];
+                data_overlap_size_t[k] = data_overlap_size[k];
+              }
+              dims_size_t[data_dims] = output_vector_size;
+              data_overlap_size_t[data_dims] = 0;
+              chunk_size_t[data_dims] = output_vector_size;
+            }
+            else
+            {
+              data_dims_t = data_dims;
+              dims_size_t.resize(data_dims_t);
+              chunk_size_t.resize(data_dims_t);
+              data_overlap_size_t.resize(data_dims_t);
+              for (int k = 0; k < data_dims; k++)
+              {
+                dims_size_t[k] = data_dims_size[k];
+                if (k == output_vector_flat_direction_index)
+                  dims_size_t[k] = dims_size_t[k] * output_vector_size;
+                // dims_size_t[k] = data_dims_size[k] * output_vector_size;
+                chunk_size_t[k] = data_chunk_size[k];
+                data_overlap_size_t[k] = data_overlap_size[k];
+              }
+            }
+            B->CreateStorageSpace(data_dims_t, dims_size_t, chunk_size_t, data_overlap_size_t, output_element_type_class, data_total_chunks);
+            B->SetOutputVectorIO(output_vector_size, output_vector_flat_direction_index);
+          }
+        }
+        if (data_total_chunks % mpi_size != 0)
+        {
+          B->DisableCollectivIO(B->GetFileName());
+        }
+      }
+      else //B->isVirtualArray() == 1
+      {
+        if (skip_flag == 1)
+        {
+          Array<BAttributeType> *aa; //attribute array
+          Data<BAttributeType> *aah;
+          for (int i = 0; i < B->GetAttributesSize(); i++)
+          {
+            aa = B->GetAttributes(i);
+            aah = aa->GetDataHandle();
+            aa->CreateStorageSpace(data_dims, skiped_dims_size, data_chunk_size, data_overlap_size, output_element_type_class, data_total_chunks);
+            if (data_total_chunks % mpi_size != 0)
+            {
+              aa->DisableCollectivIO(aah->GetFileName());
+            };
+          }
+        }
+        else
+        {
+          Array<BAttributeType> *aa; //attribute array
+          Data<BAttributeType> *aah;
+          for (int i = 0; i < B->GetAttributesSize(); i++)
+          {
+            aa = B->GetAttributes(i);
+            aah = aa->GetDataHandle();
+            aa->CreateStorageSpace(data_dims, data_dims_size, data_chunk_size, data_overlap_size, output_element_type_class, data_total_chunks);
+            if (data_total_chunks % mpi_size != 0)
+            {
+              aa->DisableCollectivIO(aah->GetFileName());
+            };
+          }
+        }
+      }
+    }
+    else
+    { //(B == NULL)
+      if (apply_writeback_flag == 0)
+      {
+        save_result_flag = 0;
+      }
+      else
+      {
+        save_result_flag = 1;
+      }
+    }
+
+    t_end = MPI_Wtime();
+    time_create = time_create + t_end - t_start;
+
+#ifdef DEBUG
+    if (mpi_rank == 0)
+    {
+      printf("Start to load the first chunk !\n");
+      fflush(stdout);
+    }
+#endif
+
+    t_start = MPI_Wtime();
+    int load_ret = LoadNextChunk(current_result_chunk_data_size);
+    current_result_chunk_data.resize(current_result_chunk_data_size);
+    t_end = MPI_Wtime();
+    time_read = time_read + t_end - t_start;
+
+    MPI_Barrier(MPI_COMM_WORLD);
+    //#ifdef DEBUG
+    if (!mpi_rank)
+    {
+      std::cout << "Rank 0, Loading the first chunk ... done ! current_result_chunk_data_size = " << current_result_chunk_data_size << ", next_chunk_id =  " << current_chunk_id << std::endl;
+    }
+    //#endif
+
+#if defined(_OPENMP)
+    if (mpi_rank == 0)
+    {
+      std::cout << "OpenMP is enabled in Apply, Total # of threads = " << nthreads << std::endl;
+    }
+#else
+    if (mpi_rank == 0)
+    {
+      std::cout << "OpenMP is [NOT] enabled in Apply" << std::endl;
+    }
+#endif
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    //Start real UDF function running
+    unsigned long long result_vector_index = 0;
+    //Apply UDF to eah cell of local chunk, untill no chunk
+    while (load_ret == 1)
+    {
+      processed_chunks_count = processed_chunks_count + 1;
+      unsigned long long cell_target_g_location_rm;
+      result_vector_index = 0;
+
+      //t_start = MPI_Wtime();
+      //Start to process a chunk
+      if (set_apply_direction_flag == 0)
+      { //in row-major direction
+        //unsigned long long lrm;
+        t_start = MPI_Wtime();
+
+#if defined(_OPENMP)
+        size_t *prefix;
+#endif
+
+#if defined(_OPENMP)
+#pragma omp parallel
+#endif
+        {
+          std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
+          unsigned long long offset_ol;
+          Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
+          Stencil<UDFOutputType> cell_return_stencil;
+          UDFOutputType cell_return_value;
+          unsigned long long cell_target_g_location_rm;
+          int is_mirror_value = 0;
+          std::vector<unsigned long long> skip_chunk_coordinate(data_dims, 0), skip_chunk_coordinate_start(data_dims, 0);
+          int skip_flag_on_cell = 0;
+
+#if defined(_OPENMP)
+          int ithread = omp_get_thread_num();
+          int nthreads = omp_get_num_threads();
+#pragma omp single
+          {
+            prefix = new size_t[nthreads + 1];
+            prefix[0] = 0;
+          }
+          std::vector<UDFOutputType> vec_private;
+#endif
+
+#if defined(_OPENMP)
+#pragma omp for schedule(static) nowait
+#endif
+          for (unsigned long long i = 0; i < current_chunk_cells; i++)
+          {
+            //Get the coordinate (HDF5 uses row major layout)
+            //cell_coordinate = RowMajorOrderReverse(i, current_chunk_size);
+            //printf("i = %lld \n", i);
+
+            ROW_MAJOR_ORDER_REVERSE_MACRO(i, current_chunk_size, current_chunk_size.size(), cell_coordinate)
+
+            if (skip_flag == 1)
+            {
+              //See SkipIt in utility.h for more details
+
+              //if (SkipIt(cell_coordinate, skip_size) == 1)
+              //  continue;
+              //assert(i < current_chunk_cells);
+
+              skip_flag_on_cell = 0;
+              for (int i = 0; i < data_dims; i++)
+              {
+                //The coordinate of the skip chunk this coordinate belong to
+                skip_chunk_coordinate[i] = std::floor(cell_coordinate[i] / skip_size[i]);
+                skip_chunk_coordinate_start[i] = skip_chunk_coordinate[i] * skip_size[i]; //first cell's coodinate of this skip chunk
+                if (skip_chunk_coordinate_start[i] != cell_coordinate[i])
+                { //we only run on the first  element of this skip chunk
+                  skip_flag_on_cell = 1;
+                  break;
+                }
+              }
+
+              if (skip_flag_on_cell == 1)
+                continue; //          for (unsigned long long i = 0; i < current_chunk_cells; i++)
+              assert(i < current_chunk_cells);
+            }
+            //int iithread = omp_get_thread_num();
+            //printf("i = %lld on thread # = %d (/%d), current_chunk_cells = %lld \n", i, iithread, nthreads, current_chunk_cells);
+
+            //Get the coodinate with overlapping
+            //Also, get the global coodinate of the cell in original array
+            for (int ii = 0; ii < data_dims; ii++)
+            {
+              if (cell_coordinate[ii] + ol_origin_offset[ii] < current_chunk_ol_size[ii])
+              {
+                cell_coordinate_ol[ii] = cell_coordinate[ii] + ol_origin_offset[ii];
+              }
+              else
+              {
+                cell_coordinate_ol[ii] = current_chunk_ol_size[ii] - 1;
+              }
+              //get the global coordinate
+              global_cell_coordinate[ii] = current_chunk_start_offset[ii] + cell_coordinate[ii];
+            }
+
+            //Update the offset with overlapping
+            //offset_ol = RowMajorOrder(current_chunk_ol_size, cell_coordinate_ol);
+            ROW_MAJOR_ORDER_MACRO(current_chunk_ol_size, current_chunk_ol_size.size(), cell_coordinate_ol, offset_ol);
+            cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size);
+            //Set the global coodinate of the cell as the ID of the cell
+            //Disable it for performance.
+            //RowMajorOrder(data_dims_size, global_cell_coordinate)
+            ROW_MAJOR_ORDER_MACRO(data_dims_size, data_dims_size.size(), global_cell_coordinate, cell_target_g_location_rm)
+            cell_target.set_my_g_location_rm(cell_target_g_location_rm);
+            is_mirror_value = 0;
+            if (mirror_value_flag == 1)
+            {
+              for (int iii = 0; iii < mirror_values.size(); iii++)
+              {
+                if (current_chunk_data[offset_ol] == mirror_values[iii])
+                {
+                  is_mirror_value = 1;
+                  break;
+                }
+              }
+            }
+
+            //Just for the test of performnace
+            //if(cell_coordinate[0] >= 16383 || cell_coordinate[1] >= 16383)
+
+            if (is_mirror_value == 0)
+            {
+              //Not mirrow value, we need to run the UDF to get results
+#ifdef PY_ARRAYUDF
+              cell_return_stencil = UDF(&cell_target); // Called by python
+#else
+
+              cell_return_stencil = UDF(cell_target); // Called by C++
+#endif
+              cell_return_value = cell_return_stencil.get_value();
+#ifdef DEBUG
+              if (current_chunk_id == 1)
+              {
+                std::cout << "cell_coordinate    = " << cell_coordinate[0] << ", " << cell_coordinate[1] << std::endl;
+                std::cout << "ol_origin_offsest  = " << ol_origin_offset[0] << ", " << ol_origin_offset[1] << std::endl;
+                std::cout << "cell_coordinate_ol = " << cell_coordinate_ol[0] << ", " << cell_coordinate_ol[1] << std::endl;
+                std::cout << "offset_ol = " << offset_ol << std::endl;
+                std::cout << std::endl;
+              }
+#endif
+            }
+            else
+            {
+              //This is a mirrow value, copy it into result directly
+              //Using memcpy to avail error in template of T
+              if (sizeof(cell_return_value) == sizeof(T))
+              {
+                memset(&cell_return_value, 0, sizeof(T));
+                std::memcpy(&cell_return_value, &current_chunk_data[offset_ol], sizeof(T));
+              }
+              //cell_return_value = current_chunk_data[offset_ol];
+            }
+
+            if (save_result_flag == 1)
+            {
+              if (skip_flag == 1)
+              {
+#if defined(_OPENMP)
+                vec_private.push_back(cell_return_value);
+#else
+                current_result_chunk_data[result_vector_index] = cell_return_value;
+                result_vector_index = result_vector_index + 1;
+#endif
+                //When skip_flag is set, there is no need to have apply_replace_flag
+                //Todo: in future
+                //if(apply_replace_flag == 1){
+                //  current_chunk_data[i] = cell_return_value; //Replace the orginal data
+                //}
+              }
+              else
+              {
+                current_result_chunk_data[i] = cell_return_value; //cell_return =  cell_return.
+                if (apply_replace_flag == 1)
+                {
+                  std::memcpy(&current_chunk_data[offset_ol], &cell_return_value, sizeof(T));
+                }
+              }
+            }
+          } //end for loop, finish the processing on a single chunk in row-major direction
+#if defined(_OPENMP)
+          prefix[ithread + 1] = vec_private.size();
+#pragma omp barrier
+#pragma omp single
+          {
+            for (int i = 1; i < (nthreads + 1); i++)
+            {
+              prefix[i] += prefix[i - 1];
+            }
+            if (current_result_chunk_data.size() != prefix[nthreads])
+            {
+              std::cout << "Wrong output size ! prefix[nthreads] =" << prefix[nthreads] << ", current.size() = " << current_result_chunk_data.size() << " \n ";
+            }
+          } //end of omp for
+          std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
+          clear_vector(vec_private);
+#endif
+        } //end of omp para
+
+#if defined(_OPENMP)
+        delete[] prefix;
+#endif
+        t_end = MPI_Wtime();
+        time_udf = t_end - t_start + time_udf;
+      }
+      else
+      { //go to reverse direction set_apply_direction_flag == 1
+        int is_mirror_value = 0;
+        Stencil<UDFOutputType> cell_return_stencil;
+        UDFOutputType cell_return_value;
+        std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
+        Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
+        unsigned long long offset_ol;
+        for (long long i = current_chunk_cells - 1; i >= 0; i--)
+        { //
+          //Get the coordinate (HDF5 uses row major layout)
+          cell_coordinate = RowMajorOrderReverse(i, current_chunk_size);
+          //Get the coodinate with overlapping
+          //Also, get the global coodinate of the cell in original array
+          for (int ii = 0; ii < data_dims; ii++)
+          {
+            if (cell_coordinate[ii] + ol_origin_offset[ii] < current_chunk_ol_size[ii])
+            {
+              cell_coordinate_ol[ii] = cell_coordinate[ii] + ol_origin_offset[ii];
+            }
+            else
+            {
+              cell_coordinate_ol[ii] = current_chunk_ol_size[ii] - 1;
+            }
+            //get the global coordinate
+            global_cell_coordinate[ii] = current_chunk_start_offset[ii] + cell_coordinate[ii];
+          }
+
+          //Update the offset with overlapping
+          offset_ol = RowMajorOrder(current_chunk_ol_size, cell_coordinate_ol);
+          cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size);
+          //Set the global coodinate of the cell as the ID of the cell
+          //Disable it for performance.
+          cell_target.set_my_g_location_rm(RowMajorOrder(data_dims_size, global_cell_coordinate));
+
+          is_mirror_value = 0;
+          if (mirror_value_flag == 1)
+          {
+            for (int iii = 0; iii < mirror_values.size(); iii++)
+            {
+              if (current_chunk_data[offset_ol] == mirror_values[iii])
+              {
+                is_mirror_value = 1;
+                break;
+              }
+            }
+          }
+
+          if (is_mirror_value == 0)
+          {
+            //t_start =  MPI_Wtime();
+#ifdef PY_ARRAYUDF
+            cell_return_stencil = UDF(&cell_target); // Called by python
+#else
+            cell_return_stencil = UDF(cell_target); // Called by C++
+#endif
+            cell_return_value = cell_return_stencil.get_value();
+            //t_end   =  MPI_Wtime();
+            //time_udf = t_end-t_start + time_udf;
+          }
+          else
+          {
+            //This is a mirro value , copy the result into result directly
+            if (sizeof(cell_return_value) == sizeof(T))
+            {
+              memset(&cell_return_value, 0, sizeof(T));
+              std::memcpy(&cell_return_value, &current_chunk_data[offset_ol], sizeof(T));
+            }
+          }
+
+          if (save_result_flag == 1)
+          {
+            current_result_chunk_data[i] = cell_return_value; //cell_return =  cell_return.
+            if (apply_replace_flag == 1)
+            {
+              //current_chunk_data[offset_ol] = cell_return_value; //Replace the orginal data
+              std::memcpy(&current_chunk_data[offset_ol], &cell_return_value, sizeof(T));
+            }
+#ifdef DEBUG
+            std::cout << "current_result_chunk_data[" << i << "] = " << current_result_chunk_data[i] << std::endl;
+#endif
+          }
+        } //finish the processing on a single chunk
+      }   //end of direction
+      //////////////////////////////////////
+      //end of processing on a single chunk
+      /////////////////////////////////////
+      //t_end = MPI_Wtime();
+      //time_udf = t_end - t_start + time_udf;
+
+      //We can clear somespace if no chunk to process
+      if (!HasNextChunk())
+      {
+        clear_vector(current_chunk_data);
+      }
+      //MPI_Barrier(MPI_COMM_WORLD);
+      //#ifdef DEBUG
+      if (mpi_rank == 0)
+        std::cout << "Finished current chunk and go to [ " << current_chunk_id << "] at rank 0 !" << std::endl;
+      //#endif
+      //if(single_step_flag == 1)    // goto report_results_mark;
+      t_start = MPI_Wtime();
+      if (save_result_flag == 1)
+      {
+        if (apply_writeback_flag == 0)
+        {
+          //Write result to B
+          if (skip_flag == 0)
+          {
+            if (!B->isVirtualArray())
+            {
+              B->SaveResult(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
+            }
+            else
+            {
+              Array<BAttributeType> *aa;
+              Data<BAttributeType> *ah;
+              std::vector<BAttributeType> current_chunk_data_temp;
+              current_chunk_data_temp.resize(current_result_chunk_data.size());
+              int n = B->GetAttributesSize();
+              for (int i = 0; i < n; i++)
+              {
+                aa = B->GetAttributes(i);
+                ah = aa->GetDataHandle();
+
+                if (mpi_rank == 0)
+                  std::cout << "Write " << i << "th attribute: " << aa->GetDatasetName() << " \n";
+                  //UDFOutputType
+                  //ExtractFromVirtualVector<BAttributeType, BType>(current_chunk_data_temp, current_result_chunk_data, i);
+#if __cplusplus > 201402L
+                ExtractFromVirtualVector<BAttributeType, UDFOutputType>(current_chunk_data_temp, current_result_chunk_data, i);
+#endif
+                ah->WriteData(current_chunk_start_offset, current_chunk_end_offset, current_chunk_data_temp);
+              }
+              current_chunk_data_temp.resize(0);
+            }
+          }
+          else
+          {
+
+            if (!B->isVirtualArray())
+            {
+              B->SaveResult(current_result_chunk_start_offset, current_result_chunk_end_offset, current_result_chunk_data);
+              //B->SaveResult(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
+            }
+            else
+            {
+              Array<BAttributeType> *aa;
+              Data<BAttributeType> *ah;
+              std::vector<BAttributeType> current_chunk_data_temp;
+              current_chunk_data_temp.resize(current_result_chunk_data.size());
+              int n = B->GetAttributesSize();
+              for (int i = 0; i < n; i++)
+              {
+                aa = B->GetAttributes(i);
+                ah = aa->GetDataHandle();
+
+                if (mpi_rank == 0)
+                  std::cout << "Write " << i << "th attribute: " << aa->GetDatasetName() << " \n";
+                  //UDFOutputType
+                  //ExtractFromVirtualVector<BAttributeType, BType>(current_chunk_data_temp, current_result_chunk_data, i);
+#if __cplusplus > 201402L
+                ExtractFromVirtualVector<BAttributeType, UDFOutputType>(current_chunk_data_temp, current_result_chunk_data, i);
+#endif
+                ah->WriteData(current_result_chunk_start_offset, current_result_chunk_end_offset, current_chunk_data_temp);
+              }
+              current_chunk_data_temp.resize(0);
+            }
+          }
+        }
+        else
+        {
+          //Write result to A
+          // i.e., overwrite the original data
+          if (skip_flag == 0)
+          {
+            data->WriteDataVoid(current_chunk_start_offset, current_chunk_end_offset, &(current_result_chunk_data[0]));
+          }
+          else
+          {
+            data->WriteDataVoid(current_result_chunk_start_offset, current_result_chunk_end_offset, &(current_result_chunk_data[0]));
+          }
+        }
+      }
+      t_end = MPI_Wtime();
+      time_write = time_write + t_end - t_start;
+      t_start = MPI_Wtime();
+      load_ret = LoadNextChunk(current_result_chunk_data_size);
+      current_result_chunk_data.resize(current_result_chunk_data_size);
+      t_end = MPI_Wtime();
+      time_read = time_read + t_end - t_start;
+    } //finish all chunks
+
+    if (set_apply_direction_flag == 0)
+    {
+      current_chunk_id = mpi_rank; //Reset to starting point
+    }
+    else
+    {
+      current_chunk_id = data_total_chunks - mpi_size + mpi_rank; //Reset to starting point
+    }
+  //Sync data across the nodes, mostly used for GA
+  //if(save_result_flag == 1){
+  // t_start =  MPI_Wtime();
+  //DataSyncCrossNode();
+  // t_end   =  MPI_Wtime();  time_sync = time_sync + t_end - t_start;
+  //}
+  report_results_mark:
+#ifdef REPORT_TIMING_RESULT
+    ReportTime();
+#endif
+    return;
+  }
+
   int GetRank()
   {
     return data_dims;
@@ -2999,14 +3659,14 @@ public:
       skip_size[i] = skip_size_p[i];
     }
 
-#ifdef DEBUG
+    //#ifdef DEBUG
     if (mpi_rank == 0)
     {
-      PrintVector<unsigned long long>("After setting skip_size", skip_size);
-      PrintVector<unsigned long long>("After setting skiped_dims_size ", skiped_dims_size);
+      PrintVector<unsigned long long>("Apply skip_size ", skip_size);
+      //PrintVector<unsigned long long>("After setting skiped_dims_size ", skiped_dims_size);
       //PrintVector<int>("After setting skiped_chunk_size ", skiped_chunk_size);
     }
-#endif
+    //#endif
 
     skip_flag = 1;
   }
@@ -3069,6 +3729,10 @@ public:
 #ifdef DEBUG
     printf("Set output vector size : %d, %d \n", vsize, direction);
 #endif
+    if (!mpi_rank)
+    {
+      printf("Set output vector size [%d] along [%d]th dimension  \n", vsize, flat_direction_index);
+    }
   }
 
   void SetApplyOptionalOutput()

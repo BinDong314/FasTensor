@@ -34,32 +34,21 @@ class Stencil
 {
 private:
   T value;
+  int has_set_output_value_flag = false;
   std::vector<unsigned long long> my_location; //This is the coodinate with overlapping
-  //std::vector<unsigned long long> my_location_no_ol;  //This is the coordinate withou over-lapping
-  //static unsigned long long       n_location;  //for forward  iteration operation on stencil of a chunk (without ol)
-  //static int                      n_at_end_flag = 0;
-  //static unsigned long long       p_location;  //for backward iteration operation on stencil of a chunk (without ol)
-  //static int                      p_at_end_flag = 0;
-  unsigned long long my_g_location_rm; //lineared form of
-                                       //my coordinates in original big array.
-
+  unsigned long long my_g_location_rm;         //lineared form of my coordinates in original big array.
   unsigned long long chunk_id;
   T *chunk_data_pointer = NULL;
   unsigned long long chunk_data_size = 1;
   unsigned long long chunk_data_size_no_ol = 1;
   unsigned long long my_offset_no_ol;             //for hist
   std::vector<unsigned long long> chunk_dim_size; //This is the size with over-lapping
-  //std::vector<unsigned long long> chunk_dim_size_no_ol;  //This is the size without over-lapping
   int dims;
-  //int                            *coordinate_shift = NULL;
   std::vector<int> coordinate_shift;
-  //unsigned long long             *coordinate = NULL;
   std::vector<unsigned long long> coordinate;
   int trail_run_flag = 0; //When rail_run_flag = 1, it records the maximum overlap size
-  //std::vector<long long>          ol_origin_offset;
   int padding_value_set_flag = 0;
   T padding_value;
-
   int mpi_rank, mpi_size;
 
 public:
@@ -74,40 +63,28 @@ public:
   Stencil(int dims_input, T *chunk)
   {
     dims = dims_input;
-    //coordinate_shift = (int *)malloc(sizeof(int) * dims_input);
     coordinate_shift.resize(dims_input);
     coordinate.resize(dims_input);
     set_trail_run_flag();
     chunk_data_pointer = chunk;
 
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+#ifdef DEBUG
+    MpiRankSize(&mpi_rank, &mpi_size);
+#endif
   }
 
   //For production
   Stencil(unsigned long long my_offset, T *chunk, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &chunk_size)
   {
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
-
 #ifdef DEBUG
+    MpiRankSize(&mpi_rank, &mpi_size);
     std::cout << "my value =" << value << ", coordinate = (" << my_coordinate[0] << ", " << my_coordinate[1] << " )" << std::endl;
 #endif
     chunk_data_pointer = chunk;
-    //chunk_dim_size       = chunk_size;
-    //my_location          = my_coordinate;
-
-    //chunk_dim_size_no_ol = chunk_size;
-    //my_location_no_ol    = my_coordinate;
-    //n_location           = my_coordinate;
-    //p_location           = my_coordinate;
     dims = chunk_size.size();
     chunk_dim_size.resize(dims);
     my_location.resize(dims);
-    //coordinate_shift.resize(dims);  coordinate.resize(dims);
-    //coordinate_shift = (int *)malloc(sizeof(int) * dims);
     coordinate_shift.resize(dims);
-    //coordinate = (unsigned long long *)malloc(sizeof(unsigned long long) * dims);
     coordinate.resize(dims);
     chunk_data_size = 1;
     for (int i = 0; i < dims; i++)
@@ -115,10 +92,9 @@ public:
       chunk_data_size = chunk_data_size * chunk_size[i];
       chunk_dim_size[i] = chunk_size[i];
       my_location[i] = my_coordinate[i];
-      //if(chunk_size[i] > 768 ) {printf("At mpi_rank %d , Warning in creating stencil: %lld \n ", mpi_rank, chunk_size[i]); fflush(stdout);}
     }
 
-    chunk_data_size = chunk_data_size - 1; //Starting from zero
+    chunk_data_size = chunk_data_size - 1;
     if (my_offset > chunk_data_size)
     {
       std::cout << "Error in intializing Stencil(). my_offset  = " << my_offset << ", chunk_data_size = " << chunk_data_size << std::endl;
@@ -127,7 +103,6 @@ public:
     else
     {
       value = chunk[my_offset];
-      //value = 1;
     }
   };
 
@@ -323,6 +298,18 @@ public:
     exit(0);
   }
 
+  template <class TO>
+  inline void operator=(TO &others)
+  {
+    value = others;
+    has_set_output_value_flag = true;
+  }
+
+  bool has_output_value()
+  {
+    return has_set_output_value_flag;
+  }
+
   T get_value()
   {
     return value;
@@ -439,88 +426,6 @@ public:
     padding_value_set_flag = 1;
     padding_value = padding_value_p;
   }
-
-  /*
-    inline Stencil operator+(const Stencil c){
-    Stencil temp_obj = *this;
-    temp_obj.value = temp_obj.value +  c.value;
-    return temp_obj;
-    }
-    inline Stencil operator-(const Stencil c){
-    Stencil temp_obj = *this;
-    temp_obj.value = temp_obj.value - c.value;
-    return temp_obj;
-    }
-    inline Stencil operator*(const Stencil c){
-    Stencil temp_obj = *this;
-    temp_obj.value = temp_obj.value * c.value;
-    return temp_obj;
-    }
-    inline Stencil operator/(const Stencil c){
-    Stencil temp_obj = *this;
-    #ifdef DEBUG
-    std::cout << "temp_obj.value = " <<  temp_obj.value << std::endl;
-    #endif
-    temp_obj.value = temp_obj.value / c.value;
-    return temp_obj;
-    }
-
-    inline T const & operator+(const int iv){
-    //Stencil temp_obj = *this;
-    //temp_obj.value = temp_obj.value + iv;
-    //return temp_obj;
-    return  (this->value + iv);
-    }
-    inline T const & operator-(const int iv){
-    //Stencil temp_obj = *this;
-    //temp_obj.value = temp_obj.value - iv;
-    //return temp_obj;
-    return  (this->value - iv);
-    }
-    inline T const & operator*(const int iv){
-    return  (this->value * iv);
-    }
-
-    inline T const & operator/(const int iv){
-    //Stencil temp_obj = *this;
-    //#ifdef DEBUG
-    //std::cout << "temp_obj.value = " <<  temp_obj.value << std::endl;
-    //#endif
-    //temp_obj.value = temp_obj.value / iv;
-    return this->value/iv;
-    }
-
-    inline T const & operator+(const float iv){
-    //Stencil temp_obj = *this;
-    //temp_obj.value = temp_obj.value + iv;
-    //return temp_obj;
-    return this->value+iv;
-
-    }
-    inline T const & operator-(const float iv){
-    //Stencil temp_obj = *this;
-    //temp_obj.value = temp_obj.value - iv;
-    //return temp_obj;
-    return this->value-iv;
-
-    }
-    inline T const & operator*(const float iv){
-    //Stencil temp_obj = *this;
-    //temp_obj.value = temp_obj.value * iv;
-    //return temp_obj;
-    return this->value*iv;
-    }
-
-      
-    inline T const & operator/(const float iv){
-    //Stencil temp_obj = *this;
-    //#ifdef DEBUG
-    //std::cout << "temp_obj.value = " <<  temp_obj.value << std::endl;
-    //#endif
-    //temp_obj.value = temp_obj.value / iv;
-    //return temp_obj;
-    return this->value/iv;
-    }*/
 };
 
 #endif

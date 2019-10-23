@@ -487,7 +487,7 @@ void *vv2v(std::vector<std::vector<T>> &v)
   T *rv = (T *)malloc(v.size() * v[0].size() * sizeof(T)); //Assuming all rows have the same size
   if (rv == NULL)
   {
-    printf("Not enough memory (in *vv2v) v.size = %lld, v[0].size = %lld, sizeof(T) = %d!\n", v.size(), v[0].size(), sizeof(T));
+    printf("Not enough memory (in *vv2v) v.size = %lu, v[0].size = %lu, sizeof(T) = %lu!\n", v.size(), v[0].size(), sizeof(T));
     exit(-1);
   }
   for (unsigned i = 0; i < v.size(); i++)
@@ -763,4 +763,9 @@ bool has_env(const char *env_var)
     return false;
 }
 
+void MpiRankSize(int *mpi_rank, int *mpi_size)
+{
+  MPI_Comm_rank(MPI_COMM_WORLD, mpi_rank);
+  MPI_Comm_size(MPI_COMM_WORLD, mpi_size);
+}
 #endif

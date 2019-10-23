@@ -261,6 +261,7 @@ AUPY_LIBS = @AUPY_LIBS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
+AU_DEBUG_ENABLED = @AU_DEBUG_ENABLED@
 AU_OLDCXX_ENABLED = @AU_OLDCXX_ENABLED@
 AWK = @AWK@
 CC = @CC@
@@ -386,12 +387,10 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = gnu
-
-# -fopenmp -openmp -DENABLE_OPENMP -g -O0 -std=c++11 -std=c++0x
 AM_CPPFLAGS = @ARRAYUDF_CPPFLAGS@  -I./third_part
 AM_CFLAGS = @ARRAYUDF_CFLAGS@  -I./third_part
 AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@    -I./third_part 
-AM_LDFLAGS = =@ARRAYUDF_LIBS@   -all-static     -I./third_part
+AM_LDFLAGS = @ARRAYUDF_LIBS@   -all-static     -I./third_part
 lib_LTLIBRARIES = libArrayUDF.la
 libArrayUDF_la_SOURCES = array_udf_array.h array_udf_stencil.h array_udf_io.h utility.h iarray-helper.h iarray.h iarray.cpp 
 libArrayUDF_la_LDFLAGS = -version-info 0:0:0  -all-static

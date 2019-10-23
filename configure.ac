@@ -53,39 +53,48 @@ else
 AC_MSG_ERROR([no: HDF5 directory not found!])
 fi
 
-##http://hpc.pnl.gov/globalarrays/
-##AC_ARG_WITH([ga],
-##[AS_HELP_STRING([--with-ga=DIR],
-##[use DIR as the root directory for Global Arrays (GA) Toolkit])],
-##[GA_HOME="$withval"],
-##[AC_MSG_ERROR([GA must be specified using --with-ga option])]
-##)
 
-##AC_MSG_CHECKING([for GA at $GA_HOME])
-##if test -d "$GA_HOME"   && test -d "$GA_HOME/include"  && test -d "$GA_HOME/lib"; then
-##ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$GA_HOME/include"
-##ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$GA_HOME/include"
-##ARRAYUDF_LIBS="$ARRAYUDF_LIBS         -L$GA_HOME/lib -lga -framework Accelerate -larmci"
-##AC_MSG_RESULT([yes])	    
-##else
-##AC_MSG_ERROR([no: Global Arrays (GA) Toolkit directory not found!])
-##fi
+AC_SUBST(AU_OLDCXX_ENABLED)
+AU_OLDCXX_ENABLED=false
+AC_ARG_ENABLE([oldcxx], 
+[AC_HELP_STRING([--enable-oldcxx],[enable oladcxx(not to use c++17])],
+[AU_OLDCXX_ENABLED=true],
+[AU_OLDCXX_ENABLED=false])
+AM_CONDITIONAL([BUILD_OLDCXX], [test x$AU_OLDCXX_ENABLED = xtrue])
 
-#AC_ARG_WITH([boost],
-#[AS_HELP_STRING([--with-boost=DIR],
-#[use DIR as the root directory for C++ Boost])],
-#[BOOST_HOME="$withval"],
-#[AC_MSG_ERROR([C++ Boost must be specified using --with-boost option])]
-#)
 
-#AC_MSG_CHECKING([for Boost at $BOOST_HOME])
-#if test -d "$BOOST_HOME"   && test -d "$BOOST_HOME/include" ; then
-#ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$BOOST_HOME/include"
-#ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$BOOST_HOME/include"
-#AC_MSG_RESULT([yes])	    
-#else
-#AC_MSG_ERROR([no: C++ Boost not found!])
-#fi
+AC_MSG_CHECKING([compile oldcxx])
+if test "$AU_OLDCXX_ENABLED" = "true" ; then
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++11"
+AC_MSG_RESULT([yes])	    
+else
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++17"
+AC_MSG_RESULT([no])
+fi
+
+
+AC_SUBST(AU_DEBUG_ENABLED)
+AU_DEBUG_ENABLED=false
+AC_ARG_ENABLE([debug], 
+[AC_HELP_STRING([--enable-debug],[enable debug (-g3) ])],
+[AU_DEBUG_ENABLED=true],
+[AU_DEBUG_ENABLED=false])
+
+
+AC_MSG_CHECKING([enable debug])
+if test "$AU_DEBUG_ENABLED" = "true" ; then
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS -g3"
+CFLAGS+=" -g3"
+CXXFLAGS+=" -g3"
+AC_MSG_RESULT([yes])	    
+else
+ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS -O3"
+CFLAGS+=" -O3"
+CXXFLAGS+=" -O3"
+AC_MSG_RESULT([no])
+fi
+
+
 
 #/Users/dbin/work/soft/boost_1_64_0/build/include
 #Python interface 
@@ -96,6 +105,9 @@ AC_ARG_ENABLE([python],
 [ARRAY_UDF_PYTHON_ENABLED=true],
 [ARRAY_UDF_PYTHON_ENABLED=false])
 AM_CONDITIONAL([BUILD_PYTHON], [test x$ARRAY_UDF_PYTHON_ENABLED = xtrue])
+
+
+
 
 AC_SUBST(AUPY_CFLAGS)
 AC_SUBST(AUPY_CPPFLAGS)
@@ -146,38 +158,7 @@ fi
 
 
 
-AC_SUBST(AU_OLDCXX_ENABLED)
-AU_OLDCXX_ENABLED=false
-AC_ARG_ENABLE([oldcxx], 
-[AC_HELP_STRING([--enable-oldcxx],[enable oladcxx(not to use c++17])],
-[AU_OLDCXX_ENABLED=true],
-[AU_OLDCXX_ENABLED=false])
-AM_CONDITIONAL([BUILD_OLDCXX], [test x$AU_OLDCXX_ENABLED = xtrue])
 
-
-echo "$AU_OLDCXX_ENABLED"
-AC_MSG_CHECKING([compile oldcxx])
-if test "$AU_OLDCXX_ENABLED" = "true" ; then
-ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++11"
-AC_MSG_RESULT([yes])	    
-else
-ARRAYUDF_CXXFLAGS="$ARRAYUDF_CXXFLAGS    -std=c++17"
-AC_MSG_RESULT([no])
-fi
-
-
-
-
-AC_ARG_ENABLE(debug,
-AS_HELP_STRING([--enable-debug],
-               [enable debugging, default: no]),
-[case "${enableval}" in
-             yes) debug=true;;
-             no)  debug=false;;
-             *)   AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
-esac],
-[debug=false])
-AM_CONDITIONAL(DEBUG, test $debug=true)
 
 
 AC_ARG_ENABLE(openmp,[AS_HELP_STRING([--enable-openmp], [enable OpenMP])])
@@ -213,6 +194,40 @@ dnl 	    AUPY_LIBS="$AUPY_CFLAGS       -L$PYTHON_HOME/lib  -lpython3.4m  -ldl -f
 dnl 	else
 dnl            AC_MSG_ERROR([no: Python directory not found!])
 dnl        fi
+
+##http://hpc.pnl.gov/globalarrays/
+##AC_ARG_WITH([ga],
+##[AS_HELP_STRING([--with-ga=DIR],
+##[use DIR as the root directory for Global Arrays (GA) Toolkit])],
+##[GA_HOME="$withval"],
+##[AC_MSG_ERROR([GA must be specified using --with-ga option])]
+##)
+
+##AC_MSG_CHECKING([for GA at $GA_HOME])
+##if test -d "$GA_HOME"   && test -d "$GA_HOME/include"  && test -d "$GA_HOME/lib"; then
+##ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$GA_HOME/include"
+##ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$GA_HOME/include"
+##ARRAYUDF_LIBS="$ARRAYUDF_LIBS         -L$GA_HOME/lib -lga -framework Accelerate -larmci"
+##AC_MSG_RESULT([yes])	    
+##else
+##AC_MSG_ERROR([no: Global Arrays (GA) Toolkit directory not found!])
+##fi
+
+#AC_ARG_WITH([boost],
+#[AS_HELP_STRING([--with-boost=DIR],
+#[use DIR as the root directory for C++ Boost])],
+#[BOOST_HOME="$withval"],
+#[AC_MSG_ERROR([C++ Boost must be specified using --with-boost option])]
+#)
+
+#AC_MSG_CHECKING([for Boost at $BOOST_HOME])
+#if test -d "$BOOST_HOME"   && test -d "$BOOST_HOME/include" ; then
+#ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$BOOST_HOME/include"
+#ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$BOOST_HOME/include"
+#AC_MSG_RESULT([yes])	    
+#else
+#AC_MSG_ERROR([no: C++ Boost not found!])
+#fi
 
 
 AC_CONFIG_FILES([Makefile
