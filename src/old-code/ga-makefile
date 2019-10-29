@@ -1,0 +1,23 @@
+CC=mpic++
+
+OUTPUTBIN=ga-test
+OUTPUTSRC=ga-test.cpp
+
+GA_DIR=/project/projectdirs/m1248/bin-data/soft/ga-git/build
+##/project/projectdirs/m1248/bin-data/soft/ga-5.6.1/build-edison/
+##/project/projectdirs/m1248/bin-data/soft/ga-git/build
+
+CFLAGS=  -std=c++11  -I.  -L. -I../src  -O0  -g3  -I $(GA_DIR)/include -L $(GA_DIR)/lib
+CCFLAGS= -std=c++11 -I.  -L. -I../src  -O0  -g3  -I $(GA_DIR)/include -L $(GA_DIR)/lib
+LIBS= -lga -larmci -framework Accelerate 
+
+
+.PHONY:all
+all:$(OUTPUTBIN)
+$(OUTPUTBIN): $(OUTPUTSRC)
+	$(CC) $(OUTPUTSRC)  -o $(OUTPUTBIN)  $(CFLAGS) $(CCFLAGS) $(LIBS)
+.PHONY:clean
+clean:
+	rm  -rf $(OUTPUTBIN)
+
+

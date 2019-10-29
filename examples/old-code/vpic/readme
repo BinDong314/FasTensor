@@ -1,0 +1,65 @@
+This file contains tips to run the analysis code for VPIC.
+
+It analyzes the data dumped by VPIC using the HDF5 interface (please see ./hdf5-dump-code-for-vpic for information).
+
+
+The analysis codes has four files:
+
+        field-element-wise-op.cpp	
+        particle-global-xyz.cpp
+        particle-interpolation.cpp
+        parallel-eb-at-particle.cpp	
+
+"field-element-wise-op.cpp" perform a few element-wise operations on field data.
+"particle-global-xyz.cpp" calculates global location (x/y/z) for each particle.
+"particle-interpolation.cpp" interpolates the field data to each particle.
+"parallel-eb-at-particle.cpp" calculates the interpolated filed for each particle.
+
+All files have the same structure:
+
+        //User-defined function
+        //It describes the operation on 5 data points, which are expressed
+        //with relative offset from center (i.e., s(0,0))
+        float my_ave( Stencil<float> s){
+            return (s(0,0) + s(-1, 0) + s(1, 0) + s(0, 1) + s(0, -1))/4.0;
+        }
+
+        void main(){       
+            //Input data from a HDF5 file
+            Array<float> *A = new Array<float>(     AU_NVS, AU_HDF5,  input_h5_file,  input_h5_group,  input_h5_dataset, chunk_size, overlap_size);
+            //Output data to a HDF5 file
+            Array<float> *B = new Array<float>(AU_COMPUTED, AU_HDF5, output_h5_file, output_h5_group, output_h5_dataset, chunk_size, overlap_size);
+            //Run the my_ave UDF on A and stores results in B 
+            A->Apply(my_ave, B)
+            ....
+        }
+
+Usually, these files should be ran by  the order listed above.
+
+   > change "CCC" in Makefile to your compiler
+   > make
+   > mpirun -n 2 field-element-wise-op 
+   > mpirun -n 2 particle-global-xyz 
+   > mpirun -n 2 particle-interpolation
+   > mpirun -n 2 parallel-eb-at-particle
+
+   By default, these programs will use the files in "./test-file"
+   
+   Each file has command line arguments to set input file/output file, chunks sizes, etc.
+
+   Please run these programs with "-h" for detailed information. 
+   For example, 
+
+        ./field-element-wise-op -h
+        Usage: element-wise [OPTION]
+                -h help
+                -f field file
+                -e hydro electron file
+                -i hydro ion file
+                -r result file
+                -g group(or step) name
+                -c chunk size string (3D, e.g. "32,1,32")
+                -o overlap (ghost zone) size (3D, e.g. "0,0,0").
+                Example: mpirun -n 2 ./element-wise  -f ./test-file/fields_50.h5 -e ./test-file/hydro_electron_50.h5  -i ./test-file/hydro_ion_50.h5 -r ./test-file/fields_50.h5 -g /Timestep_50 -c  "32,1,32"
+    
+    Note that: "-r result file" can be avoided to store results in input file.  
