@@ -18,8 +18,8 @@
 #ifndef END_POINT_H
 #define END_POINT_H
 
-#include "array_udf_attribute.h"
-#include "endpoint_hdf5.h"
+#include "au_utility.h"
+#include "au_attribute.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -35,8 +35,8 @@ using namespace std;
  */
 class Endpoint
 {
-private:
-    AuDataEndpointType endpoint_type;
+protected:
+    AuEndpointType endpoint_type;
     std::vector<std::string> endpoint_info;
     std::vector<unsigned long long> endpoint_dim_size;
     int endpoint_ranks;
@@ -141,21 +141,6 @@ public:
     virtual void EnableCollectiveIO() = 0;
 
     virtual void DisableCollectiveIO() = 0;
-};
-
-class EndpointFactory
-{
-public:
-    static Endpoint *NewEndpoint(const std::string &description, std::string endpoint)
-    {
-        if (description == "EP_HDF5")
-            return new EndpointHDF5(endpoint);
-        /* if (description == "EP_IARRAY")
-            return new EndpointIArray(endpoint);
-        if (description == "EP_IVECTOR")
-            return new EndpointIVECTOR(endpoint);*/
-        return nullptr;
-    }
 };
 
 #endif

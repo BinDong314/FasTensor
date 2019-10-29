@@ -24,7 +24,7 @@
 #include <vector>
 #include <cmath>
 #include <stdlib.h>
-#include "utility.h"
+#include "au_utility.h"
 
 using namespace std;
 extern double time_address_cal, row_major_order_cal, pre_row_major_order_cal, data_access_time;
@@ -382,7 +382,7 @@ public:
     }
     chunk_data_size_no_ol = chunk_data_size_no_ol - 1; //start from 0
     //my_offset_no_ol       = RowMajorOrder(chunk_dim_size_no_ol_p, my_location_no_ol_p) - 1;
-    ROW_MAJOR_ORDER_MACRO(chunk_dim_size_no_ol_p, chunk_dim_size_no_ol_p.size(), my_location_no_ol_p, my_offset_no_ol)
+    ROW_MAJOR_ORDER_MACRO(chunk_dim_size_no_ol_p, chunk_dim_size_no_ol_p.size(), my_location_no_ol_p, my_offset_no_ol);
     my_offset_no_ol = my_offset_no_ol - 1;
     //p_location           = n_location;
   }

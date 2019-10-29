@@ -48,24 +48,6 @@ typedef enum AuEndpointDataType
   AU_NCLASSES /*this must be last                          */
 } AuEndpointDataType;
 
-//See https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h
-//for reference
-typedef enum AType
-{
-  AU_NO_TYPE = -1,  /*error                                      */
-  AU_INTEGER = 0,   /*integer types                              */
-  AU_FLOAT = 1,     /*floating-point types                       */
-  AU_TIME = 2,      /*date and time types                        */
-  AU_STRING = 3,    /*character string types                     */
-  AU_BITFIELD = 4,  /*bit field types                            */
-  AU_OPAQUE = 5,    /*opaque types                               */
-  AU_COMPOUND = 6,  /*compound types                             */
-  AU_REFERENCE = 7, /*reference types                            */
-  AU_ENUM = 8,      /*enumeration types                          */
-  AU_VLEN = 9,      /*Variable-Length types                      */
-  AU_NCLASSES       /*this must be last                          */
-} AUType;
-
 typedef enum NVSFile
 {
   AU_HDF5 = 0,   //Data comes HDF5
@@ -94,6 +76,7 @@ typedef enum GlobalArrayOperation
   AU_PRELOAD = 0,
 } GlobalArrayOperation;
 
+/*
 typedef struct UDFAttribute
 {
   void *gs_data_r; //global shared data for reading. It's better to be an array in Global Array Toolkit;
@@ -102,7 +85,7 @@ typedef struct UDFAttribute
   MPI_Op local_reduce_op;
   int *skip_before;
   int *skip_after;
-} UDFAttribute;
+} UDFAttribute;*/
 
 /*
 //NVS: non volatile storage

@@ -97,8 +97,8 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-DIST_COMMON = $(srcdir)/Makefile.am $(am__python_PYTHON_DIST) \
-	$(include_HEADERS) $(am__DIST_COMMON)
+DIST_COMMON = $(srcdir)/Makefile.am $(include_HEADERS) \
+	$(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
@@ -130,27 +130,15 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pyexecdir)" \
-	"$(DESTDIR)$(pythondir)" "$(DESTDIR)$(includedir)"
-LTLIBRARIES = $(lib_LTLIBRARIES) $(pyexec_LTLIBRARIES)
-_ArrayUDF_la_LIBADD =
-am___ArrayUDF_la_SOURCES_DIST = ArrayUDF_wrap.cxx array_udf_array.h \
-	array_udf_stencil.h array_udf_io.h array_udf_pyoffset.h \
-	utility.h
-@BUILD_PYTHON_TRUE@am__ArrayUDF_la_OBJECTS =  \
-@BUILD_PYTHON_TRUE@	_ArrayUDF_la-ArrayUDF_wrap.lo
-_ArrayUDF_la_OBJECTS = $(am__ArrayUDF_la_OBJECTS)
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
+LTLIBRARIES = $(lib_LTLIBRARIES)
+libArrayUDF_la_LIBADD =
+am_libArrayUDF_la_OBJECTS = au_endpoint_hdf5.lo
+libArrayUDF_la_OBJECTS = $(am_libArrayUDF_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-_ArrayUDF_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(_ArrayUDF_la_CXXFLAGS) \
-	$(CXXFLAGS) $(_ArrayUDF_la_LDFLAGS) $(LDFLAGS) -o $@
-@BUILD_PYTHON_TRUE@am__ArrayUDF_la_rpath = -rpath $(pyexecdir)
-libArrayUDF_la_LIBADD =
-am_libArrayUDF_la_OBJECTS = iarray.lo
-libArrayUDF_la_OBJECTS = $(am_libArrayUDF_la_OBJECTS)
 libArrayUDF_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(AM_CXXFLAGS) $(CXXFLAGS) $(libArrayUDF_la_LDFLAGS) \
@@ -170,8 +158,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/_ArrayUDF_la-ArrayUDF_wrap.Plo \
-	./$(DEPDIR)/iarray.Plo
+am__depfiles_remade = ./$(DEPDIR)/au_endpoint_hdf5.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -209,19 +196,13 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(_ArrayUDF_la_SOURCES) $(libArrayUDF_la_SOURCES)
-DIST_SOURCES = $(am___ArrayUDF_la_SOURCES_DIST) \
-	$(libArrayUDF_la_SOURCES)
+SOURCES = $(libArrayUDF_la_SOURCES)
+DIST_SOURCES = $(libArrayUDF_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-am__python_PYTHON_DIST = ArrayUDF.py
-am__py_compile = PYTHON=$(PYTHON) $(SHELL) $(py_compile)
-am__pep3147_tweak = \
-  sed -e 's|\.py$$||' -e 's|[^/]*$$|&.*.pyc\n&.*.pyo|'
-py_compile = $(top_srcdir)/py-compile
 HEADERS = $(include_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
@@ -242,8 +223,7 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 ETAGS = etags
 CTAGS = ctags
-am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp \
-	$(top_srcdir)/py-compile
+am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -392,39 +372,13 @@ AM_CFLAGS = @ARRAYUDF_CFLAGS@  -I./third_part
 AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@    -I./third_part 
 AM_LDFLAGS = @ARRAYUDF_LIBS@   -all-static     -I./third_part
 lib_LTLIBRARIES = libArrayUDF.la
-libArrayUDF_la_SOURCES = array_udf_array.h array_udf_stencil.h array_udf_io.h utility.h iarray-helper.h iarray.h iarray.cpp 
+libArrayUDF_la_SOURCES = au_array.h au_endpoint.h au_stencil.h au_attribute.h au_endpoint_hdf5.h au_endpoint_hdf5.cpp au_endpoint_factory.h au_utility.h 
 libArrayUDF_la_LDFLAGS = -version-info 0:0:0  -all-static
-include_HEADERS = array_udf_array.h array_udf_stencil.h array_udf_io.h utility.h iarray-helper.h iarray.h array_udf.h   array_udf_h5.h   array_udf_attribute.h  array_udf_iarray.h  array_udf_pyoffset.h  third_party/cista.h third_party/cista_au_extended_ptr_tuple.h third_party/cista_au_extended_tuple.h third_party/cista_au_extended_arity.h
-
-#include_HEADERS
-#pkginclude_HEADERS
-#nobase_pkginclude_HEADERS=array_udf_array.h array_udf_stencil.h array_udf_io.h utility.h iarray/g/iarray-helper.h iarray/g/iarray.h array_udf.h   array_udf_h5.h   array_udf_attribute.h  array_udf_iarray.h  array_udf_pyoffset.h
-#BUILT_SOURCES = $(builddir)/ArrayUDF.py $(builddir)/ArrayUDF_wrap.c:ArrayUDF.i
-#	$(SWIG) $(AX_SWIG_PYTHON_OPT) -o $@ $<
-
-#python_PYTHON = $(builddir)/ArrayUDF.py
-#pyexec_LTLIBRARIES 	
-
-# example.py and example_wrap.c are created by SWIG from src/example.i
-# Put these in the build tree
-@BUILD_PYTHON_TRUE@BUILT_SOURCES = ArrayUDF.py ArrayUDF_wrap.cxx
-
-# Ask autotools to install the generated Python file
-@BUILD_PYTHON_TRUE@python_PYTHON = ArrayUDF.py
-
-# This is the Python module
-@BUILD_PYTHON_TRUE@pyexec_LTLIBRARIES = _ArrayUDF.la
-# It is composed of the generated C file
-@BUILD_PYTHON_TRUE@_ArrayUDF_la_SOURCES = ArrayUDF_wrap.cxx array_udf_array.h array_udf_stencil.h array_udf_io.h array_udf_pyoffset.h utility.h
-# -module tells libtool we don't need a 'lib' prefix
-@BUILD_PYTHON_TRUE@_ArrayUDF_la_LDFLAGS = -module -avoid-version ${PYTHON_LDFLAGS}  -shared $(PYTHON_LIBS) @ARRAYUDF_LIBS@ 
-@BUILD_PYTHON_TRUE@_ArrayUDF_la_CXXFLAGS = -DPY_ARRAYUDF=1 $(PYTHON_CPPFLAGS) $(PYTHON_CFLAGS)   @ARRAYUDF_CPPFLAGS@ 
-@BUILD_PYTHON_TRUE@_ArrayUDF_la_CFLAGS = -DPY_ARRAYUDF=1 $(PYTHON_CPPFLAGS) $(PYTHON_CFLAGS)   @ARRAYUDF_CFLAGS@
-all: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) all-am
+include_HEADERS = au_array.h	au_endpoint.h au_stencil.h au_attribute.h au_endpoint_hdf5.h au_utility.h
+all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cpp .cxx .lo .o .obj
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -490,44 +444,6 @@ clean-libLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-install-pyexecLTLIBRARIES: $(pyexec_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	@list='$(pyexec_LTLIBRARIES)'; test -n "$(pyexecdir)" || list=; \
-	list2=; for p in $$list; do \
-	  if test -f $$p; then \
-	    list2="$$list2 $$p"; \
-	  else :; fi; \
-	done; \
-	test -z "$$list2" || { \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(pyexecdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(pyexecdir)" || exit 1; \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(pyexecdir)'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(pyexecdir)"; \
-	}
-
-uninstall-pyexecLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(pyexec_LTLIBRARIES)'; test -n "$(pyexecdir)" || list=; \
-	for p in $$list; do \
-	  $(am__strip_dir) \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(pyexecdir)/$$f'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(pyexecdir)/$$f"; \
-	done
-
-clean-pyexecLTLIBRARIES:
-	-test -z "$(pyexec_LTLIBRARIES)" || rm -f $(pyexec_LTLIBRARIES)
-	@list='$(pyexec_LTLIBRARIES)'; \
-	locs=`for p in $$list; do echo $$p; done | \
-	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
-	      sort -u`; \
-	test -z "$$locs" || { \
-	  echo rm -f $${locs}; \
-	  rm -f $${locs}; \
-	}
-
-_ArrayUDF.la: $(_ArrayUDF_la_OBJECTS) $(_ArrayUDF_la_DEPENDENCIES) $(EXTRA__ArrayUDF_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(_ArrayUDF_la_LINK) $(am__ArrayUDF_la_rpath) $(_ArrayUDF_la_OBJECTS) $(_ArrayUDF_la_LIBADD) $(LIBS)
-
 libArrayUDF.la: $(libArrayUDF_la_OBJECTS) $(libArrayUDF_la_DEPENDENCIES) $(EXTRA_libArrayUDF_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(libArrayUDF_la_LINK) -rpath $(libdir) $(libArrayUDF_la_OBJECTS) $(libArrayUDF_la_LIBADD) $(LIBS)
 
@@ -537,8 +453,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/_ArrayUDF_la-ArrayUDF_wrap.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iarray.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_endpoint_hdf5.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -570,85 +485,11 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
 
-_ArrayUDF_la-ArrayUDF_wrap.lo: ArrayUDF_wrap.cxx
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(_ArrayUDF_la_CXXFLAGS) $(CXXFLAGS) -MT _ArrayUDF_la-ArrayUDF_wrap.lo -MD -MP -MF $(DEPDIR)/_ArrayUDF_la-ArrayUDF_wrap.Tpo -c -o _ArrayUDF_la-ArrayUDF_wrap.lo `test -f 'ArrayUDF_wrap.cxx' || echo '$(srcdir)/'`ArrayUDF_wrap.cxx
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/_ArrayUDF_la-ArrayUDF_wrap.Tpo $(DEPDIR)/_ArrayUDF_la-ArrayUDF_wrap.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ArrayUDF_wrap.cxx' object='_ArrayUDF_la-ArrayUDF_wrap.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(_ArrayUDF_la_CXXFLAGS) $(CXXFLAGS) -c -o _ArrayUDF_la-ArrayUDF_wrap.lo `test -f 'ArrayUDF_wrap.cxx' || echo '$(srcdir)/'`ArrayUDF_wrap.cxx
-
-.cxx.o:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
-@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ $<
-
-.cxx.obj:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
-@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.cxx.lo:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
-@am__fastdepCXX_TRUE@	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
-@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
-
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-pythonPYTHON: $(python_PYTHON)
-	@$(NORMAL_INSTALL)
-	@list='$(python_PYTHON)'; dlist=; list2=; test -n "$(pythondir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(pythondir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(pythondir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then b=; else b="$(srcdir)/"; fi; \
-	  if test -f $$b$$p; then \
-	    $(am__strip_dir) \
-	    dlist="$$dlist $$f"; \
-	    list2="$$list2 $$b$$p"; \
-	  else :; fi; \
-	done; \
-	for file in $$list2; do echo $$file; done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pythondir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pythondir)" || exit $$?; \
-	done || exit $$?; \
-	if test -n "$$dlist"; then \
-	  $(am__py_compile) --destdir "$(DESTDIR)" \
-	                    --basedir "$(pythondir)" $$dlist; \
-	else :; fi
-
-uninstall-pythonPYTHON:
-	@$(NORMAL_UNINSTALL)
-	@list='$(python_PYTHON)'; test -n "$(pythondir)" || list=; \
-	py_files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	test -n "$$py_files" || exit 0; \
-	dir='$(DESTDIR)$(pythondir)'; \
-	pyc_files=`echo "$$py_files" | sed 's|$$|c|'`; \
-	pyo_files=`echo "$$py_files" | sed 's|$$|o|'`; \
-	st=0; \
-	for files in "$$py_files" "$$pyc_files" "$$pyo_files"; do \
-	  $(am__uninstall_files_from_dir) || st=$$?; \
-	done; \
-	dir='$(DESTDIR)$(pythondir)/__pycache__'; \
-	echo "$$py_files" | $(am__pep3147_tweak) | $(am__base_list) | \
-	  while read files; do \
-	    $(am__uninstall_files_from_dir) || st=$$?; \
-	  done || exit $$?; \
-	exit $$st
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
 	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
@@ -757,15 +598,13 @@ distdir-am: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) check-am
+check: check-am
 all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pyexecdir)" "$(DESTDIR)$(pythondir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) install-am
+install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -795,16 +634,13 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
-@BUILD_PYTHON_FALSE@clean-local:
 clean: clean-am
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
-	clean-pyexecLTLIBRARIES mostlyclean-am
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/_ArrayUDF_la-ArrayUDF_wrap.Plo
-	-rm -f ./$(DEPDIR)/iarray.Plo
+		-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -821,13 +657,13 @@ info: info-am
 
 info-am:
 
-install-data-am: install-includeHEADERS install-pythonPYTHON
+install-data-am: install-includeHEADERS
 
 install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-libLTLIBRARIES install-pyexecLTLIBRARIES
+install-exec-am: install-libLTLIBRARIES
 
 install-html: install-html-am
 
@@ -850,8 +686,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/_ArrayUDF_la-ArrayUDF_wrap.Plo
-	-rm -f ./$(DEPDIR)/iarray.Plo
+		-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -868,37 +703,28 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-includeHEADERS uninstall-libLTLIBRARIES \
-	uninstall-pyexecLTLIBRARIES uninstall-pythonPYTHON
+uninstall-am: uninstall-includeHEADERS uninstall-libLTLIBRARIES
 
-.MAKE: all check install install-am install-strip
+.MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
-	clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
-	clean-pyexecLTLIBRARIES cscopelist-am ctags ctags-am distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-includeHEADERS install-info \
-	install-info-am install-libLTLIBRARIES install-man install-pdf \
-	install-pdf-am install-ps install-ps-am \
-	install-pyexecLTLIBRARIES install-pythonPYTHON install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	clean-generic clean-libLTLIBRARIES clean-libtool cscopelist-am \
+	ctags ctags-am distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am \
+	install-includeHEADERS install-info install-info-am \
+	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-includeHEADERS \
-	uninstall-libLTLIBRARIES uninstall-pyexecLTLIBRARIES \
-	uninstall-pythonPYTHON
+	uninstall-libLTLIBRARIES
 
 .PRECIOUS: Makefile
 
-# tell Make how to create the generated SWIG files
-@BUILD_PYTHON_TRUE@ArrayUDF.py ArrayUDF_wrap.cxx: ArrayUDF.i
-@BUILD_PYTHON_TRUE@	$(SWIGCC) -c++ -python ArrayUDF.i 
-
-@BUILD_PYTHON_TRUE@clean-local:
-@BUILD_PYTHON_TRUE@	rm ArrayUDF.py ArrayUDF_wrap.cxx
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

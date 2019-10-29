@@ -87,7 +87,7 @@ void print_help()
           -r fill random number \n\
           -i intial valur to fill (not random number) \n\
           -p sparse array     \n\
-          Example: mpirun -n 1 ./fake-hdf5-data -f testf.h5p -g /testg -d /testg/testd -n 2 -s 100,100 -t 0 \n";
+          Example: mpirun -n 1 ./au_test_data_generator -f testf-16x16.h5p -g /testg -d /testg/testd -n 2 -s 16,16 -t 1 \n";
 
   fprintf(stdout, msg, "fake-hdf5");
 }
