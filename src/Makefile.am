@@ -6,11 +6,9 @@ AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@    -I./third_part
 AM_LDFLAGS = @ARRAYUDF_LIBS@   -all-static     -I./third_part
 
 lib_LTLIBRARIES=libArrayUDF.la
-libArrayUDF_la_SOURCES=array_udf_array.h array_udf_stencil.h array_udf_io.h utility.h iarray-helper.h iarray.h iarray.cpp 
+libArrayUDF_la_SOURCES=au_array.h au_endpoint.h	au_stencil.h au_attribute.h	au_endpoint_hdf5.h	au_utility.h
 libArrayUDF_la_LDFLAGS=-version-info 0:0:0  -all-static
-include_HEADERS=array_udf_array.h array_udf_stencil.h array_udf_io.h utility.h iarray-helper.h iarray.h array_udf.h   array_udf_h5.h   array_udf_attribute.h  array_udf_iarray.h  array_udf_pyoffset.h  third_party/cista.h third_party/cista_au_extended_ptr_tuple.h third_party/cista_au_extended_tuple.h third_party/cista_au_extended_arity.h
-
-
+include_HEADERS=au_array.h	au_endpoint.h au_stencil.h au_attribute.h au_endpoint_hdf5.h au_utility.h
 
 #include_HEADERS
 #pkginclude_HEADERS
