@@ -20,6 +20,7 @@
 #include "au.h"
 
 using namespace std;
+using namespace AU;
 
 //UDF One: duplicate the original data
 inline Stencil<float> myfunc1(const Stencil<float> &iStencil)
@@ -70,11 +71,11 @@ int main(int argc, char *argv[])
 
     //Results data 1 to be stored in a file
     Array<float> *B = new Array<float>("EP_HDF5:./testf-16x16-f1.h5p:/testg:/testg/testd");
-    //A->Apply(myfunc1, B);
+    A->Apply(myfunc1, B);
     delete B;
 
     //Results data 2 to be stored in a file
-    Array<float> *C = new Array<float>("AU_HDF5:./testf-16x16-f2.h5p:/testg:/testg/testd");
+    Array<float> *C = new Array<float>("EP_HDF5:./testf-16x16-f2.h5p:/testg:/testg/testd");
     std::vector<int> strip_size = {1, 16};
     //A->SetOutputVector(VEC_SIZE, 1);
     //A->SetApplyStripSize(strip_size);

@@ -19,7 +19,7 @@
 #define END_POINT_H
 
 #include "au_utility.h"
-#include "au_attribute.h"
+#include "au_type.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -41,6 +41,7 @@ protected:
     std::vector<unsigned long long> endpoint_dim_size;
     int endpoint_ranks;
     AuEndpointDataType data_element_type;
+    std::string data_endpoint_orig;
 
 public:
     Endpoint(){};
@@ -48,6 +49,7 @@ public:
 
     Endpoint(std::string data_endpoint)
     {
+        data_endpoint_orig = data_endpoint;
         ExtractFileTypeInfo(data_endpoint, endpoint_type, endpoint_info);
     }
 
@@ -56,31 +58,28 @@ public:
      * 
      * @return vector for the size of data  endpoint_dim_size.size() is the rank
      */
-    std::vector<unsigned long long> GetDimensions()
-    {
-        return endpoint_dim_size;
-    }
+    std::vector<unsigned long long> GetDimensions();
 
     /**
      * @brief Set the Dimensions 
      * 
      * @return < 0 error, works otherwise
      */
-    void SetDimensions(std::vector<unsigned long long> endpoint_dim_size_p)
-    {
-        endpoint_ranks = endpoint_dim_size_p.size();
-        endpoint_dim_size = endpoint_dim_size_p;
-    }
+    void SetDimensions(std::vector<unsigned long long> endpoint_dim_size_p);
 
-    void SetDataElementType(AuEndpointDataType data_element_type_p)
-    {
-        data_element_type = data_element_type_p;
-    }
+    /**
+     * @brief set the type of data element
+     * 
+     * @param data_element_type_p 
+     */
+    void SetDataElementType(AuEndpointDataType data_element_type_p);
 
-    AuEndpointDataType GetDataElementType(AuEndpointDataType data_element_type_p)
-    {
-        return data_element_type;
-    }
+    /**
+     * @brief Get the Type of Data Element 
+     * 
+     * @return AuEndpointDataType 
+     */
+    AuEndpointDataType GetDataElementType();
 
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type

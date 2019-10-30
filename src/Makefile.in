@@ -133,7 +133,8 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libArrayUDF_la_LIBADD =
-am_libArrayUDF_la_OBJECTS = au_endpoint_hdf5.lo
+am_libArrayUDF_la_OBJECTS = au.lo au_array.lo au_endpoint.lo \
+	au_endpoint_hdf5.lo au_utility.lo
 libArrayUDF_la_OBJECTS = $(am_libArrayUDF_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -158,7 +159,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/au_endpoint_hdf5.Plo
+am__depfiles_remade = ./$(DEPDIR)/au.Plo ./$(DEPDIR)/au_array.Plo \
+	./$(DEPDIR)/au_endpoint.Plo ./$(DEPDIR)/au_endpoint_hdf5.Plo \
+	./$(DEPDIR)/au_utility.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -372,9 +375,9 @@ AM_CFLAGS = @ARRAYUDF_CFLAGS@  -I./third_part
 AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@    -I./third_part 
 AM_LDFLAGS = @ARRAYUDF_LIBS@   -all-static     -I./third_part
 lib_LTLIBRARIES = libArrayUDF.la
-libArrayUDF_la_SOURCES = au_array.h au_endpoint.h au_stencil.h au_attribute.h au_endpoint_hdf5.h au_endpoint_hdf5.cpp au_endpoint_factory.h au_utility.h 
+libArrayUDF_la_SOURCES = au.h au.cpp au_array.h au_array.cpp au_endpoint.h au_endpoint.cpp au_stencil.h au_type.h au_endpoint_hdf5.h au_endpoint_hdf5.cpp au_endpoint_factory.h au_utility.cpp au_utility.h 
 libArrayUDF_la_LDFLAGS = -version-info 0:0:0  -all-static
-include_HEADERS = au_array.h	au_endpoint.h au_stencil.h au_attribute.h au_endpoint_hdf5.h au_utility.h
+include_HEADERS = au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5.h au_utility.h
 all: all-am
 
 .SUFFIXES:
@@ -453,7 +456,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_array.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_endpoint.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_endpoint_hdf5.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_utility.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -640,7 +647,11 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
+		-rm -f ./$(DEPDIR)/au.Plo
+	-rm -f ./$(DEPDIR)/au_array.Plo
+	-rm -f ./$(DEPDIR)/au_endpoint.Plo
+	-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
+	-rm -f ./$(DEPDIR)/au_utility.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -686,7 +697,11 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
+		-rm -f ./$(DEPDIR)/au.Plo
+	-rm -f ./$(DEPDIR)/au_array.Plo
+	-rm -f ./$(DEPDIR)/au_endpoint.Plo
+	-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
+	-rm -f ./$(DEPDIR)/au_utility.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

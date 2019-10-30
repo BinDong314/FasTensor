@@ -18,7 +18,7 @@
 #ifndef END_POINT_HDF5_H
 #define END_POINT_HDF5_H
 
-#include "au_attribute.h"
+#include "au_type.h"
 #include "au_endpoint.h"
 #include <string>
 #include <iostream>
@@ -63,32 +63,36 @@ public:
             std::exit(EXIT_FAILURE);
         }
     }
+    ~EndpointHDF5()
+    {
+        Close();
+    }
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
      * 
      * @return int < 0 error, >= 0 works 
      */
-     int ExtractMeta() override;
+    int ExtractMeta() override;
     /**
      * @brief print information about the endpoint
      * 
      * @return < 0 error, >= 0 works 
      */
-     int PrintInfo() override;
+    int PrintInfo() override;
 
     /**
      * @brief create the endpoint
      * 
      * @return  < 0 error, >= 0 works 
      */
-     int Create() override;
+    int Create() override;
 
     /**
      * @brief open the endpoint
      * 
      * @return < 0 error, >= 0 works 
      */
-     int Open() override;
+    int Open() override;
 
     /**
      * @brief read the data from end-point
@@ -98,7 +102,7 @@ public:
      * @param data, store the result data 
      * @return int < 0 error, >= 0 works
      */
-     int Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
+    int Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
 
     /**
      * @brief write the data to the end-point
@@ -108,14 +112,14 @@ public:
      * @param data, store the result data 
      * @return int < 0 error, >= 0 works
      */
-     int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
+    int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
 
     /**
      * @brief close the end-point
      * 
      * @return int int < 0 error, >= 0 works
      */
-     int Close() override;
+    int Close() override;
 
     void Map2MyType() override;
 

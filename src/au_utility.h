@@ -15,10 +15,9 @@
  *
  */
 
-#ifndef ARRAY_UDF_UTILITY
-#define ARRAY_UDF_UTILITY
+#ifndef ARRAY_UDF_UTILITY_H
+#define ARRAY_UDF_UTILITY_H
 
-#include <complex> // std::complex
 #include <vector>
 #include <type_traits>
 #include <cstring>
@@ -32,66 +31,113 @@
 #include <algorithm>
 #include <iterator>
 #include <iostream>
-#include "au_attribute.h"
+#include "au_type.h"
 
-int ExtractFileTypeInfo(std::string data_endpoint_info, AuEndpointType &endpoint_type, std::vector<std::string> &endpoint_info)
+int ExtractFileTypeInfo(std::string data_endpoint_info, AuEndpointType &endpoint_type, std::vector<std::string> &endpoint_info);
+int file_exist(const char *filename);
+
+template <typename T>
+inline void PrintVector(std::string name, std::vector<T> v)
 {
-
-  //Get the AuDataEndpointType
-  std::stringstream ss(data_endpoint_info);
-  std::string token;
-  if (!std::getline(ss, token, ':'))
-  {
-    std::cout << "Error: invalued data_endpoint_info " << std::endl;
-    std::exit(EXIT_FAILURE);
-  }
-
-  if (token == "EP_HDF5")
-  {
-    endpoint_type = EP_HDF5;
-  }
-  else if (token == "EP_NETCDF")
-  {
-    endpoint_type = EP_NETCDF;
-  }
-  else if (token == "EP_AUDIOS")
-  {
-    endpoint_type = EP_AUDIOS;
-  }
-  else if (token == "EP_BINARY")
-  {
-    endpoint_type = EP_BINARY;
-  }
-  else if (token == "EP_VIRTUAL")
-  {
-    endpoint_type = EP_VIRTUAL;
-  }
-  else if (token == "EP_IARRAY")
-  {
-    endpoint_type = EP_IARRAY;
-  }
-  else if (token == "EP_IVECTOR")
-  {
-    endpoint_type = EP_IVECTOR;
-  }
-  else
-  {
-    std::cout << "Error: No AuDataEndpointType found in data_endpoint_info " << std::endl;
-    std::exit(EXIT_FAILURE);
-  }
-
-  while (std::getline(ss, token, ':'))
-  {
-    endpoint_info.push_back(token);
-  }
-
-  return 0;
+    int n = v.size();
+    std::cout << name << ": ";
+    if (n > 60)
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            std::cout << v[i] << ",";
+        }
+        std::cout << " ... ";
+        for (int i = n - 30; i < n; i++)
+        {
+            std::cout << v[i] << ",";
+        }
+    }
+    else
+    {
+        for (int i = 0; i < n - 1; i++)
+        {
+            std::cout << v[i] << ",";
+        }
+        std::cout << v[n - 1];
+    }
+    std::cout << std::endl;
 }
 
-int file_exist(const char *filename)
+template <typename T>
+inline void PrintScalar(std::string name, T v)
 {
-  struct stat buffer;
-  return (stat(filename, &buffer) == 0);
+    std::cout << name << ": " << v << std::endl;
 }
+
+/**
+ * @brief convert coordinate to linearized one
+ * 
+ * @param dsize : size of all dimensions of the data
+ * @param coordinate : multidimensional coordinate
+ * @return unsigned long long : linearized one
+ */
+inline unsigned long long RowMajorOrder(std::vector<unsigned long long> dsize, std::vector<unsigned long long> coordinate)
+{
+    unsigned long long offset = coordinate[0];
+    int n = dsize.size();
+    for (int i = 1; i < n; i++)
+    {
+        offset = offset * dsize[i] + coordinate[i];
+    }
+    return offset;
+}
+
+/**
+ * @brief convert linearized coordinate to multidimensional one
+ * 
+ * @param offset : linearized coordinate
+ * @param dsize : data size 
+ * @return std::vector<unsigned long long> :multidimensional coordinate
+ */
+inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long offset, std::vector<unsigned long long> dsize)
+{
+    int n = dsize.size();
+    std::vector<unsigned long long> original_coordinate;
+    original_coordinate.resize(n);
+    //unsigned long long reminder;
+    for (unsigned long long i = n - 1; i >= 1; i--)
+    {
+        original_coordinate[i] = offset % dsize[i];
+        offset = offset / dsize[i];
+    }
+    //Last dimenstion
+    original_coordinate[0] = offset;
+
+    return original_coordinate;
+}
+
+/**
+ * @brief macro version of above two functions for speed
+ * 
+ */
+#ifndef ROW_MAJOR_ORDER_MACRO
+#define ROW_MAJOR_ORDER_MACRO(dsize, dsize_len, coordinate, offset) \
+    {                                                               \
+        offset = coordinate[0];                                     \
+        for (int iii = 1; iii < dsize_len; iii++)                   \
+        {                                                           \
+            offset = offset * dsize[iii] + coordinate[iii];         \
+        }                                                           \
+    }
+#endif
+
+#ifndef ROW_MAJOR_ORDER_REVERSE_MACRO
+#define ROW_MAJOR_ORDER_REVERSE_MACRO(offset, dsize, dsize_len, result_coord_v) \
+    {                                                                           \
+        unsigned long long temp_offset = offset;                                \
+        for (int iii = dsize_len - 1; iii >= 1; iii--)                          \
+        {                                                                       \
+            result_coord_v[iii] = temp_offset % dsize[iii];                     \
+            temp_offset = temp_offset / dsize[iii];                             \
+        }                                                                       \
+        result_coord_v[0] = temp_offset;                                        \
+    }
+#endif
 
 #endif
