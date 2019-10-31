@@ -62,6 +62,7 @@ public:
             std::cout << " data endpoint to HDF5 is not correct" << std::endl;
             std::exit(EXIT_FAILURE);
         }
+        SetOpenFlag(false);
     }
     ~EndpointHDF5()
     {

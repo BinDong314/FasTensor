@@ -42,6 +42,7 @@ protected:
     int endpoint_ranks;
     AuEndpointDataType data_element_type;
     std::string data_endpoint_orig;
+    bool open_flag = false;
 
 public:
     Endpoint(){};
@@ -140,6 +141,10 @@ public:
     virtual void EnableCollectiveIO() = 0;
 
     virtual void DisableCollectiveIO() = 0;
+
+    bool GetOpenFlag();
+
+    void SetOpenFlag(bool open_flag_p);
 };
 
 #endif

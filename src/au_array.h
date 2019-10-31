@@ -22,7 +22,6 @@ extern int au_mpi_rank_global;
 #ifndef ARRAY_UDF_ARRAY_H
 #define ARRAY_UDF_ARRAY_H
 
-#include <assert.h>
 #include "mpi.h"
 #include "au_endpoint.h"
 #include "au_stencil.h"
@@ -30,6 +29,7 @@ extern int au_mpi_rank_global;
 #include "au_type.h"
 #include "au_endpoint_factory.h"
 #include "au_mpi.h"
+#include <assert.h>
 
 namespace AU
 {
@@ -77,7 +77,7 @@ private:
   int current_chunk_id; //Id of the current chunk (in memory) to apply UDF
 
   std::vector<unsigned long long> skip_size;        //Size to ship after each operation
-  std::vector<unsigned long long> skiped_dims_size; //Size of the data after
+  std::vector<unsigned long long> skiped_dims_size; //Size of the data after skip
   std::vector<unsigned long long> skiped_chunks;    //# of chunks after skip
   std::vector<int> skiped_chunk_size;               //Size of each chunk after skip
 
@@ -89,8 +89,10 @@ private:
   std::vector<unsigned long long> view_size;
   std::vector<unsigned long long> view_orginal_data_dims_size;
 
-
   std::vector<T> mirror_values;
+
+  OutputVectorFlatDirection output_vector_flat_direction_index;
+  unsigned int output_vector_size = 0;
 
   //Flag variable
   bool skip_flag = false;
@@ -99,8 +101,10 @@ private:
   bool virtual_array_flag = false;
   bool save_result_flag = true;
   bool reverse_apply_direction_flag = false;
-  bool mirror_value_flag  = false;
+  bool mirror_value_flag = false;
   bool apply_replace_flag = false;
+  bool vector_type_flag = false;
+
   //help variable
   AU_WTIME_TYPE t_start, time_read = 0, time_udf = 0, time_write = 0, time_create = 0, time_sync = 0, time_nonvolatile = 0;
 
@@ -180,8 +184,6 @@ public:
   void CalculateChunkSize(std::vector<unsigned long long> &data_size, std::vector<unsigned long long> &chunk_size)
   {
   }
-
-  
 
   void InitializeApplyInput()
   {
@@ -350,7 +352,7 @@ public:
           //RowMajorOrder(data_dims_size, global_cell_coordinate)
           //ROW_MAJOR_ORDER_MACRO(data_dims_size, data_dims_size.size(), global_cell_coordinate, cell_target_g_location_rm)
           //cell_target.set_my_g_location_rm(cell_target_g_location_rm);
-           is_mirror_value = 0;
+          is_mirror_value = 0;
           if (mirror_value_flag)
           {
             for (int iii = 0; iii < mirror_values.size(); iii++)
@@ -440,21 +442,149 @@ public:
       /////////////////////////////////////
 
       t_start = AU_WTIME;
-      FinalizeApplyOutput();
+      std::vector<unsigned long long> B_data_size;
+      std::vector<int> B_data_chunk_size, B_data_overlap_size;
+      CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
+      B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+      B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
       time_write = time_write + AU_WTIME - t_start;
 
       t_start = AU_WTIME;
       load_ret = LoadNextChunk(current_result_chunk_data_size);
       current_result_chunk_data.resize(current_result_chunk_data_size);
-      time_read = time_read + AU_WTIME- t_start;
+      time_read = time_read + AU_WTIME - t_start;
 
     } // end of while:: no more chunks to process
 
     return;
   }
 
-  void FinalizeApplyOutput()
+  int WriteEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)
   {
+    endpoint->Write(start_p, end_p, data);
+  }
+
+  void inline CalculateOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p)
+  {
+    if (skip_flag)
+    {
+      if (!vector_type_flag)
+      {
+        data_size_p = skiped_dims_size;
+        data_chunk_size_p = skiped_chunk_size;
+        data_overlap_size_p = data_overlap_size; //Todo:  need to consider data_overlap size
+      }
+      else //skip_flag == true and vector_type_flag == true
+      {
+        int data_dims_t;
+        std::vector<unsigned long long> skiped_dims_size_t;
+        std::vector<int> skiped_chunk_size_t;
+        std::vector<int> data_overlap_size_t;
+
+        if (output_vector_flat_direction_index > (data_dims - 1))
+        { //We save the output vector as new dimensions
+          data_dims_t = data_dims + 1;
+          skiped_dims_size_t.resize(data_dims_t);
+          skiped_chunk_size_t.resize(data_dims_t);
+          data_overlap_size_t.resize(data_dims_t);
+          for (int k = 0; k < data_dims; k++)
+          {
+            skiped_dims_size_t[k] = skiped_dims_size[k];
+            data_overlap_size_t[k] = data_overlap_size[k];
+            skiped_chunk_size_t[k] = skiped_chunk_size[k];
+          }
+          skiped_dims_size_t[data_dims] = output_vector_size;
+          data_overlap_size_t[data_dims] = 0;
+          skiped_chunk_size_t[data_dims] = output_vector_size;
+        }
+        else
+        { //We save the output vector within existing dimensions
+          data_dims_t = data_dims;
+          skiped_dims_size_t.resize(data_dims_t);
+          skiped_chunk_size_t.resize(data_dims_t);
+          data_overlap_size_t.resize(data_dims_t);
+          for (int k = 0; k < data_dims; k++)
+          {
+            skiped_dims_size_t[k] = skiped_dims_size[k];
+            if (k == output_vector_flat_direction_index)
+              skiped_dims_size_t[k] = skiped_dims_size_t[k] * output_vector_size;
+            data_overlap_size_t[k] = data_overlap_size[k];
+            skiped_chunk_size_t[k] = skiped_chunk_size[k];
+          }
+        }
+
+        data_size_p = skiped_dims_size_t;
+        data_chunk_size_p = skiped_chunk_size_t;
+        data_overlap_size_p = data_overlap_size_t;
+      }
+    }
+    else
+    { //skip_flag == false
+      if (vector_type_flag == 0)
+      {
+        data_size_p = data_size;
+        data_chunk_size_p = data_chunk_size;
+        data_overlap_size_p = data_overlap_size;
+      }
+      else //skip_flag == false and vector_type_flag == true
+      {
+        int data_dims_t;
+        std::vector<unsigned long long> dims_size_t;
+        std::vector<int> chunk_size_t;
+        std::vector<int> data_overlap_size_t;
+
+        if (output_vector_flat_direction_index > (data_dims - 1))
+        {
+          data_dims_t = data_dims + 1;
+          dims_size_t.resize(data_dims_t);
+          chunk_size_t.resize(data_dims_t);
+          data_overlap_size_t.resize(data_dims_t);
+          for (int k = 0; k < data_dims; k++)
+          {
+            dims_size_t[k] = data_size[k];
+            chunk_size_t[k] = data_chunk_size[k];
+            data_overlap_size_t[k] = data_overlap_size[k];
+          }
+          dims_size_t[data_dims] = output_vector_size;
+          data_overlap_size_t[data_dims] = 0;
+          chunk_size_t[data_dims] = output_vector_size;
+        }
+        else
+        {
+          data_dims_t = data_dims;
+          dims_size_t.resize(data_dims_t);
+          chunk_size_t.resize(data_dims_t);
+          data_overlap_size_t.resize(data_dims_t);
+          for (int k = 0; k < data_dims; k++)
+          {
+            dims_size_t[k] = data_size[k];
+            if (k == output_vector_flat_direction_index)
+              dims_size_t[k] = dims_size_t[k] * output_vector_size;
+            // dims_size_t[k] = data_dims_size[k] * output_vector_size;
+            chunk_size_t[k] = data_chunk_size[k];
+            data_overlap_size_t[k] = data_overlap_size[k];
+          }
+        }
+
+        data_size_p = dims_size_t;
+        data_chunk_size_p = chunk_size_t;
+        data_overlap_size_p = data_overlap_size_t;
+      }
+    }
+  }
+
+  int inline CreateEndpoint(std::vector<unsigned long long> data_size_p, std::vector<int> data_chunk_size_p, std::vector<int> data_overlap_size_p)
+  {
+    if (endpoint->GetOpenFlag())
+      return 0;
+
+    data_size = data_size_p;
+    data_chunk_size = data_chunk_size_p;
+    data_overlap_size = data_overlap_size_p;
+    endpoint->SetDimensions(data_size);
+    AuEndpointDataType type_p = InferDataType<T>();
+    endpoint->SetDataElementType(type_p);
+    return endpoint->Create();
   }
 
   /**
@@ -649,7 +779,7 @@ public:
     }
   }
 
-}; //end of class Array
+}; // namespace AU
 
 } // namespace AU
 #endif
