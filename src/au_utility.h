@@ -140,4 +140,104 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
     }
 #endif
 
+#define AU_EXIT(info)                                                                                     \
+    {                                                                                                     \
+        std::cout << "Exit happens at " << __FILE__ << ", " << __func__ << ", " << __LINE__ << std::endl; \
+        std::cout << "Log : " << info << std::endl;                                                       \
+        std::exit(EXIT_FAILURE);                                                                          \
+    }
+
+/**
+ * @brief 
+ *flat vector of vector to 1D vector
+ * direction specify row-major or colum major
+ *  AU_FLAT_OUTPUT_ROW (0): row major, e.g., for a 2 by 2 vector
+ *     v[0][0] v[0][1] v[1][0] v[1][1]
+ * AU_FLAT_OUTPUT_COL (1): column major, e.g., for a 2 by 2 vector
+ *    v[0][0] v[1][0] v[0][1] v[1][1]
+ * 
+ * Since this is the support function to WriteEndpoint,
+ * It also convert the address associated with it. 
+ * 
+ * @tparam T type of data element
+ * @param v the vector of vector
+ * @param direction how to flat the data
+ * @param start_address the start address before/after flat, it may chage the # of dimensions
+ * @param end_address  the end address before/after flat, it may chage the # of dimensions
+ * @return void* the flat data
+ */
+template <typename T>
+void *FlatVector(std::vector<std::vector<T>> &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address)
+{
+    if (v.size() < 1)
+    {
+        return NULL;
+    }
+
+    if (v[0].size() < 1)
+    {
+        return NULL;
+    }
+
+    //Check v's elemtnt has same size
+    for (unsigned j = 0; j < v.size() - 1; j++){
+        if( v[j].size() != v[j+1].size() ){
+            AU_EXIT("Size of each element of vector must be queal.");
+        }
+    }
+
+    if(direction == AU_FLAT_OUTPUT_NEW){
+        start_address.push_back(0);
+        end_address.push_back(v[0].size());
+        return &v[0];
+    }
+
+    T *rv = (T *)malloc(v.size() * v[0].size() * sizeof(T)); //Assuming all rows have the same size
+    if (rv == NULL)
+    {
+        AU_EXIT("Not enough memory");
+    }
+
+    if (direction == AU_FLAT_OUTPUT_COL)
+    {
+        for (unsigned i = 0; i < v[0].size(); i++)
+        {
+            for (unsigned j = 0; j < v.size(); j++)
+            {
+                memcpy(rv + v.size() * i + j, &(v[j][i]), sizeof(T));
+            }
+        }
+    }
+    else if (direction == AU_FLAT_OUTPUT_ROW)
+    {
+   
+        for (unsigned i = 0; i < v.size(); i++)
+        {
+            memcpy(rv + v[i].size() * i, &(v[i][0]), v[i].size() * sizeof(T));
+        }
+    }
+    else
+    {
+        AU_EXIT("Not supported option yet to flat vector");
+    }
+
+
+    end_address[direction] =  (end_address[direction] - start_address[direction] + 1 ) * v[0].size();
+
+    return (void *)rv;
+}
+
+
+template <typename T>
+void *FlatVector(std::vector<T> &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address)
+{
+    AU_EXIT("Should not be here");
+}
+
+template <typename T>
+void *FlatVector(T &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address)
+{
+    AU_EXIT("Should not be here");
+}
+
 #endif

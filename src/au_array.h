@@ -253,9 +253,9 @@ public:
 
     //Set up the input data for LoadNextChunk
     InitializeApplyInput();
-
     std::vector<UDFOutputType> current_result_chunk_data;
     unsigned long long current_result_chunk_data_size = 1;
+    vector_type_flag = InferVectorType<UDFOutputType>();
 
     t_start = AU_WTIME;
     int load_ret = LoadNextChunk(current_result_chunk_data_size);
@@ -436,7 +436,6 @@ public:
 #endif
       time_udf = AU_WTIME - t_start + time_udf;
 
-      PrintVector("current_result_chunk_data: ", current_result_chunk_data);
       //////////////////////////////////////
       //end of processing on a single chunk
       /////////////////////////////////////
@@ -444,9 +443,23 @@ public:
       t_start = AU_WTIME;
       std::vector<unsigned long long> B_data_size;
       std::vector<int> B_data_chunk_size, B_data_overlap_size;
-      CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
-      B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
-      B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
+      if (vector_type_flag)
+      {
+        int vector_size;
+        std::vector<unsigned long long> current_chunk_start_offset_v = current_chunk_end_offset, current_chunk_end_offset_v = current_chunk_end_offset;
+        void *data_point;
+        data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v);
+
+        InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
+        B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+        //B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, &current_result_chunk_data[0]);
+      }
+      else
+      {
+        InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
+        B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+        B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
+      }
       time_write = time_write + AU_WTIME - t_start;
 
       t_start = AU_WTIME;
@@ -461,10 +474,10 @@ public:
 
   int WriteEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)
   {
-    endpoint->Write(start_p, end_p, data);
+    return endpoint->Write(start_p, end_p, data);
   }
 
-  void inline CalculateOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p)
+  void inline InferOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p, int vector_type_size)
   {
     if (skip_flag)
     {
@@ -779,7 +792,44 @@ public:
     }
   }
 
-}; // namespace AU
+  void SetApplyStrip(std::vector<int> strip_size)
+  {
+    if (strip_size.size() != data_dims)
+    {
+      AU_EXIT("Strip size must be equal to the # of dimensions of data");
+    }
+
+    skiped_dims_size.resize(data_dims);
+    skip_size.resize(data_dims);
+    skiped_chunks.resize(data_dims);
+    skiped_chunk_size.resize(data_dims);
+    for (int i = 0; i < data_dims; i++)
+    {
+      if (data_size[i] % strip_size[i] != 0 || data_chunk_size[i] % strip_size[i] != 0)
+      {
+        AU_EXIT("Strip size must be aligned with size of both array and chunk ! \n");
+      }
+      skiped_dims_size[i] = data_size[i] / strip_size[i];
+      skiped_chunk_size[i] = data_chunk_size[i] / strip_size[i];
+      if (skiped_dims_size[i] % skiped_chunk_size[i] != 0)
+      {
+        skiped_chunks[i] = skiped_dims_size[i] / skiped_chunk_size[i] + 1;
+      }
+      else
+      {
+        skiped_chunks[i] = skiped_dims_size[i] / skiped_chunk_size[i];
+      }
+      skip_size[i] = strip_size[i];
+    }
+    skip_flag = true;
+  }
+
+  void SetVectorDirection(OutputVectorFlatDirection flat_direction_index)
+  {
+    output_vector_flat_direction_index = flat_direction_index;
+  }
+
+}; // calss of array
 
 } // namespace AU
 #endif

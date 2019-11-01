@@ -77,9 +77,10 @@ int main(int argc, char *argv[])
     //Results data 2 to be stored in a file
     Array<float> *C = new Array<float>("EP_HDF5:./testf-16x16-f2.h5p:/testg:/testg/testd");
     std::vector<int> strip_size = {1, 16};
-    //A->SetOutputVector(VEC_SIZE, 1);
-    //A->SetApplyStripSize(strip_size);
-    //A->Apply(myfunc2, C);
+    A->SetVectorDirection(AU_FLAT_OUTPUT_ROW);
+
+    A->SetApplyStrip(strip_size);
+    A->Apply(myfunc2, C);
 
     //Clear
     delete A;
