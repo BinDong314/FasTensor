@@ -24,6 +24,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+
 #include "hdf5.h" //right now, we only have code for HDF5
 
 //
@@ -45,22 +46,15 @@ public:
      */
     EndpointHDF5(std::string data_endpoint) : Endpoint(data_endpoint)
     {
-        if (endpoint_info.size() == 3)
+        if (endpoint_info.size() == 2)
         {
             fn_str = endpoint_info[0];
-            gn_str = endpoint_info[1];
-            dn_str = endpoint_info[2];
-        }
-        else if (endpoint_info.size() == 2)
-        {
-            fn_str = endpoint_info[0];
-            gn_str = "/";
-            dn_str = endpoint_info[2];
+            gn_str = ExtractPath(endpoint_info[1]);
+            dn_str = ExtractFileName(endpoint_info[1]);
         }
         else
         {
-            std::cout << " data endpoint to HDF5 is not correct" << std::endl;
-            std::exit(EXIT_FAILURE);
+            AU_EXIT("HDF5 data endpoint info is not correct");
         }
         SetOpenFlag(false);
     }

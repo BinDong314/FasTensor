@@ -30,6 +30,7 @@ extern int au_mpi_rank_global;
 #include "au_endpoint_factory.h"
 #include "au_mpi.h"
 #include <assert.h>
+#include <stdarg.h>
 
 namespace AU
 {
@@ -92,7 +93,6 @@ private:
   std::vector<T> mirror_values;
 
   OutputVectorFlatDirection output_vector_flat_direction_index;
-  unsigned int output_vector_size = 0;
 
   //Flag variable
   bool skip_flag = false;
@@ -445,18 +445,18 @@ public:
       std::vector<int> B_data_chunk_size, B_data_overlap_size;
       if (vector_type_flag)
       {
-        int vector_size;
-        std::vector<unsigned long long> current_chunk_start_offset_v = current_chunk_end_offset, current_chunk_end_offset_v = current_chunk_end_offset;
+        size_t vector_size;
+        std::vector<unsigned long long> current_chunk_start_offset_v = current_result_chunk_start_offset, current_chunk_end_offset_v = current_result_chunk_end_offset;
         void *data_point;
-        data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v);
-
+        data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
         InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
         B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
-        //B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, &current_result_chunk_data[0]);
+        B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
+        free(data_point);
       }
       else
       {
-        InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
+        InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, 0);
         B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
         B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
       }
@@ -477,7 +477,7 @@ public:
     return endpoint->Write(start_p, end_p, data);
   }
 
-  void inline InferOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p, int vector_type_size)
+  void inline InferOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p, size_t output_vector_size)
   {
     if (skip_flag)
     {
@@ -597,6 +597,10 @@ public:
     endpoint->SetDimensions(data_size);
     AuEndpointDataType type_p = InferDataType<T>();
     endpoint->SetDataElementType(type_p);
+    endpoint->PrintInfo();
+    PrintVector("   data size", data_size);
+    //PrintVector("  chunk size", data_chunk_size);
+    //PrintVector("overlap size", data_overlap_size);
     return endpoint->Create();
   }
 
@@ -827,6 +831,13 @@ public:
   void SetVectorDirection(OutputVectorFlatDirection flat_direction_index)
   {
     output_vector_flat_direction_index = flat_direction_index;
+  }
+
+  inline T operator()(Ts... indexs) const
+  {
+
+    T t;
+    return t;
   }
 
 }; // calss of array

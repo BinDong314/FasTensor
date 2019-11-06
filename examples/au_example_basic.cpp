@@ -23,37 +23,10 @@ using namespace std;
 using namespace AU;
 
 //UDF One: duplicate the original data
-inline Stencil<float> myfunc1(const Stencil<float> &iStencil)
+inline Stencil<float> udf_basic(const Stencil<float> &iStencil)
 {
     Stencil<float> oStencil;
     oStencil = iStencil(0, 0) + 2.0;
-    return oStencil;
-}
-
-#define VEC_SIZE 16
-//UDF One: duplicate the original data
-inline Stencil<std::vector<float>> myfunc2(const Stencil<float> &iStencil)
-{
-
-    Stencil<std::vector<float>> oStencil;
-    std::vector<float> temp_vec(VEC_SIZE);
-
-    for (int i = 0; i < VEC_SIZE; i++)
-    {
-        temp_vec[i] = iStencil(0, i) + 2.0;
-    }
-    oStencil = temp_vec;
-    return oStencil;
-}
-
-inline Stencil<float> myfunc3(const Stencil<float> &iStencil)
-{
-
-    Stencil<float> oStencil;
-    if (iStencil(0) > 100.0)
-    {
-        oStencil = iStencil(0);
-    }
     return oStencil;
 }
 
@@ -66,25 +39,18 @@ int main(int argc, char *argv[])
     std::vector<int> chunk_size = {4, 16};
     std::vector<int> overlap_size = {1, 1};
 
-    //Orginal data set
-    Array<float> *A = new Array<float>("EP_HDF5:./testf-16x16.h5p:/testg:/testg/testd", chunk_size, overlap_size);
+    //Input data
+    Array<float> *A = new Array<float>("EP_HDF5:./testf-16x16.h5p:/testg/testd", chunk_size, overlap_size);
 
-    //Results data 1 to be stored in a file
-    Array<float> *B = new Array<float>("EP_HDF5:./testf-16x16-f1.h5p:/testg:/testg/testd");
-    A->Apply(myfunc1, B);
-    delete B;
+    //Result data
+    Array<float> *B = new Array<float>("EP_HDF5:./testf-16x16-f1.h5p:/testg/testd");
 
-    //Results data 2 to be stored in a file
-    Array<float> *C = new Array<float>("EP_HDF5:./testf-16x16-f2.h5p:/testg:/testg/testd");
-    std::vector<int> strip_size = {1, 16};
-    A->SetVectorDirection(AU_FLAT_OUTPUT_ROW);
-
-    A->SetApplyStrip(strip_size);
-    A->Apply(myfunc2, C);
+    //Run
+    A->Apply(udf_basic, B);
 
     //Clear
     delete A;
-    delete C;
+    delete B;
 
     AU_Finalize();
 

@@ -88,7 +88,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = au_example$(EXEEXT) au_test_data_generator$(EXEEXT)
+bin_PROGRAMS = au_test_data_generator$(EXEEXT) \
+	au_example_basic$(EXEEXT) au_example_vector$(EXEEXT) \
+	au_example_filter$(EXEEXT)
 subdir = examples
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -104,12 +106,16 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_au_example_OBJECTS = au_example.$(OBJEXT)
-au_example_OBJECTS = $(am_au_example_OBJECTS)
+am_au_example_basic_OBJECTS = au_example_basic.$(OBJEXT)
+au_example_basic_OBJECTS = $(am_au_example_basic_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+am_au_example_filter_OBJECTS = au_example_filter.$(OBJEXT)
+au_example_filter_OBJECTS = $(am_au_example_filter_OBJECTS)
+am_au_example_vector_OBJECTS = au_example_vector.$(OBJEXT)
+au_example_vector_OBJECTS = $(am_au_example_vector_OBJECTS)
 am_au_test_data_generator_OBJECTS = au_test_data_generator.$(OBJEXT)
 au_test_data_generator_OBJECTS = $(am_au_test_data_generator_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -127,7 +133,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/au_example.Po \
+am__depfiles_remade = ./$(DEPDIR)/au_example_basic.Po \
+	./$(DEPDIR)/au_example_filter.Po \
+	./$(DEPDIR)/au_example_vector.Po \
 	./$(DEPDIR)/au_test_data_generator.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -148,8 +156,11 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(au_example_SOURCES) $(au_test_data_generator_SOURCES)
-DIST_SOURCES = $(au_example_SOURCES) $(au_test_data_generator_SOURCES)
+SOURCES = $(au_example_basic_SOURCES) $(au_example_filter_SOURCES) \
+	$(au_example_vector_SOURCES) $(au_test_data_generator_SOURCES)
+DIST_SOURCES = $(au_example_basic_SOURCES) \
+	$(au_example_filter_SOURCES) $(au_example_vector_SOURCES) \
+	$(au_test_data_generator_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -322,12 +333,18 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_party  @ARRAYUDF_CP
 AM_CFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_party  @ARRAYUDF_CFLAGS@    -ldl 
 AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_party  @ARRAYUDF_CXXFLAGS@    -ldl  
 AM_LDFLAGS = @ARRAYUDF_LIBS@  -all-static  -ldl 
-au_example_SOURCES = au_example.cpp
-au_example_DEPENDENCIES = ../src/libArrayUDF.la
-au_example_LDADD = ../src/libArrayUDF.la
 au_test_data_generator_SOURCES = au_test_data_generator.cpp
 au_test_data_generator_DEPENDENCIES = ../src/libArrayUDF.la
 au_test_data_generator_LDADD = ../src/libArrayUDF.la
+au_example_basic_SOURCES = au_example_basic.cpp
+au_example_basic_DEPENDENCIES = ../src/libArrayUDF.la
+au_example_basic_LDADD = ../src/libArrayUDF.la
+au_example_vector_SOURCES = au_example_vector.cpp
+au_example_vector_DEPENDENCIES = ../src/libArrayUDF.la
+au_example_vector_LDADD = ../src/libArrayUDF.la
+au_example_filter_SOURCES = au_example_filter.cpp
+au_example_filter_DEPENDENCIES = ../src/libArrayUDF.la
+au_example_filter_LDADD = ../src/libArrayUDF.la
 all: all-am
 
 .SUFFIXES:
@@ -411,9 +428,17 @@ clean-binPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
-au_example$(EXEEXT): $(au_example_OBJECTS) $(au_example_DEPENDENCIES) $(EXTRA_au_example_DEPENDENCIES) 
-	@rm -f au_example$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(au_example_OBJECTS) $(au_example_LDADD) $(LIBS)
+au_example_basic$(EXEEXT): $(au_example_basic_OBJECTS) $(au_example_basic_DEPENDENCIES) $(EXTRA_au_example_basic_DEPENDENCIES) 
+	@rm -f au_example_basic$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(au_example_basic_OBJECTS) $(au_example_basic_LDADD) $(LIBS)
+
+au_example_filter$(EXEEXT): $(au_example_filter_OBJECTS) $(au_example_filter_DEPENDENCIES) $(EXTRA_au_example_filter_DEPENDENCIES) 
+	@rm -f au_example_filter$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(au_example_filter_OBJECTS) $(au_example_filter_LDADD) $(LIBS)
+
+au_example_vector$(EXEEXT): $(au_example_vector_OBJECTS) $(au_example_vector_DEPENDENCIES) $(EXTRA_au_example_vector_DEPENDENCIES) 
+	@rm -f au_example_vector$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(au_example_vector_OBJECTS) $(au_example_vector_LDADD) $(LIBS)
 
 au_test_data_generator$(EXEEXT): $(au_test_data_generator_OBJECTS) $(au_test_data_generator_DEPENDENCIES) $(EXTRA_au_test_data_generator_DEPENDENCIES) 
 	@rm -f au_test_data_generator$(EXEEXT)
@@ -425,7 +450,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_basic.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_filter.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_vector.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_test_data_generator.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -591,7 +618,9 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/au_example.Po
+		-rm -f ./$(DEPDIR)/au_example_basic.Po
+	-rm -f ./$(DEPDIR)/au_example_filter.Po
+	-rm -f ./$(DEPDIR)/au_example_vector.Po
 	-rm -f ./$(DEPDIR)/au_test_data_generator.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -638,7 +667,9 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/au_example.Po
+		-rm -f ./$(DEPDIR)/au_example_basic.Po
+	-rm -f ./$(DEPDIR)/au_example_filter.Po
+	-rm -f ./$(DEPDIR)/au_example_vector.Po
 	-rm -f ./$(DEPDIR)/au_test_data_generator.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

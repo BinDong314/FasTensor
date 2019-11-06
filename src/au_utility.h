@@ -164,10 +164,11 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
  * @param direction how to flat the data
  * @param start_address the start address before/after flat, it may chage the # of dimensions
  * @param end_address  the end address before/after flat, it may chage the # of dimensions
+ * @param v_size, the size of each element vector
  * @return void* the flat data
  */
 template <typename T>
-void *FlatVector(std::vector<std::vector<T>> &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address)
+void *FlatVector(std::vector<std::vector<T>> &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address, size_t &v_size)
 {
     if (v.size() < 1)
     {
@@ -180,19 +181,23 @@ void *FlatVector(std::vector<std::vector<T>> &v, OutputVectorFlatDirection direc
     }
 
     //Check v's elemtnt has same size
-    for (unsigned j = 0; j < v.size() - 1; j++){
-        if( v[j].size() != v[j+1].size() ){
+    for (unsigned j = 0; j < v.size() - 1; j++)
+    {
+        if (v[j].size() != v[j + 1].size())
+        {
             AU_EXIT("Size of each element of vector must be queal.");
         }
     }
+    v_size = v[0].size();
 
-    if(direction == AU_FLAT_OUTPUT_NEW){
+    if (direction == AU_FLAT_OUTPUT_NEW)
+    {
         start_address.push_back(0);
-        end_address.push_back(v[0].size());
+        end_address.push_back(v_size - 1);
         return &v[0];
     }
 
-    T *rv = (T *)malloc(v.size() * v[0].size() * sizeof(T)); //Assuming all rows have the same size
+    T *rv = (T *)malloc(v.size() * v_size * sizeof(T)); //Assuming all rows have the same size
     if (rv == NULL)
     {
         AU_EXIT("Not enough memory");
@@ -200,7 +205,7 @@ void *FlatVector(std::vector<std::vector<T>> &v, OutputVectorFlatDirection direc
 
     if (direction == AU_FLAT_OUTPUT_COL)
     {
-        for (unsigned i = 0; i < v[0].size(); i++)
+        for (unsigned i = 0; i < v_size; i++)
         {
             for (unsigned j = 0; j < v.size(); j++)
             {
@@ -210,10 +215,10 @@ void *FlatVector(std::vector<std::vector<T>> &v, OutputVectorFlatDirection direc
     }
     else if (direction == AU_FLAT_OUTPUT_ROW)
     {
-   
+
         for (unsigned i = 0; i < v.size(); i++)
         {
-            memcpy(rv + v[i].size() * i, &(v[i][0]), v[i].size() * sizeof(T));
+            memcpy(rv + v_size * i, &(v[i][0]), v_size * sizeof(T));
         }
     }
     else
@@ -221,23 +226,25 @@ void *FlatVector(std::vector<std::vector<T>> &v, OutputVectorFlatDirection direc
         AU_EXIT("Not supported option yet to flat vector");
     }
 
-
-    end_address[direction] =  (end_address[direction] - start_address[direction] + 1 ) * v[0].size();
+    end_address[direction] = start_address[direction] + (end_address[direction] - start_address[direction] + 1) * v_size - 1;
 
     return (void *)rv;
 }
 
-
 template <typename T>
-void *FlatVector(std::vector<T> &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address)
+void *FlatVector(std::vector<T> &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address, size_t &v_size)
 {
     AU_EXIT("Should not be here");
 }
 
 template <typename T>
-void *FlatVector(T &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address)
+void *FlatVector(T &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address, size_t &v_size)
 {
     AU_EXIT("Should not be here");
 }
+
+std::string ExtractFileName(const std::string &fullPath);
+
+std::string ExtractPath(const std::string &fullPath);
 
 #endif
