@@ -94,6 +94,8 @@ private:
 
   OutputVectorFlatDirection output_vector_flat_direction_index;
 
+  std::vector<Endpoint *> attribute_endpoint_vector; //vector of endpoints for a virtual array
+
   //Flag variable
   bool skip_flag = false;
   bool view_flag = false;
@@ -167,6 +169,16 @@ public:
 
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
+  }
+
+  /**
+   * @brief Construct a new Array object with only chunk size and overlap size
+   *         Mostly, this is used for virtual array which has uniform chunk size and overlap size
+   * @param cs chunk size 
+   * @param os overlap size
+   */
+  Array(std::vector<int> cs, std::vector<int> os)
+  {
   }
 
   /**
@@ -905,6 +917,45 @@ public:
     }
 
     endpoint->Write(start, end, static_cast<void *>(data_v.data()));
+  }
+
+  template <class AttributeType2>
+  void PushBackAttribute(std::string data_endpoint)
+  {
+
+    Endpoint *attribute_endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+    attribute_endpoint_vector.push_back(attribute_endpoint);
+    AuEndpointDataType data_element_type = InferDataType<AttributeType2>();
+    endpoint->SetDataElementType(data_element_type);
+
+    if (attribute_endpoint_vector.size() == 0)
+    {
+      virtual_array_flag = true;
+      attribute_endpoint->ExtractMeta();
+      data_size = endpoint->GetDimensions();
+      data_dims = data_size.size();
+    }
+    else
+    {
+      attribute_endpoint->ExtractMeta();
+      std::vector<unsigned long long> data_size_temp = endpoint->GetDimensions();
+      int data_dims_p = data_size.size();
+
+      if (data_size != data_size_temp || data_dims != data_dims_p)
+      {
+        AU_EXIT("Attributed must have same # of dimensions and size");
+      }
+    }
+  }
+
+  bool GetVirtualArrayFlag()
+  {
+    return virtual_array_flag;
+  }
+
+  void SetVirtualArrayFlag(bool flag_p)
+  {
+    virtual_array_flag = true;
   }
 
 }; // calss of array
