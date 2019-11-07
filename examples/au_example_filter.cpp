@@ -1,3 +1,13 @@
+
+#include <iostream>
+#include <stdarg.h>
+#include <vector>
+#include <stdlib.h>
+#include "au.h"
+
+using namespace std;
+using namespace AU;
+
 inline Stencil<float> udf_filter(const Stencil<float> &iStencil)
 {
 

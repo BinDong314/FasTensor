@@ -43,6 +43,7 @@ protected:
     AuEndpointDataType data_element_type;
     std::string data_endpoint_orig;
     bool open_flag = false;
+    unsigned read_write_flag;
 
 public:
     Endpoint(){};
@@ -145,6 +146,10 @@ public:
     bool GetOpenFlag();
 
     void SetOpenFlag(bool open_flag_p);
+
+    void SetRwFlag(unsigned read_write_flag_p);
+
+    unsigned GetRwFlag();
 };
 
 #endif

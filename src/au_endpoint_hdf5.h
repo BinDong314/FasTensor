@@ -57,6 +57,7 @@ public:
             AU_EXIT("HDF5 data endpoint info is not correct");
         }
         SetOpenFlag(false);
+        SetRwFlag(H5F_ACC_RDONLY);
     }
     ~EndpointHDF5()
     {

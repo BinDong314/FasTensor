@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     Array<float> *A = new Array<float>("EP_HDF5:./testf-16x16.h5p:/testg/testd", chunk_size, overlap_size);
 
     //Result data
-    Array<float> *B = new Array<float>("EP_HDF5:./testf-16x16-f1.h5p:/testg/testd");
+    Array<float> *B = new Array<float>("EP_HDF5:./testf-16x16-basic.h5p:/testg/testd");
 
     //Run
     A->Apply(udf_basic, B);

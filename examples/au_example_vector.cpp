@@ -57,14 +57,14 @@ int main(int argc, char *argv[])
     Array<float> *A = new Array<float>("EP_HDF5:./testf-16x16.h5p:/testg/testd", chunk_size, overlap_size);
 
     //Results data to be stored in a file
-    Array<float> *B = new Array<float>("EP_HDF5:./testf-16x16-f2.h5p:/testg/testd");
+    Array<float> *B = new Array<float>("EP_HDF5:./testf-16x16-vector.h5p:/testg/testd");
 
     //Set the direction to flat vector of output
     A->SetVectorDirection(AU_FLAT_OUTPUT_ROW);
 
     //Skip paramter, run the udf_vector on the first cell of each row
-    std::vector<int> strip_size = {1, 16};
-    A->SetApplyStrip(strip_size);
+    std::vector<int> skip_size = {1, 16};
+    A->SetApplySkip(skip_size);
 
     //Run udf_vector
     A->Apply(udf_vector, B);

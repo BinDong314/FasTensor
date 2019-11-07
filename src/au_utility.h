@@ -33,6 +33,8 @@
 #include <iostream>
 #include "au_type.h"
 
+#define V2VOIDP(vv) static_cast<void *>(vv.data())
+
 int ExtractFileTypeInfo(std::string data_endpoint_info, AuEndpointType &endpoint_type, std::vector<std::string> &endpoint_info);
 int file_exist(const char *filename);
 

@@ -77,7 +77,7 @@ private:
 
   int current_chunk_id; //Id of the current chunk (in memory) to apply UDF
 
-  std::vector<unsigned long long> skip_size;        //Size to ship after each operation
+  std::vector<int> skip_size;                       //Size to ship after each operation
   std::vector<unsigned long long> skiped_dims_size; //Size of the data after skip
   std::vector<unsigned long long> skiped_chunks;    //# of chunks after skip
   std::vector<int> skiped_chunk_size;               //Size of each chunk after skip
@@ -131,6 +131,8 @@ public:
   {
     array_data_endpoint_info = data_endpoint;
     endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+    AuEndpointDataType data_element_type = InferDataType<T>();
+    endpoint->SetDataElementType(data_element_type);
   }
 
   /**
@@ -144,6 +146,9 @@ public:
     array_data_endpoint_info = data_endpoint;
     data_auto_chunk_dim_index = auto_chunk_dim_index;
     endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+
+    AuEndpointDataType data_element_type = InferDataType<T>();
+    endpoint->SetDataElementType(data_element_type);
   }
 
   /**
@@ -159,6 +164,9 @@ public:
     data_chunk_size = cs;
     data_overlap_size = os;
     endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+
+    AuEndpointDataType data_element_type = InferDataType<T>();
+    endpoint->SetDataElementType(data_element_type);
   }
 
   /**
@@ -187,10 +195,6 @@ public:
 
   void InitializeApplyInput()
   {
-    //Map T to AuEndpointDataType
-    AuEndpointDataType data_element_type = InferDataType<T>();
-    endpoint->SetDataElementType(data_element_type);
-
     //Read the metadata (rank, dimension size) from endpoint
     endpoint->ExtractMeta();
     data_size = endpoint->GetDimensions();
@@ -223,6 +227,31 @@ public:
         data_chunked_size[i] = data_size[i] / data_chunk_size[i] + 1;
       }
       data_total_chunks = data_total_chunks * data_chunked_size[i];
+    }
+
+    if (skip_flag)
+    {
+      skiped_dims_size.resize(data_dims);
+      skiped_chunks.resize(data_dims);
+      skiped_chunk_size.resize(data_dims);
+
+      for (int i = 0; i < data_dims; i++)
+      {
+        if (data_size[i] % skip_size[i] != 0 || data_chunk_size[i] % skip_size[i] != 0)
+        {
+          AU_EXIT("Strip size must be aligned with size of both array and chunk ! \n");
+        }
+        skiped_dims_size[i] = data_size[i] / skip_size[i];
+        skiped_chunk_size[i] = data_chunk_size[i] / skip_size[i];
+        if (skiped_dims_size[i] % skiped_chunk_size[i] != 0)
+        {
+          skiped_chunks[i] = skiped_dims_size[i] / skiped_chunk_size[i] + 1;
+        }
+        else
+        {
+          skiped_chunks[i] = skiped_dims_size[i] / skiped_chunk_size[i];
+        }
+      }
     }
 
     //#ifdef DEBUG
@@ -475,6 +504,11 @@ public:
   int WriteEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)
   {
     return endpoint->Write(start_p, end_p, data);
+  }
+
+  int ReadEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)
+  {
+    return endpoint->Read(start_p, end_p, data);
   }
 
   void inline InferOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p, size_t output_vector_size)
@@ -796,35 +830,9 @@ public:
     }
   }
 
-  void SetApplyStrip(std::vector<int> strip_size)
+  void SetApplySkip(std::vector<int> skip_size_p)
   {
-    if (strip_size.size() != data_dims)
-    {
-      AU_EXIT("Strip size must be equal to the # of dimensions of data");
-    }
-
-    skiped_dims_size.resize(data_dims);
-    skip_size.resize(data_dims);
-    skiped_chunks.resize(data_dims);
-    skiped_chunk_size.resize(data_dims);
-    for (int i = 0; i < data_dims; i++)
-    {
-      if (data_size[i] % strip_size[i] != 0 || data_chunk_size[i] % strip_size[i] != 0)
-      {
-        AU_EXIT("Strip size must be aligned with size of both array and chunk ! \n");
-      }
-      skiped_dims_size[i] = data_size[i] / strip_size[i];
-      skiped_chunk_size[i] = data_chunk_size[i] / strip_size[i];
-      if (skiped_dims_size[i] % skiped_chunk_size[i] != 0)
-      {
-        skiped_chunks[i] = skiped_dims_size[i] / skiped_chunk_size[i] + 1;
-      }
-      else
-      {
-        skiped_chunks[i] = skiped_dims_size[i] / skiped_chunk_size[i];
-      }
-      skip_size[i] = strip_size[i];
-    }
+    skip_size = skip_size_p;
     skip_flag = true;
   }
 
@@ -833,11 +841,70 @@ public:
     output_vector_flat_direction_index = flat_direction_index;
   }
 
-  inline T operator()(Ts... indexs) const
+  template <typename... Is>
+  inline T operator()(Is... indexs) const
   {
+    std::vector<int> iv{{indexs...}};
+    std::vector<unsigned long long> start;
+    std::vector<unsigned long long> end;
+    std::vector<T> data_v;
 
-    T t;
-    return t;
+    start.resize(iv.size());
+    end.resize(iv.size());
+    data_v.resize(iv.size());
+
+    for (int i = 0; i < iv.size(); i++)
+    {
+      start[i] = iv[i];
+      end[i] = iv[i];
+    }
+
+    endpoint->Read(start, end, static_cast<void *>(data_v.data()));
+    return data_v[0];
+  }
+
+  template <typename... Is>
+  inline T GetValue(Is... indexs) const
+  {
+    std::vector<int> iv{{indexs...}};
+    std::vector<unsigned long long> start;
+    std::vector<unsigned long long> end;
+    std::vector<T> data_v;
+
+    start.resize(iv.size());
+    end.resize(iv.size());
+    data_v.resize(1);
+
+    for (int i = 0; i < iv.size(); i++)
+    {
+      start[i] = iv[i];
+      end[i] = iv[i];
+    }
+
+    endpoint->Read(start, end, static_cast<void *>(data_v.data()));
+    return data_v[0];
+  }
+
+  template <typename... Is>
+  inline void SetValue(T data_p, Is... indexs) const
+  {
+    std::vector<int> iv{{indexs...}};
+    std::vector<unsigned long long> start;
+    std::vector<unsigned long long> end;
+    std::vector<T> data_v;
+
+    start.resize(iv.size());
+    end.resize(iv.size());
+    data_v.resize(1);
+
+    data_v[0] = data_p;
+    for (int i = 0; i < iv.size(); i++)
+    {
+      start[i] = iv[i];
+      end[i] = iv[i];
+    }
+
+    endpoint->Write(start, end, static_cast<void *>(data_v.data()));
   }
 
 }; // calss of array
