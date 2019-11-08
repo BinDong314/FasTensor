@@ -84,6 +84,13 @@ public:
     AuEndpointDataType GetDataElementType();
 
     /**
+     * @brief Get the size of the type for the element
+     * 
+     * @return int 
+     */
+    int GetDataElementTypeSize();
+
+    /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
      * 
      * @return int < 0 error, >= 0 works 

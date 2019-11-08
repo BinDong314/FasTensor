@@ -89,8 +89,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = au_test_data_generator$(EXEEXT) \
-	au_example_basic$(EXEEXT) au_example_vector$(EXEEXT) \
-	au_example_array$(EXEEXT)
+	au_example_hello_world$(EXEEXT) au_example_vector$(EXEEXT) \
+	au_example_array$(EXEEXT) au_example_vds$(EXEEXT)
 subdir = examples
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -108,16 +108,28 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_au_example_array_OBJECTS = au_example_array.$(OBJEXT)
 au_example_array_OBJECTS = $(am_au_example_array_OBJECTS)
+au_example_array_LDADD = $(LDADD)
+au_example_array_DEPENDENCIES = ../src/libArrayUDF.la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-am_au_example_basic_OBJECTS = au_example_basic.$(OBJEXT)
-au_example_basic_OBJECTS = $(am_au_example_basic_OBJECTS)
+am_au_example_hello_world_OBJECTS = au_example_hello_world.$(OBJEXT)
+au_example_hello_world_OBJECTS = $(am_au_example_hello_world_OBJECTS)
+au_example_hello_world_LDADD = $(LDADD)
+au_example_hello_world_DEPENDENCIES = ../src/libArrayUDF.la
+am_au_example_vds_OBJECTS = au_example_vds.$(OBJEXT)
+au_example_vds_OBJECTS = $(am_au_example_vds_OBJECTS)
+au_example_vds_LDADD = $(LDADD)
+au_example_vds_DEPENDENCIES = ../src/libArrayUDF.la
 am_au_example_vector_OBJECTS = au_example_vector.$(OBJEXT)
 au_example_vector_OBJECTS = $(am_au_example_vector_OBJECTS)
+au_example_vector_LDADD = $(LDADD)
+au_example_vector_DEPENDENCIES = ../src/libArrayUDF.la
 am_au_test_data_generator_OBJECTS = au_test_data_generator.$(OBJEXT)
 au_test_data_generator_OBJECTS = $(am_au_test_data_generator_OBJECTS)
+au_test_data_generator_LDADD = $(LDADD)
+au_test_data_generator_DEPENDENCIES = ../src/libArrayUDF.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -134,8 +146,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/au_example_array.Po \
-	./$(DEPDIR)/au_example_basic.Po \
-	./$(DEPDIR)/au_example_vector.Po \
+	./$(DEPDIR)/au_example_hello_world.Po \
+	./$(DEPDIR)/au_example_vds.Po ./$(DEPDIR)/au_example_vector.Po \
 	./$(DEPDIR)/au_test_data_generator.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -156,9 +168,11 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(au_example_array_SOURCES) $(au_example_basic_SOURCES) \
+SOURCES = $(au_example_array_SOURCES) \
+	$(au_example_hello_world_SOURCES) $(au_example_vds_SOURCES) \
 	$(au_example_vector_SOURCES) $(au_test_data_generator_SOURCES)
-DIST_SOURCES = $(au_example_array_SOURCES) $(au_example_basic_SOURCES) \
+DIST_SOURCES = $(au_example_array_SOURCES) \
+	$(au_example_hello_world_SOURCES) $(au_example_vds_SOURCES) \
 	$(au_example_vector_SOURCES) $(au_test_data_generator_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -332,18 +346,13 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_party  @ARRAYUDF_CP
 AM_CFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_party  @ARRAYUDF_CFLAGS@    -ldl 
 AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_party  @ARRAYUDF_CXXFLAGS@    -ldl  
 AM_LDFLAGS = @ARRAYUDF_LIBS@  -all-static  -ldl 
+LDADD = ../src/libArrayUDF.la
+DEPENDENCIES = ../src/libArrayUDF.la
 au_test_data_generator_SOURCES = au_test_data_generator.cpp
-au_test_data_generator_DEPENDENCIES = ../src/libArrayUDF.la
-au_test_data_generator_LDADD = ../src/libArrayUDF.la
-au_example_basic_SOURCES = au_example_basic.cpp
-au_example_basic_DEPENDENCIES = ../src/libArrayUDF.la
-au_example_basic_LDADD = ../src/libArrayUDF.la
+au_example_hello_world_SOURCES = au_example_hello_world.cpp
 au_example_vector_SOURCES = au_example_vector.cpp
-au_example_vector_DEPENDENCIES = ../src/libArrayUDF.la
-au_example_vector_LDADD = ../src/libArrayUDF.la
 au_example_array_SOURCES = au_example_array.cpp
-au_example_array_DEPENDENCIES = ../src/libArrayUDF.la
-au_example_array_LDADD = ../src/libArrayUDF.la
+au_example_vds_SOURCES = au_example_vds.cpp
 all: all-am
 
 .SUFFIXES:
@@ -431,9 +440,13 @@ au_example_array$(EXEEXT): $(au_example_array_OBJECTS) $(au_example_array_DEPEND
 	@rm -f au_example_array$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(au_example_array_OBJECTS) $(au_example_array_LDADD) $(LIBS)
 
-au_example_basic$(EXEEXT): $(au_example_basic_OBJECTS) $(au_example_basic_DEPENDENCIES) $(EXTRA_au_example_basic_DEPENDENCIES) 
-	@rm -f au_example_basic$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(au_example_basic_OBJECTS) $(au_example_basic_LDADD) $(LIBS)
+au_example_hello_world$(EXEEXT): $(au_example_hello_world_OBJECTS) $(au_example_hello_world_DEPENDENCIES) $(EXTRA_au_example_hello_world_DEPENDENCIES) 
+	@rm -f au_example_hello_world$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(au_example_hello_world_OBJECTS) $(au_example_hello_world_LDADD) $(LIBS)
+
+au_example_vds$(EXEEXT): $(au_example_vds_OBJECTS) $(au_example_vds_DEPENDENCIES) $(EXTRA_au_example_vds_DEPENDENCIES) 
+	@rm -f au_example_vds$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(au_example_vds_OBJECTS) $(au_example_vds_LDADD) $(LIBS)
 
 au_example_vector$(EXEEXT): $(au_example_vector_OBJECTS) $(au_example_vector_DEPENDENCIES) $(EXTRA_au_example_vector_DEPENDENCIES) 
 	@rm -f au_example_vector$(EXEEXT)
@@ -450,7 +463,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_array.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_basic.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_hello_world.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_vds.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_vector.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_test_data_generator.Po@am__quote@ # am--include-marker
 
@@ -618,7 +632,8 @@ clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/au_example_array.Po
-	-rm -f ./$(DEPDIR)/au_example_basic.Po
+	-rm -f ./$(DEPDIR)/au_example_hello_world.Po
+	-rm -f ./$(DEPDIR)/au_example_vds.Po
 	-rm -f ./$(DEPDIR)/au_example_vector.Po
 	-rm -f ./$(DEPDIR)/au_test_data_generator.Po
 	-rm -f Makefile
@@ -667,7 +682,8 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/au_example_array.Po
-	-rm -f ./$(DEPDIR)/au_example_basic.Po
+	-rm -f ./$(DEPDIR)/au_example_hello_world.Po
+	-rm -f ./$(DEPDIR)/au_example_vds.Po
 	-rm -f ./$(DEPDIR)/au_example_vector.Po
 	-rm -f ./$(DEPDIR)/au_test_data_generator.Po
 	-rm -f Makefile

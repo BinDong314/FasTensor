@@ -82,10 +82,13 @@ int EndpointHDF5::Create()
         }
         did = H5Dcreate(fid, dn_str.c_str(), disk_type, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     }
+    std::cout << dn_str << "\n";
+
     dataspace_id = H5Dget_space(did);
     H5Sclose(ts_id);
-
     SetOpenFlag(true);
+
+    H5Fflush(fid, H5F_SCOPE_GLOBAL);
     return 0;
 }
 
@@ -294,6 +297,7 @@ void EndpointHDF5::Map2MyType()
     case AU_DOUBLE:
         mem_type = H5T_NATIVE_DOUBLE;
         disk_type = H5T_IEEE_F64LE;
+        return;
     default:
         std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
         std::flush(std::cout);

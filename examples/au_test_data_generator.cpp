@@ -85,11 +85,11 @@ void print_help()
           -c number of cores. \n\
           -m mode(1: array, 2: rational), no suport right now \n\
           -r fill random number \n\
-          -i intial valur to fill (not random number) \n\
+          -i start value to fill and then ++\n\
           -p sparse array     \n\
-          Example: mpirun -n 1 ./au_test_data_generator -f testf-16x16.h5p -g /testg -d /testg/testd -n 2 -s 16,16 -t 1 \n";
+          Example: mpirun -n 1 ./au_test_data_generator -f ./test-data/testf-16x16-hello-world.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1 \n";
 
-  fprintf(stdout, msg, "fake-hdf5");
+  fprintf(stdout, msg, "au_test_data_generator");
 }
 
 //#define SDS_MPI
@@ -292,7 +292,8 @@ int main(int argc, char **argv)
       }
       else
       {
-        pi[i] = i * 10 + start_value;
+        pi[i] = start_value;
+        start_value++;
       }
     }
     else if (type == 1)

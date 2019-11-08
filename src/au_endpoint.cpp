@@ -31,6 +31,42 @@ AuEndpointDataType Endpoint::GetDataElementType()
     return data_element_type;
 }
 
+/**
+     * @brief Get the size of the type for the element
+     * 
+     * @return int 
+     */
+int Endpoint::GetDataElementTypeSize()
+{
+    switch (data_element_type)
+    {
+    case AU_SHORT:
+        return sizeof(short);
+    case AU_INT:
+        return sizeof(int);
+    case AU_LONG:
+        return sizeof(long);
+    case AU_LONG_LONG:
+        return sizeof(long long);
+    case AU_USHORT:
+        return sizeof(unsigned short);
+    case AU_UINT:
+        return sizeof(unsigned int);
+    case AU_ULONG:
+        return sizeof(unsigned long);
+    case AU_ULLONG:
+        return sizeof(unsigned long long);
+    case AU_FLOAT:
+        return sizeof(float);
+    case AU_DOUBLE:
+        return sizeof(double);
+    default:
+        std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+        std::flush(std::cout);
+        std::exit(EXIT_FAILURE);
+    }
+}
+
 bool Endpoint::GetOpenFlag()
 {
     return open_flag;

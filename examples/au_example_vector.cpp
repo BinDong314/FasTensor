@@ -38,7 +38,7 @@ inline Stencil<std::vector<float>> udf_vector(const Stencil<float> &iStencil)
 
     for (int i = 0; i < VEC_SIZE; i++)
     {
-        temp_vec[i] = iStencil(0, i) + 2.0;
+        temp_vec[i] = iStencil(0, i) * 2.0;
     }
     oStencil = temp_vec;
     return oStencil;
@@ -54,10 +54,10 @@ int main(int argc, char *argv[])
     std::vector<int> overlap_size = {0, 0};
 
     //Orginal data set
-    Array<float> *A = new Array<float>("EP_HDF5:./testf-16x16.h5p:/testg/testd", chunk_size, overlap_size);
+    Array<float> *A = new Array<float>("EP_HDF5:./test-data/testf-16x16-vector.h5:/testg/testd", chunk_size, overlap_size);
 
     //Results data to be stored in a file
-    Array<float> *B = new Array<float>("EP_HDF5:./testf-16x16-vector.h5p:/testg/testd");
+    Array<float> *B = new Array<float>("EP_HDF5:./test-data/testf-16x16-vector-output.h5:/testg/testd");
 
     //Set the direction to flat vector of output
     A->SetVectorDirection(AU_FLAT_OUTPUT_ROW);

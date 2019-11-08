@@ -179,6 +179,8 @@ public:
    */
   Array(std::vector<int> cs, std::vector<int> os)
   {
+    data_chunk_size = cs;
+    data_overlap_size = os;
   }
 
   /**
@@ -208,9 +210,30 @@ public:
   void InitializeApplyInput()
   {
     //Read the metadata (rank, dimension size) from endpoint
-    endpoint->ExtractMeta();
-    data_size = endpoint->GetDimensions();
-    data_dims = data_size.size();
+
+    if (virtual_array_flag && attribute_endpoint_vector.size() >= 1)
+    {
+      //Get the data_size from first attribute
+      attribute_endpoint_vector[0]->ExtractMeta();
+      data_size = attribute_endpoint_vector[0]->GetDimensions();
+      data_dims = data_size.size();
+      for (int i = 1; i < attribute_endpoint_vector.size(); i++)
+      {
+        attribute_endpoint_vector[i]->ExtractMeta();
+        std::vector<unsigned long long> data_size_p = attribute_endpoint_vector[i]->GetDimensions();
+
+        if (data_size != data_size_p)
+        {
+          AU_EXIT("All attributes must have same size");
+        }
+      }
+    }
+    else
+    {
+      endpoint->ExtractMeta();
+      data_size = endpoint->GetDimensions();
+      data_dims = data_size.size();
+    }
 
     current_chunk_start_offset.resize(data_dims);
     current_chunk_end_offset.resize(data_dims);
@@ -269,7 +292,8 @@ public:
     //#ifdef DEBUG
     if (au_mpi_rank_global == 0)
     {
-      endpoint->PrintInfo();
+      if (!virtual_array_flag)
+        endpoint->PrintInfo();
       PrintVector("   data size", data_size);
       PrintVector("  chunk size", data_chunk_size);
       PrintVector("overlap size", data_overlap_size);
@@ -285,7 +309,15 @@ public:
    */
   void PrintEndpointInfo()
   {
-    endpoint->PrintInfo();
+    if (!virtual_array_flag)
+    {
+      endpoint->PrintInfo();
+    }
+    else
+    {
+      for (auto aep : attribute_endpoint_vector)
+        aep->PrintInfo();
+    }
   }
 
   template <class UDFOutputType, class BType = UDFOutputType, class BAttributeType = BType>
@@ -393,39 +425,9 @@ public:
           //RowMajorOrder(data_dims_size, global_cell_coordinate)
           //ROW_MAJOR_ORDER_MACRO(data_dims_size, data_dims_size.size(), global_cell_coordinate, cell_target_g_location_rm)
           //cell_target.set_my_g_location_rm(cell_target_g_location_rm);
-          is_mirror_value = 0;
-          if (mirror_value_flag)
-          {
-            for (int iii = 0; iii < mirror_values.size(); iii++)
-            {
-              if (current_chunk_data[offset_ol] == mirror_values[iii])
-              {
-                is_mirror_value = 1;
-                break;
-              }
-            }
-          }
 
-          //Just for the test of performnace
-          //if(cell_coordinate[0] >= 16383 || cell_coordinate[1] >= 16383)
-
-          if (is_mirror_value == 0)
-          {
-
-            cell_return_stencil = UDF(cell_target); // Called by C++
-            cell_return_value = cell_return_stencil.get_value();
-          }
-          else
-          {
-            //This is a mirrow value, copy it into result directly
-            //Using memcpy to avail error in template of T
-            if (sizeof(cell_return_value) == sizeof(T))
-            {
-              memset(&cell_return_value, 0, sizeof(T));
-              std::memcpy(&cell_return_value, &current_chunk_data[offset_ol], sizeof(T));
-            }
-            //cell_return_value = current_chunk_data[offset_ol];
-          }
+          cell_return_stencil = UDF(cell_target); // Called by C++
+          cell_return_value = cell_return_stencil.get_value();
 
           if (save_result_flag)
           {
@@ -484,6 +486,7 @@ public:
       t_start = AU_WTIME;
       std::vector<unsigned long long> B_data_size;
       std::vector<int> B_data_chunk_size, B_data_overlap_size;
+
       if (vector_type_flag)
       {
         size_t vector_size;
@@ -501,6 +504,7 @@ public:
         B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
         B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
       }
+
       time_write = time_write + AU_WTIME - t_start;
 
       t_start = AU_WTIME;
@@ -515,7 +519,10 @@ public:
 
   int WriteEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)
   {
-    return endpoint->Write(start_p, end_p, data);
+    if (!virtual_array_flag)
+      return endpoint->Write(start_p, end_p, data);
+
+    return 0;
   }
 
   int ReadEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)
@@ -634,20 +641,40 @@ public:
 
   int inline CreateEndpoint(std::vector<unsigned long long> data_size_p, std::vector<int> data_chunk_size_p, std::vector<int> data_overlap_size_p)
   {
-    if (endpoint->GetOpenFlag())
+
+    if (!virtual_array_flag && endpoint->GetOpenFlag())
       return 0;
 
     data_size = data_size_p;
     data_chunk_size = data_chunk_size_p;
     data_overlap_size = data_overlap_size_p;
-    endpoint->SetDimensions(data_size);
-    AuEndpointDataType type_p = InferDataType<T>();
-    endpoint->SetDataElementType(type_p);
-    endpoint->PrintInfo();
-    PrintVector("   data size", data_size);
-    //PrintVector("  chunk size", data_chunk_size);
-    //PrintVector("overlap size", data_overlap_size);
-    return endpoint->Create();
+
+    if (virtual_array_flag)
+    {
+      for (int i = 0; i < attribute_endpoint_vector.size(); i++)
+      {
+        if (attribute_endpoint_vector[i]->GetOpenFlag())
+          return 0;
+        attribute_endpoint_vector[i]->SetDimensions(data_size);
+        attribute_endpoint_vector[i]->PrintInfo();
+        PrintVector("   data size", data_size);
+        //PrintVector("  chunk size", data_chunk_size);
+        //PrintVector("overlap size", data_overlap_size);
+        attribute_endpoint_vector[i]->Create();
+      }
+      return 0;
+    }
+    else
+    {
+      AuEndpointDataType type_p = InferDataType<T>();
+      endpoint->SetDimensions(data_size);
+      endpoint->SetDataElementType(type_p);
+      endpoint->PrintInfo();
+      PrintVector("   data size", data_size);
+      //PrintVector("  chunk size", data_chunk_size);
+      //PrintVector("overlap size", data_overlap_size);
+      return endpoint->Create();
+    }
   }
 
   /**
@@ -802,42 +829,18 @@ public:
     }
     else
     {
-      /*
-      if (current_chunk_ol_start_offset_cache == current_chunk_ol_start_offset && current_chunk_ol_end_offset_cache == current_chunk_ol_end_offset)
+      int n = attribute_endpoint_vector.size();
+      assert(n >= 1);
+      int element_type_size = attribute_endpoint_vector[0]->GetDataElementTypeSize();
+      void *current_chunk_data_temp;
+      current_chunk_data_temp = (void *)malloc(current_chunk_ol_cells * element_type_size);
+      for (int i = 0; i < n; i++)
       {
-
-        current_chunk_data = current_chunk_data_cache;
-        if (mpi_rank == 0)
-          printf("Read cached data (test)!!!\n");
+        if (au_mpi_rank_global == 0)
+          std::cout << "Read " << i << "th attribute: " << attribute_endpoint_vector[i]->PrintInfo() << " \n";
+        attribute_endpoint_vector[i]->Read(current_chunk_ol_start_offset, current_chunk_ol_end_offset, current_chunk_data_temp);
+        //InsertIntoVirtualVector<AttributeType, T>(current_chunk_data_temp, current_chunk_data, i);
       }
-      else
-      {
-        int n = attributes.size();
-        Data<AttributeType> *ah;
-        unsigned long long hym_count = 1;
-        std::vector<AttributeType> current_chunk_data_temp;
-        current_chunk_data_temp.resize(current_chunk_ol_cells);
-        for (int i = 0; i < n; i++)
-        {
-          ah = attributes[i]->GetDataHandle();
-          if (mpi_rank == 0)
-            std::cout << "Read " << i << "th attribute: " << attributes[i]->GetDatasetName() << " \n";
-
-          //ah->ReadDataStripingMem(current_chunk_ol_start_offset, current_chunk_ol_end_offset, &current_chunk_data[0], i, n, hym_count);
-          ah->ReadData(current_chunk_ol_start_offset, current_chunk_ol_end_offset, current_chunk_data_temp);
-          // printf("Load attribute %s,  i=%d (n=%d): value =  %f, %f\n", ah->GetDatasetName().c_str(), i, n, current_chunk_data_temp[0], current_chunk_data_temp[1]);
-#if __cplusplus > 201402L
-          InsertIntoVirtualVector<AttributeType, T>(current_chunk_data_temp, current_chunk_data, i);
-#endif
-          //std::cout << current_chunk_data[0] << std::endl;
-          //std::cout << current_chunk_data[1] << std::endl;
-        }
-        current_chunk_data_temp.resize(0);
-        current_chunk_data_cache = current_chunk_data;
-        current_chunk_ol_start_offset_cache = current_chunk_ol_start_offset;
-        current_chunk_ol_end_offset_cache = current_chunk_ol_end_offset;
-      }
-     */
       return 1;
     }
   }
@@ -922,30 +925,12 @@ public:
   template <class AttributeType2>
   void PushBackAttribute(std::string data_endpoint)
   {
-
-    Endpoint *attribute_endpoint = EndpointFactory::NewEndpoint(data_endpoint);
-    attribute_endpoint_vector.push_back(attribute_endpoint);
-    AuEndpointDataType data_element_type = InferDataType<AttributeType2>();
-    endpoint->SetDataElementType(data_element_type);
-
     if (attribute_endpoint_vector.size() == 0)
-    {
       virtual_array_flag = true;
-      attribute_endpoint->ExtractMeta();
-      data_size = endpoint->GetDimensions();
-      data_dims = data_size.size();
-    }
-    else
-    {
-      attribute_endpoint->ExtractMeta();
-      std::vector<unsigned long long> data_size_temp = endpoint->GetDimensions();
-      int data_dims_p = data_size.size();
-
-      if (data_size != data_size_temp || data_dims != data_dims_p)
-      {
-        AU_EXIT("Attributed must have same # of dimensions and size");
-      }
-    }
+    Endpoint *attribute_endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+    AuEndpointDataType data_element_type = InferDataType<AttributeType2>();
+    attribute_endpoint->SetDataElementType(data_element_type);
+    attribute_endpoint_vector.push_back(attribute_endpoint);
   }
 
   bool GetVirtualArrayFlag()

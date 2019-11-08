@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     AU_Init(argc, argv);
 
     //Input data
-    Array<float> *A = new Array<float>("EP_HDF5:./testf-16x16.h5p:/testg/testd");
+    Array<float> *A = new Array<float>("EP_HDF5:./test-data/testf-16x16-array.h5:/testg/testd");
 
     /**
      * Read data point
