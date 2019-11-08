@@ -34,7 +34,7 @@ extern int au_mpi_rank_global;
 
 namespace AU
 {
-template <class T, class AttributeType = T>
+template <class T>
 class Array
 {
 private:
@@ -320,8 +320,8 @@ public:
     }
   }
 
-  template <class UDFOutputType, class BType = UDFOutputType, class BAttributeType = BType>
-  void Apply(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType, BAttributeType> *B = nullptr)
+  template <class UDFOutputType, class BType = UDFOutputType>
+  void Apply(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
   {
 
     //Set up the input data for LoadNextChunk
@@ -922,13 +922,13 @@ public:
     endpoint->Write(start, end, static_cast<void *>(data_v.data()));
   }
 
-  template <class AttributeType2>
+  template <class AttributeType>
   void PushBackAttribute(std::string data_endpoint)
   {
     if (attribute_endpoint_vector.size() == 0)
       virtual_array_flag = true;
     Endpoint *attribute_endpoint = EndpointFactory::NewEndpoint(data_endpoint);
-    AuEndpointDataType data_element_type = InferDataType<AttributeType2>();
+    AuEndpointDataType data_element_type = InferDataType<AttributeType>();
     attribute_endpoint->SetDataElementType(data_element_type);
     attribute_endpoint_vector.push_back(attribute_endpoint);
   }
