@@ -86,3 +86,78 @@ unsigned Endpoint::GetRwFlag()
 {
     return read_write_flag;
 }
+
+#define VOID2UNION_HELPER(TARGET_TYPE, EMPLACE_INDEX)                                     \
+    {                                                                                     \
+        TARGET_TYPE *temp_pointer_of_type = (TARGET_TYPE *)data_vector_in_void;           \
+        for (int i = 0; i < n_elements; i++)                                              \
+        {                                                                                 \
+            data_vector_in_union_type[i].emplace<EMPLACE_INDEX>(temp_pointer_of_type[i]); \
+        }                                                                                 \
+    }
+
+std::vector<AuEndpointDataTypeUnion> Endpoint::Void2Union(void *data_vector_in_void, size_t n_elements)
+{
+    std::vector<AuEndpointDataTypeUnion> data_vector_in_union_type;
+    data_vector_in_union_type.resize(n_elements);
+
+    switch (data_element_type)
+    {
+    case AU_SHORT:
+    {
+        VOID2UNION_HELPER(short, AU_SHORT);
+        break;
+    }
+    case AU_INT:
+    {
+        VOID2UNION_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_LONG:
+    {
+        VOID2UNION_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_LONG_LONG:
+    {
+        VOID2UNION_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_USHORT:
+    {
+        VOID2UNION_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_UINT:
+    {
+        VOID2UNION_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_ULONG:
+    {
+        VOID2UNION_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_ULLONG:
+    {
+        VOID2UNION_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_FLOAT:
+    {
+        VOID2UNION_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_DOUBLE:
+    {
+        VOID2UNION_HELPER(int, AU_INT);
+        break;
+    }
+    default:
+        std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+        std::flush(std::cout);
+        std::exit(EXIT_FAILURE);
+    }
+
+    return data_vector_in_union_type;
+}

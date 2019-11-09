@@ -20,6 +20,7 @@
 
 #include <type_traits>
 #include <iostream>
+#include <variant>
 
 typedef enum AuEndpointType
 {
@@ -37,7 +38,6 @@ typedef enum AuEndpointType
 //for reference
 typedef enum AuEndpointDataType
 {
-  AU_NO_TYPE = -1, /*error                                      */
   AU_SHORT = 0,
   AU_INT = 1,
   AU_LONG = 2,
@@ -50,6 +50,12 @@ typedef enum AuEndpointDataType
   AU_DOUBLE = 9,
   AU_NCLASSES /*this must be last                          */
 } AuEndpointDataType;
+
+/**
+ * @brief It should follow the order of above AuEndpointDataType
+ * 
+ */
+using AuEndpointDataTypeUnion = std::variant<short, int, long, long long, unsigned short, unsigned int, unsigned long, unsigned long long, float, double>;
 
 template <typename T>
 AuEndpointDataType InferDataType()

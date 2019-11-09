@@ -157,6 +157,14 @@ public:
     void SetRwFlag(unsigned read_write_flag_p);
 
     unsigned GetRwFlag();
+
+    /**
+     * @brief convert my data in (void *) type to Union type
+     * 
+     * @param vp : pointer to data 
+     * @return std::vector<AuEndpointDataTypeUnion> : return value
+     */
+    std::vector<AuEndpointDataTypeUnion> Void2Union(void *vp, size_t n_elements);
 };
 
 #endif

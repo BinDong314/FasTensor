@@ -249,4 +249,33 @@ std::string ExtractFileName(const std::string &fullPath);
 
 std::string ExtractPath(const std::string &fullPath);
 
+/**
+ * @brief 
+ * 
+ * @tparam T1 
+ * @tparam T2 
+ * @param attribute_vector it is type of AuEndpointDataTypeUnion
+ * @param virtual_array_vector 
+ * @param index 
+ */
+template <class T1, class T2>
+void Attribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, AuEndpointDataType data_element_index, std::vector<T2> &virtual_array_vector, int index)
+{
+    assert(attribute_vector.size() == virtual_array_vector.size());
+    size_t n = attribute_vector.size();
+    for (size_t i = 0; i < n; i++)
+    {
+        T1 attribute_vector_value = attribute_vector[i];
+        int m_index = 0;
+        cista::for_each_field(virtual_array_vector[i], [&m_index, index, attribute_vector_value, data_element_index](auto &&m) {
+            if (m_index == index)
+            {
+                m = std::get<data_element_index>(attribute_vector_value);
+                return;
+            }
+            m_index++;
+        });
+    }
+}
+
 #endif
