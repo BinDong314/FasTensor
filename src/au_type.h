@@ -38,6 +38,7 @@ typedef enum AuEndpointType
 //for reference
 typedef enum AuEndpointDataType
 {
+  AU_NO_TYPE = -1,
   AU_SHORT = 0,
   AU_INT = 1,
   AU_LONG = 2,

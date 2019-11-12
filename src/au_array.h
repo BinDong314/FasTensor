@@ -834,12 +834,17 @@ public:
       int element_type_size = attribute_endpoint_vector[0]->GetDataElementTypeSize();
       void *current_chunk_data_temp;
       current_chunk_data_temp = (void *)malloc(current_chunk_ol_cells * element_type_size);
+
+      std::vector<AuEndpointDataTypeUnion> current_chunk_data_union_vector;
+
       for (int i = 0; i < n; i++)
       {
         if (au_mpi_rank_global == 0)
           std::cout << "Read " << i << "th attribute: " << attribute_endpoint_vector[i]->PrintInfo() << " \n";
         attribute_endpoint_vector[i]->Read(current_chunk_ol_start_offset, current_chunk_ol_end_offset, current_chunk_data_temp);
         //InsertIntoVirtualVector<AttributeType, T>(current_chunk_data_temp, current_chunk_data, i);
+        current_chunk_data_union_vector = attribute_endpoint_vector[i]->Void2Union(current_chunk_data_temp, current_chunk_ol_cells);
+        InsertAttribute2VirtualArrayVector(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), current_chunk_data, i);
       }
       return 1;
     }

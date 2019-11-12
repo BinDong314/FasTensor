@@ -32,6 +32,11 @@
 #include <iterator>
 #include <iostream>
 #include "au_type.h"
+#include <utility>
+
+#if __cplusplus > 201402L
+#include "cista.h"
+#endif
 
 #define V2VOIDP(vv) static_cast<void *>(vv.data())
 
@@ -259,7 +264,7 @@ std::string ExtractPath(const std::string &fullPath);
  * @param index 
  */
 template <class T1, class T2>
-void Attribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, AuEndpointDataType data_element_index, std::vector<T2> &virtual_array_vector, int index)
+void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, const AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
 {
     assert(attribute_vector.size() == virtual_array_vector.size());
     size_t n = attribute_vector.size();
@@ -267,14 +272,90 @@ void Attribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, AuEnd
     {
         T1 attribute_vector_value = attribute_vector[i];
         int m_index = 0;
-        cista::for_each_field(virtual_array_vector[i], [&m_index, index, attribute_vector_value, data_element_index](auto &&m) {
-            if (m_index == index)
+        cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, attribute_vector_value, union_index](auto &&m) {
+            if (m_index == attribute_index)
             {
-                m = std::get<data_element_index>(attribute_vector_value);
+                switch (union_index)
+                {
+                case AU_SHORT:
+                {
+                    m = std::get<AU_SHORT>(attribute_vector_value);
+                    break;
+                }
+                case AU_INT:
+                {
+                    m = std::get<AU_INT>(attribute_vector_value);
+                    break;
+                }
+                case AU_LONG:
+                {
+                    m = std::get<AU_LONG>(attribute_vector_value);
+                    break;
+                }
+                case AU_LONG_LONG:
+                {
+                    m = std::get<AU_LONG_LONG>(attribute_vector_value);
+                    break;
+                }
+                case AU_USHORT:
+                {
+                    m = std::get<AU_USHORT>(attribute_vector_value);
+                    break;
+                }
+                case AU_UINT:
+                {
+                    m = std::get<AU_UINT>(attribute_vector_value);
+                    break;
+                }
+                case AU_ULONG:
+                {
+                    m = std::get<AU_ULONG>(attribute_vector_value);
+                    break;
+                }
+                case AU_ULLONG:
+                {
+                    m = std::get<AU_ULLONG>(attribute_vector_value);
+                    break;
+                }
+                case AU_FLOAT:
+                {
+                    m = std::get<AU_FLOAT>(attribute_vector_value);
+                    break;
+                }
+                case AU_DOUBLE:
+                {
+                    m = std::get<AU_DOUBLE>(attribute_vector_value);
+                    break;
+                }
+                default:
+                    std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+                    std::flush(std::cout);
+                    std::exit(EXIT_FAILURE);
+                }
                 return;
             }
             m_index++;
         });
+    }
+}
+
+template <class T1, class T2>
+void ExtractAttributeFromVirtualArrayVector(std::vector<T1> &attribute_vector, AuEndpointDataType union_index, const std::vector<T2> &virtual_array_vector, int attribute_index)
+{
+    assert(attribute_vector.size() == virtual_array_vector.size());
+    size_t n = attribute_vector.size();
+    for (size_t i = 0; i < n; i++)
+    {
+        int m_index = 0;
+        T1 temp_v;
+        cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, &temp_v](auto &&m) {
+            if (m_index == attribute_index)
+            {
+                temp_v = m;
+            }
+            m_index++;
+        });
+        attribute_vector[i].emplace<union_index>(temp_v);
     }
 }
 
