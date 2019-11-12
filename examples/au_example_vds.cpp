@@ -24,6 +24,7 @@ using namespace AU;
 
 struct InputStruct
 {
+    AU_UDT_INIT(InputStruct)
     int i;
     int j;
     int k;
@@ -31,6 +32,7 @@ struct InputStruct
 
 struct OutputStruct
 {
+    AU_UDT_INIT(OutputStruct)
     int i;
     int j;
     int k;
@@ -68,6 +70,8 @@ int main(int argc, char *argv[])
     A->PushBackAttribute<int>("EP_HDF5:./test-data/testf-16x16-vds.h5:/testg/z");
 
     A->PrintEndpointInfo();
+
+    std::cout << A->GetValue(0,0) << "\n";
 
     //Result data
     Array<OutputStruct> *B = new Array<OutputStruct>();

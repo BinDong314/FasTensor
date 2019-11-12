@@ -22,6 +22,10 @@
 #include <iostream>
 #include <variant>
 
+#if __cplusplus > 201402L
+#include "cista.h"
+#endif
+
 typedef enum AuEndpointType
 {
   EP_HDF5 = 0,    //from/to HDF5
@@ -141,5 +145,10 @@ bool InferVectorType()
 {
   return is_vector<T>{};
 }
+
+//see more detail in third_party/cista.h
+#define AU_UDT_INIT(A) \
+  CISTA_PRINTABLE(A)   \
+  CISTA_COMPARABLE()
 
 #endif

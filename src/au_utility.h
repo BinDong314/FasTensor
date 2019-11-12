@@ -43,6 +43,16 @@
 int ExtractFileTypeInfo(std::string data_endpoint_info, AuEndpointType &endpoint_type, std::vector<std::string> &endpoint_info);
 int file_exist(const char *filename);
 
+#define COUNT_CELLS(start_address_p, end_address_p, cells_count_p)                       \
+    {                                                                                    \
+        assert(start_address_p.size() == end_address_p.size());                          \
+        cells_count_p = 1;                                                               \
+        for (int i = 0; i < start_address_p.size(); i++)                                 \
+        {                                                                                \
+            cells_count_p = cells_count_p * (end_address_p[i] - start_address_p[i] + 1); \
+        }                                                                                \
+    }
+
 template <typename T>
 inline void PrintVector(std::string name, std::vector<T> v)
 {

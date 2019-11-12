@@ -75,7 +75,7 @@ private:
   std::vector<unsigned long long> current_chunk_ol_size;         //Size of the chunk, euqal to end_offset - start_offset
   unsigned long long current_chunk_ol_cells;                     //The number of cells in current chunk
 
-  int current_chunk_id; //Id of the current chunk (in memory) to apply UDF
+  unsigned long long current_chunk_id; //Id of the current chunk (in memory) to apply UDF
 
   std::vector<int> skip_size;                       //Size to ship after each operation
   std::vector<unsigned long long> skiped_dims_size; //Size of the data after skip
@@ -517,6 +517,37 @@ public:
     return;
   }
 
+  int WriteArray(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, std::vector<T> data_p)
+  {
+    InitializeApplyInput();
+    unsigned long long data_vector_size;
+    COUNT_CELLS(start_p, end_p, data_vector_size);
+
+    if (!virtual_array_flag)
+    {
+      return endpoint->Write(start_p, end_p, &data_p[0]);
+    }
+    else
+    {
+      int n = attribute_endpoint_vector.size();
+      std::vector<AuEndpointDataTypeUnion> current_chunk_data_union_vector;
+      current_chunk_data_union_vector.resize(data_p.size());
+      for (int i = 0; i < n; i++)
+      {
+        int element_type_size = attribute_endpoint_vector[i]->GetDataElementTypeSize();
+        void *current_chunk_data_temp;
+        if (!current_chunk_data_temp)
+        {
+          AU_EXIT("Not enough memory");
+        }
+
+        ExtractAttributeFromVirtualArrayVector(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), data_p, i);
+        void current_chunk_data_void_p = attribute_endpoint_vector[i]->Union2Void(current_chunk_data_temp);
+        attribute_endpoint_vector[i]->Write(start_p, end_p, current_chunk_data_void_p);
+        free(current_chunk_data_void_p);
+      }
+    }
+  }
   int WriteEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)
   {
     if (!virtual_array_flag)
@@ -677,6 +708,39 @@ public:
     }
   }
 
+  std::vector<T> ReadArray(std::vector<unsigned long long> start, std::vector<unsigned long long> end)
+  {
+    InitializeApplyInput();
+    unsigned long long data_vector_size;
+    COUNT_CELLS(start, end, data_vector_size);
+
+    std::vector<T> data_vector;
+    data_vector.resize(data_vector_size);
+    if (!virtual_array_flag)
+    {
+      endpoint->Read(start, end, &data_vector[0]);
+    }
+    else
+    {
+      int n = attribute_endpoint_vector.size();
+      std::vector<AuEndpointDataTypeUnion> current_chunk_data_union_vector;
+      for (int i = 0; i < n; i++)
+      {
+        int element_type_size = attribute_endpoint_vector[i]->GetDataElementTypeSize();
+        void *current_chunk_data_temp = (void *)malloc(data_vector_size * element_type_size);
+        if (!current_chunk_data_temp)
+        {
+          AU_EXIT("Not enough memory");
+        }
+        attribute_endpoint_vector[i]->Read(start, end, current_chunk_data_temp);
+        current_chunk_data_union_vector = attribute_endpoint_vector[i]->Void2Union(current_chunk_data_temp, data_vector_size);
+        InsertAttribute2VirtualArrayVector(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), data_vector, i);
+        free(current_chunk_data_temp);
+      }
+    }
+    return data_vector;
+  }
+
   /**
    * @brief Load the next chunk
    * 
@@ -830,21 +894,19 @@ public:
     else
     {
       int n = attribute_endpoint_vector.size();
-      assert(n >= 1);
-      int element_type_size = attribute_endpoint_vector[0]->GetDataElementTypeSize();
-      void *current_chunk_data_temp;
-      current_chunk_data_temp = (void *)malloc(current_chunk_ol_cells * element_type_size);
-
       std::vector<AuEndpointDataTypeUnion> current_chunk_data_union_vector;
-
       for (int i = 0; i < n; i++)
       {
-        if (au_mpi_rank_global == 0)
-          std::cout << "Read " << i << "th attribute: " << attribute_endpoint_vector[i]->PrintInfo() << " \n";
+        int element_type_size = attribute_endpoint_vector[i]->GetDataElementTypeSize();
+        void *current_chunk_data_temp = (void *)malloc(current_chunk_ol_cells * element_type_size);
+        if (!current_chunk_data_temp)
+        {
+          AU_EXIT("Not enough memory");
+        }
         attribute_endpoint_vector[i]->Read(current_chunk_ol_start_offset, current_chunk_ol_end_offset, current_chunk_data_temp);
-        //InsertIntoVirtualVector<AttributeType, T>(current_chunk_data_temp, current_chunk_data, i);
         current_chunk_data_union_vector = attribute_endpoint_vector[i]->Void2Union(current_chunk_data_temp, current_chunk_ol_cells);
         InsertAttribute2VirtualArrayVector(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), current_chunk_data, i);
+        free(current_chunk_data_temp);
       }
       return 1;
     }
@@ -884,16 +946,14 @@ public:
   }
 
   template <typename... Is>
-  inline T GetValue(Is... indexs) const
+  inline T GetValue(Is... indexs)
   {
     std::vector<int> iv{{indexs...}};
     std::vector<unsigned long long> start;
     std::vector<unsigned long long> end;
-    std::vector<T> data_v;
 
     start.resize(iv.size());
     end.resize(iv.size());
-    data_v.resize(1);
 
     for (int i = 0; i < iv.size(); i++)
     {
@@ -901,8 +961,19 @@ public:
       end[i] = iv[i];
     }
 
-    endpoint->Read(start, end, static_cast<void *>(data_v.data()));
-    return data_v[0];
+    if (virtual_array_flag == 0)
+    {
+      std::vector<T> data_v;
+      data_v.resize(1);
+      endpoint->Read(start, end, static_cast<void *>(data_v.data()));
+      return data_v[0];
+    }
+    else
+    {
+      std::vector<T> data_v;
+      data_v = ReadArray(start, end);
+      return data_v[0];
+    }
   }
 
   template <typename... Is>

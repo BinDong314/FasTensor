@@ -161,3 +161,76 @@ std::vector<AuEndpointDataTypeUnion> Endpoint::Void2Union(void *data_vector_in_v
 
     return data_vector_in_union_type;
 }
+
+#define UNION2VOID_HELPER(TARGET_TYPE, EMPLACE_INDEX)                                        \
+    {                                                                                        \
+        std::vector<TARGET_TYPE> temp_pointer_of_type;                                       \
+        temp_pointer_of_type.resize(n_elements);                                             \
+        for (int i = 0; i < n_elements; i++)                                                 \
+        {                                                                                    \
+            temp_pointer_of_type[i] = std::get<EMPLACE_INDEX>(data_vector_in_union_type[i]); \
+        }                                                                                    \
+        return static_cast<void *>(temp_pointer_of_type.data());                             \
+    }
+
+void *Endpoint::Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_union_type)
+{
+    size_t n_elements = data_vector_in_union_type.size();
+    switch (data_element_type)
+    {
+    case AU_SHORT:
+    {
+        UNION2VOID_HELPER(short, AU_SHORT);
+        break;
+    }
+    case AU_INT:
+    {
+        UNION2VOID_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_LONG:
+    {
+        UNION2VOID_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_LONG_LONG:
+    {
+        UNION2VOID_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_USHORT:
+    {
+        UNION2VOID_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_UINT:
+    {
+        UNION2VOID_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_ULONG:
+    {
+        UNION2VOID_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_ULLONG:
+    {
+        UNION2VOID_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_FLOAT:
+    {
+        UNION2VOID_HELPER(int, AU_INT);
+        break;
+    }
+    case AU_DOUBLE:
+    {
+        UNION2VOID_HELPER(int, AU_INT);
+        break;
+    }
+    default:
+        std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+        std::flush(std::cout);
+        std::exit(EXIT_FAILURE);
+    }
+}

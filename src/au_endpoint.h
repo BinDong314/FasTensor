@@ -161,10 +161,18 @@ public:
     /**
      * @brief convert my data in (void *) type to Union type
      * 
-     * @param vp : pointer to data 
+     * @param vp : pointer to data (after read)
      * @return std::vector<AuEndpointDataTypeUnion> : return value
      */
     std::vector<AuEndpointDataTypeUnion> Void2Union(void *vp, size_t n_elements);
+
+    /**
+     * @brief convert data from union to void type 
+     * 
+     * @param data_vector_in_union_type : vector of data in union type
+     * @return void* : pointer to data (for write)
+     */
+    void *Endpoint::Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_union_type);
 };
 
 #endif
