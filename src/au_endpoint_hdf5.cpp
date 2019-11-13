@@ -82,13 +82,11 @@ int EndpointHDF5::Create()
         }
         did = H5Dcreate(fid, dn_str.c_str(), disk_type, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     }
-    std::cout << dn_str << "\n";
 
     dataspace_id = H5Dget_space(did);
     H5Sclose(ts_id);
-    SetOpenFlag(true);
 
-    H5Fflush(fid, H5F_SCOPE_GLOBAL);
+    Close(); //Close for data consistency during writing
     return 0;
 }
 
@@ -171,7 +169,8 @@ int EndpointHDF5::Read(std::vector<unsigned long long> start, std::vector<unsign
      */
 int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
-    if (!GetOpenFlag())
+
+    /*if (!GetOpenFlag())
     {
         SetRwFlag(H5F_ACC_RDWR);
         ExtractMeta(); //Will call open
@@ -181,9 +180,11 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
         SetRwFlag(H5F_ACC_RDWR);
         Close();       //Close
         ExtractMeta(); //Re-open it
-    }
-
+    }*/
     Map2MyType();
+    SetRwFlag(H5F_ACC_RDWR);
+    ExtractMeta(); //Re-open it
+
     std::vector<unsigned long long> offset, count;
     offset.resize(endpoint_ranks);
     count.resize(endpoint_ranks);
@@ -198,6 +199,7 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
     int ret = H5Dwrite(did, mem_type, memspace_id, dataspace_id, plist_cio_id, data);
     assert(ret >= 0);
     H5Sclose(memspace_id);
+    Close(); //Close
     return ret;
 }
 

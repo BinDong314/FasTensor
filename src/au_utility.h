@@ -35,7 +35,6 @@
 #include <utility>
 #include <variant>
 
-
 #if __cplusplus > 201402L
 #include "cista.h"
 #endif
@@ -276,7 +275,7 @@ std::string ExtractPath(const std::string &fullPath);
  * @param index 
  */
 template <class T1, class T2>
-void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector,  AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
+void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
 {
     assert(attribute_vector.size() == virtual_array_vector.size());
     size_t n = attribute_vector.size();
@@ -351,25 +350,89 @@ void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector,
     }
 }
 
-template <class T1, class T2>
-void ExtractAttributeFromVirtualArrayVector(std::vector<T1> &attribute_vector, AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
-{
-    assert(attribute_vector.size() == virtual_array_vector.size());
-    size_t n = attribute_vector.size();
-    for (size_t i = 0; i < n; i++)
-    {
-        int m_index = 0;
-        T1 temp_attribute_value;
-        cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, &temp_attribute_value, union_index](auto &&m) {
-            if (m_index == attribute_index)
-            {
-                temp_attribute_value.emplace<union_index>(m);
-                return;
-            }
-            m_index++;
-        });
-        attribute_vector[i] = temp_attribute_value;
+#define ExtractAttributeFromVirtualArrayVector_HELPER(ELEMENT_TYPE)                                                       \
+    {                                                                                                                     \
+        ELEMENT_TYPE *attribute_data_typed = (ELEMENT_TYPE *)attribute_data_void_pointer;                                 \
+        for (size_t i = 0; i < n; i++)                                                                                    \
+        {                                                                                                                 \
+            int m_index = 0;                                                                                              \
+            ELEMENT_TYPE temp_attribute_value;                                                                            \
+            cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, &temp_attribute_value](auto &&m) { \
+                if (m_index == attribute_index)                                                                           \
+                {                                                                                                         \
+                    temp_attribute_value = m;                                                                             \
+                }                                                                                                         \
+                m_index++;                                                                                                \
+            });                                                                                                           \
+            attribute_data_typed[i] = temp_attribute_value;                                                               \
+        }                                                                                                                 \
     }
+
+template <class T2>
+void *ExtractAttributeFromVirtualArrayVector(std::vector<T2> &virtual_array_vector, int attribute_index, AuEndpointDataType element_type, int element_type_size)
+{
+
+    size_t n = virtual_array_vector.size();
+    void *attribute_data_void_pointer = malloc(n * element_type_size);
+
+    switch (element_type)
+    {
+    case AU_SHORT:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(short);
+        break;
+    }
+    case AU_INT:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(int);
+        break;
+    }
+    case AU_LONG:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(long);
+        break;
+    }
+    case AU_LONG_LONG:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(long long);
+        break;
+    }
+    case AU_USHORT:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(unsigned short);
+        break;
+    }
+    case AU_UINT:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(unsigned int);
+        break;
+    }
+    case AU_ULONG:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(unsigned long);
+        break;
+    }
+    case AU_ULLONG:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(unsigned long long);
+        break;
+    }
+    case AU_FLOAT:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(float);
+        break;
+    }
+    case AU_DOUBLE:
+    {
+        ExtractAttributeFromVirtualArrayVector_HELPER(double);
+        break;
+    }
+    default:
+        std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+        std::flush(std::cout);
+        std::exit(EXIT_FAILURE);
+    }
+    return attribute_data_void_pointer;
 }
 
 #endif

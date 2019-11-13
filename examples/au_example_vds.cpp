@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
     A->PrintEndpointInfo();
 
-    std::cout << A->GetValue(0,0) << "\n";
+    std::cout << A->GetValue(0, 0) << "\n";
 
     //Result data
     Array<OutputStruct> *B = new Array<OutputStruct>();

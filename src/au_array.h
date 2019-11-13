@@ -527,28 +527,23 @@ public:
     }
     else
     {
-      unsigned long long data_vector_size;
-      COUNT_CELLS(start_p, end_p, data_vector_size);
       int n = attribute_endpoint_vector.size();
-      std::vector<AuEndpointDataTypeUnion> current_chunk_data_union_vector;
-      current_chunk_data_union_vector.resize(data_p.size());
       for (int i = 0; i < n; i++)
       {
-        int element_type_size = attribute_endpoint_vector[i]->GetDataElementTypeSize();
-        void *current_chunk_data_temp;
-        if (!current_chunk_data_temp)
-        {
-          AU_EXIT("Not enough memory");
-        }
-
-        ExtractAttributeFromVirtualArrayVector<AuEndpointDataTypeUnion, T>(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), data_p, i);
-        void *current_chunk_data_void_p = attribute_endpoint_vector[i]->Union2Void(current_chunk_data_union_vector);
+        void *current_chunk_data_void_p = ExtractAttributeFromVirtualArrayVector(data_p, i, attribute_endpoint_vector[i]->GetDataElementType(), attribute_endpoint_vector[i]->GetDataElementTypeSize());
         attribute_endpoint_vector[i]->Write(start_p, end_p, current_chunk_data_void_p);
         free(current_chunk_data_void_p);
       }
       return 1;
     }
   }
+
+  int WriteArray(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, std::vector<std::vector<T>> data_p)
+  {
+    AU_EXIT("You should not be here !");
+    return 0;
+  }
+
   int WriteEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)
   {
     if (!virtual_array_flag)
@@ -688,8 +683,8 @@ public:
         if (attribute_endpoint_vector[i]->GetOpenFlag())
           return 0;
         attribute_endpoint_vector[i]->SetDimensions(data_size);
-        attribute_endpoint_vector[i]->PrintInfo();
-        PrintVector("   data size", data_size);
+        //attribute_endpoint_vector[i]->PrintInfo();
+        //PrintVector("   data size", data_size);
         //PrintVector("  chunk size", data_chunk_size);
         //PrintVector("overlap size", data_overlap_size);
         attribute_endpoint_vector[i]->Create();
@@ -1008,6 +1003,11 @@ public:
     AuEndpointDataType data_element_type = InferDataType<AttributeType>();
     attribute_endpoint->SetDataElementType(data_element_type);
     attribute_endpoint_vector.push_back(attribute_endpoint);
+  }
+
+  std::vector<Endpoint *> GetAttributeEndpoint()
+  {
+    return attribute_endpoint_vector;
   }
 
   bool GetVirtualArrayFlag()
