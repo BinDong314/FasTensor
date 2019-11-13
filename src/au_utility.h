@@ -33,6 +33,8 @@
 #include <iostream>
 #include "au_type.h"
 #include <utility>
+#include <variant>
+
 
 #if __cplusplus > 201402L
 #include "cista.h"
@@ -274,7 +276,7 @@ std::string ExtractPath(const std::string &fullPath);
  * @param index 
  */
 template <class T1, class T2>
-void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, const AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
+void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector,  AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
 {
     assert(attribute_vector.size() == virtual_array_vector.size());
     size_t n = attribute_vector.size();
@@ -350,22 +352,23 @@ void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector,
 }
 
 template <class T1, class T2>
-void ExtractAttributeFromVirtualArrayVector(std::vector<T1> &attribute_vector, AuEndpointDataType union_index, const std::vector<T2> &virtual_array_vector, int attribute_index)
+void ExtractAttributeFromVirtualArrayVector(std::vector<T1> &attribute_vector, AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
 {
     assert(attribute_vector.size() == virtual_array_vector.size());
     size_t n = attribute_vector.size();
     for (size_t i = 0; i < n; i++)
     {
         int m_index = 0;
-        T1 temp_v;
-        cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, &temp_v](auto &&m) {
+        T1 temp_attribute_value;
+        cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, &temp_attribute_value, union_index](auto &&m) {
             if (m_index == attribute_index)
             {
-                temp_v = m;
+                temp_attribute_value.emplace<union_index>(m);
+                return;
             }
             m_index++;
         });
-        attribute_vector[i].emplace<union_index>(temp_v);
+        attribute_vector[i] = temp_attribute_value;
     }
 }
 

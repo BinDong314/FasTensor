@@ -502,7 +502,8 @@ public:
       {
         InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, 0);
         B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
-        B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
+        //B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
+        B->WriteArray(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
       }
 
       time_write = time_write + AU_WTIME - t_start;
@@ -519,16 +520,15 @@ public:
 
   int WriteArray(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, std::vector<T> data_p)
   {
-    InitializeApplyInput();
-    unsigned long long data_vector_size;
-    COUNT_CELLS(start_p, end_p, data_vector_size);
-
+    //InitializeApplyInput();
     if (!virtual_array_flag)
     {
       return endpoint->Write(start_p, end_p, &data_p[0]);
     }
     else
     {
+      unsigned long long data_vector_size;
+      COUNT_CELLS(start_p, end_p, data_vector_size);
       int n = attribute_endpoint_vector.size();
       std::vector<AuEndpointDataTypeUnion> current_chunk_data_union_vector;
       current_chunk_data_union_vector.resize(data_p.size());
@@ -541,11 +541,12 @@ public:
           AU_EXIT("Not enough memory");
         }
 
-        ExtractAttributeFromVirtualArrayVector(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), data_p, i);
-        void current_chunk_data_void_p = attribute_endpoint_vector[i]->Union2Void(current_chunk_data_temp);
+        ExtractAttributeFromVirtualArrayVector<AuEndpointDataTypeUnion, T>(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), data_p, i);
+        void *current_chunk_data_void_p = attribute_endpoint_vector[i]->Union2Void(current_chunk_data_union_vector);
         attribute_endpoint_vector[i]->Write(start_p, end_p, current_chunk_data_void_p);
         free(current_chunk_data_void_p);
       }
+      return 1;
     }
   }
   int WriteEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)

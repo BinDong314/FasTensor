@@ -172,7 +172,7 @@ public:
      * @param data_vector_in_union_type : vector of data in union type
      * @return void* : pointer to data (for write)
      */
-    void *Endpoint::Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_union_type);
+    void *Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_union_type);
 };
 
 #endif
