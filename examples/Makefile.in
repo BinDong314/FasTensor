@@ -90,7 +90,8 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = au_test_data_generator$(EXEEXT) \
 	au_example_hello_world$(EXEEXT) au_example_vector$(EXEEXT) \
-	au_example_array$(EXEEXT) au_example_vds$(EXEEXT)
+	au_example_array$(EXEEXT) au_example_vds$(EXEEXT) \
+	au_example_1f1p$(EXEEXT)
 subdir = examples
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -106,14 +107,18 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_au_example_array_OBJECTS = au_example_array.$(OBJEXT)
-au_example_array_OBJECTS = $(am_au_example_array_OBJECTS)
-au_example_array_LDADD = $(LDADD)
-au_example_array_DEPENDENCIES = ../src/libArrayUDF.la
+am_au_example_1f1p_OBJECTS = au_example_1f1p.$(OBJEXT)
+au_example_1f1p_OBJECTS = $(am_au_example_1f1p_OBJECTS)
+au_example_1f1p_LDADD = $(LDADD)
+au_example_1f1p_DEPENDENCIES = ../src/libArrayUDF.la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+am_au_example_array_OBJECTS = au_example_array.$(OBJEXT)
+au_example_array_OBJECTS = $(am_au_example_array_OBJECTS)
+au_example_array_LDADD = $(LDADD)
+au_example_array_DEPENDENCIES = ../src/libArrayUDF.la
 am_au_example_hello_world_OBJECTS = au_example_hello_world.$(OBJEXT)
 au_example_hello_world_OBJECTS = $(am_au_example_hello_world_OBJECTS)
 au_example_hello_world_LDADD = $(LDADD)
@@ -145,7 +150,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/au_example_array.Po \
+am__depfiles_remade = ./$(DEPDIR)/au_example_1f1p.Po \
+	./$(DEPDIR)/au_example_array.Po \
 	./$(DEPDIR)/au_example_hello_world.Po \
 	./$(DEPDIR)/au_example_vds.Po ./$(DEPDIR)/au_example_vector.Po \
 	./$(DEPDIR)/au_test_data_generator.Po
@@ -168,10 +174,10 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(au_example_array_SOURCES) \
+SOURCES = $(au_example_1f1p_SOURCES) $(au_example_array_SOURCES) \
 	$(au_example_hello_world_SOURCES) $(au_example_vds_SOURCES) \
 	$(au_example_vector_SOURCES) $(au_test_data_generator_SOURCES)
-DIST_SOURCES = $(au_example_array_SOURCES) \
+DIST_SOURCES = $(au_example_1f1p_SOURCES) $(au_example_array_SOURCES) \
 	$(au_example_hello_world_SOURCES) $(au_example_vds_SOURCES) \
 	$(au_example_vector_SOURCES) $(au_test_data_generator_SOURCES)
 am__can_run_installinfo = \
@@ -353,6 +359,7 @@ au_example_hello_world_SOURCES = au_example_hello_world.cpp
 au_example_vector_SOURCES = au_example_vector.cpp
 au_example_array_SOURCES = au_example_array.cpp
 au_example_vds_SOURCES = au_example_vds.cpp
+au_example_1f1p_SOURCES = au_example_1f1p.cpp
 all: all-am
 
 .SUFFIXES:
@@ -436,6 +443,10 @@ clean-binPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
+au_example_1f1p$(EXEEXT): $(au_example_1f1p_OBJECTS) $(au_example_1f1p_DEPENDENCIES) $(EXTRA_au_example_1f1p_DEPENDENCIES) 
+	@rm -f au_example_1f1p$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(au_example_1f1p_OBJECTS) $(au_example_1f1p_LDADD) $(LIBS)
+
 au_example_array$(EXEEXT): $(au_example_array_OBJECTS) $(au_example_array_DEPENDENCIES) $(EXTRA_au_example_array_DEPENDENCIES) 
 	@rm -f au_example_array$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(au_example_array_OBJECTS) $(au_example_array_LDADD) $(LIBS)
@@ -462,6 +473,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_1f1p.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_array.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_hello_world.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_vds.Po@am__quote@ # am--include-marker
@@ -631,7 +643,8 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/au_example_array.Po
+		-rm -f ./$(DEPDIR)/au_example_1f1p.Po
+	-rm -f ./$(DEPDIR)/au_example_array.Po
 	-rm -f ./$(DEPDIR)/au_example_hello_world.Po
 	-rm -f ./$(DEPDIR)/au_example_vds.Po
 	-rm -f ./$(DEPDIR)/au_example_vector.Po
@@ -681,7 +694,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/au_example_array.Po
+		-rm -f ./$(DEPDIR)/au_example_1f1p.Po
+	-rm -f ./$(DEPDIR)/au_example_array.Po
 	-rm -f ./$(DEPDIR)/au_example_hello_world.Po
 	-rm -f ./$(DEPDIR)/au_example_vds.Po
 	-rm -f ./$(DEPDIR)/au_example_vector.Po

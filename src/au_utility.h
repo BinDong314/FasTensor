@@ -34,6 +34,7 @@
 #include "au_type.h"
 #include <utility>
 #include <variant>
+#include <dirent.h>
 
 #if __cplusplus > 201402L
 #include "cista.h"
@@ -41,9 +42,44 @@
 
 #define V2VOIDP(vv) static_cast<void *>(vv.data())
 
-int ExtractFileTypeInfo(std::string data_endpoint_info, AuEndpointType &endpoint_type, std::vector<std::string> &endpoint_info);
+/**
+ * @brief map string typed name of type to AuEndpointType
+ * 
+ * @param endpoint_type_str input of string name
+ * @return AuEndpointType output of type 
+ */
+AuEndpointType MapString2EndpointType(std::string endpoint_type_str);
+
+/**
+ * @brief Get file list of a direction
+ * 
+ * @param dir_str_p 
+ * @return std::vector<std::string> 
+ */
+std::vector<std::string> GetDirFileList(std::string dir_str_p);
+
+/**
+ * @brief Split endpoint_type_info string to type and information
+ * 
+ * @param endpoint_type_info , information string for the endpoint
+ * @param endpoint_type , output value containing the type
+ * @param endpoint_info , output value containging all other parts
+ * @return int 
+ */
+int ExtractEndpointTypeInfo(std::string endpoint_type_info, AuEndpointType &endpoint_type, std::string &endpoint_info);
+
+/**
+ * @brief Check wether the file exists
+ * 
+ * @param filename 
+ * @return int 
+ */
 int file_exist(const char *filename);
 
+/**
+ * @brief help function to counts cells between start/end
+ * 
+ */
 #define COUNT_CELLS(start_address_p, end_address_p, cells_count_p)                       \
     {                                                                                    \
         assert(start_address_p.size() == end_address_p.size());                          \

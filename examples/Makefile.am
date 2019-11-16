@@ -6,7 +6,7 @@ AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part  @ARRAYUDF_CXX
 AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static  -ldl 
 
 
-bin_PROGRAMS=  au_test_data_generator au_example_hello_world au_example_vector au_example_array au_example_vds
+bin_PROGRAMS=  au_test_data_generator au_example_hello_world au_example_vector au_example_array au_example_vds au_example_1f1p
 LDADD=../src/libArrayUDF.la
 DEPENDENCIES=../src/libArrayUDF.la
 
@@ -15,6 +15,8 @@ au_example_hello_world_SOURCES=au_example_hello_world.cpp
 au_example_vector_SOURCES=au_example_vector.cpp
 au_example_array_SOURCES=au_example_array.cpp
 au_example_vds_SOURCES=au_example_vds.cpp
+au_example_1f1p_SOURCES=au_example_1f1p.cpp
+
 
 
 

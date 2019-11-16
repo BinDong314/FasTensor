@@ -234,3 +234,23 @@ void *Endpoint::Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_
         std::exit(EXIT_FAILURE);
     }
 }
+
+/**
+     * @brief set the endpoint_info string 
+     * 
+     * @param endpoint_info 
+     */
+void Endpoint::SetEndpointInfo(std::string endpoint_info_p)
+{
+    endpoint_info = endpoint_info_p;
+}
+
+/**
+    * @brief Get the endpoint_info string 
+     * 
+     * @return std::string 
+     */
+std::string Endpoint::GetEndpointInfo()
+{
+    return endpoint_info;
+}

@@ -31,6 +31,7 @@ extern int au_mpi_rank_global;
 #include "au_mpi.h"
 #include <assert.h>
 #include <stdarg.h>
+#include <regex>
 
 namespace AU
 {
@@ -95,6 +96,10 @@ private:
   OutputVectorFlatDirection output_vector_flat_direction_index;
 
   std::vector<Endpoint *> attribute_endpoint_vector; //vector of endpoints for a virtual array
+
+  //For directory
+  std::regex dir_input_regex, dir_output_regex;
+  std::string dir_output_replace_str;
 
   //Flag variable
   bool skip_flag = false;
@@ -683,10 +688,6 @@ public:
         if (attribute_endpoint_vector[i]->GetOpenFlag())
           return 0;
         attribute_endpoint_vector[i]->SetDimensions(data_size);
-        //attribute_endpoint_vector[i]->PrintInfo();
-        //PrintVector("   data size", data_size);
-        //PrintVector("  chunk size", data_chunk_size);
-        //PrintVector("overlap size", data_overlap_size);
         attribute_endpoint_vector[i]->Create();
       }
       return 0;
@@ -696,10 +697,6 @@ public:
       AuEndpointDataType type_p = InferDataType<T>();
       endpoint->SetDimensions(data_size);
       endpoint->SetDataElementType(type_p);
-      endpoint->PrintInfo();
-      PrintVector("   data size", data_size);
-      //PrintVector("  chunk size", data_chunk_size);
-      //PrintVector("overlap size", data_overlap_size);
       return endpoint->Create();
     }
   }
@@ -1018,6 +1015,17 @@ public:
   void SetVirtualArrayFlag(bool flag_p)
   {
     virtual_array_flag = true;
+  }
+
+  void SetDirOutputRegexReplace(std::regex &regex_p, std::string &replace_str_p)
+  {
+    dir_output_regex = regex_p;
+    dir_output_replace_str = replace_str_p;
+  }
+
+  void SetDirInputRegexSearch(std::regex &regex_p)
+  {
+    dir_input_regex = regex_p;
   }
 
 }; // calss of array

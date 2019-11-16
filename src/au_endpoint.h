@@ -37,7 +37,7 @@ class Endpoint
 {
 protected:
     AuEndpointType endpoint_type;
-    std::vector<std::string> endpoint_info;
+    std::string endpoint_info;
     std::vector<unsigned long long> endpoint_dim_size;
     int endpoint_ranks;
     AuEndpointDataType data_element_type;
@@ -48,12 +48,6 @@ protected:
 public:
     Endpoint(){};
     ~Endpoint(){};
-
-    Endpoint(std::string data_endpoint)
-    {
-        data_endpoint_orig = data_endpoint;
-        ExtractFileTypeInfo(data_endpoint, endpoint_type, endpoint_info);
-    }
 
     /**
      * @brief Get the Dimensions of the data
@@ -89,6 +83,13 @@ public:
      * @return int 
      */
     int GetDataElementTypeSize();
+
+    /**
+     * @brief parse endpoint_info to my own info
+     *        
+     * @return int: 0 works,  < 0 error,
+     */
+    virtual int ParseEndpointInfo() = 0;
 
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
@@ -173,6 +174,20 @@ public:
      * @return void* : pointer to data (for write)
      */
     void *Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_union_type);
+
+    /**
+     * @brief set the endpoint_info string 
+     * 
+     * @param endpoint_info 
+     */
+    void SetEndpointInfo(std::string endpoint_info_p);
+
+    /**
+     * @brief Get the endpoint_info string 
+     * 
+     * @return std::string 
+     */
+    std::string GetEndpointInfo();
 };
 
 #endif

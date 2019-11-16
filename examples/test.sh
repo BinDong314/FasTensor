@@ -21,8 +21,42 @@ rm ./test-data/testf-16x16-vds-y.h5
 rm ./test-data/testf-16x16-vds-z.h5
 
 
+mkdir ./test-data/test_1f1p_dir
+./au_test_data_generator -f ./test-data/test_1f1p_dir/testf-16x16-1f1p-1.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1
+./au_test_data_generator -f ./test-data/test_1f1p_dir/testf-16x16-1f1p-2.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1
+./au_test_data_generator -f ./test-data/test_1f1p_dir/testf-16x16-1f1p-3.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1
+./au_test_data_generator -f ./test-data/test_1f1p_dir/testf-16x16-1f1p-4.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1
+
+
+# To test of running a command
+# $1 command name
+# $2 output data of the command (HDF5 format)
+# $3 correct output of the command (HDF5 format)
+function run_command(){
+    $1
+    if [ $? -eq 0 ]
+    then
+        echo "Test run $1  ... [PASSED]"
+    else
+        echo "Test run $1 ... [FAILED]" >&2
+    fi
+
+    if [ "$#" -gt 1 ]; then
+        h5diff ./test-data/$2 ./test-data-good/$2
+        if [ $? -eq 0 ]
+        then
+            echo "Checked output of $1 [PASSED]"
+        else
+            echo "Checked output of $2 [FALSE]" >&2
+        fi    
+    fi
+}
+
+
+
 
 ## Run the test code
-./au_example_hello_world
-./au_example_vector
-./au_example_array
+run_command ./au_example_hello_world testf-16x16-hello-world-output.h5 
+run_command ./au_example_vector testf-16x16-vector-output.h5 
+run_command ./au_example_array
+run_command ./au_example_vds testf-16x16-vds-output.h5

@@ -15,8 +15,8 @@
  *
  */
 
-#ifndef ARRAY_UDF_ATTRIBUTE
-#define ARRAY_UDF_ATTRIBUTE
+#ifndef ARRAY_UDF_TYPE_H
+#define ARRAY_UDF_TYPE_H
 
 #include <type_traits>
 #include <iostream>
@@ -29,13 +29,15 @@
 typedef enum AuEndpointType
 {
   EP_HDF5 = 0,    //from/to HDF5
-  EP_NETCDF = 1,  //from/to NETCDF
-  EP_AUDIOS = 2,  //from/to AUDIOS
-  EP_BINARY = 3,  //from/to binary file
-  EP_VIRTUAL = 4, //from/to Virtual array of above types
-  EP_IARRAY = 5,  //from/to in-memory cache
-  EP_IVECTOR = 6, //from/to from CXX vector
-  EP_H5VDS = 7,   //from/to from CXX vector
+  EP_NETCDF = 1,  //from/to NETCDF; todo
+  EP_AUDIOS = 2,  //from/to AUDIOS; todo
+  EP_BINARY = 3,  //from/to binary file; todo
+  EP_VIRTUAL = 4, //from/to Virtual array of above types; todo
+  EP_IARRAY = 5,  //from/to in-memory cache: todo
+  EP_H5VDS = 6,   //H5 VDS: todo
+  EP_DIR = 7,     //Directory to data to process. file format to be detected
+  EP_DASSA = 8,   //customized DASSA IO
+  EP_TDMS = 9,    //tdms file format (to binary file)
 } AuEndpointType;
 
 //See https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h

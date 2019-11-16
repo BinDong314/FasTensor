@@ -44,21 +44,21 @@ public:
      * 
      * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
      */
-    EndpointHDF5(std::string data_endpoint) : Endpoint(data_endpoint)
+    EndpointHDF5(std::string endpoint_info_p)
     {
-        if (endpoint_info.size() == 2)
-        {
-            fn_str = endpoint_info[0];
-            gn_str = ExtractPath(endpoint_info[1]);
-            dn_str = ExtractFileName(endpoint_info[1]);
-        }
-        else
-        {
-            AU_EXIT("HDF5 data endpoint info is not correct");
-        }
+        endpoint_info = endpoint_info_p;
+        ParseEndpointInfo();
         SetOpenFlag(false);
         SetRwFlag(H5F_ACC_RDONLY);
     }
+    /**
+     * @brief Construct a new Endpoint in HDF5 
+     *         Nothing to do there, can be used as sub-endpoint of directory
+     */
+    EndpointHDF5()
+    {
+    }
+
     ~EndpointHDF5()
     {
         Close();
@@ -122,5 +122,12 @@ public:
     void EnableCollectiveIO() override;
 
     void DisableCollectiveIO() override;
+
+    /**
+     * @brief parse endpoint_info to my own info
+     *        In HDF5, it map endpoint_info to filename, group name and datasetname
+     * @return int: 0 works,  < 0 error,
+     */
+    int ParseEndpointInfo() override;
 };
 #endif

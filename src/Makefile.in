@@ -134,7 +134,7 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libArrayUDF_la_LIBADD =
 am_libArrayUDF_la_OBJECTS = au.lo au_array.lo au_endpoint.lo \
-	au_endpoint_hdf5.lo au_utility.lo
+	au_endpoint_hdf5.lo au_utility.lo au_endpoint_dir.lo
 libArrayUDF_la_OBJECTS = $(am_libArrayUDF_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -160,8 +160,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/au.Plo ./$(DEPDIR)/au_array.Plo \
-	./$(DEPDIR)/au_endpoint.Plo ./$(DEPDIR)/au_endpoint_hdf5.Plo \
-	./$(DEPDIR)/au_utility.Plo
+	./$(DEPDIR)/au_endpoint.Plo ./$(DEPDIR)/au_endpoint_dir.Plo \
+	./$(DEPDIR)/au_endpoint_hdf5.Plo ./$(DEPDIR)/au_utility.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -375,9 +375,9 @@ AM_CFLAGS = @ARRAYUDF_CFLAGS@  -I./third_part
 AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@    -I./third_part  
 AM_LDFLAGS = @ARRAYUDF_LIBS@   -all-static     -I./third_part
 lib_LTLIBRARIES = libArrayUDF.la
-libArrayUDF_la_SOURCES = au.h au.cpp au_array.h au_array.cpp au_endpoint.h au_endpoint.cpp au_stencil.h au_type.h au_endpoint_hdf5.h au_endpoint_hdf5.cpp au_endpoint_factory.h au_utility.cpp au_utility.h 
+libArrayUDF_la_SOURCES = au.h au.cpp au_array.h au_array.cpp au_endpoint.h au_endpoint.cpp au_stencil.h au_type.h au_endpoint_hdf5.h au_endpoint_hdf5.cpp au_endpoint_factory.h au_utility.cpp au_utility.h au_endpoint_dir.cpp au_endpoint_dir.h
 libArrayUDF_la_LDFLAGS = -version-info 0:0:0  -all-static
-include_HEADERS = au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5.h au_utility.h third_part/cista.h third_part/cista_au_extended_ptr_tuple.h third_part/cista_au_extended_tuple.h third_part/cista_au_extended_arity.h
+include_HEADERS = au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5.h au_utility.h third_part/cista.h third_part/cista_au_extended_ptr_tuple.h third_part/cista_au_extended_tuple.h third_part/cista_au_extended_arity.h au_endpoint_dir.h
 all: all-am
 
 .SUFFIXES:
@@ -459,6 +459,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_array.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_endpoint.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_endpoint_dir.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_endpoint_hdf5.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_utility.Plo@am__quote@ # am--include-marker
 
@@ -650,6 +651,7 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/au.Plo
 	-rm -f ./$(DEPDIR)/au_array.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint.Plo
+	-rm -f ./$(DEPDIR)/au_endpoint_dir.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
 	-rm -f ./$(DEPDIR)/au_utility.Plo
 	-rm -f Makefile
@@ -700,6 +702,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/au.Plo
 	-rm -f ./$(DEPDIR)/au_array.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint.Plo
+	-rm -f ./$(DEPDIR)/au_endpoint_dir.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
 	-rm -f ./$(DEPDIR)/au_utility.Plo
 	-rm -f Makefile

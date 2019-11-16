@@ -18,8 +18,10 @@
 #ifndef END_POINT_DIR_H
 #define END_POINT_DIR_H
 
+#include "au_utility.h"
 #include "au_type.h"
 #include "au_endpoint.h"
+#include "au_endpoint_hdf5.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -29,39 +31,39 @@
 
 //
 //I/O layer
-class EndpointHDF5 : public Endpoint
+class EndpointDIR : public Endpoint
 {
 private:
     hid_t fid = -1, gid = -1, did = -1;
     hid_t dataspace_id = -1;
-    std::string fn_str, gn_str, dn_str;
+    std::string dir_str;
+    std::vector<std::string> dir_file_list;
+    AuEndpointType sub_endpoint_type;
+    Endpoint *sub_endpoint;
+    std::string sub_endpoint_info;
     hid_t plist_id = -1, plist_cio_id = H5P_DEFAULT;
     hid_t mem_type, disk_type;
 
 public:
     /**
-     * @brief Construct a new EndpointHDF5 object
+     * @brief Construct a new EndpointDIR object
      * 
      * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
      */
-    EndpointHDF5(std::string data_endpoint) : Endpoint(data_endpoint)
+    EndpointDIR(std::string endpoint_info_p)
     {
-        if (endpoint_info.size() == 2)
-        {
-            fn_str = endpoint_info[0];
-            gn_str = ExtractPath(endpoint_info[1]);
-            dn_str = ExtractFileName(endpoint_info[1]);
-        }
-        else
-        {
-            AU_EXIT("HDF5 data endpoint info is not correct");
-        }
-        SetOpenFlag(false);
-        SetRwFlag(H5F_ACC_RDONLY);
+        endpoint_info = endpoint_info_p;
+        ParseEndpointInfo();
+        if (sub_endpoint_type == EP_HDF5)
+            sub_endpoint = new EndpointHDF5();
     }
-    ~EndpointHDF5()
+
+    EndpointDIR()
     {
-        Close();
+    }
+
+    ~EndpointDIR()
+    {
     }
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
@@ -122,5 +124,7 @@ public:
     void EnableCollectiveIO() override;
 
     void DisableCollectiveIO() override;
+
+    int ParseEndpointInfo() override;
 };
 #endif

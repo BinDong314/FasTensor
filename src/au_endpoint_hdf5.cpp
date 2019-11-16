@@ -306,3 +306,27 @@ void EndpointHDF5::Map2MyType()
         std::exit(EXIT_FAILURE);
     }
 };
+
+/**
+     * @brief parse endpoint_info to my own info
+     *        In HDF5, it map endpoint_info to filename, group name and datasetname
+     * @return int: 0 works,  < 0 error,
+     */
+int EndpointHDF5::ParseEndpointInfo()
+{
+    std::stringstream ss(endpoint_info);
+    if (!std::getline(ss, fn_str, ':'))
+    {
+        AU_EXIT("Invalued endpoint_info");
+    }
+
+    std::string group_dataset_name_str;
+
+    if (!std::getline(ss, group_dataset_name_str, ':'))
+    {
+        AU_EXIT("Invalued endpoint_info");
+    }
+
+    gn_str = ExtractPath(group_dataset_name_str);
+    dn_str = ExtractFileName(group_dataset_name_str);
+}
