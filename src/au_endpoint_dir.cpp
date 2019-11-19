@@ -70,7 +70,9 @@ int EndpointDIR::ExtractMeta()
 int EndpointDIR::Create()
 {
     sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info);
-    return 0;
+    sub_endpoint->SetDimensions(endpoint_dim_size);
+    sub_endpoint->SetDataElementType(data_element_type);
+    return sub_endpoint->Create();
 }
 
 int EndpointDIR::Open()
@@ -90,10 +92,19 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
 {
     PrintVector("EndpointDIR::Read, start ", start);
     PrintVector("EndpointDIR::Read, start ", end);
-
+    std::cout << "Read file: " << dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info << "\n";
+    sub_endpoint->SetDataElementType(data_element_type);
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
     sub_endpoint->Read(start, end, data);
     sub_endpoint->Close();
+
+    float *data_f = (float *)data;
+    for (int i = 0; i < 10; i++)
+    {
+        std::cout << data_f[i] << "   ";
+    }
+    std::cout << "\n";
     return 0;
 }
 
@@ -107,6 +118,7 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
      */
 int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info);
     sub_endpoint->Create();
     sub_endpoint->Write(start, end, data);
     sub_endpoint->Close();

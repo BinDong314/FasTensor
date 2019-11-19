@@ -277,8 +277,8 @@ public:
       data_dims = data_size.size();
     }
 
-    UpdateChunkSize(data_chunk_size, data_size);
-    UpdateOverlapSize(data_overlap_size);
+    //UpdateChunkSize(data_chunk_size, data_size);
+    //UpdateOverlapSize(data_overlap_size);
 
     current_chunk_start_offset.resize(data_dims);
     current_chunk_end_offset.resize(data_dims);
@@ -928,6 +928,7 @@ public:
     if (!virtual_array_flag)
     {
       endpoint->Read(current_chunk_ol_start_offset, current_chunk_ol_end_offset, &current_chunk_data[0]);
+      PrintVector("current_chunk_data", current_chunk_data);
       return 1;
     }
     else

@@ -55,6 +55,7 @@ public:
         if (sub_endpoint_type == EP_HDF5)
             sub_endpoint = new EndpointHDF5();
         SetEndpointType(EP_DIR);
+        sub_endpoint->SetDataElementType(data_element_type);
     }
 
     EndpointDIR()

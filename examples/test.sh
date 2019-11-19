@@ -26,7 +26,7 @@ mkdir ./test-data/test_1f1p_dir
 ./au_test_data_generator -f ./test-data/test_1f1p_dir/testf-16x16-1f1p-2.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1
 ./au_test_data_generator -f ./test-data/test_1f1p_dir/testf-16x16-1f1p-3.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1
 ./au_test_data_generator -f ./test-data/test_1f1p_dir/testf-16x16-1f1p-4.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1
-
+mkdir ./test-data/test_1f1p_dir_output
 
 # To test of running a command
 # $1 command name
