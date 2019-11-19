@@ -36,14 +36,14 @@ int main(int argc, char *argv[])
     AU_Init(argc, argv);
 
     // set up the chunk size and the overlap size
-    std::vector<int> chunk_size = {4, 16};
-    std::vector<int> overlap_size = {1, 1};
+    std::vector<int> chunk_size = {16, 16};
+    std::vector<int> overlap_size = {0, 0};
 
     //Input data
-    Array<float> *A = new Array<float>("EP_DIR:EP_HDF5:./test-data/test_1f1p_dir", chunk_size, overlap_size);
+    Array<float> *A = new Array<float>("EP_DIR:EP_HDF5:./test-data/test_1f1p_dir:/testg/testd", chunk_size, overlap_size);
 
     //Result data
-    Array<float> *B = new Array<float>("EP_DIR:EP_HDF5:./test-data/test_1f1p_dir_output");
+    Array<float> *B = new Array<float>("EP_DIR:EP_HDF5:./test-data/test_1f1p_dir_output:/testg/testd");
 
     //Run
     A->Apply(udf_1f1p, B);

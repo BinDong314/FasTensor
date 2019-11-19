@@ -243,6 +243,7 @@ void *Endpoint::Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_
 void Endpoint::SetEndpointInfo(std::string endpoint_info_p)
 {
     endpoint_info = endpoint_info_p;
+    ParseEndpointInfo(); //After set, we need to refresh related other parts
 }
 
 /**
@@ -253,4 +254,36 @@ void Endpoint::SetEndpointInfo(std::string endpoint_info_p)
 std::string Endpoint::GetEndpointInfo()
 {
     return endpoint_info;
+}
+
+/**
+     * @brief Set the Endpoint Type object
+     * 
+     * @param endpoint_type_p 
+     */
+void Endpoint::SetEndpointType(AuEndpointType endpoint_type_p)
+{
+    endpoint_type = endpoint_type_p;
+}
+
+/**
+     * @brief Get the Endpoint Type object
+     * 
+     * @return AuEndpointType 
+     */
+AuEndpointType Endpoint::GetEndpointType()
+{
+    return endpoint_type;
+}
+
+std::vector<std::string> Endpoint::GetDirFileVector()
+{
+    AU_EXIT("Error: should not be called");
+    std::vector<std::string> sv;
+    return sv;
+}
+
+void Endpoint::SetDirFileVector(std::vector<std::string> &file_list)
+{
+    AU_EXIT("Error: should not be called");
 }

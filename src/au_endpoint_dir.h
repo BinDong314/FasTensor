@@ -27,22 +27,20 @@
 #include <vector>
 #include <math.h>
 
-#include "hdf5.h" //right now, we only have code for HDF5
-
 //
 //I/O layer
 class EndpointDIR : public Endpoint
 {
 private:
-    hid_t fid = -1, gid = -1, did = -1;
-    hid_t dataspace_id = -1;
+    std::string endpoint_info;
+    AuEndpointType sub_endpoint_type;
+    std::string sub_endpoint_info; //Directory of files
+    Endpoint *sub_endpoint;
+
     std::string dir_str;
     std::vector<std::string> dir_file_list;
-    AuEndpointType sub_endpoint_type;
-    Endpoint *sub_endpoint;
-    std::string sub_endpoint_info;
-    hid_t plist_id = -1, plist_cio_id = H5P_DEFAULT;
-    hid_t mem_type, disk_type;
+    std::string append_sub_endpoint_info;              //dir_file_list[i] + append_sub_endpoint_info is the finale sub_endpoint_info
+    std::vector<int> dir_chunk_size, dir_overlap_size; //set chunk size to be each sub_endpoint
 
 public:
     /**
@@ -56,6 +54,7 @@ public:
         ParseEndpointInfo();
         if (sub_endpoint_type == EP_HDF5)
             sub_endpoint = new EndpointHDF5();
+        SetEndpointType(EP_DIR);
     }
 
     EndpointDIR()
@@ -126,5 +125,16 @@ public:
     void DisableCollectiveIO() override;
 
     int ParseEndpointInfo() override;
+
+    /**
+     * @brief Get the Chunk Size object
+     * 
+     * @return std::vector<int> 
+     */
+    std::vector<int> GetChunkSize() override;
+
+    std::vector<std::string> GetDirFileVector() override;
+
+    void SetDirFileVector(std::vector<std::string> &file_list) override;
 };
 #endif

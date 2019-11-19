@@ -50,6 +50,7 @@ public:
         ParseEndpointInfo();
         SetOpenFlag(false);
         SetRwFlag(H5F_ACC_RDONLY);
+        SetEndpointType(EP_HDF5);
     }
     /**
      * @brief Construct a new Endpoint in HDF5 
@@ -129,5 +130,7 @@ public:
      * @return int: 0 works,  < 0 error,
      */
     int ParseEndpointInfo() override;
+
+    std::vector<int> GetChunkSize() override;
 };
 #endif

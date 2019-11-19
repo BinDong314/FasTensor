@@ -111,6 +111,8 @@ private:
   bool mirror_value_flag = false;
   bool apply_replace_flag = false;
   bool vector_type_flag = false;
+  bool chunk_size_by_user_flag = false;
+  bool chunk_size_by_user_by_dimension_flag = false;
 
   //help variable
   AU_WTIME_TYPE t_start, time_read = 0, time_udf = 0, time_write = 0, time_create = 0, time_sync = 0, time_nonvolatile = 0;
@@ -156,6 +158,7 @@ public:
 
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
+    chunk_size_by_user_by_dimension_flag = true;
   }
 
   /**
@@ -174,6 +177,8 @@ public:
 
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
+
+    chunk_size_by_user_flag = true;
   }
 
   /**
@@ -208,14 +213,46 @@ public:
   {
   }
 
-  void CalculateChunkSize(std::vector<unsigned long long> &data_size, std::vector<unsigned long long> &chunk_size)
+  /**
+   * @brief Update the chunk size, given chunk_size_by_user_flag/chunk_size_by_user_by_dimension_flag
+   * 
+   * @param chunk_size_p 
+   * @param overlap_size_p 
+   * @param data_size 
+   */
+  void UpdateChunkSize(std::vector<int> &chunk_size_p, std::vector<unsigned long long> &data_size)
   {
+
+    if (endpoint->GetEndpointType() == EP_DIR)
+    {
+      //chunk_size_p = endpoint->GetChunkSize();
+    }
+
+    //partition by dimensions
+    if (chunk_size_by_user_by_dimension_flag)
+    {
+    }
+    //return the default chunk_size
+
+    //optimal chunk_size
+  }
+
+  void UpdateOverlapSize(std::vector<int> &overlap_size_p)
+  {
+    if (endpoint->GetEndpointType() == EP_DIR || chunk_size_by_user_by_dimension_flag)
+    {
+      for (int i = 0; i < data_dims; i++)
+      {
+        overlap_size_p[i] = 0;
+      }
+    }
+    //optimal chunk_size
   }
 
   void InitializeApplyInput()
   {
-    //Read the metadata (rank, dimension size) from endpoint
 
+    //Read the metadata (rank, dimension size) from endpoint
     if (virtual_array_flag && attribute_endpoint_vector.size() >= 1)
     {
       //Get the data_size from first attribute
@@ -239,6 +276,9 @@ public:
       data_size = endpoint->GetDimensions();
       data_dims = data_size.size();
     }
+
+    UpdateChunkSize(data_chunk_size, data_size);
+    UpdateOverlapSize(data_overlap_size);
 
     current_chunk_start_offset.resize(data_dims);
     current_chunk_end_offset.resize(data_dims);
@@ -491,6 +531,12 @@ public:
       t_start = AU_WTIME;
       std::vector<unsigned long long> B_data_size;
       std::vector<int> B_data_chunk_size, B_data_overlap_size;
+
+      if (B->GetEndpointType() == EP_DIR && GetEndpointType() == EP_DIR)
+      {
+        std::vector<std::string> dir_file_list = GetDirFile();
+        B->SetDirFile(dir_file_list);
+      }
 
       if (vector_type_flag)
       {
@@ -1026,6 +1072,28 @@ public:
   void SetDirInputRegexSearch(std::regex &regex_p)
   {
     dir_input_regex = regex_p;
+  }
+
+  AuEndpointType GetEndpointType()
+  {
+    if (!virtual_array_flag)
+    {
+      return endpoint->GetEndpointType();
+    }
+    else
+    {
+      return attribute_endpoint_vector[0]->GetEndpointType();
+    }
+  }
+
+  std::vector<std::string> GetDirFile()
+  {
+    return endpoint->GetDirFileVector();
+  }
+
+  void SetDirFile(std::vector<std::string> &file_list)
+  {
+    endpoint->SetDirFileVector(file_list);
   }
 
 }; // calss of array

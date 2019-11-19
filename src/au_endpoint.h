@@ -85,6 +85,58 @@ public:
     int GetDataElementTypeSize();
 
     /**
+     * @brief Set the Endpoint Type object
+     * 
+     * @param endpoint_type_p 
+     */
+    void SetEndpointType(AuEndpointType endpoint_type_p);
+
+    /**
+     * @brief Get the Endpoint Type object
+     * 
+     * @return AuEndpointType 
+     */
+    AuEndpointType GetEndpointType();
+
+    bool GetOpenFlag();
+
+    void SetOpenFlag(bool open_flag_p);
+
+    void SetRwFlag(unsigned read_write_flag_p);
+
+    unsigned GetRwFlag();
+
+    /**
+     * @brief convert my data in (void *) type to Union type
+     * 
+     * @param vp : pointer to data (after read)
+     * @return std::vector<AuEndpointDataTypeUnion> : return value
+     */
+    std::vector<AuEndpointDataTypeUnion> Void2Union(void *vp, size_t n_elements);
+
+    /**
+     * @brief convert data from union to void type 
+     * 
+     * @param data_vector_in_union_type : vector of data in union type
+     * @return void* : pointer to data (for write)
+     */
+    void *Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_union_type);
+
+    /**
+     * @brief set the endpoint_info string 
+     * 
+     * @param endpoint_info 
+     */
+    void SetEndpointInfo(std::string endpoint_info_p);
+
+    /**
+     * @brief Get the endpoint_info string 
+     * 
+     * @return std::string 
+     */
+    std::string GetEndpointInfo();
+
+    /**
      * @brief parse endpoint_info to my own info
      *        
      * @return int: 0 works,  < 0 error,
@@ -92,7 +144,7 @@ public:
     virtual int ParseEndpointInfo() = 0;
 
     /**
-     * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
+     * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/other ep_type dependents ones
      * 
      * @return int < 0 error, >= 0 works 
      */
@@ -151,43 +203,16 @@ public:
 
     virtual void DisableCollectiveIO() = 0;
 
-    bool GetOpenFlag();
-
-    void SetOpenFlag(bool open_flag_p);
-
-    void SetRwFlag(unsigned read_write_flag_p);
-
-    unsigned GetRwFlag();
-
     /**
-     * @brief convert my data in (void *) type to Union type
+     * @brief Get the Chunk Size object for EP_DIR
      * 
-     * @param vp : pointer to data (after read)
-     * @return std::vector<AuEndpointDataTypeUnion> : return value
+     * @return std::vector<int> 
      */
-    std::vector<AuEndpointDataTypeUnion> Void2Union(void *vp, size_t n_elements);
+    virtual std::vector<int> GetChunkSize() = 0;
 
-    /**
-     * @brief convert data from union to void type 
-     * 
-     * @param data_vector_in_union_type : vector of data in union type
-     * @return void* : pointer to data (for write)
-     */
-    void *Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_union_type);
+    virtual std::vector<std::string> GetDirFileVector();
 
-    /**
-     * @brief set the endpoint_info string 
-     * 
-     * @param endpoint_info 
-     */
-    void SetEndpointInfo(std::string endpoint_info_p);
-
-    /**
-     * @brief Get the endpoint_info string 
-     * 
-     * @return std::string 
-     */
-    std::string GetEndpointInfo();
+    virtual void SetDirFileVector(std::vector<std::string> &file_list);
 };
 
 #endif
