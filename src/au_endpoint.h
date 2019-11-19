@@ -9,7 +9,7 @@
 
 /**
  *
- * Email questions to {dbin, kwu, sbyna}@lbl.gov
+ * Email questions to dbin@lbl.gov
  * Scientific Data Management Research Group
  * Lawrence Berkeley National Laboratory
  *
@@ -204,15 +204,32 @@ public:
     virtual void DisableCollectiveIO() = 0;
 
     /**
-     * @brief Get the Chunk Size object for EP_DIR
+    * @brief Get the Dir File Vector object
+    * 
+    * @return std::vector<std::string> 
+    */
+    virtual std::vector<std::string> GetDirFileVector();
+
+    /**
+     * @brief Set the Dir File Vector object
+     * 
+     * @param file_list 
+     */
+    virtual void SetDirFileVector(std::vector<std::string> &file_list);
+
+    /**
+     * @brief Get the Dir Chunk Size object
      * 
      * @return std::vector<int> 
      */
-    virtual std::vector<int> GetChunkSize() = 0;
+    virtual std::vector<int> GetDirChunkSize();
 
-    virtual std::vector<std::string> GetDirFileVector();
-
-    virtual void SetDirFileVector(std::vector<std::string> &file_list);
+    /**
+     * @brief Set the Dir Chunk Size object
+     * 
+     * @param dir_chunk_size_p 
+     */
+    virtual void SetDirChunkSize(std::vector<int> &dir_chunk_size_p);
 };
 
 #endif

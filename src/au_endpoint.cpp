@@ -287,3 +287,23 @@ void Endpoint::SetDirFileVector(std::vector<std::string> &file_list)
 {
     AU_EXIT("Error: should not be called");
 }
+
+/**
+     * @brief Get the Dir Chunk Size object
+     * 
+     * @return std::vector<int> 
+     */
+std::vector<int> Endpoint::GetDirChunkSize()
+{
+    AU_EXIT("Error: should not be called");
+}
+
+/**
+     * @brief Set the Dir Chunk Size object
+     * 
+     * @param dir_chunk_size_p 
+     */
+void Endpoint::SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
+{
+    AU_EXIT("Error: should not be called");
+}

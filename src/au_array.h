@@ -9,7 +9,7 @@
 
 /**
  *
- * Email questions to {dbin, kwu, sbyna}@lbl.gov
+ * Email questions to dbin@lbl.gov
  * Scientific Data Management Research Group
  * Lawrence Berkeley National Laboratory
  *
@@ -536,6 +536,8 @@ public:
       {
         std::vector<std::string> dir_file_list = GetDirFile();
         B->SetDirFile(dir_file_list);
+        std::vector<int> dir_chunk_size = GetDirChunkSize();
+        B->SetDirChunkSize(dir_chunk_size);
       }
 
       if (vector_type_flag)
@@ -928,7 +930,6 @@ public:
     if (!virtual_array_flag)
     {
       endpoint->Read(current_chunk_ol_start_offset, current_chunk_ol_end_offset, &current_chunk_data[0]);
-      PrintVector("current_chunk_data", current_chunk_data);
       return 1;
     }
     else
@@ -1095,6 +1096,16 @@ public:
   void SetDirFile(std::vector<std::string> &file_list)
   {
     endpoint->SetDirFileVector(file_list);
+  }
+
+  std::vector<int> GetDirChunkSize()
+  {
+    return endpoint->GetDirChunkSize();
+  }
+
+  void SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
+  {
+    endpoint->SetDirChunkSize(dir_chunk_size_p);
   }
 
 }; // calss of array

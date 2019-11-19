@@ -314,7 +314,7 @@ void EndpointHDF5::Map2MyType()
      */
 int EndpointHDF5::ParseEndpointInfo()
 {
-    std::cout << endpoint_info << "\n";
+    //std::cout << endpoint_info << "\n";
     std::stringstream ss(endpoint_info);
     if (!std::getline(ss, fn_str, ':'))
     {
@@ -330,11 +330,4 @@ int EndpointHDF5::ParseEndpointInfo()
 
     gn_str = ExtractPath(group_dataset_name_str);
     dn_str = ExtractFileName(group_dataset_name_str);
-}
-
-std::vector<int> EndpointHDF5::GetChunkSize()
-{
-    AU_EXIT("Should not be here");
-    std::vector<int> v;
-    return v;
 }

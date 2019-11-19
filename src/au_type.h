@@ -33,7 +33,7 @@ typedef enum AuEndpointType
   EP_AUDIOS = 2,  //from/to AUDIOS; todo
   EP_BINARY = 3,  //from/to binary file; todo
   EP_VIRTUAL = 4, //from/to Virtual array of above types; todo
-  EP_IARRAY = 5,  //from/to in-memory cache: todo
+  EP_MEMORY = 5,  //from/to in-memory cache: todo
   EP_H5VDS = 6,   //H5 VDS: todo
   EP_DIR = 7,     //Directory to data to process. file format to be detected
   EP_DASSA = 8,   //customized DASSA IO

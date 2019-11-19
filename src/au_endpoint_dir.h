@@ -9,7 +9,7 @@
 
 /**
  *
- * Email questions to {dbin, kwu, sbyna}@lbl.gov
+ * Email questions to dbin@lbl.gov
  * Scientific Data Management Research Group
  * Lawrence Berkeley National Laboratory
  *
@@ -132,7 +132,9 @@ public:
      * 
      * @return std::vector<int> 
      */
-    std::vector<int> GetChunkSize() override;
+    std::vector<int> GetDirChunkSize() override;
+
+    void SetDirChunkSize(std::vector<int> &dir_chunk_size_p) override;
 
     std::vector<std::string> GetDirFileVector() override;
 

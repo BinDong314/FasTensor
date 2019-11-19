@@ -9,7 +9,7 @@
 
 /**
  *
- * Email questions to {dbin, kwu, sbyna}@lbl.gov
+ * Email questions to dbin@lbl.gov
  * Scientific Data Management Research Group
  * Lawrence Berkeley National Laboratory
  *
@@ -58,6 +58,9 @@ public:
      */
     EndpointHDF5()
     {
+        SetOpenFlag(false);
+        SetRwFlag(H5F_ACC_RDONLY);
+        SetEndpointType(EP_HDF5);
     }
 
     ~EndpointHDF5()
@@ -130,7 +133,5 @@ public:
      * @return int: 0 works,  < 0 error,
      */
     int ParseEndpointInfo() override;
-
-    std::vector<int> GetChunkSize() override;
 };
 #endif

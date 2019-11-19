@@ -69,10 +69,10 @@ int EndpointDIR::ExtractMeta()
 
 int EndpointDIR::Create()
 {
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info);
-    sub_endpoint->SetDimensions(endpoint_dim_size);
-    sub_endpoint->SetDataElementType(data_element_type);
-    return sub_endpoint->Create();
+    //sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info);
+    //sub_endpoint->SetDataElementType(data_element_type);
+    //return sub_endpoint->Create();
+    return 0;
 }
 
 int EndpointDIR::Open()
@@ -90,22 +90,17 @@ int EndpointDIR::Open()
      */
 int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
-    PrintVector("EndpointDIR::Read, start ", start);
-    PrintVector("EndpointDIR::Read, start ", end);
-    std::cout << "Read file: " << dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info << "\n";
+
+    int sub_endpoint_index = 0;
+    sub_endpoint_index = start[0] / dir_chunk_size[0];
+    start[0] = 0;
+    end[0] = dir_chunk_size[0] - 1;
+
     sub_endpoint->SetDataElementType(data_element_type);
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
     sub_endpoint->Read(start, end, data);
-    sub_endpoint->Close();
 
-    float *data_f = (float *)data;
-    for (int i = 0; i < 10; i++)
-    {
-        std::cout << data_f[i] << "   ";
-    }
-    std::cout << "\n";
-    return 0;
+    return sub_endpoint->Close();
 }
 
 /**
@@ -118,11 +113,19 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
      */
 int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info);
+    int sub_endpoint_index = 0;
+    sub_endpoint_index = start[0] / dir_chunk_size[0];
+    start[0] = 0;
+    end[0] = dir_chunk_size[0] - 1;
+    for (int i = 0; i < endpoint_ranks; i++)
+        endpoint_dim_size[i] = dir_chunk_size[i];
+
+    sub_endpoint->SetDataElementType(data_element_type);
+    sub_endpoint->SetDimensions(endpoint_dim_size);
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
     sub_endpoint->Create();
     sub_endpoint->Write(start, end, data);
-    sub_endpoint->Close();
-    return 0;
+    return sub_endpoint->Close();
 }
 
 /**
@@ -174,9 +177,14 @@ int EndpointDIR::ParseEndpointInfo()
      * 
      * @return std::vector<int> 
      */
-std::vector<int> EndpointDIR::GetChunkSize()
+std::vector<int> EndpointDIR::GetDirChunkSize()
 {
     return dir_chunk_size;
+}
+
+void EndpointDIR::SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
+{
+    dir_chunk_size = dir_chunk_size_p;
 }
 
 std::vector<std::string> EndpointDIR::GetDirFileVector()
