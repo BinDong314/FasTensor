@@ -39,6 +39,13 @@ typedef enum AuEndpointType
   EP_DASSA = 8,   //customized DASSA IO
   EP_TDMS = 9,    //tdms file format (to binary file)
 } AuEndpointType;
+/**
+ * @brief map string typed name of type to AuEndpointType
+ * 
+ * @param endpoint_type_str input of string name
+ * @return AuEndpointType output of type 
+ */
+AuEndpointType MapString2EndpointType(std::string endpoint_type_str);
 
 //See https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h
 //for reference

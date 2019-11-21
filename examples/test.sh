@@ -87,3 +87,5 @@ run_command ./au_example_vector testf-16x16-vector-output.h5
 run_command ./au_example_array
 run_command ./au_example_vds testf-16x16-vds-output.h5
 run_command_1f1p ./au_example_1f1p 
+
+run_command  ./au_example_cache ./test-data/testf-16x16-cache.h5

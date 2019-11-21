@@ -43,14 +43,6 @@
 #define V2VOIDP(vv) static_cast<void *>(vv.data())
 
 /**
- * @brief map string typed name of type to AuEndpointType
- * 
- * @param endpoint_type_str input of string name
- * @return AuEndpointType output of type 
- */
-AuEndpointType MapString2EndpointType(std::string endpoint_type_str);
-
-/**
  * @brief Get file list of a direction
  * 
  * @param dir_str_p 

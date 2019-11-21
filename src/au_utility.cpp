@@ -78,13 +78,13 @@ AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
     {
         endpoint_type = EP_VIRTUAL;
     }
-    else if (endpoint_type_str == "EP_IARRAY")
+    else if (endpoint_type_str == "EP_MEMORY")
     {
-        endpoint_type = EP_H5VDS;
+        endpoint_type = EP_MEMORY;
     }
     else if (endpoint_type_str == "EP_H5VDS")
     {
-        endpoint_type = EP_DIR;
+        endpoint_type = EP_H5VDS;
     }
     else if (endpoint_type_str == "EP_DIR")
     {

@@ -1,6 +1,8 @@
 #include "au_endpoint.h"
 #include "au_endpoint_hdf5.h"
 #include "au_endpoint_dir.h"
+#include "au_endpoint_memory.h"
+
 #include <string.h>
 
 class EndpointFactory
@@ -21,10 +23,10 @@ public:
             return new EndpointHDF5(endpoint_info);
         if (endpoint_type == EP_DIR)
             return new EndpointDIR(endpoint_info);
-        /* if (description == "EP_IARRAY")
-            return new EndpointIArray(endpoint);
-        if (description == "EP_IVECTOR")
-            return new EndpointIVECTOR(endpoint);*/
+        if (endpoint_type == EP_MEMORY)
+            return new EndpointMEMORY(endpoint);
+
+        AU_EXIT("Not supported endpoint");
         return nullptr;
     }
 };

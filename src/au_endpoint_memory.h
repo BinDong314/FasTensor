@@ -15,55 +15,44 @@
  *
  */
 
-#ifndef END_POINT_HDF5_H
-#define END_POINT_HDF5_H
+#ifndef END_POINT_MEMORY_H
+#define END_POINT_MEMORY_H
 
 #include "au_type.h"
 #include "au_endpoint.h"
 #include <string>
 #include <iostream>
 #include <vector>
-#include <math.h>
 
-#include "hdf5.h" //right now, we only have code for HDF5
-
-//
-//I/O layer
-class EndpointHDF5 : public Endpoint
+class EndpointMEMORY : public Endpoint
 {
 private:
-    hid_t fid = -1, gid = -1, did = -1;
-    hid_t dataspace_id = -1;
-    std::string fn_str, gn_str, dn_str;
-    hid_t plist_id = -1, plist_cio_id = H5P_DEFAULT;
-    hid_t mem_type, disk_type;
+    int iarray_handle = -1;
 
 public:
     /**
-     * @brief Construct a new EndpointHDF5 object
+     * @brief Construct a new EndpointMEMORY object
      * 
      * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
      */
-    EndpointHDF5(std::string endpoint_info_p)
+    EndpointMEMORY(std::string endpoint_info_p)
     {
         endpoint_info = endpoint_info_p;
         ParseEndpointInfo();
         SetOpenFlag(false);
-        SetRwFlag(H5F_ACC_RDONLY);
-        SetEndpointType(EP_HDF5);
+        SetEndpointType(EP_MEMORY);
     }
     /**
-     * @brief Construct a new Endpoint in HDF5 
+     * @brief Construct a new Endpoint in MEMORY 
      *         Nothing to do there, can be used as sub-endpoint of directory
      */
-    EndpointHDF5()
+    EndpointMEMORY()
     {
         SetOpenFlag(false);
-        SetRwFlag(H5F_ACC_RDONLY);
-        SetEndpointType(EP_HDF5);
+        SetEndpointType(EP_MEMORY);
     }
 
-    ~EndpointHDF5()
+    ~EndpointMEMORY()
     {
         Close();
     }
@@ -129,7 +118,7 @@ public:
 
     /**
      * @brief parse endpoint_info to my own info
-     *        In HDF5, it map endpoint_info to filename, group name and datasetname
+     *        In MEMORY, it map endpoint_info to filename, group name and datasetname
      * @return int: 0 works,  < 0 error,
      */
     int ParseEndpointInfo() override;
