@@ -33,63 +33,63 @@
 #define DASH_READ_FLAG 0
 #define DASH_WRITE_FLAG 1
 
-#define CreateDashMatrix(dash_matrix_p_p, rank_const_p, element_type_code_p)                                         \
+#define CreateDashMatrix(dash_matrix_p_p, rank_const_p, element_type_code_p, array_size)                             \
     {                                                                                                                \
-        dash::SizeSpec<rank_const_p> dash_size_spec = dash::SizeSpec<rank_const_p>();                                \
+        dash::SizeSpec<rank_const_p, unsigned long> dash_size_spec = dash::SizeSpec<rank_const_p, unsigned long>();  \
         for (int i = 0; i < rank_const_p; i++)                                                                       \
         {                                                                                                            \
-            dash_size_spec[i].resize(0, endpoint_dim_size(i));                                                       \
+            dash_size_spec.resize(i, array_size[i]);                                                                 \
         }                                                                                                            \
         switch (element_type_code_p)                                                                                 \
         {                                                                                                            \
         case AU_SHORT:                                                                                               \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<short, rank_const_p>(dash::SizeSpec<1>(dash_size_spec));              \
+            dash_matrix_p_p = new dash::Matrix<short, rank_const_p>(dash_size_spec);              \
             break;                                                                                                   \
         }                                                                                                            \
         case AU_INT:                                                                                                 \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<int, rank_const_p>(dash::SizeSpec<1>(dash_size_spec));                \
+            dash_matrix_p_p = new dash::Matrix<int, rank_const_p>(dash_size_spec);                \
             break;                                                                                                   \
         }                                                                                                            \
         case AU_LONG:                                                                                                \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<long, rank_const_p>(dash::SizeSpec<1>(dash_size_spec));               \
+            dash_matrix_p_p = new dash::Matrix<long, rank_const_p>(dash_size_spec);               \
             break;                                                                                                   \
         }                                                                                                            \
         case AU_LONG_LONG:                                                                                           \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<long long, rank_const_p>(dash::SizeSpec<1>(dash_size_spec));          \
+            dash_matrix_p_p = new dash::Matrix<long long, rank_const_p>(dash_size_spec);          \
             break;                                                                                                   \
         }                                                                                                            \
         case AU_USHORT:                                                                                              \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<unsigned int, rank_const_p>(dash::SizeSpec<1>(dash_size_spec));       \
+            dash_matrix_p_p = new dash::Matrix<unsigned int, rank_const_p>(dash_size_spec);       \
             break;                                                                                                   \
         }                                                                                                            \
         case AU_UINT:                                                                                                \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<unsigned int, rank_const_p>(dash::SizeSpec<1>(dash_size_spec));       \
+            dash_matrix_p_p = new dash::Matrix<unsigned int, rank_const_p>(dash_size_spec);       \
             break;                                                                                                   \
         }                                                                                                            \
         case AU_ULONG:                                                                                               \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<unsigned long, rank_const_p>(dash::SizeSpec<1>(dash_size_spec));      \
+            dash_matrix_p_p = new dash::Matrix<unsigned long, rank_const_p>(dash_size_spec);      \
             break;                                                                                                   \
         }                                                                                                            \
         case AU_ULLONG:                                                                                              \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<unsigned long long, rank_const_p>(dash::SizeSpec<1>(dash_size_spec)); \
+            dash_matrix_p_p = new dash::Matrix<unsigned long long, rank_const_p>(dash_size_spec); \
             break;                                                                                                   \
         }                                                                                                            \
         case AU_FLOAT:                                                                                               \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<float, rank_const_p>(dash::SizeSpec<1>(dash_size_spec));              \
+            dash_matrix_p_p = new dash::Matrix<float, rank_const_p>(dash_size_spec);              \
             break;                                                                                                   \
         }                                                                                                            \
         case AU_DOUBLE:                                                                                              \
         {                                                                                                            \
-            dash_matrix_p_p = new dash::Matrix<double, rank_const_p>(dash::SizeSpec<1>(dash_size_spec));             \
+            dash_matrix_p_p = new dash::Matrix<double, rank_const_p>(dash_size_spec);             \
             break;                                                                                                   \
         }                                                                                                            \
         default:                                                                                                     \
@@ -98,11 +98,11 @@
     }
 #define AccessDashDataHelp(rank_const_p, dash_array_typed, start_p, end_p, data_p_typed, RW_flag) \
     {                                                                                             \
-        unsigned long long offset = 0;                                                            \
+        unsigned long  offset = 0;                                                            \
         switch (rank_const_p)                                                                     \
         {                                                                                         \
         case 1:                                                                                   \
-            for (unsigned long long i = start_p[0]; i <= end_p[0]; i++)                           \
+            for (unsigned  long i = start_p[0]; i <= end_p[0]; i++)                           \
             {                                                                                     \
                 if (RW_flag == DASH_READ_FLAG)                                                    \
                 {                                                                                 \
@@ -115,9 +115,9 @@
             }                                                                                     \
             break;                                                                                \
         case 2:                                                                                   \
-            for (unsigned long long i = start_p[0]; i <= end_p[0]; i++)                           \
+            for (unsigned  long i = start_p[0]; i <= end_p[0]; i++)                           \
             {                                                                                     \
-                for (unsigned long long j = start_p[1]; j <= end_p[1]; j++)                       \
+                for (unsigned  long j = start_p[1]; j <= end_p[1]; j++)                       \
                 {                                                                                 \
                     offset = i * (end_p[1] - start_p[1] + 1) + j;                                 \
                     if (RW_flag == DASH_READ_FLAG)                                                \
@@ -132,11 +132,11 @@
             }                                                                                     \
             break;                                                                                \
         case 3:                                                                                   \
-            for (unsigned long long i = start_p[0]; i <= end_p[0]; i++)                           \
+            for (unsigned  long i = start_p[0]; i <= end_p[0]; i++)                           \
             {                                                                                     \
-                for (unsigned long long j = start_p[1]; j <= end_p[1]; j++)                       \
+                for (unsigned  long j = start_p[1]; j <= end_p[1]; j++)                       \
                 {                                                                                 \
-                    for (unsigned long long k = start_p[2]; k <= end_p[2]; k++)                   \
+                    for (unsigned  long k = start_p[2]; k <= end_p[2]; k++)                   \
                     {                                                                             \
                         offset = i * (end_p[1] - start_p[1] + 1) + j;                             \
                         offset = offset * (end_p[2] - start_p[2] + 1) + k;                        \

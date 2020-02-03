@@ -8,18 +8,28 @@ int EndpointMEMORY::ExtractMeta()
 
 int EndpointMEMORY::Create()
 {
-
+    std::vector<unsigned long> endpoint_dim_size_ul;
+    endpoint_dim_size_ul.resize(endpoint_dim_size.size());
+    for(int i = 0 ;i < endpoint_dim_size.size(); i++){
+        endpoint_dim_size_ul[i] = endpoint_dim_size[i];
+    }
     switch (endpoint_dim_size.size())
     {
     case 1:
-        CreateDashMatrix(dash_array_p, 1, data_element_type);
+    {
+        CreateDashMatrix(dash_array_p, 1, data_element_type, endpoint_dim_size_ul);
         break;
+    }
     case 2:
-        CreateDashMatrix(dash_array_p, 2, data_element_type);
+    {
+        CreateDashMatrix(dash_array_p, 2, data_element_type, endpoint_dim_size_ul);
         break;
+    }
     case 3:
-        CreateDashMatrix(dash_array_p, 3, data_element_type);
+    {
+        CreateDashMatrix(dash_array_p, 3, data_element_type, endpoint_dim_size_ul);
         break;
+    }
     default:
         AU_EXIT("Only support until 3D in memory data!");
         break;
@@ -43,20 +53,33 @@ int EndpointMEMORY::Open()
      */
 int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    std::vector<unsigned long> start_ul, end_ul;
+    start_ul.resize(start.size());
+    end_ul.resize(end.size());
+
+    for(int i = 0 ;i < start.size(); i++){
+        start_ul[i] = start[i];
+        end_ul[i] = end[i];
+    }
     switch (endpoint_dim_size.size())
     {
     case 1:
-        /* code */
-        AccessDashData(1, dash_array_p, start, end, data, data_element_type, DASH_READ_FLAG);
+    { /* code */
+        AccessDashData(1, dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
         break;
+    }
     case 2:
-        AccessDashData(2, dash_array_p, start, end, data, data_element_type, DASH_READ_FLAG);
+    {
+        AccessDashData(2, dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
         /* code */
         break;
+    }
     case 3:
-        AccessDashData(3, dash_array_p, start, end, data, data_element_type, DASH_READ_FLAG);
+    {
+        AccessDashData(3, dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
         /* code */
-        break;
+    }
+    break;
     default:
         AU_EXIT("Only support until 3D in memory data!");
         break;
