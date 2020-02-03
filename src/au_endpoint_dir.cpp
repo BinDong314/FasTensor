@@ -170,6 +170,8 @@ int EndpointDIR::ParseEndpointInfo()
     {
         AU_EXIT("Invalued sub_endpoint_info");
     }
+
+    return 0;
 }
 
 /**

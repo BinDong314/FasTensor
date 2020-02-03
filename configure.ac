@@ -54,6 +54,23 @@ AC_MSG_ERROR([no: HDF5 directory not found!])
 fi
 
 
+AC_ARG_WITH([dash],
+[AS_HELP_STRING([--with-dash=DIR],
+[use DIR as the root directory for DASH include and lib])],
+[DASH_HOME="$withval"],
+[AC_MSG_ERROR([DASH must be specified using --with-dash option])]
+)
+
+AC_MSG_CHECKING([for DASH at $DASH_HOME])
+if test -d "$DASH_HOME"   && test -d "$DASH_HOME/include"  && test -d "$DASH_HOME/lib"; then
+ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$DASH_HOME/include -std=c++14"
+ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$DASH_HOME/include -std=c++14"
+ARRAYUDF_LIBS="$ARRAYUDF_LIBS           -L$DASH_HOME/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14"
+AC_MSG_RESULT([yes])	    
+else
+AC_MSG_ERROR([no: DASH directory not found!])
+fi
+
 AC_SUBST(AU_OLDCXX_ENABLED)
 AU_OLDCXX_ENABLED=false
 AC_ARG_ENABLE([oldcxx], 

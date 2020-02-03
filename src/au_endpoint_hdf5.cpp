@@ -330,4 +330,6 @@ int EndpointHDF5::ParseEndpointInfo()
 
     gn_str = ExtractPath(group_dataset_name_str);
     dn_str = ExtractFileName(group_dataset_name_str);
+
+    return 0;
 }

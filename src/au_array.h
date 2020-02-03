@@ -113,6 +113,7 @@ private:
   bool vector_type_flag = false;
   bool chunk_size_by_user_flag = false;
   bool chunk_size_by_user_by_dimension_flag = false;
+  bool endpoint_memory_flag = false;
 
   //help variable
   AU_WTIME_TYPE t_start, time_read = 0, time_udf = 0, time_write = 0, time_create = 0, time_sync = 0, time_nonvolatile = 0;
@@ -142,6 +143,8 @@ public:
     endpoint = EndpointFactory::NewEndpoint(data_endpoint);
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
+    if (endpoint->GetEndpointType() == EP_MEMORY)
+      endpoint_memory_flag = true;
   }
 
   /**
@@ -159,6 +162,8 @@ public:
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
     chunk_size_by_user_by_dimension_flag = true;
+    if (endpoint->GetEndpointType() == EP_MEMORY)
+      endpoint_memory_flag = true;
   }
 
   /**
@@ -179,6 +184,8 @@ public:
     endpoint->SetDataElementType(data_element_type);
 
     chunk_size_by_user_flag = true;
+    if (endpoint->GetEndpointType() == EP_MEMORY)
+      endpoint_memory_flag = true;
   }
 
   /**
@@ -251,7 +258,6 @@ public:
 
   void InitializeApplyInput()
   {
-
     //Read the metadata (rank, dimension size) from endpoint
     if (virtual_array_flag && attribute_endpoint_vector.size() >= 1)
     {
@@ -334,18 +340,47 @@ public:
       }
     }
 
+    if (!endpoint_memory_flag)
+    {
+      current_chunk_id = au_mpi_rank_global; //Each process deal with one chunk one time, starting from its rank
+    }
+    else
+    {
+      unsigned long long temp_data_total_chunks, current_chunk_start;
+      if (data_total_chunks % au_mpi_size_global == 0)
+      {
+        temp_data_total_chunks = data_total_chunks / au_mpi_size_global;
+        current_chunk_start = temp_data_total_chunks * au_mpi_rank_global;
+      }
+      else
+      {
+        unsigned long long data_total_chunks_left = data_total_chunks % au_mpi_size_global;
+        temp_data_total_chunks = (data_total_chunks - data_total_chunks_left) % au_mpi_size_global;
+        if (au_mpi_rank_global < data_total_chunks_left)
+        {
+          temp_data_total_chunks = temp_data_total_chunks + 1;
+          current_chunk_start = temp_data_total_chunks * au_mpi_rank_global;
+        }
+        else
+        {
+          current_chunk_start = data_total_chunks_left * (temp_data_total_chunks + 1) + temp_data_total_chunks * (au_mpi_rank_global - data_total_chunks_left);
+        }
+      }
+      current_chunk_id = current_chunk_start;
+      data_total_chunks = temp_data_total_chunks;
+    }
+
     //#ifdef DEBUG
     if (au_mpi_rank_global == 0)
     {
       if (!virtual_array_flag)
         endpoint->PrintInfo();
-      PrintVector("   data size", data_size);
-      PrintVector("  chunk size", data_chunk_size);
-      PrintVector("overlap size", data_overlap_size);
-      PrintScalar("Total chunks", data_total_chunks);
+      PrintVector("       data size", data_size);
+      PrintVector("      chunk size", data_chunk_size);
+      PrintVector("    overlap size", data_overlap_size);
+      PrintScalar("current chunk id:", current_chunk_id);
+      PrintScalar("    total chunks", data_total_chunks);
     }
-
-    current_chunk_id = au_mpi_rank_global; //Each process deal with one chunk one time, starting from its rank
   }
 
   /**
@@ -368,6 +403,11 @@ public:
   template <class UDFOutputType, class BType = UDFOutputType>
   void Apply(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
   {
+
+    //When output is memory, we needs to consider it too, via seting endpoint_memory_flag = true
+    //Then InitializeApplyInput will do the job
+    if (B->GetEndpointType() == EP_MEMORY)
+      endpoint_memory_flag = true;
 
     //Set up the input data for LoadNextChunk
     InitializeApplyInput();
@@ -782,6 +822,47 @@ public:
     return data_vector;
   }
 
+  bool HasNextChunk()
+  {
+    if (current_chunk_id >= data_total_chunks || current_chunk_id < 0)
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * @brief update current_chunk_id
+   * 
+   * @return int 
+   */
+  void SchduleChunkNext()
+  {
+    //Next chunk id
+    if (!reverse_apply_direction_flag)
+    {
+      if (!endpoint_memory_flag)
+      {
+        current_chunk_id = current_chunk_id + au_mpi_size_global;
+      }
+      else
+      {
+        current_chunk_id = current_chunk_id + 1;
+      }
+    }
+    else
+    {
+      if (!endpoint_memory_flag)
+      {
+        current_chunk_id = current_chunk_id - au_mpi_size_global;
+      }
+      else
+      {
+        current_chunk_id = current_chunk_id - 1;
+      }
+    }
+  }
   /**
    * @brief Load the next chunk
    * 
@@ -793,11 +874,12 @@ public:
    */
   int LoadNextChunk(unsigned long long &result_vector_size)
   {
-    result_vector_size = 0;
-    if (current_chunk_id >= data_total_chunks || current_chunk_id < 0)
+    if (!HasNextChunk())
     {
       return 0;
     }
+
+    result_vector_size = 0;
 
     current_chunk_cells = 1;
     current_result_chunk_cells = 1;
@@ -890,15 +972,6 @@ public:
       current_chunk_ol_cells = current_chunk_ol_cells * current_chunk_ol_size[i];
     }
 
-    //Next chunk id
-    if (!reverse_apply_direction_flag)
-    {
-      current_chunk_id = current_chunk_id + au_mpi_size_global;
-    }
-    else
-    {
-      current_chunk_id = current_chunk_id - au_mpi_size_global;
-    }
     current_chunk_data.resize(current_chunk_ol_cells);
     if (save_result_flag == 1)
     {
@@ -920,6 +993,9 @@ public:
         current_chunk_ol_end_offset[i] = current_chunk_ol_end_offset[i] + view_start_offset[i];
       }
     }
+
+    //update current_chunk_id
+    SchduleChunkNext();
 
     //Return  1, data read into   local_chunk_data
     //Return  0, end of file (no data left to handle)
@@ -1047,6 +1123,8 @@ public:
     Endpoint *attribute_endpoint = EndpointFactory::NewEndpoint(data_endpoint);
     AuEndpointDataType data_element_type = InferDataType<AttributeType>();
     attribute_endpoint->SetDataElementType(data_element_type);
+    if (attribute_endpoint->GetEndpointType() == EP_MEMORY)
+      endpoint_memory_flag = true;
     attribute_endpoint_vector.push_back(attribute_endpoint);
   }
 

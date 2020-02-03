@@ -9,6 +9,22 @@ int EndpointMEMORY::ExtractMeta()
 int EndpointMEMORY::Create()
 {
 
+    switch (endpoint_dim_size.size())
+    {
+    case 1:
+        CreateDashMatrix(dash_array_p, 1, data_element_type);
+        break;
+    case 2:
+        CreateDashMatrix(dash_array_p, 2, data_element_type);
+        break;
+    case 3:
+        CreateDashMatrix(dash_array_p, 3, data_element_type);
+        break;
+    default:
+        AU_EXIT("Only support until 3D in memory data!");
+        break;
+    }
+
     return 0;
 }
 
@@ -27,6 +43,24 @@ int EndpointMEMORY::Open()
      */
 int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    switch (endpoint_dim_size.size())
+    {
+    case 1:
+        /* code */
+        AccessDashData(1, dash_array_p, start, end, data, data_element_type, DASH_READ_FLAG);
+        break;
+    case 2:
+        AccessDashData(2, dash_array_p, start, end, data, data_element_type, DASH_READ_FLAG);
+        /* code */
+        break;
+    case 3:
+        AccessDashData(3, dash_array_p, start, end, data, data_element_type, DASH_READ_FLAG);
+        /* code */
+        break;
+    default:
+        AU_EXIT("Only support until 3D in memory data!");
+        break;
+    }
 
     return 0;
 }
@@ -41,6 +75,24 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
      */
 int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    switch (endpoint_dim_size.size())
+    {
+    case 1:
+        /* code */
+        AccessDashData(1, dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
+        break;
+    case 2:
+        AccessDashData(2, dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
+        /* code */
+        break;
+    case 3:
+        AccessDashData(3, dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
+        /* code */
+        break;
+    default:
+        AU_EXIT("Only support until 3D in memory data!");
+        break;
+    }
     return 0;
 }
 

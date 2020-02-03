@@ -796,6 +796,7 @@ with_gnu_ld
 with_sysroot
 enable_libtool_lock
 with_hdf5
+with_dash
 enable_oldcxx
 enable_debug
 enable_python
@@ -1464,6 +1465,8 @@ Optional Packages:
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
   --with-hdf5=DIR         use DIR as the root directory for HDF5 include and
+                          lib
+  --with-dash=DIR         use DIR as the root directory for DASH include and
                           lib
   --with-swig=DIR         use DIR as the root directory for swig's include and
                           lib
@@ -16852,6 +16855,28 @@ else
 as_fn_error $? "no: HDF5 directory not found!" "$LINENO" 5
 fi
 
+
+
+# Check whether --with-dash was given.
+if test "${with_dash+set}" = set; then :
+  withval=$with_dash; DASH_HOME="$withval"
+else
+  as_fn_error $? "DASH must be specified using --with-dash option" "$LINENO" 5
+
+fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for DASH at $DASH_HOME" >&5
+$as_echo_n "checking for DASH at $DASH_HOME... " >&6; }
+if test -d "$DASH_HOME"   && test -d "$DASH_HOME/include"  && test -d "$DASH_HOME/lib"; then
+ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$DASH_HOME/include -std=c++14"
+ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$DASH_HOME/include -std=c++14"
+ARRAYUDF_LIBS="$ARRAYUDF_LIBS           -L$DASH_HOME/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+as_fn_error $? "no: DASH directory not found!" "$LINENO" 5
+fi
 
 
 AU_OLDCXX_ENABLED=false
