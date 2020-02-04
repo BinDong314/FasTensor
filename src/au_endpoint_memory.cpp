@@ -10,9 +10,11 @@ int EndpointMEMORY::Create()
 {
     std::vector<unsigned long> endpoint_dim_size_ul;
     endpoint_dim_size_ul.resize(endpoint_dim_size.size());
-    for(int i = 0 ;i < endpoint_dim_size.size(); i++){
+    for (int i = 0; i < endpoint_dim_size.size(); i++)
+    {
         endpoint_dim_size_ul[i] = endpoint_dim_size[i];
     }
+
     switch (endpoint_dim_size.size())
     {
     case 1:
@@ -57,29 +59,28 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
     start_ul.resize(start.size());
     end_ul.resize(end.size());
 
-    for(int i = 0 ;i < start.size(); i++){
+    for (int i = 0; i < start.size(); i++)
+    {
         start_ul[i] = start[i];
         end_ul[i] = end[i];
     }
     switch (endpoint_dim_size.size())
     {
     case 1:
-    { /* code */
-        AccessDashData(1, dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
+    {
+        AccessDashData1D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
         break;
     }
     case 2:
     {
-        AccessDashData(2, dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
-        /* code */
+        AccessDashData2D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
         break;
     }
     case 3:
     {
-        AccessDashData(3, dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
-        /* code */
+        AccessDashData3D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
+        break;
     }
-    break;
     default:
         AU_EXIT("Only support until 3D in memory data!");
         break;
@@ -102,14 +103,14 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
     {
     case 1:
         /* code */
-        AccessDashData(1, dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
+        AccessDashData1D(dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
         break;
     case 2:
-        AccessDashData(2, dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
+        AccessDashData2D(dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
         /* code */
         break;
     case 3:
-        AccessDashData(3, dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
+        AccessDashData3D(dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
         /* code */
         break;
     default:
