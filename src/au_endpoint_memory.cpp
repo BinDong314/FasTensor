@@ -99,6 +99,7 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
      */
 int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+
     switch (endpoint_dim_size.size())
     {
     case 1:
