@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     Array<float> *C = new Array<float>("EP_HDF5:./test-data/testf-16x16-cache-output.h5:/testg/testd");
 
     //Run
-    //A->Apply(udf_cache1, B);
+    A->Apply(udf_cache1, B);
 
     //A->Apply(udf_cache2, C);
 

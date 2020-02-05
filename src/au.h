@@ -24,6 +24,7 @@
 #include "au_type.h"
 #include "au_array.h"
 #include "au_mpi.h"
+#include <libdash.h>
 
 extern int au_mpi_size_global;
 extern int au_mpi_rank_global;

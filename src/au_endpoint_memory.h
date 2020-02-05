@@ -300,160 +300,663 @@
         }                                                                                                                                                              \
     }
 
-#define AccessDashData1D(dash_array_p_p, start_p, end_p, data_p, element_type_code_p, RW_flag)                                 \
-    {                                                                                                                          \
-        switch (element_type_code_p)                                                                                           \
-        {                                                                                                                      \
-        case AU_SHORT:                                                                                                         \
-        {                                                                                                                      \
-            dash::Matrix<short, 1, unsigned long> *dash_array_typed = (dash::Matrix<short, 1, unsigned long> *)dash_array_p_p; \
-            short *typed_data_p = (short *)data_p;                                                                             \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                             \
-            {                                                                                                                  \
-                if (RW_flag == DASH_READ_FLAG)                                                                                 \
-                {                                                                                                              \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                 \
-                }                                                                                                              \
-                else                                                                                                           \
-                {                                                                                                              \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                 \
-                }                                                                                                              \
-            }                                                                                                                  \
-            break;                                                                                                             \
-        }                                                                                                                      \
-        case AU_INT:                                                                                                           \
-        {                                                                                                                      \
-            dash::Matrix<int, 1, unsigned long> *dash_array_typed = (dash::Matrix<int, 1, unsigned long> *)dash_array_p_p;     \
-            int *typed_data_p = (int *)data_p;                                                                                 \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                             \
-            {                                                                                                                  \
-                if (RW_flag == DASH_READ_FLAG)                                                                                 \
-                {                                                                                                              \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                 \
-                }                                                                                                              \
-                else                                                                                                           \
-                {                                                                                                              \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                 \
-                }                                                                                                              \
-            }                                                                                                                  \
-            break;                                                                                                             \
-            break;                                                                                                             \
-        }                                                                                                                      \
-        default:                                                                                                               \
-            AU_EXIT("Unsupported datatype in AccessDashData !");                                                               \
-        }                                                                                                                      \
+#define AccessDashData1D(dash_array_p_p, start_p, end_p, data_p, element_type_code_p, RW_flag)                                                           \
+    {                                                                                                                                                    \
+        switch (element_type_code_p)                                                                                                                     \
+        {                                                                                                                                                \
+        case AU_SHORT:                                                                                                                                   \
+        {                                                                                                                                                \
+            dash::Matrix<short, 1, unsigned long> *dash_array_typed = (dash::Matrix<short, 1, unsigned long> *)dash_array_p_p;                           \
+            short *typed_data_p = (short *)data_p;                                                                                                       \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_INT:                                                                                                                                     \
+        {                                                                                                                                                \
+            dash::Matrix<int, 1, unsigned long> *dash_array_typed = (dash::Matrix<int, 1, unsigned long> *)dash_array_p_p;                               \
+            int *typed_data_p = (int *)data_p;                                                                                                           \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_LONG:                                                                                                                                    \
+        {                                                                                                                                                \
+            dash::Matrix<long, 1, unsigned long> *dash_array_typed = (dash::Matrix<long, 1, unsigned long> *)dash_array_p_p;                             \
+            long *typed_data_p = (long *)data_p;                                                                                                         \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_LONG_LONG:                                                                                                                               \
+        {                                                                                                                                                \
+            dash::Matrix<long long, 1, unsigned long> *dash_array_typed = (dash::Matrix<long long, 1, unsigned long> *)dash_array_p_p;                   \
+            long long *typed_data_p = (long long *)data_p;                                                                                               \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_USHORT:                                                                                                                                  \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned short, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 1, unsigned long> *)dash_array_p_p;         \
+            unsigned short *typed_data_p = (unsigned short *)data_p;                                                                                     \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_UINT:                                                                                                                                    \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned int, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 1, unsigned long> *)dash_array_p_p;             \
+            unsigned int *typed_data_p = (unsigned int *)data_p;                                                                                         \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_ULONG:                                                                                                                                   \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned long, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 1, unsigned long> *)dash_array_p_p;           \
+            unsigned long *typed_data_p = (unsigned long *)data_p;                                                                                       \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_ULLONG:                                                                                                                                  \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned long long, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 1, unsigned long> *)dash_array_p_p; \
+            unsigned long long *typed_data_p = (unsigned long long *)data_p;                                                                             \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_FLOAT:                                                                                                                                   \
+        {                                                                                                                                                \
+            dash::Matrix<float, 1, unsigned long> *dash_array_typed = (dash::Matrix<float, 1, unsigned long> *)dash_array_p_p;                           \
+            float *typed_data_p = (float *)data_p;                                                                                                       \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_DOUBLE:                                                                                                                                  \
+        {                                                                                                                                                \
+            dash::Matrix<double, 1, unsigned long> *dash_array_typed = (dash::Matrix<double, 1, unsigned long> *)dash_array_p_p;                         \
+            double *typed_data_p = (double *)data_p;                                                                                                     \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                if (RW_flag == DASH_READ_FLAG)                                                                                                           \
+                {                                                                                                                                        \
+                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                }                                                                                                                                        \
+                else                                                                                                                                     \
+                {                                                                                                                                        \
+                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        default:                                                                                                                                         \
+            AU_EXIT("Unsupported datatype in AccessDashData !");                                                                                         \
+        }                                                                                                                                                \
     }
 
-#define AccessDashData2D(dash_array_p_p, start_p, end_p, data_p, element_type_code_p, RW_flag)                                 \
-    {                                                                                                                          \
-        unsigned long offset = 0;                                                                                              \
-        switch (element_type_code_p)                                                                                           \
-        {                                                                                                                      \
-        case AU_SHORT:                                                                                                         \
-        {                                                                                                                      \
-            dash::Matrix<short, 2, unsigned long> *dash_array_typed = (dash::Matrix<short, 2, unsigned long> *)dash_array_p_p; \
-            short *typed_data_p = (short *)data_p;                                                                             \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                             \
-            {                                                                                                                  \
-                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                         \
-                {                                                                                                              \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                              \
-                    if (RW_flag == DASH_READ_FLAG)                                                                             \
-                    {                                                                                                          \
-                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                     \
-                    }                                                                                                          \
-                    else                                                                                                       \
-                    {                                                                                                          \
-                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                     \
-                    }                                                                                                          \
-                }                                                                                                              \
-            }                                                                                                                  \
-            break;                                                                                                             \
-        }                                                                                                                      \
-        case AU_INT:                                                                                                           \
-        {                                                                                                                      \
-            dash::Matrix<int, 2, unsigned long> *dash_array_typed = (dash::Matrix<int, 2, unsigned long> *)dash_array_p_p;     \
-            int *typed_data_p = (int *)data_p;                                                                                 \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                             \
-            {                                                                                                                  \
-                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                         \
-                {                                                                                                              \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                              \
-                    if (RW_flag == DASH_READ_FLAG)                                                                             \
-                    {                                                                                                          \
-                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                     \
-                    }                                                                                                          \
-                    else                                                                                                       \
-                    {                                                                                                          \
-                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                     \
-                    }                                                                                                          \
-                }                                                                                                              \
-            }                                                                                                                  \
-            break;                                                                                                             \
-        }                                                                                                                      \
-        default:                                                                                                               \
-            AU_EXIT("Unsupported datatype in AccessDashData !");                                                               \
-        }                                                                                                                      \
+#define AccessDashData2D(dash_array_p_p, start_p, end_p, data_p, element_type_code_p, RW_flag)                                                           \
+    {                                                                                                                                                    \
+        unsigned long offset = 0;                                                                                                                        \
+        switch (element_type_code_p)                                                                                                                     \
+        {                                                                                                                                                \
+        case AU_SHORT:                                                                                                                                   \
+        {                                                                                                                                                \
+            dash::Matrix<short, 2, unsigned long> *dash_array_typed = (dash::Matrix<short, 2, unsigned long> *)dash_array_p_p;                           \
+            short *typed_data_p = (short *)data_p;                                                                                                       \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_INT:                                                                                                                                     \
+        {                                                                                                                                                \
+            dash::Matrix<int, 2, unsigned long> *dash_array_typed = (dash::Matrix<int, 2, unsigned long> *)dash_array_p_p;                               \
+            int *typed_data_p = (int *)data_p;                                                                                                           \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_LONG:                                                                                                                                    \
+        {                                                                                                                                                \
+            dash::Matrix<long, 2, unsigned long> *dash_array_typed = (dash::Matrix<long, 2, unsigned long> *)dash_array_p_p;                             \
+            long *typed_data_p = (long *)data_p;                                                                                                         \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_LONG_LONG:                                                                                                                               \
+        {                                                                                                                                                \
+            dash::Matrix<long long, 2, unsigned long> *dash_array_typed = (dash::Matrix<long long, 2, unsigned long> *)dash_array_p_p;                   \
+            long long *typed_data_p = (long long *)data_p;                                                                                               \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_USHORT:                                                                                                                                  \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned short, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 2, unsigned long> *)dash_array_p_p;         \
+            unsigned short *typed_data_p = (unsigned short *)data_p;                                                                                     \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_UINT:                                                                                                                                    \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned int, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 2, unsigned long> *)dash_array_p_p;             \
+            unsigned int *typed_data_p = (unsigned int *)data_p;                                                                                         \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_ULONG:                                                                                                                                   \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned long, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 2, unsigned long> *)dash_array_p_p;           \
+            unsigned long *typed_data_p = (unsigned long *)data_p;                                                                                       \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_ULLONG:                                                                                                                                  \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned long long, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 2, unsigned long> *)dash_array_p_p; \
+            unsigned long long *typed_data_p = (unsigned long long *)data_p;                                                                             \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_FLOAT:                                                                                                                                   \
+        {                                                                                                                                                \
+            dash::Matrix<float, 2, unsigned long> *dash_array_typed = (dash::Matrix<float, 2, unsigned long> *)dash_array_p_p;                           \
+            float *typed_data_p = (float *)data_p;                                                                                                       \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_DOUBLE:                                                                                                                                  \
+        {                                                                                                                                                \
+            dash::Matrix<double, 2, unsigned long> *dash_array_typed = (dash::Matrix<double, 2, unsigned long> *)dash_array_p_p;                         \
+            double *typed_data_p = (double *)data_p;                                                                                                     \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    if (RW_flag == DASH_READ_FLAG)                                                                                                       \
+                    {                                                                                                                                    \
+                        typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                    }                                                                                                                                    \
+                    else                                                                                                                                 \
+                    {                                                                                                                                    \
+                        dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        default:                                                                                                                                         \
+            AU_EXIT("Unsupported datatype in AccessDashData !");                                                                                         \
+        }                                                                                                                                                \
     }
 
-#define AccessDashData3D(dash_array_p_p, start_p, end_p, data_p, element_type_code_p, RW_flag)                                 \
-    {                                                                                                                          \
-        unsigned long offset = 0;                                                                                              \
-        switch (element_type_code_p)                                                                                           \
-        {                                                                                                                      \
-        case AU_SHORT:                                                                                                         \
-        {                                                                                                                      \
-            dash::Matrix<short, 3, unsigned long> *dash_array_typed = (dash::Matrix<short, 3, unsigned long> *)dash_array_p_p; \
-            short *typed_data_p = (short *)data_p;                                                                             \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                             \
-            {                                                                                                                  \
-                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                         \
-                {                                                                                                              \
-                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                     \
-                    {                                                                                                          \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                          \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                     \
-                        if (RW_flag == DASH_READ_FLAG)                                                                         \
-                        {                                                                                                      \
-                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                              \
-                        }                                                                                                      \
-                        else                                                                                                   \
-                        {                                                                                                      \
-                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                              \
-                        }                                                                                                      \
-                    }                                                                                                          \
-                }                                                                                                              \
-            }                                                                                                                  \
-            break;                                                                                                             \
-        }                                                                                                                      \
-        case AU_INT:                                                                                                           \
-        {                                                                                                                      \
-            dash::Matrix<int, 3, unsigned long> *dash_array_typed = (dash::Matrix<int, 3, unsigned long> *)dash_array_p_p;     \
-            int *typed_data_p = (int *)data_p;                                                                                 \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                             \
-            {                                                                                                                  \
-                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                         \
-                {                                                                                                              \
-                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                     \
-                    {                                                                                                          \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                          \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                     \
-                        if (RW_flag == DASH_READ_FLAG)                                                                         \
-                        {                                                                                                      \
-                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                              \
-                        }                                                                                                      \
-                        else                                                                                                   \
-                        {                                                                                                      \
-                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                              \
-                        }                                                                                                      \
-                    }                                                                                                          \
-                }                                                                                                              \
-            }                                                                                                                  \
-            break;                                                                                                             \
-        }                                                                                                                      \
-        default:                                                                                                               \
-            AU_EXIT("Unsupported datatype in AccessDashData !");                                                               \
-        }                                                                                                                      \
+#define AccessDashData3D(dash_array_p_p, start_p, end_p, data_p, element_type_code_p, RW_flag)                                                           \
+    {                                                                                                                                                    \
+        unsigned long offset = 0;                                                                                                                        \
+        switch (element_type_code_p)                                                                                                                     \
+        {                                                                                                                                                \
+        case AU_SHORT:                                                                                                                                   \
+        {                                                                                                                                                \
+            dash::Matrix<short, 3, unsigned long> *dash_array_typed = (dash::Matrix<short, 3, unsigned long> *)dash_array_p_p;                           \
+            short *typed_data_p = (short *)data_p;                                                                                                       \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_INT:                                                                                                                                     \
+        {                                                                                                                                                \
+            dash::Matrix<int, 3, unsigned long> *dash_array_typed = (dash::Matrix<int, 3, unsigned long> *)dash_array_p_p;                               \
+            int *typed_data_p = (int *)data_p;                                                                                                           \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_LONG:                                                                                                                                    \
+        {                                                                                                                                                \
+            dash::Matrix<long, 3, unsigned long> *dash_array_typed = (dash::Matrix<long, 3, unsigned long> *)dash_array_p_p;                             \
+            long *typed_data_p = (long *)data_p;                                                                                                         \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_LONG_LONG:                                                                                                                               \
+        {                                                                                                                                                \
+            dash::Matrix<long long, 3, unsigned long> *dash_array_typed = (dash::Matrix<long long, 3, unsigned long> *)dash_array_p_p;                   \
+            long long *typed_data_p = (long long *)data_p;                                                                                               \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_USHORT:                                                                                                                                  \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned short, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 3, unsigned long> *)dash_array_p_p;         \
+            unsigned short *typed_data_p = (unsigned short *)data_p;                                                                                     \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_UINT:                                                                                                                                    \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned int, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 3, unsigned long> *)dash_array_p_p;             \
+            unsigned int *typed_data_p = (unsigned int *)data_p;                                                                                         \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_ULONG:                                                                                                                                   \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned long, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 3, unsigned long> *)dash_array_p_p;           \
+            unsigned long *typed_data_p = (unsigned long *)data_p;                                                                                       \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_ULLONG:                                                                                                                                  \
+        {                                                                                                                                                \
+            dash::Matrix<unsigned long long, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 3, unsigned long> *)dash_array_p_p; \
+            unsigned long long *typed_data_p = (unsigned long long *)data_p;                                                                             \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_FLOAT:                                                                                                                                   \
+        {                                                                                                                                                \
+            dash::Matrix<float, 3, unsigned long> *dash_array_typed = (dash::Matrix<float, 3, unsigned long> *)dash_array_p_p;                           \
+            float *typed_data_p = (float *)data_p;                                                                                                       \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        case AU_DOUBLE:                                                                                                                                  \
+        {                                                                                                                                                \
+            dash::Matrix<double, 3, unsigned long> *dash_array_typed = (dash::Matrix<double, 3, unsigned long> *)dash_array_p_p;                         \
+            double *typed_data_p = (double *)data_p;                                                                                                     \
+            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
+            {                                                                                                                                            \
+                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
+                {                                                                                                                                        \
+                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
+                    {                                                                                                                                    \
+                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        if (RW_flag == DASH_READ_FLAG)                                                                                                   \
+                        {                                                                                                                                \
+                            typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
+                        }                                                                                                                                \
+                        else                                                                                                                             \
+                        {                                                                                                                                \
+                            dash_array_typed->at(i, j, k) = typed_data_p[offset];                                                                        \
+                        }                                                                                                                                \
+                    }                                                                                                                                    \
+                }                                                                                                                                        \
+            }                                                                                                                                            \
+            break;                                                                                                                                       \
+        }                                                                                                                                                \
+        default:                                                                                                                                         \
+            AU_EXIT("Unsupported datatype in AccessDashData !");                                                                                         \
+        }                                                                                                                                                \
     }
 class EndpointMEMORY : public Endpoint
 {
