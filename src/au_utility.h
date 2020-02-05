@@ -193,6 +193,12 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
         std::exit(EXIT_FAILURE);                                                                          \
     }
 
+#define AU_INFO(info)                                                                             \
+    {                                                                                             \
+        std::cout << "Info at " << __FILE__ << ", " << __func__ << ", " << __LINE__ << std::endl; \
+        std::cout << "Info : " << info << std::endl;                                              \
+    }
+
 /**
  * @brief 
  *flat vector of vector to 1D vector

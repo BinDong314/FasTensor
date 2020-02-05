@@ -8,6 +8,8 @@ int EndpointMEMORY::ExtractMeta()
 
 int EndpointMEMORY::Create()
 {
+    AU_INFO("Memory Create");
+
     std::vector<unsigned long> endpoint_dim_size_ul;
     endpoint_dim_size_ul.resize(endpoint_dim_size.size());
     for (int i = 0; i < endpoint_dim_size.size(); i++)
@@ -42,6 +44,7 @@ int EndpointMEMORY::Create()
 
 int EndpointMEMORY::Open()
 {
+    AU_INFO("Memory Open");
     return 0;
 }
 
@@ -55,6 +58,8 @@ int EndpointMEMORY::Open()
      */
 int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    AU_INFO("Memory read");
+
     std::vector<unsigned long> start_ul, end_ul;
     start_ul.resize(start.size());
     end_ul.resize(end.size());
@@ -99,6 +104,8 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
      */
 int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    AU_INFO("Memory Write");
+
     switch (endpoint_dim_size.size())
     {
     case 1:
@@ -127,6 +134,8 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
      */
 int EndpointMEMORY::Close()
 {
+    AU_INFO("Memory Close");
+
     return 0;
 };
 
