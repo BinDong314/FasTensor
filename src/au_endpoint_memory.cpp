@@ -16,7 +16,7 @@ int EndpointMEMORY::Create()
     {
         endpoint_dim_size_ul[i] = endpoint_dim_size[i];
     }
-
+    PrintVector("endpoint_dim_size_ul = ", endpoint_dim_size_ul);
     switch (endpoint_dim_size.size())
     {
     case 1:
@@ -38,6 +38,8 @@ int EndpointMEMORY::Create()
         AU_EXIT("Only support until 3D in memory data!");
         break;
     }
+
+    SetOpenFlag(true);
 
     return 0;
 }

@@ -664,10 +664,14 @@
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
+                        float temp_value = dash_array_typed->at(i, j);                                                                                   \
+                        std::cout << "temp_value read = " << temp_value << " ,, " << std::endl;                                                          \
                     }                                                                                                                                    \
                     else                                                                                                                                 \
                     {                                                                                                                                    \
                         dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
+                        float temp_value = dash_array_typed->at(i, j);                                                                                   \
+                        std::cout << "temp_value write = " << temp_value << " ,,, typed_data_p[offset] =  " << typed_data_p[offset] << std::endl;        \
                     }                                                                                                                                    \
                 }                                                                                                                                        \
             }                                                                                                                                            \
