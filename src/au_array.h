@@ -616,6 +616,7 @@ public:
     //InitializeApplyInput();
     if (!virtual_array_flag)
     {
+      PrintVector("data_p", data_p);
       return endpoint->Write(start_p, end_p, &data_p[0]);
     }
     else

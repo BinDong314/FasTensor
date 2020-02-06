@@ -58,7 +58,8 @@ int EndpointMEMORY::Open()
      */
 int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
-    AU_INFO("Memory read");
+    //AU_INFO("Memory read");
+    dash::Team::All().barrier();
 
     std::vector<unsigned long> start_ul, end_ul;
     start_ul.resize(start.size());
@@ -90,7 +91,7 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
         AU_EXIT("Only support until 3D in memory data!");
         break;
     }
-
+    dash::Team::All().barrier();
     return 0;
 }
 
@@ -105,20 +106,19 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
 int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
     AU_INFO("Memory Write");
+    PrintVector("start", start);
+    PrintVector("end", end);
 
     switch (endpoint_dim_size.size())
     {
     case 1:
-        /* code */
         AccessDashData1D(dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
         break;
     case 2:
         AccessDashData2D(dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
-        /* code */
         break;
     case 3:
         AccessDashData3D(dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
-        /* code */
         break;
     default:
         AU_EXIT("Only support until 3D in memory data!");
