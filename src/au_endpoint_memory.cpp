@@ -8,15 +8,12 @@ int EndpointMEMORY::ExtractMeta()
 
 int EndpointMEMORY::Create()
 {
-    AU_INFO("Memory Create");
-
     std::vector<unsigned long> endpoint_dim_size_ul;
     endpoint_dim_size_ul.resize(endpoint_dim_size.size());
     for (int i = 0; i < endpoint_dim_size.size(); i++)
     {
         endpoint_dim_size_ul[i] = endpoint_dim_size[i];
     }
-    PrintVector("endpoint_dim_size_ul = ", endpoint_dim_size_ul);
     switch (endpoint_dim_size.size())
     {
     case 1:
@@ -107,10 +104,6 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
      */
 int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
-    AU_INFO("Memory Write");
-    PrintVector("start", start);
-    PrintVector("end", end);
-
     switch (endpoint_dim_size.size())
     {
     case 1:

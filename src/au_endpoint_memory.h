@@ -312,11 +312,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -329,11 +329,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -346,11 +346,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -363,11 +363,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -380,11 +380,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -397,11 +397,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -414,11 +414,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -431,11 +431,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -448,11 +448,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -465,11 +465,11 @@
             {                                                                                                                                            \
                 if (RW_flag == DASH_READ_FLAG)                                                                                                           \
                 {                                                                                                                                        \
-                    typed_data_p[i] = dash_array_typed->at(i);                                                                                           \
+                    typed_data_p[i - start_p[0]] = dash_array_typed->at(i);                                                                              \
                 }                                                                                                                                        \
                 else                                                                                                                                     \
                 {                                                                                                                                        \
-                    dash_array_typed->at(i) = typed_data_p[i];                                                                                           \
+                    dash_array_typed->at(i) = typed_data_p[i - start_p[0]];                                                                              \
                 }                                                                                                                                        \
             }                                                                                                                                            \
             break;                                                                                                                                       \
@@ -492,7 +492,7 @@
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
@@ -513,7 +513,7 @@
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
@@ -534,7 +534,7 @@
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
@@ -555,7 +555,7 @@
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
@@ -576,7 +576,7 @@
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
@@ -597,7 +597,7 @@
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
@@ -618,7 +618,7 @@
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
@@ -639,7 +639,7 @@
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
@@ -655,23 +655,19 @@
         case AU_FLOAT:                                                                                                                                   \
         {                                                                                                                                                \
             dash::Matrix<float, 2, unsigned long> *dash_array_typed = (dash::Matrix<float, 2, unsigned long> *)dash_array_p_p;                           \
-            float *typed_data_p = (float *)data_p;                                                                                                       \
+            float *typed_data_p = static_cast<float *>(data_p);                                                                                          \
             for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                                                                       \
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
-                        float temp_value = dash_array_typed->at(i, j);                                                                                   \
-                        std::cout << "temp_value read = " << temp_value << " ,, " << std::endl;                                                          \
                     }                                                                                                                                    \
                     else                                                                                                                                 \
                     {                                                                                                                                    \
                         dash_array_typed->at(i, j) = typed_data_p[offset];                                                                               \
-                        float temp_value = dash_array_typed->at(i, j);                                                                                   \
-                        std::cout << "temp_value write = " << temp_value << " ,,, typed_data_p[offset] =  " << typed_data_p[offset] << std::endl;        \
                     }                                                                                                                                    \
                 }                                                                                                                                        \
             }                                                                                                                                            \
@@ -685,7 +681,7 @@
             {                                                                                                                                            \
                 for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                                                                                   \
                 {                                                                                                                                        \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                        \
+                    offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                          \
                     if (RW_flag == DASH_READ_FLAG)                                                                                                       \
                     {                                                                                                                                    \
                         typed_data_p[offset] = dash_array_typed->at(i, j);                                                                               \
@@ -718,8 +714,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
@@ -743,8 +739,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
@@ -768,8 +764,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
@@ -793,8 +789,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
@@ -818,8 +814,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
@@ -843,8 +839,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
@@ -868,8 +864,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
@@ -893,8 +889,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
@@ -918,8 +914,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \
@@ -943,8 +939,8 @@
                 {                                                                                                                                        \
                     for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                                                                               \
                     {                                                                                                                                    \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                                                                                    \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                                                                               \
+                        offset = (i - start_p[0]) * (end_p[1] - start_p[1] + 1) + (j - start_p[1]);                                                      \
+                        offset = offset * (end_p[2] - start_p[2] + 1) + (k - start_p[2]);                                                                \
                         if (RW_flag == DASH_READ_FLAG)                                                                                                   \
                         {                                                                                                                                \
                             typed_data_p[offset] = dash_array_typed->at(i, j, k);                                                                        \

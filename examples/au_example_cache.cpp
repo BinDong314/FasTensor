@@ -59,15 +59,7 @@ int main(int argc, char *argv[])
     //Run
     A->Apply(udf_cache1, B);
 
-    for (int i = 0; i < 16; i++)
-    {
-        for (int j = 0; j < 16; j++)
-        {
-            std::cout << B->GetValue(i, j) << " , ";
-        }
-        std::cout << " \n";
-    }
-    //B->Apply(udf_cache2, C);
+    B->Apply(udf_cache2, C);
 
     //Clear
     delete A;
