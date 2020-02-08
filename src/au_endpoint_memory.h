@@ -33,68 +33,74 @@
 #define DASH_READ_FLAG 0
 #define DASH_WRITE_FLAG 1
 
-#define CreateDashMatrix(dash_matrix_p_p, rank_const_p, element_type_code_p, array_size)                            \
-    {                                                                                                               \
-        dash::SizeSpec<rank_const_p, unsigned long> dash_size_spec = dash::SizeSpec<rank_const_p, unsigned long>(); \
-        for (int i = 0; i < rank_const_p; i++)                                                                      \
-        {                                                                                                           \
-            dash_size_spec.resize(i, array_size[i]);                                                                \
-        }                                                                                                           \
-        switch (element_type_code_p)                                                                                \
-        {                                                                                                           \
-        case AU_SHORT:                                                                                              \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<short, rank_const_p, unsigned long>(dash_size_spec);                 \
-            break;                                                                                                  \
-        }                                                                                                           \
-        case AU_INT:                                                                                                \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<int, rank_const_p, unsigned long>(dash_size_spec);                   \
-            break;                                                                                                  \
-        }                                                                                                           \
-        case AU_LONG:                                                                                               \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<long, rank_const_p, unsigned long>(dash_size_spec);                  \
-            break;                                                                                                  \
-        }                                                                                                           \
-        case AU_LONG_LONG:                                                                                          \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<long long, rank_const_p, unsigned long>(dash_size_spec);             \
-            break;                                                                                                  \
-        }                                                                                                           \
-        case AU_USHORT:                                                                                             \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<unsigned int, rank_const_p, unsigned long>(dash_size_spec);          \
-            break;                                                                                                  \
-        }                                                                                                           \
-        case AU_UINT:                                                                                               \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<unsigned int, rank_const_p, unsigned long>(dash_size_spec);          \
-            break;                                                                                                  \
-        }                                                                                                           \
-        case AU_ULONG:                                                                                              \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<unsigned long, rank_const_p, unsigned long>(dash_size_spec);         \
-            break;                                                                                                  \
-        }                                                                                                           \
-        case AU_ULLONG:                                                                                             \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<unsigned long long, rank_const_p, unsigned long>(dash_size_spec);    \
-            break;                                                                                                  \
-        }                                                                                                           \
-        case AU_FLOAT:                                                                                              \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<float, rank_const_p, unsigned long>(dash_size_spec);                 \
-            break;                                                                                                  \
-        }                                                                                                           \
-        case AU_DOUBLE:                                                                                             \
-        {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<double, rank_const_p, unsigned long>(dash_size_spec);                \
-            break;                                                                                                  \
-        }                                                                                                           \
-        default:                                                                                                    \
-            AU_EXIT("Unsupported datatype in CreateDashMatrix !");                                                  \
-        }                                                                                                           \
+#define CreateDashMatrix(dash_matrix_p_p, rank_const_p, element_type_code_p, array_size)                                                   \
+    {                                                                                                                                      \
+        dash::SizeSpec<rank_const_p, unsigned long> dash_size_spec = dash::SizeSpec<rank_const_p, unsigned long>();                        \
+        size_t num_units = dash::Team::All().size();                                                                                       \
+        dash::TeamSpec<rank_const_p, unsigned long> teamspec;                                                                              \
+        teamspec.balance_extents();                                                                                                        \
+        dash::DistributionSpec<rank_const_p> distspec;                                                                                     \
+        for (int i = 0; i < rank_const_p; i++)                                                                                             \
+        {                                                                                                                                  \
+            dash_size_spec.resize(i, array_size[i]);                                                                                       \
+        }                                                                                                                                  \
+        switch (element_type_code_p)                                                                                                       \
+        {                                                                                                                                  \
+        case AU_SHORT:                                                                                                                     \
+        {                                                                                                                                  \
+            dash_matrix_p_p = new dash::Matrix<short, rank_const_p, unsigned long>(dash_size_spec);                                        \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        case AU_INT:                                                                                                                       \
+        {                                                                                                                                  \
+            dash_matrix_p_p = new dash::Matrix<int, rank_const_p, unsigned long>(dash_size_spec);                                          \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        case AU_LONG:                                                                                                                      \
+        {                                                                                                                                  \
+            dash_matrix_p_p = new dash::Matrix<long, rank_const_p, unsigned long>(dash_size_spec);                                         \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        case AU_LONG_LONG:                                                                                                                 \
+        {                                                                                                                                  \
+            dash_matrix_p_p = new dash::Matrix<long long, rank_const_p, unsigned long>(dash_size_spec);                                    \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        case AU_USHORT:                                                                                                                    \
+        {                                                                                                                                  \
+            dash_matrix_p_p = new dash::Matrix<unsigned int, rank_const_p, unsigned long>(dash_size_spec);                                 \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        case AU_UINT:                                                                                                                      \
+        {                                                                                                                                  \
+            dash_matrix_p_p = new dash::Matrix<unsigned int, rank_const_p, unsigned long>(dash_size_spec);                                 \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        case AU_ULONG:                                                                                                                     \
+        {                                                                                                                                  \
+            dash_matrix_p_p = new dash::Matrix<unsigned long, rank_const_p, unsigned long>(dash_size_spec);                                \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        case AU_ULLONG:                                                                                                                    \
+        {                                                                                                                                  \
+            dash_matrix_p_p = new dash::Matrix<unsigned long long, rank_const_p, unsigned long>(dash_size_spec);                           \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        case AU_FLOAT:                                                                                                                     \
+        {                                                                                                                                  \
+            dash::Matrix<float, rank_const_p, unsigned long> *dash_matrix_p_temp = new dash::Matrix<float, rank_const_p, unsigned long>(); \
+            dash_matrix_p_temp->allocate(dash_size_spec, distspec, teamspec, dash::Team::All());                                           \
+            dash_matrix_p_p = dash_matrix_p_temp;                                                                                          \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        case AU_DOUBLE:                                                                                                                    \
+        {                                                                                                                                  \
+            dash_matrix_p_p = new dash::Matrix<double, rank_const_p, unsigned long>(dash_size_spec);                                       \
+            break;                                                                                                                         \
+        }                                                                                                                                  \
+        default:                                                                                                                           \
+            AU_EXIT("Unsupported datatype in CreateDashMatrix !");                                                                         \
+        }                                                                                                                                  \
     }
 #define AccessDashDataHelp(rank_const_p, dash_array_typed, start_p, end_p, data_p_typed, RW_flag) \
     {                                                                                             \

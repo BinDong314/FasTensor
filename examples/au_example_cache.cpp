@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     // set up the chunk size and the overlap size
     std::vector<int> chunk_size = {4, 16};
-    std::vector<int> overlap_size = {0, 0};
+    std::vector<int> overlap_size = {1, 1};
 
     //Input data
     Array<float> *A = new Array<float>("EP_HDF5:./test-data/testf-16x16-cache.h5:/testg/testd", chunk_size, overlap_size);
