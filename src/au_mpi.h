@@ -14,13 +14,24 @@
 #define MPI_COMM_WORLD_DEFAULT MPI_COMM_WORLD
 #define MPI_INIT(argc, argv, au_mpi_comm_global, au_mpi_rank_global, au_mpi_size_global) \
     {                                                                                    \
-        MPI_Init(&argc, &argv);                                                          \
+        int mpi_init_flag = 0;                                                           \
+        MPI_Initialized(&mpi_init_flag);                                                 \
+        if (!mpi_init_flag)                                                              \
+        {                                                                                \
+            MPI_Init(&argc, &argv);                                                      \
+        }                                                                                \
         MPI_Comm_rank(au_mpi_comm_global, &au_mpi_rank_global);                          \
         MPI_Comm_size(au_mpi_comm_global, &au_mpi_size_global);                          \
     }
-#define MPI_FINALIZE()  \
-    {                   \
-        MPI_Finalize(); \
+
+#define MPI_FINALIZE()                     \
+    {                                      \
+        int mpi_finalize_flag = 0;         \
+        MPI_Finalized(&mpi_finalize_flag); \
+        if (!mpi_finalize_flag)            \
+        {                                  \
+            MPI_Finalize();                \
+        }                                  \
     }
 #else
 #define MPI_COMM_TYPE int

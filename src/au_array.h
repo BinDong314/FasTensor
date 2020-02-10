@@ -340,35 +340,7 @@ public:
       }
     }
 
-    if (!endpoint_memory_flag)
-    {
-      current_chunk_id = au_mpi_rank_global; //Each process deal with one chunk one time, starting from its rank
-    }
-    else
-    {
-      unsigned long long temp_data_total_chunks, current_chunk_start;
-      if (data_total_chunks % au_mpi_size_global == 0)
-      {
-        temp_data_total_chunks = data_total_chunks / au_mpi_size_global;
-        current_chunk_start = temp_data_total_chunks * au_mpi_rank_global;
-      }
-      else
-      {
-        unsigned long long data_total_chunks_left = data_total_chunks % au_mpi_size_global;
-        temp_data_total_chunks = (data_total_chunks - data_total_chunks_left) % au_mpi_size_global;
-        if (au_mpi_rank_global < data_total_chunks_left)
-        {
-          temp_data_total_chunks = temp_data_total_chunks + 1;
-          current_chunk_start = temp_data_total_chunks * au_mpi_rank_global;
-        }
-        else
-        {
-          current_chunk_start = data_total_chunks_left * (temp_data_total_chunks + 1) + temp_data_total_chunks * (au_mpi_rank_global - data_total_chunks_left);
-        }
-      }
-      current_chunk_id = current_chunk_start;
-      data_total_chunks = temp_data_total_chunks;
-    }
+    current_chunk_id = au_mpi_rank_global; //Each process deal with one chunk one time, starting from its rank
 
     //#ifdef DEBUG
     if (au_mpi_rank_global == 0)
@@ -761,7 +733,6 @@ public:
 
   int inline CreateEndpoint(std::vector<unsigned long long> data_size_p, std::vector<int> data_chunk_size_p, std::vector<int> data_overlap_size_p)
   {
-
     if (!virtual_array_flag && endpoint->GetOpenFlag())
       return 0;
 
@@ -791,7 +762,7 @@ public:
 
   std::vector<T> ReadArray(std::vector<unsigned long long> start, std::vector<unsigned long long> end)
   {
-    InitializeApplyInput();
+    //InitializeApplyInput();
     unsigned long long data_vector_size;
     COUNT_CELLS(start, end, data_vector_size);
 
@@ -842,25 +813,11 @@ public:
     //Next chunk id
     if (!reverse_apply_direction_flag)
     {
-      if (!endpoint_memory_flag)
-      {
-        current_chunk_id = current_chunk_id + au_mpi_size_global;
-      }
-      else
-      {
-        current_chunk_id = current_chunk_id + 1;
-      }
+      current_chunk_id = current_chunk_id + au_mpi_size_global;
     }
     else
     {
-      if (!endpoint_memory_flag)
-      {
-        current_chunk_id = current_chunk_id - au_mpi_size_global;
-      }
-      else
-      {
-        current_chunk_id = current_chunk_id - 1;
-      }
+      current_chunk_id = current_chunk_id - au_mpi_size_global;
     }
   }
   /**
