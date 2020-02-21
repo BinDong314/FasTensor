@@ -307,3 +307,15 @@ void Endpoint::SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
 {
     AU_EXIT("Error: should not be called");
 }
+
+/**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     */
+int Endpoint::SpecialOperator(int opt_code, std::string parameter)
+{
+    AU_EXIT("Error: should not be called");
+    return 0;
+}

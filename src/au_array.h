@@ -1143,6 +1143,56 @@ public:
     endpoint->SetDirChunkSize(dir_chunk_size_p);
   }
 
+  /**
+ * @brief Set the Size object
+ * 
+ * @param size_p 
+ */
+  void SetSize(std::vector<unsigned long long> size_p)
+  {
+    data_size = size_p;
+  }
+
+  /**
+   * @brief write data to another endpoint type, e.g., HDF5 in disk
+   * 
+   * @param data_endpoint 
+   * @return int 
+   */
+  int Nonvolatile(std::string data_endpoint_p)
+  {
+    std::string target_array_data_endpoint_info = data_endpoint_p;
+    Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
+
+    int ret;
+    if (endpoint_memory_flag == true && target_endpoint->GetEndpointType() == EP_HDF5)
+    {
+      ret = endpoint->SpecialOperator(0, target_endpoint->GetEndpointInfo());
+    }
+    else
+    {
+      AU_EXIT("Nonvolatile: only support MEMORY to HDF5 now!");
+    }
+
+    return ret;
+  }
+
+  int Volatile(std::string data_endpoint_p)
+  {
+    std::string target_array_data_endpoint_info = data_endpoint_p;
+    Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
+    int ret;
+    if (endpoint_memory_flag == true && target_endpoint->GetEndpointType() == EP_HDF5)
+    {
+      ret = endpoint->SpecialOperator(1, target_endpoint->GetEndpointInfo());
+    }
+    else
+    {
+      AU_EXIT("Volatile: only support HDF5 to MEMORY now!");
+    }
+
+    return ret;
+  }
 }; // calss of array
 
 } // namespace AU

@@ -33,6 +33,136 @@
 #define DASH_READ_FLAG 0
 #define DASH_WRITE_FLAG 1
 
+#define DASH_NONVOLATILE_CODE 0
+#define DASH_VOLATILE_CODE 1
+
+using dash::io::hdf5::hdf5_options;
+using dash::io::hdf5::StoreHDF;
+
+class EndpointMEMORY : public Endpoint
+{
+private:
+    void *dash_array_p;
+
+public:
+    /**
+     * @brief Construct a new EndpointMEMORY object
+     * 
+     * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
+     */
+    EndpointMEMORY(std::string endpoint_info_p)
+    {
+        endpoint_info = endpoint_info_p;
+        ParseEndpointInfo();
+        SetOpenFlag(false);
+        SetEndpointType(EP_MEMORY);
+    }
+    /**
+     * @brief Construct a new Endpoint in MEMORY 
+     *         Nothing to do there, can be used as sub-endpoint of directory
+     */
+    EndpointMEMORY()
+    {
+        SetOpenFlag(false);
+        SetEndpointType(EP_MEMORY);
+    }
+
+    ~EndpointMEMORY()
+    {
+        Close();
+    }
+    /**
+     * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
+     * 
+     * @return int < 0 error, >= 0 works 
+     */
+    int ExtractMeta() override;
+    /**
+     * @brief print information about the endpoint
+     * 
+     * @return < 0 error, >= 0 works 
+     */
+    int PrintInfo() override;
+
+    /**
+     * @brief create the endpoint
+     * 
+     * @return  < 0 error, >= 0 works 
+     */
+    int Create() override;
+
+    /**
+     * @brief open the endpoint
+     * 
+     * @return < 0 error, >= 0 works 
+     */
+    int Open() override;
+
+    /**
+     * @brief read the data from end-point
+     * 
+     * @param start, coordinates of the cell to start (including)
+     * @param end , coordinates of the cell to end (including)
+     * @param data, store the result data 
+     * @return int < 0 error, >= 0 works
+     */
+    int Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
+
+    /**
+     * @brief write the data to the end-point
+     * 
+     * @param start, coordinates of the cell to start (including)
+     * @param end , coordinates of the cell to end (including)
+     * @param data, store the result data 
+     * @return int < 0 error, >= 0 works
+     */
+    int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
+
+    /**
+     * @brief close the end-point
+     * 
+     * @return int int < 0 error, >= 0 works
+     */
+    int Close() override;
+
+    void Map2MyType() override;
+
+    void EnableCollectiveIO() override;
+
+    void DisableCollectiveIO() override;
+
+    /**
+     * @brief parse endpoint_info to my own info
+     *        In MEMORY, it map endpoint_info to filename, group name and datasetname
+     * @return int: 0 works,  < 0 error,
+     */
+    int ParseEndpointInfo() override;
+
+    /**
+     * @brief call a special operator on endpoint
+     *        to dump file from MEMORY to HDF5, or in verse
+     *                 
+     * @param opt_code, specially defined code 
+     */
+    int SpecialOperator(int opt_code, std::string parameter) override;
+
+    /**
+     * @brief Nonvolatile the data in MEMORY to HDF5
+     * 
+     * @param parameter 
+     * @return int 
+     */
+    int Nonvolatile(std::string parameter);
+
+    /**
+     * @brief Volatile the data from HDF5 to MEMORY
+     * 
+     * @param parameter 
+     * @return int 
+     */
+    int Volatile(std::string parameter);
+};
+
 #define CreateDashMatrix(dash_matrix_p_p, rank_const_p, element_type_code_p, array_size)                                                   \
     {                                                                                                                                      \
         dash::SizeSpec<rank_const_p, unsigned long> dash_size_spec = dash::SizeSpec<rank_const_p, unsigned long>();                        \
@@ -101,209 +231,6 @@
         default:                                                                                                                           \
             AU_EXIT("Unsupported datatype in CreateDashMatrix !");                                                                         \
         }                                                                                                                                  \
-    }
-#define AccessDashDataHelp(rank_const_p, dash_array_typed, start_p, end_p, data_p_typed, RW_flag) \
-    {                                                                                             \
-        unsigned long offset = 0;                                                                 \
-        switch (rank_const_p)                                                                     \
-        {                                                                                         \
-        case 1:                                                                                   \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                \
-            {                                                                                     \
-                if (RW_flag == DASH_READ_FLAG)                                                    \
-                {                                                                                 \
-                    data_p_typed[i] = dash_array_typed->at(i);                                    \
-                }                                                                                 \
-                else                                                                              \
-                {                                                                                 \
-                    dash_array_typed->at(i) = data_p_typed[i];                                    \
-                }                                                                                 \
-            }                                                                                     \
-            break;                                                                                \
-        case 2:                                                                                   \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                \
-            {                                                                                     \
-                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                            \
-                {                                                                                 \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                 \
-                    if (RW_flag == DASH_READ_FLAG)                                                \
-                    {                                                                             \
-                        data_p_typed[offset] = dash_array_typed->at(i, j);                        \
-                    }                                                                             \
-                    else                                                                          \
-                    {                                                                             \
-                        dash_array_typed->at(i, j) = data_p_typed[offset];                        \
-                    }                                                                             \
-                }                                                                                 \
-            }                                                                                     \
-            break;                                                                                \
-        case 3:                                                                                   \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                \
-            {                                                                                     \
-                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                            \
-                {                                                                                 \
-                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                        \
-                    {                                                                             \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                             \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                        \
-                        if (RW_flag == DASH_READ_FLAG)                                            \
-                        {                                                                         \
-                            data_p_typed[offset] = dash_array_typed->at(i, j, k);                 \
-                        }                                                                         \
-                        else                                                                      \
-                        {                                                                         \
-                            dash_array_typed->at(i, j, k) = data_p_typed[offset];                 \
-                        }                                                                         \
-                    }                                                                             \
-                }                                                                                 \
-            }                                                                                     \
-            break;                                                                                \
-        default:                                                                                  \
-            AU_EXIT("Unsupported dimensioin beyond 3D !");                                        \
-            break;                                                                                \
-        }                                                                                         \
-    }
-
-#define AccessDashDataHelp1D(rank_const_p, dash_array_typed, start_p, end_p, data_p_typed, RW_flag) \
-    {                                                                                               \
-        unsigned long offset = 0;                                                                   \
-        switch (rank_const_p)                                                                       \
-        {                                                                                           \
-        case 1:                                                                                     \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                  \
-            {                                                                                       \
-                if (RW_flag == DASH_READ_FLAG)                                                      \
-                {                                                                                   \
-                    data_p_typed[i] = dash_array_typed->at(i);                                      \
-                }                                                                                   \
-                else                                                                                \
-                {                                                                                   \
-                    dash_array_typed->at(i) = data_p_typed[i];                                      \
-                }                                                                                   \
-            }                                                                                       \
-            break;                                                                                  \
-        case 2:                                                                                     \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                  \
-            {                                                                                       \
-                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                              \
-                {                                                                                   \
-                    offset = i * (end_p[1] - start_p[1] + 1) + j;                                   \
-                    if (RW_flag == DASH_READ_FLAG)                                                  \
-                    {                                                                               \
-                        data_p_typed[offset] = dash_array_typed->at(i, j);                          \
-                    }                                                                               \
-                    else                                                                            \
-                    {                                                                               \
-                        dash_array_typed->at(i, j) = data_p_typed[offset];                          \
-                    }                                                                               \
-                }                                                                                   \
-            }                                                                                       \
-            break;                                                                                  \
-        case 3:                                                                                     \
-            for (unsigned long i = start_p[0]; i <= end_p[0]; i++)                                  \
-            {                                                                                       \
-                for (unsigned long j = start_p[1]; j <= end_p[1]; j++)                              \
-                {                                                                                   \
-                    for (unsigned long k = start_p[2]; k <= end_p[2]; k++)                          \
-                    {                                                                               \
-                        offset = i * (end_p[1] - start_p[1] + 1) + j;                               \
-                        offset = offset * (end_p[2] - start_p[2] + 1) + k;                          \
-                        if (RW_flag == DASH_READ_FLAG)                                              \
-                        {                                                                           \
-                            data_p_typed[offset] = dash_array_typed->at(i, j, k);                   \
-                        }                                                                           \
-                        else                                                                        \
-                        {                                                                           \
-                            dash_array_typed->at(i, j, k) = data_p_typed[offset];                   \
-                        }                                                                           \
-                    }                                                                               \
-                }                                                                                   \
-            }                                                                                       \
-            break;                                                                                  \
-        default:                                                                                    \
-            AU_EXIT("Unsupported dimensioin beyond 3D !");                                          \
-            break;                                                                                  \
-        }                                                                                           \
-    }
-
-#define AccessDashData(rank_const_p, dash_array_p_p, start_p, end_p, data_p, element_type_code_p, RW_flag)                                                             \
-    {                                                                                                                                                                  \
-        switch (element_type_code_p)                                                                                                                                   \
-        {                                                                                                                                                              \
-        case AU_SHORT:                                                                                                                                                 \
-        {                                                                                                                                                              \
-            dash::Matrix<short, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<short, rank_const_p, unsigned long> *)dash_array_p_p;                           \
-            short *short_data_p = (short *)data_p;                                                                                                                     \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        case AU_INT:                                                                                                                                                   \
-        {                                                                                                                                                              \
-            dash::Matrix<int, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<int, rank_const_p, unsigned long> *)dash_array_p_p;                               \
-            int *short_data_p = (int *)data_p;                                                                                                                         \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-                                                                                                                                                                       \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        case AU_LONG:                                                                                                                                                  \
-        {                                                                                                                                                              \
-            dash::Matrix<long, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<long, rank_const_p, unsigned long> *)dash_array_p_p;                             \
-            long *short_data_p = (long *)data_p;                                                                                                                       \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        case AU_LONG_LONG:                                                                                                                                             \
-        {                                                                                                                                                              \
-            dash::Matrix<long long, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<long long, rank_const_p, unsigned long> *)dash_array_p_p;                   \
-            long long *short_data_p = (long long *)data_p;                                                                                                             \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        case AU_USHORT:                                                                                                                                                \
-        {                                                                                                                                                              \
-            dash::Matrix<unsigned short, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<unsigned short, rank_const_p, unsigned long> *)dash_array_p_p;         \
-            unsigned short *short_data_p = (unsigned short *)data_p;                                                                                                   \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        case AU_UINT:                                                                                                                                                  \
-        {                                                                                                                                                              \
-            dash::Matrix<unsigned int, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<unsigned int, rank_const_p, unsigned long> *)dash_array_p_p;             \
-            unsigned int *short_data_p = (unsigned int *)data_p;                                                                                                       \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        case AU_ULONG:                                                                                                                                                 \
-        {                                                                                                                                                              \
-            dash::Matrix<unsigned long, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<unsigned long, rank_const_p, unsigned long> *)dash_array_p_p;           \
-            unsigned long *short_data_p = (unsigned long *)data_p;                                                                                                     \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        case AU_ULLONG:                                                                                                                                                \
-        {                                                                                                                                                              \
-            dash::Matrix<unsigned long long, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<unsigned long long, rank_const_p, unsigned long> *)dash_array_p_p; \
-            unsigned long long *short_data_p = (unsigned long long *)data_p;                                                                                           \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        case AU_FLOAT:                                                                                                                                                 \
-        {                                                                                                                                                              \
-            dash::Matrix<float, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<float, rank_const_p, unsigned long> *)dash_array_p_p;                           \
-            float *short_data_p = (float *)data_p;                                                                                                                     \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        case AU_DOUBLE:                                                                                                                                                \
-        {                                                                                                                                                              \
-            dash::Matrix<double, rank_const_p, unsigned long> *matrix_p = (dash::Matrix<double, rank_const_p, unsigned long> *)dash_array_p_p;                         \
-            double *short_data_p = (double *)data_p;                                                                                                                   \
-            AccessDashDataHelp(rank_const_p, matrix_p, start_p, end_p, short_data_p, RW_flag);                                                                         \
-            break;                                                                                                                                                     \
-        }                                                                                                                                                              \
-        default:                                                                                                                                                       \
-            AU_EXIT("Unsupported datatype in AccessDashData !");                                                                                                       \
-        }                                                                                                                                                              \
     }
 
 #define AccessDashData1D(dash_array_p_p, start_p, end_p, data_p, element_type_code_p, RW_flag)                                                           \
@@ -964,103 +891,5 @@
             AU_EXIT("Unsupported datatype in AccessDashData !");                                                                                         \
         }                                                                                                                                                \
     }
-class EndpointMEMORY : public Endpoint
-{
-private:
-    void *dash_array_p;
 
-public:
-    /**
-     * @brief Construct a new EndpointMEMORY object
-     * 
-     * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
-     */
-    EndpointMEMORY(std::string endpoint_info_p)
-    {
-        endpoint_info = endpoint_info_p;
-        ParseEndpointInfo();
-        SetOpenFlag(false);
-        SetEndpointType(EP_MEMORY);
-    }
-    /**
-     * @brief Construct a new Endpoint in MEMORY 
-     *         Nothing to do there, can be used as sub-endpoint of directory
-     */
-    EndpointMEMORY()
-    {
-        SetOpenFlag(false);
-        SetEndpointType(EP_MEMORY);
-    }
-
-    ~EndpointMEMORY()
-    {
-        Close();
-    }
-    /**
-     * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
-     * 
-     * @return int < 0 error, >= 0 works 
-     */
-    int ExtractMeta() override;
-    /**
-     * @brief print information about the endpoint
-     * 
-     * @return < 0 error, >= 0 works 
-     */
-    int PrintInfo() override;
-
-    /**
-     * @brief create the endpoint
-     * 
-     * @return  < 0 error, >= 0 works 
-     */
-    int Create() override;
-
-    /**
-     * @brief open the endpoint
-     * 
-     * @return < 0 error, >= 0 works 
-     */
-    int Open() override;
-
-    /**
-     * @brief read the data from end-point
-     * 
-     * @param start, coordinates of the cell to start (including)
-     * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
-     * @return int < 0 error, >= 0 works
-     */
-    int Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
-
-    /**
-     * @brief write the data to the end-point
-     * 
-     * @param start, coordinates of the cell to start (including)
-     * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
-     * @return int < 0 error, >= 0 works
-     */
-    int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
-
-    /**
-     * @brief close the end-point
-     * 
-     * @return int int < 0 error, >= 0 works
-     */
-    int Close() override;
-
-    void Map2MyType() override;
-
-    void EnableCollectiveIO() override;
-
-    void DisableCollectiveIO() override;
-
-    /**
-     * @brief parse endpoint_info to my own info
-     *        In MEMORY, it map endpoint_info to filename, group name and datasetname
-     * @return int: 0 works,  < 0 error,
-     */
-    int ParseEndpointInfo() override;
-};
 #endif

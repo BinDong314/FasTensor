@@ -24,7 +24,7 @@ public:
         if (endpoint_type == EP_DIR)
             return new EndpointDIR(endpoint_info);
         if (endpoint_type == EP_MEMORY)
-            return new EndpointMEMORY(endpoint);
+            return new EndpointMEMORY(endpoint_info);
 
         AU_EXIT("Not supported endpoint");
         return nullptr;

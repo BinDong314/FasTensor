@@ -570,7 +570,7 @@ Xsed='/opt/local/bin//gsed -e 1s/^X//'
 GREP='/opt/local/bin//ggrep'
 EGREP='/opt/local/bin//ggrep -E'
 FGREP='/opt/local/bin//ggrep -F'
-LD='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld'
+LD='/Library/Developer/CommandLineTools/usr/bin/ld'
 NM='/opt/local/bin//nm -B'
 LN_S='ln -s'
 max_cmd_len='196608'
@@ -675,7 +675,7 @@ postuninstall_cmds=''
 finish_cmds=''
 finish_eval=''
 hardcode_into_libs='no'
-sys_lib_search_path_spec='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0  /usr/local/lib'
+sys_lib_search_path_spec='/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1  /usr/local/lib'
 configure_time_dlsearch_path='/usr/local/lib /lib /usr/lib'
 configure_time_lt_sys_library_path=''
 hardcode_action='immediate'
@@ -690,7 +690,7 @@ postdep_objects=''
 predeps=''
 postdeps=''
 compiler_lib_search_path=''
-LD_CXX='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld'
+LD_CXX='/Library/Developer/CommandLineTools/usr/bin/ld'
 reload_flag_CXX=' -r'
 reload_cmds_CXX='$LTCC $LTCFLAGS -nostdlib $wl-r -o $output$reload_objs'
 old_archive_cmds_CXX='$AR $AR_FLAGS $oldlib$oldobjs~$RANLIB $tool_oldlib'
@@ -897,10 +897,12 @@ S["BUILD_OLDCXX_TRUE"]="#"
 S["AU_OLDCXX_ENABLED"]="false"
 S["ARRAYUDF_LDFLAGS"]=""
 S["ARRAYUDF_LIBS"]="           -L/Users/dbin/work/soft/hdf5-1.10.5/build//lib -lhdf5 -lhdf5_hl -lz           -L/Users/dbin/opt/dash-0.4.0//lib -ldash-mpi -ldart-mpi -ld"\
-"art-base -lpthread -std=c++14"
+"art-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
 S["ARRAYUDF_CXXFLAGS"]="    -std=c++17 -O3"
-S["ARRAYUDF_CPPFLAGS"]="   -I/Users/dbin/work/soft/hdf5-1.10.5/build//include   -I/Users/dbin/opt/dash-0.4.0//include -std=c++14"
-S["ARRAYUDF_CFLAGS"]="       -I/Users/dbin/work/soft/hdf5-1.10.5/build//include       -I/Users/dbin/opt/dash-0.4.0//include -std=c++14"
+S["ARRAYUDF_CPPFLAGS"]="   -I/Users/dbin/work/soft/hdf5-1.10.5/build//include   -I/Users/dbin/opt/dash-0.4.0//include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpic"\
+"h'"
+S["ARRAYUDF_CFLAGS"]="       -I/Users/dbin/work/soft/hdf5-1.10.5/build//include       -I/Users/dbin/opt/dash-0.4.0//include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_"\
+"ID='mpich'"
 S["LIBOBJS"]=""
 S["CXXCPP"]="mpic++ -E"
 S["am__fastdepCXX_FALSE"]="#"
@@ -926,7 +928,7 @@ S["LN_S"]="ln -s"
 S["NM"]="/opt/local/bin//nm -B"
 S["ac_ct_DUMPBIN"]=""
 S["DUMPBIN"]=""
-S["LD"]="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld"
+S["LD"]="/Library/Developer/CommandLineTools/usr/bin/ld"
 S["FGREP"]="/opt/local/bin//ggrep -F"
 S["EGREP"]="/opt/local/bin//ggrep -E"
 S["GREP"]="/opt/local/bin//ggrep"

@@ -230,6 +230,14 @@ public:
      * @param dir_chunk_size_p 
      */
     virtual void SetDirChunkSize(std::vector<int> &dir_chunk_size_p);
+
+    /**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     */
+    virtual int SpecialOperator(int opt_code, std::string parameter);
 };
 
 #endif

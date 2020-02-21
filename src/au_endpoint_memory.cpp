@@ -156,3 +156,237 @@ int EndpointMEMORY::ParseEndpointInfo()
 {
     return 0;
 }
+
+int EndpointMEMORY::SpecialOperator(int opt_code, std::string parameter)
+{
+    int ret;
+    switch (opt_code)
+    {
+    case DASH_NONVOLATILE_CODE:
+        ret = Nonvolatile(parameter);
+        break;
+    case DASH_VOLATILE_CODE:
+        ret = Volatile(parameter);
+        break;
+    default:
+        AU_EXIT("Not supported operator on MEMORY endpoint");
+        break;
+    }
+
+    return ret;
+}
+
+/**
+     * @brief Nonvolatile the data in MEMORY to HDF5
+     * 
+     * @param parameter 
+     * @return int 
+     */
+int EndpointMEMORY::Nonvolatile(std::string parameter)
+{
+    std::string fn_str, path_str;
+    std::stringstream ss(parameter);
+    if (!std::getline(ss, fn_str, ':'))
+    {
+        AU_EXIT("Invalued endpoint_info");
+    }
+
+    if (!std::getline(ss, path_str, ':'))
+    {
+        AU_EXIT("Invalued endpoint_info");
+    }
+    switch (endpoint_dim_size.size())
+    {
+       case 1:
+       {
+        /*
+        if (data_element_type == AU_SHORT)                                                                                                             
+        {                                                                                                                                                
+            dash::Matrix<short, 1, unsigned long> *dash_array_typed = (dash::Matrix<short, 1, unsigned long> *)dash_array_p;                           
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+        }  */
+        AU_EXIT("DASH has some isssue with 1D HDF5 dump.");
+        break; 
+        }         
+    case 2:
+    {
+         if (data_element_type == AU_SHORT)                                                                                                             
+        {                                                                                                                                                
+            dash::Matrix<short, 2, unsigned long> *dash_array_typed = (dash::Matrix<short, 2, unsigned long> *)dash_array_p;                           
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+        }                                                                                                                                                
+        else if (data_element_type == AU_INT)                                                                                                          
+        {                                                                                                                                                
+            dash::Matrix<int, 2, unsigned long> *dash_array_typed = (dash::Matrix<int, 2, unsigned long> *)dash_array_p;                               
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                                                                                                                                                                     \
+        }                                                                                                                                                
+        else if (data_element_type == AU_LONG)                                                                                                         
+        {                                                                                                                                                
+            dash::Matrix<long, 2, unsigned long> *dash_array_typed = (dash::Matrix<long, 2, unsigned long> *)dash_array_p;                             
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+        }                                                                                                                                                
+        else if (data_element_type == AU_LONG_LONG)                                                                                                    
+        {                                                                                                                                                
+            dash::Matrix<long long, 2, unsigned long> *dash_array_typed = (dash::Matrix<long long, 2, unsigned long> *)dash_array_p;                   
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+        }                                                                                                                                                
+        else if (data_element_type == AU_USHORT)                                                                                                       
+        {                                                                                                                                                
+            dash::Matrix<unsigned short, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 2, unsigned long> *)dash_array_p;         
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+        }                                                                                                                                                
+        else if (data_element_type == AU_UINT)                                                                                                         
+        {                                                                                                                                                
+            dash::Matrix<unsigned int, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 2, unsigned long> *)dash_array_p;             
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+         }                                                                                                                                                
+        else if (data_element_type == AU_ULONG)                                                                                                        
+        {                                                                                                                                                
+            dash::Matrix<unsigned long, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 2, unsigned long> *)dash_array_p;           
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+        }                                                                                                                                                
+        else if (data_element_type == AU_ULLONG)                                                                                                       
+        {                                                                                                                                                
+            dash::Matrix<unsigned long long, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 2, unsigned long> *)dash_array_p; 
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                                                                                                                                                           
+        }                                                                                                                                                
+        else if (data_element_type == AU_FLOAT)                                                                                                        
+        {                                                                                                                                                
+            dash::Matrix<float, 2, unsigned long> *dash_array_typed = (dash::Matrix<float, 2, unsigned long> *)dash_array_p;                           
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                                                                                                                                                              
+        }                                                                                                                                                
+        else if (data_element_type == AU_DOUBLE)                                                                                                       
+        {                                                                                                                                               
+            dash::Matrix<double, 2, unsigned long> *dash_array_typed = (dash::Matrix<double, 2, unsigned long> *)dash_array_p;                         
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                                                                                                                                                                    \
+        }                                                                                                                                                
+        else                                                                                                                                             
+        {                                                                                                                                                
+            AU_EXIT("Unsupported datatype in AccessDashData !");                                                                                         
+        }   
+        break;
+    }
+    case 3:
+    {
+         if (data_element_type == AU_SHORT)                                                                                                             
+        {                                                                                                                                                
+            dash::Matrix<short, 3, unsigned long> *dash_array_typed = (dash::Matrix<short, 3, unsigned long> *)dash_array_p;                           
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+        }                                                                                                                                                
+        else if (data_element_type == AU_INT)                                                                                                          
+        {                                                                                                                                                
+            dash::Matrix<int, 3, unsigned long> *dash_array_typed = (dash::Matrix<int, 3, unsigned long> *)dash_array_p;                               
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                                                                                                                                                                     \
+        }                                                                                                                                                
+        else if (data_element_type == AU_LONG)                                                                                                         
+        {                                                                                                                                                
+            dash::Matrix<long, 3, unsigned long> *dash_array_typed = (dash::Matrix<long, 3, unsigned long> *)dash_array_p;                             
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+                                                                                                                                           
+        }                                                                                                                                                
+        else if (data_element_type == AU_LONG_LONG)                                                                                                    
+        {                                                                                                                                                
+            dash::Matrix<long long, 3, unsigned long> *dash_array_typed = (dash::Matrix<long long, 3, unsigned long> *)dash_array_p;                   
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+                                                                                                                                           
+        }                                                                                                                                                
+        else if (data_element_type == AU_USHORT)                                                                                                       
+        {                                                                                                                                                
+            dash::Matrix<unsigned short, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 3, unsigned long> *)dash_array_p;         
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+                                                                                                                                           
+        }                                                                                                                                                
+        else if (data_element_type == AU_UINT)                                                                                                         
+        {                                                                                                                                                
+            dash::Matrix<unsigned int, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 3, unsigned long> *)dash_array_p;             
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+                                                                                                                                           
+        }                                                                                                                                                
+        else if (data_element_type == AU_ULONG)                                                                                                        
+        {                                                                                                                                                
+            dash::Matrix<unsigned long, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 3, unsigned long> *)dash_array_p;           
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+                                                                                                                                           
+        }                                                                                                                                                
+        else if (data_element_type == AU_ULLONG)                                                                                                       
+        {                                                                                                                                                
+            dash::Matrix<unsigned long long, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 3, unsigned long> *)dash_array_p; 
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+                                                                                                                                           
+        }                                                                                                                                                
+        else if (data_element_type == AU_FLOAT)                                                                                                        
+        {                                                                                                                                                
+            dash::Matrix<float, 3, unsigned long> *dash_array_typed = (dash::Matrix<float, 3, unsigned long> *)dash_array_p;                           
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                          
+                                                                                                                                           
+        }                                                                                                                                                
+        else if (data_element_type == AU_DOUBLE)                                                                                                       
+        {                                                                                                                                               
+            dash::Matrix<double, 3, unsigned long> *dash_array_typed = (dash::Matrix<double, 3, unsigned long> *)dash_array_p;                         
+            StoreHDF::write(*dash_array_typed, fn_str, path_str);                                                                                                                                                                                                                                                                                                                                                                    \
+        }                                                                                                                                                
+        else                                                                                                                                             
+        {                                                                                                                                                
+            AU_EXIT("Unsupported datatype in AccessDashData !");                                                                                         
+        }   
+        break; 
+    }       
+    default:
+        AU_EXIT("Only support until 3D in memory data!");
+        break;
+    }
+
+    //DashHDF5Transfer2D(dash_array_p, data_element_type, DASH_WRITE_FLAG, fn_str, path_str);
+
+    //dash::Matrix<float, 2, unsigned long> *dash_array_typed = (dash::Matrix<float, 2, unsigned long> *)dash_array_p;
+    //dash::Matrix<float, 2, unsigned long> &dash_array_typed_ref = *dash_array_typed;
+    //StoreHDF::write(*dash_array_typed, fn_str, path_str);
+
+    return 0;
+}
+
+/**
+     * @brief Volatile the data from HDF5 to MEMORY
+     * 
+     * @param parameter 
+     * @return int 
+     */
+int EndpointMEMORY::Volatile(std::string parameter)
+{
+
+    std::string fn_str, path_str;
+    std::stringstream ss(parameter);
+    if (!std::getline(ss, fn_str, ':'))
+    {
+        AU_EXIT("Invalued endpoint_info");
+    }
+
+    if (!std::getline(ss, path_str, ':'))
+    {
+        AU_EXIT("Invalued endpoint_info");
+    }
+
+    /*
+    switch (endpoint_dim_size.size())
+    {
+    case 1:
+        DashHDF5Transfer1D(dash_array_p, data_element_type, DASH_READ_FLAG, fn_str, path_str);
+        break;
+    case 2:
+        DashHDF5Transfer2D(dash_array_p, data_element_type, DASH_READ_FLAG, fn_str, path_str);
+        break;
+    case 3:
+        DashHDF5Transfer3D(dash_array_p, data_element_type, DASH_READ_FLAG, fn_str, path_str);
+        break;
+    default:
+        AU_EXIT("Only support until 3D in memory data!");
+        break;
+    }*/
+
+    dash::Matrix<float, 2> *dash_array_typed = (dash::Matrix<float, 2> *)dash_array_p;
+    dash::Matrix<float, 2> &dash_array_typed_ref = *dash_array_typed;
+
+    StoreHDF::read(dash_array_typed_ref, fn_str, fn_str);
+
+    return 0;
+}

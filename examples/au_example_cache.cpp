@@ -59,6 +59,10 @@ int main(int argc, char *argv[])
     //Run
     A->Apply(udf_cache1, B);
 
+    //Dump intermediate data
+    B->Nonvolatile("EP_HDF5:./test-data/testf-16x16-cache-intermediate.h5:/testg/testd");
+
+    //Run analysis again
     B->Apply(udf_cache2, C);
 
     //Clear
