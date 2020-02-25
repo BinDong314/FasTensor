@@ -189,6 +189,28 @@ public:
   }
 
   /**
+   * @brief Construct a new Array object for read, as Input of Apply
+   * 
+   * @param data_endpoint contains file info, ("AuDataEndpointType + file name")
+   * @param cs , chunk size
+   * @param os , ghost size
+   */
+  Array(std::string data_endpoint, std::vector<unsigned long long> size_p)
+  {
+    array_data_endpoint_info = data_endpoint;
+    endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+    AuEndpointDataType data_element_type = InferDataType<T>();
+    endpoint->SetDataElementType(data_element_type);
+    if (endpoint->GetEndpointType() == EP_MEMORY)
+    {
+      endpoint_memory_flag = true;
+      endpoint->SetDimensions(size_p);
+      endpoint->Create();
+    }
+    data_size = size_p;
+  }
+
+  /**
    * @brief Construct a new Array object with only chunk size and overlap size
    *         Mostly, this is used for virtual array which has uniform chunk size and overlap size
    * @param cs chunk size 
@@ -375,12 +397,6 @@ public:
   template <class UDFOutputType, class BType = UDFOutputType>
   void Apply(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
   {
-
-    //When output is memory, we needs to consider it too, via seting endpoint_memory_flag = true
-    //Then InitializeApplyInput will do the job
-    if (B->GetEndpointType() == EP_MEMORY)
-      endpoint_memory_flag = true;
-
     //Set up the input data for LoadNextChunk
     InitializeApplyInput();
     std::vector<UDFOutputType> current_result_chunk_data;
@@ -541,36 +557,40 @@ public:
       /////////////////////////////////////
 
       t_start = AU_WTIME;
-      std::vector<unsigned long long> B_data_size;
-      std::vector<int> B_data_chunk_size, B_data_overlap_size;
 
-      if (B->GetEndpointType() == EP_DIR && GetEndpointType() == EP_DIR)
+      if (B != nullptr)
       {
-        std::vector<std::string> dir_file_list = GetDirFile();
-        B->SetDirFile(dir_file_list);
-        std::vector<int> dir_chunk_size = GetDirChunkSize();
-        B->SetDirChunkSize(dir_chunk_size);
-      }
 
-      if (vector_type_flag)
-      {
-        size_t vector_size;
-        std::vector<unsigned long long> current_chunk_start_offset_v = current_result_chunk_start_offset, current_chunk_end_offset_v = current_result_chunk_end_offset;
-        void *data_point;
-        data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
-        InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
-        B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
-        B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
-        free(data_point);
-      }
-      else
-      {
-        InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, 0);
-        B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
-        //B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
-        B->WriteArray(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
-      }
+        std::vector<unsigned long long> B_data_size;
+        std::vector<int> B_data_chunk_size, B_data_overlap_size;
 
+        if (B->GetEndpointType() == EP_DIR && GetEndpointType() == EP_DIR)
+        {
+          std::vector<std::string> dir_file_list = GetDirFile();
+          B->SetDirFile(dir_file_list);
+          std::vector<int> dir_chunk_size = GetDirChunkSize();
+          B->SetDirChunkSize(dir_chunk_size);
+        }
+
+        if (vector_type_flag)
+        {
+          size_t vector_size;
+          std::vector<unsigned long long> current_chunk_start_offset_v = current_result_chunk_start_offset, current_chunk_end_offset_v = current_result_chunk_end_offset;
+          void *data_point;
+          data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
+          InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
+          B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+          B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
+          free(data_point);
+        }
+        else
+        {
+          InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, 0);
+          B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+          //B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
+          B->WriteArray(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
+        }
+      }
       time_write = time_write + AU_WTIME - t_start;
 
       t_start = AU_WTIME;

@@ -32,6 +32,9 @@ mkdir ./test-data/test_1f1p_dir_output > /dev/null 2>&1
 
 ./au_test_data_generator -f ./test-data/testf-16x16-cache.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1 > /dev/null 2>&1
 
+
+./au_test_data_generator -f ./test-data/testf-16-reduce.h5 -g /testg -d /testg/testd -n 1 -s 128 -t 1 > /dev/null 2>&1
+
 echo "Start to run test  ..."
 
 # To test of running a command
