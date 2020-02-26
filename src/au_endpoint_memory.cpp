@@ -1,5 +1,9 @@
 #include "au_endpoint_memory.h"
 
+//see au.h for its definations
+extern int au_mpi_size_global;
+extern int au_mpi_rank_global;
+
 int EndpointMEMORY::ExtractMeta()
 {
 
@@ -61,41 +65,44 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
     //AU_INFO("Memory read");
     dash::Team::All().barrier();
 
-    PrintVector("Read start", start);
-    PrintVector("Read   end", end);
+    if(!local_mirror_flag){
+        std::vector<unsigned long> start_ul, end_ul;
+        start_ul.resize(start.size());
+        end_ul.resize(end.size());
 
-    std::vector<unsigned long> start_ul, end_ul;
-    start_ul.resize(start.size());
-    end_ul.resize(end.size());
-
-    for (int i = 0; i < start.size(); i++)
-    {
-        start_ul[i] = start[i];
-        end_ul[i] = end[i];
+        for (int i = 0; i < start.size(); i++)
+        {
+            start_ul[i] = start[i];
+            end_ul[i] = end[i];
+        }
+        switch (endpoint_dim_size.size())
+        {
+        case 1:
+        {
+            AccessDashData1D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
+            break;
+        }
+        case 2:
+        {
+            AccessDashData2D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
+            break;
+        }
+        case 3:
+        {
+            AccessDashData3D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
+            break;
+        }
+        default:
+            AU_EXIT("Only support until 3D in memory data!");
+            break;
+        }
+        dash::Team::All().barrier();
+        return 0;
+    }else{
+        float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
+        std::memcpy(data, &local_mirror_buffer_typed[start[0]], sizeof(float) );
+        return 0;
     }
-    switch (endpoint_dim_size.size())
-    {
-    case 1:
-    {
-        AccessDashData1D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
-        break;
-    }
-    case 2:
-    {
-        AccessDashData2D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
-        break;
-    }
-    case 3:
-    {
-        AccessDashData3D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_READ_FLAG);
-        break;
-    }
-    default:
-        AU_EXIT("Only support until 3D in memory data!");
-        break;
-    }
-    dash::Team::All().barrier();
-    return 0;
 }
 
 /**
@@ -108,25 +115,40 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
      */
 int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
-    PrintVector("Write start", start);
-    PrintVector("Write   end", end);
 
-    switch (endpoint_dim_size.size())
-    {
-    case 1:
-        AccessDashData1D(dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
-        break;
-    case 2:
-        AccessDashData2D(dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
-        break;
-    case 3:
-        AccessDashData3D(dash_array_p, start, end, data, data_element_type, DASH_WRITE_FLAG);
-        break;
-    default:
-        AU_EXIT("Only support until 3D in memory data!");
-        break;
+    if(!local_mirror_flag){
+        std::vector<unsigned long> start_ul, end_ul;
+        start_ul.resize(start.size());
+        end_ul.resize(end.size());
+
+        for (int i = 0; i < start.size(); i++)
+        {
+            start_ul[i] = start[i];
+            end_ul[i] = end[i];
+        }
+
+
+        switch (endpoint_dim_size.size())
+        {
+        case 1:
+            AccessDashData1D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_WRITE_FLAG);
+            break;
+        case 2:
+            AccessDashData2D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_WRITE_FLAG);
+            break;
+        case 3:
+            AccessDashData3D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_WRITE_FLAG);
+            break;
+        default:
+            AU_EXIT("Only support until 3D in memory data!");
+            break;
+        }
+        return 0;
+    }else{
+        float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
+        std::memcpy(&local_mirror_buffer_typed[start[0]],  data, sizeof(float));
+        return 0;
     }
-    return 0;
 }
 
 /**
@@ -166,7 +188,7 @@ int EndpointMEMORY::ParseEndpointInfo()
 
 int EndpointMEMORY::SpecialOperator(int opt_code, std::string parameter)
 {
-    int ret;
+    int ret =0;
     switch (opt_code)
     {
     case DASH_NONVOLATILE_CODE:
@@ -174,6 +196,13 @@ int EndpointMEMORY::SpecialOperator(int opt_code, std::string parameter)
         break;
     case DASH_VOLATILE_CODE:
         ret = Volatile(parameter);
+        break;
+    case DASH_ENABLE_LOCAL_MIRROR_CODE:
+        local_mirror_flag = true;
+        ret = CreateLocalMirror();
+        break;
+    case DASH_MERGE_MIRRORS_CODE:
+        ret = MergeMirrors();
         break;
     default:
         AU_EXIT("Not supported operator on MEMORY endpoint");
@@ -445,4 +474,45 @@ int EndpointMEMORY::Volatile(std::string parameter)
     StoreHDF::read(dash_array_typed_ref, fn_str, fn_str);
 
     return 0;
+}
+
+
+
+  /**
+     * @brief Merger mirrors on all processes
+     * 
+     * @return int 
+     */
+int EndpointMEMORY::MergeMirrors(){
+    void *reduced_mirror_buffer;
+    if(!au_mpi_rank_global){
+        reduced_mirror_buffer = (float *)malloc( local_mirror_size * sizeof(float));
+    }
+    MPI_Reduce(&local_mirror_buffer, &reduced_mirror_buffer, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    if(!au_mpi_rank_global){
+        std::vector<unsigned long> start_ul, end_ul;
+        start_ul.resize(endpoint_dim_size.size());
+        end_ul.resize(endpoint_dim_size.size());
+
+        for (int i = 0; i < endpoint_dim_size.size(); i++)
+        {
+            start_ul[i] = 0;
+            end_ul[i] = endpoint_dim_size[i];
+        }
+        AccessDashData1D(dash_array_p, start_ul, end_ul, local_mirror_buffer, data_element_type, DASH_WRITE_FLAG);
+    }
+}
+
+    /**
+     * @brief Create a Local Mirror object
+     * 
+     * @return int 
+     */
+int EndpointMEMORY::CreateLocalMirror(){
+    local_mirror_size = 1;
+    for (int i = 0; i < endpoint_dim_size.size(); i++){
+        local_mirror_size = local_mirror_size * endpoint_dim_size[i];
+    }
+    local_mirror_buffer = (float *)malloc( local_mirror_size * sizeof(float));                                                                                                       
 }

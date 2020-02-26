@@ -35,6 +35,8 @@
 
 #define DASH_NONVOLATILE_CODE 0
 #define DASH_VOLATILE_CODE 1
+#define DASH_ENABLE_LOCAL_MIRROR_CODE 2
+#define DASH_MERGE_MIRRORS_CODE 3
 
 using dash::io::hdf5::hdf5_options;
 using dash::io::hdf5::StoreHDF;
@@ -43,6 +45,11 @@ class EndpointMEMORY : public Endpoint
 {
 private:
     void *dash_array_p;
+
+    //For local mirror
+    void *local_mirror_buffer;
+    bool local_mirror_flag;
+    unsigned long long local_mirror_size;
 
 public:
     /**
@@ -161,6 +168,20 @@ public:
      * @return int 
      */
     int Volatile(std::string parameter);
+
+    /**
+     * @brief Merger mirrors on all processes
+     * 
+     * @return int 
+     */
+    int MergeMirrors();
+
+    /**
+     * @brief Create a Local Mirror object
+     * 
+     * @return int 
+     */
+    int CreateLocalMirror();
 };
 
 #define CreateDashMatrix(dash_matrix_p_p, rank_const_p, element_type_code_p, array_size)                            \
