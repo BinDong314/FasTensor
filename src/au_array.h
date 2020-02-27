@@ -29,6 +29,7 @@ extern int au_mpi_rank_global;
 #include "au_type.h"
 #include "au_endpoint_factory.h"
 #include "au_mpi.h"
+#include "au_merge.h"
 #include <assert.h>
 #include <stdarg.h>
 #include <regex>
@@ -1197,6 +1198,12 @@ public:
     return ret;
   }
 
+  /**
+    * @brief load HDF5 array to IN_MEMORY array   
+  * 
+  * @param data_endpoint_p 
+  * @return int 
+  */
   int Volatile(std::string data_endpoint_p)
   {
     std::string target_array_data_endpoint_info = data_endpoint_p;
@@ -1213,7 +1220,26 @@ public:
 
     return ret;
   }
-}; // calss of array
+
+  /**
+   * @brief create a local mirror of array
+   * 
+   * @param intial_value 
+   * @return int 
+   */
+  int EnableLocalMirror(T intial_value)
+  {
+    std::string intial_value_str = std::to_string(intial_value);
+    endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
+  }
+
+  int MergeLocalMirror(int Op)
+  {
+    std::string op_str = std::to_string(Op);
+    endpoint->SpecialOperator(DASH_MERGE_MIRRORS_CODE, op_str);
+  }
+
+}; // class of array
 
 } // namespace AU
 #endif

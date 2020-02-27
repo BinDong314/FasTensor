@@ -48,7 +48,7 @@ private:
 
     //For local mirror
     void *local_mirror_buffer;
-    bool local_mirror_flag;
+    bool local_mirror_flag = false;
     unsigned long long local_mirror_size;
 
 public:
@@ -174,14 +174,14 @@ public:
      * 
      * @return int 
      */
-    int MergeMirrors();
+    int MergeMirrors(std::string op_str);
 
     /**
      * @brief Create a Local Mirror object
      * 
      * @return int 
      */
-    int CreateLocalMirror();
+    int CreateLocalMirror(std::string init_value_str);
 };
 
 #define CreateDashMatrix(dash_matrix_p_p, rank_const_p, element_type_code_p, array_size)                            \
