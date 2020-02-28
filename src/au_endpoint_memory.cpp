@@ -1,5 +1,7 @@
 #include "au_endpoint_memory.h"
 
+
+
 //see au.h for its definations
 extern int au_mpi_size_global;
 extern int au_mpi_rank_global;
@@ -638,8 +640,10 @@ int EndpointMEMORY::MergeMirrors(std::string op_str){
     reduced_mirror_buffer = (float *)malloc( local_mirror_size * sizeof(float));
     //}
     
+
     MPI_Reduce(local_mirror_buffer, reduced_mirror_buffer, local_mirror_size, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
 
+    
     if(!au_mpi_rank_global){
         float *reduced_mirror_buffer_typed = (float *)reduced_mirror_buffer;
         for(int i = 0; i < local_mirror_size; i++){
@@ -658,6 +662,8 @@ int EndpointMEMORY::MergeMirrors(std::string op_str){
         }
         AccessDashData1D(dash_array_p, start_ul, end_ul, reduced_mirror_buffer, data_element_type, DASH_WRITE_FLAG);
     }
+
+    return 0;
 }
 
     /**
@@ -670,13 +676,63 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str){
     for (int i = 0; i < endpoint_dim_size.size(); i++){
         local_mirror_size = local_mirror_size * endpoint_dim_size[i];
     }
-    float *local_mirror_buffer_typed = (float *)malloc( local_mirror_size * sizeof(float));   
 
-    float init_value = std::stof(init_value_str); 
-
-    for(int i = 0; i < local_mirror_size; i++ ){
-        local_mirror_buffer_typed[i] = init_value;
+    switch (data_element_type)
+    {
+        case AU_SHORT: 
+        {
+            local_mirror_buffer = CreateLocalMirrorHelp< short>(init_value_str, local_mirror_size);
+            break;
+        }
+        case AU_INT: 
+        {
+            local_mirror_buffer = CreateLocalMirrorHelp<int>(init_value_str, local_mirror_size);
+            break;
+        }
+        case AU_LONG: 
+        {
+            local_mirror_buffer = CreateLocalMirrorHelp<long>(init_value_str, local_mirror_size);
+            break;
+        }
+          case AU_LONG_LONG: 
+        {
+             local_mirror_buffer = CreateLocalMirrorHelp<long long>(init_value_str, local_mirror_size);           
+            break;
+        }
+        case AU_USHORT: 
+        {
+            local_mirror_buffer = CreateLocalMirrorHelp<unsigned short>(init_value_str, local_mirror_size);
+            break;             
+        }
+         case AU_UINT: 
+        {
+             local_mirror_buffer = CreateLocalMirrorHelp<unsigned int>(init_value_str, local_mirror_size);
+            break;       
+       }
+        case AU_ULONG: 
+        {
+            local_mirror_buffer = CreateLocalMirrorHelp<unsigned long>(init_value_str, local_mirror_size);
+            break;
+        }
+          case AU_ULLONG: 
+        {
+             local_mirror_buffer = CreateLocalMirrorHelp<unsigned long long>(init_value_str, local_mirror_size);
+             break;
+        }
+        case AU_FLOAT: 
+        { 
+            local_mirror_buffer = CreateLocalMirrorHelp<float>(init_value_str, local_mirror_size);
+            break;
+        }
+        case AU_DOUBLE: 
+        { 
+            local_mirror_buffer = CreateLocalMirrorHelp<double>(init_value_str, local_mirror_size);
+            break;
+        }
+        default:
+            AU_EXIT("Only support until 3D in memory data!");
+            break;
     }
 
-    local_mirror_buffer = (void *) local_mirror_buffer_typed;   
+    return 0;
 }

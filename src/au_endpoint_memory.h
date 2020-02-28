@@ -20,6 +20,8 @@
 
 #include "au_type.h"
 #include "au_endpoint.h"
+#include "au_local_mirror.h"
+
 #include <string>
 #include <iostream>
 #include <vector>
