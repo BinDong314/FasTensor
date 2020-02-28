@@ -636,21 +636,67 @@ int EndpointMEMORY::Volatile(std::string parameter)
      */
 int EndpointMEMORY::MergeMirrors(std::string op_str){
     void *reduced_mirror_buffer;
-    //if(!au_mpi_rank_global){
-    reduced_mirror_buffer = (float *)malloc( local_mirror_size * sizeof(float));
-    //}
-    
 
-    MPI_Reduce(local_mirror_buffer, reduced_mirror_buffer, local_mirror_size, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
-
+    switch (data_element_type)
+    {
+        case AU_SHORT: 
+        {
+            reduced_mirror_buffer = MergeMirrorsHelp< short>(local_mirror_buffer, local_mirror_size, op_str);
+            break;
+        }
+        case AU_INT: 
+        {
+            reduced_mirror_buffer = MergeMirrorsHelp<int>(local_mirror_buffer, local_mirror_size, op_str);
+            break;
+        }
+        case AU_LONG: 
+        {
+            reduced_mirror_buffer = MergeMirrorsHelp<long>(local_mirror_buffer, local_mirror_size, op_str);
+            break;
+        }
+          case AU_LONG_LONG: 
+        {
+            reduced_mirror_buffer = MergeMirrorsHelp<long long>(local_mirror_buffer, local_mirror_size, op_str);           
+            break;
+        }
+        case AU_USHORT: 
+        {
+            reduced_mirror_buffer = MergeMirrorsHelp<unsigned short>(local_mirror_buffer, local_mirror_size, op_str);
+            break;             
+        }
+         case AU_UINT: 
+        {
+            reduced_mirror_buffer = MergeMirrorsHelp<unsigned int>(local_mirror_buffer, local_mirror_size, op_str);
+            break;       
+       }
+        case AU_ULONG: 
+        {
+            reduced_mirror_buffer = MergeMirrorsHelp<unsigned long>(local_mirror_buffer, local_mirror_size, op_str);
+            break;
+        }
+          case AU_ULLONG: 
+        {
+            reduced_mirror_buffer = MergeMirrorsHelp<unsigned long long>(local_mirror_buffer, local_mirror_size, op_str);
+             break;
+        }
+        case AU_FLOAT: 
+        { 
+            reduced_mirror_buffer = MergeMirrorsHelp<float>(local_mirror_buffer, local_mirror_size, op_str);
+            break;
+        }
+        case AU_DOUBLE: 
+        { 
+            reduced_mirror_buffer = MergeMirrorsHelp<double>(local_mirror_buffer, local_mirror_size, op_str);
+            break;
+        }
+        default:
+        {
+            AU_EXIT("Not supported type in memory data!");
+            break;
+        }
+    }
     
     if(!au_mpi_rank_global){
-        float *reduced_mirror_buffer_typed = (float *)reduced_mirror_buffer;
-        for(int i = 0; i < local_mirror_size; i++){
-            std::cout << reduced_mirror_buffer_typed[i] << ", ";
-        }
-        std::cout << "\n";
-
         std::vector<unsigned long> start_ul, end_ul;
         start_ul.resize(endpoint_dim_size.size());
         end_ul.resize(endpoint_dim_size.size());
@@ -730,8 +776,10 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str){
             break;
         }
         default:
+        {
             AU_EXIT("Only support until 3D in memory data!");
             break;
+        }
     }
 
     return 0;
