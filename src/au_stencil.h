@@ -36,7 +36,10 @@ private:
   T value;
   int has_set_output_value_flag = false;
   std::vector<unsigned long long> my_location; //This is the coodinate with overlapping
-  unsigned long long my_g_location_rm;         //lineared form of my coordinates in original big array.
+  std::vector<unsigned long long> global_coordinate;
+  unsigned long long global_coordinate_lineared;
+
+  unsigned long long my_g_location_rm; //lineared form of my coordinates in original big array.
   unsigned long long chunk_id;
   T *chunk_data_pointer = NULL;
   unsigned long long chunk_data_size = 1;
@@ -385,6 +388,62 @@ public:
     ROW_MAJOR_ORDER_MACRO(chunk_dim_size_no_ol_p, chunk_dim_size_no_ol_p.size(), my_location_no_ol_p, my_offset_no_ol);
     my_offset_no_ol = my_offset_no_ol - 1;
     //p_location           = n_location;
+  }
+
+  /**
+   * @brief Set the Location object
+   * 
+   * @param my_offset  within the local chunk
+   * @param my_coordinate within the local chunk
+   * @param my_location_no_ol_p 
+   * @param chunk_dim_size_no_ol_p chunk size withiout considering overlap
+   * @param ol_origin_offset_p  chunk offset from the global (0, 0)
+   * @param current_chunk_ol_size overlap size
+   * @param global_coordinate  current cell's global coodinate
+   * @param global_coordinate_lm  linearized global_coordinate
+   */
+  void SetLocation(unsigned long long &my_offset, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &my_location_no_ol_p, std::vector<unsigned long long> &chunk_dim_size_no_ol_p, std::vector<long long> &ol_origin_offset_p, std::vector<unsigned long long> &current_chunk_ol_size, std::vector<unsigned long long> &global_coordinate_p, unsigned long long &global_coordinate_lineared_p)
+  {
+    if (my_offset > chunk_data_size)
+    {
+      std::cout << "Error in intializing Stencil(). my_offset  = " << my_offset << ", chunk_data_size = " << chunk_data_size << std::endl;
+      exit(-1);
+    }
+    else
+    {
+      value = chunk_data_pointer[my_offset];
+    }
+
+    chunk_data_size_no_ol = 1;
+    int rank = my_coordinate.size();
+    for (int i = 0; i < rank; i++)
+    {
+      my_location[i] = my_coordinate[i];
+      //my_location_no_ol[i]    = my_location_no_ol_p[i];
+      //chunk_dim_size_no_ol[i] = chunk_dim_size_no_ol_p[i];
+      //ol_origin_offset[i]     = ol_origin_offset_p[i];
+      chunk_data_size_no_ol = chunk_data_size_no_ol * chunk_dim_size_no_ol_p[i];
+      chunk_dim_size[i] = current_chunk_ol_size[i];
+    }
+    chunk_data_size_no_ol = chunk_data_size_no_ol - 1; //start from 0
+    //my_offset_no_ol       = RowMajorOrder(chunk_dim_size_no_ol_p, my_location_no_ol_p) - 1;
+    ROW_MAJOR_ORDER_MACRO(chunk_dim_size_no_ol_p, chunk_dim_size_no_ol_p.size(), my_location_no_ol_p, my_offset_no_ol);
+    my_offset_no_ol = my_offset_no_ol - 1;
+
+    my_g_location_rm = global_coordinate_lineared_p;
+
+    global_coordinate = global_coordinate_p;
+    global_coordinate_lineared = global_coordinate_lineared_p;
+  }
+
+  /**
+   * @brief return the global coodinate of the current Stencil
+   * 
+   * @return std::vector<unsigned long long> 
+   */
+  std::vector<unsigned long long> GetCoordinate() const
+  {
+    return global_coordinate;
   }
 
   void set_trail_run_flag()

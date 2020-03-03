@@ -493,7 +493,15 @@ public:
 
           //Update the offset with overlapping
           ROW_MAJOR_ORDER_MACRO(current_chunk_ol_size, current_chunk_ol_size.size(), cell_coordinate_ol, offset_ol);
-          cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size);
+          if (endpoint->GetEndpointType() != EP_DIR)
+          {
+            ROW_MAJOR_ORDER_MACRO(data_size, data_size.size(), global_cell_coordinate, cell_target_g_location_rm)
+            cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size, global_cell_coordinate, cell_target_g_location_rm);
+          }
+          else
+          {
+            cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size, cell_coordinate_ol, offset_ol);
+          }
           //Set the global coodinate of the cell as the ID of the cell
           //Disable it for performance.
           //RowMajorOrder(data_dims_size, global_cell_coordinate)
@@ -1231,12 +1239,14 @@ public:
   {
     std::string intial_value_str = std::to_string(intial_value);
     endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
+    return 0;
   }
 
   int MergeLocalMirror(int Op)
   {
     std::string op_str = std::to_string(Op);
     endpoint->SpecialOperator(DASH_MERGE_MIRRORS_CODE, op_str);
+    return 0;
   }
 
 }; // class of array

@@ -28,7 +28,6 @@ Array<float> *H;
 //UDF One: duplicate the original data
 inline Stencil<float> udf_hist(const Stencil<float> &iStencil)
 {
-
     if (iStencil(0) < 40)
     {
         H->SetValue(H->GetValue(0) + 1, 0);

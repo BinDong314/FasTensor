@@ -20,7 +20,7 @@
 #define AU_LOCAL_MIRROR_H
 
 #define LOCAL_MIRROR_READ_FLAG 0
-#define LOCAL_MIRROR_FLAG 1
+#define LOCAL_MIRROR_WRITE_FLAG 1
 
 #include <iostream> // std::cout
 #include <sstream>  // std::istringstream
@@ -56,7 +56,9 @@ void *CreateLocalMirrorHelp(std::string init_value_str, size_t local_mirror_size
 }
 
 template <typename T>
-int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long long> &mirror_size, std::vector<unsigned long long> &start, std::vector<unsigned long long> &end, void *data, int read_write_code)
+int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long long> &mirror_size,
+                          std::vector<unsigned long long> &start, std::vector<unsigned long long> &end,
+                          void *data, int read_write_code)
 {
     T *local_mirror_buffer_typed = (T *)local_mirror_buffer;
     T *data_typed = (T *)data;
@@ -64,22 +66,25 @@ int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long l
     {
     case 1:
     {
+        unsigned long long data_typed_offset = 0;
         for (unsigned long long i = start[0]; i <= end[0]; i++)
         {
             if (read_write_code == LOCAL_MIRROR_READ_FLAG)
             {
-                data_typed[i] = local_mirror_buffer_typed[i];
+                data_typed[data_typed_offset] = local_mirror_buffer_typed[i];
             }
             else
             {
-                local_mirror_buffer_typed[i] = data_typed[i];
+                local_mirror_buffer_typed[i] = data_typed[data_typed_offset];
             }
+            data_typed_offset++;
         }
         break;
     }
     case 2:
     {
         unsigned long long offset;
+        unsigned long long data_typed_offset = 0;
         std::vector<unsigned long long> coodinate_temp(2);
         for (unsigned long long i = start[0]; i <= end[0]; i++)
         {
@@ -88,13 +93,14 @@ int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long l
                 coodinate_temp[0] = i;
                 coodinate_temp[1] = j;
                 ROW_MAJOR_ORDER_MACRO(mirror_size, mirror_size.size(), coodinate_temp, offset);
+                //std::cout << "coodinate_temp =" << i << ", " << j << ", offset = " << offset << ", data_typed[offset] =" << data_typed[offset] << ", buffer_typed[offset]=" << local_mirror_buffer_typed[offset] << std::endl;
                 if (read_write_code == LOCAL_MIRROR_READ_FLAG)
                 {
-                    data_typed[offset] = local_mirror_buffer_typed[offset];
+                    data_typed[data_typed_offset] = local_mirror_buffer_typed[offset];
                 }
                 else
                 {
-                    local_mirror_buffer_typed[offset] = data_typed[offset];
+                    local_mirror_buffer_typed[offset] = data_typed[data_typed_offset];
                 }
             }
         }
@@ -104,6 +110,7 @@ int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long l
     case 3:
     {
         unsigned long long offset;
+        unsigned long long data_typed_offset = 0;
         std::vector<unsigned long long> coodinate_temp(3);
         for (unsigned long long i = start[0]; i <= end[0]; i++)
         {
@@ -117,11 +124,11 @@ int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long l
                     ROW_MAJOR_ORDER_MACRO(mirror_size, mirror_size.size(), coodinate_temp, offset);
                     if (read_write_code == LOCAL_MIRROR_READ_FLAG)
                     {
-                        data_typed[offset] = local_mirror_buffer_typed[offset];
+                        data_typed[data_typed_offset] = local_mirror_buffer_typed[offset];
                     }
                     else
                     {
-                        local_mirror_buffer_typed[offset] = data_typed[offset];
+                        local_mirror_buffer_typed[offset] = data_typed[data_typed_offset];
                     }
                 }
             }
@@ -146,6 +153,7 @@ T *MergeMirrorsHelp(void *local_mirror_buffer, unsigned long long &local_mirror_
     AU_MPI_Datatype merge_type = InferMPIType<T>();
     AU_MPI_Op merge_op = InferMPIMergeOp(opt_str);
 
+    PrintScalar("local_mirror_size = ", local_mirror_size);
     AU_Reduce(local_mirror_buffer, reduced_mirror_buffer, local_mirror_size, merge_type, merge_op, 0, MPI_COMM_WORLD_DEFAULT);
     return reduced_mirror_buffer;
 }

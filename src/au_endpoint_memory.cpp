@@ -101,8 +101,27 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
         dash::Team::All().barrier();
         return 0;
     }else{
-        float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
-        std::memcpy(data, &local_mirror_buffer_typed[start[0]], sizeof(float) );
+        //float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
+        //std::memcpy(data, &local_mirror_buffer_typed[start[0]], sizeof(float) );
+        // PrintVector("start = ", start);
+        //PrintVector("end = ", end);
+
+        switch (data_element_type)
+        {
+        
+            case AU_FLOAT: 
+            { 
+                AccessLocalMirrorHelp<float>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
+    
+            default:
+            {
+                AU_EXIT("Not supported type in memory data!");
+                break;
+            }
+        }
+        
         return 0;
     }
 }
@@ -147,8 +166,23 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
         }
         return 0;
     }else{
-        float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
-        std::memcpy(&local_mirror_buffer_typed[start[0]],  data, sizeof(float));
+        //float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
+        //std::memcpy(&local_mirror_buffer_typed[start[0]],  data, sizeof(float));
+        switch (data_element_type)
+        {
+        
+            case AU_FLOAT: 
+            { 
+                AccessLocalMirrorHelp<float>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
+    
+            default:
+            {
+                AU_EXIT("Not supported type in memory data!");
+                break;
+            }
+        }
         return 0;
     }
 }
@@ -695,8 +729,20 @@ int EndpointMEMORY::MergeMirrors(std::string op_str){
             break;
         }
     }
-    
+        
     if(!au_mpi_rank_global){
+        /*
+        float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
+            for (int i = 0; i < 16; i++){
+            std::cout << "local:  " << local_mirror_buffer_typed[i] << std::endl;
+        }
+
+        float *reduced_mirror_buffer_typed = (float *)reduced_mirror_buffer;
+        for (int i = 0; i < 16; i++){
+            std::cout << "merged:  " << reduced_mirror_buffer_typed[i] << std::endl;
+        }
+        std::cout << "\n " ;*/
+        
         std::vector<unsigned long> start_ul, end_ul;
         start_ul.resize(endpoint_dim_size.size());
         end_ul.resize(endpoint_dim_size.size());
@@ -706,7 +752,24 @@ int EndpointMEMORY::MergeMirrors(std::string op_str){
             start_ul[i] = 0;
             end_ul[i] = endpoint_dim_size[i]-1;
         }
-        AccessDashData1D(dash_array_p, start_ul, end_ul, reduced_mirror_buffer, data_element_type, DASH_WRITE_FLAG);
+        //PrintScalar("local_mirror_size = ", local_mirror_size);
+        //PrintVector("endpoint_dim_size = ", endpoint_dim_size);
+
+        switch (endpoint_dim_size.size())
+        {
+        case 1:
+            AccessDashData1D(dash_array_p, start_ul, end_ul, reduced_mirror_buffer, data_element_type, DASH_WRITE_FLAG);
+            break;
+        case 2:
+            AccessDashData2D(dash_array_p, start_ul, end_ul, reduced_mirror_buffer, data_element_type, DASH_WRITE_FLAG);
+            break;
+        case 3:
+            AccessDashData3D(dash_array_p, start_ul, end_ul, reduced_mirror_buffer, data_element_type, DASH_WRITE_FLAG);
+            break;
+        default:
+            AU_EXIT("AU_MEMORY only support until 3D data");
+            break;
+        }
     }
 
     return 0;
