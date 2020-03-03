@@ -69,12 +69,12 @@ int main(int argc, char *argv[])
 
     std::cout << "Enable Local Mirros: " << std::endl;
     //Result data
-    H->EnableLocalMirror(0);
+    H->Clone(0);
 
     //Run
     A->Apply(udf_hist);
 
-    H->MergeLocalMirror(AU_SUM);
+    H->Merge(AU_SUM);
 
     H->Nonvolatile("EP_HDF5:./test-data/testf-16-reduce-hist.h5:/testg/testd");
 

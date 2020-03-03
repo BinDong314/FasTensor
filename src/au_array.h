@@ -1015,7 +1015,7 @@ public:
     }
   }
 
-  void SetApplySkip(std::vector<int> skip_size_p)
+  void EnableApplyStride(std::vector<int> skip_size_p)
   {
     skip_size = skip_size_p;
     skip_flag = true;
@@ -1230,19 +1230,31 @@ public:
   }
 
   /**
-   * @brief create a local mirror of array
-   * 
+   * @brief create a local mirror (clone) of array
+   *        with the inital value
    * @param intial_value 
    * @return int 
    */
-  int EnableLocalMirror(T intial_value)
+  int Clone(T intial_value)
   {
     std::string intial_value_str = std::to_string(intial_value);
     endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
     return 0;
   }
 
-  int MergeLocalMirror(int Op)
+  /**
+   * @brief create a local miroor (clone of array) without intial value
+   *        so, it needs to copy the whole array
+   * @return int 
+   */
+  int Clone()
+  {
+    std::string intial_value_str = ""; //Empty string
+    endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
+    return 0;
+  }
+
+  int Merge(int Op)
   {
     std::string op_str = std::to_string(Op);
     endpoint->SpecialOperator(DASH_MERGE_MIRRORS_CODE, op_str);

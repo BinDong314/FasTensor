@@ -20,7 +20,7 @@ int EndpointMEMORY::Create()
     {
         endpoint_dim_size_ul[i] = endpoint_dim_size[i];
     }
-    PrintVector("Create endpoint_dim_size_ul = ", endpoint_dim_size_ul);
+    //PrintVector("Create endpoint_dim_size_ul = ", endpoint_dim_size_ul);
     switch (endpoint_dim_size.size())
     {
     case 1:
@@ -731,18 +731,6 @@ int EndpointMEMORY::MergeMirrors(std::string op_str){
     }
         
     if(!au_mpi_rank_global){
-        /*
-        float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
-            for (int i = 0; i < 16; i++){
-            std::cout << "local:  " << local_mirror_buffer_typed[i] << std::endl;
-        }
-
-        float *reduced_mirror_buffer_typed = (float *)reduced_mirror_buffer;
-        for (int i = 0; i < 16; i++){
-            std::cout << "merged:  " << reduced_mirror_buffer_typed[i] << std::endl;
-        }
-        std::cout << "\n " ;*/
-        
         std::vector<unsigned long> start_ul, end_ul;
         start_ul.resize(endpoint_dim_size.size());
         end_ul.resize(endpoint_dim_size.size());
@@ -843,6 +831,98 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str){
             AU_EXIT("Only support until 3D in memory data!");
             break;
         }
+    }
+
+    if(init_value_str == ""){
+        if(!au_mpi_rank_global){
+            std::vector<unsigned long> start_ul, end_ul;
+            start_ul.resize(endpoint_dim_size.size());
+            end_ul.resize(endpoint_dim_size.size());
+
+            for (int i = 0; i < endpoint_dim_size.size(); i++)
+            {
+                start_ul[i] = 0;
+                end_ul[i] = endpoint_dim_size[i]-1;
+            }
+            //PrintScalar("local_mirror_size = ", local_mirror_size);
+            //PrintVector("endpoint_dim_size = ", endpoint_dim_size);
+
+            switch (endpoint_dim_size.size())
+            {
+            case 1:
+                AccessDashData1D(dash_array_p, start_ul, end_ul, local_mirror_buffer, data_element_type, DASH_READ_FLAG);
+                break;
+            case 2:
+                AccessDashData2D(dash_array_p, start_ul, end_ul, local_mirror_buffer, data_element_type, DASH_READ_FLAG);
+                break;
+            case 3:
+                AccessDashData3D(dash_array_p, start_ul, end_ul, local_mirror_buffer, data_element_type, DASH_READ_FLAG);
+                break;
+            default:
+                AU_EXIT("AU_MEMORY only support until 3D data");
+                break;
+            }
+        }
+
+        switch (data_element_type)
+        {
+            case AU_SHORT: 
+            {
+                BcastHelp<short>(local_mirror_buffer, local_mirror_size);
+                break;
+            }
+            case AU_INT: 
+            {
+                BcastHelp<int>(local_mirror_buffer, local_mirror_size);
+                break;
+            }
+            case AU_LONG: 
+            {
+                BcastHelp<long>(local_mirror_buffer, local_mirror_size);
+                break;
+            }
+            case AU_LONG_LONG: 
+            {
+                BcastHelp<long long>(local_mirror_buffer, local_mirror_size);
+                break;
+            }
+            case AU_USHORT: 
+            {
+                BcastHelp<unsigned short>(local_mirror_buffer, local_mirror_size);
+                break;             
+            }
+            case AU_UINT: 
+            {
+                BcastHelp<unsigned int>(local_mirror_buffer, local_mirror_size);
+                break;       
+            }
+            case AU_ULONG: 
+            {
+                BcastHelp<unsigned long>(local_mirror_buffer, local_mirror_size);
+                break;
+            }
+            case AU_ULLONG: 
+            {
+                BcastHelp<unsigned long long>(local_mirror_buffer, local_mirror_size);
+                break;
+            }
+            case AU_FLOAT: 
+            { 
+                BcastHelp<float>(local_mirror_buffer, local_mirror_size);
+                break;
+            }
+            case AU_DOUBLE: 
+            { 
+                BcastHelp<double>(local_mirror_buffer, local_mirror_size);
+                break;
+            }
+            default:
+            {
+                AU_EXIT("Only support until 3D in memory data!");
+                break;
+            }
+        }
+
     }
 
     return 0;

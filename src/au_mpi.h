@@ -147,6 +147,10 @@ inline MPI_Op InferMPIMergeOp(std::string &opt_str)
     {                                                                             \
         MPI_Reduce(local_buffer_p, reduced_buffer_p, size, type, op, root, comm); \
     }
+#define AU_Bcast(data_bffer_p, count_p, datatype_p, root_p, comm_p)   \
+    {                                                                 \
+        MPI_Bcast(data_bffer_p, count_p, datatype_p, root_p, comm_p); \
+    }
 
 #else
 #define MPI_COMM_TYPE int
@@ -169,19 +173,23 @@ inline MPI_Op InferMPIMergeOp(std::string &opt_str)
 template <typename T>
 inline int InferMPIType()
 {
-    AU_EXIT("No MPI used to compile!");
+    AU_EXIT("No MPI used to compile wihtout MPI compiled !");
 }
 
 inline int InferMPIMergeOp(std::string &opt_str)
 {
-    AU_EXIT("Should not be here!");
+    AU_EXIT("Should not be here wihtout MPI compiled  !");
 }
 
 #define AU_Reduce(local_buffer_p, reduced_buffer_p, size, type, op, root, comm) \
     {                                                                           \
-        AU_EXIT("Should not be here!")                                          \
+        AU_EXIT("Should not be here wihtout MPI compiled !");                   \
     }
 
+#define AU_Bcast(data_bffer_p, count_p, datatype_p, root_p, comm_p) \
+    {                                                               \
+        AU_EXIT("Should not be here wihtout MPI compiled !");       \
+    }
 #endif
 
 #endif

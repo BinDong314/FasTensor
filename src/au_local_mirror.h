@@ -36,22 +36,23 @@ extern int au_mpi_rank_global;
 template <typename T>
 void *CreateLocalMirrorHelp(std::string init_value_str, size_t local_mirror_size)
 {
-    std::istringstream reader(init_value_str);
-    T init_val;
-    reader >> init_val;
-
     T *local_mirror_buffer_typed = (T *)malloc(local_mirror_size * sizeof(float));
-
     if (local_mirror_buffer_typed == NULL)
     {
         AU_EXIT("Not enough memory to crate local mirror.");
         return NULL;
     }
-    for (int i = 0; i < local_mirror_size; i++)
-    {
-        local_mirror_buffer_typed[i] = init_val;
-    }
 
+    if (init_value_str != "")
+    {
+        std::istringstream reader(init_value_str);
+        T init_val;
+        reader >> init_val;
+        for (int i = 0; i < local_mirror_size; i++)
+        {
+            local_mirror_buffer_typed[i] = init_val;
+        }
+    }
     return (void *)local_mirror_buffer_typed;
 }
 
@@ -150,12 +151,19 @@ T *MergeMirrorsHelp(void *local_mirror_buffer, unsigned long long &local_mirror_
     {
         reduced_mirror_buffer = (T *)malloc(local_mirror_size * sizeof(T));
     }
-    AU_MPI_Datatype merge_type = InferMPIType<T>();
+    AU_MPI_Datatype merge_data_type = InferMPIType<T>();
     AU_MPI_Op merge_op = InferMPIMergeOp(opt_str);
 
-    PrintScalar("local_mirror_size = ", local_mirror_size);
-    AU_Reduce(local_mirror_buffer, reduced_mirror_buffer, local_mirror_size, merge_type, merge_op, 0, MPI_COMM_WORLD_DEFAULT);
+    AU_Reduce(local_mirror_buffer, reduced_mirror_buffer, local_mirror_size, merge_data_type, merge_op, 0, MPI_COMM_WORLD_DEFAULT);
     return reduced_mirror_buffer;
+}
+
+template <typename T>
+void BcastHelp(void *local_mirror_buffer, unsigned long long &local_mirror_size)
+{
+    AU_MPI_Datatype data_type = InferMPIType<T>();
+
+    AU_Bcast(local_mirror_buffer, local_mirror_size, data_type, 0, MPI_COMM_WORLD_DEFAULT);
 }
 
 #endif

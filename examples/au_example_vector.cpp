@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 
     //Skip paramter, run the udf_vector on the first cell of each row
     std::vector<int> skip_size = {1, 16};
-    A->SetApplySkip(skip_size);
+    A->EnableApplyStride(skip_size);
 
     //Run udf_vector
     A->Apply(udf_vector, B);
