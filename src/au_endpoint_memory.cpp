@@ -101,20 +101,58 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
         dash::Team::All().barrier();
         return 0;
     }else{
-        //float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
-        //std::memcpy(data, &local_mirror_buffer_typed[start[0]], sizeof(float) );
-        // PrintVector("start = ", start);
-        //PrintVector("end = ", end);
-
         switch (data_element_type)
         {
-        
+            case AU_SHORT: 
+            { 
+                AccessLocalMirrorHelp<short>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
+            case AU_INT: 
+            { 
+                AccessLocalMirrorHelp<int>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
+            case AU_LONG: 
+            { 
+                AccessLocalMirrorHelp<long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
+            case AU_LONG_LONG: 
+            { 
+                AccessLocalMirrorHelp<long long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
+             case AU_USHORT: 
+            { 
+                AccessLocalMirrorHelp<unsigned short>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
+            case AU_UINT: 
+            { 
+                AccessLocalMirrorHelp<unsigned int>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
+            case AU_ULONG: 
+            { 
+                AccessLocalMirrorHelp<unsigned long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
+            case AU_ULLONG: 
+            { 
+                AccessLocalMirrorHelp<unsigned long long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
             case AU_FLOAT: 
             { 
                 AccessLocalMirrorHelp<float>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
                 break;
             }
-    
+            case AU_DOUBLE: 
+            { 
+                AccessLocalMirrorHelp<double>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
             default:
             {
                 AU_EXIT("Not supported type in memory data!");
@@ -166,17 +204,58 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
         }
         return 0;
     }else{
-        //float *local_mirror_buffer_typed = (float *) local_mirror_buffer;
-        //std::memcpy(&local_mirror_buffer_typed[start[0]],  data, sizeof(float));
         switch (data_element_type)
         {
-        
+            case AU_SHORT: 
+            { 
+                AccessLocalMirrorHelp<short>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
+            case AU_INT: 
+            { 
+                AccessLocalMirrorHelp<int>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
+            case AU_LONG: 
+            { 
+                AccessLocalMirrorHelp<long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
+            case AU_LONG_LONG: 
+            { 
+                AccessLocalMirrorHelp<long long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
+             case AU_USHORT: 
+            { 
+                AccessLocalMirrorHelp<unsigned short>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
+            case AU_UINT: 
+            { 
+                AccessLocalMirrorHelp<unsigned int>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
+            case AU_ULONG: 
+            { 
+                AccessLocalMirrorHelp<unsigned long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
+            case AU_ULLONG: 
+            { 
+                AccessLocalMirrorHelp<unsigned long long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
             case AU_FLOAT: 
             { 
                 AccessLocalMirrorHelp<float>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
                 break;
             }
-    
+            case AU_DOUBLE: 
+            { 
+                AccessLocalMirrorHelp<double>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
             default:
             {
                 AU_EXIT("Not supported type in memory data!");
