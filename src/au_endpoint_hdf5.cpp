@@ -329,7 +329,12 @@ int EndpointHDF5::ParseEndpointInfo()
     }
 
     gn_str = ExtractPath(group_dataset_name_str);
+    if (gn_str == "")
+    {
+        gn_str = "/";
+    }
     dn_str = ExtractFileName(group_dataset_name_str);
 
+    //std::cout << "gn_str = " << gn_str << ", dn_str =" << dn_str << std::endl;
     return 0;
 }
