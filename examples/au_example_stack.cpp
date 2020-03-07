@@ -17,6 +17,7 @@
 #include <stdarg.h>
 #include <vector>
 #include <stdlib.h>
+#include <math.h>
 #include "au.h"
 
 using namespace std;
@@ -33,20 +34,53 @@ using namespace AU;
  *        A points to  a list of files and each have size of 8 x 8.
  */
 
-std::vector<unsigned long long> H_size = {201, 14999};
-Array<float> *H;
+#define LTS 14999 //length of time series
+#define CHS 201   //channels
 
-inline Stencil<float> udf_hist_2d(const Stencil<float> &iStencil)
+std::vector<unsigned long long> H_size = {CHS, LTS};
+Array<double> *H;
+
+inline Stencil<double> stack_udf(const Stencil<double> &iStencil)
 {
+    std::vector<double> ts(LTS);
+    for (int i = 0; i < LTS; i++)
+    {
+        ts[i] = iStencil(0, i);
+    }
+    //Remove the media
+    double median = Median(ts);
+    for (int i = 0; i < LTS; i++)
+    {
+        ts[i] = ts[i] - median;
+    }
 
+    //Subset
+    int startt = 125, endt = 14875, LTS_new;
+    int LTS_new = 14875 - 125 + 1;
+    std::vector<double> ts_sub(LTS_new);
+    for (int i = 0; i < LTS_new; i++)
+    {
+        ts_sub[i] = ts[i + startt];
+    }
+
+    std::vector<double> semblance_denom(LTS_new);
+    std::vector<double> coherency(LTS_new);
+
+    for (int i = 0; i < LTS_new; i++)
+    {
+        semblance_denom[i] = ts_sub[i] * ts_sub[i];
+    }
+
+    //
     int temp_index;
     std::vector<unsigned long long> temp_coord = iStencil.GetCoordinate();
     temp_index = temp_coord[0];
-    for (int i = 0; i < 14999; i++)
+    for (int i = 0; i < LTS; i++)
     {
-        H->SetValue(H->GetValue(temp_index, i) + iStencil(0, i), temp_index, i);
+        H->SetValue(H->GetValue(temp_index, i) + ts[i], temp_index, i);
     }
 
+    //std::cout << "finish one file, temp_index = " << temp_index << std::endl;
     return 0;
 }
 
@@ -59,10 +93,10 @@ int main(int argc, char *argv[])
     std::vector<int> chunk_size = {201, 14999};
     std::vector<int> overlap_size = {0, 0};
 
-    H = new Array<float>("EP_MEMORY", H_size);
+    H = new Array<double>("EP_MEMORY", H_size);
 
     //Input data, 8 by 8
-    Array<float> *A = new Array<float>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5:/xcoor", chunk_size, overlap_size);
+    Array<double> *A = new Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5:/xcoor", chunk_size, overlap_size);
 
     //Result data
     H->Clone(0);
@@ -71,7 +105,7 @@ int main(int argc, char *argv[])
     A->EnableApplyStride(skip_size);
 
     //Run
-    A->Apply(udf_hist_2d);
+    A->Apply(stack_udf);
 
     H->Merge(AU_SUM);
 

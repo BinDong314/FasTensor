@@ -36,7 +36,7 @@ extern int au_mpi_rank_global;
 template <typename T>
 void *CreateLocalMirrorHelp(std::string init_value_str, size_t local_mirror_size)
 {
-    T *local_mirror_buffer_typed = (T *)malloc(local_mirror_size * sizeof(float));
+    T *local_mirror_buffer_typed = (T *)malloc(local_mirror_size * sizeof(T));
     if (local_mirror_buffer_typed == NULL)
     {
         AU_EXIT("Not enough memory to crate local mirror.");
