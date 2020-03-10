@@ -37,10 +37,11 @@ using namespace AU;
 #define LTS 14999 //length of time series
 #define CHS 201   //channels
 
-double t_start = -59, t_end = 59, sample_rate = 0.00800000000000000;
+double t_start = -59.9920000000000, t_end = 59.9920000000000, sample_rate = 0.00800000000000000;
 
 std::vector<unsigned long long> H_size = {CHS, LTS};
 Array<double> *H;
+Array<double> semblanceSum_denom;
 
 inline Stencil<double> stack_udf(const Stencil<double> &iStencil)
 {
@@ -57,7 +58,7 @@ inline Stencil<double> stack_udf(const Stencil<double> &iStencil)
     }
 
     //Subset
-    std::vector<double> ts_sub();
+    std::vector<double> ts_sub;
     ts_sub = TimeSubset(t_start, t_end, -59, 59, sample_rate);
     /*
     bool flag = CausalityFlagging(ts_sub, 0.05, 3.0, 10, t_start, t_end, sample_rate);
@@ -67,14 +68,15 @@ inline Stencil<double> stack_udf(const Stencil<double> &iStencil)
     }*/
 
     std::vector<double> semblance_denom(LTS_new);
-    std::vector<std::complex> coherency(LTS_new);
+    std::vector<std::complex> coherency;
 
     for (int i = 0; i < LTS_new; i++)
     {
         semblance_denom[i] = ts_sub[i] * ts_sub[i];
     }
 
-    //
+    coherency = instanPhaseEstimator(ts_sub);
+
     int temp_index;
     std::vector<unsigned long long> temp_coord = iStencil.GetCoordinate();
     temp_index = temp_coord[0];

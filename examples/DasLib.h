@@ -6,7 +6,7 @@
 namespace DasLib
 {
 // Function for calculating median
-template <classname T = double>
+template <classname T>
 inline T Median(std::vector<T> &v)
 {
     sort(v.begin(), v.end());
@@ -69,7 +69,7 @@ inline bool CausalityFlagging(std::vector<T> &v, double tmin, double tmax, doubl
 }
 
 //double rms(double x[], int n)
-template <classname T = double>
+template <classname T>
 T Rms(std::vector<T> &x, int n)
 {
     T sum = 0;
@@ -80,11 +80,13 @@ T Rms(std::vector<T> &x, int n)
     return sqrt(sum / n);
 }
 
-template <classname T = double>
+template <classname T>
 inline void Hilbert(std::vector<T> &in, std::vector<std::complex<T>> &out)
 {
     size_t INN = v.size();
     fftw_complex *in_temp = malloc(sizeof(fftw_complex() * INN);
+    std::memset(in_temp, 0, sizeof(fftw_complex() * INN );
+
     for (size_t i = 0; i < INN; i++)
     {
         in_temp[i][REAL] = in[i];
@@ -134,28 +136,6 @@ inline void Hilbert(std::vector<T> &in, std::vector<std::complex<T>> &out)
         out[i].imag(in_temp[i][IMAG] / INN);
     }
     free(in_temp);
-}
-
-template <classname T = double>
-inline void Angle(fftw_complex *v, size_t N, std::vector<T> &out)
-{
-    for (size_t i = 0; i < N; i++)
-    {
-        out[i] = atan(v[i][REAL] / v[i][IMAG]);
-    }
-}
-
-template <classname T = double>
-inline std::vector<std::complex<T>> FftwComplex2StdComplex(fftw_complex *v, size_t N)
-{
-    std::vector<std::complex<T>> scv;
-    scv.resize(N);
-    for (size_t i = 0; i < N; i++)
-    {
-        scv[i].real = v[i][REAL];
-        scv[i].imag = v[i][IMAG];
-    }
-    return scv;
 }
 
 /*
@@ -402,18 +382,22 @@ Flipud(std::vector<T> &v, size_t rows, size_t cols)
     return vo;
 }
 
+//
+//phiMat = angle(hilbert(gather));
+//phaseshiftMat = exp(sqrt(-1)*phiMat);
 template <classname T = double>
-inline std::vector<std::complex> instanPhaseEstimator(std::vector<T> &v)
+inline std::vector<std::complex<T>> instanPhaseEstimator(std::vector<T> &v)
 {
-    std::vector<std::complex<double>> ov;
-
+    std::vector<std::complex<T>> ov;
+    T ov_angle;
     Hilbert(v, ov);
-    //angle
-    for (int i = 0; i < ov.size(); i++)
+    size_t N = ov.size();
+    std::complex<T> minus_one(-1, 0);
+    for (int i = 0; i < N; i++)
     {
+        ov_angle = std::arg(ov[i]);
+        ov[i] = std::exp(minus_one * ov_angle);
     }
-    //exp(sqrt(-1)*phiMat)
-
     return ov;
 }
 
