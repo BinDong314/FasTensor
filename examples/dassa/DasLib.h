@@ -14,7 +14,7 @@ template <class T>
 inline T Median(std::vector<T> &v)
 {
     sort(v.begin(), v.end());
-    size_t n = v.size;
+    size_t n = v.size();
     // check for even case
     if (n % 2 != 0)
         return v[n / 2];
@@ -88,27 +88,28 @@ template <class T>
 inline void Hilbert(std::vector<T> &in, std::vector<std::complex<T>> &out)
 {
     size_t INN = in.size();
-    fftw_complex *in_temp = malloc(sizeof(fftw_complex) * INN);
+    fftw_complex *in_temp = fftw_alloc_complex(INN);
     std::memset(in_temp, 0, sizeof(fftw_complex) * INN);
 
     for (size_t i = 0; i < INN; i++)
     {
-        in_temp[i][REAL] = in[i];
-        in_temp[i][IMAG] = 0;
+        in_temp[i][0] = in[i];
+        in_temp[i][1] = 0;
     }
 
-    fftw_complex *out_temp = malloc(sizeof(fftw_complex) * INN);
+    fftw_complex *out_temp = fftw_alloc_complex(INN);
     std::memset(out_temp, 0, sizeof(fftw_complex) * INN);
     fftw_plan pf = fftw_plan_dft_1d(INN, in_temp, out_temp, FFTW_FORWARD, FFTW_ESTIMATE);
     fftw_execute(pf);
     fftw_destroy_plan(pf);
+    fftw_cleanup();
 
     size_t HN = INN >> 1;
     size_t numRem = HN;
     for (size_t i = 0; i < HN; i++)
     {
-        out_temp[i][REAL] *= 2;
-        out_temp[i][IMAG] *= 2;
+        out_temp[i][0] *= 2;
+        out_temp[i][1] *= 2;
     }
 
     if (INN % 2 == 0)
@@ -117,29 +118,29 @@ inline void Hilbert(std::vector<T> &in, std::vector<std::complex<T>> &out)
     }
     else if (INN > 1)
     {
-        out_temp[HN][REAL] *= 2;
-        out_temp[HN][IMAG] *= 2;
+        out_temp[HN][0] *= 2;
+        out_temp[HN][1] *= 2;
     }
 
-    memset(&out_temp[HW + 1][REAL], 0, numRem * sizeof(fftw_complex));
+    memset(&out_temp[HN + 1][0], 0, numRem * sizeof(fftw_complex));
 
     std::memset(in_temp, 0, sizeof(fftw_complex) * INN);
 
-    pf = fftw_plan_dft_1d(INN, out_temp, in_temp, FFTW_BACKWORD, FFTW_ESTIMATE);
+    pf = fftw_plan_dft_1d(INN, out_temp, in_temp, FFTW_BACKWARD, FFTW_ESTIMATE);
     fftw_execute(pf);
     fftw_destroy_plan(pf);
 
     fftw_cleanup();
 
-    free(out_temp);
+    fftw_free(out_temp);
 
     out.resize(INN);
     for (size_t i = 0; i < INN; i++)
     {
-        out[i].real(in_temp[i][REAL] / INN);
-        out[i].imag(in_temp[i][IMAG] / INN);
+        out[i].real(in_temp[i][0] / INN);
+        out[i].imag(in_temp[i][1] / INN);
     }
-    free(in_temp);
+    fftw_free(in_temp);
 }
 
 /*
@@ -378,13 +379,13 @@ int ButterLow(int n, double fcf, std::vector<double> &A, std::vector<double> &B)
 }
 
 template <class T>
-Flipud(std::vector<T> &v, size_t rows, size_t cols)
+std::vector<T> Flipud(std::vector<T> &v, size_t rows, size_t cols)
 {
     std::vector<T> vo;
     vo.resize(rows * cols);
-    for ()
+    /*for ()
     {
-    }
+    }*/
     return vo;
 }
 

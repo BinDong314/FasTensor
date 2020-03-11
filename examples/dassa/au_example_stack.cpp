@@ -60,23 +60,23 @@ inline Stencil<double> stack_udf(const Stencil<double> &iStencil)
 
     //Subset
     std::vector<double> ts_sub;
-    ts_sub = TimeSubset(t_start, t_end, -59, 59, sample_rate);
+    ts_sub = DasLib::TimeSubset(ts, t_start, t_end, -59, 59, sample_rate);
     /*
     bool flag = CausalityFlagging(ts_sub, 0.05, 3.0, 10, t_start, t_end, sample_rate);
     if (flag = flase)
     {
         //Flipud(ts_sub);
     }*/
-
+    size_t LTS_new = ts_sub.size();
     std::vector<double> semblance_denom(LTS_new);
-    std::vector<std::complex> coherency;
+    std::vector<std::complex<double>> coherency;
 
     for (int i = 0; i < LTS_new; i++)
     {
         semblance_denom[i] = ts_sub[i] * ts_sub[i];
     }
 
-    coherency = instanPhaseEstimator(ts_sub);
+    coherency = DasLib::instanPhaseEstimator(ts_sub);
 
     int temp_index;
     std::vector<unsigned long long> temp_coord = iStencil.GetCoordinate();

@@ -393,7 +393,7 @@ libArrayUDF_la_LDFLAGS = -version-info 0:0:0  -all-static
 include_HEADERS = au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5.h \
                 au_utility.h third_part/cista.h third_part/cista_au_extended_ptr_tuple.h \
                 third_part/cista_au_extended_tuple.h third_part/cista_au_extended_arity.h au_endpoint_dir.h \
-                au_endpoint_memory.h au.h au_endpoint_factory.h
+                au_endpoint_memory.h au.h au_endpoint_factory.h au_local_mirror.h  au_mpi.h au_merge.h
 
 all: all-am
 
