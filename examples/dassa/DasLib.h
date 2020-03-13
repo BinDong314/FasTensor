@@ -31,7 +31,7 @@ inline T Median(std::vector<T> &v)
  * @param end_t,  end time of correlation fh(9) in Matlab code, e.g., 60
  * @param sub_start_t, start time of subset 
  * @param sub_end_t, end time of subset 
- * @param smaple_rate, interval of each point, fh(8) in Matlab code 
+ * @param smaple_rate, interval of each point, fh(8) in Matlab code , 0.008
  * @return std::vector<T>  return sub array
  */
 template <class T>

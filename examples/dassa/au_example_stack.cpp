@@ -81,7 +81,7 @@ inline Stencil<double> stack_udf(const Stencil<double> &iStencil)
     int temp_index;
     std::vector<unsigned long long> temp_coord = iStencil.GetCoordinate();
     temp_index = temp_coord[0];
-    for (int i = 0; i < LTS; i++)
+    for (int i = 0; i < LTS_new; i++)
     {
         H->SetValue(H->GetValue(temp_index, i) + ts[i], temp_index, i);
     }
