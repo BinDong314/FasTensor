@@ -40,53 +40,67 @@ using namespace AU;
 
 double t_start = -59.9920000000000, t_end = 59.9920000000000, sample_rate = 0.00800000000000000;
 
-std::vector<unsigned long long> H_size = {CHS, LTS};
-Array<double> *H;
-Array<double> semblanceSum_denom;
+std::vector<unsigned long long> sc_size(2);
+Array<double> *semblance_denom_sum;
+Array<double> *coherency_sum;
+Array<double> *data_in;
 
-inline Stencil<double> stack_udf(const Stencil<double> &iStencil)
+inline Stencil<double>
+stack_udf(const Stencil<double> &iStencil)
 {
-    std::vector<double> ts(LTS);
-    for (int i = 0; i < LTS; i++)
-    {
-        ts[i] = iStencil(0, i);
-    }
-    //Remove the media
-    double median = DasLib::Median(ts);
-    for (int i = 0; i < LTS; i++)
-    {
-        ts[i] = ts[i] - median;
-    }
+    std::vector<int> start_offset{0, 0}, end_offset{CHS - 1, LTS - 1};
+    std::vector<double> ts = iStencil.Read(start_offset, end_offset);
+    std::vector<std::vector<double>> ts2d = Vector1D2D(CHS, ts);
 
-    //Subset
-    std::vector<double> ts_sub;
-    ts_sub = DasLib::TimeSubset(ts, t_start, t_end, -59, 59, sample_rate);
+    std::cout << "Read data " << std::endl;
+    //Remove the media
+    for (int i = 0; i < CHS; i++)
+    {
+        double median = DasLib::Median(ts2d[i]);
+        for (int j = 0; j < LTS; i++)
+        {
+            ts2d[i][j] = ts2d[i][j] - median;
+        }
+        //Subset
+        ts2d[i] = DasLib::TimeSubset(ts2d[i], t_start, t_end, -59, 59, sample_rate);
+    }
     /*
     bool flag = CausalityFlagging(ts_sub, 0.05, 3.0, 10, t_start, t_end, sample_rate);
-    if (flag = flase)
+    if (flag == flase)
     {
         //Flipud(ts_sub);
     }*/
-    size_t LTS_new = ts_sub.size();
-    std::vector<double> semblance_denom(LTS_new);
-    std::vector<std::complex<double>> coherency;
-
-    for (int i = 0; i < LTS_new; i++)
+    size_t LTS_new = ts2d[0].size();
+    std::vector<std::vector<double>> semblance_denom;
+    std::vector<std::vector<std::complex<double>>> coherency;
+    semblance_denom.resize(CHS);
+    coherency.resize(CHS);
+    for (int i = 0; i < CHS; i++)
     {
-        semblance_denom[i] = ts_sub[i] * ts_sub[i];
+        semblance_denom[i].resize(LTS_new);
+        coherency[i].resize(LTS_new);
+        for (int j = 0; j < LTS_new; j++)
+        {
+            semblance_denom[i][j] = ts2d[i][j] * ts2d[i][j];
+        }
+
+        coherency[i] = DasLib::instanPhaseEstimator(ts2d[i]);
     }
 
-    coherency = DasLib::instanPhaseEstimator(ts_sub);
+    std::vector<unsigned long long> H_start{0, 0}, H_end{LTS_new - 1, LTS_new - 1};
+    std::vector<double> semblance_denom_sum_v = semblance_denom_sum->ReadArray(H_start, H_end);
+    std::vector<double> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
 
-    int temp_index;
-    std::vector<unsigned long long> temp_coord = iStencil.GetCoordinate();
-    temp_index = temp_coord[0];
-    for (int i = 0; i < LTS_new; i++)
+    for (int i = 0; i < H_row.size(); i++)
     {
-        H->SetValue(H->GetValue(temp_index, i) + ts[i], temp_index, i);
+        H_row[i] = H_row[i] + ts[i];
+        coherency_sum_v[i] = coherency_sum_v[i] + coherency[i];
+        semblance_denom_sum_v[i] = semblance_denom_sum_v[i] + semblance_denom[i];
     }
 
-    //std::cout << "finish one file, temp_index = " << temp_index << std::endl;
+    semblance_denom_sum->WriteArray(H_start, H_end, semblance_denom_sum_v);
+    coherency_sum->WriteArray(H_start, H_end, coherency_sum_v);
+    std::cout << "finish one file, temp_index " << std::endl;
     return 0;
 }
 
@@ -96,30 +110,37 @@ int main(int argc, char *argv[])
     AU_Init(argc, argv);
 
     // set up the chunk size and the overlap size
-    std::vector<int> chunk_size = {201, 14999};
+    std::vector<int> chunk_size = {CHS, LTS};
     std::vector<int> overlap_size = {0, 0};
 
-    H = new Array<double>("EP_MEMORY", H_size);
+    size_t size_after_subset = InferTimeSubsetSize(t_start, t_end, -59, 59, sample_rate);
+    sc_size[0] = CHS;
+    sc_size[1] = size_after_subset;
+    semblance_denom_sum = new Array<double>("EP_MEMORY", sc_size);
+    coherency_sum = new Array<double>("EP_MEMORY", sc_size);
 
     //Input data, 8 by 8
     Array<double> *A = new Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5:/xcoor", chunk_size, overlap_size);
-
-    //Result data
-    H->Clone(0);
-
     std::vector<int> skip_size = {1, 14999};
     A->EnableApplyStride(skip_size);
+
+    //Result data
+    semblance_denom_sum->Clone(0);
+    coherency_sum->Clone(0);
 
     //Run
     A->Apply(stack_udf);
 
-    H->Merge(AU_SUM);
+    semblance_denom_sum->Merge(AU_SUM);
+    coherency_sum->Merge(AU_SUM);
 
-    H->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack.h5:/xcoorstack");
+    semblance_denom_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_semblance_denom_sum.h5:/semblance_denom_sum");
+    coherency_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_coherency_sum.h5:/coherency_sum");
 
     //Clear
     delete A;
-    delete H;
+    delete semblance_denom_sum;
+    delete coherency_sum;
 
     AU_Finalize();
 

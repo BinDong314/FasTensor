@@ -37,9 +37,8 @@ inline T Median(std::vector<T> &v)
 template <class T>
 inline std::vector<T> TimeSubset(std::vector<T> &v, double start_t, double end_t, double sub_start_t, double sub_end_t, double smaple_rate)
 {
-    size_t sub_start_index, sub_end_index;
-    sub_start_index = round((sub_start_t - start_t) / smaple_rate + 1);
-    sub_end_index = round((sub_end_t - start_t) / smaple_rate + 1);
+    size_t sub_start_index = round((sub_start_t - start_t) / smaple_rate + 1);
+    size_t sub_end_index = round((sub_end_t - start_t) / smaple_rate + 1);
 
     std::vector<T> v_subset;
     v_subset.resize(sub_end_index - sub_start_index + 1);
@@ -52,6 +51,38 @@ inline std::vector<T> TimeSubset(std::vector<T> &v, double start_t, double end_t
     }
 
     return v_subset;
+}
+/**
+ * @brief infer the size of vector after time subset
+ * 
+ * @param start_t 
+ * @param end_t 
+ * @param sub_start_t 
+ * @param sub_end_t 
+ * @param smaple_rate 
+ * @return size_t 
+ */
+inline size_t InferTimeSubsetSize(double start_t, double end_t, double sub_start_t, double sub_end_t, double smaple_rate)
+{
+    size_t sub_start_index = round((sub_start_t - start_t) / smaple_rate + 1);
+    size_t sub_end_index = round((sub_end_t - start_t) / smaple_rate + 1);
+
+    return sub_end_index - sub_start_index + 1;
+}
+
+typedef std::vector<std::vector<double>> DoubleVector2D;
+
+template <class T>
+inline std::vector<std::vector<T>> Vector1D2D(size_t cols, std::vector<T> data1d)
+{
+    std::vector<std::vector<T>> result;
+    for (std::size_t i = 0; i < data1d.size(); ++i)
+    {
+        if (i % cols == 0)
+            result.resize(result.size() + 1);
+        result[i / cols].push_back(values[i]);
+    }
+    return result;
 }
 
 /*

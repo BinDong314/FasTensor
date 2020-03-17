@@ -612,7 +612,7 @@ public:
     return;
   }
 
-  int WriteArray(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, std::vector<T> data_p)
+  int WriteArray(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, std::vector<T> &data_p)
   {
     //InitializeApplyInput();
     if (!virtual_array_flag)

@@ -315,7 +315,7 @@ public:
     return has_set_output_value_flag;
   }
 
-  inline std::vector<T> Read(std::vector<int> &start_offset, std::vector<int> &end_offset)
+  inline std::vector<T> Read(std::vector<int> &start_offset, std::vector<int> &end_offset) const
   {
     std::vector<T> rv;
     int rank_temp = start_offset.size();
@@ -331,8 +331,8 @@ public:
       start_offset_size_t[i] = start_offset[i];
       end_offset_size_t[i] = end_offset[i];
     }
-    rv.resize(n);
 
+    rv.resize(n);
     size_t offset, rv_offset = 0;
     std::vector<size_t> coordinate;
     coordinate.resize(rank_temp);
@@ -351,6 +351,42 @@ public:
     }
 
     return rv;
+  }
+
+  int Write(std::vector<int> &start_offset, std::vector<int> &end_offset, std::vector<T> &data) const
+  {
+    int rank_temp = start_offset.size();
+    std::vector<size_t> start_offset_size_t, end_offset_size_t;
+    start_offset_size_t.resize(rank_temp);
+    end_offset_size_t.resize(rank_temp);
+    size_t n = 1;
+    for (int i = 0; i < rank_temp; i++)
+    {
+      n = n * (end_offset[i] - start_offset[i] + 1);
+      assert(start_offset[i] >= 0); //ArrayIterator any only process positive offset
+      assert(end_offset[i] >= 0);
+      start_offset_size_t[i] = start_offset[i];
+      end_offset_size_t[i] = end_offset[i];
+    }
+
+    size_t offset, rv_offset = 0;
+    std::vector<size_t> coordinate;
+    coordinate.resize(rank_temp);
+    for (ArrayIterator<size_t> c(start_offset_size_t, end_offset_size_t); c; ++c)
+    {
+      for (int j = 0; j < rank_temp; j++)
+      {
+        coordinate[j] = my_location[j] + c[j];
+        if (coordinate[j] >= chunk_dim_size[j]) //Check boundary :: Be careful with size overflow
+          coordinate[j] = chunk_dim_size[j] - 1;
+      }
+      ROW_MAJOR_ORDER_MACRO(chunk_dim_size, rank_temp, coordinate, offset);
+      assert(offset <= chunk_data_size);
+      chunk_data_pointer[offset] = data[rv_offset];
+      rv_offset = rv_offset + 1;
+    }
+
+    return 0;
   }
 
   T get_value()
