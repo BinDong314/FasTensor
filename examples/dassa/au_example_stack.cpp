@@ -41,9 +41,10 @@ using namespace AU;
 double t_start = -59.9920000000000, t_end = 59.9920000000000, sample_rate = 0.00800000000000000;
 
 std::vector<unsigned long long> sc_size(2);
+
 Array<double> *semblance_denom_sum;
-Array<double> *coherency_sum;
-Array<double> *data_in;
+Array<std::complex<double>> *coherency_sum;
+Array<double> *data_in_sum;
 
 inline Stencil<double>
 stack_udf(const Stencil<double> &iStencil)
@@ -87,19 +88,27 @@ stack_udf(const Stencil<double> &iStencil)
         coherency[i] = DasLib::instanPhaseEstimator(ts2d[i]);
     }
 
-    std::vector<unsigned long long> H_start{0, 0}, H_end{LTS_new - 1, LTS_new - 1};
+    std::vector<unsigned long long> H_start{0, 0}, H_end{CHS - 1, LTS_new - 1};
     std::vector<double> semblance_denom_sum_v = semblance_denom_sum->ReadArray(H_start, H_end);
-    std::vector<double> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
+    std::vector<std::complex<double>> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
+    std::vector<double> data_in_sum_v = data_in_sum->ReadArray(H_start, H_end);
 
-    for (int i = 0; i < H_row.size(); i++)
+    int offset;
+    for (int i = 0; i < CHS; i++)
     {
-        H_row[i] = H_row[i] + ts[i];
-        coherency_sum_v[i] = coherency_sum_v[i] + coherency[i];
-        semblance_denom_sum_v[i] = semblance_denom_sum_v[i] + semblance_denom[i];
+        for (int j = 0; j < LTS_new; j++)
+        {
+            offset = i * LTS_new + j;
+            coherency_sum_v[offset] = coherency_sum_v[offset] + coherency[i][j];
+            semblance_denom_sum_v[offset] = semblance_denom_sum_v[offset] + semblance_denom[i][j];
+            data_in_sum_v[offset] = data_in_sum_v[offset] + ts2d[i][j];
+        }
     }
 
     semblance_denom_sum->WriteArray(H_start, H_end, semblance_denom_sum_v);
     coherency_sum->WriteArray(H_start, H_end, coherency_sum_v);
+    data_in_sum->WriteArray(H_start, H_end, data_in_sum_v);
+
     std::cout << "finish one file, temp_index " << std::endl;
     return 0;
 }
@@ -116,17 +125,20 @@ int main(int argc, char *argv[])
     size_t size_after_subset = InferTimeSubsetSize(t_start, t_end, -59, 59, sample_rate);
     sc_size[0] = CHS;
     sc_size[1] = size_after_subset;
-    semblance_denom_sum = new Array<double>("EP_MEMORY", sc_size);
-    coherency_sum = new Array<double>("EP_MEMORY", sc_size);
 
-    //Input data, 8 by 8
+    semblance_denom_sum = new Array<double>("EP_MEMORY", sc_size);
+    coherency_sum = new Array<std::complex<double>>("EP_MEMORY", sc_size);
+    data_in_sum = new Array<double>("EP_MEMORY", sc_size);
+
+    //Input data,
     Array<double> *A = new Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5:/xcoor", chunk_size, overlap_size);
     std::vector<int> skip_size = {1, 14999};
     A->EnableApplyStride(skip_size);
 
     //Result data
     semblance_denom_sum->Clone(0);
-    coherency_sum->Clone(0);
+    coherency_sum->Clone();
+    data_in_sum->Clone(0);
 
     //Run
     A->Apply(stack_udf);
@@ -139,8 +151,10 @@ int main(int argc, char *argv[])
 
     //Clear
     delete A;
+
     delete semblance_denom_sum;
     delete coherency_sum;
+    delete data_in_sum;
 
     AU_Finalize();
 

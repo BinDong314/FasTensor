@@ -1261,6 +1261,16 @@ public:
     return 0;
   }
 
+  /**
+   * @brief Fill the array with value
+   * 
+   * @param value 
+   * @return int 
+   */
+  int Fill(T &value)
+  {
+  }
+
 }; // class of array
 
 } // namespace AU

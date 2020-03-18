@@ -21,6 +21,7 @@
 #include <type_traits>
 #include <iostream>
 #include <variant>
+#include <complex>
 
 #if __cplusplus > 201402L
 #include "cista.h"
@@ -62,7 +63,8 @@ typedef enum AuEndpointDataType
   AU_ULLONG = 7,
   AU_FLOAT = 8,
   AU_DOUBLE = 9,
-  AU_NCLASSES /*this must be last                          */
+  AU_DOUBLE_COMPLEX = 10, //it is std::complex<double>
+  AU_NCLASSES             /*this must be last                          */
 } AuEndpointDataType;
 
 /**
@@ -113,6 +115,10 @@ AuEndpointDataType InferDataType()
   else if (std::is_same<T, double>::value)
   {
     return AU_DOUBLE;
+  }
+  else if (std::is_same<T, std::complex<double>>::value)
+  {
+    return AU_DOUBLE_COMPLEX;
   }
   else
   {

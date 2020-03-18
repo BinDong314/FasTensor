@@ -802,6 +802,11 @@ int EndpointMEMORY::MergeMirrors(std::string op_str){
             reduced_mirror_buffer = MergeMirrorsHelp<double>(local_mirror_buffer, local_mirror_size, op_str);
             break;
         }
+         case AU_DOUBLE_COMPLEX: 
+        { 
+            reduced_mirror_buffer = MergeMirrorsHelp<std::complex<double>>(local_mirror_buffer, local_mirror_size, op_str);
+            break;
+        }     
         default:
         {
             AU_EXIT("Not supported type in memory data!");
@@ -843,7 +848,7 @@ int EndpointMEMORY::MergeMirrors(std::string op_str){
 }
 
     /**
-     * @brief Create a Local Mirror object
+     * @brief Create a Local Mirror object (Clone)
      * 
      * @return int 
      */
@@ -903,6 +908,11 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str){
         case AU_DOUBLE: 
         { 
             local_mirror_buffer = CreateLocalMirrorHelp<double>(init_value_str, local_mirror_size);
+            break;
+        }
+        case AU_DOUBLE_COMPLEX: 
+        { 
+            local_mirror_buffer = CreateLocalMirrorHelp<std::complex<double>>(init_value_str, local_mirror_size);
             break;
         }
         default:
@@ -993,6 +1003,11 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str){
             case AU_DOUBLE: 
             { 
                 BcastHelp<double>(local_mirror_buffer, local_mirror_size);
+                break;
+            }
+            case AU_DOUBLE_COMPLEX:
+            { 
+                BcastHelp<std::complex<double>>(local_mirror_buffer, local_mirror_size);
                 break;
             }
             default:

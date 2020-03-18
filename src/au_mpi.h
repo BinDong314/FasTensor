@@ -80,6 +80,10 @@ inline MPI_Datatype InferMPIType()
     {
         return MPI_DOUBLE;
     }
+    else if (std::is_same<T, std::complex<double>>::value)
+    {
+        return MPI_CXX_DOUBLE_COMPLEX;
+    }
     else
     {
         AU_EXIT("Not supporte MPI data type");
