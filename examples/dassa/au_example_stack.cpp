@@ -24,17 +24,6 @@
 using namespace std;
 using namespace AU;
 
-/**
- * @brief Example to sum each row of A (8 x 8)
- *        Store result in H (8 x 2)
- *        H[0,0] = sum (A[0,0], A[0,1], A[0,2], A[0,3])  
- *        H[0,1] = sum (A[0,4], A[0,5], A[0,6], A[0,7])  
- *        H[1,0] = sum (A[1,0], A[1,1], A[1,2], A[1,3]) 
- *        ...  ...
- *       
- *        A points to  a list of files and each have size of 8 x 8.
- */
-
 #define LTS 14999 //length of time series
 #define CHS 201   //channels
 
@@ -51,19 +40,19 @@ stack_udf(const Stencil<double> &iStencil)
 {
     std::vector<int> start_offset{0, 0}, end_offset{CHS - 1, LTS - 1};
     std::vector<double> ts = iStencil.Read(start_offset, end_offset);
-    std::vector<std::vector<double>> ts2d = Vector1D2D(CHS, ts);
+    std::vector<std::vector<double>> ts2d = DasLib::Vector1D2D(CHS, ts);
 
     std::cout << "Read data " << std::endl;
     //Remove the media
     for (int i = 0; i < CHS; i++)
     {
         double median = DasLib::Median(ts2d[i]);
-        for (int j = 0; j < LTS; i++)
+        for (int j = 0; j < LTS; j++)
         {
             ts2d[i][j] = ts2d[i][j] - median;
         }
         //Subset
-        ts2d[i] = DasLib::TimeSubset(ts2d[i], t_start, t_end, -59, 59, sample_rate);
+        //ts2d[i] = DasLib::TimeSubset(ts2d[i], t_start, t_end, -59, 59, sample_rate);
     }
     /*
     bool flag = CausalityFlagging(ts_sub, 0.05, 3.0, 10, t_start, t_end, sample_rate);
@@ -122,9 +111,11 @@ int main(int argc, char *argv[])
     std::vector<int> chunk_size = {CHS, LTS};
     std::vector<int> overlap_size = {0, 0};
 
-    size_t size_after_subset = InferTimeSubsetSize(t_start, t_end, -59, 59, sample_rate);
+    size_t size_after_subset = DasLib::InferTimeSubsetSize(t_start, t_end, -59, 59, sample_rate);
     sc_size[0] = CHS;
     sc_size[1] = size_after_subset;
+
+    std::cout << "size_after_subset = " << size_after_subset << "\n";
 
     semblance_denom_sum = new Array<double>("EP_MEMORY", sc_size);
     coherency_sum = new Array<std::complex<double>>("EP_MEMORY", sc_size);
@@ -135,7 +126,9 @@ int main(int argc, char *argv[])
     std::vector<int> skip_size = {1, 14999};
     A->EnableApplyStride(skip_size);
 
-    //Result data
+    //Clone to create local copy
+    std::complex<double> complex_zero(0, 0);
+    coherency_sum->Fill(complex_zero);
     semblance_denom_sum->Clone(0);
     coherency_sum->Clone();
     data_in_sum->Clone(0);

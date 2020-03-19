@@ -153,6 +153,11 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
                 AccessLocalMirrorHelp<double>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
                 break;
             }
+            case AU_DOUBLE_COMPLEX: 
+            { 
+                AccessLocalMirrorHelp<std::complex<double>>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+                break;
+            }
             default:
             {
                 AU_EXIT("Not supported type in memory data!");
@@ -254,6 +259,11 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
             case AU_DOUBLE: 
             { 
                 AccessLocalMirrorHelp<double>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+                break;
+            }
+            case AU_DOUBLE_COMPLEX: 
+            { 
+                AccessLocalMirrorHelp<std::complex<double>>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
                 break;
             }
             default:

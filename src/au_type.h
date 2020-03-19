@@ -71,7 +71,7 @@ typedef enum AuEndpointDataType
  * @brief It should follow the order of above AuEndpointDataType
  * 
  */
-using AuEndpointDataTypeUnion = std::variant<short, int, long, long long, unsigned short, unsigned int, unsigned long, unsigned long long, float, double>;
+using AuEndpointDataTypeUnion = std::variant<short, int, long, long long, unsigned short, unsigned int, unsigned long, unsigned long long, float, double, std::complex<double>>;
 
 template <typename T>
 AuEndpointDataType InferDataType()

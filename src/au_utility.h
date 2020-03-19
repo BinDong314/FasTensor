@@ -309,7 +309,7 @@ std::string ExtractPath(const std::string &fullPath);
  * @param index 
  */
 template <class T1, class T2>
-void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
+inline void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
 {
     assert(attribute_vector.size() == virtual_array_vector.size());
     size_t n = attribute_vector.size();
@@ -384,6 +384,12 @@ void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector,
     }
 }
 
+template <>
+inline void InsertAttribute2VirtualArrayVector<AuEndpointDataTypeUnion, std::complex<double>>(const std::vector<AuEndpointDataTypeUnion> &attribute_vector, AuEndpointDataType union_index, std::vector<std::complex<double>> &virtual_array_vector, int attribute_index)
+{
+    AU_EXIT("std::complex does not work with cista::for_each_field now");
+}
+
 #define ExtractAttributeFromVirtualArrayVector_HELPER(ELEMENT_TYPE)                                                       \
     {                                                                                                                     \
         ELEMENT_TYPE *attribute_data_typed = (ELEMENT_TYPE *)attribute_data_void_pointer;                                 \
@@ -403,7 +409,7 @@ void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector,
     }
 
 template <class T2>
-void *ExtractAttributeFromVirtualArrayVector(std::vector<T2> &virtual_array_vector, int attribute_index, AuEndpointDataType element_type, int element_type_size)
+inline void *ExtractAttributeFromVirtualArrayVector(std::vector<T2> &virtual_array_vector, int attribute_index, AuEndpointDataType element_type, int element_type_size)
 {
 
     size_t n = virtual_array_vector.size();
@@ -469,4 +475,9 @@ void *ExtractAttributeFromVirtualArrayVector(std::vector<T2> &virtual_array_vect
     return attribute_data_void_pointer;
 }
 
+template <>
+inline void *ExtractAttributeFromVirtualArrayVector<std::complex<double>>(std::vector<std::complex<double>> &virtual_array_vector, int attribute_index, AuEndpointDataType element_type, int element_type_size)
+{
+    AU_EXIT("std::complex<double> does work with cista::to_tuple<");
+}
 #endif

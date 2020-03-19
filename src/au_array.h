@@ -1262,13 +1262,30 @@ public:
   }
 
   /**
-   * @brief Fill the array with value
+   * @brief Fill the array with value (only on rank 0)
    * 
    * @param value 
    * @return int 
    */
-  int Fill(T &value)
+  int Fill(T fill_value)
   {
+    if (!au_mpi_rank_global)
+    {
+      unsigned long long total_size = 1;
+      std::vector<unsigned long long> start_p(data_size.size());
+      std::vector<unsigned long long> end_p(data_size.size());
+
+      for (int i = 0; i < data_size.size(); i++)
+      {
+        start_p[i] = 0;
+        end_p[i] = data_size[i] - 1;
+        total_size = total_size * data_size[i];
+      }
+      std::vector<T> default_value_v(total_size, fill_value);
+      endpoint->Write(start_p, end_p, static_cast<void *>(default_value_v.data()));
+    }
+
+    return 0;
   }
 
 }; // class of array
