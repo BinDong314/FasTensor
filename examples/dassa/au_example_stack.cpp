@@ -35,6 +35,7 @@ Array<double> *semblance_denom_sum;
 Array<std::complex<double>> *coherency_sum;
 Array<double> *data_in_sum;
 
+int udf_count = 0;
 inline Stencil<double>
 stack_udf(const Stencil<double> &iStencil)
 {
@@ -42,7 +43,7 @@ stack_udf(const Stencil<double> &iStencil)
     std::vector<double> ts = iStencil.Read(start_offset, end_offset);
     std::vector<std::vector<double>> ts2d = DasLib::Vector1D2D(LTS, ts);
 
-    std::cout << "Read data: ts2d.size = " << ts2d.size() << " x " << ts2d[0].size() << std::endl;
+    std::cout << "Read data: ts2d.size = " << ts2d.size() << " x " << ts2d[0].size() << ", count = " << udf_count++ << std::endl;
     //Remove the media
     for (int i = 0; i < CHS; i++)
     {
@@ -124,7 +125,7 @@ int main(int argc, char *argv[])
 
     //Input data,
     Array<double> *A = new Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5:/xcoor", chunk_size, overlap_size);
-    std::vector<int> skip_size = {1, 14999};
+    std::vector<int> skip_size = {CHS, LTS};
     A->EnableApplyStride(skip_size);
 
     //Clone to create local copy
@@ -143,7 +144,7 @@ int main(int argc, char *argv[])
     data_in_sum->Merge(AU_SUM);
 
     semblance_denom_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_semblance_denom_sum.h5:/semblance_denom_sum");
-    coherency_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_coherency_sum.h5:/coherency_sum");
+    //coherency_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_coherency_sum.h5:/coherency_sum");
 
     //Clear
     delete A;
