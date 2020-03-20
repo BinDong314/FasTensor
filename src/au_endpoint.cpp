@@ -77,6 +77,16 @@ void Endpoint::SetOpenFlag(bool open_flag_p)
     open_flag = open_flag_p;
 }
 
+bool Endpoint::GetCreateFlag()
+{
+    return create_flag;
+}
+
+void Endpoint::SetCreateFlag(bool create_flag_p)
+{
+    create_flag = create_flag_p;
+}
+
 void Endpoint::SetRwFlag(unsigned read_write_flag_p)
 {
     read_write_flag = read_write_flag_p;

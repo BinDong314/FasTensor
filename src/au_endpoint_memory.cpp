@@ -44,7 +44,7 @@ int EndpointMEMORY::Create()
     }
 
     SetOpenFlag(true);
-
+    SetCreateFlag(true);
     return 0;
 }
 
@@ -66,6 +66,9 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
 {
     //AU_INFO("Memory read");
     dash::Team::All().barrier();
+    if(!GetCreateFlag()){
+        Create();
+    }
 
     if(!local_mirror_flag){
         std::vector<unsigned long> start_ul, end_ul;
@@ -179,7 +182,11 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
      */
 int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    dash::Team::All().barrier();
 
+    if(!GetCreateFlag()){
+        Create();
+    }
     if(!local_mirror_flag){
         std::vector<unsigned long> start_ul, end_ul;
         start_ul.resize(start.size());

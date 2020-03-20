@@ -65,6 +65,7 @@ public:
         ParseEndpointInfo();
         SetOpenFlag(false);
         SetEndpointType(EP_MEMORY);
+        SetCreateFlag(false);
     }
     /**
      * @brief Construct a new Endpoint in MEMORY 
@@ -74,6 +75,7 @@ public:
     {
         SetOpenFlag(false);
         SetEndpointType(EP_MEMORY);
+        SetCreateFlag(false);
     }
 
     ~EndpointMEMORY()
