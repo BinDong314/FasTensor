@@ -121,9 +121,10 @@ T Rms(std::vector<T> &x, int n)
 template <class T>
 inline std::vector<std::complex<T>> Hilbert(std::vector<T> &in)
 {
-    size_t INN = in.size();
-    fftw_complex *in_temp = fftw_alloc_complex(sizeof(fftw_complex) * INN);
-    std::memset(in_temp, 0, sizeof(fftw_complex) * INN);
+    int INN = in.size();
+    //std::cout << "INN =" << INN << "\n";
+    fftw_complex *in_temp = (fftw_complex *)fftw_alloc_complex(sizeof(fftw_complex) * INN);
+    //std::memset(in_temp, 0, sizeof(fftw_complex) * INN);
 
     for (size_t i = 0; i < INN; i++)
     {
@@ -131,13 +132,13 @@ inline std::vector<std::complex<T>> Hilbert(std::vector<T> &in)
         in_temp[i][1] = 0;
     }
 
-    fftw_complex *out_temp = fftw_alloc_complex(sizeof(fftw_complex) * INN);
-    std::memset(out_temp, 0, sizeof(fftw_complex) * INN);
+    fftw_complex *out_temp = (fftw_complex *)fftw_alloc_complex(sizeof(fftw_complex) * INN);
+    //std::memset(out_temp, 0, sizeof(fftw_complex) * INN);
 
-    fftw_plan pf = fftw_plan_dft_1d(INN, in_temp, in_temp, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftw_plan pf = fftw_plan_dft_1d(INN, in_temp, out_temp, FFTW_FORWARD, FFTW_ESTIMATE);
     fftw_execute(pf);
     fftw_destroy_plan(pf);
-    fftw_cleanup();
+    //fftw_cleanup();
 
     size_t HN = INN >> 1;
     size_t numRem = HN;
@@ -159,15 +160,12 @@ inline std::vector<std::complex<T>> Hilbert(std::vector<T> &in)
 
     memset(&out_temp[HN + 1][0], 0, numRem * sizeof(fftw_complex));
 
-    std::memset(in_temp, 0, sizeof(fftw_complex) * INN);
+    //std::memset(in_temp, 0, sizeof(fftw_complex) * INN);
 
-    pf = fftw_plan_dft_1d(INN, out_temp, in_temp, FFTW_BACKWARD, FFTW_ESTIMATE);
-    fftw_execute(pf);
-    fftw_destroy_plan(pf);
-
-    fftw_cleanup();
-
-    fftw_free(out_temp);
+    fftw_plan pf2 = fftw_plan_dft_1d(INN, out_temp, in_temp, FFTW_BACKWARD, FFTW_ESTIMATE);
+    fftw_execute(pf2);
+    fftw_destroy_plan(pf2);
+    //std::cout << "INN 2 =" << INN << "\n";
 
     std::vector<std::complex<T>> out(INN);
     for (size_t i = 0; i < INN; i++)
@@ -175,7 +173,10 @@ inline std::vector<std::complex<T>> Hilbert(std::vector<T> &in)
         out[i].real(in_temp[i][0] / INN);
         out[i].imag(in_temp[i][1] / INN);
     }
+    fftw_free(out_temp);
     fftw_free(in_temp);
+    fftw_cleanup();
+
     return out;
 }
 
@@ -432,9 +433,10 @@ template <class T>
 inline std::vector<std::complex<T>> instanPhaseEstimator(std::vector<T> &v)
 {
     std::vector<std::complex<T>> ov;
-    T ov_angle;
     ov = Hilbert(v);
     size_t N = ov.size();
+
+    T ov_angle;
     std::complex<T> minus_one(-1, 0);
     for (int i = 0; i < N; i++)
     {

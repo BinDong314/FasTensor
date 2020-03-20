@@ -40,9 +40,9 @@ stack_udf(const Stencil<double> &iStencil)
 {
     std::vector<int> start_offset{0, 0}, end_offset{CHS - 1, LTS - 1};
     std::vector<double> ts = iStencil.Read(start_offset, end_offset);
-    std::vector<std::vector<double>> ts2d = DasLib::Vector1D2D(CHS, ts);
+    std::vector<std::vector<double>> ts2d = DasLib::Vector1D2D(LTS, ts);
 
-    std::cout << "Read data " << std::endl;
+    std::cout << "Read data: ts2d.size = " << ts2d.size() << " x " << ts2d[0].size() << std::endl;
     //Remove the media
     for (int i = 0; i < CHS; i++)
     {
@@ -61,6 +61,7 @@ stack_udf(const Stencil<double> &iStencil)
         //Flipud(ts_sub);
     }*/
     size_t LTS_new = ts2d[0].size();
+    //std::cout << " LTS_new = " << LTS_new << "\n";
     std::vector<std::vector<double>> semblance_denom;
     std::vector<std::vector<std::complex<double>>> coherency;
     semblance_denom.resize(CHS);
@@ -98,7 +99,7 @@ stack_udf(const Stencil<double> &iStencil)
     coherency_sum->WriteArray(H_start, H_end, coherency_sum_v);
     data_in_sum->WriteArray(H_start, H_end, data_in_sum_v);
 
-    std::cout << "finish one file, temp_index " << std::endl;
+    //std::cout << "finish one file, temp_index " << std::endl;
     return 0;
 }
 
@@ -129,6 +130,7 @@ int main(int argc, char *argv[])
     //Clone to create local copy
     std::complex<double> complex_zero(0, 0);
     coherency_sum->Fill(complex_zero);
+
     semblance_denom_sum->Clone(0);
     coherency_sum->Clone();
     data_in_sum->Clone(0);
@@ -138,6 +140,7 @@ int main(int argc, char *argv[])
 
     semblance_denom_sum->Merge(AU_SUM);
     coherency_sum->Merge(AU_SUM);
+    data_in_sum->Merge(AU_SUM);
 
     semblance_denom_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_semblance_denom_sum.h5:/semblance_denom_sum");
     coherency_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_coherency_sum.h5:/coherency_sum");
