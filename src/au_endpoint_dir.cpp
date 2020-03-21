@@ -95,12 +95,15 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     sub_endpoint_index = start[0] / dir_chunk_size[0];
     start[0] = 0;
     end[0] = dir_chunk_size[0] - 1;
-
+    PrintVector("start", start);
+    PrintVector("end", end);
     sub_endpoint->SetDataElementType(data_element_type);
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
     sub_endpoint->Read(start, end, data);
-
-    return sub_endpoint->Close();
+    std::cout << "DIR read sub " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
+    sub_endpoint->Close();
+    return 0;
 }
 
 /**

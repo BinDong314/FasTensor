@@ -55,7 +55,7 @@ stack_udf(const Stencil<double> &iStencil)
             ts2d[i][j] = ts2d[i][j] - median;
         }
         //Subset
-        //ts2d[i] = DasLib::TimeSubset(ts2d[i], t_start, t_end, -59, 59, sample_rate);
+        ts2d[i] = DasLib::TimeSubset(ts2d[i], t_start, t_end, -59, 59, sample_rate);
     }
     /*
     bool flag = CausalityFlagging(ts_sub, 0.05, 3.0, 10, t_start, t_end, sample_rate);
@@ -64,7 +64,7 @@ stack_udf(const Stencil<double> &iStencil)
         //Flipud(ts_sub);
     }*/
     size_t LTS_new = ts2d[0].size();
-    //std::cout << " LTS_new = " << LTS_new << "\n";
+    std::cout << " LTS_new = " << LTS_new << "\n";
     std::vector<std::vector<double>> semblance_denom;
     std::vector<std::vector<std::complex<double>>> coherency;
     semblance_denom.resize(CHS);
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
     phaseWeight->WriteArray(H_start, H_end, phaseWeight_v);
 
     semblance_denom_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblanceWeight.h5:/semblanceWeight");
-    phaseWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/phaseWeight");
+    //phaseWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/phaseWeight");
 
     delete semblance_denom_sum;
     delete coherency_sum;

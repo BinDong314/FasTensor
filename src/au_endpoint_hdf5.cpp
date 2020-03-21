@@ -335,6 +335,6 @@ int EndpointHDF5::ParseEndpointInfo()
     }
     dn_str = ExtractFileName(group_dataset_name_str);
 
-    //std::cout << "gn_str = " << gn_str << ", dn_str =" << dn_str << std::endl;
+    std::cout << "fn_str =" << fn_str << "gn_str = " << gn_str << ", dn_str =" << dn_str << std::endl;
     return 0;
 }
