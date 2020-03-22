@@ -37,26 +37,75 @@ Array<double> *data_in_sum;
 Array<double> *phaseWeight;
 
 double nStack = 0;
+
 inline Stencil<double>
 stack_udf(const Stencil<double> &iStencil)
 {
+    std::cout << "nStack: " << nStack++ << "\n";
+
     std::vector<int> start_offset{0, 0}, end_offset{CHS - 1, LTS - 1};
-    std::vector<double> ts = iStencil.Read(start_offset, end_offset);
+    //std::vector<double> ts = iStencil.Read(start_offset, end_offset);
+    std::vector<double> ts(CHS * LTS);
+    for (int i = 0; i < CHS; i++)
+    {
+        for (int j = 0; j < LTS; j++)
+        {
+            ts[i * LTS + j] = iStencil(i, j);
+        }
+    }
+
+    std::cout << "Initial data: \n";
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            std::cout << ", " << ts[i * LTS + j];
+        }
+        std::cout << "\n";
+    }
+
     std::vector<std::vector<double>> ts2d = DasLib::Vector1D2D(LTS, ts);
 
-    std::cout << "nStack: " << nStack++ << "\n";
+    std::cout << "After Vector1D2D: \n";
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            std::cout << ", " << ts2d[i][j];
+        }
+        std::cout << "\n";
+    }
+
+    DasLib::DeleteMedian(ts2d);
+
+    std::cout << "After DeleteMedian: \n";
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            std::cout << ", " << ts2d[i][j];
+        }
+        std::cout << "\n";
+    }
 
     //Remove the media
     for (int i = 0; i < CHS; i++)
     {
-        double median = DasLib::Median(ts2d[i]);
-        for (int j = 0; j < LTS; j++)
-        {
-            ts2d[i][j] = ts2d[i][j] - median;
-        }
         //Subset
         ts2d[i] = DasLib::TimeSubset(ts2d[i], t_start, t_end, -59, 59, sample_rate);
     }
+
+    std::cout << "After Subset: \n";
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            std::cout << ", " << ts2d[i][j];
+        }
+        std::cout << "\n";
+    }
+
     /*
     bool flag = CausalityFlagging(ts_sub, 0.05, 3.0, 10, t_start, t_end, sample_rate);
     if (flag == flase)
@@ -127,7 +176,7 @@ int main(int argc, char *argv[])
     phaseWeight = new Array<double>("EP_MEMORY", sc_size);
 
     //Input data,
-    Array<double> *A = new Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5:/xcoor", chunk_size, overlap_size);
+    Array<double> *A = new Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_2:/xcoor", chunk_size, overlap_size);
     std::vector<int> skip_size = {CHS, LTS};
     A->EnableApplyStride(skip_size);
 
@@ -169,7 +218,7 @@ int main(int argc, char *argv[])
     phaseWeight->WriteArray(H_start, H_end, phaseWeight_v);
 
     semblance_denom_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblanceWeight.h5:/semblanceWeight");
-    //phaseWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/phaseWeight");
+    phaseWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/phaseWeight");
 
     delete semblance_denom_sum;
     delete coherency_sum;

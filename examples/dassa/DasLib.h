@@ -22,6 +22,29 @@ inline T Median(std::vector<T> &v)
     return (v[(n - 1) / 2] + v[n / 2]) / 2.0;
 }
 
+template <class T>
+inline void DeleteMedian(std::vector<std::vector<T>> &v)
+{
+    int rows = v.size();
+    int cols = v[0].size();
+
+    std::cout << "rows = " << rows << ", cols = " << cols << "\n";
+    std::vector<T> temp_cols(rows);
+    T temp_median;
+    for (int j = 0; j < cols; j++)
+    {
+        for (int i = 0; i < rows; i++)
+        {
+            temp_cols[i] = v[i][j];
+        }
+        temp_median = Median(temp_cols);
+        for (int i = 0; i < rows; i++)
+        {
+            v[i][j] = v[i][j] - temp_median;
+        }
+    }
+}
+
 /**
  * @brief 
  * 
@@ -76,14 +99,18 @@ inline size_t InferTimeSubsetSize(double start_t, double end_t, double sub_start
 typedef std::vector<std::vector<double>> DoubleVector2D;
 
 template <class T>
-inline std::vector<std::vector<T>> Vector1D2D(size_t cols, std::vector<T> data1d)
+inline std::vector<std::vector<T>> Vector1D2D(size_t cols, std::vector<T> &data1d)
 {
     std::vector<std::vector<T>> result;
-    for (std::size_t i = 0; i < data1d.size(); ++i)
+    size_t rows = data1d.size() / cols;
+    result.resize(rows);
+    for (std::size_t i = 0; i < rows; ++i)
     {
-        if (i % cols == 0)
-            result.resize(result.size() + 1);
-        result[i / cols].push_back(data1d[i]);
+        result[i].resize(cols);
+        for (std::size_t j = 0; j < cols; ++j)
+        {
+            result[i][j] = data1d[i * cols + j];
+        }
     }
     return result;
 }

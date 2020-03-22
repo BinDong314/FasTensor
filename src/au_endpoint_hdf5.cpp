@@ -92,9 +92,6 @@ int EndpointHDF5::Create()
 
 int EndpointHDF5::Open()
 {
-    plist_id = H5Pcreate(H5P_FILE_ACCESS);
-    //Comment out for paralle VDS test on sigle node
-    //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
     fid = H5Fopen(fn_str.c_str(), read_write_flag, plist_id);
     if (fid < 0)
@@ -241,6 +238,10 @@ void EndpointHDF5::EnableCollectiveIO()
         H5Pclose(plist_cio_id);
     plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
     H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
+
+    plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    //Comment out for paralle VDS test on sigle node
+    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 }
 
 void EndpointHDF5::DisableCollectiveIO()
@@ -248,6 +249,10 @@ void EndpointHDF5::DisableCollectiveIO()
     if (plist_cio_id > 0)
         H5Pclose(plist_cio_id);
     plist_cio_id = H5P_DEFAULT;
+
+    if (plist_id > 0)
+        H5Pclose(plist_id);
+    plist_id = H5P_DEFAULT;
 }
 
 int EndpointHDF5::PrintInfo()

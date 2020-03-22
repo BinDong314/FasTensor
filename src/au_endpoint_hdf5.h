@@ -35,7 +35,7 @@ private:
     hid_t fid = -1, gid = -1, did = -1;
     hid_t dataspace_id = -1;
     std::string fn_str, gn_str, dn_str;
-    hid_t plist_id = -1, plist_cio_id = H5P_DEFAULT;
+    hid_t plist_id = H5P_DEFAULT, plist_cio_id = H5P_DEFAULT;
     hid_t mem_type, disk_type;
 
 public:
