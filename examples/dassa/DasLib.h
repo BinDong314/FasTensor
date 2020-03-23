@@ -60,9 +60,10 @@ inline void DeleteMedian(std::vector<std::vector<T>> &v)
 template <class T>
 inline std::vector<T> TimeSubset(std::vector<T> &v, double start_t, double end_t, double sub_start_t, double sub_end_t, double smaple_rate)
 {
-    size_t sub_start_index = round((sub_start_t - start_t) / smaple_rate + 1);
-    size_t sub_end_index = round((sub_end_t - start_t) / smaple_rate + 1);
+    size_t sub_start_index = round((sub_start_t - start_t) / smaple_rate);
+    size_t sub_end_index = round((sub_end_t - start_t) / smaple_rate);
 
+    //std::cout << "sub_start_index = " << sub_start_index << ", sub_end_index = " << sub_end_index << "\n";
     assert(sub_start_index >= 0);
     assert(sub_end_index >= 0);
     assert(sub_end_index >= sub_start_index);
@@ -169,7 +170,7 @@ inline std::vector<std::complex<T>> Hilbert(std::vector<T> &in)
 
     size_t HN = INN >> 1;
     size_t numRem = HN;
-    for (size_t i = 0; i < HN; i++)
+    for (size_t i = 1; i < HN; ++i)
     {
         out_temp[i][0] *= 2;
         out_temp[i][1] *= 2;
@@ -195,7 +196,7 @@ inline std::vector<std::complex<T>> Hilbert(std::vector<T> &in)
     //std::cout << "INN 2 =" << INN << "\n";
 
     std::vector<std::complex<T>> out(INN);
-    for (size_t i = 0; i < INN; i++)
+    for (size_t i = 0; i < INN; ++i)
     {
         out[i].real(in_temp[i][0] / INN);
         out[i].imag(in_temp[i][1] / INN);
@@ -462,9 +463,8 @@ inline std::vector<std::complex<T>> instanPhaseEstimator(std::vector<T> &v)
     std::vector<std::complex<T>> ov;
     ov = Hilbert(v);
     size_t N = ov.size();
-
     T ov_angle;
-    std::complex<T> minus_one(-1, 0);
+    std::complex<T> minus_one(0, -1);
     for (int i = 0; i < N; i++)
     {
         ov_angle = std::arg(ov[i]);

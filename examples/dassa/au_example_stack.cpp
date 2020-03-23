@@ -121,7 +121,7 @@ stack_udf(const Stencil<double> &iStencil)
     for (int i = 0; i < CHS; i++)
     {
         semblance_denom[i].resize(LTS_new);
-        coherency[i].resize(LTS_new);
+        //coherency[i].resize(LTS_new);
         for (int j = 0; j < LTS_new; j++)
         {
             semblance_denom[i][j] = ts2d[i][j] * ts2d[i][j];
@@ -129,7 +129,25 @@ stack_udf(const Stencil<double> &iStencil)
 
         coherency[i] = DasLib::instanPhaseEstimator(ts2d[i]);
     }
+    std::cout << "After semblance_denom: \n";
 
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            std::cout << ", " << semblance_denom[i][j];
+        }
+        std::cout << "\n";
+    }
+    std::cout << "After coherency: \n";
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            std::cout << ", " << coherency[i][j];
+        }
+        std::cout << "\n";
+    }
     std::vector<unsigned long long> H_start{0, 0}, H_end{CHS - 1, LTS_new - 1};
     std::vector<double> semblance_denom_sum_v = semblance_denom_sum->ReadArray(H_start, H_end);
     std::vector<std::complex<double>> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
@@ -159,6 +177,12 @@ int main(int argc, char *argv[])
 {
     //Init the MPICH, etc.
     AU_Init(argc, argv);
+
+    std::vector<double> v = {1, 2, 3, 4, 5, 6, 7, 8};
+    std::vector<std::complex<double>> vh = DasLib::Hilbert(v);
+    for (int i = 0; i < 8; i++)
+        std::cout << vh[i] << " ,";
+    std::cout << "\n";
 
     // set up the chunk size and the overlap size
     std::vector<int> chunk_size = {CHS, LTS};
