@@ -63,6 +63,14 @@ int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long l
 {
     T *local_mirror_buffer_typed = (T *)local_mirror_buffer;
     T *data_typed = (T *)data;
+
+    std::cout << "AccessLocalMirrorHelp: ";
+    for (int i = 0; i < 10; i++)
+    {
+        std::cout << data_typed[i] << " ,  ";
+    }
+    std::cout << "\n";
+
     switch (mirror_size.size())
     {
     case 1:
@@ -103,6 +111,7 @@ int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long l
                 {
                     local_mirror_buffer_typed[offset] = data_typed[data_typed_offset];
                 }
+                data_typed_offset++;
             }
         }
         break;
@@ -131,6 +140,7 @@ int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long l
                     {
                         local_mirror_buffer_typed[offset] = data_typed[data_typed_offset];
                     }
+                    data_typed_offset++;
                 }
             }
         }

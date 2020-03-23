@@ -43,6 +43,7 @@ int EndpointMEMORY::Create()
         break;
     }
 
+    std::cout << "Create M in M\n";
     SetOpenFlag(true);
     SetCreateFlag(true);
     return 0;
@@ -68,6 +69,7 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
     dash::Team::All().barrier();
     if(!GetCreateFlag()){
         Create();
+        std::cout << "Create in Read !\n" ;
     }
 
     if(!local_mirror_flag){
@@ -186,7 +188,9 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
 
     if(!GetCreateFlag()){
         Create();
+        std::cout << "\nCreate in write !\n" ;
     }
+
     if(!local_mirror_flag){
         std::vector<unsigned long> start_ul, end_ul;
         start_ul.resize(start.size());
@@ -279,6 +283,12 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
                 break;
             }
         }
+        std::cout << "After write: ";
+        double *tp =  (double *)local_mirror_buffer;
+        for(int i = 0; i < 10; i++){
+            std::cout << ", " << tp[i];
+        }
+        std::cout << "\n";
         return 0;
     }
 }

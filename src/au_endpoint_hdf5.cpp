@@ -92,7 +92,6 @@ int EndpointHDF5::Create()
 
 int EndpointHDF5::Open()
 {
-
     fid = H5Fopen(fn_str.c_str(), read_write_flag, plist_id);
     if (fid < 0)
     {
@@ -221,8 +220,8 @@ int EndpointHDF5::Close()
         H5Gclose(gid);
     if (fid > 0)
         H5Fclose(fid);
-    plist_id = -1;
-    plist_cio_id = -1;
+    plist_id = H5P_DEFAULT;
+    plist_cio_id = H5P_DEFAULT;
     dataspace_id = -1;
     did = -1;
     gid = -1;
@@ -340,6 +339,6 @@ int EndpointHDF5::ParseEndpointInfo()
     }
     dn_str = ExtractFileName(group_dataset_name_str);
 
-    std::cout << "fn_str =" << fn_str << "gn_str = " << gn_str << ", dn_str =" << dn_str << std::endl;
+    std::cout << "fn_str =" << fn_str << ", gn_str = " << gn_str << ", dn_str =" << dn_str << std::endl;
     return 0;
 }

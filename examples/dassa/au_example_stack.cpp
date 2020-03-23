@@ -153,6 +153,7 @@ stack_udf(const Stencil<double> &iStencil)
     std::vector<std::complex<double>> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
     std::vector<double> data_in_sum_v = data_in_sum->ReadArray(H_start, H_end);
 
+    PrintVector("data_in_sum_v read: ", data_in_sum_v);
     int offset;
     for (int i = 0; i < CHS; i++)
     {
@@ -164,6 +165,8 @@ stack_udf(const Stencil<double> &iStencil)
             data_in_sum_v[offset] = data_in_sum_v[offset] + ts2d[i][j];
         }
     }
+
+    PrintVector("data_in_sum_v after update: ", data_in_sum_v);
 
     semblance_denom_sum->WriteArray(H_start, H_end, semblance_denom_sum_v);
     coherency_sum->WriteArray(H_start, H_end, coherency_sum_v);
@@ -234,9 +237,12 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < CHS * size_after_subset; i++)
     {
+        if (i < 10)
+            std::cout << ", " << data_in_sum_v[i];
         semblance_denom_sum_v[i] = data_in_sum_v[i] * data_in_sum_v[i] / semblance_denom_sum_v[i];
         phaseWeight_v[i] = std::pow(std::abs(coherency_sum_v[i] / nStack), u);
     }
+    std::cout << "\n ";
 
     semblance_denom_sum->WriteArray(H_start, H_end, semblance_denom_sum_v);
     phaseWeight->WriteArray(H_start, H_end, phaseWeight_v);
@@ -247,6 +253,7 @@ int main(int argc, char *argv[])
     delete semblance_denom_sum;
     delete coherency_sum;
     delete data_in_sum;
+    delete phaseWeight;
 
     AU_Finalize();
 
