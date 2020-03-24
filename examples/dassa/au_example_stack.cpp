@@ -35,6 +35,7 @@ Array<double> *semblance_denom_sum;
 Array<std::complex<double>> *coherency_sum;
 Array<double> *data_in_sum;
 Array<double> *phaseWeight;
+Array<double> *semblanceWeight;
 
 double nStack = 0;
 
@@ -106,12 +107,12 @@ stack_udf(const Stencil<double> &iStencil)
         std::cout << "\n";
     }
 
-    /*
-    bool flag = CausalityFlagging(ts_sub, 0.05, 3.0, 10, t_start, t_end, sample_rate);
+    bool flag = DasLib::CausalityFlagging(ts_sub, 0.05, 3.0, 10, t_start, t_end, sample_rate);
     if (flag == flase)
     {
-        //Flipud(ts_sub);
-    }*/
+        DasLib::Flipud(ts_sub);
+    }
+
     size_t LTS_new = ts2d[0].size();
     std::cout << " LTS_new = " << LTS_new << "\n";
     std::vector<std::vector<double>> semblance_denom;
@@ -181,12 +182,6 @@ int main(int argc, char *argv[])
     //Init the MPICH, etc.
     AU_Init(argc, argv);
 
-    std::vector<double> v = {1, 2, 3, 4, 5, 6, 7, 8};
-    std::vector<std::complex<double>> vh = DasLib::Hilbert(v);
-    for (int i = 0; i < 8; i++)
-        std::cout << vh[i] << " ,";
-    std::cout << "\n";
-
     // set up the chunk size and the overlap size
     std::vector<int> chunk_size = {CHS, LTS};
     std::vector<int> overlap_size = {0, 0};
@@ -201,6 +196,7 @@ int main(int argc, char *argv[])
     coherency_sum = new Array<std::complex<double>>("EP_MEMORY", sc_size);
     data_in_sum = new Array<double>("EP_MEMORY", sc_size);
     phaseWeight = new Array<double>("EP_MEMORY", sc_size);
+    semblanceWeight = new Array<double>("EP_MEMORY", sc_size);
 
     //Input data,
     Array<double> *A = new Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_2:/xcoor", chunk_size, overlap_size);
@@ -234,21 +230,22 @@ int main(int argc, char *argv[])
     std::vector<std::complex<double>> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
     std::vector<double> data_in_sum_v = data_in_sum->ReadArray(H_start, H_end);
     std::vector<double> phaseWeight_v(coherency_sum_v.size());
+    std::vector<double> semblanceWeight_v(coherency_sum_v.size());
+
+    data_in_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_data_in_sum.h5:/data");
+    semblance_denom_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblance_denom_sum.h5:/data");
 
     for (int i = 0; i < CHS * size_after_subset; i++)
     {
-        if (i < 10)
-            std::cout << ", " << data_in_sum_v[i];
-        semblance_denom_sum_v[i] = data_in_sum_v[i] * data_in_sum_v[i] / semblance_denom_sum_v[i];
+        semblanceWeight_v[i] = data_in_sum_v[i] * data_in_sum_v[i] / semblance_denom_sum_v[i];
         phaseWeight_v[i] = std::pow(std::abs(coherency_sum_v[i] / nStack), u);
     }
-    std::cout << "\n ";
 
-    semblance_denom_sum->WriteArray(H_start, H_end, semblance_denom_sum_v);
+    semblanceWeight->WriteArray(H_start, H_end, semblanceWeight_v);
     phaseWeight->WriteArray(H_start, H_end, phaseWeight_v);
 
-    semblance_denom_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblanceWeight.h5:/semblanceWeight");
-    phaseWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/phaseWeight");
+    semblanceWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblanceWeight.h5:/data");
+    phaseWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/data");
 
     delete semblance_denom_sum;
     delete coherency_sum;

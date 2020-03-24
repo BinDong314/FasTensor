@@ -43,7 +43,6 @@ int EndpointMEMORY::Create()
         break;
     }
 
-    std::cout << "Create M in M\n";
     SetOpenFlag(true);
     SetCreateFlag(true);
     return 0;
@@ -283,12 +282,6 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
                 break;
             }
         }
-        std::cout << "After write: ";
-        double *tp =  (double *)local_mirror_buffer;
-        for(int i = 0; i < 10; i++){
-            std::cout << ", " << tp[i];
-        }
-        std::cout << "\n";
         return 0;
     }
 }

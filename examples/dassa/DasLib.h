@@ -116,7 +116,6 @@ inline std::vector<std::vector<T>> Vector1D2D(size_t cols, std::vector<T> &data1
     return result;
 }
 
-/*
 template <class T>
 inline bool CausalityFlagging(std::vector<T> &v, double tmin, double tmax, double fmax, double start_t, double end_t, double smaple_rate)
 {
@@ -132,7 +131,6 @@ inline bool CausalityFlagging(std::vector<T> &v, double tmin, double tmax, doubl
     std::vector<double> Dsi_causal = TimeSubset(v_sub_new, tmin, tmax * 0.9);
     std::vector<double> rms_causal = TimeSubset(v_sub_new, -tmax * 0.9, -tmin);
 } // namespace DasLib
-*/
 
 //double rms(double x[], int n)
 template <class T>
