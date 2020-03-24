@@ -31,11 +31,11 @@ double t_start = -59.9920000000000, t_end = 59.9920000000000, sample_rate = 0.00
 double u = 0.3;
 std::vector<unsigned long long> sc_size(2);
 
-Array<double> *semblance_denom_sum;
-Array<std::complex<double>> *coherency_sum;
-Array<double> *data_in_sum;
-Array<double> *phaseWeight;
-Array<double> *semblanceWeight;
+AU::Array<double> *semblance_denom_sum;
+AU::Array<std::complex<double>> *coherency_sum;
+AU::Array<double> *data_in_sum;
+AU::Array<double> *phaseWeight;
+AU::Array<double> *semblanceWeight;
 
 double nStack = 0;
 
@@ -107,10 +107,10 @@ stack_udf(const Stencil<double> &iStencil)
         std::cout << "\n";
     }
 
-    bool flag = DasLib::CausalityFlagging(ts_sub, 0.05, 3.0, 10, t_start, t_end, sample_rate);
-    if (flag == flase)
+    bool flag = DasLib::CausalityFlagging(ts2d, 0.05, 3.0, 10, t_start, t_end, sample_rate);
+    if (flag == false)
     {
-        DasLib::Flipud(ts_sub);
+        std::reverse(ts2d.begin(), ts2d.end());
     }
 
     size_t LTS_new = ts2d[0].size();
@@ -192,14 +192,14 @@ int main(int argc, char *argv[])
 
     std::cout << "size_after_subset = " << size_after_subset << "\n";
 
-    semblance_denom_sum = new Array<double>("EP_MEMORY", sc_size);
-    coherency_sum = new Array<std::complex<double>>("EP_MEMORY", sc_size);
-    data_in_sum = new Array<double>("EP_MEMORY", sc_size);
-    phaseWeight = new Array<double>("EP_MEMORY", sc_size);
-    semblanceWeight = new Array<double>("EP_MEMORY", sc_size);
+    semblance_denom_sum = new AU::Array<double>("EP_MEMORY", sc_size);
+    coherency_sum = new AU::Array<std::complex<double>>("EP_MEMORY", sc_size);
+    data_in_sum = new AU::Array<double>("EP_MEMORY", sc_size);
+    phaseWeight = new AU::Array<double>("EP_MEMORY", sc_size);
+    semblanceWeight = new AU::Array<double>("EP_MEMORY", sc_size);
 
     //Input data,
-    Array<double> *A = new Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_2:/xcoor", chunk_size, overlap_size);
+    AU::Array<double> *A = new AU::Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_2:/xcoor", chunk_size, overlap_size);
     std::vector<int> skip_size = {CHS, LTS};
     A->EnableApplyStride(skip_size);
 
