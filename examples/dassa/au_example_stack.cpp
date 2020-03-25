@@ -150,6 +150,8 @@ int main(int argc, char *argv[])
     coherency_sum->Clone();
     data_in_sum->Clone(0);
 
+    std::cout << "Pre apply \n";
+
     //Run
     A->Apply(stack_udf);
 

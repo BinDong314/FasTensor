@@ -228,7 +228,7 @@ inline bool CausalityFlagging(std::vector<std::vector<T>> &v, double tmin, doubl
             std::cout << " tv1[i].size = " << tv1[i].size() << "\n";
             PrintVector("tv1", tv1[i]);
         }
-        filtfilt(A, , tv1[i], tv2[i]);
+        filtfilt(A, B, tv1[i], tv2[i]);
         if (i == 0)
             PrintVector("tv2", tv2[i]);
         tv3[i] = TimeSubset(tv2[i], -tmax, tmax, tmin, tmax * 0.9, smaple_rate);   //causal
