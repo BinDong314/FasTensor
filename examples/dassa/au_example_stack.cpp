@@ -142,6 +142,8 @@ int main(int argc, char *argv[])
     std::vector<int> skip_size = {CHS, LTS};
     A->EnableApplyStride(skip_size);
 
+    std::cout << "Pre clone \n";
+
     //Clone to create local copy
     std::complex<double> complex_zero(0, 0);
     coherency_sum->Fill(complex_zero);
