@@ -86,18 +86,20 @@ template <typename T>
 inline void PrintVector(std::string name, std::vector<T> v)
 {
     int n = v.size();
-    std::cout << name << ": ";
-    if (n > 60)
+    if (name != "")
+        std::cout << name << ": ";
+    if (n > 8)
     {
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 4; i++)
         {
             std::cout << v[i] << ",";
         }
         std::cout << " ... ";
-        for (int i = n - 30; i < n; i++)
+        for (int i = n - 4; i < n - 1; i++)
         {
             std::cout << v[i] << ",";
         }
+        std::cout << v[n - 1];
     }
     else
     {
@@ -106,6 +108,34 @@ inline void PrintVector(std::string name, std::vector<T> v)
             std::cout << v[i] << ",";
         }
         std::cout << v[n - 1];
+    }
+    std::cout << std::endl;
+}
+
+template <typename T>
+inline void PrintVV(std::string name, std::vector<std::vector<T>> v)
+{
+    int n = v.size();
+    std::cout << name << ": ";
+
+    if (n > 8)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            PrintVector("", v[i]);
+        }
+        std::cout << " ... \n";
+        for (int i = n - 4; i < n; i++)
+        {
+            PrintVector("", v[i]);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < n - 1; i++)
+        {
+            PrintVector("", v[i]);
+        }
     }
     std::cout << std::endl;
 }

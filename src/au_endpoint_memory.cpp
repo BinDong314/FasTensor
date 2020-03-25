@@ -65,7 +65,7 @@ int EndpointMEMORY::Open()
 int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
     //AU_INFO("Memory read");
-    dash::Team::All().barrier();
+    //dash::Team::All().barrier();
     if(!GetCreateFlag()){
         Create();
         std::cout << "Create in Read !\n" ;
@@ -183,7 +183,7 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
      */
 int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
-    dash::Team::All().barrier();
+    //dash::Team::All().barrier();
 
     if(!GetCreateFlag()){
         Create();
@@ -369,6 +369,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         AU_EXIT("Invalued endpoint_info");
     }
 
+
     /*
     Endpoint *sub_endpoint = new EndpointHDF5();
     sub_endpoint->SetDataElementType(data_element_type);
@@ -376,7 +377,6 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
     sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
     sub_endpoint->Create();
     sub_endpoint->Write(start, end, data);
-
     return 0;*/
 
     //if(!local_mirror_flag){
@@ -847,7 +847,10 @@ int EndpointMEMORY::MergeMirrors(std::string op_str){
         }
     }
 
-    std::cout << "Pre write merged result to dash\n" ;    
+  
+
+    if(!au_mpi_rank_global)
+        std::cout << "Pre write merged result to dash disabled\n" ;    
     if(!au_mpi_rank_global && false){
         std::vector<unsigned long> start_ul, end_ul;
         start_ul.resize(endpoint_dim_size.size());

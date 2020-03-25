@@ -205,9 +205,10 @@ public:
     if (endpoint->GetEndpointType() == EP_MEMORY)
     {
       endpoint_memory_flag = true;
-      endpoint->SetDimensions(size_p);
-      endpoint->Create();
     }
+
+    endpoint->SetDimensions(size_p);
+    endpoint->Create();
     data_size = size_p;
   }
 

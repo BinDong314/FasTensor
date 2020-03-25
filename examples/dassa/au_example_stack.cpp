@@ -26,8 +26,8 @@ using namespace AU;
 
 #define LTS 14999 //length of time series
 #define CHS 201   //channels
-extern int au_mpi_size_global;
-extern int au_mpi_rank_global;
+extern int au_size;
+extern int au_rank;
 
 double t_start = -59.9920000000000, t_end = 59.9920000000000, sample_rate = 0.00800000000000000;
 double u = 0.3;
@@ -59,6 +59,7 @@ stack_udf(const Stencil<double> &iStencil)
             ts2d[i][j] = iStencil(i, j);
         }
     }
+    PrintVV("ts2d at rank " + std::to_string(au_rank), ts2d);
 
     DasLib::DeleteMedian(ts2d);
 
@@ -98,6 +99,7 @@ stack_udf(const Stencil<double> &iStencil)
     std::vector<std::complex<double>> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
     std::vector<double> data_in_sum_v = data_in_sum->ReadArray(H_start, H_end);
 
+    //PrintVector("coherency_sum_v (before) " + std::to_string(au_rank), data_in_sum_v);
     int offset;
     for (int i = 0; i < CHS; i++)
     {
@@ -109,6 +111,8 @@ stack_udf(const Stencil<double> &iStencil)
             data_in_sum_v[offset] = data_in_sum_v[offset] + ts2d[i][j];
         }
     }
+
+    PrintVector("coherency_sum_v (after)" + std::to_string(au_rank), coherency_sum_v);
 
     semblance_denom_sum->WriteArray(H_start, H_end, semblance_denom_sum_v);
     coherency_sum->WriteArray(H_start, H_end, coherency_sum_v);
@@ -137,8 +141,8 @@ int main(int argc, char *argv[])
     coherency_sum = new AU::Array<std::complex<double>>("EP_MEMORY", sc_size);
     data_in_sum = new AU::Array<double>("EP_MEMORY", sc_size);
 
-    phaseWeight = new AU::Array<double>("EP_HDF5:./xcorr_examples_h5_stack_semblanceWeight.h5:/data", sc_size);
-    semblanceWeight = new AU::Array<double>("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/data", sc_size);
+    semblanceWeight = new AU::Array<double>("EP_HDF5:./xcorr_examples_h5_stack_semblanceWeight.h5:/data", sc_size);
+    phaseWeight = new AU::Array<double>("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/data", sc_size);
 
     //semblanceWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblanceWeight.h5:/data");
     //phaseWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/data");
@@ -158,7 +162,7 @@ int main(int argc, char *argv[])
     std::cout << "Clone semblance_denom_sum  \n";
     coherency_sum->Clone();
     std::cout << "Clone coherency_sum  \n";
-    data_in_sum->Clone(0);
+    data_in_sum->Clone();
     std::cout << "Pre apply \n";
 
     //Run
@@ -168,37 +172,48 @@ int main(int argc, char *argv[])
     coherency_sum->Merge(AU_SUM);
     data_in_sum->Merge(AU_SUM);
 
-    std::cout << "nStack = " << nStack << "\n";
+    double TotalStack;
+    AU_Reduce(&nStack, &TotalStack, 1, MPI_DOUBLE, AU_SUM, 0, MPI_COMM_WORLD);
+    std::cout << "Total nStack = " << TotalStack << "\n";
     //semblance_denom_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_semblance_denom_sum.h5:/semblance_denom_sum");
     //coherency_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_coherency_sum.h5:/coherency_sum");
 
     //Clear
     delete A;
 
-    std::vector<unsigned long long> H_start{0, 0}, H_end{CHS - 1, size_after_subset - 1};
-
-    std::vector<double> semblance_denom_sum_v = semblance_denom_sum->ReadArray(H_start, H_end);
-    std::vector<std::complex<double>> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
-    std::vector<double> data_in_sum_v = data_in_sum->ReadArray(H_start, H_end);
-
-    std::vector<double> phaseWeight_v(coherency_sum_v.size());
-    std::vector<double> semblanceWeight_v(coherency_sum_v.size());
-
-    //if (!au_mpi_rank_global)
-    //{
-    //data_in_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_data_in_sum.h5:/data");
-    //semblance_denom_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblance_denom_sum.h5:/data");
-
-    for (int i = 0; i < CHS * size_after_subset; i++)
+    if (!au_rank)
     {
-        semblanceWeight_v[i] = data_in_sum_v[i] * data_in_sum_v[i] / semblance_denom_sum_v[i];
-        phaseWeight_v[i] = std::pow(std::abs(coherency_sum_v[i] / nStack), u);
+        std::vector<unsigned long long> H_start{0, 0}, H_end{CHS - 1, size_after_subset - 1};
+
+        std::vector<double> semblance_denom_sum_v = semblance_denom_sum->ReadArray(H_start, H_end);
+        std::vector<std::complex<double>> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
+        std::vector<double> data_in_sum_v = data_in_sum->ReadArray(H_start, H_end);
+
+        std::vector<double> phaseWeight_v(coherency_sum_v.size());
+        std::vector<double> semblanceWeight_v(coherency_sum_v.size());
+
+        PrintVector("data_in_sum_v", data_in_sum_v);
+
+        PrintVector("coherency_sum_v", coherency_sum_v);
+
+        PrintVector("semblance_denom_sum_v", semblance_denom_sum_v);
+
+        //data_in_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_data_in_sum.h5:/data");
+        //semblance_denom_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblance_denom_sum.h5:/data");
+
+        for (int i = 0; i < CHS * size_after_subset; i++)
+        {
+            semblanceWeight_v[i] = data_in_sum_v[i] * data_in_sum_v[i] / semblance_denom_sum_v[i];
+            phaseWeight_v[i] = std::pow(std::abs(coherency_sum_v[i] / TotalStack), u);
+        }
+
+        PrintVector("semblanceWeight_v", semblanceWeight_v);
+
+        PrintVector("phaseWeight_v", phaseWeight_v);
+
+        semblanceWeight->WriteArray(H_start, H_end, semblanceWeight_v);
+        phaseWeight->WriteArray(H_start, H_end, phaseWeight_v);
     }
-
-    semblanceWeight->WriteArray(H_start, H_end, semblanceWeight_v);
-    phaseWeight->WriteArray(H_start, H_end, phaseWeight_v);
-    //}
-
     delete semblance_denom_sum;
     delete coherency_sum;
     delete data_in_sum;

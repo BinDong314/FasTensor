@@ -161,6 +161,12 @@ T *MergeMirrorsHelp(void *local_mirror_buffer, unsigned long long &local_mirror_
     AU_MPI_Op merge_op = InferMPIMergeOp(opt_str);
 
     AU_Reduce(local_mirror_buffer, reduced_mirror_buffer, local_mirror_size, merge_data_type, merge_op, 0, MPI_COMM_WORLD_DEFAULT);
+
+    if (!au_mpi_rank_global)
+    {
+        std::memcpy(local_mirror_buffer, reduced_mirror_buffer, local_mirror_size * sizeof(T));
+    }
+
     return reduced_mirror_buffer;
 }
 
