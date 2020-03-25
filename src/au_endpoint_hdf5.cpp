@@ -92,6 +92,11 @@ int EndpointHDF5::Create()
 
 int EndpointHDF5::Open()
 {
+    if (file_exist(fn_str.c_str()) == 0)
+    {
+        Create();
+    }
+
     fid = H5Fopen(fn_str.c_str(), read_write_flag, plist_id);
     if (fid < 0)
     {

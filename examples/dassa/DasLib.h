@@ -210,35 +210,21 @@ inline bool CausalityFlagging(std::vector<std::vector<T>> &v, double tmin, doubl
 
     std::vector<double> A, B;
     ButterLow(3, 0.16, A, B);
-    PrintScalar("N", N);
+
+    /*PrintScalar("N", N);
     PrintVector("A", A);
     PrintVector("B", B);
     PrintScalar("start_t", start_t);
     PrintScalar("end_t", end_t);
     PrintScalar("smaple_rate", smaple_rate);
-    PrintScalar("tmax", tmax);
+    PrintScalar("tmax", tmax);*/
 
     for (int i = 0; i < N; i++)
     {
-        if (i == 0)
-            PrintVector("v", v[i]);
         tv1[i] = TimeSubset(v[i], start_t, end_t, -tmax, tmax, smaple_rate);
-        if (i == 0)
-        {
-            std::cout << " tv1[i].size = " << tv1[i].size() << "\n";
-            PrintVector("tv1", tv1[i]);
-        }
         filtfilt(A, B, tv1[i], tv2[i]);
-        if (i == 0)
-            PrintVector("tv2", tv2[i]);
         tv3[i] = TimeSubset(tv2[i], -tmax, tmax, tmin, tmax * 0.9, smaple_rate);   //causal
         tv4[i] = TimeSubset(tv2[i], -tmax, tmax, -tmax * 0.9, -tmin, smaple_rate); //acausal
-
-        if (i == 0)
-        {
-            PrintVector("tv3", tv3[i]);
-            PrintVector("tv4", tv4[i]);
-        }
     }
     std::vector<double> rms_acausal(N), rms_causal(N);
 
@@ -248,12 +234,12 @@ inline bool CausalityFlagging(std::vector<std::vector<T>> &v, double tmin, doubl
         rms_acausal[i] = Rms(tv4[i]);
     }
 
-    PrintVector("rms_causal: ", rms_causal);
-    PrintVector("rms_acausal: ", rms_acausal);
+    //PrintVector("rms_causal: ", rms_causal);
+    //PrintVector("rms_acausal: ", rms_acausal);
 
     double rms_acausal_mean = Mean(rms_acausal);
     double rms_causal_mean = Mean(rms_causal);
-    std::cout << "rms_causal_mean = " << rms_causal_mean << ", rms_causal_mean =" << rms_causal_mean << "\n";
+    //std::cout << "rms_causal_mean = " << rms_causal_mean << ", rms_causal_mean =" << rms_causal_mean << "\n";
     if (rms_acausal_mean < rms_causal_mean)
     {
         return true;

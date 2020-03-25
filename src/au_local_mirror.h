@@ -43,6 +43,9 @@ void *CreateLocalMirrorHelp(std::string init_value_str, size_t local_mirror_size
         return NULL;
     }
 
+    //Set it to zeror by default
+    std::memset(local_mirror_buffer_typed, 0, local_mirror_size * sizeof(T));
+
     if (init_value_str != "")
     {
         std::istringstream reader(init_value_str);
