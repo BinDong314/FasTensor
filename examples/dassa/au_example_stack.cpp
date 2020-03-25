@@ -46,48 +46,19 @@ stack_udf(const Stencil<double> &iStencil)
 
     std::vector<int> start_offset{0, 0}, end_offset{CHS - 1, LTS - 1};
     //std::vector<double> ts = iStencil.Read(start_offset, end_offset);
-    std::vector<double> ts(CHS * LTS);
+    //std::vector<double> ts(CHS * LTS);
+    std::vector<std::vector<double>> ts2d;
+    ts2d.resize(CHS);
     for (int i = 0; i < CHS; i++)
     {
+        ts2d[i].resize(LTS);
         for (int j = 0; j < LTS; j++)
         {
-            ts[i * LTS + j] = iStencil(i, j);
+            ts2d[i][j] = iStencil(i, j);
         }
-    }
-
-    std::cout << "Initial data: \n";
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            std::cout << ", " << ts[i * LTS + j];
-        }
-        std::cout << "\n";
-    }
-
-    std::vector<std::vector<double>> ts2d = DasLib::Vector1D2D(LTS, ts);
-
-    std::cout << "After Vector1D2D: \n";
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            std::cout << ", " << ts2d[i][j];
-        }
-        std::cout << "\n";
     }
 
     DasLib::DeleteMedian(ts2d);
-
-    std::cout << "After DeleteMedian: \n";
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            std::cout << ", " << ts2d[i][j];
-        }
-        std::cout << "\n";
-    }
 
     //Remove the media
     for (int i = 0; i < CHS; i++)
@@ -96,25 +67,14 @@ stack_udf(const Stencil<double> &iStencil)
         ts2d[i] = DasLib::TimeSubset(ts2d[i], t_start, t_end, -59, 59, sample_rate);
     }
 
-    std::cout << "After Subset: \n";
-
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            std::cout << ", " << ts2d[i][j];
-        }
-        std::cout << "\n";
-    }
-
-    bool flag = DasLib::CausalityFlagging(ts2d, 0.05, 3.0, 10, t_start, t_end, sample_rate);
+    bool flag = DasLib::CausalityFlagging(ts2d, 0.05, 3.0, 10, -59, 59, sample_rate);
     if (flag == false)
     {
         std::reverse(ts2d.begin(), ts2d.end());
+        std::cout << "reverse ts2d\n";
     }
 
     size_t LTS_new = ts2d[0].size();
-    std::cout << " LTS_new = " << LTS_new << "\n";
     std::vector<std::vector<double>> semblance_denom;
     std::vector<std::vector<std::complex<double>>> coherency;
     semblance_denom.resize(CHS);
@@ -130,31 +90,12 @@ stack_udf(const Stencil<double> &iStencil)
 
         coherency[i] = DasLib::instanPhaseEstimator(ts2d[i]);
     }
-    std::cout << "After semblance_denom: \n";
 
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            std::cout << ", " << semblance_denom[i][j];
-        }
-        std::cout << "\n";
-    }
-    std::cout << "After coherency: \n";
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            std::cout << ", " << coherency[i][j];
-        }
-        std::cout << "\n";
-    }
     std::vector<unsigned long long> H_start{0, 0}, H_end{CHS - 1, LTS_new - 1};
     std::vector<double> semblance_denom_sum_v = semblance_denom_sum->ReadArray(H_start, H_end);
     std::vector<std::complex<double>> coherency_sum_v = coherency_sum->ReadArray(H_start, H_end);
     std::vector<double> data_in_sum_v = data_in_sum->ReadArray(H_start, H_end);
 
-    PrintVector("data_in_sum_v read: ", data_in_sum_v);
     int offset;
     for (int i = 0; i < CHS; i++)
     {
@@ -166,8 +107,6 @@ stack_udf(const Stencil<double> &iStencil)
             data_in_sum_v[offset] = data_in_sum_v[offset] + ts2d[i][j];
         }
     }
-
-    PrintVector("data_in_sum_v after update: ", data_in_sum_v);
 
     semblance_denom_sum->WriteArray(H_start, H_end, semblance_denom_sum_v);
     coherency_sum->WriteArray(H_start, H_end, coherency_sum_v);

@@ -95,9 +95,9 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     sub_endpoint_index = start[0] / dir_chunk_size[0];
     start[0] = 0;
     end[0] = dir_chunk_size[0] - 1;
-    PrintVector("start", start);
-    PrintVector("end", end);
-    std::cout << "DIR read sub (before) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
+    //PrintVector("start", start);
+    //PrintVector("end", end);
+    //std::cout << "DIR read sub (before) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
 
     sub_endpoint->SetDataElementType(data_element_type);
     sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
@@ -106,7 +106,7 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     sub_endpoint->Read(start, end, data);
     sub_endpoint->Close();
 
-    std::cout << "DIR read sub (after) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
+    //std::cout << "DIR read sub (after) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
 
     return 0;
 }
