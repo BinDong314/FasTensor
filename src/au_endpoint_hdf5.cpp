@@ -34,7 +34,7 @@ int EndpointHDF5::Create()
     Map2MyType();
     std::string root_dir = "/";
     plist_id = H5Pcreate(H5P_FILE_ACCESS);
-    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+    //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
     if (file_exist(fn_str.c_str()) == 0)
     {

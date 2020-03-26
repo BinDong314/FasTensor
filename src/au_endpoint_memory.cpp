@@ -370,14 +370,27 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
     }
 
 
-    /*
-    Endpoint *sub_endpoint = new EndpointHDF5();
-    sub_endpoint->SetDataElementType(data_element_type);
-    sub_endpoint->SetDimensions(endpoint_dim_size);
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
-    sub_endpoint->Create();
-    sub_endpoint->Write(start, end, data);
-    return 0;*/
+    std::cout << "Nonvolatile \n";
+    if(!au_mpi_rank_global){
+        std::vector<unsigned long long> start(endpoint_dim_size.size()), end(endpoint_dim_size.size());
+
+        for(int i = 0; i < endpoint_dim_size.size(); i++){
+            start[i] = 0;
+            end[i] = endpoint_dim_size[i] -1;
+        }
+        Endpoint *sub_endpoint = new EndpointHDF5();
+        sub_endpoint->SetDataElementType(data_element_type);
+        sub_endpoint->SetDimensions(endpoint_dim_size);
+        sub_endpoint->SetEndpointInfo(parameter);
+        
+        PrintVector("endpoint_dim_size", endpoint_dim_size);
+        std::cout << "Create pre \n";
+        sub_endpoint->Create();
+        std::cout << "Write pre \n";
+        sub_endpoint->Write(start, end, local_mirror_buffer);
+    }
+
+    return 0;
 
     //if(!local_mirror_flag){
         switch (endpoint_dim_size.size())

@@ -59,7 +59,7 @@ stack_udf(const Stencil<double> &iStencil)
             ts2d[i][j] = iStencil(i, j);
         }
     }
-    PrintVV("ts2d at rank " + std::to_string(au_rank), ts2d);
+    //PrintVV("ts2d at rank " + std::to_string(au_rank), ts2d);
 
     DasLib::DeleteMedian(ts2d);
 
@@ -112,7 +112,7 @@ stack_udf(const Stencil<double> &iStencil)
         }
     }
 
-    PrintVector("coherency_sum_v (after)" + std::to_string(au_rank), coherency_sum_v);
+    //PrintVector("coherency_sum_v (after)" + std::to_string(au_rank), coherency_sum_v);
 
     semblance_denom_sum->WriteArray(H_start, H_end, semblance_denom_sum_v);
     coherency_sum->WriteArray(H_start, H_end, coherency_sum_v);
@@ -192,14 +192,14 @@ int main(int argc, char *argv[])
         std::vector<double> phaseWeight_v(coherency_sum_v.size());
         std::vector<double> semblanceWeight_v(coherency_sum_v.size());
 
-        PrintVector("data_in_sum_v", data_in_sum_v);
+        //PrintVector("data_in_sum_v", data_in_sum_v);
 
-        PrintVector("coherency_sum_v", coherency_sum_v);
+        //PrintVector("coherency_sum_v", coherency_sum_v);
 
-        PrintVector("semblance_denom_sum_v", semblance_denom_sum_v);
+        //PrintVector("semblance_denom_sum_v", semblance_denom_sum_v);
 
-        //data_in_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_data_in_sum.h5:/data");
-        //semblance_denom_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblance_denom_sum.h5:/data");
+        data_in_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_data_in_sum.h5:/data");
+        semblance_denom_sum->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblance_denom_sum.h5:/data");
 
         for (int i = 0; i < CHS * size_after_subset; i++)
         {
@@ -207,9 +207,9 @@ int main(int argc, char *argv[])
             phaseWeight_v[i] = std::pow(std::abs(coherency_sum_v[i] / TotalStack), u);
         }
 
-        PrintVector("semblanceWeight_v", semblanceWeight_v);
+        //PrintVector("semblanceWeight_v", semblanceWeight_v);
 
-        PrintVector("phaseWeight_v", phaseWeight_v);
+        //PrintVector("phaseWeight_v", phaseWeight_v);
 
         semblanceWeight->WriteArray(H_start, H_end, semblanceWeight_v);
         phaseWeight->WriteArray(H_start, H_end, phaseWeight_v);
