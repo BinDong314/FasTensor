@@ -3,6 +3,8 @@ See copyright at the end.
 
 
 1, Required software packages:
+
+```
    Note:
           1), Install MPICH2 before HDF5 to enable the parallel I/O in HDF5
           2), add mpicc/mpicxx/mpirun from MPICH2 installation to your PATH
@@ -14,6 +16,7 @@ See copyright at the end.
        https://www.hdfgroup.org/downloads/hdf5/source-code/
 
    -- DASH from  https://github.com/dash-project/dash/   
+```
 
 2, HDF5
 ```
@@ -26,9 +29,11 @@ See copyright at the end.
 ```
 
 3, DASH
+
+```
  > cd tools3rd
- > 
- > git clone https://github.com/dash-project/dash.git
+ > tar zxvf dash.tar.gz
+   (or git clone https://github.com/dash-project/dash.git )
  > vim build.minimal.sh
    Change 
       -DENABLE_HDF5=OFF 
@@ -37,13 +42,19 @@ See copyright at the end.
    Your may also need to setup HDF5_ROOT to HDF5 installation directory if DASH can not find HDF5
 
  > make -C ./build install 
+```
 
 4, FastTensor
+```
  > ./configure --prefix=$PWD/build --with-hdf5=../hdf5-1.12.0/build/build/ CXX=mpic++ CC=mpicc --with-dash=/Users/dbin/opt/dash-0.4.0/
+```
 
+5, Error issue with DASH/C++ compiler:
 
-Error issue:
 /Users/dbin/opt/dash-0.4.0//include/cpp17/cstddef.h:12:12: error:
       redefinition of 'byte'
 enum class byte : unsigned char {};
+
+You can resolve it by 
+  cp dash/cstddef.h ~/opt/dash-0.4.0/include/cpp17/
 
