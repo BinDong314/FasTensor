@@ -147,7 +147,9 @@ int main(int argc, char *argv[])
     //semblanceWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_semblanceWeight.h5:/data");
     //phaseWeight->Nonvolatile("EP_HDF5:./xcorr_examples_h5_stack_phaseWeight.h5:/data");
     //Input data,
-    AU::Array<double> *A = new AU::Array<double>("EP_DIR:EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_2:/xcoor", chunk_size, overlap_size);
+    std::string XCORR_DIR = "/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_2";
+    AU::Array<double> *A = new AU::Array<double>("EP_DIR:EP_HDF5:" + XCORR_DIR + ":/xcoor", chunk_size, overlap_size);
+
     std::vector<int> skip_size = {CHS, LTS};
     A->EnableApplyStride(skip_size);
 
