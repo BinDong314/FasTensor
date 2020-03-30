@@ -1,5 +1,7 @@
 1. See ../../Readme to install ArrayUDF first.
+
 2, Install FFTW
+
    ```
    either use existing modules (e.g., apt get insall fftw3, module load fftw3, etc.)
    or install your own (see DIY tips)
@@ -22,8 +24,11 @@
    To be the directory contains all xcorr files. 
    
 5, make
+
 6, ./au_example_stack
+
 7, Output files will be 
+
 ```
     xcorr_examples_h5_stack_data_in_sum.h5
     xcorr_examples_h5_stack_phaseWeight.h5
@@ -32,6 +37,7 @@
 ```
 
 DIY Tips on FFTW:
+
 ```
 > cd Tools3rd
 > tar zxvf fftw-3.3.8.tar.gz

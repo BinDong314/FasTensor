@@ -19,6 +19,7 @@ See copyright at the end.
 ```
 
 2, HDF5
+
 ```
  > cd tools3rd
  > tar zxvf hdf5-1.12.0.tar.gz
@@ -45,16 +46,21 @@ See copyright at the end.
 ```
 
 4, FastTensor
+
 ```
  > ./configure --prefix=$PWD/build --with-hdf5=../hdf5-1.12.0/build/build/ CXX=mpic++ CC=mpicc --with-dash=/Users/dbin/opt/dash-0.4.0/
 ```
 
 5, Error issue with DASH/C++ compiler:
 
+```
 /Users/dbin/opt/dash-0.4.0//include/cpp17/cstddef.h:12:12: error:
       redefinition of 'byte'
 enum class byte : unsigned char {};
+```
 
 You can resolve it by 
-  cp dash/cstddef.h ~/opt/dash-0.4.0/include/cpp17/
 
+```
+  cp dash/cstddef.h ~/opt/dash-0.4.0/include/cpp17/
+```
