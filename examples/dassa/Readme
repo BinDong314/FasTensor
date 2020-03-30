@@ -4,12 +4,13 @@
 
    ```
    either use existing modules (e.g., apt get insall fftw3, module load fftw3, etc.)
+   
    or install your own (see DIY tips)
    ```
 
 3, Edit the Makefile
 
-  ```
+```
    AU_DIR=/Users/dbin/work/FastTensor/build
    HDF5_DIR=/Users/dbin/work/soft/hdf5-1.10.5/build
    FFTW_DIR=/Users/dbin/work/test-fasttensor/fasttensor/examples/dassa/Tools3rd/fftw-3.3.8/build
@@ -21,6 +22,7 @@
 ```
    std::string XCORR_DIR = "/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_2";
 ```
+   
    To be the directory contains all xcorr files. 
    
 5, make
