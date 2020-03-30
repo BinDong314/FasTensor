@@ -1,12 +1,12 @@
+
 1. See ../../Readme to install ArrayUDF first.
 
 2, Install FFTW
 
-   ```
+  
    either use existing modules (e.g., apt get insall fftw3, module load fftw3, etc.)
-   
    or install your own (see DIY tips)
-   ```
+ 
 
 3, Edit the Makefile
 
