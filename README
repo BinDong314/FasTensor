@@ -16,13 +16,15 @@ See copyright at the end.
    -- DASH from  https://github.com/dash-project/dash/   
 
 2, HDF5
+```
  > cd tools3rd
  > tar zxvf hdf5-1.12.0.tar.gz
  > cd hdf5-1.12.0
  > ./autogen.sh
  > ./configure --enable-parallel --prefix=$PWD/build CC=mpicc
  >  make install
- 
+```
+
 3, DASH
  > cd tools3rd
  > 
