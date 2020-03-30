@@ -1,12 +1,11 @@
 
 
 #Bin's Mac
-##export PATH=$PATH;/opt/local/bin
-AU_DIR=/Users/dbin/work/FastTensor/build
-HDF5_DIR=/Users/dbin/work/soft/hdf5-1.10.5/build
-FFTW_DIR=/opt/local/
+AU_DIR=/Users/dbin/work/test-fasttensor/fasttensor/build
+HDF5_DIR=/Users/dbin/work/test-fasttensor/hdf5-1.12.0/build
+FFTW_DIR=/Users/dbin/work/test-fasttensor/fasttensor/examples/dassa/Tools3rd/fftw-3.3.8/build
 DASH_DIR=/Users/dbin/opt/dash-0.4.0
-EIGEN3_DIR=/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/fft-header
+EIGEN3_DIR=/Users/dbin/work/test-fasttensor/fasttensor/examples/dassa/Tools3rd
 
 CCC=mpicxx
 OTHER_FLAGS=-O0 -g  -std=c++17 DasLib3rd.cpp
