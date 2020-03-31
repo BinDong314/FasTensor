@@ -33,18 +33,26 @@ int EndpointHDF5::Create()
 {
     Map2MyType();
     std::string root_dir = "/";
-    plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    //plist_id = H5Pcreate(H5P_FILE_ACCESS);
     //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
-
     if (file_exist(fn_str.c_str()) == 0)
     {
+        std::cout << "Call H5Fcreate 1 : " << fn_str << "\n";
+
         fid = H5Fcreate(fn_str.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
     }
     else
     {
         fid = H5Fopen(fn_str.c_str(), H5F_ACC_RDWR, plist_id);
         if (fid < 0)
+        {
+            std::cout << "Call H5Fcreate 2\n";
             fid = H5Fcreate(fn_str.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
+        }
+        if (fid < 0)
+        {
+            AU_EXIT("Can not create/open file !");
+        }
     }
 
     if (gn_str != root_dir)
@@ -95,6 +103,7 @@ int EndpointHDF5::Open()
     if (file_exist(fn_str.c_str()) == 0)
     {
         Create();
+        std::cout << "Call create in Open again !\n";
     }
 
     fid = H5Fopen(fn_str.c_str(), read_write_flag, plist_id);
@@ -183,8 +192,9 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
         ExtractMeta(); //Re-open it
     }*/
     Map2MyType();
+    Close();
     SetRwFlag(H5F_ACC_RDWR);
-    ExtractMeta(); //Re-open it
+    Open(); //Re-open it
 
     std::vector<unsigned long long> offset, count;
     offset.resize(endpoint_ranks);

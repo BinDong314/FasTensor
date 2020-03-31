@@ -382,11 +382,11 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         sub_endpoint->SetDataElementType(data_element_type);
         sub_endpoint->SetDimensions(endpoint_dim_size);
         sub_endpoint->SetEndpointInfo(parameter);
-        
+        std::cout << sub_endpoint->GetEndpointInfo() << "\n";
         PrintVector("endpoint_dim_size", endpoint_dim_size);
-        std::cout << "Create pre \n";
+        //std::cout << "Create pre \n";
         sub_endpoint->Create();
-        std::cout << "Write pre \n";
+        //std::cout << "Write pre \n";
         sub_endpoint->Write(start, end, local_mirror_buffer);
     }
 

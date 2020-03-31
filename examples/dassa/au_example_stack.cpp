@@ -210,7 +210,6 @@ int main(int argc, char *argv[])
         }
 
         //PrintVector("semblanceWeight_v", semblanceWeight_v);
-
         //PrintVector("phaseWeight_v", phaseWeight_v);
 
         semblanceWeight->WriteArray(H_start, H_end, semblanceWeight_v);

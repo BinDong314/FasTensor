@@ -202,13 +202,14 @@ public:
     endpoint = EndpointFactory::NewEndpoint(data_endpoint);
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
+    endpoint->SetDimensions(size_p);
+
     if (endpoint->GetEndpointType() == EP_MEMORY)
     {
       endpoint_memory_flag = true;
+      endpoint->Create();
     }
 
-    endpoint->SetDimensions(size_p);
-    endpoint->Create();
     data_size = size_p;
   }
 
