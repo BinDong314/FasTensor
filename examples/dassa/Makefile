@@ -2,6 +2,7 @@
 
 #Bin's Mac
 AU_DIR=/Users/dbin/work/test-fasttensor/fasttensor/build
+#AU_DIR=/Users/dbin/work/FastTensor/build
 HDF5_DIR=/Users/dbin/work/test-fasttensor/hdf5-1.12.0/build
 FFTW_DIR=/opt/local
 DASH_DIR=/Users/dbin/opt/dash-0.4.0

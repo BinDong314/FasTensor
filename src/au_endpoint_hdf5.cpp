@@ -97,7 +97,6 @@ int EndpointHDF5::Open()
         Create();
     }
 
-
     fid = H5Fopen(fn_str.c_str(), read_write_flag, plist_id);
     if (fid < 0)
     {
