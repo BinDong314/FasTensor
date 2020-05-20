@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS=gnu
 AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part  @ARRAYUDF_CPPFLAGS@   -ldl 
 AM_CFLAGS   = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part  @ARRAYUDF_CFLAGS@    -ldl 
 AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part  @ARRAYUDF_CXXFLAGS@    -ldl 
-AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static  -ldl 
+AM_LDFLAGS  = -Wl,--start-group @ARRAYUDF_LIBS@  -all-static  -ldl 
 
 
 bin_PROGRAMS=   au_test_data_generator \
