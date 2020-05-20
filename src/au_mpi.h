@@ -147,9 +147,9 @@ inline MPI_Op InferMPIMergeOp(std::string &opt_str)
     return 0;
 }
 
-#define AU_Reduce(local_buffer_p, reduced_buffer_p, size, type, op, root, comm)       \
-    {                                                                                 \
-        MPI_Reduce(local_buffer_p, reduced_buffer_p, size, type, op_mpi, root, comm); \
+#define AU_Reduce(local_buffer_p, reduced_buffer_p, size, type, op, root, comm)   \
+    {                                                                             \
+        MPI_Reduce(local_buffer_p, reduced_buffer_p, size, type, op, root, comm); \
     }
 #define AU_Bcast(data_bffer_p, count_p, datatype_p, root_p, comm_p)   \
     {                                                                 \
