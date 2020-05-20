@@ -147,58 +147,6 @@ inline MPI_Op InferMPIMergeOp(std::string &opt_str)
     return 0;
 }
 
-inline MPI_Op InferMPIMergeOpInt(AU_Op op_int)
-{
-
-    switch (op_int)
-    {
-    case AU_MAX:
-        return MPI_MAX;
-        break;
-    case AU_MIN:
-        return MPI_MIN;
-        break;
-    case AU_SUM:
-        return MPI_SUM;
-        break;
-    case AU_PROD:
-        return MPI_PROD;
-        break;
-    case AU_LAND:
-        return MPI_LAND;
-        break;
-    case AU_BAND:
-        return MPI_BAND;
-        break;
-    case AU_LOR:
-        return MPI_LOR;
-        break;
-    case AU_BOR:
-        return MPI_BOR;
-        break;
-    case AU_LXOR:
-        return MPI_LXOR;
-        break;
-    case AU_BXOR:
-        return MPI_BXOR;
-        break;
-    case AU_MINLOC:
-        return MPI_MINLOC;
-        break;
-    case AU_MAXLOC:
-        return MPI_MAXLOC;
-        break;
-    case AU_REPLACE:
-        return MPI_REPLACE;
-        break;
-    default:
-        AU_EXIT("Not supported type in MPI_Reduce");
-        break;
-    }
-
-    return 0;
-}
-
 #define AU_Reduce(local_buffer_p, reduced_buffer_p, size, type, op, root, comm)       \
     {                                                                                 \
         MPI_Reduce(local_buffer_p, reduced_buffer_p, size, type, op_mpi, root, comm); \
