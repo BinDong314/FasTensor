@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
     data_in_sum->Merge(AU_SUM);
 
     double TotalStack;
-    AU_Reduce(&nStack, &TotalStack, 1, MPI_DOUBLE, AU_SUM, 0, MPI_COMM_WORLD);
+    AU_Reduce(&nStack, &TotalStack, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     std::cout << "Total nStack = " << TotalStack << "\n";
     //semblance_denom_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_semblance_denom_sum.h5:/semblance_denom_sum");
     //coherency_sum->Nonvolatile("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/stacking_files/xcorr_examples_h5_stack_coherency_sum.h5:/coherency_sum");
