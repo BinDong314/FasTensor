@@ -35,9 +35,7 @@ class EndpointADIOS : public Endpoint
 private:
     std::string fn_str, vn_str; //file name and variable name
     adios2_type adios2_data_element_type;
-    adios2_variable *v;
-    adios2_adios *adios;
-    adios2_engine *engine;
+    //adios2_variable *v;
     std::vector<size_t> adios_shape, adios_start, adios_count;
 
 public:
@@ -50,7 +48,6 @@ public:
     {
         endpoint_info = endpoint_info_p;
         ParseEndpointInfo();
-        adios = adios2_init(MPI_COMM_WORLD, adios2_debug_mode_on);
     }
     ~EndpointADIOS()
     {

@@ -52,6 +52,7 @@ void EndpointADIOS::Map2MyType()
         return;
     case AU_FLOAT:
         adios2_data_element_type = adios2_type_float;
+        cout << "float type! \n";
         return;
     case AU_DOUBLE:
         adios2_data_element_type = adios2_type_double;
@@ -81,6 +82,7 @@ int EndpointADIOS::PrintInfo()
     */
 int EndpointADIOS::ExtractMeta()
 {
+    return 0;
 }
 
 /**
@@ -93,6 +95,7 @@ int EndpointADIOS::ExtractMeta()
      */
 int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    Map2MyType();
     int rank = start.size();
     adios_start.resize(rank);
     adios_count.resize(rank);
@@ -109,7 +112,14 @@ int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsi
             adios_shape[i] = endpoint_dim_size[i];
         }
     }
+    float *pf = (float *)data;
+    cout << "adios_shape " << adios_shape[0] << ", " << adios_shape[1] << ", adios_start: " << adios_start[0] << ", " << adios_start[1] << ", adios_count: " << adios_count[0] << ", " << adios_count[1] << ", value =" << pf[0] << "\n";
+
+    adios2_adios *adios;
+    adios2_engine *engine;
+    adios = adios2_init(MPI_COMM_WORLD, adios2_debug_mode_on);
     adios2_io *io = adios2_declare_io(adios, "BPFile_Write");
+
     adios2_variable *variable = adios2_define_variable(io, vn_str.c_str(), adios2_data_element_type, adios_shape.size(), adios_shape.data(), adios_start.data(), adios_count.data(), adios2_constant_dims_true);
 
     engine = adios2_open(io, fn_str.c_str(), adios2_mode_write);
@@ -117,6 +127,9 @@ int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsi
     adios2_put(engine, variable, data, adios2_mode_deferred);
 
     adios2_close(engine);
+
+    adios2_finalize(adios);
+    return 0;
 }
 
 /**
@@ -129,6 +142,7 @@ int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsi
      */
 int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    Map2MyType();
     int rank = start.size();
     adios_start.resize(rank);
     adios_count.resize(rank);
@@ -136,17 +150,25 @@ int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsig
     {
         adios_start[i] = start[i];
         adios_count[i] = end[i] - start[i] + 1;
+
+        //cout << "Read, adios_start: " << adios_start[0] << ", " << adios_start[1] << ", adios_count: " << adios_count[0] << ", " << adios_count[1] << "\n";
     }
 
+    //std::cout << "vn_str :" << vn_str << "\n";
+    adios2_adios *adios;
+    adios2_engine *engine;
+    adios = adios2_init(MPI_COMM_WORLD, adios2_debug_mode_on);
     adios2_io *io = adios2_declare_io(adios, "BPFile_READ_C");
-    adios2_variable *variable = adios2_inquire_variable(io, vn_str.c_str());
     engine = adios2_open(io, fn_str.c_str(), adios2_mode_read);
-
+    adios2_variable *variable = adios2_inquire_variable(io, vn_str.c_str());
     adios2_set_selection(variable, rank, adios_start.data(), adios_count.data());
 
     adios2_get(engine, variable, data, adios2_mode_sync);
 
     adios2_close(engine);
+    adios2_finalize(adios);
+
+    return 0;
 }
 
 int EndpointADIOS::Create()

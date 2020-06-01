@@ -14,7 +14,8 @@ bin_PROGRAMS=   au_test_data_generator \
                 au_example_1f1p \
                 au_example_cache \
                 au_example_reduce \
-                au_example_reduce2D_1f1p 
+                au_example_reduce2D_1f1p \
+                au_example_adios
                 
 
 LDADD=../src/libArrayUDF.la @ARRAYUDF_LIBS@ 
@@ -29,4 +30,4 @@ au_example_1f1p_SOURCES=au_example_1f1p.cpp
 au_example_cache_SOURCES=au_example_cache.cpp
 au_example_reduce_SOURCES=au_example_reduce.cpp
 au_example_reduce2D_1f1p_SOURCES=au_example_reduce2D_1f1p.cpp
-
+au_example_adios_SOURCES=au_example_adios.cpp

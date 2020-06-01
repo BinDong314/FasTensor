@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     //Init the MPICH, etc.
     AU_Init(argc, argv);
 
-    std::vector<unsigned long long> A_size = {16, 16};
+    std::vector<unsigned long long> A_size = {8, 8};
     //Input data
     Array<float> *A = new Array<float>("EP_ADIOS:./test-data/adios_test.bp:testv", A_size);
 
