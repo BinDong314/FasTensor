@@ -42,6 +42,8 @@ protected:
     int endpoint_ranks;
     AuEndpointDataType data_element_type;
     std::string data_endpoint_orig;
+
+    bool set_endpoint_dim_size_flag = false;
     bool open_flag = false;
     bool create_flag = false;
     unsigned read_write_flag;
@@ -204,9 +206,9 @@ public:
 
     virtual void Map2MyType() = 0;
 
-    virtual void EnableCollectiveIO() = 0;
+    virtual void EnableCollectiveIO();
 
-    virtual void DisableCollectiveIO() = 0;
+    virtual void DisableCollectiveIO();
 
     /**
     * @brief Get the Dir File Vector object

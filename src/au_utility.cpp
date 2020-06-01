@@ -66,9 +66,9 @@ AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
     {
         endpoint_type = EP_NETCDF;
     }
-    else if (endpoint_type_str == "EP_AUDIOS")
+    else if (endpoint_type_str == "EP_ADIOS")
     {
-        endpoint_type = EP_AUDIOS;
+        endpoint_type = EP_ADIOS;
     }
     else if (endpoint_type_str == "EP_BINARY")
     {

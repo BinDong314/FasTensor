@@ -25,16 +25,20 @@
 #include <vector>
 #include <math.h>
 
-//
-//I/O layer
+//#define HAS_ADIOS_END_POINT 1
+
+#ifdef HAS_ADIOS_END_POINT
+
+#include <adios2_c.h>
 class EndpointADIOS : public Endpoint
 {
 private:
-    hid_t fid = -1, gid = -1, did = -1;
-    hid_t dataspace_id = -1;
-    std::string fn_str, gn_str, dn_str;
-    hid_t plist_id = -1, plist_cio_id = H5P_DEFAULT;
-    hid_t mem_type, disk_type;
+    std::string fn_str, vn_str; //file name and variable name
+    adios2_type adios2_data_element_type;
+    adios2_variable *v;
+    adios2_adios *adios;
+    adios2_engine *engine;
+    std::vector<size_t> adios_shape, adios_start, adios_count;
 
 public:
     /**
@@ -42,19 +46,11 @@ public:
      * 
      * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
      */
-    EndpointADIOS(std::string data_endpoint) : Endpoint(data_endpoint)
+    EndpointADIOS(std::string endpoint_info_p)
     {
-        if (endpoint_info.size() == 2)
-        {
-            fn_str = endpoint_info[0];
-            gn_str = ExtractPath(endpoint_info[1]);
-            dn_str = ExtractFileName(endpoint_info[1]);
-        }
-        else
-        {
-            AU_EXIT("ADIOS data endpoint info is not correct");
-        }
-        SetOpenFlag(false);
+        endpoint_info = endpoint_info_p;
+        ParseEndpointInfo();
+        adios = adios2_init(MPI_COMM_WORLD, adios2_debug_mode_on);
     }
     ~EndpointADIOS()
     {
@@ -116,8 +112,70 @@ public:
 
     void Map2MyType() override;
 
-    void EnableCollectiveIO() override;
-
-    void DisableCollectiveIO() override;
+    int ParseEndpointInfo() override;
 };
+#else
+class EndpointADIOS : public Endpoint
+{
+private:
+public:
+    /**
+     * @brief Construct a new EndpointHDF5 object
+     * 
+     * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
+     */
+    EndpointADIOS(std::string endpoint_info_p)
+    {
+        std::cout << "EndpointADIOS is not configured and compiled ! \n";
+    }
+    ~EndpointADIOS()
+    {
+        Close();
+    }
+
+    int ParseEndpointInfo() override
+    {
+        return -1;
+    }
+
+    int ExtractMeta() override
+    {
+        return -1;
+    }
+
+    int PrintInfo() override
+    {
+        return -1;
+    }
+
+    int Create() override
+    {
+        return -1;
+    }
+
+    int Open() override
+    {
+        return -1;
+    }
+
+    void Map2MyType() override
+    {
+    }
+
+    int Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override
+    {
+        return -1;
+    }
+
+    int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override
+    {
+        return -1;
+    }
+
+    int Close() override
+    {
+        return -1;
+    }
+};
+#endif
 #endif

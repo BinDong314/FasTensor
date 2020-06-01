@@ -50,8 +50,6 @@ DIY Tips on FFTW:
 
 
 Notes on
-1, module load gcc/7.4.0
-2, module load hdf5/1.10.5-gcc-p
-3, module load fftw
+1, module load gcc/7.4.0 hdf5/1.10.5-gcc-p fftw
 
 

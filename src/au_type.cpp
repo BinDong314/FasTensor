@@ -14,7 +14,7 @@ AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
     }
     else if (endpoint_type_str == "EP_AUDIOS")
     {
-        endpoint_type = EP_AUDIOS;
+        endpoint_type = EP_ADIOS;
     }
     else if (endpoint_type_str == "EP_BINARY")
     {

@@ -54,6 +54,25 @@ AC_MSG_ERROR([no: HDF5 directory not found!])
 fi
 
 
+AC_ARG_WITH([adios],
+[AS_HELP_STRING([--with-adios=DIR],
+[use DIR as the root directory for ADIOS include and lib])],
+[ADIOS_HOME="$withval"],
+[with_adios=no]
+)
+
+if test "x$with_adios" != xno; then
+  AC_MSG_CHECKING([for ADIOS at $ADIOS_HOME])
+  if test -d "$ADIOS_HOME"   && test -d "$ADIOS_HOME/include"  && test -d "$ADIOS_HOME/lib"; then
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS      -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI"
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI "
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS        /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c_mpi.2.5.0.dylib /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c.2.5.0.dylib  -DHAS_ADIOS_END_POINT -L$ADIOS_HOME/lib -DADIOS2_USE_MPI"
+  AC_MSG_RESULT([yes])	    
+  else
+  AC_MSG_ERROR([no: ADIOS directory not found!])
+  fi
+fi
+
 AC_ARG_WITH([dash],
 [AS_HELP_STRING([--with-dash=DIR],
 [use DIR as the root directory for DASH include and lib])],

@@ -19,6 +19,7 @@ void Endpoint::SetDimensions(std::vector<unsigned long long> endpoint_dim_size_p
 {
     endpoint_ranks = endpoint_dim_size_p.size();
     endpoint_dim_size = endpoint_dim_size_p;
+    set_endpoint_dim_size_flag = true;
 }
 
 void Endpoint::SetDataElementType(AuEndpointDataType data_element_type_p)
@@ -328,4 +329,12 @@ int Endpoint::SpecialOperator(int opt_code, std::string parameter)
 {
     AU_EXIT("Error: should not be called");
     return 0;
+}
+
+void Endpoint::EnableCollectiveIO()
+{
+}
+
+void Endpoint::DisableCollectiveIO()
+{
 }

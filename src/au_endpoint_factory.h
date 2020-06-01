@@ -2,6 +2,7 @@
 #include "au_endpoint_hdf5.h"
 #include "au_endpoint_dir.h"
 #include "au_endpoint_memory.h"
+#include "au_endpoint_adios.h"
 
 #include <string.h>
 
@@ -25,7 +26,8 @@ public:
             return new EndpointDIR(endpoint_info);
         if (endpoint_type == EP_MEMORY)
             return new EndpointMEMORY(endpoint_info);
-
+        if (endpoint_type == EP_ADIOS)
+            return new EndpointADIOS(endpoint_info);
         AU_EXIT("Not supported endpoint");
         return nullptr;
     }

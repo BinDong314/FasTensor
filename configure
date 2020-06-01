@@ -796,6 +796,7 @@ with_gnu_ld
 with_sysroot
 enable_libtool_lock
 with_hdf5
+with_adios
 with_dash
 enable_oldcxx
 enable_debug
@@ -1465,6 +1466,8 @@ Optional Packages:
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
   --with-hdf5=DIR         use DIR as the root directory for HDF5 include and
+                          lib
+  --with-adios=DIR        use DIR as the root directory for ADIOS include and
                           lib
   --with-dash=DIR         use DIR as the root directory for DASH include and
                           lib
@@ -16857,6 +16860,30 @@ fi
 
 
 
+# Check whether --with-adios was given.
+if test "${with_adios+set}" = set; then :
+  withval=$with_adios; ADIOS_HOME="$withval"
+else
+  with_adios=no
+
+fi
+
+
+if test "x$with_adios" != xno; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ADIOS at $ADIOS_HOME" >&5
+$as_echo_n "checking for ADIOS at $ADIOS_HOME... " >&6; }
+  if test -d "$ADIOS_HOME"   && test -d "$ADIOS_HOME/include"  && test -d "$ADIOS_HOME/lib"; then
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS      -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI"
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI "
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS        /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c_mpi.2.5.0.dylib /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c.2.5.0.dylib  -DHAS_ADIOS_END_POINT -L$ADIOS_HOME/lib -DADIOS2_USE_MPI"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  else
+  as_fn_error $? "no: ADIOS directory not found!" "$LINENO" 5
+  fi
+fi
+
+
 # Check whether --with-dash was given.
 if test "${with_dash+set}" = set; then :
   withval=$with_dash; DASH_HOME="$withval"
@@ -19205,7 +19232,9 @@ $as_echo X/"$am_mf" |
     { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "Something went wrong bootstrapping makefile fragments
-    for automatic dependency tracking.  Try re-running configure with the
+    for automatic dependency tracking.  If GNU make was not used, consider
+    re-running the configure script with MAKE=\"gmake\" (or whatever is
+    necessary).  You can also try re-running configure with the
     '--disable-dependency-tracking' option to at least be able to build
     the package (albeit without support for automatic dependency tracking).
 See \`config.log' for more details" "$LINENO" 5; }
