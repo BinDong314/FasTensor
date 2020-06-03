@@ -38,6 +38,10 @@ private:
     //adios2_variable *v;
     std::vector<size_t> adios_shape, adios_start, adios_count;
 
+    adios2_adios *adios;
+    adios2_io *rw_io;
+    adios2_variable *rw_variable;
+
 public:
     /**
      * @brief Construct a new EndpointHDF5 object
@@ -48,9 +52,15 @@ public:
     {
         endpoint_info = endpoint_info_p;
         ParseEndpointInfo();
+
+        adios = adios2_init(MPI_COMM_WORLD, adios2_debug_mode_on);
+        rw_io = adios2_declare_io(adios, "SomeName");
+        SetOpenFlag(false);
+        SetCreateFlag(false);
     }
     ~EndpointADIOS()
     {
+        adios2_finalize(adios);
         Close();
     }
     /**
