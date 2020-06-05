@@ -143,11 +143,8 @@ int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsi
         Create();
     }
     adios2_set_selection(rw_variable, rank, adios_start.data(), adios_count.data());
-    adios2_engine *write_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_write);
-    adios2_put(write_engine, rw_variable, data, adios2_mode_sync);
-    adios2_perform_puts(write_engine);
-    adios2_flush(write_engine);
-    adios2_close(write_engine);
+    adios2_put(write_engine, rw_variable, data, adios2_mode_deferred);
+
     return 0;
 }
 
@@ -190,10 +187,10 @@ int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsig
     {
         Create();
     }
-    adios2_set_selection(rw_variable, rank, adios_start.data(), adios_count.data());
-    adios2_engine *read_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_read);
-    adios2_get(read_engine, rw_variable, data, adios2_mode_sync);
-    adios2_close(read_engine);
+    //adios2_set_selection(rw_variable, rank, adios_start.data(), adios_count.data());
+    //adios2_engine *read_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_read);
+    //adios2_get(read_engine, rw_variable, data, adios2_mode_sync);
+    //adios2_close(read_engine);
     return 0;
 }
 
@@ -217,8 +214,9 @@ int EndpointADIOS::Create()
         }
     }
     std::cout << "define variable : " << vn_str << ", adios_shape : " << adios_shape[0] << ", " << adios_shape[1] << " in Create\n";
-    rw_variable = adios2_define_variable(rw_io, vn_str.c_str(), adios2_data_element_type, adios_shape.size(), adios_shape.data(), adios_start.data(), adios_count.data(), adios2_constant_dims_true);
+    rw_variable = adios2_define_variable(rw_io, vn_str.c_str(), adios2_data_element_type, adios_shape.size(), adios_shape.data(), adios_start.data(), adios_count.data(), adios2_constant_dims_false);
 
+    write_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_write);
     //Do the first write to create the
     SetCreateFlag(true);
     return 0;

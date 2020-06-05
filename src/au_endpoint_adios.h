@@ -41,6 +41,7 @@ private:
     adios2_adios *adios;
     adios2_io *rw_io;
     adios2_variable *rw_variable;
+    adios2_engine *write_engine;
 
 public:
     /**
@@ -61,6 +62,9 @@ public:
     ~EndpointADIOS()
     {
         adios2_finalize(adios);
+        //adios2_perform_puts(write_engine);
+        //adios2_flush(write_engine);
+        adios2_close(write_engine);
         Close();
     }
     /**

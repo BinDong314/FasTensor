@@ -13,6 +13,7 @@
 #define AU_WTIME_TYPE double
 #define AU_WTIME MPI_Wtime()
 #define MPI_COMM_WORLD_DEFAULT MPI_COMM_WORLD
+#define MPI_INFO_NULL_DEFAULT MPI_INFO_NULL
 #define AU_MPI_Datatype MPI_Datatype
 #define AU_MPI_Op MPI_Op
 #define MPI_INIT(argc, argv, au_mpi_comm_global, au_mpi_rank_global, au_mpi_size_global) \
@@ -161,7 +162,7 @@ inline MPI_Op InferMPIMergeOp(std::string &opt_str)
 #define AU_WTIME_TYPE time_t
 #define AU_WTIME time(NULL)
 #define MPI_COMM_WORLD_DEFAULT 0
-
+#define MPI_INFO_NULL_DEFAULT 0
 #define AU_MPI_Datatype int
 #define AU_MPI_Op int
 

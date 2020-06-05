@@ -30,7 +30,7 @@
 typedef enum AuEndpointType
 {
   EP_HDF5 = 0,    //from/to HDF5
-  EP_NETCDF = 1,  //from/to NETCDF; todo
+  EP_PNETCDF = 1, //from/to NETCDF; todo
   EP_ADIOS = 2,   //from/to AUDIOS; todo
   EP_BINARY = 3,  //from/to binary file; todo
   EP_VIRTUAL = 4, //from/to Virtual array of above types; todo

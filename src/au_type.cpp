@@ -8,9 +8,9 @@ AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
     {
         endpoint_type = EP_HDF5;
     }
-    else if (endpoint_type_str == "EP_NETCDF")
+    else if (endpoint_type_str == "EP_PNETCDF")
     {
-        endpoint_type = EP_NETCDF;
+        endpoint_type = EP_PNETCDF;
     }
     else if (endpoint_type_str == "EP_AUDIOS")
     {
