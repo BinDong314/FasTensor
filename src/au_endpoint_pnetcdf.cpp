@@ -111,17 +111,21 @@ int EndpointPnetCDF::ExtractMeta()
 int EndpointPnetCDF::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
     Map2MyType();
+    if (!GetCreateFlag())
+    {
+        Create();
+    }
 
     std::vector<MPI_Offset> pnetcdf_start, pnetcdf_count;
     int rank = start.size();
     pnetcdf_start.resize(rank);
     pnetcdf_count.resize(rank);
 
-    MPI_Offset element_count = 1;
+    MPI_Offset pnetcdf_element_count = 1;
     for (int i = 0; i < rank; i++)
     {
-        pnetcdf_start[i] = 0;
-        pnetcdf_count[i] = endpoint_dim_size[i] - 1;
+        pnetcdf_start[i] = start[i];
+        pnetcdf_count[i] = end[i] - start[i] + 1;
         pnetcdf_element_count = pnetcdf_count[i] * pnetcdf_element_count;
     }
 
@@ -142,16 +146,20 @@ int EndpointPnetCDF::Read(std::vector<unsigned long long> start, std::vector<uns
 {
     Map2MyType();
 
+    if (!GetOpenFlag())
+    {
+        Open();
+    }
     std::vector<MPI_Offset> pnetcdf_start, pnetcdf_count;
     int rank = start.size();
     pnetcdf_start.resize(rank);
     pnetcdf_count.resize(rank);
 
-    MPI_Offset element_count = 1;
+    MPI_Offset pnetcdf_element_count = 1;
     for (int i = 0; i < rank; i++)
     {
-        pnetcdf_start[i] = 0;
-        pnetcdf_count[i] = endpoint_dim_size[i] - 1;
+        pnetcdf_start[i] = start[i];
+        pnetcdf_count[i] = end[i] - start[i] + 1;
         pnetcdf_element_count = pnetcdf_count[i] * pnetcdf_element_count;
     }
 
@@ -164,7 +172,7 @@ int EndpointPnetCDF::Read(std::vector<unsigned long long> start, std::vector<uns
 int EndpointPnetCDF::Create()
 {
     int ret;
-    ret = ncmpi_create(MPI_COMM_WORLD_DEFAULT, fn_str.c_str(), NC_CLOBBER | NC_64BIT_OFFSET, MPI_INFO_NULL_DEFAULT, &ncfile);
+    ret = ncmpi_create(MPI_COMM_WORLD_DEFAULT, fn_str.c_str(), NC_64BIT_OFFSET, MPI_INFO_NULL_DEFAULT, &ncfile);
     if (ret != NC_NOERR)
         handle_pnetcdf_error(ret, __LINE__);
 
@@ -173,13 +181,15 @@ int EndpointPnetCDF::Create()
     std::vector<int> dimid;
     dimid.resize(rank);
 
+    std::string dim_name;
     for (int i = 0; i < rank; i++)
     {
-        ret = ncmpi_def_dim(ncfile, "somename", endpoint_dim_size[i], &dimid[i]);
+        dim_name = "dim" + std::to_string(i);
+        ret = ncmpi_def_dim(ncfile, dim_name.c_str(), endpoint_dim_size[i], &dimid[i]);
         if (ret != NC_NOERR)
             handle_pnetcdf_error(ret, __LINE__);
     }
-    ret = ncmpi_def_var(ncfile, vn_str.c_str(), element_type_nc, rank, &dimid, &ncvar);
+    ret = ncmpi_def_var(ncfile, vn_str.c_str(), element_type_nc, rank, &dimid[0], &ncvar);
     if (ret != NC_NOERR)
         handle_pnetcdf_error(ret, __LINE__);
 
@@ -187,6 +197,8 @@ int EndpointPnetCDF::Create()
     if (ret != NC_NOERR)
         handle_pnetcdf_error(ret, __LINE__);
 
+    SetCreateFlag(true);
+    SetOpenFlag(true);
     return 0;
 }
 
@@ -197,7 +209,7 @@ int EndpointPnetCDF::Open()
     if (ret != NC_NOERR)
         handle_pnetcdf_error(ret, __LINE__);
 
-    ret = ncmpi_inq_varid(ncfile, ncvar.c_str(), &ncvar);
+    ret = ncmpi_inq_varid(ncfile, vn_str.c_str(), &ncvar);
     if (ret != NC_NOERR)
         handle_pnetcdf_error(ret, __LINE__);
     return ret;
@@ -205,6 +217,8 @@ int EndpointPnetCDF::Open()
 
 int EndpointPnetCDF::Close()
 {
+    SetCreateFlag(false);
+    SetOpenFlag(false);
     return ncmpi_close(ncfile);
 }
 

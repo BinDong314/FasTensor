@@ -27,6 +27,7 @@
 
 #ifdef HAS_PNETCDF_END_POINT
 
+#include "au_mpi.h"
 #include "pnetcdf.h"
 
 class EndpointPnetCDF : public Endpoint

@@ -797,6 +797,7 @@ with_sysroot
 enable_libtool_lock
 with_hdf5
 with_adios
+with_pnetcdf
 with_dash
 enable_oldcxx
 enable_debug
@@ -1469,6 +1470,8 @@ Optional Packages:
                           lib
   --with-adios=DIR        use DIR as the root directory for ADIOS include and
                           lib
+  --with-pnetcdf=DIR      use DIR as the root directory for PnetCDF include
+                          and lib
   --with-dash=DIR         use DIR as the root directory for DASH include and
                           lib
   --with-swig=DIR         use DIR as the root directory for swig's include and
@@ -16876,10 +16879,34 @@ $as_echo_n "checking for ADIOS at $ADIOS_HOME... " >&6; }
   ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS      -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI"
   ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI "
   ARRAYUDF_LIBS="$ARRAYUDF_LIBS        /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c_mpi.2.5.0.dylib /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c.2.5.0.dylib  -DHAS_ADIOS_END_POINT -L$ADIOS_HOME/lib -DADIOS2_USE_MPI"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes !" >&5
+$as_echo "yes !" >&6; }
+  else
+  as_fn_error $? "no: ADIOS directory not found!" "$LINENO" 5
+  fi
+fi
+
+
+# Check whether --with-pnetcdf was given.
+if test "${with_pnetcdf+set}" = set; then :
+  withval=$with_pnetcdf; PNETCDF_HOME="$withval"
+else
+  with_pnetcdf=no
+
+fi
+
+
+if test "x$with_pnetcdf" != xno; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for PnetCDF at $ADIOS_HOME" >&5
+$as_echo_n "checking for PnetCDF at $ADIOS_HOME... " >&6; }
+  if test -d "$PNETCDF_HOME"   && test -d "$PNETCDF_HOME/include"  && test -d "$PNETCDF_HOME/lib"; then
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -DHAS_PNETCDF_END_POINT  -I$PNETCDF_HOME/include "
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DHAS_PNETCDF_END_POINT  -I$PNETCDF_HOME/include "
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS        -DHAS_PNETCDF_END_POINT  -L$PNETCDF_HOME/lib -lpnetcdf"
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
   else
-  as_fn_error $? "no: ADIOS directory not found!" "$LINENO" 5
+  as_fn_error $? "no: PnetCDF directory not found!" "$LINENO" 5
   fi
 fi
 

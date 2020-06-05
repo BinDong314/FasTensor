@@ -67,7 +67,7 @@ if test "x$with_adios" != xno; then
   ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS      -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI"
   ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI "
   ARRAYUDF_LIBS="$ARRAYUDF_LIBS        /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c_mpi.2.5.0.dylib /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c.2.5.0.dylib  -DHAS_ADIOS_END_POINT -L$ADIOS_HOME/lib -DADIOS2_USE_MPI"
-  AC_MSG_RESULT([yes: DIOS directory found !])	    
+  AC_MSG_RESULT([yes !])	    
   else
   AC_MSG_ERROR([no: ADIOS directory not found!])
   fi
@@ -83,10 +83,10 @@ AC_ARG_WITH([pnetcdf],
 if test "x$with_pnetcdf" != xno; then
   AC_MSG_CHECKING([for PnetCDF at $ADIOS_HOME])
   if test -d "$PNETCDF_HOME"   && test -d "$PNETCDF_HOME/include"  && test -d "$PNETCDF_HOME/lib"; then
-  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$PNETCDF_HOME/include "
-  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -I$PNETCDF_HOME/include "
-  ARRAYUDF_LIBS="$ARRAYUDF_LIBS         -L$PNETCDF_HOME/lib -lpnetcdf"
-  AC_MSG_RESULT([yes: PnetCDF directory found ])	    
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -DHAS_PNETCDF_END_POINT  -I$PNETCDF_HOME/include "
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DHAS_PNETCDF_END_POINT  -I$PNETCDF_HOME/include "
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS        -DHAS_PNETCDF_END_POINT  -L$PNETCDF_HOME/lib -lpnetcdf"
+  AC_MSG_RESULT([yes])	    
   else
   AC_MSG_ERROR([no: PnetCDF directory not found!])
   fi

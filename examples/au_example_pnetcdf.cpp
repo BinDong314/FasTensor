@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
         {
             std::cout << A->GetValue(i, j) << " , ";
         }
+        std::cout << " \n";
     }
     std::cout << " \n\n";
     /**
