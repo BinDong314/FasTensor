@@ -41,7 +41,7 @@ private:
     adios2_adios *adios;
     adios2_io *rw_io;
     adios2_variable *rw_variable;
-    adios2_engine *write_engine;
+    adios2_engine *rw_engine;
 
 public:
     /**
@@ -55,17 +55,28 @@ public:
         ParseEndpointInfo();
 
         adios = adios2_init(MPI_COMM_WORLD, adios2_debug_mode_on);
+        if (adios == NULL)
+        {
+            printf("ERROR: invalid %s handler at line %d  \n", "adios2_init", __LINE__);
+            exit(EXIT_FAILURE);
+        }
+
         rw_io = adios2_declare_io(adios, "SomeName");
+        if (rw_io == NULL)
+        {
+            printf("ERROR: invalid %s handler at line %d  \n", "adios2_declare_io", __LINE__);
+            exit(EXIT_FAILURE);
+        }
+
+        //std::cout << "Init done \n";
         SetOpenFlag(false);
         SetCreateFlag(false);
     }
     ~EndpointADIOS()
     {
-        adios2_finalize(adios);
-        //adios2_perform_puts(write_engine);
-        //adios2_flush(write_engine);
-        adios2_close(write_engine);
         Close();
+        adios2_finalize(adios);
+        //std::cout << "Close done \n";
     }
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type

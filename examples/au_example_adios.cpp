@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     /**
      * Read  vector
      */
+    /*
     std::vector<unsigned long long> start = {0, 0};
     std::vector<unsigned long long> end = {5, 5};
     std::vector<float> datav(6 * 6);
@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
         std::cout << " \n";
     }
     std::cout << " \n";
-
+*/
     /**
      * Update/write data vector
      * 

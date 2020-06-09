@@ -52,7 +52,7 @@ private:
    *                            -- AU_CXXVECTOR --> NULL
    */
   std::string array_data_endpoint_info;
-  Endpoint *endpoint;
+  Endpoint *endpoint = NULL;
 
   //Below are info about endpooint
   int data_dims;                                     //The number of dimensioins of data in endpoint
@@ -243,6 +243,17 @@ public:
    */
   Array(std::vector<T> &data_vector_endpoint, std::vector<int> cs, std::vector<int> os)
   {
+  }
+
+  /**
+   * @brief Construct a new Array object from in-memory vector
+   *        The data are assumed to be 1D too here
+   * @param data_vector_endpoint the data to intialize 
+   */
+  ~Array()
+  {
+    if (endpoint != NULL)
+      delete endpoint;
   }
 
   /**

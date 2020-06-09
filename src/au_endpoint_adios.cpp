@@ -3,6 +3,24 @@
 
 #ifdef HAS_ADIOS_END_POINT
 
+void check_adios_handler(const void *handler, const char *message, int lineno)
+{
+    if (handler == NULL)
+    {
+        printf("ERROR: invalid %s handler at line %d  \n", message, lineno);
+        exit(EXIT_FAILURE);
+    }
+}
+
+void check_adios_error(const int error, int lineno)
+{
+    if (error)
+    {
+        printf("ERROR: %d at line %d \n", error, lineno);
+        exit(error);
+    }
+}
+
 int EndpointADIOS::ParseEndpointInfo()
 {
     //std::cout << endpoint_info << "\n";
@@ -96,14 +114,14 @@ int EndpointADIOS::ExtractMeta()
 int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
     Map2MyType();
-    int rank = start.size();
-    adios_start.resize(rank);
-    adios_count.resize(rank);
+    int endpoint_dim_rank = start.size();
+    adios_start.resize(endpoint_dim_rank);
+    adios_count.resize(endpoint_dim_rank);
     if (set_endpoint_dim_size_flag)
     {
-        adios_shape.resize(rank);
+        adios_shape.resize(endpoint_dim_rank);
     }
-    for (int i = 0; i < rank; i++)
+    for (int i = 0; i < endpoint_dim_rank; i++)
     {
         adios_start[i] = start[i];
         adios_count[i] = end[i] - start[i] + 1;
@@ -142,8 +160,14 @@ int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsi
     {
         Create();
     }
-    adios2_set_selection(rw_variable, rank, adios_start.data(), adios_count.data());
-    adios2_put(write_engine, rw_variable, data, adios2_mode_deferred);
+
+    int errio = adios2_set_selection(rw_variable, endpoint_dim_rank, adios_start.data(), adios_count.data());
+    check_adios_error(errio, __LINE__);
+
+    errio = adios2_put(rw_engine, rw_variable, data, adios2_mode_sync);
+    check_adios_error(errio, __LINE__);
+    //adios2_perform_puts(write_engine);
+    //adios2_close(write_engine);
 
     return 0;
 }
@@ -159,10 +183,10 @@ int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsi
 int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
     Map2MyType();
-    int rank = start.size();
-    adios_start.resize(rank);
-    adios_count.resize(rank);
-    for (int i = 0; i < rank; i++)
+    int adios_rank = start.size();
+    adios_start.resize(adios_rank);
+    adios_count.resize(adios_rank);
+    for (int i = 0; i < adios_rank; i++)
     {
         adios_start[i] = start[i];
         adios_count[i] = end[i] - start[i] + 1;
@@ -170,26 +194,21 @@ int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsig
         //cout << "Read, adios_start: " << adios_start[0] << ", " << adios_start[1] << ", adios_count: " << adios_count[0] << ", " << adios_count[1] << "\n";
     }
 
-    /*
-    adios2_io *read_io = adios2_declare_io(adios, "SomeName");
-    adios2_engine *read_engine = adios2_open(read_io, fn_str.c_str(), adios2_mode_read);
-
-    //std::cout << "vn_str :" << vn_str << "\n";
-    adios2_variable *read_variable = adios2_inquire_variable(read_io, vn_str.c_str());
-    adios2_set_selection(read_variable, rank, adios_start.data(), adios_count.data());
-    adios2_get(read_engine, variable, data, adios2_mode_sync);
-
-    adios2_close(engine);
-    //adios2_finalize(adios);
-    */
-
-    if (!GetCreateFlag())
+    if (!GetOpenFlag())
     {
-        Create();
+        Open();
     }
-    //adios2_set_selection(rw_variable, rank, adios_start.data(), adios_count.data());
-    //adios2_engine *read_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_read);
-    //adios2_get(read_engine, rw_variable, data, adios2_mode_sync);
+    else
+    {
+        if (GetRwFlag() != adios2_mode_read)
+        {
+            Close();
+            Open();
+        }
+    }
+
+    adios2_set_selection(rw_variable, adios_rank, adios_start.data(), adios_count.data());
+    adios2_get(rw_engine, rw_variable, data, adios2_mode_sync);
     //adios2_close(read_engine);
     return 0;
 }
@@ -197,14 +216,14 @@ int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsig
 int EndpointADIOS::Create()
 {
 
-    int rank = endpoint_dim_size.size();
-    adios_start.resize(rank);
-    adios_count.resize(rank);
+    int endpoint_dim_rank = endpoint_dim_size.size();
+    adios_start.resize(endpoint_dim_rank);
+    adios_count.resize(endpoint_dim_rank);
     if (set_endpoint_dim_size_flag)
     {
-        adios_shape.resize(rank);
+        adios_shape.resize(endpoint_dim_rank);
     }
-    for (int i = 0; i < rank; i++)
+    for (int i = 0; i < endpoint_dim_rank; i++)
     {
         adios_start[i] = 0;
         adios_count[i] = endpoint_dim_size[i] - 1;
@@ -214,21 +233,41 @@ int EndpointADIOS::Create()
         }
     }
     std::cout << "define variable : " << vn_str << ", adios_shape : " << adios_shape[0] << ", " << adios_shape[1] << " in Create\n";
-    rw_variable = adios2_define_variable(rw_io, vn_str.c_str(), adios2_data_element_type, adios_shape.size(), adios_shape.data(), adios_start.data(), adios_count.data(), adios2_constant_dims_false);
 
-    write_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_write);
+    rw_variable = adios2_define_variable(rw_io, vn_str.c_str(), adios2_data_element_type, endpoint_dim_rank, adios_shape.data(), adios_start.data(), adios_count.data(), adios2_constant_dims_false);
+    check_adios_handler(rw_variable, "adios2_define_variable", __LINE__);
+
+    //Assume create file to write
+    rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_write);
+    check_adios_handler(rw_engine, "adios2_open", __LINE__);
+
     //Do the first write to create the
     SetCreateFlag(true);
+    SetOpenFlag(true);
+    SetRwFlag(adios2_mode_write);
     return 0;
 }
 
 int EndpointADIOS::Open()
 {
-    return -1;
+    //Assume create file to write
+    rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_read);
+    check_adios_handler(rw_engine, "adios2_open", __LINE__);
+    adios2_variable *rw_variable = adios2_inquire_variable(rw_io, vn_str.c_str());
+    SetOpenFlag(true);
+    SetRwFlag(adios2_mode_read);
+    return 0;
 }
 
 int EndpointADIOS::Close()
 {
+    if (GetRwFlag() == adios2_mode_write)
+    {
+        adios2_perform_puts(rw_engine);
+        adios2_flush(rw_engine);
+    }
+    adios2_close(rw_engine);
+    std::cout << "call close ! \n";
     return -1;
 }
 

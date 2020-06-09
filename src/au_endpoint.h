@@ -50,7 +50,7 @@ protected:
 
 public:
     Endpoint(){};
-    ~Endpoint(){};
+    virtual ~Endpoint(){};
 
     /**
      * @brief Get the Dimensions of the data
