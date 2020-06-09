@@ -70,7 +70,6 @@ void EndpointADIOS::Map2MyType()
         return;
     case AU_FLOAT:
         adios2_data_element_type = adios2_type_float;
-        cout << "float type! \n";
         return;
     case AU_DOUBLE:
         adios2_data_element_type = adios2_type_double;
@@ -117,48 +116,35 @@ int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsi
     int endpoint_dim_rank = start.size();
     adios_start.resize(endpoint_dim_rank);
     adios_count.resize(endpoint_dim_rank);
-    if (set_endpoint_dim_size_flag)
-    {
-        adios_shape.resize(endpoint_dim_rank);
-    }
     for (int i = 0; i < endpoint_dim_rank; i++)
     {
         adios_start[i] = start[i];
         adios_count[i] = end[i] - start[i] + 1;
-        if (set_endpoint_dim_size_flag)
-        {
-            adios_shape[i] = endpoint_dim_size[i];
-        }
     }
-    float *pf = (float *)data;
-    cout << "adios_shape " << adios_shape[0] << ", " << adios_shape[1] << ", adios_start: " << adios_start[0] << ", " << adios_start[1] << ", adios_count: " << adios_count[0] << ", " << adios_count[1] << ", value =" << pf[0] << "\n";
 
-    /*
-    adios2_io *write_io = adios2_declare_io(adios, "SomeName");
-    adios2_engine *write_engine = adios2_open(write_io, fn_str.c_str(), adios2_mode_write);
-    if (write_engine == NULL)
+    if (file_exist(fn_str.c_str()) == 0)
     {
-        std::cout << "open engine failed : " << fn_str << "\n";
-    }
-    adios2_variable *write_variable = adios2_inquire_variable(write_io, vn_str.c_str());
-    if (write_variable == NULL)
-    {
-        std::cout << "define variable : " << vn_str << "\n";
-        write_variable = adios2_define_variable(write_io, vn_str.c_str(), adios2_data_element_type, adios_shape.size(), adios_shape.data(), adios_start.data(), adios_count.data(), adios2_constant_dims_true);
+        if (!GetCreateFlag())
+        {
+            Create();
+        }
     }
     else
     {
-        adios2_set_selection(write_variable, rank, adios_start.data(), adios_count.data());
-    }
-    adios2_put(write_engine, write_variable, data, adios2_mode_sync);
-    adios2_perform_puts(write_engine);
-    adios2_flush(write_engine);
-    adios2_close(write_engine);
-    */
-
-    if (!GetCreateFlag())
-    {
-        Create();
+        if (!GetOpenFlag())
+        {
+            SetRwFlag(adios2_mode_write);
+            Open();
+        }
+        else
+        {
+            if (GetRwFlag() != adios2_mode_write)
+            {
+                Close();
+                SetRwFlag(adios2_mode_write);
+                Open();
+            }
+        }
     }
 
     int errio = adios2_set_selection(rw_variable, endpoint_dim_rank, adios_start.data(), adios_count.data());
@@ -190,7 +176,6 @@ int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsig
     {
         adios_start[i] = start[i];
         adios_count[i] = end[i] - start[i] + 1;
-
         //cout << "Read, adios_start: " << adios_start[0] << ", " << adios_start[1] << ", adios_count: " << adios_count[0] << ", " << adios_count[1] << "\n";
     }
 
@@ -203,13 +188,13 @@ int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsig
         if (GetRwFlag() != adios2_mode_read)
         {
             Close();
+            SetRwFlag(adios2_mode_read);
             Open();
         }
     }
 
     adios2_set_selection(rw_variable, adios_rank, adios_start.data(), adios_count.data());
     adios2_get(rw_engine, rw_variable, data, adios2_mode_sync);
-    //adios2_close(read_engine);
     return 0;
 }
 
@@ -232,7 +217,7 @@ int EndpointADIOS::Create()
             adios_shape[i] = endpoint_dim_size[i];
         }
     }
-    std::cout << "define variable : " << vn_str << ", adios_shape : " << adios_shape[0] << ", " << adios_shape[1] << " in Create\n";
+    //std::cout << "define variable : " << vn_str << ", adios_shape : " << adios_shape[0] << ", " << adios_shape[1] << " in Create\n";
 
     rw_variable = adios2_define_variable(rw_io, vn_str.c_str(), adios2_data_element_type, endpoint_dim_rank, adios_shape.data(), adios_start.data(), adios_count.data(), adios2_constant_dims_false);
     check_adios_handler(rw_variable, "adios2_define_variable", __LINE__);
@@ -251,11 +236,19 @@ int EndpointADIOS::Create()
 int EndpointADIOS::Open()
 {
     //Assume create file to write
-    rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_read);
+    if (GetRwFlag() == adios2_mode_read)
+    {
+        rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_read);
+        SetRwFlag(adios2_mode_read);
+    }
+    else
+    {
+        rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_write);
+        SetRwFlag(adios2_mode_write);
+    }
     check_adios_handler(rw_engine, "adios2_open", __LINE__);
     adios2_variable *rw_variable = adios2_inquire_variable(rw_io, vn_str.c_str());
     SetOpenFlag(true);
-    SetRwFlag(adios2_mode_read);
     return 0;
 }
 
