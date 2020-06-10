@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
             A->SetValue(i + j + 0.001, i, j);
         }
     }
-    std::cout << " \n\n";
+    std::cout << "  ... done \n\n";
 
     std::cout << "Read all cells, via GetValue() method: \n";
     //Get the data by point, same as above operation
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
         }
         std::cout << "\n";
     }
-    std::cout << " \n\n";
+    std::cout << "  ... done \n\n";
     /**
      * Read  vector
      */
@@ -80,7 +80,9 @@ int main(int argc, char *argv[])
      * 
      */
     //Let's update the data and write & read-back
-    /*  for (int i = 0; i < 6 * 6; i++)
+
+    /*
+    for (int i = 0; i < 6 * 6; i++)
     {
         datav[i] = datav[i] - 1.1;
     }
@@ -98,7 +100,6 @@ int main(int argc, char *argv[])
         std::cout << " \n";
     }
     std::cout << " \n\n";
-
 */
     delete A;
 

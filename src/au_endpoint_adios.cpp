@@ -122,29 +122,16 @@ int EndpointADIOS::Write(std::vector<unsigned long long> start, std::vector<unsi
         adios_count[i] = end[i] - start[i] + 1;
     }
 
-    if (file_exist(fn_str.c_str()) == 0)
+    if (!GetOpenFlag())
     {
-        if (!GetCreateFlag())
-        {
-            Create();
-        }
+        SetRwFlag(adios2_mode_write);
+        Open(); //open for write
     }
-    else
+    else if (GetRwFlag() != adios2_mode_write)
     {
-        if (!GetOpenFlag())
-        {
-            SetRwFlag(adios2_mode_write);
-            Open();
-        }
-        else
-        {
-            if (GetRwFlag() != adios2_mode_write)
-            {
-                Close();
-                SetRwFlag(adios2_mode_write);
-                Open();
-            }
-        }
+        Close();
+        SetRwFlag(adios2_mode_write);
+        Open();
     }
 
     int errio = adios2_set_selection(rw_variable, endpoint_dim_rank, adios_start.data(), adios_count.data());
@@ -181,16 +168,14 @@ int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsig
 
     if (!GetOpenFlag())
     {
+        SetRwFlag(adios2_mode_read);
         Open();
     }
-    else
+    else if (GetRwFlag() != adios2_mode_read)
     {
-        if (GetRwFlag() != adios2_mode_read)
-        {
-            Close();
-            SetRwFlag(adios2_mode_read);
-            Open();
-        }
+        Close();
+        SetRwFlag(adios2_mode_read);
+        Open();
     }
 
     adios2_set_selection(rw_variable, adios_rank, adios_start.data(), adios_count.data());
@@ -200,7 +185,6 @@ int EndpointADIOS::Read(std::vector<unsigned long long> start, std::vector<unsig
 
 int EndpointADIOS::Create()
 {
-
     int endpoint_dim_rank = endpoint_dim_size.size();
     adios_start.resize(endpoint_dim_rank);
     adios_count.resize(endpoint_dim_rank);
@@ -235,19 +219,27 @@ int EndpointADIOS::Create()
 
 int EndpointADIOS::Open()
 {
+    if (file_exist(fn_str.c_str()) == 0)
+    {
+        //create the file it does not exits
+        cout << "create file \n";
+        return Create();
+    }
+
     //Assume create file to write
     if (GetRwFlag() == adios2_mode_read)
     {
         rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_read);
-        SetRwFlag(adios2_mode_read);
     }
     else
     {
         rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_write);
-        SetRwFlag(adios2_mode_write);
     }
     check_adios_handler(rw_engine, "adios2_open", __LINE__);
-    adios2_variable *rw_variable = adios2_inquire_variable(rw_io, vn_str.c_str());
+
+    rw_variable = adios2_inquire_variable(rw_io, vn_str.c_str());
+    check_adios_handler(rw_variable, "adios2_define_variable", __LINE__);
+
     SetOpenFlag(true);
     return 0;
 }
