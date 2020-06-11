@@ -233,12 +233,15 @@ int EndpointADIOS::Open()
     }
     else
     {
+        //rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_append);
+
+        rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_read);
         rw_engine = adios2_open(rw_io, fn_str.c_str(), adios2_mode_write);
     }
     check_adios_handler(rw_engine, "adios2_open", __LINE__);
 
     rw_variable = adios2_inquire_variable(rw_io, vn_str.c_str());
-    check_adios_handler(rw_variable, "adios2_define_variable", __LINE__);
+    check_adios_handler(rw_variable, "adios2_inquire_variable", __LINE__);
 
     SetOpenFlag(true);
     return 0;

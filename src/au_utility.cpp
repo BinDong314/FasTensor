@@ -41,7 +41,7 @@ std::vector<std::string> GetDirFileList(std::string dir_str_p)
     int temp_index = 0;
     if (namelist_length < 0)
     {
-        AU_EXIT("Eroor in list directory");
+        AU_EXIT("Error in list directory at " + dir_str_p);
     }
     else
     {
