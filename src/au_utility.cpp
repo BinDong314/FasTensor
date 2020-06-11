@@ -1,4 +1,21 @@
 #include "au_utility.h"
+#include <limits.h>
+
+std::string realpathEx(std::string path)
+{
+    const char *path_c_str = path.c_str();
+    char *home;
+    char buff[PATH_MAX];
+    if (*path_c_str == '~' && (home = getenv("HOME")))
+    {
+        char s[PATH_MAX];
+        return std::string(realpath(strcat(strcpy(s, home), path_c_str + 1), buff));
+    }
+    else
+    {
+        return std::string(realpath(path_c_str, buff));
+    }
+}
 
 int ExtractEndpointTypeInfo(std::string endpoint_type_info, AuEndpointType &endpoint_type, std::string &endpoint_info)
 {
@@ -35,13 +52,15 @@ std::string ExtractPath(const std::string &fullPath)
 
 std::vector<std::string> GetDirFileList(std::string dir_str_p)
 {
+
     struct dirent **namelist;
-    int namelist_length = scandir(dir_str_p.c_str(), &namelist, 0, alphasort);
+    std::string dir_str_p_new = realpathEx(dir_str_p);
+    int namelist_length = scandir(dir_str_p_new.c_str(), &namelist, 0, alphasort);
     std::vector<std::string> file_list;
     int temp_index = 0;
     if (namelist_length < 0)
     {
-        AU_EXIT("Error in list directory at " + dir_str_p);
+        AU_EXIT("Error in list directory at " + dir_str_p_new);
     }
     else
     {

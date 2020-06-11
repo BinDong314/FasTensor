@@ -43,6 +43,15 @@
 #define V2VOIDP(vv) static_cast<void *>(vv.data())
 
 /**
+ * @brief expand the path to full directory 
+ *    https://www.dreamincode.net/forums/topic/218601-realpath-and-tilde/
+ * @param path 
+ * @param buff 
+ * @return char* 
+ */
+std::string realpathEx(std::string path);
+
+/**
  * @brief Get file list of a direction
  * 
  * @param dir_str_p 
