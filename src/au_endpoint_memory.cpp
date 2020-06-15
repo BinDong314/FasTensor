@@ -382,7 +382,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         sub_endpoint->SetDataElementType(data_element_type);
         sub_endpoint->SetDimensions(endpoint_dim_size);
         sub_endpoint->SetEndpointInfo(parameter);
-        std::cout << sub_endpoint->GetEndpointInfo() << "\n";
+        //std::cout << sub_endpoint->GetEndpointInfo() << "\n";
         //PrintVector("endpoint_dim_size", endpoint_dim_size);
         //std::cout << "Create pre \n";
         sub_endpoint->Create();
@@ -862,8 +862,7 @@ int EndpointMEMORY::MergeMirrors(std::string op_str){
 
   
 
-    if(!au_mpi_rank_global)
-        std::cout << "Pre write merged result to dash disabled\n" ;    
+    //if(!au_mpi_rank_global) std::cout << "Pre write merged result to dash disabled\n" ;    
     if(!au_mpi_rank_global && false){
         std::vector<unsigned long> start_ul, end_ul;
         start_ul.resize(endpoint_dim_size.size());
