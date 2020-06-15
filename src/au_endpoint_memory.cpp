@@ -293,7 +293,7 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
      */
 int EndpointMEMORY::Close()
 {
-    AU_INFO("Memory Close");
+    //AU_INFO("Memory Close");
 
     return 0;
 };
@@ -370,7 +370,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
     }
 
 
-    std::cout << "Nonvolatile \n";
+    //std::cout << "Nonvolatile \n";
     if(!au_mpi_rank_global){
         std::vector<unsigned long long> start(endpoint_dim_size.size()), end(endpoint_dim_size.size());
 
@@ -383,7 +383,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         sub_endpoint->SetDimensions(endpoint_dim_size);
         sub_endpoint->SetEndpointInfo(parameter);
         std::cout << sub_endpoint->GetEndpointInfo() << "\n";
-        PrintVector("endpoint_dim_size", endpoint_dim_size);
+        //PrintVector("endpoint_dim_size", endpoint_dim_size);
         //std::cout << "Create pre \n";
         sub_endpoint->Create();
         //std::cout << "Write pre \n";
