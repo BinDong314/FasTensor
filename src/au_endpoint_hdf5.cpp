@@ -37,7 +37,7 @@ int EndpointHDF5::Create()
     //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
     if (file_exist(fn_str.c_str()) == 0)
     {
-        std::cout << "Call H5Fcreate 1 : " << fn_str << "\n";
+        //std::cout << "Call H5Fcreate 1 : " << fn_str << "\n";
 
         fid = H5Fcreate(fn_str.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
     }
@@ -46,7 +46,7 @@ int EndpointHDF5::Create()
         fid = H5Fopen(fn_str.c_str(), H5F_ACC_RDWR, plist_id);
         if (fid < 0)
         {
-            std::cout << "Call H5Fcreate 2\n";
+            // std::cout << "Call H5Fcreate 2\n";
             fid = H5Fcreate(fn_str.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
         }
         if (fid < 0)
@@ -103,7 +103,7 @@ int EndpointHDF5::Open()
     if (file_exist(fn_str.c_str()) == 0)
     {
         Create();
-        std::cout << "Call create in Open again !\n";
+        //std::cout << "Call create in Open again !\n";
     }
 
     fid = H5Fopen(fn_str.c_str(), read_write_flag, plist_id);
