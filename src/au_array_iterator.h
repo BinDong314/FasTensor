@@ -14,6 +14,21 @@ class ArrayIterator
     T N;
 
 public:
+    /*
+    //The e_p is not included
+    //The b_p is included
+    //e.g., b_p  = (0, 0), e_p = (3,3)
+    //output is:
+        0, 0
+        0, 1
+        0, 2
+        1, 0
+        1, 1
+        1, 2
+        2, 0
+        2, 1
+        2, 2
+    */
     ArrayIterator(const A &b_p, const A &e_p) : b(b_p), i(b_p), e(e_p), N(b_p.size()) {}
 
     ArrayIterator &operator++()

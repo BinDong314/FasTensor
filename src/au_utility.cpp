@@ -5,7 +5,7 @@ std::string realpathEx(std::string path)
 {
     const char *path_c_str = path.c_str();
     char *home;
-    char buff[PATH_MAX];
+    char buff[PATH_MAX]; // = (char *)malloc(path.size());
     if (*path_c_str == '~' && (home = getenv("HOME")))
     {
         char s[PATH_MAX];
@@ -15,6 +15,7 @@ std::string realpathEx(std::string path)
     {
         return std::string(realpath(path_c_str, buff));
     }
+    //free(buff);
 }
 
 int ExtractEndpointTypeInfo(std::string endpoint_type_info, AuEndpointType &endpoint_type, std::string &endpoint_info)
@@ -55,6 +56,7 @@ std::vector<std::string> GetDirFileList(std::string dir_str_p)
 
     struct dirent **namelist;
     std::string dir_str_p_new = realpathEx(dir_str_p);
+    //std::string dir_str_p_new = dir_str_p;
     int namelist_length = scandir(dir_str_p_new.c_str(), &namelist, 0, alphasort);
     std::vector<std::string> file_list;
     int temp_index = 0;

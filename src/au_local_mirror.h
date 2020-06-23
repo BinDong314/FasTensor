@@ -67,6 +67,35 @@ int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long l
     T *local_mirror_buffer_typed = (T *)local_mirror_buffer;
     T *data_typed = (T *)data;
 
+    std::vector<unsigned long long> read_count;
+    unsigned long long element_count = 1;
+    read_count.resize(mirror_size.size());
+    for (int i = 0; i < mirror_size.size(); i++)
+    {
+        read_count[i] = end[i] - start[i] + 1;
+        element_count = element_count * read_count[i];
+    }
+
+    if (read_count == mirror_size)
+    {
+        //std::cout << "Access local whole ! \n";
+        if (read_write_code == LOCAL_MIRROR_READ_FLAG)
+        {
+            std::memcpy(data, local_mirror_buffer, element_count * sizeof(T));
+        }
+        else
+        {
+            std::memcpy(local_mirror_buffer, data, element_count * sizeof(T));
+        }
+        return 0;
+    }
+    else
+    {
+        PrintVector("read_count: ", read_count);
+        PrintVector("mirror_size: ", mirror_size);
+        std::cout << "Not Access local whole ! \n";
+    }
+
     switch (mirror_size.size())
     {
     case 1:

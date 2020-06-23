@@ -408,6 +408,14 @@ public:
     }
   }
 
+  /**
+   * @brief Run a UDF on the data pointed by the array
+   * 
+   * @tparam UDFOutputType : the output type of UDF
+   * @tparam BType : The element type of output Array B
+   * @param UDF: pointer to user-defined function 
+   * @param B : Output Array B
+   */
   template <class UDFOutputType, class BType = UDFOutputType>
   void Apply(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
   {
@@ -1061,6 +1069,13 @@ public:
     return data_v[0];
   }
 
+  /**
+   * @brief Get the Value at indexs
+   * 
+   * @tparam Is : index type
+   * @param indexs : the index of data
+   * @return T : the value at indexs
+   */
   template <typename... Is>
   inline T GetValue(Is... indexs)
   {
