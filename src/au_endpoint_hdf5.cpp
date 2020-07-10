@@ -19,6 +19,7 @@
 
 int EndpointHDF5::ExtractMeta()
 {
+    PrintInfo();
     Open();
     hid_t datatype = H5Dget_type(did); /* datatype handle */
     H5T_class_t type_class = H5Tget_class(datatype);

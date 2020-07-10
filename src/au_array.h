@@ -18,6 +18,8 @@
 //see au.h for its definations
 extern int au_mpi_size_global;
 extern int au_mpi_rank_global;
+extern int au_size;
+extern int au_rank;
 
 #ifndef ARRAY_UDF_ARRAY_H
 #define ARRAY_UDF_ARRAY_H
@@ -159,7 +161,7 @@ public:
     array_data_endpoint_info = data_endpoint;
     data_auto_chunk_dim_index = auto_chunk_dim_index;
     endpoint = EndpointFactory::NewEndpoint(data_endpoint);
-
+    //std::cout << data_endpoint << "\n";
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
     chunk_size_by_user_by_dimension_flag = true;
@@ -263,33 +265,54 @@ public:
    * @param overlap_size_p 
    * @param data_size 
    */
-  void UpdateChunkSize(std::vector<int> &chunk_size_p, std::vector<unsigned long long> &data_size)
+  void UpdateChunkSize()
   {
+    //partition by dimensions
+    if (chunk_size_by_user_by_dimension_flag)
+    {
+      //data_chunked_size.resize(data_dims);
+      data_chunk_size.resize(data_dims);
+      //overlap_size_p.resize(data_dims);
+      for (int i = 0; i < data_dims; i++)
+      {
+        if (data_auto_chunk_dim_index == i)
+        {
+          if (data_size[i] % au_size == 0)
+          {
+            data_chunk_size[i] = data_size[i] / au_size;
+          }
+          else
+          {
+            data_chunk_size[i] = data_size[i] / au_size + 1;
+          }
+        }
+        else
+        {
+          data_chunk_size[i] = data_size[i];
+        }
+        //data_overlap_size[i] = 0;
+      }
+    }
 
     if (endpoint->GetEndpointType() == EP_DIR)
     {
       //chunk_size_p = endpoint->GetChunkSize();
     }
 
-    //partition by dimensions
-    if (chunk_size_by_user_by_dimension_flag)
-    {
-    }
-    //return the default chunk_size
-
     //optimal chunk_size
   }
 
-  void UpdateOverlapSize(std::vector<int> &overlap_size_p)
+  void UpdateOverlapSize()
   {
     if (endpoint->GetEndpointType() == EP_DIR || chunk_size_by_user_by_dimension_flag)
     {
+      data_overlap_size.resize(data_dims);
       for (int i = 0; i < data_dims; i++)
       {
-        overlap_size_p[i] = 0;
+        data_overlap_size[i] = 0;
       }
     }
-    //optimal chunk_size
+    //optimal overlap size
   }
 
   void InitializeApplyInput()
@@ -319,8 +342,9 @@ public:
       data_dims = data_size.size();
     }
 
-    //UpdateChunkSize(data_chunk_size, data_size);
+    UpdateChunkSize();
     //UpdateOverlapSize(data_overlap_size);
+    UpdateOverlapSize();
 
     current_chunk_start_offset.resize(data_dims);
     current_chunk_end_offset.resize(data_dims);
@@ -1200,6 +1224,16 @@ public:
     endpoint->SetDirChunkSize(dir_chunk_size_p);
   }
 
+  void SetChunkSize(std::vector<int> data_chunk_size_p)
+  {
+    data_chunk_size = data_chunk_size_p;
+  }
+
+  std::vector<int> GetChunkSize()
+  {
+    return data_chunk_size;
+  }
+
   /**
  * @brief Set the Size object
  * 
@@ -1208,6 +1242,19 @@ public:
   void SetSize(std::vector<unsigned long long> size_p)
   {
     data_size = size_p;
+  }
+
+  /**
+ * @brief Set the Size object
+ * 
+ * @param size_p 
+ */
+  std::vector<unsigned long long> GetSize()
+  {
+    endpoint->ExtractMeta();
+    data_size = endpoint->GetDimensions();
+    data_dims = data_size.size();
+    return data_size;
   }
 
   /**
@@ -1314,6 +1361,44 @@ public:
     }
 
     return 0;
+  }
+
+  void DisableCollectiveIO()
+  {
+    if (endpoint->GetEndpointType() == EP_HDF5)
+    {
+      endpoint->DisableCollectiveIO();
+    }
+  }
+
+  void EnableCollectiveIO()
+  {
+    if (endpoint->GetEndpointType() == EP_HDF5)
+    {
+      endpoint->EnableCollectiveIO();
+    }
+  }
+
+  void ReportTime()
+  {
+    std::vector<double> mpi_stats_read, mpi_stats_udf, mpi_stats_write;
+    MPIReduceStats(time_read, mpi_stats_read);
+    MPIReduceStats(time_udf, mpi_stats_udf);
+    MPIReduceStats(time_write, mpi_stats_write);
+
+    if (au_rank == 0)
+    {
+      std::cout << "Timing Results of All " << std::endl;
+      std::cout << "Read      time (s) : max = " << mpi_stats_read[0] << ", min = " << mpi_stats_read[1] << ", ave = " << mpi_stats_read[2] / au_size << std::endl;
+      std::cout << "UDF       time (s) : max = " << mpi_stats_udf[0] << ", min = " << mpi_stats_udf[0] << ", ave = " << mpi_stats_udf[0] / au_size << std::endl;
+      std::cout << "Write     time (s) : max = " << mpi_stats_write[0] << ", min = " << mpi_stats_write[0] << ", ave = " << mpi_stats_write[0] / au_size << std::endl;
+      fflush(stdout);
+    }
+
+    //reset timer to zero
+    time_read = 0;
+    time_write = 0;
+    time_udf = 0;
   }
 
 }; // class of array

@@ -157,6 +157,28 @@ inline MPI_Op InferMPIMergeOp(std::string &opt_str)
         MPI_Bcast(data_bffer_p, count_p, datatype_p, root_p, comm_p); \
     }
 
+/**
+ * @brief get max/min/sum of local_value 
+ * 
+ * @tparam T 
+ * @param local_value : input value
+ * @param stats_vector : stats result: max, min, sum
+ */
+template <typename T>
+inline void MPIReduceStats(const T local_value, std::vector<T> &stats_vector)
+{
+    MPI_Datatype mpi_type = InferMPIType<T>();
+    T value_max, value_min, value_sum;
+    MPI_Allreduce(&local_value, &value_max, 1, mpi_type, MPI_MAX, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_value, &value_min, 1, mpi_type, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(&local_value, &value_sum, 1, mpi_type, MPI_SUM, MPI_COMM_WORLD);
+
+    stats_vector.resize(3);
+    stats_vector[0] = value_max;
+    stats_vector[1] = value_min;
+    stats_vector[2] = value_sum;
+}
+
 #else
 #define MPI_COMM_TYPE int
 #define AU_WTIME_TYPE time_t
@@ -174,6 +196,22 @@ inline MPI_Op InferMPIMergeOp(std::string &opt_str)
 #define MPI_FINALIZE() \
     {                  \
     }
+
+/**
+ * @brief get max/min/sum of local_value 
+ * 
+ * @tparam T 
+ * @param local_value : input value
+ * @param stats_vector : stats result
+ */
+template <typename T>
+inline void MPIReduceStats(const T local_value, std::vector<T> &stats_vector)
+{
+    stats_vector.resize(3);
+    stats_vector[0] = local_value;
+    stats_vector[1] = local_value;
+    stats_vector[2] = local_value;
+}
 
 template <typename T>
 inline int InferMPIType()
