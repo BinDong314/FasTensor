@@ -1,13 +1,4 @@
 /**
- *ArrayUDF Copyright (c) 2017, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
- *
- *If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at  IPO@lbl.gov.
- *
- * NOTICE. This Software was developed under funding from the U.S. Department of Energy and the U.S. Government consequently retains certain rights. As such, the U.S. Government has been granted for itself and others acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the Software to reproduce, distribute copies to the public, prepare derivative works, and perform publicly and display publicly, and to permit other to do so. 
- *
- */
-
-/**
  *
  * Email questions to {dbin}@lbl.gov
  * Scientific Data Management Research Group
@@ -33,7 +24,7 @@ int EndpointDIR::ExtractMeta()
         sub_endpoint->ExtractMeta();
         temp_endpoint_dim_size = sub_endpoint->GetDimensions();
 
-        if (i == 0)
+        if (i == dir_data_merge_index)
         {
             endpoint_dim_size = temp_endpoint_dim_size;
         }
@@ -205,4 +196,54 @@ std::vector<std::string> EndpointDIR::GetDirFileVector()
 void EndpointDIR::SetDirFileVector(std::vector<std::string> &file_list)
 {
     dir_file_list = file_list;
+}
+
+int EndpointDIR::SpecialOperator(int opt_code, std::string parameter)
+{
+    int sub_cmd;
+    std::string sub_cmd_arg, temp_str;
+    std::stringstream ss(parameter);
+
+    switch (opt_code)
+    {
+    case DIR_MERGE_INDEX:
+        SetMergeIndex(std::stoi(parameter));
+        break;
+    case DIR_SUB_CMD_ARG:
+        if (!std::getline(ss, temp_str, ':'))
+        {
+            AU_EXIT("Invalued sub_endpoint_info");
+        }
+        sub_cmd = std::stoi(temp_str);
+
+        if (!std::getline(ss, sub_cmd_arg, ':'))
+        {
+            AU_EXIT("Invalued sub_endpoint_info");
+        }
+        if (sub_endpoint != nullptr)
+            sub_endpoint->SpecialOperator(sub_cmd, sub_cmd_arg);
+        break;
+    default:
+        break;
+    }
+}
+
+/**
+     * @brief Set the Merge Index
+     * 
+     * @param index_p 
+     */
+void EndpointDIR::SetMergeIndex(int index_p)
+{
+    dir_data_merge_index = 0;
+}
+
+/**
+     * @brief Get the Merge Index object
+     * 
+     * @return int 
+     */
+int EndpointDIR::GetMergeIndex()
+{
+    return dir_data_merge_index;
 }

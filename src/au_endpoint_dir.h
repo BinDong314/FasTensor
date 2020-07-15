@@ -18,6 +18,9 @@
 #ifndef END_POINT_DIR_H
 #define END_POINT_DIR_H
 
+#define DIR_MERGE_INDEX 0
+#define DIR_SUB_CMD_ARG 1
+
 #include "au_utility.h"
 #include "au_type.h"
 #include "au_endpoint.h"
@@ -35,12 +38,14 @@ private:
     std::string endpoint_info;
     AuEndpointType sub_endpoint_type;
     std::string sub_endpoint_info; //Directory of files
-    Endpoint *sub_endpoint;
+    Endpoint *sub_endpoint = nullptr;
 
     std::string dir_str;
     std::vector<std::string> dir_file_list;
     std::string append_sub_endpoint_info;              //dir_file_list[i] + append_sub_endpoint_info is the finale sub_endpoint_info
     std::vector<int> dir_chunk_size, dir_overlap_size; //set chunk size to be each sub_endpoint
+
+    int dir_data_merge_index = 0;
 
 public:
     /**
@@ -139,5 +144,27 @@ public:
     std::vector<std::string> GetDirFileVector() override;
 
     void SetDirFileVector(std::vector<std::string> &file_list) override;
+
+    /**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     */
+    int SpecialOperator(int opt_code, std::string parameter) override;
+
+    /**
+     * @brief Set the Merge Index
+     * 
+     * @param index_p 
+     */
+    void SetMergeIndex(int index_p);
+
+    /**
+     * @brief Get the Merge Index object
+     * 
+     * @return int 
+     */
+    int GetMergeIndex();
 };
 #endif

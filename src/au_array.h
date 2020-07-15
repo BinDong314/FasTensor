@@ -1363,6 +1363,21 @@ public:
     return 0;
   }
 
+  /**
+   * @brief pass command cmd to Endpoint of Array
+   * 
+   * @param cmd_p : int cmd (specific to Endpoint)
+   * @param arg_p : string arg (specific to cmd)
+   */
+  void EndpointControl(int cmd_p, std::string arg_p)
+  {
+    endpoint->SpecialOperator(cmd_p, arg_p);
+  }
+
+  /**
+   * @brief merge below to EndpointControl
+   * 
+   */
   void DisableCollectiveIO()
   {
     if (endpoint->GetEndpointType() == EP_HDF5)

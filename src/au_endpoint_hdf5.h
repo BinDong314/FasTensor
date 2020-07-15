@@ -27,6 +27,11 @@
 
 #include "hdf5.h" //right now, we only have code for HDF5
 
+#define OP_ENABLE_MPI_IO 0
+#define OP_DISABLE_MPI_IO 1
+#define OP_ENABLE_COLLECTIVE_IO 2
+#define OP_DISABLE_COLLECTIVE_IO 3
+
 //
 //I/O layer
 class EndpointHDF5 : public Endpoint
@@ -51,6 +56,8 @@ public:
         SetOpenFlag(false);
         SetRwFlag(H5F_ACC_RDONLY);
         SetEndpointType(EP_HDF5);
+        EnableMPIIO();
+        EnableCollectiveIO();
     }
     /**
      * @brief Construct a new Endpoint in HDF5 
@@ -61,6 +68,8 @@ public:
         SetOpenFlag(false);
         SetRwFlag(H5F_ACC_RDONLY);
         SetEndpointType(EP_HDF5);
+        EnableMPIIO();
+        EnableCollectiveIO();
     }
 
     ~EndpointHDF5()
@@ -127,11 +136,23 @@ public:
 
     void DisableCollectiveIO() override;
 
+    void EnableMPIIO();
+
+    void DisableMPIIO();
+
     /**
      * @brief parse endpoint_info to my own info
      *        In HDF5, it map endpoint_info to filename, group name and datasetname
      * @return int: 0 works,  < 0 error,
      */
     int ParseEndpointInfo() override;
+
+    /**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     */
+    int SpecialOperator(int opt_code, std::string parameter) override;
 };
 #endif

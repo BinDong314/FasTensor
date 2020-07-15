@@ -19,7 +19,7 @@
 
 int EndpointHDF5::ExtractMeta()
 {
-    PrintInfo();
+    //PrintInfo();
     Open();
     hid_t datatype = H5Dget_type(did); /* datatype handle */
     H5T_class_t type_class = H5Tget_class(datatype);
@@ -34,8 +34,10 @@ int EndpointHDF5::Create()
 {
     Map2MyType();
     std::string root_dir = "/";
+
     //plist_id = H5Pcreate(H5P_FILE_ACCESS);
     //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+
     if (file_exist(fn_str.c_str()) == 0)
     {
         //std::cout << "Call H5Fcreate 1 : " << fn_str << "\n";
@@ -131,7 +133,7 @@ int EndpointHDF5::Open()
 
     SetOpenFlag(true);
 
-    plist_cio_id = H5P_DEFAULT;
+    //plist_cio_id = H5P_DEFAULT;
     return 0;
 }
 
@@ -147,7 +149,7 @@ int EndpointHDF5::Read(std::vector<unsigned long long> start, std::vector<unsign
 {
     if (GetOpenFlag() == false)
     {
-        ExtractMeta();
+        ExtractMeta(); //It also opens
     }
 
     Map2MyType();
@@ -180,8 +182,9 @@ int EndpointHDF5::Read(std::vector<unsigned long long> start, std::vector<unsign
      */
 int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
+    Map2MyType();
 
-    /*if (!GetOpenFlag())
+    if (!GetOpenFlag())
     {
         SetRwFlag(H5F_ACC_RDWR);
         ExtractMeta(); //Will call open
@@ -191,11 +194,10 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
         SetRwFlag(H5F_ACC_RDWR);
         Close();       //Close
         ExtractMeta(); //Re-open it
-    }*/
-    Map2MyType();
-    Close();
-    SetRwFlag(H5F_ACC_RDWR);
-    Open(); //Re-open it
+    }
+    //Close();
+    //SetRwFlag(H5F_ACC_RDWR);
+    //Open(); //Re-open it
 
     std::vector<unsigned long long> offset, count;
     offset.resize(endpoint_ranks);
@@ -224,10 +226,10 @@ int EndpointHDF5::Close()
 {
     if (fid > 0)
         H5Fflush(fid, H5F_SCOPE_GLOBAL);
-    if (plist_id > 0)
+    /*if (plist_id > 0)
         H5Pclose(plist_id);
     if (plist_cio_id > 0)
-        H5Pclose(plist_cio_id);
+        H5Pclose(plist_cio_id);*/
     if (dataspace_id > 0)
         H5Sclose(dataspace_id);
     if (did > 0)
@@ -236,8 +238,8 @@ int EndpointHDF5::Close()
         H5Gclose(gid);
     if (fid > 0)
         H5Fclose(fid);
-    plist_id = H5P_DEFAULT;
-    plist_cio_id = H5P_DEFAULT;
+    //plist_id = H5P_DEFAULT;
+    //plist_cio_id = H5P_DEFAULT;
     dataspace_id = -1;
     did = -1;
     gid = -1;
@@ -249,14 +251,11 @@ int EndpointHDF5::Close()
 
 void EndpointHDF5::EnableCollectiveIO()
 {
+    EnableMPIIO();
     if (plist_cio_id > 0)
         H5Pclose(plist_cio_id);
     plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
     H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
-
-    plist_id = H5Pcreate(H5P_FILE_ACCESS);
-    //Comment out for paralle VDS test on sigle node
-    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 }
 
 void EndpointHDF5::DisableCollectiveIO()
@@ -264,7 +263,18 @@ void EndpointHDF5::DisableCollectiveIO()
     if (plist_cio_id > 0)
         H5Pclose(plist_cio_id);
     plist_cio_id = H5P_DEFAULT;
+}
 
+void EndpointHDF5::EnableMPIIO()
+{
+    if (plist_id > 0)
+        H5Pclose(plist_id);
+    plist_id = H5Pcreate(H5P_FILE_ACCESS);
+    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+}
+
+void EndpointHDF5::DisableMPIIO()
+{
     if (plist_id > 0)
         H5Pclose(plist_id);
     plist_id = H5P_DEFAULT;
@@ -357,4 +367,36 @@ int EndpointHDF5::ParseEndpointInfo()
 
     //std::cout << "fn_str =" << fn_str << ", gn_str = " << gn_str << ", dn_str =" << dn_str << std::endl;
     return 0;
+}
+
+#define OP_ENABLE_MPI_IO 0
+#define OP_DISABLE_MPI_IO 1
+#define OP_ENABLE_COLLECTIVE_IO 2
+#define OP_DISABLE_COLLECTIVE_IO 3
+
+/**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     */
+int EndpointHDF5::SpecialOperator(int opt_code, std::string parameter)
+{
+    switch (OP_ENABLE_MPI_IO)
+    {
+    case OP_ENABLE_MPI_IO:
+        EnableMPIIO();
+        break;
+    case OP_DISABLE_MPI_IO:
+        DisableMPIIO();
+        break;
+    case OP_ENABLE_COLLECTIVE_IO:
+        EnableCollectiveIO();
+        break;
+    case OP_DISABLE_COLLECTIVE_IO:
+        DisableCollectiveIO();
+        break;
+    default:
+        break;
+    }
 }
