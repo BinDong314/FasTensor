@@ -97,6 +97,7 @@ int EndpointHDF5::Create()
     dataspace_id = H5Dget_space(did);
     H5Sclose(ts_id);
     SetRwFlag(H5F_ACC_RDWR);
+    SetOpenFlag(true);
 
     //Close(); //Close for data consistency during writing
     return 0;
