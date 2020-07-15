@@ -96,8 +96,9 @@ int EndpointHDF5::Create()
 
     dataspace_id = H5Dget_space(did);
     H5Sclose(ts_id);
+    SetRwFlag(H5F_ACC_RDWR);
 
-    Close(); //Close for data consistency during writing
+    //Close(); //Close for data consistency during writing
     return 0;
 }
 
@@ -368,11 +369,6 @@ int EndpointHDF5::ParseEndpointInfo()
     //std::cout << "fn_str =" << fn_str << ", gn_str = " << gn_str << ", dn_str =" << dn_str << std::endl;
     return 0;
 }
-
-#define OP_ENABLE_MPI_IO 0
-#define OP_DISABLE_MPI_IO 1
-#define OP_ENABLE_COLLECTIVE_IO 2
-#define OP_DISABLE_COLLECTIVE_IO 3
 
 /**
      * @brief call a special operator on endpoint
