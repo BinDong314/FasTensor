@@ -75,6 +75,8 @@ public:
     ~EndpointHDF5()
     {
         Close();
+        DisableMPIIO();
+        DisableCollectiveIO();
     }
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
