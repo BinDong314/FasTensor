@@ -58,7 +58,11 @@ public:
         endpoint_info = endpoint_info_p;
         ParseEndpointInfo();
         if (sub_endpoint_type == EP_HDF5)
+        {
             sub_endpoint = new EndpointHDF5();
+            sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, "");
+            sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, "");
+        }
         SetEndpointType(EP_DIR);
         sub_endpoint->SetDataElementType(data_element_type);
     }
