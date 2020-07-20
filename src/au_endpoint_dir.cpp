@@ -24,7 +24,7 @@ int EndpointDIR::ExtractMeta()
         sub_endpoint->ExtractMeta();
         temp_endpoint_dim_size = sub_endpoint->GetDimensions();
 
-        if (i == dir_data_merge_index)
+        if (i == 0)
         {
             endpoint_dim_size = temp_endpoint_dim_size;
         }
@@ -45,7 +45,7 @@ int EndpointDIR::ExtractMeta()
     {
         dir_chunk_size[i] = endpoint_dim_size[i];
         dir_overlap_size[i] = 0;
-        if (i == 0)
+        if (i == dir_data_merge_index)
         {
             endpoint_dim_size[i] = endpoint_dim_size[i] * dir_file_list.size();
         }
@@ -82,23 +82,37 @@ int EndpointDIR::Open()
 int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
 
-    int sub_endpoint_index = 0;
-    sub_endpoint_index = start[0] / dir_chunk_size[0];
-    start[0] = 0;
-    end[0] = dir_chunk_size[0] - 1;
+    int sub_endpoint_index = 0, sub_endpoint_index_end = 0;
+    sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
+    sub_endpoint_index_end = (end[dir_data_merge_index] + 1) / dir_chunk_size[dir_data_merge_index];
+
+    start[dir_data_merge_index] = 0;
+    end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
     //PrintVector("start", start);
     //PrintVector("end", end);
     //std::cout << "DIR read sub (before) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
 
-    sub_endpoint->SetDataElementType(data_element_type);
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
-    //sub_endpoint->Close();
-    sub_endpoint->Open();
-    sub_endpoint->Read(start, end, data);
-    sub_endpoint->Close();
+    size_t total_element;
+    COUNT_CELLS(start, end, total_element);
+    size_t sub_endpoint_element_size = sub_endpoint->GetDataElementTypeSize();
+
+    std::cout << "sub_endpoint_element_size = " << sub_endpoint_element_size << ", total_element =" << total_element << "\n";
+    void *data_temp = malloc(total_element * sub_endpoint_element_size);
+
+    for (int i = sub_endpoint_index; i < sub_endpoint_index_end; i++)
+    {
+        //sub_endpoint->SetDataElementType(data_element_type);
+        sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
+        //sub_endpoint->Close();
+        sub_endpoint->Open();
+        sub_endpoint->Read(start, end, data_temp);
+        sub_endpoint->Close();
+    }
+    //Insert data_temp into data
 
     //std::cout << "DIR read sub (after) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
 
+    free(data_temp);
     return 0;
 }
 
@@ -162,12 +176,15 @@ int EndpointDIR::ParseEndpointInfo()
     std::stringstream ss(sub_endpoint_info);
     if (!std::getline(ss, dir_str, ':'))
     {
-        AU_EXIT("Invalued sub_endpoint_info");
+        AU_EXIT("Wrong sub_endpoint_info");
     }
 
-    if (!std::getline(ss, append_sub_endpoint_info, ':'))
+    if (sub_endpoint_type == EP_HDF5)
     {
-        AU_EXIT("Invalued sub_endpoint_info");
+        if (!std::getline(ss, append_sub_endpoint_info, ':'))
+        {
+            AU_EXIT("Wrong sub_endpoint_info");
+        }
     }
 
     return 0;
@@ -214,7 +231,8 @@ int EndpointDIR::SpecialOperator(int opt_code, std::string parameter)
         {
             AU_EXIT("Invalued sub_endpoint_info");
         }
-        sub_cmd = std::stoi(temp_str);
+        if (sub_endpoint != nullptr)
+            sub_cmd = sub_endpoint->MapOpStr2Int(temp_str);
 
         if (!std::getline(ss, sub_cmd_arg, ':'))
         {
@@ -226,6 +244,7 @@ int EndpointDIR::SpecialOperator(int opt_code, std::string parameter)
     default:
         break;
     }
+    return 0;
 }
 
 /**
@@ -235,7 +254,7 @@ int EndpointDIR::SpecialOperator(int opt_code, std::string parameter)
      */
 void EndpointDIR::SetMergeIndex(int index_p)
 {
-    dir_data_merge_index = 0;
+    dir_data_merge_index = index_p;
 }
 
 /**

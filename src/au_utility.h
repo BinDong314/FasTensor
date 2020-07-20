@@ -225,11 +225,11 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
     }
 #endif
 
-#define AU_EXIT(info)                                                                                     \
-    {                                                                                                     \
-        std::cout << "Exit happens at " << __FILE__ << ", " << __func__ << ", " << __LINE__ << std::endl; \
-        std::cout << "Log : " << info << std::endl;                                                       \
-        std::exit(EXIT_FAILURE);                                                                          \
+#define AU_EXIT(info)                                                                                                            \
+    {                                                                                                                            \
+        std::cout << "Exit happens at file: " << __FILE__ << ",  function: " << __func__ << ", line: " << __LINE__ << std::endl; \
+        std::cout << "Log : " << info << std::endl;                                                                              \
+        std::exit(EXIT_FAILURE);                                                                                                 \
     }
 
 #define AU_INFO(info)                                                                             \

@@ -25,6 +25,7 @@
 #include "au_type.h"
 #include "au_endpoint.h"
 #include "au_endpoint_hdf5.h"
+#include "au_endpoint_tdms.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -58,7 +59,15 @@ public:
         endpoint_info = endpoint_info_p;
         ParseEndpointInfo();
         if (sub_endpoint_type == EP_HDF5)
+        {
             sub_endpoint = new EndpointHDF5();
+            sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, "");
+            sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, "");
+        }
+        else if (sub_endpoint_type == EP_TDMS)
+        {
+            sub_endpoint = new EndpointTDMS();
+        }
         SetEndpointType(EP_DIR);
         sub_endpoint->SetDataElementType(data_element_type);
     }
@@ -69,6 +78,8 @@ public:
 
     ~EndpointDIR()
     {
+        if (sub_endpoint != nullptr)
+            delete sub_endpoint;
     }
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type

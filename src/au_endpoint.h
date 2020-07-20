@@ -245,6 +245,22 @@ public:
      * @param opt_code, specially defined code 
      */
     virtual int SpecialOperator(int opt_code, std::string parameter);
+
+    /**
+     * @brief map a op_cmd_str to int as input of SpecialOperator
+     * 
+     * @param op_cmd_str cmd string 
+     * @return int 
+     */
+    virtual int MapOpStr2Int(std::string op_cmd_str);
+
+    /**
+     * @brief map op_int to string 
+     * 
+     * @param op_int 
+     * @return std::string 
+     */
+    virtual std::string MapOpInt2Str(int op_int);
 };
 
 #endif
