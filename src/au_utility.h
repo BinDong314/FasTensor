@@ -91,6 +91,23 @@ int file_exist(const char *filename);
         }                                                                                \
     }
 
+/**
+ * @brief help function to counts cells between start/end
+ * 
+ */
+#define COUNT_RANGES(start_address_p, end_address_p, count_p)       \
+    {                                                               \
+        assert(start_address_p.size() == end_address_p.size());     \
+        if (count_p.size() != start_address_p.size())               \
+        {                                                           \
+            count_p.resize(start_address_p.size());                 \
+        }                                                           \
+        for (int i = 0; i < start_address_p.size(); i++)            \
+        {                                                           \
+            count_p[i] = end_address_p[i] - start_address_p[i] + 1; \
+        }                                                           \
+    }
+
 template <typename T>
 inline void PrintVector(std::string name, std::vector<T> v)
 {
@@ -519,4 +536,5 @@ inline void *ExtractAttributeFromVirtualArrayVector<std::complex<double>>(std::v
 {
     AU_EXIT("std::complex<double> does work with cista::to_tuple<");
 }
+
 #endif

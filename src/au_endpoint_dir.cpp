@@ -7,6 +7,7 @@
  */
 
 #include "au_endpoint_dir.h"
+#include "au_array_view_access.h"
 
 int EndpointDIR::ExtractMeta()
 {
@@ -82,34 +83,54 @@ int EndpointDIR::Open()
 int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
 
+    int data_rank = start.size();
+
+    //get the size of data to read
+    std::vector<unsigned long long> count(data_rank);
+    COUNT_RANGES(start, end, count);
+
     int sub_endpoint_index = 0, sub_endpoint_index_end = 0;
     sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
     sub_endpoint_index_end = (end[dir_data_merge_index] + 1) / dir_chunk_size[dir_data_merge_index];
 
-    start[dir_data_merge_index] = 0;
-    end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
-    //PrintVector("start", start);
-    //PrintVector("end", end);
+    std::vector<unsigned long long> start_sub_endpoint(start.begin(), start.end()), end_sub_endpoint(end.begin(), end.end());
+    start_sub_endpoint[dir_data_merge_index] = 0;
+    end_sub_endpoint[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
+
+    PrintScalar("sub_endpoint_index", sub_endpoint_index);
+    PrintScalar("sub_endpoint_index_end", sub_endpoint_index_end);
+    PrintVector("start_sub_endpoint", start_sub_endpoint);
+    PrintVector("end_sub_endpoint", end_sub_endpoint);
+
     //std::cout << "DIR read sub (before) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
 
     size_t total_element;
-    COUNT_CELLS(start, end, total_element);
+    COUNT_CELLS(start_sub_endpoint, end_sub_endpoint, total_element);
     size_t sub_endpoint_element_size = sub_endpoint->GetDataElementTypeSize();
 
     std::cout << "sub_endpoint_element_size = " << sub_endpoint_element_size << ", total_element =" << total_element << "\n";
     void *data_temp = malloc(total_element * sub_endpoint_element_size);
 
-    for (int i = sub_endpoint_index; i < sub_endpoint_index_end; i++)
+    std::vector<unsigned long long> view_start(data_rank), view_end(data_rank);
+    for (int i = sub_endpoint_index; i <= sub_endpoint_index_end; i++)
     {
         //sub_endpoint->SetDataElementType(data_element_type);
         sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
         //sub_endpoint->Close();
         sub_endpoint->Open();
-        sub_endpoint->Read(start, end, data_temp);
+        sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
         sub_endpoint->Close();
+        for (int j = 0; j < data_rank; j++)
+        {
+            view_start[j] = dir_chunk_size[j] * i;
+            view_end[j] = view_start[j] + end_sub_endpoint[j] - start_sub_endpoint[j] + 1;
+        }
+        PrintVector("view_start: ", view_start);
+        PrintVector("view_end: ", view_end);
+        ArrayViewAccess(data_temp, data, count, view_start, view_end, ARRAY_VIEW_WRITE, sub_endpoint_element_size);
     }
     //Insert data_temp into data
-
+    //inline int ArrayViewAccess(void *view_buffer, void *array_buffer, std::vector<unsigned long long> &array_size, std::vector<unsigned long long> &start, std::vector<unsigned long long> &end, int read_write_code, int element_size);
     //std::cout << "DIR read sub (after) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
 
     free(data_temp);

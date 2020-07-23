@@ -25,7 +25,7 @@
 #include <cmath>
 #include <stdlib.h>
 #include "au_utility.h"
-#include "au_array_iterator.h"
+#include "au_array_view_access.h"
 #include "au_utility.h"
 
 using namespace std;
@@ -345,9 +345,20 @@ public:
 
     rv.resize(n);
 
-    size_t offset, rv_offset = 0;
-    std::vector<size_t> coordinate;
-    coordinate.resize(rank_temp);
+    std::vector<unsigned long long> view_start(rank_temp), view_end(rank_temp);
+    for (int ii = 0; ii < rank_temp; ii++)
+    {
+      view_start[ii] = my_location[ii] + start_offset[ii];
+      view_end[ii] = my_location[ii] + end_offset[ii];
+    }
+    ArrayViewAccess(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ, sizeof(T));
+
+    //inline int ArrayViewAccess(void *view_buffer, void *array_buffer, std::vector<unsigned long long> &array_size, std::vector<unsigned long long> &start, std::vector<unsigned long long> &end, int read_write_code, int element_size);
+    //size_t offset, rv_offset = 0;
+    //std::vector<size_t> coordinate;
+    //coordinate.resize(rank_temp);
+
+    /*
     for (ArrayIterator<size_t> c(start_offset_size_t, end_offset_size_t); c; ++c)
     {
       //PrintVector("ArrayIterator_c: ", c);
@@ -362,7 +373,28 @@ public:
       assert(offset <= chunk_data_size);
       rv[rv_offset] = chunk_data_pointer[offset];
       rv_offset = rv_offset + 1;
-    }
+    }*/
+
+    /*
+    std::vector<int> coordinate_iterate(start_offset.begin(), start_offset.end());
+
+    for (size_t ii = 0; ii < n; ii++)
+    {
+      //PrintVector("ArrayIterator_c: ", c);
+      for (int j = 0; j < rank_temp; j++)
+      {
+        coordinate[j] = my_location[j] + coordinate_iterate[j];
+        if (coordinate[j] >= chunk_dim_size[j]) //Check boundary :: Be careful with size overflow
+          coordinate[j] = chunk_dim_size[j] - 1;
+      }
+
+      ROW_MAJOR_ORDER_MACRO(chunk_dim_size, rank_temp, coordinate, offset);
+      assert(offset <= chunk_data_size);
+      rv[rv_offset] = chunk_data_pointer[offset];
+      rv_offset = rv_offset + 1;
+
+      ITERATOR_MACRO(coordinate_iterate, start_offset, end_offset);
+    }*/
 
     return rv;
   }
@@ -370,7 +402,7 @@ public:
   int Write(std::vector<int> &start_offset, std::vector<int> &end_offset, std::vector<T> &data) const
   {
     int rank_temp = start_offset.size();
-    std::vector<size_t> start_offset_size_t, end_offset_size_t;
+    /*std::vector<size_t> start_offset_size_t, end_offset_size_t;
     start_offset_size_t.resize(rank_temp);
     end_offset_size_t.resize(rank_temp);
     size_t n = 1;
@@ -381,8 +413,17 @@ public:
       assert(end_offset[i] >= 0);
       start_offset_size_t[i] = start_offset[i];
       end_offset_size_t[i] = end_offset[i] + 1;
-    }
+    }*/
 
+    std::vector<unsigned long long> view_start(rank_temp), view_end(rank_temp);
+    for (int ii = 0; ii < rank_temp; ii++)
+    {
+      view_start[ii] = my_location[ii] + start_offset[ii];
+      view_end[ii] = my_location[ii] + end_offset[ii];
+    }
+    ArrayViewAccess(data.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_WRITE, sizeof(T));
+
+    /*
     size_t offset, rv_offset = 0;
     std::vector<size_t> coordinate;
     coordinate.resize(rank_temp);
@@ -398,7 +439,7 @@ public:
       assert(offset <= chunk_data_size);
       chunk_data_pointer[offset] = data[rv_offset];
       rv_offset = rv_offset + 1;
-    }
+    }*/
 
     return 0;
   }

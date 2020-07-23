@@ -137,7 +137,8 @@ am_libArrayUDF_la_OBJECTS = au.lo au_array.lo au_endpoint.lo \
 	au_type.lo au_endpoint_hdf5.lo au_utility.lo \
 	au_endpoint_dir.lo au_endpoint_memory.lo au_endpoint_adios.lo \
 	au_endpoint_pnetcdf.lo au_endpoint_tdms.lo \
-	au_endpoint_binary.lo
+	au_endpoint_binary.lo au_array_iterator.lo \
+	au_array_view_access.lo
 libArrayUDF_la_OBJECTS = $(am_libArrayUDF_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -163,6 +164,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/au.Plo ./$(DEPDIR)/au_array.Plo \
+	./$(DEPDIR)/au_array_iterator.Plo \
+	./$(DEPDIR)/au_array_view_access.Plo \
 	./$(DEPDIR)/au_endpoint.Plo ./$(DEPDIR)/au_endpoint_adios.Plo \
 	./$(DEPDIR)/au_endpoint_binary.Plo \
 	./$(DEPDIR)/au_endpoint_dir.Plo \
@@ -397,7 +400,9 @@ libArrayUDF_la_SOURCES = au.h au.cpp \
                        au_endpoint_adios.h au_endpoint_adios.cpp \
                        au_endpoint_pnetcdf.h au_endpoint_pnetcdf.cpp \
                        au_endpoint_tdms.h  au_endpoint_tdms.cpp \
-                       au_endpoint_binary.h au_endpoint_binary.cpp
+                       au_endpoint_binary.h au_endpoint_binary.cpp \
+                       au_array_iterator.h au_array_iterator.cpp \
+                       au_array_view_access.h au_array_view_access.cpp 
 
 libArrayUDF_la_LDFLAGS = -version-info 0:0:0  -all-static
 include_HEADERS = au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5.h \
@@ -408,7 +413,9 @@ include_HEADERS = au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hd
                 au_endpoint_adios.h \
                 au_endpoint_pnetcdf.h \
                 au_endpoint_tdms.h \
-                au_endpoint_binary.h
+                au_endpoint_binary.h \
+                au_array_view_access.h \
+                au_array_iterator.h
 
 all: all-am
 
@@ -490,6 +497,8 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_array.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_array_iterator.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_array_view_access.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_endpoint.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_endpoint_adios.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_endpoint_binary.Plo@am__quote@ # am--include-marker
@@ -688,6 +697,8 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/au.Plo
 	-rm -f ./$(DEPDIR)/au_array.Plo
+	-rm -f ./$(DEPDIR)/au_array_iterator.Plo
+	-rm -f ./$(DEPDIR)/au_array_view_access.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint_adios.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint_binary.Plo
@@ -745,6 +756,8 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/au.Plo
 	-rm -f ./$(DEPDIR)/au_array.Plo
+	-rm -f ./$(DEPDIR)/au_array_iterator.Plo
+	-rm -f ./$(DEPDIR)/au_array_view_access.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint_adios.Plo
 	-rm -f ./$(DEPDIR)/au_endpoint_binary.Plo
