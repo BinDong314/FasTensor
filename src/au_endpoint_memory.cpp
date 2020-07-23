@@ -392,7 +392,8 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         sub_endpoint->SetDataElementType(data_element_type);
         sub_endpoint->SetDimensions(endpoint_dim_size);
         sub_endpoint->SetEndpointInfo(parameter);
-        //std::cout << sub_endpoint->GetEndpointInfo() << "\n";
+
+        std::cout << sub_endpoint->GetEndpointInfo() << "\n";
         PrintVector("endpoint_dim_size", endpoint_dim_size);
         PrintVector("start =", start);
         PrintVector("end   =", end);
