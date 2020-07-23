@@ -118,7 +118,8 @@ inline void PrintVector(std::string name, std::vector<T> v)
         }
         std::cout << v[n - 1];
     }
-    std::cout << std::endl;
+    std::cout << std::endl
+              << std::flush;
 }
 
 template <typename T>

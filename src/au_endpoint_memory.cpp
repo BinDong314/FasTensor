@@ -374,7 +374,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         AU_EXIT("Invalued endpoint_info");
     }
 
-    //std::cout << "Nonvolatile \n";
+    std::cout << "Nonvolatile \n";
     if (!au_mpi_rank_global)
     {
         std::vector<unsigned long long> start(endpoint_dim_size.size()), end(endpoint_dim_size.size());
@@ -395,7 +395,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         //std::cout << sub_endpoint->GetEndpointInfo() << "\n";
         PrintVector("endpoint_dim_size", endpoint_dim_size);
         PrintVector("start =", start);
-        PrintVector("end =", end);
+        PrintVector("end   =", end);
 
         //std::cout << "Create pre \n";
         sub_endpoint->Create();
