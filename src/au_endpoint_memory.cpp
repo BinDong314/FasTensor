@@ -388,11 +388,15 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, "");
         sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, "");
 
-        std::cout << "Nonvolatile : after OP_DISABLE_COLLECTIVE_IO " sub_endpoint->SetDataElementType(data_element_type);
+        std::cout << "Nonvolatile : after OP_DISABLE_COLLECTIVE_IO \n";
+        sub_endpoint->SetDataElementType(data_element_type);
         sub_endpoint->SetDimensions(endpoint_dim_size);
         sub_endpoint->SetEndpointInfo(parameter);
         //std::cout << sub_endpoint->GetEndpointInfo() << "\n";
         PrintVector("endpoint_dim_size", endpoint_dim_size);
+        PrintVector("start =", start);
+        PrintVector("end =", end);
+
         //std::cout << "Create pre \n";
         sub_endpoint->Create();
         //std::cout << "Write pre \n";
