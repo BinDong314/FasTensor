@@ -385,6 +385,9 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
             end[i] = endpoint_dim_size[i] - 1;
         }
         Endpoint *sub_endpoint = new EndpointHDF5();
+        sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, "");
+        sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, "");
+
         sub_endpoint->SetDataElementType(data_element_type);
         sub_endpoint->SetDimensions(endpoint_dim_size);
         sub_endpoint->SetEndpointInfo(parameter);
