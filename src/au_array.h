@@ -1265,12 +1265,15 @@ public:
    */
   int Nonvolatile(std::string data_endpoint_p)
   {
-    std::cout << "Just Call Nonvolatile in array \n ";
+    std::cout << "Just Call Nonvolatile in array :  " << data_endpoint_p << "\n"
+              << std::flush;
 
     std::string target_array_data_endpoint_info = data_endpoint_p;
+
+    std::cout << target_endpoint->GetEndpointType() << "\n";
     Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
 
-    std::cout << "Before Call Nonvolatile in array \n ";
+    std::cout << "Before Call Nonvolatile in array \n " << std::flush;
 
     int ret;
     if (endpoint_memory_flag == true && target_endpoint->GetEndpointType() == EP_HDF5)
