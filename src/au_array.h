@@ -1271,6 +1271,8 @@ public:
     int ret;
     if (endpoint_memory_flag == true && target_endpoint->GetEndpointType() == EP_HDF5)
     {
+      std::cout << "Call Nonvolatile in array \n ";
+
       ret = endpoint->SpecialOperator(0, target_endpoint->GetEndpointInfo());
     }
     else
