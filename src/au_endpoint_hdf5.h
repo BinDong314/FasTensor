@@ -59,6 +59,23 @@ public:
         EnableMPIIO();
         EnableCollectiveIO();
     }
+
+    /**
+     * @brief Construct a new EndpointHDF5 object
+     * 
+     * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
+     */
+    EndpointHDF5(int no_mpi)
+    {
+        endpoint_info = endpoint_info_p;
+        ParseEndpointInfo();
+        SetOpenFlag(false);
+        SetRwFlag(H5F_ACC_RDONLY);
+        SetEndpointType(EP_HDF5);
+        //EnableMPIIO();
+        //EnableCollectiveIO();
+    }
+
     /**
      * @brief Construct a new Endpoint in HDF5 
      *         Nothing to do there, can be used as sub-endpoint of directory

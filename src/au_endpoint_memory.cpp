@@ -385,7 +385,10 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
             start[i] = 0;
             end[i] = endpoint_dim_size[i] - 1;
         }
-        Endpoint *sub_endpoint = new EndpointHDF5();
+        //Pass 1 to require no Collective IO, i.e. no MPI
+        //Todo: need a better way to do that
+        //This is needed when it called only from on processes
+        Endpoint *sub_endpoint = new EndpointHDF5(1);
         sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, "");
         sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, "");
 
