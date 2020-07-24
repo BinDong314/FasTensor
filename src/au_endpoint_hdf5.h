@@ -61,14 +61,14 @@ public:
     }
 
     /**
-     * @brief Construct a new EndpointHDF5 object
+     * @brief Construct a new EndpointHDF5 object without MPI
      * 
-     * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
+     * @param no_mpi  any number should work
      */
     EndpointHDF5(int no_mpi)
     {
-        endpoint_info = endpoint_info_p;
-        ParseEndpointInfo();
+        //endpoint_info = endpoint_info_p;
+        //ParseEndpointInfo();
         SetOpenFlag(false);
         SetRwFlag(H5F_ACC_RDONLY);
         SetEndpointType(EP_HDF5);
