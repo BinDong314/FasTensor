@@ -281,6 +281,7 @@ void EndpointHDF5::DisableMPIIO()
     if (plist_id > 0)
         H5Pclose(plist_id);
     //std::cout << "DisableMPIIO \n";
+
     plist_id = H5P_DEFAULT;
 }
 
