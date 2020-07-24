@@ -1268,6 +1268,8 @@ public:
     std::string target_array_data_endpoint_info = data_endpoint_p;
     Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
 
+    std::cout << "Before Call Nonvolatile in array \n ";
+
     int ret;
     if (endpoint_memory_flag == true && target_endpoint->GetEndpointType() == EP_HDF5)
     {
