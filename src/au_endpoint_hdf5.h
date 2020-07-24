@@ -58,6 +58,9 @@ public:
         SetEndpointType(EP_HDF5);
         EnableMPIIO();
         EnableCollectiveIO();
+
+        std::cout << " EndpointHDF5 construct :  " << endpoint_info << "\n"
+                  << std::flush;
     }
     /**
      * @brief Construct a new Endpoint in HDF5 
