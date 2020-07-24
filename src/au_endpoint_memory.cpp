@@ -332,6 +332,7 @@ int EndpointMEMORY::SpecialOperator(int opt_code, std::string parameter)
     switch (opt_code)
     {
     case DASH_NONVOLATILE_CODE:
+        std::cout << "Call Nonvolatile \n ";
         ret = Nonvolatile(parameter);
         break;
     case DASH_VOLATILE_CODE:
