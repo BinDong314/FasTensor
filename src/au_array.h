@@ -1270,8 +1270,8 @@ public:
 
     std::string target_array_data_endpoint_info = data_endpoint_p;
 
-    std::cout << target_endpoint->GetEndpointType() << "\n";
     Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
+    std::cout << target_endpoint->GetEndpointType() << "\n";
 
     std::cout << "Before Call Nonvolatile in array \n " << std::flush;
 
