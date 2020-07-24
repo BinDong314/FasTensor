@@ -1265,6 +1265,8 @@ public:
    */
   int Nonvolatile(std::string data_endpoint_p)
   {
+    std::cout << "Just Call Nonvolatile in array \n ";
+
     std::string target_array_data_endpoint_info = data_endpoint_p;
     Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
 
