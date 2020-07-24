@@ -383,7 +383,7 @@ int EndpointHDF5::ParseEndpointInfo()
      */
 int EndpointHDF5::SpecialOperator(int opt_code, std::string parameter)
 {
-    switch (OP_ENABLE_MPI_IO)
+    switch (opt_code)
     {
     case OP_ENABLE_MPI_IO:
         EnableMPIIO();
