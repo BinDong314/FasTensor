@@ -262,7 +262,7 @@ void EndpointHDF5::EnableCollectiveIO()
 
 void EndpointHDF5::DisableCollectiveIO()
 {
-    std::cout << "DisableCollectiveIO \n";
+    //std::cout << "DisableCollectiveIO \n";
     if (plist_cio_id > 0)
         H5Pclose(plist_cio_id);
     plist_cio_id = H5P_DEFAULT;
@@ -280,9 +280,7 @@ void EndpointHDF5::DisableMPIIO()
 {
     if (plist_id > 0)
         H5Pclose(plist_id);
-
-    std::cout << "DisableMPIIO \n";
-
+    //std::cout << "DisableMPIIO \n";
     plist_id = H5P_DEFAULT;
 }
 
