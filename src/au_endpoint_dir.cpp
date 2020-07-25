@@ -111,6 +111,9 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     std::cout << "sub_endpoint_element_size = " << sub_endpoint_element_size << ", total_element =" << total_element << "\n";
     void *data_temp = malloc(total_element * sub_endpoint_element_size);
 
+    //Insert data_temp into data
+    //std::cout << "DIR read sub (after) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
+
     std::vector<unsigned long long> view_start(data_rank), view_end(data_rank);
     for (int i = sub_endpoint_index; i <= sub_endpoint_index_end; i++)
     {
@@ -127,11 +130,45 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
         }
         PrintVector("view_start: ", view_start);
         PrintVector("view_end: ", view_end);
-        ArrayViewAccess(data_temp, data, count, view_start, view_end, ARRAY_VIEW_WRITE, sub_endpoint_element_size);
+
+        switch (data_element_type)
+        {
+        case AU_SHORT:
+            ArrayViewAccessP<short>((short *)data_temp, (short *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        case AU_INT:
+            ArrayViewAccessP<int>((int *)data_temp, (int *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        case AU_LONG:
+            ArrayViewAccessP<long>((long *)data_temp, (long *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        case AU_LONG_LONG:
+            ArrayViewAccessP<long long>((long long *)data_temp, (long long *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        case AU_USHORT:
+            ArrayViewAccessP<unsigned short>((unsigned short *)data_temp, (unsigned short *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        case AU_UINT:
+            ArrayViewAccessP<unsigned int>((unsigned int *)data_temp, (unsigned int *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        case AU_ULONG:
+            ArrayViewAccessP<unsigned long>((unsigned long *)data_temp, (unsigned long *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        case AU_ULLONG:
+            ArrayViewAccessP<unsigned long long>((unsigned long long *)data_temp, (unsigned long long *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        case AU_FLOAT:
+            ArrayViewAccessP<float>((float *)data_temp, (float *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        case AU_DOUBLE:
+            ArrayViewAccessP<double>((double *)data_temp, (double *)data, count, view_start, view_end, ARRAY_VIEW_WRITE);
+            break;
+        default:
+            std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+            std::flush(std::cout);
+            std::exit(EXIT_FAILURE);
+        }
     }
-    //Insert data_temp into data
-    //inline int ArrayViewAccess(void *view_buffer, void *array_buffer, std::vector<unsigned long long> &array_size, std::vector<unsigned long long> &start, std::vector<unsigned long long> &end, int read_write_code, int element_size);
-    //std::cout << "DIR read sub (after) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
 
     free(data_temp);
     return 0;

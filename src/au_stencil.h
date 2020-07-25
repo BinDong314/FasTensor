@@ -351,7 +351,10 @@ public:
       view_start[ii] = my_location[ii] + start_offset[ii];
       view_end[ii] = my_location[ii] + end_offset[ii];
     }
-    ArrayViewAccess(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ, sizeof(T));
+    //ArrayViewAccess(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ, sizeof(T));
+
+    ArrayViewAccessP<T>(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ);
+    //ArrayViewAccess();
 
     //inline int ArrayViewAccess(void *view_buffer, void *array_buffer, std::vector<unsigned long long> &array_size, std::vector<unsigned long long> &start, std::vector<unsigned long long> &end, int read_write_code, int element_size);
     //size_t offset, rv_offset = 0;
@@ -421,8 +424,8 @@ public:
       view_start[ii] = my_location[ii] + start_offset[ii];
       view_end[ii] = my_location[ii] + end_offset[ii];
     }
-    ArrayViewAccess(data.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_WRITE, sizeof(T));
-
+    //ArrayViewAccess(data.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_WRITE, sizeof(T));
+    ArrayViewAccessP<T>(data.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_WRITE);
     /*
     size_t offset, rv_offset = 0;
     std::vector<size_t> coordinate;
