@@ -21,6 +21,7 @@ int EndpointDIR::ExtractMeta()
     std::vector<unsigned long long> temp_endpoint_dim_size;
     for (int i = 0; i < dir_file_list.size(); i++)
     {
+        std::cout << dir_file_list[i] << ", in EndpointDIR::ExtractMeta\n";
         sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
         sub_endpoint->ExtractMeta();
         temp_endpoint_dim_size = sub_endpoint->GetDimensions();
@@ -85,6 +86,8 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
 
     int data_rank = start.size();
 
+    sub_endpoint->SetDataElementType(data_element_type);
+
     //get the size of data to read
     std::vector<unsigned long long> count(data_rank);
     COUNT_RANGES(start, end, count);
@@ -94,6 +97,7 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     sub_endpoint_index_end = (end[dir_data_merge_index] + 1) / dir_chunk_size[dir_data_merge_index];
 
     std::vector<unsigned long long> start_sub_endpoint(start.begin(), start.end()), end_sub_endpoint(end.begin(), end.end());
+
     start_sub_endpoint[dir_data_merge_index] = 0;
     end_sub_endpoint[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
 
@@ -114,7 +118,7 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     //Insert data_temp into data
     //std::cout << "DIR read sub (after) " << sub_endpoint->GetEndpointInfo() << ", append_sub_endpoint_info =" << append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << "\n";
 
-    std::vector<unsigned long long> view_start(data_rank), view_end(data_rank);
+    std::vector<unsigned long long> view_start(start_sub_endpoint.begin(), start_sub_endpoint.end()), view_end(end_sub_endpoint.begin(), end_sub_endpoint.end());
     for (int i = sub_endpoint_index; i <= sub_endpoint_index_end; i++)
     {
         //sub_endpoint->SetDataElementType(data_element_type);
@@ -123,11 +127,17 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
         sub_endpoint->Open();
         sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
         sub_endpoint->Close();
-        for (int j = 0; j < data_rank; j++)
+        /*for (int j = 0; j < data_rank; j++)
         {
             view_start[j] = dir_chunk_size[j] * i;
-            view_end[j] = view_start[j] + end_sub_endpoint[j] - start_sub_endpoint[j] + 1;
-        }
+            view_end[j] = view_start[j] + dir_chunk_size[j] - 1;
+        }*/
+        //start_sub_endpoint[dir_data_merge_index] = 0;
+        //end_sub_endpoint[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
+        //view_start[j] = start_sub_endpoint[dir_data_merge_index];
+        view_start[dir_data_merge_index] = i * start_sub_endpoint[dir_data_merge_index];
+        view_end[dir_data_merge_index] = (i + 1) * end_sub_endpoint[dir_data_merge_index];
+
         PrintVector("view_start: ", view_start);
         PrintVector("view_end: ", view_end);
 
@@ -191,6 +201,7 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     for (int i = 0; i < endpoint_ranks; i++)
         endpoint_dim_size[i] = dir_chunk_size[i];
 
+    std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info << " \n";
     sub_endpoint->SetDataElementType(data_element_type);
     sub_endpoint->SetDimensions(endpoint_dim_size);
     sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);

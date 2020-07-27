@@ -141,8 +141,13 @@ inline int ArrayViewAccessP(T *view_v, T *array_v, std::vector<unsigned long lon
     unsigned long long array_buffer_offset = 0, view_buffer_offset = 0;
     if (view_size.size() == 2)
     {
+        PrintVector("view_size =", view_size);
+        PrintVector("array_size =", array_size);
+
         for (int i = 0; i < view_size[0]; i++)
         {
+            // PrintScalar("array_buffer_offset = ", array_buffer_offset);
+            // PrintScalar("view_buffer_offset = ", view_buffer_offset);
             array_buffer_offset = array_size[1] * (start[0] + i) + start[1];
             view_buffer_offset = view_size[1] * i;
             //Copy each row

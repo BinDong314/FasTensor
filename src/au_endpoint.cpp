@@ -25,8 +25,6 @@ void Endpoint::SetDimensions(std::vector<unsigned long long> endpoint_dim_size_p
 void Endpoint::SetDataElementType(AuEndpointDataType data_element_type_p)
 {
     data_element_type = data_element_type_p;
-
-    std::cout << "InSet data_element_type =" << data_element_type_p << "\n";
 }
 
 AuEndpointDataType Endpoint::GetDataElementType()

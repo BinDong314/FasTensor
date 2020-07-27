@@ -146,6 +146,7 @@ public:
     endpoint = EndpointFactory::NewEndpoint(data_endpoint);
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
+
     if (endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
   }
