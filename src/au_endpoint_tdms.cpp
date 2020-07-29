@@ -15,7 +15,5 @@ void EndpointTDMS::UpdateSeekOffset()
 
     this->SetSeekOffset(seek_offset);
 
-#ifdef OUTPUT_META_TO_SCREEN
-    printf("Size of customized metadata right after the fixed %d byte header : %lld\n", NBYTE_LEADIN, nByte_metadata);
-#endif
+    //printf("TDMS header: %ld (%d fixed + %lld user's)\n", seek_offset, NBYTE_LEADIN, nByte_metadata);
 }

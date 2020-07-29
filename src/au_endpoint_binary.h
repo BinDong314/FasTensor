@@ -19,14 +19,17 @@
 #include <math.h>
 
 #define BINARY_SET_SIZE 0
-
+#define BINARY_ENABLE_TRANSPOSE_ON_READ 1
+#define BINARY_ENABLE_TRANSPOSE_ON_WRITE 2
+#define BINARY_DISABLE_TRANSPOSE_ON_READ 3
+#define BINARY_DISABLE_TRANSPOSE_ON_WRITE 4
 //
 //I/O layer
 class EndpointBinary : public Endpoint
 {
 private:
     std::string fn_str;
-    FILE *fp;
+    FILE *fp = NULL;
 
     /**
      * @brief 
@@ -42,6 +45,9 @@ private:
     size_t rw_type_size;
 
     long int seek_offset = 0; //SEEK_SET: from the beginning of file
+
+    bool tranpose_on_read_flag = false;
+    bool tranpose_on_write_flag = false;
 
     //std::vector<size_t> array_size;
 public:
@@ -186,5 +192,28 @@ public:
      * @return std::string 
      */
     std::string MapOpInt2Str(int op_int) override;
+
+    /**
+     * @brief EnableTranposeOnRead
+     * 
+     */
+    void EnableTranposeOnRead();
+    /**
+     * @brief EnableTranposeOnWrite
+     * 
+     */
+    void EnableTranposeOnWrite();
+
+    /**
+     * @brief DisableTranposeOnRead
+     * 
+     */
+    void DisableTranposeOnRead();
+
+    /**
+     * @brief DisableTranposeOnWrite
+     * 
+     */
+    void DisableTranposeOnWrite();
 };
 #endif

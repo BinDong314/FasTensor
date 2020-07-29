@@ -39,7 +39,7 @@ AuEndpointDataType Endpoint::GetDataElementType()
      */
 int Endpoint::GetDataElementTypeSize()
 {
-    std::cout << "data_element_type =" << data_element_type << "\n";
+    //std::cout << "data_element_type =" << data_element_type << "\n";
     switch (data_element_type)
     {
     case AU_SHORT:

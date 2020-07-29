@@ -23,7 +23,7 @@ int cols_chunk = 60000;
 inline Stencil<double> udf_kf1p(const Stencil<short> &iStencil)
 {
     Stencil<double> oStencil;
-    double oDouble = iStencil(0, 0) * 2.0;
+    double oDouble = iStencil(0, 0) * 1.0;
     oStencil = oDouble;
     return oStencil;
 }
@@ -44,10 +44,11 @@ int main(int argc, char *argv[])
     Array<short> *A = new Array<short>("EP_DIR:EP_TDMS:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/tdms-dir", chunk_size, overlap_size);
     A->EndpointControl(DIR_MERGE_INDEX, "1");
     A->EndpointControl(DIR_SUB_CMD_ARG, "BINARY_SET_SIZE:11648,30000");
-
+    A->EndpointControl(DIR_SUB_CMD_ARG, "BINARY_ENABLE_TRANSPOSE_ON_READ");
 
     //Result data
-    Array<double> *B = new Array<double>("EP_DIR:EP_TDMS:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/tdms-dir-dec");
+    //Array<double> *B = new Array<double>("EP_DIR:EP_TDMS:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/tdms-dir-dec");
+    Array<double> *B = new Array<double>("EP_HDF5:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/tdms-dir-dec/test.h5:/DataCT");
 
     //Run
     A->Apply(udf_kf1p, B);
