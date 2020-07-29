@@ -173,15 +173,18 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
 {
     PrintVector("EndpointDIR::Write start :", start);
     PrintVector("EndpointDIR::Write end :", end);
-
+    std::cout << " dir_data_merge_index = " << dir_data_merge_index << " \n";
     int sub_endpoint_index = 0;
-    sub_endpoint_index = start[0] / dir_chunk_size[0];
-    start[0] = 0;
-    end[0] = dir_chunk_size[0] - 1;
+    sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
+    start[dir_data_merge_index] = 0;
+    end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
     for (int i = 0; i < endpoint_ranks; i++)
         endpoint_dim_size[i] = dir_chunk_size[i];
 
-    //std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info << " \n";
+    std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info << " \n";
+
+    PrintVector("EndpointDIR::Write start (after):", start);
+    PrintVector("EndpointDIR::Write end (after) :", end);
 
     sub_endpoint->SetDataElementType(data_element_type);
     sub_endpoint->SetDimensions(endpoint_dim_size);

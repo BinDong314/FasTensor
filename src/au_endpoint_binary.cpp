@@ -94,7 +94,6 @@ int EndpointBinary::Read(std::vector<unsigned long long> start, std::vector<unsi
             switch (data_element_type)
             {
             case AU_SHORT:
-                std::cout << " call transpose !\n";
                 transpose_data_2D<short>((short *)data, (short *)temp_data, (end[1] - start[1] + 1), (end[0] - start[0] + 1));
                 break;
             case AU_INT:
