@@ -17,7 +17,7 @@ using namespace std;
 using namespace AU;
 
 int rows_chunk = 11648;
-int cols_chunk = 30000; //60000;
+int cols_chunk = 60000;
 
 //UDF One: duplicate the original data
 inline Stencil<double> udf_kf1p(const Stencil<short> &iStencil)
@@ -49,10 +49,10 @@ int main(int argc, char *argv[])
     //Result data
     //Array<double> *B = new Array<double>("EP_DIR:EP_TDMS:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/tdms-dir-dec");
 
-    Array<double> *B = new Array<double>("EP_HDF5:./tdms-dir-dec/test.h5:/DataCT");
+    //Array<double> *B = new Array<double>("EP_HDF5:./tdms-dir-dec/test.h5:/DataCT");
 
-    //Array<double> *B = new Array<double>("EP_DIR:EP_HDF5:./tdms-dir-dec/:/DataCT");
-    //B->EndpointControl(DIR_MERGE_INDEX, "1");
+    Array<double> *B = new Array<double>("EP_DIR:EP_HDF5:./tdms-dir-dec/:/DataCT");
+    B->EndpointControl(DIR_MERGE_INDEX, "1");
 
     //Run
     A->Apply(udf_kf1p, B);
