@@ -332,6 +332,19 @@ int Endpoint::SpecialOperator(int opt_code, std::string parameter)
     return 0;
 }
 
+/**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     * @param parameter_v, vector of argument
+     */
+int Endpoint::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
+{
+    AU_EXIT("Error: SpecialOperator is not implemented in endpoint");
+    return 0;
+}
+
 void Endpoint::EnableCollectiveIO()
 {
 }

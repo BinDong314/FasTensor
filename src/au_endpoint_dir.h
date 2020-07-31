@@ -20,6 +20,9 @@
 
 #define DIR_MERGE_INDEX 0
 #define DIR_SUB_CMD_ARG 1
+#define DIR_INPUT_SEARCH_RGX 2
+#define DIR_OUPUT_REPLACE_RGX 3
+#define DIR_OUPUT_REPLACE_RGX_ARG 4
 
 #include "au_utility.h"
 #include "au_type.h"
@@ -30,6 +33,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <regex>
 
 //
 //I/O layer
@@ -47,6 +51,13 @@ private:
     std::vector<int> dir_chunk_size, dir_overlap_size; //set chunk size to be each sub_endpoint
 
     int dir_data_merge_index = 0;
+
+    bool input_replace_regex_flag = false;
+    std::regex *input_filter_regex; //The regex to "search" on list of file as input
+
+    bool output_replace_regex_flag = false;
+    std::regex *output_replace_regex; //The regex to "replace" on list of file as output (input)
+    std::string output_replace_regex_aug;
 
 public:
     /**

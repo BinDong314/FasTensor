@@ -247,6 +247,15 @@ public:
     virtual int SpecialOperator(int opt_code, std::string parameter);
 
     /**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     * @param parameter_v, vector of argument
+     */
+    virtual int SpecialOperator(int opt_code, std::vector<std::string> parameter_v);
+
+    /**
      * @brief map a op_cmd_str to int as input of SpecialOperator
      * 
      * @param op_cmd_str cmd string 

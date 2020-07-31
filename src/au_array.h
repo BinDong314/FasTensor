@@ -1376,6 +1376,17 @@ public:
   }
 
   /**
+   * @brief pass command cmd to Endpoint of Array
+   * 
+   * @param cmd_p : int cmd (specific to Endpoint)
+   * @param arg_v_p : a vector of arg. It is typed as string and specific to cmd_p
+   */
+  void EndpointControl(int cmd_p, std::vector<std::string> arg_v_p)
+  {
+    endpoint->SpecialOperator(cmd_p, arg_v_p);
+  }
+
+  /**
    * @brief merge below to EndpointControl
    * 
    */

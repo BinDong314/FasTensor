@@ -11,7 +11,23 @@
 
 int EndpointDIR::ExtractMeta()
 {
-    dir_file_list = GetDirFileList(dir_str);
+    std::vector<std::string> temp_dir_file_list = GetDirFileList(dir_str);
+    //dir_file_list = GetDirFileList(dir_str);
+    if (input_replace_regex_flag)
+    {
+        dir_file_list.clear();
+        for (int i = 0; i < temp_dir_file_list.size(); i++)
+        {
+            if (std::regex_match(temp_dir_file_list[i], *input_filter_regex))
+            {
+                dir_file_list.push_back(temp_dir_file_list[i]);
+            }
+        }
+    }
+    else
+    {
+        dir_file_list = temp_dir_file_list;
+    }
 
     if (dir_file_list.size() < 0)
         AU_EXIT("No file under directory");
@@ -198,14 +214,25 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     }
     PrintVector("EndpointDIR::Write endpoint_dim_size:", endpoint_dim_size);
 
-    std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info << " \n";
+    std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " + append_sub_endpoint_info << " \n";
 
     PrintVector("EndpointDIR::Write start (after):", start);
     PrintVector("EndpointDIR::Write end (after) :", end);
 
+    std::string new_file_name_after_regex;
+    //regex re("^(.*)\\.tdms$");
+
+    if (output_replace_regex_flag)
+    {
+        new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], *output_replace_regex, output_replace_regex_aug);
+    }
+
+    std::cout << "call write :  " << dir_str + "/" + new_file_name_after_regex + ": " + append_sub_endpoint_info << " \n";
+
     sub_endpoint->SetDataElementType(data_element_type);
     sub_endpoint->SetDimensions(endpoint_dim_size);
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
+    //sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info);
     sub_endpoint->Create();
     sub_endpoint->Write(start, end, data);
     return sub_endpoint->Close();
@@ -311,6 +338,17 @@ int EndpointDIR::SpecialOperator(int opt_code, std::string parameter)
 
         if (sub_endpoint != nullptr)
             sub_endpoint->SpecialOperator(sub_cmd, sub_cmd_arg);
+        break;
+    case DIR_INPUT_SEARCH_RGX:
+        input_replace_regex_flag = true;
+        input_filter_regex = new std::regex(parameter);
+        break;
+    case DIR_OUPUT_REPLACE_RGX:
+        output_replace_regex_flag = true;
+        output_replace_regex = new std::regex(parameter);
+        break;
+    case DIR_OUPUT_REPLACE_RGX_ARG:
+        output_replace_regex_aug = parameter;
         break;
     default:
         break;

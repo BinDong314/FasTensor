@@ -45,15 +45,18 @@ int main(int argc, char *argv[])
     A->EndpointControl(DIR_MERGE_INDEX, "1");
     A->EndpointControl(DIR_SUB_CMD_ARG, "BINARY_SET_SIZE:11648,30000");
     A->EndpointControl(DIR_SUB_CMD_ARG, "BINARY_ENABLE_TRANSPOSE_ON_READ");
+    A->EndpointControl(DIR_INPUT_SEARCH_RGX, "^(.*)[135]\\.tdms$");
 
     //Result data
     //Array<double> *B = new Array<double>("EP_DIR:EP_TDMS:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/tdms-dir-dec");
 
     //Array<double> *B = new Array<double>("EP_HDF5:./tdms-dir-dec/test.h5:/DataCT");
 
+    //http://www.cplusplus.com/reference/regex/ECMAScript/
     Array<double> *B = new Array<double>("EP_DIR:EP_HDF5:./tdms-dir-dec/:/DataCT");
     B->EndpointControl(DIR_MERGE_INDEX, "1");
-
+    B->EndpointControl(DIR_OUPUT_REPLACE_RGX, "^(.*)\\.tdms$");
+    B->EndpointControl(DIR_OUPUT_REPLACE_RGX_ARG, "$1.h5");
     //Run
     A->Apply(udf_kf1p, B);
 
