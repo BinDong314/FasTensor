@@ -1,11 +1,4 @@
-/**
- *ArrayUDF Copyright (c) 2017, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
- *
- *If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at  IPO@lbl.gov.
- *
- * NOTICE. This Software was developed under funding from the U.S. Department of Energy and the U.S. Government consequently retains certain rights. As such, the U.S. Government has been granted for itself and others acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the Software to reproduce, distribute copies to the public, prepare derivative works, and perform publicly and display publicly, and to permit other to do so. 
- *
- */
+
 
 /**
  *
@@ -377,7 +370,35 @@ int EndpointHDF5::ParseEndpointInfo()
      *                 dump file from MEMORY to HDF5
      * @param opt_code, specially defined code 
      */
+/** comment out 
 int EndpointHDF5::SpecialOperator(int opt_code, std::string parameter)
+{
+    switch (OP_ENABLE_MPI_IO)
+    {
+    case OP_ENABLE_MPI_IO:
+        EnableMPIIO();
+        break;
+    case OP_DISABLE_MPI_IO:
+        DisableMPIIO();
+        break;
+    case OP_ENABLE_COLLECTIVE_IO:
+        EnableCollectiveIO();
+        break;
+    case OP_DISABLE_COLLECTIVE_IO:
+        DisableCollectiveIO();
+        break;
+    default:
+        break;
+    }
+}*/
+
+/**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     */
+int EndpointHDF5::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
 {
     switch (OP_ENABLE_MPI_IO)
     {

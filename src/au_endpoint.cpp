@@ -326,11 +326,11 @@ void Endpoint::SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
      *                 dump file from MEMORY to HDF5
      * @param opt_code, specially defined code 
      */
-int Endpoint::SpecialOperator(int opt_code, std::string parameter)
-{
-    AU_EXIT("Error: SpecialOperator is not implemented in endpoint");
-    return 0;
-}
+//int Endpoint::SpecialOperator(int opt_code, std::string parameter)
+//{
+//    AU_EXIT("Error: SpecialOperator is not implemented in endpoint");
+//    return 0;
+//}
 
 /**
      * @brief call a special operator on endpoint

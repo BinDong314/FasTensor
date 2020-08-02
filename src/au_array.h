@@ -1,11 +1,4 @@
-/**
- *ArrayUDF Copyright (c) 2017, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
- *
- *If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at  IPO@lbl.gov.
- *
- * NOTICE. This Software was developed under funding from the U.S. Department of Energy and the U.S. Government consequently retains certain rights. As such, the U.S. Government has been granted for itself and others acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the Software to reproduce, distribute copies to the public, prepare derivative works, and perform publicly and display publicly, and to permit other to do so. 
- *
- */
+
 
 /**
  *
@@ -1272,7 +1265,9 @@ public:
     int ret;
     if (endpoint_memory_flag == true && target_endpoint->GetEndpointType() == EP_HDF5)
     {
-      ret = endpoint->SpecialOperator(0, target_endpoint->GetEndpointInfo());
+      std::vector<std::string> arg_v;
+      arg_v.push_back(target_endpoint->GetEndpointInfo());
+      ret = endpoint->SpecialOperator(0, arg_v);
     }
     else
     {
@@ -1295,7 +1290,9 @@ public:
     int ret;
     if (endpoint_memory_flag == true && target_endpoint->GetEndpointType() == EP_HDF5)
     {
-      ret = endpoint->SpecialOperator(1, target_endpoint->GetEndpointInfo());
+      std::vector<std::string> arg_v;
+      arg_v.push_back(target_endpoint->GetEndpointInfo());
+      ret = endpoint->SpecialOperator(1, arg_v);
     }
     else
     {
@@ -1313,7 +1310,9 @@ public:
    */
   int Clone(T intial_value)
   {
-    std::string intial_value_str = std::to_string(intial_value);
+    std::vector<std::string> intial_value_str;
+    intial_value_str.push_back(std::to_string(intial_value));
+
     endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
     return 0;
   }
@@ -1325,14 +1324,15 @@ public:
    */
   int Clone()
   {
-    std::string intial_value_str = ""; //Empty string
-    endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
+    //std::string intial_value_str = ""; //Empty string
+    endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, std::vector<std::string>());
     return 0;
   }
 
   int Merge(int Op)
   {
-    std::string op_str = std::to_string(Op);
+    std::vector<std::string> op_str;
+    op_str.push_back(std::to_string(Op));
     endpoint->SpecialOperator(DASH_MERGE_MIRRORS_CODE, op_str);
     return 0;
   }
@@ -1370,10 +1370,10 @@ public:
    * @param cmd_p : int cmd (specific to Endpoint)
    * @param arg_p : string arg (specific to cmd)
    */
-  void EndpointControl(int cmd_p, std::string arg_p)
-  {
-    endpoint->SpecialOperator(cmd_p, arg_p);
-  }
+  //void EndpointControl(int cmd_p, std::string arg_p)
+  // {
+  //  endpoint->SpecialOperator(cmd_p, arg_p);
+  // }
 
   /**
    * @brief pass command cmd to Endpoint of Array

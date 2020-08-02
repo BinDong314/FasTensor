@@ -312,6 +312,7 @@ void EndpointDIR::SetDirFileVector(std::vector<std::string> &file_list)
     dir_file_list = file_list;
 }
 
+/*
 int EndpointDIR::SpecialOperator(int opt_code, std::string parameter)
 {
     int sub_cmd;
@@ -349,6 +350,62 @@ int EndpointDIR::SpecialOperator(int opt_code, std::string parameter)
         break;
     case DIR_OUPUT_REPLACE_RGX_ARG:
         output_replace_regex_aug = parameter;
+        break;
+    default:
+        break;
+    }
+    return 0;
+}*/
+
+int EndpointDIR::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
+{
+    int sub_cmd;
+    std::vector<std::string> sub_cmd_arg;
+    switch (opt_code)
+    {
+    case DIR_MERGE_INDEX:
+        if (parameter_v.size() < 1)
+        {
+            AU_EXIT("DIR_MERGE_INDEX  needs 1 parameter: index of dimension to merge \n");
+        }
+        SetMergeIndex(std::stoi(parameter_v[0]));
+        break;
+    case DIR_SUB_CMD_ARG:
+        if (parameter_v.size() < 1)
+        {
+            AU_EXIT("DIR_SUB_CMD_ARG  needs at least 1 parameter: sub command code \n");
+        }
+        if (sub_endpoint != nullptr)
+            sub_cmd = sub_endpoint->MapOpStr2Int(parameter_v[0]);
+
+        if (parameter_v.size() > 1)
+        {
+            sub_cmd_arg.push_back(parameter_v[1]);
+        }
+        else
+        {
+            sub_cmd_arg.push_back("");
+        }
+
+        if (sub_endpoint != nullptr)
+            sub_endpoint->SpecialOperator(sub_cmd, sub_cmd_arg);
+        break;
+    case DIR_INPUT_SEARCH_RGX:
+        if (parameter_v.size() < 1)
+        {
+            AU_EXIT("DIR_INPUT_SEARCH_RGX  needs 1 parameters: regex pattern and replace string pattern \n");
+        }
+        input_replace_regex_flag = true;
+        input_filter_regex = new std::regex(parameter_v[0]);
+        break;
+    case DIR_OUPUT_REPLACE_RGX:
+        if (parameter_v.size() < 2)
+        {
+            AU_EXIT("DIR_OUPUT_REPLACE_RGX  needs two parameters: regex pattern and replace string pattern \n");
+        }
+        output_replace_regex_flag = true;
+        output_replace_regex = new std::regex(parameter_v[0]);
+        output_replace_regex_aug = parameter_v[1];
         break;
     default:
         break;

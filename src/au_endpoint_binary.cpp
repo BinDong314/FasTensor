@@ -264,6 +264,7 @@ void EndpointBinary::UpdateSeekOffset()
     seek_offset = 0;
 }
 
+/*
 int EndpointBinary::SpecialOperator(int opt_code, std::string parameter)
 {
     std::vector<unsigned long long> binary_array_size;
@@ -283,6 +284,49 @@ int EndpointBinary::SpecialOperator(int opt_code, std::string parameter)
         //SetArraySize(binary_array_size);
         SetDimensions(binary_array_size);
         break;
+    case BINARY_ENABLE_TRANSPOSE_ON_READ:
+        EnableTranposeOnRead();
+        break;
+    case BINARY_ENABLE_TRANSPOSE_ON_WRITE:
+        EnableTranposeOnWrite();
+        break;
+    case BINARY_DISABLE_TRANSPOSE_ON_READ:
+        DisableTranposeOnRead();
+        break;
+    case BINARY_DISABLE_TRANSPOSE_ON_WRITE:
+        DisableTranposeOnWrite();
+        break;
+    default:
+        AU_EXIT("Not supported opt_code in SpecialOperator of EndpointBinary!");
+        break;
+    }
+
+    return 0;
+} */
+
+int EndpointBinary::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
+{
+
+    switch (opt_code)
+    {
+    case BINARY_SET_SIZE:
+    {
+        std::vector<unsigned long long> binary_array_size;
+        unsigned long long temp_size;
+        string substr;
+        stringstream s_stream(parameter_v[0]); //parameter has the format: "dim0_size, dim2_size,...""
+
+        while (s_stream.good())
+        {
+            getline(s_stream, substr, ','); //get first string delimited by comma
+            //sscanf(substr.c_str(), "%zu", &temp_size);
+            temp_size = std::stoull(substr, nullptr, 0);
+            binary_array_size.push_back(temp_size);
+        }
+        //SetArraySize(binary_array_size);
+        SetDimensions(binary_array_size);
+    }
+    break;
     case BINARY_ENABLE_TRANSPOSE_ON_READ:
         EnableTranposeOnRead();
         break;

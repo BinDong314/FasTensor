@@ -326,23 +326,23 @@ int EndpointMEMORY::ParseEndpointInfo()
     return 0;
 }
 
-int EndpointMEMORY::SpecialOperator(int opt_code, std::string parameter)
+int EndpointMEMORY::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
 {
     int ret = 0;
     switch (opt_code)
     {
     case DASH_NONVOLATILE_CODE:
-        ret = Nonvolatile(parameter);
+        ret = Nonvolatile(parameter_v[0]);
         break;
     case DASH_VOLATILE_CODE:
-        ret = Volatile(parameter);
+        ret = Volatile(parameter_v[0]);
         break;
     case DASH_ENABLE_LOCAL_MIRROR_CODE:
         local_mirror_flag = true;
-        ret = CreateLocalMirror(parameter);
+        ret = CreateLocalMirror(parameter_v[0]);
         break;
     case DASH_MERGE_MIRRORS_CODE:
-        ret = MergeMirrors(parameter);
+        ret = MergeMirrors(parameter_v[0]);
         break;
     default:
         AU_EXIT("Not supported operator on MEMORY endpoint");
