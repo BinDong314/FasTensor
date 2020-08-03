@@ -117,6 +117,7 @@ public:
   //So fat, we define the function for 1D, 2D, 3D seperately.
   //TO DO: more flexiable arguments to support any dimensions.
 
+  /*
   //1D
   inline T &operator()(const int i1) const
   {
@@ -294,6 +295,65 @@ public:
     size_t shift_offset = 1;
     std::cout << "At ArrayUDF_Stencil.h: we does not have the code for 4D offsets yet. You can DIY it by coping above 3D codes." << std::endl;
     exit(0);
+  }
+  */
+
+  //Generic version of the ()
+  template <typename... Is>
+  inline T &operator()(Is... offsets) const
+  {
+    std::vector<int> ov{{offsets...}};
+    int ov_rank = ov.size();
+    if (dims != ov_rank)
+    {
+      AU_EXIT("The # of offsets " + std::to_string(ov_rank) + " is not equal to the data's: " + std::to_string(dims));
+    }
+    std::vector<int> coordinate_shift(dims);
+    std::vector<unsigned long long> coordinate(dims);
+
+    for (int i = 0; i < ov_rank; i++)
+    {
+      coordinate_shift[i] = ov[i];
+      if (coordinate_shift[i] == 0)
+      {
+        coordinate[i] = my_location[i];
+      }
+      else if (coordinate_shift[i] > 0)
+      {
+        coordinate[i] = my_location[i] + coordinate_shift[i];
+        if (coordinate[i] >= chunk_dim_size[i]) //Check boundary :: Be careful with size overflow
+          coordinate[i] = chunk_dim_size[i] - 1;
+      }
+      else
+      {
+        coordinate[i] = -coordinate_shift[i]; //Convert to unsigned long long
+        if (my_location[i] <= coordinate[i])
+        {
+          coordinate[i] = 0;
+        }
+        else
+        {
+          coordinate[i] = my_location[i] - coordinate[i]; //Check boundary :: Be careful with size overflow
+        }
+      }
+    }
+    unsigned long long shift_offset = coordinate[0];
+    for (int i = 1; i < ov_rank; i++)
+    {
+      shift_offset = shift_offset * chunk_dim_size[i] + coordinate[i];
+    }
+
+    if (shift_offset <= chunk_data_size)
+    {
+      return chunk_data_pointer[shift_offset];
+    }
+    else
+    {
+      PrintVector("ov = ", ov);
+      PrintVector("coordinate = ", coordinate);
+      PrintVector("chunk_dim_size = ", chunk_dim_size);
+      AU_EXIT("Error in operator() of Stencil");
+    }
   }
 
   template <class TO>
