@@ -308,6 +308,8 @@ public:
     {
       AU_EXIT("The # of offsets " + std::to_string(ov_rank) + " is not equal to the data's: " + std::to_string(dims));
     }
+
+    //std::cout << "Call new index ! \n";
     std::vector<int> coordinate_shift(dims);
     std::vector<unsigned long long> coordinate(dims);
 

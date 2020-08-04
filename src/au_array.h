@@ -288,22 +288,25 @@ public:
       }
     }
 
-    if (endpoint->GetEndpointType() == EP_DIR)
+  
+    if (endpoint != NULL && endpoint->GetEndpointType() == EP_DIR)
     {
-      //chunk_size_p = endpoint->GetChunkSize();
+        //chunk_size_p = endpoint->GetChunkSize();
     }
-
     //optimal chunk_size
   }
 
   void UpdateOverlapSize()
   {
-    if (endpoint->GetEndpointType() == EP_DIR || chunk_size_by_user_by_dimension_flag)
+    if (endpoint != NULL)
     {
-      data_overlap_size.resize(data_dims);
-      for (int i = 0; i < data_dims; i++)
+      if (endpoint->GetEndpointType() == EP_DIR || chunk_size_by_user_by_dimension_flag)
       {
-        data_overlap_size[i] = 0;
+        data_overlap_size.resize(data_dims);
+        for (int i = 0; i < data_dims; i++)
+        {
+          data_overlap_size[i] = 0;
+        }
       }
     }
     //optimal overlap size
@@ -337,7 +340,6 @@ public:
     }
 
     UpdateChunkSize();
-    //UpdateOverlapSize(data_overlap_size);
     UpdateOverlapSize();
 
     current_chunk_start_offset.resize(data_dims);
@@ -532,7 +534,7 @@ public:
 
           //Update the offset with overlapping
           ROW_MAJOR_ORDER_MACRO(current_chunk_ol_size, current_chunk_ol_size.size(), cell_coordinate_ol, offset_ol);
-          if (endpoint->GetEndpointType() != EP_DIR)
+          if (endpoint != NULL && endpoint->GetEndpointType() != EP_DIR)
           {
             ROW_MAJOR_ORDER_MACRO(data_size, data_size.size(), global_cell_coordinate, cell_target_g_location_rm)
             cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size, global_cell_coordinate, cell_target_g_location_rm);
@@ -660,9 +662,11 @@ public:
     }
     else
     {
+
       int n = attribute_endpoint_vector.size();
       for (int i = 0; i < n; i++)
       {
+        //std::cout << "write " << i << " \n" ;
         void *current_chunk_data_void_p = ExtractAttributeFromVirtualArrayVector(data_p, i, attribute_endpoint_vector[i]->GetDataElementType(), attribute_endpoint_vector[i]->GetDataElementTypeSize());
         attribute_endpoint_vector[i]->Write(start_p, end_p, current_chunk_data_void_p);
         free(current_chunk_data_void_p);
@@ -816,6 +820,7 @@ public:
           return 0;
         attribute_endpoint_vector[i]->SetDimensions(data_size);
         attribute_endpoint_vector[i]->Create();
+        attribute_endpoint_vector[i]->Close(); //call it to make sure it is consistency
       }
       return 0;
     }
