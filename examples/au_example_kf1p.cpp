@@ -42,20 +42,15 @@ int main(int argc, char *argv[])
 
     //Input data
     Array<short> *A = new Array<short>("EP_DIR:EP_TDMS:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/tdms-dir", chunk_size, overlap_size);
-    std::vector<std::string> aug_merge_index, aug_dir_sub_cmd1, aug_dir_sub_cmd2, aug_input_search_rgx;
+    std::vector<std::string> aug_merge_index, aug_dir_sub_cmd, aug_input_search_rgx;
 
     aug_merge_index.push_back("1");
-
-    aug_dir_sub_cmd1.push_back("BINARY_SET_SIZE");
-    aug_dir_sub_cmd1.push_back("11648,30000");
-
-    aug_dir_sub_cmd2.push_back("BINARY_ENABLE_TRANSPOSE_ON_READ");
-
+    aug_dir_sub_cmd.push_back("BINARY_ENABLE_TRANSPOSE_ON_READ");
     aug_input_search_rgx.push_back("^(.*)[135]\\.tdms$");
 
     A->EndpointControl(DIR_MERGE_INDEX, aug_merge_index);
-    A->EndpointControl(DIR_SUB_CMD_ARG, aug_dir_sub_cmd1);
-    A->EndpointControl(DIR_SUB_CMD_ARG, aug_dir_sub_cmd2);
+    //A->EndpointControl(DIR_SUB_CMD_ARG, aug_dir_sub_cmd1); //Not needed
+    A->EndpointControl(DIR_SUB_CMD_ARG, aug_dir_sub_cmd);
     A->EndpointControl(DIR_INPUT_SEARCH_RGX, aug_input_search_rgx);
 
     //Result data
