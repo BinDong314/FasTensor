@@ -288,10 +288,9 @@ public:
       }
     }
 
-  
     if (endpoint != NULL && endpoint->GetEndpointType() == EP_DIR)
     {
-        //chunk_size_p = endpoint->GetChunkSize();
+      //chunk_size_p = endpoint->GetChunkSize();
     }
     //optimal chunk_size
   }

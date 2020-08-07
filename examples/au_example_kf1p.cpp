@@ -54,11 +54,11 @@ int main(int argc, char *argv[])
     A->EndpointControl(DIR_INPUT_SEARCH_RGX, aug_input_search_rgx);
 
     //Result data
-    //Array<double> *B = new Array<double>("EP_DIR:EP_TDMS:/Users/dbin/work/arrayudf-git-svn-test-on-bitbucket/examples/das/tdms-dir-dec");
 
+    //Store into a single file
     //Array<double> *B = new Array<double>("EP_HDF5:./tdms-dir-dec/test.h5:/DataCT");
 
-    //http://www.cplusplus.com/reference/regex/ECMAScript/
+    //Store into multiple file
     Array<double> *B = new Array<double>("EP_DIR:EP_HDF5:./tdms-dir-dec/:/DataCT");
 
     std::vector<std::string> aug_output_replace_arg;

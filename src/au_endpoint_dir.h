@@ -52,6 +52,7 @@ private:
 
     int dir_data_merge_index = 0;
 
+    //http://www.cplusplus.com/reference/regex/ECMAScript/
     bool input_replace_regex_flag = false;
     std::regex *input_filter_regex; //The regex to "search" on list of file as input
 

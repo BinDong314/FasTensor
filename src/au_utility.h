@@ -252,10 +252,19 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
  * @brief 
  *flat vector of vector to 1D vector
  * direction specify row-major or colum major
- *  AU_FLAT_OUTPUT_ROW (0): row major, e.g., for a 2 by 2 vector
+ *  AU_FLAT_OUTPUT_ROW (0): row major, e.g., for a 2 by 2 vector of vector
  *     v[0][0] v[0][1] v[1][0] v[1][1]
- * AU_FLAT_OUTPUT_COL (1): column major, e.g., for a 2 by 2 vector
+ * AU_FLAT_OUTPUT_COL (1): column major, e.g., for a 2 by 2 vector of vector
  *    v[0][0] v[1][0] v[0][1] v[1][1]
+ * 
+ * AU_FLAT_OUTPUT_RC: both row and column major, e.g. for a 2 by 2 vector of vector
+ *    v[0][0] v[0][1]
+ *    v[1][0] v[1][1]
+ *    Then, linearized as  v[0][0] v[0][1] v[1][0] v[1][1]
+ *    It looks like AU_FLAT_OUTPUT_ROW, but the start_address and end_address are handled differently
+ *    start_address is adjusted by v.size()
+ *    end_address is adjusted by v[0].size()  
+ * AU_FLAT_OUTPUT_CR: both row and column major, e.g. for a 2 by 2 vector of vector
  * 
  * Since this is the support function to WriteEndpoint,
  * It also convert the address associated with it. 

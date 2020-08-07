@@ -114,7 +114,7 @@ inline int ArrayViewAccessV(std::vector<T> &view_v, std::vector<T> &array_v, std
     }
 
 template <class T>
-inline int ArrayViewAccessP(T *view_v, T *array_v, std::vector<unsigned long long> &array_size, std::vector<unsigned long long> &start, std::vector<unsigned long long> &end, int read_write_code)
+inline int ArrayViewAccessP(T *view_v, T *array_v, std::vector<unsigned long long> array_size, std::vector<unsigned long long> start, std::vector<unsigned long long> end, int read_write_code)
 {
     std::vector<unsigned long long> view_size;
     unsigned long long element_count = 1;
