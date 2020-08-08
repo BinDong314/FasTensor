@@ -385,6 +385,10 @@ public:
       {
         if (data_size[i] % skip_size[i] != 0 || data_chunk_size[i] % skip_size[i] != 0)
         {
+          PrintVector("data_size = ", data_size);
+          PrintVector("data_chunk_size = ", data_chunk_size);
+          PrintVector("skip_size = ", skip_size);
+
           AU_EXIT("Strip size must be aligned with size of both array and chunk ! \n");
         }
         skiped_dims_size[i] = data_size[i] / skip_size[i];
