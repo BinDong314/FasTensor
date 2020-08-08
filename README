@@ -70,3 +70,24 @@ Note on Lawrencium at LBNL
 
 
 module load gcc/7.4.0 hdf5/1.10.5-gcc-p
+
+
+Note on Cori at NERSC
+
+To install DASH:
+
+```
+module switch PrgEnv-intel PrgEnv-gnu
+module load cray-hdf5-parallel
+export HDF5_BASE=/opt/cray/pe/hdf5-parallel/1.10.5.2/GNU/8.2
+
+```
+
+Error:
+
+usr/bin/ld: /opt/cray/pe/hdf5-parallel/1.10.5.2/GNU/8.2/lib/libhdf5.a(H5PLint.o): undefined reference to symbol 'dlclose@@GLIBC_2.2.5'
+
+edit CMakeExt/HDF5.cmake to add -ldl
+
+
+CXX=CC  ./configure  --prefix=$PWD/build --with-dash=/project/projectdirs/m1248/fasttensor/tools3rd/dash/install --with-hdf5=/opt/cray/pe/hdf5-parallel/1.10.5.2/GNU/8.2

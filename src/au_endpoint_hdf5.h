@@ -51,13 +51,18 @@ public:
      */
     EndpointHDF5(std::string endpoint_info_p)
     {
+        std::cout << "Init EndpointHDF5 \n ";
         endpoint_info = endpoint_info_p;
         ParseEndpointInfo();
         SetOpenFlag(false);
         SetRwFlag(H5F_ACC_RDONLY);
         SetEndpointType(EP_HDF5);
+        std::cout << "Init EndpointHDF5 Middle\n ";
+
         EnableMPIIO();
         EnableCollectiveIO();
+
+        std::cout << "Finish EndpointHDF5 \n ";
     }
 
     /**
