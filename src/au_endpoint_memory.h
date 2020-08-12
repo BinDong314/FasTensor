@@ -31,7 +31,6 @@
 #include <iostream>
 #include <cstddef>
 #include <iomanip>
-#include <libdash.h>
 
 #define DASH_READ_FLAG 0
 #define DASH_WRITE_FLAG 1
@@ -41,6 +40,7 @@
 #define DASH_ENABLE_LOCAL_MIRROR_CODE 2
 #define DASH_MERGE_MIRRORS_CODE 3
 
+#include <libdash.h>
 using dash::io::hdf5::hdf5_options;
 using dash::io::hdf5::StoreHDF;
 

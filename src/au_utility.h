@@ -40,6 +40,13 @@
 #include "cista.h"
 #endif
 
+template <class T>
+inline void ClearVector(std::vector<T> &v)
+{
+    v.clear();
+    std::vector<T>().swap(v);
+}
+
 #define V2VOIDP(vv) static_cast<void *>(vv.data())
 
 /**

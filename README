@@ -71,6 +71,11 @@ Note on Lawrencium at LBNL
 
 module load gcc/7.4.0 hdf5/1.10.5-gcc-p
 
+HDF5 DIY:
+CC=cc ./configure  --enable-parallel --prefix=$PWD/build
+
+export HDF5_BASE=/project/projectdirs/m1248/fasttensor-debug/tools3rd/hdf5-1.12.0/build
+
 
 Note on Cori at NERSC
 
