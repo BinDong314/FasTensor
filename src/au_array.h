@@ -91,6 +91,8 @@ private:
 
   OutputVectorFlatDirection output_vector_flat_direction_index;
 
+  std::vector<size_t> output_vector_flat_shape;
+
   std::vector<Endpoint *> attribute_endpoint_vector; //vector of endpoints for a virtual array
 
   //For directory
@@ -1067,6 +1069,18 @@ public:
   void SetVectorDirection(OutputVectorFlatDirection flat_direction_index)
   {
     output_vector_flat_direction_index = flat_direction_index;
+  }
+
+  /**
+   * @brief A geneic verion of function to control how to deal with output vector during the run of Apply on Array. The output of Apply in this way is vector of vector (2D). We need to convert it into vector (1D). Also we need to control the shape of the 1D vector to write into output Array.
+   * 
+   * @param flat_direction,  the direction to flat the 2D vector to 1D vector
+   * @param flat_shape, the shape of the data after the flat from 2D to the 2D
+   */
+  void ControlOutputVector(OutputVectorFlatDirection flat_direction, std::vector<size_t> flat_shape)
+  {
+    output_vector_flat_direction_index = flat_direction;
+    output_vector_flat_shape = flat_shape;
   }
 
   template <typename... Is>

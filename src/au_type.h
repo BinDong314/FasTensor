@@ -154,6 +154,24 @@ bool InferVectorType()
   return is_vector<T>{};
 }
 
+template <typename T>
+struct is_vector_vector : public std::false_type
+{
+};
+
+template <typename T, typename A>
+struct is_vector_vector<std::vector<std::vector<T, A>>> : public std::true_type
+{
+};
+
+//1: vector type
+//0: other types
+template <typename T>
+bool InferVectorVectorType()
+{
+  return is_vector_vector<T>{};
+}
+
 //see more detail in third_party/cista.h
 #define AU_UDT_INIT(A) \
   CISTA_PRINTABLE(A)   \

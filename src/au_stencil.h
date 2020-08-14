@@ -49,6 +49,14 @@ private:
   T padding_value;
   int mpi_rank, mpi_size;
 
+  /**
+   * @brief is_output_vector_flag;
+   * 
+   */
+  bool is_output_vector_flag;
+  std::vector<size_t> output_vector_shape;
+  OutputVectorFlatDirection output_vector_flat_direction;
+
 public:
   //For test only
   Stencil(){};
@@ -502,9 +510,44 @@ public:
     return 0;
   }
 
+  /**
+   * @brief Get the value object
+   * 
+   * @return T 
+   */
   T get_value()
   {
     return value;
+  }
+
+  /**
+   * @brief Set the value object
+   * 
+   * @param value_p 
+   */
+  void set_value(const T value_p)
+  {
+    value = value_p;
+  }
+
+  /**
+   * @brief Get the Value object
+   * 
+   * @return T 
+   */
+  T GetValue()
+  {
+    return value;
+  }
+
+  /**
+   * @brief Set the value object
+   * 
+   * @param value_p 
+   */
+  void SetValue(const T value_p)
+  {
+    value = value_p;
   }
 
   unsigned long long get_local_neighbors_count_at_left() const
@@ -673,6 +716,65 @@ public:
   {
     padding_value_set_flag = 1;
     padding_value = padding_value_p;
+  }
+
+  /**
+   * @brief Set the Output Vector Flag object
+   * 
+   * @param is_output_vector_flag_p : true or false
+   */
+  void SetOutputVectorFlag(const bool is_output_vector_flag_p)
+  {
+    is_output_vector_flag = is_output_vector_flag_p
+  }
+
+  /**
+   * @brief Get the Output Vector Flag object
+   * 
+   * @return true 
+   * @return false 
+   */
+  bool GetOutputVectorFlag()
+  {
+    return is_output_vector_flag;
+  }
+
+  void SetOutputVectorFlatDirection(OutputVectorFlatDirection output_vector_flat_direction_p)
+  {
+    output_vector_flat_direction = output_vector_flat_direction_p;
+  }
+
+  OutputVectorFlatDirection GetOutputVectorFlatDirection
+  {
+    return output_vector_flat_direction
+  }
+
+  /**
+   * @brief Set the Output Vector Shape object
+   * 
+   * @param output_vector_shape_p 
+   *        -1: using the size of vector as default
+   */
+  void SetOutputVectorShape(const std::vector<size_t> output_vector_shape_p)
+  {
+    /*
+     * will check the size when it got used
+    if (dims != output_vector_shape_p.size())
+    {
+      AU_EXIT("size() of output_vector_shape_p is not equal to dims ");
+    }
+    */
+    output_vector_shape = output_vector_shape_p;
+  }
+
+  /**
+   * @brief Get the Output Vector Shape object
+   * 
+   * @return std::vector<size_t> 
+   */
+  std::vector<size_t> GetOutputVectorShape()
+  {
+    return output_vector_shape;
   }
 };
 
