@@ -25,9 +25,11 @@ int EndpointHDF5::ExtractMeta()
 
 int EndpointHDF5::Create()
 {
+    std::cout << "EndpointHDF5::Create :: " << fn_str << "\n";
+
     Map2MyType();
     std::string root_dir = "/";
-
+    PrintInfo();
     //plist_id = H5Pcreate(H5P_FILE_ACCESS);
     //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
@@ -98,6 +100,8 @@ int EndpointHDF5::Create()
 
 int EndpointHDF5::Open()
 {
+    std::cout << "EndpointHDF5::Open :: " << fn_str << "\n";
+    PrintInfo();
     if (file_exist(fn_str.c_str()) == 0)
     {
         Create();

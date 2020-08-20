@@ -56,11 +56,10 @@ inline void GetChunkAddress(const unsigned long long chunk_id, const std::vector
     }
 
     assert(chunk_id < total_chunks);
-    std::vector<unsigned long long> chunk_coordinate;
-    chunk_coordinate.resize(rank);
+    std::vector<unsigned long long> chunk_coordinate(rank);
     PrintVector("chunks = ", chunks);
     PrintScalar("chunk_id = ", chunk_id);
-    PrintVector("chunk_coordinate = ", chunk_coordinate);
+    //PrintVector("chunk_coordinate = ", chunk_coordinate);
 
     ROW_MAJOR_ORDER_REVERSE_MACRO(chunk_id, chunks, rank, chunk_coordinate);
 
@@ -78,15 +77,18 @@ inline void GetChunkAddress(const unsigned long long chunk_id, const std::vector
             chunk_start_address[i] = array_size[i];
         }
 
-        if (chunk_start_address[i] + chunk_size[i] < array_size[i])
+        if (chunk_start_address[i] + chunk_size[i] - 1 < array_size[i])
         {
-            chunk_end_address[i] = chunk_start_address[i] + chunk_size[i];
+            chunk_end_address[i] = chunk_start_address[i] + chunk_size[i] - 1;
         }
         else
         {
-            chunk_end_address[i] = array_size[i];
+            chunk_end_address[i] = array_size[i] - 1;
         }
     }
+
+    PrintVector("chunk_start_address = ", chunk_start_address);
+    PrintVector("chunk_end_address = ", chunk_end_address);
 }
 
 /**

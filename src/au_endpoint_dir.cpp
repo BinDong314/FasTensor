@@ -226,6 +226,10 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     {
         new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], *output_replace_regex, output_replace_regex_aug);
     }
+    else
+    {
+        new_file_name_after_regex = dir_file_list[sub_endpoint_index];
+    }
 
     std::cout << "call write :  " << dir_str + "/" + new_file_name_after_regex + ": " + append_sub_endpoint_info << " \n";
 
