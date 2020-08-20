@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <cstring>
 #include "au_array_iterator.h"
-#include "au_utility.h"
+#include "au_utility_macro.h"
 
 #define ARRAY_VIEW_READ 0
 #define ARRAY_VIEW_WRITE 1

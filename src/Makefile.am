@@ -22,7 +22,9 @@ libArrayUDF_la_SOURCES=au.h au.cpp \
                        au_endpoint_binary.h au_endpoint_binary.cpp \
                        au_array_iterator.h au_array_iterator.cpp \
                        au_array_view_access.h au_array_view_access.cpp \
-                       au_array_transpose.h
+                       au_array_transpose.h \
+                       au_utility_macro.h \
+                       au_output_vector.h au_output_vector.cpp
 
 libArrayUDF_la_LDFLAGS=-version-info 0:0:0  -all-static
 include_HEADERS=au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5.h \
@@ -36,7 +38,9 @@ include_HEADERS=au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5
                 au_endpoint_binary.h \
                 au_array_view_access.h \
                 au_array_iterator.h \
-                au_array_transpose.h
+                au_array_transpose.h \
+                au_utility_macro.h \
+                au_output_vector.h 
 
 
 

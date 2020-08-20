@@ -725,7 +725,7 @@ public:
    */
   void SetOutputVectorFlag(const bool is_output_vector_flag_p)
   {
-    is_output_vector_flag = is_output_vector_flag_p
+    is_output_vector_flag = is_output_vector_flag_p;
   }
 
   /**
@@ -744,9 +744,9 @@ public:
     output_vector_flat_direction = output_vector_flat_direction_p;
   }
 
-  OutputVectorFlatDirection GetOutputVectorFlatDirection
+  OutputVectorFlatDirection GetOutputVectorFlatDirection()
   {
-    return output_vector_flat_direction
+    return output_vector_flat_direction;
   }
 
   /**
@@ -764,6 +764,7 @@ public:
       AU_EXIT("size() of output_vector_shape_p is not equal to dims ");
     }
     */
+    is_output_vector_flag = true;
     output_vector_shape = output_vector_shape_p;
   }
 
@@ -774,6 +775,11 @@ public:
    */
   std::vector<size_t> GetOutputVectorShape()
   {
+    if (!is_output_vector_flag)
+    {
+      AU_EXIT("The shape of output vector is not set in UDF !");
+    }
+
     return output_vector_shape;
   }
 };

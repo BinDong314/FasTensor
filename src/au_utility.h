@@ -24,10 +24,12 @@
 #include <algorithm>
 #include <iterator>
 #include <iostream>
-#include "au_type.h"
 #include <utility>
 #include <variant>
 #include <dirent.h>
+
+#include "au_type.h"
+#include "au_utility_macro.h"
 
 #if __cplusplus > 201402L
 #include "cista.h"
@@ -71,35 +73,20 @@ int ExtractEndpointTypeInfo(std::string endpoint_type_info, AuEndpointType &endp
 int file_exist(const char *filename);
 
 /**
- * @brief help function to counts cells between start/end
+ * @brief 
  * 
+ * @param fullPath 
+ * @return std::string 
  */
-#define COUNT_CELLS(start_address_p, end_address_p, cells_count_p)                       \
-    {                                                                                    \
-        assert(start_address_p.size() == end_address_p.size());                          \
-        cells_count_p = 1;                                                               \
-        for (int i = 0; i < start_address_p.size(); i++)                                 \
-        {                                                                                \
-            cells_count_p = cells_count_p * (end_address_p[i] - start_address_p[i] + 1); \
-        }                                                                                \
-    }
+std::string ExtractFileName(const std::string &fullPath);
 
 /**
- * @brief help function to counts cells between start/end
+ * @brief 
  * 
+ * @param fullPath 
+ * @return std::string 
  */
-#define COUNT_RANGES(start_address_p, end_address_p, count_p)       \
-    {                                                               \
-        assert(start_address_p.size() == end_address_p.size());     \
-        if (count_p.size() != start_address_p.size())               \
-        {                                                           \
-            count_p.resize(start_address_p.size());                 \
-        }                                                           \
-        for (int i = 0; i < start_address_p.size(); i++)            \
-        {                                                           \
-            count_p[i] = end_address_p[i] - start_address_p[i] + 1; \
-        }                                                           \
-    }
+std::string ExtractPath(const std::string &fullPath);
 
 template <typename T>
 inline void PrintVector(std::string name, std::vector<T> v)
@@ -206,156 +193,6 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
 
     return original_coordinate;
 }
-
-/**
- * @brief macro version of above two functions for speed
- * 
- */
-#ifndef ROW_MAJOR_ORDER_MACRO
-#define ROW_MAJOR_ORDER_MACRO(dsize, dsize_len, coordinate, offset) \
-    {                                                               \
-        offset = coordinate[0];                                     \
-        for (int iii = 1; iii < dsize_len; iii++)                   \
-        {                                                           \
-            offset = offset * dsize[iii] + coordinate[iii];         \
-        }                                                           \
-    }
-#endif
-
-#ifndef ROW_MAJOR_ORDER_REVERSE_MACRO
-#define ROW_MAJOR_ORDER_REVERSE_MACRO(offset, dsize, dsize_len, result_coord_v) \
-    {                                                                           \
-        unsigned long long temp_offset = offset;                                \
-        for (int iii = dsize_len - 1; iii >= 1; iii--)                          \
-        {                                                                       \
-            result_coord_v[iii] = temp_offset % dsize[iii];                     \
-            temp_offset = temp_offset / dsize[iii];                             \
-        }                                                                       \
-        result_coord_v[0] = temp_offset;                                        \
-    }
-#endif
-
-#define AU_EXIT(info)                                                                                                            \
-    {                                                                                                                            \
-        std::cout << "Exit happens at file: " << __FILE__ << ",  function: " << __func__ << ", line: " << __LINE__ << std::endl; \
-        std::cout << "Log : " << info << std::endl;                                                                              \
-        std::exit(EXIT_FAILURE);                                                                                                 \
-    }
-
-#define AU_INFO(info)                                                                             \
-    {                                                                                             \
-        std::cout << "Info at " << __FILE__ << ", " << __func__ << ", " << __LINE__ << std::endl; \
-        std::cout << "Info : " << info << std::endl;                                              \
-    }
-
-/**
- * @brief 
- *flat vector of vector to 1D vector
- * direction specify row-major or colum major
- *  AU_FLAT_OUTPUT_ROW (0): row major, e.g., for a 2 by 2 vector of vector
- *     v[0][0] v[0][1] v[1][0] v[1][1]
- * AU_FLAT_OUTPUT_COL (1): column major, e.g., for a 2 by 2 vector of vector
- *    v[0][0] v[1][0] v[0][1] v[1][1]
- * 
- * AU_FLAT_OUTPUT_RC: both row and column major, e.g. for a 2 by 2 vector of vector
- *    v[0][0] v[0][1]
- *    v[1][0] v[1][1]
- *    Then, linearized as  v[0][0] v[0][1] v[1][0] v[1][1]
- *    It looks like AU_FLAT_OUTPUT_ROW, but the start_address and end_address are handled differently
- *    start_address is adjusted by v.size()
- *    end_address is adjusted by v[0].size()  
- * AU_FLAT_OUTPUT_CR: both row and column major, e.g. for a 2 by 2 vector of vector
- * 
- * Since this is the support function to WriteEndpoint,
- * It also convert the address associated with it. 
- * 
- * @tparam T type of data element
- * @param v the vector of vector
- * @param direction how to flat the data
- * @param start_address the start address before/after flat, it may chage the # of dimensions
- * @param end_address  the end address before/after flat, it may chage the # of dimensions
- * @param v_size, the size of each element vector
- * @return void* the flat data
- */
-template <typename T>
-void *FlatVector(std::vector<std::vector<T>> &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address, size_t &v_size)
-{
-    if (v.size() < 1)
-    {
-        return NULL;
-    }
-
-    if (v[0].size() < 1)
-    {
-        return NULL;
-    }
-
-    //Check v's elemtnt has same size
-    for (unsigned j = 0; j < v.size() - 1; j++)
-    {
-        if (v[j].size() != v[j + 1].size())
-        {
-            AU_EXIT("Size of each element of vector must be queal.");
-        }
-    }
-    v_size = v[0].size();
-
-    if (direction == AU_FLAT_OUTPUT_NEW)
-    {
-        start_address.push_back(0);
-        end_address.push_back(v_size - 1);
-        return &v[0];
-    }
-
-    T *rv = (T *)malloc(v.size() * v_size * sizeof(T)); //Assuming all rows have the same size
-    if (rv == NULL)
-    {
-        AU_EXIT("Not enough memory");
-    }
-
-    if (direction == AU_FLAT_OUTPUT_COL)
-    {
-        for (unsigned i = 0; i < v_size; i++)
-        {
-            for (unsigned j = 0; j < v.size(); j++)
-            {
-                memcpy(rv + v.size() * i + j, &(v[j][i]), sizeof(T));
-            }
-        }
-    }
-    else if (direction == AU_FLAT_OUTPUT_ROW)
-    {
-
-        for (unsigned i = 0; i < v.size(); i++)
-        {
-            memcpy(rv + v_size * i, &(v[i][0]), v_size * sizeof(T));
-        }
-    }
-    else
-    {
-        AU_EXIT("Not supported option yet to flat vector");
-    }
-
-    end_address[direction] = start_address[direction] + (end_address[direction] - start_address[direction] + 1) * v_size - 1;
-
-    return (void *)rv;
-}
-
-template <typename T>
-void *FlatVector(std::vector<T> &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address, size_t &v_size)
-{
-    AU_EXIT("Should not be here");
-}
-
-template <typename T>
-void *FlatVector(T &v, OutputVectorFlatDirection direction, std::vector<unsigned long long> &start_address, std::vector<unsigned long long> &end_address, size_t &v_size)
-{
-    AU_EXIT("Should not be here");
-}
-
-std::string ExtractFileName(const std::string &fullPath);
-
-std::string ExtractPath(const std::string &fullPath);
 
 /**
  * @brief 

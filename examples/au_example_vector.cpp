@@ -41,6 +41,11 @@ inline Stencil<std::vector<float>> udf_vector(const Stencil<float> &iStencil)
         temp_vec[i] = iStencil(0, i) * 2.0;
     }
     oStencil = temp_vec;
+
+    std::vector<size_t> vector_shape(2);
+    vector_shape[0] = 1;
+    vector_shape[1] = VEC_SIZE;
+    oStencil.SetOutputVectorShape(vector_shape);
     return oStencil;
 }
 
@@ -60,7 +65,7 @@ int main(int argc, char *argv[])
     Array<float> *B = new Array<float>("EP_HDF5:./test-data/testf-16x16-vector-output.h5:/testg/testd");
 
     //Set the direction to flat vector of output
-    A->SetVectorDirection(AU_FLAT_OUTPUT_ROW);
+    //A->SetVectorDirection(AU_FLAT_OUTPUT_ROW);
 
     //Skip paramter, run the udf_vector on the first cell of each row
     std::vector<int> skip_size = {1, 16};

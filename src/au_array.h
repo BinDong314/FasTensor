@@ -17,6 +17,9 @@ extern int au_rank;
 #ifndef ARRAY_UDF_ARRAY_H
 #define ARRAY_UDF_ARRAY_H
 
+#include <assert.h>
+#include <stdarg.h>
+#include <regex>
 #include "mpi.h"
 #include "au_endpoint.h"
 #include "au_stencil.h"
@@ -25,9 +28,7 @@ extern int au_rank;
 #include "au_endpoint_factory.h"
 #include "au_mpi.h"
 #include "au_merge.h"
-#include <assert.h>
-#include <stdarg.h>
-#include <regex>
+#include "au_output_vector.h"
 
 namespace AU
 {
@@ -112,6 +113,9 @@ private:
   bool chunk_size_by_user_flag = false;
   bool chunk_size_by_user_by_dimension_flag = false;
   bool endpoint_memory_flag = false;
+
+  //The shape of output_vector when vector_type_flag = true
+  std::vector<size_t> output_vector_shape;
 
   //help variable
   AU_WTIME_TYPE t_start, time_read = 0, time_udf = 0, time_write = 0, time_create = 0, time_sync = 0, time_nonvolatile = 0;
@@ -444,6 +448,7 @@ public:
     InitializeApplyInput();
     std::vector<UDFOutputType> current_result_chunk_data;
     unsigned long long current_result_chunk_data_size = 1;
+
     vector_type_flag = InferVectorType<UDFOutputType>();
 
     t_start = AU_WTIME;
@@ -553,6 +558,11 @@ public:
           cell_return_stencil = UDF(cell_target); // Called by C++
           cell_return_value = cell_return_stencil.get_value();
 
+          if (vector_type_flag == true)
+          {
+            output_vector_shape = cell_return_stencil.GetOutputVectorShape();
+          }
+
           if (save_result_flag)
           {
             if (skip_flag)
@@ -625,11 +635,14 @@ public:
 
         if (vector_type_flag)
         {
+          //output_vector_shape
           size_t vector_size;
           std::vector<unsigned long long> current_chunk_start_offset_v = current_result_chunk_start_offset, current_chunk_end_offset_v = current_result_chunk_end_offset;
           void *data_point;
-          data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
-          InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
+          // data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
+          // InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
+          data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v);
+          CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
           B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
           B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
           free(data_point);
@@ -695,6 +708,56 @@ public:
     return endpoint->Read(start_p, end_p, data);
   }
 
+  /**
+ * @brief Calculate the Size of Output array (B)
+ * 
+ * @param data_size_p, the size of the output array 
+ * @param data_chunk_size_p , the chunk size of the output array
+ * @param data_overlap_size_p , the overlap size of the output array
+ */
+  void inline CalculateOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p)
+  {
+    if (skip_flag)
+    {
+      data_size_p = skiped_dims_size;
+      data_chunk_size_p = skiped_chunk_size;
+      data_overlap_size_p = data_overlap_size; //Todo:  need to consider data_overlap size
+    }
+    else
+    {
+      data_size_p = data_size;
+      data_chunk_size_p = data_chunk_size;
+      data_overlap_size_p = data_overlap_size;
+    }
+
+    //we may update the data_size_p/data_chunk_size_p/data_overlap_size_p if vector used
+    //output_vector_shape is the parameter
+    if (vector_type_flag)
+    {
+      int rank = data_size_p.size();
+      for (int i = 0; i < output_vector_shape.size(); i++)
+      {
+        if (i > rank)
+        {
+          data_size_p.push_back(output_vector_shape[i]);
+          data_chunk_size_p.push_back(output_vector_shape[i]);
+          data_overlap_size_p.push_back(0);
+        }
+        else
+        {
+          data_size_p[i] = data_size_p[i] * output_vector_shape[i];
+        }
+      }
+    }
+  }
+  /**
+   * @brief infer the size for output array
+   * 
+   * @param data_size_p 
+   * @param data_chunk_size_p 
+   * @param data_overlap_size_p 
+   * @param output_vector_size 
+   */
   void inline InferOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p, size_t output_vector_size)
   {
     if (skip_flag)
