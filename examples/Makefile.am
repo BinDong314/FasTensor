@@ -18,7 +18,8 @@ bin_PROGRAMS=   au_test_data_generator \
                 au_example_adios \
                 au_example_pnetcdf \
                 au_example_simple \
-                au_example_kf1p
+                au_example_kf1p \
+                au_example_vector_2d
 
                
 
@@ -38,3 +39,4 @@ au_example_adios_SOURCES=au_example_adios.cpp
 au_example_pnetcdf_SOURCES=au_example_pnetcdf.cpp
 au_example_simple_SOURCES=au_example_simple.cpp
 au_example_kf1p_SOURCES=au_example_kf1p.cpp
+au_example_vector_2d_SOURCES=au_example_vector_2d.cpp
