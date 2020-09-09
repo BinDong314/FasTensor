@@ -25,7 +25,7 @@ int EndpointHDF5::ExtractMeta()
 
 int EndpointHDF5::Create()
 {
-    std::cout << "EndpointHDF5::Create :: " << fn_str << "\n";
+    // std::cout << "EndpointHDF5::Create :: " << fn_str << "\n";
 
     Map2MyType();
     std::string root_dir = "/";
@@ -100,7 +100,7 @@ int EndpointHDF5::Create()
 
 int EndpointHDF5::Open()
 {
-    std::cout << "EndpointHDF5::Open :: " << fn_str << "\n";
+    //std::cout << "EndpointHDF5::Open :: " << fn_str << "\n";
     PrintInfo();
     if (file_exist(fn_str.c_str()) == 0)
     {

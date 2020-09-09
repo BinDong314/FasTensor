@@ -25,11 +25,14 @@ ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG) $(FFTW_FLAG)  $(DASH_FLAG) $(E
 
 .PHONY: all clean
 
-all:$(patsubst %.cpp, %.exe, $(wildcard *.cpp))
+all: create_data ma
 
-%.exe: %.cpp Makefile
+create_data: create_data.cpp 
+	$(CCC) $< -o $@ $(ALL_FLAGS)
+
+ma: ma.cpp 
 	$(CCC) $< -o $@ $(ALL_FLAGS)
 
 clean:
-	rm *.exe
+	rm create_data ma
 
