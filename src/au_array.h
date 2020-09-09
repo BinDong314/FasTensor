@@ -30,7 +30,7 @@ extern int au_rank;
 #include "au_merge.h"
 #include "au_output_vector.h"
 
-namespace AU
+namespace FT
 {
 template <class T>
 class Array
@@ -1511,5 +1511,5 @@ public:
 
 }; // class of array
 
-} // namespace AU
+} // namespace FT
 #endif

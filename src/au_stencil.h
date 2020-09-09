@@ -60,10 +60,6 @@ private:
 public:
   //For test only
   Stencil(){};
-  Stencil(T v)
-  {
-    value = v;
-  };
 
   // For trail run
   Stencil(int dims_input, T *chunk)
@@ -77,6 +73,32 @@ public:
 #ifdef DEBUG
     MpiRankSize(&mpi_rank, &mpi_size);
 #endif
+  }
+
+  /**
+   * @brief Construct a new Stencil object contains the value 
+   *        Mostly, it is used as output
+   * 
+   * @param value, value to be contained 
+   */
+  Stencil(T value_p)
+  {
+    value = value_p;
+  }
+
+  /**
+   * @brief Construct a new Stencil object contains the value
+   *        and the value has the shape for n-dimensional array
+   *        Mostly, it is used as output
+   * 
+   * @param value, the value to be contained in Stencil object
+   * @param shape, the shape fo the output data
+   */
+  Stencil(T value_p, std::vector<size_t> shape_p)
+  {
+    value = value_p;
+    is_output_vector_flag = true;
+    output_vector_shape = shape_p;
   }
 
   //For production

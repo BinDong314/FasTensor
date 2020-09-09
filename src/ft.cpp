@@ -1,4 +1,4 @@
-#include "au.h"
+#include "ft.h"
 
 int au_mpi_size_global;
 int au_mpi_rank_global;

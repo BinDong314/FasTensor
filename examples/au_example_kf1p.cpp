@@ -1,7 +1,6 @@
-
 /**
  *
- * Email questions to dbin@lbl.gov
+ * Author:  Bin Dong, dbin@lbl.gov
  * Scientific Data Management Research Group
  * Lawrence Berkeley National Laboratory
  *
@@ -11,10 +10,10 @@
 #include <stdarg.h>
 #include <vector>
 #include <stdlib.h>
-#include "au.h"
+#include "ft.h"
 
 using namespace std;
-using namespace AU;
+using namespace FT;
 
 int rows_chunk = 11648;
 int cols_chunk = 60000;
