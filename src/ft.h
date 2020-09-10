@@ -25,8 +25,13 @@ extern int au_size;
 extern int au_rank;
 
 extern MPI_COMM_TYPE au_mpi_comm_global;
-void AU_Init(int argc, char *argv[], MPI_COMM_TYPE au_mpi_comm = MPI_COMM_WORLD_DEFAULT);
+void FT_Init(int argc, char *argv[], MPI_COMM_TYPE au_mpi_comm = MPI_COMM_WORLD_DEFAULT);
 
-void AU_Finalize();
+void FT_Finalize();
+
+//for some legacy code
+#define AU_Init(argc, argv) FT_Init(argc, argv)
+
+#define AU_Finalize() FT_Finalize()
 
 #endif

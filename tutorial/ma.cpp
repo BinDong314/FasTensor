@@ -26,7 +26,7 @@ inline Stencil<float> udf_ma(const Stencil<float> &iStencil)
 int main(int argc, char *argv[])
 {
     //Init the MPICH, etc.
-    AU_Init(argc, argv);
+    FT_Init(argc, argv);
 
     // set up the chunk size and the overlap size
     std::vector<int> chunk_size = {4, 4};
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     delete A;
     delete B;
 
-    AU_Finalize();
+    FT_Finalize();
 
     return 0;
 }

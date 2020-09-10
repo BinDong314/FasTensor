@@ -8,7 +8,7 @@ int au_rank;
 
 MPI_COMM_TYPE au_mpi_comm_global = MPI_COMM_WORLD_DEFAULT;
 
-void AU_Init(int argc, char *argv[], MPI_COMM_TYPE au_mpi_comm_user)
+void FT_Init(int argc, char *argv[], MPI_COMM_TYPE au_mpi_comm_user)
 {
     au_mpi_comm_global = au_mpi_comm_user;
     dash::init(&argc, &argv);
@@ -21,7 +21,7 @@ void AU_Init(int argc, char *argv[], MPI_COMM_TYPE au_mpi_comm_user)
         std::cout << "RUN analysis with  [" << au_size << "] processes \n";
 }
 
-void AU_Finalize()
+void FT_Finalize()
 {
     dash::finalize();
     MPI_FINALIZE();
