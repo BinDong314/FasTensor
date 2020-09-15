@@ -57,6 +57,10 @@ private:
   std::vector<size_t> output_vector_shape;
   OutputVectorFlatDirection output_vector_flat_direction;
 
+  //padding value
+  bool has_padding_value_flag = false;
+  T padding_value;
+
 public:
   //For test only
   Stencil(){};
@@ -352,15 +356,28 @@ public:
       }
       else if (coordinate_shift[i] > 0)
       {
+
         coordinate[i] = my_location[i] + coordinate_shift[i];
-        if (coordinate[i] >= chunk_dim_size[i]) //Check boundary :: Be careful with size overflow
+        if (coordinate[i] >= chunk_dim_size[i])
+        { //Check boundary :: Be careful with size overflow
           coordinate[i] = chunk_dim_size[i] - 1;
+          //return the padding_value if go beyond boundary and has padding seting
+          if (has_padding_value_flag)
+          {
+            return padding_value;
+          }
+        }
       }
       else
       {
         coordinate[i] = -coordinate_shift[i]; //Convert to unsigned long long
         if (my_location[i] <= coordinate[i])
         {
+          //return the padding_value if go beyond boundary and has padding seting
+          if (has_padding_value_flag)
+          {
+            return padding_value;
+          }
           coordinate[i] = 0;
         }
         else
@@ -803,6 +820,12 @@ public:
     }
 
     return output_vector_shape;
+  }
+
+  void SetPadding(T padding_value_t)
+  {
+    has_padding_value_flag = true;
+    padding_value = padding_value_t;
   }
 };
 

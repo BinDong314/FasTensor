@@ -100,7 +100,7 @@ private:
   std::regex dir_input_regex, dir_output_regex;
   std::string dir_output_replace_str;
 
-  //Flag variable
+  //Flag variable for different purposes
   bool skip_flag = false;
   bool view_flag = false;
   bool cpp_vec_flag = false;
@@ -113,9 +113,13 @@ private:
   bool chunk_size_by_user_flag = false;
   bool chunk_size_by_user_by_dimension_flag = false;
   bool endpoint_memory_flag = false;
+  bool has_padding_value_flag = false;
 
   //The shape of output_vector when vector_type_flag = true
   std::vector<size_t> output_vector_shape;
+
+  //padding_value_p
+  T padding_value;
 
   //help variable
   AU_WTIME_TYPE t_start, time_read = 0, time_udf = 0, time_write = 0, time_create = 0, time_sync = 0, time_nonvolatile = 0;
@@ -444,6 +448,20 @@ public:
   template <class UDFOutputType, class BType = UDFOutputType>
   void Apply(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
   {
+    Transform(UDF, B);
+  }
+
+  /**
+   * @brief Run a UDF on the data pointed by the array
+   * 
+   * @tparam UDFOutputType : the output type of UDF
+   * @tparam BType : The element type of output Array B
+   * @param UDF: pointer to user-defined function 
+   * @param B : Output Array B
+   */
+  template <class UDFOutputType, class BType = UDFOutputType>
+  void Transform(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
+  {
     //Set up the input data for LoadNextChunk
     InitializeApplyInput();
     std::vector<UDFOutputType> current_result_chunk_data;
@@ -477,6 +495,10 @@ public:
         std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
         unsigned long long offset_ol;
         Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
+        if (has_padding_value_flag)
+        {
+          cell_target.SetPadding(padding_value);
+        }
         Stencil<UDFOutputType> cell_return_stencil;
         UDFOutputType cell_return_value;
         unsigned long long cell_target_g_location_rm;
@@ -1509,7 +1531,15 @@ public:
     time_udf = 0;
   }
 
+  void SetPadding(T padding_value_p)
+  {
+    has_padding_value_flag = true;
+    padding_value = padding_value_p;
+  }
+
 }; // class of array
 
 } // namespace FT
+
+namespace AU = FT;
 #endif

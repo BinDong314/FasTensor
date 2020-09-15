@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     Array<float> *B = new Array<float>("EP_HDF5:tutorial_ma.h5:/data");
 
     //Run
-    A->Apply(udf_ma, B);
+    A->Transform(udf_ma, B);
 
     //Clear
     delete A;

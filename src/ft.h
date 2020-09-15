@@ -31,7 +31,10 @@ void FT_Finalize();
 
 //for some legacy code
 #define AU_Init(argc, argv) FT_Init(argc, argv)
-
 #define AU_Finalize() FT_Finalize()
+
+//const auto &AU_Init = FT_Init;
+
+//const auto &AU_Finalize = FT_Finalize;
 
 #endif
