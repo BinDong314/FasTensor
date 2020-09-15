@@ -45,8 +45,8 @@ private:
   std::vector<int> coordinate_shift;
   std::vector<unsigned long long> coordinate;
   int trail_run_flag = 0; //When rail_run_flag = 1, it records the maximum overlap size
-  int padding_value_set_flag = 0;
-  T padding_value;
+  //int padding_value_set_flag = 0;
+  //T padding_value;
   int mpi_rank, mpi_size;
 
   /**
@@ -334,7 +334,7 @@ public:
 
   //Generic version of the ()
   template <typename... Is>
-  inline T &operator()(Is... offsets) const
+  inline T operator()(Is... offsets) const
   {
     std::vector<int> ov{{offsets...}};
     int ov_rank = ov.size();
@@ -751,11 +751,11 @@ public:
     return my_g_location_rm;
   }
 
-  void SetApplyPadding(T padding_value_p)
-  {
-    padding_value_set_flag = 1;
-    padding_value = padding_value_p;
-  }
+  //void SetApplyPadding(T padding_value_p)
+  //{
+  //  padding_value_set_flag = 1;
+  //  padding_value = padding_value_p;
+  //}
 
   /**
    * @brief Set the Output Vector Flag object
@@ -822,10 +822,10 @@ public:
     return output_vector_shape;
   }
 
-  void SetPadding(T padding_value_t)
+  void SetPadding(T padding_value_p)
   {
     has_padding_value_flag = true;
-    padding_value = padding_value_t;
+    padding_value = padding_value_p;
   }
 };
 
