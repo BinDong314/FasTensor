@@ -19,10 +19,6 @@ using namespace FT;
 inline Stencil<float> udf_ma(const Stencil<float> &iStencil)
 {
     Stencil<float> oStencil;
-    std::cout << "iStencil(0, -1) =  " << iStencil(0, -1) << "\n";
-    std::cout << "iStencil(0,  0) =  " << iStencil(0, 0) << "\n";
-    std::cout << "iStencil(0,  1) =  " << iStencil(0, 1) << "\n";
-
     oStencil = (iStencil(0, -1) + iStencil(0, 0) + iStencil(0, 1)) / 3.0;
     return oStencil;
 }
