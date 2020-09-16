@@ -29,7 +29,7 @@ int EndpointHDF5::Create()
 
     Map2MyType();
     std::string root_dir = "/";
-    PrintInfo();
+    //PrintInfo();
     //plist_id = H5Pcreate(H5P_FILE_ACCESS);
     //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
