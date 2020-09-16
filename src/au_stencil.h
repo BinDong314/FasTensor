@@ -371,7 +371,7 @@ public:
       else
       {
         coordinate[i] = -coordinate_shift[i]; //Convert to unsigned long long
-        if (my_location[i] <= coordinate[i])
+        if (my_location[i] < coordinate[i])
         {
           //return the padding_value if go beyond boundary and has padding seting
           if (has_padding_value_flag)
