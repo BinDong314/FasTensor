@@ -25,7 +25,7 @@ ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG) $(FFTW_FLAG)  $(DASH_FLAG) $(E
 
 .PHONY: all clean
 
-all: create_data ma padding
+all: create_data ma padding conv
 
 create_data: create_data.cpp 
 	$(CCC) $< -o $@ $(ALL_FLAGS)
@@ -37,6 +37,9 @@ padding: padding.cpp
 	$(CCC) $< -o $@ $(ALL_FLAGS)
 
 
+conv: conv.cpp
+	$(CCC) $< -o $@ $(ALL_FLAGS)
+
 clean:
-	rm create_data ma padding
+	rm create_data ma padding conv
 

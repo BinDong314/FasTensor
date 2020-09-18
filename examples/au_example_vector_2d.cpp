@@ -59,7 +59,7 @@ inline Stencil<std::vector<float>> udf_vector_2d(const Stencil<float> &iStencil)
     std::vector<size_t> vector_shape(2);
     vector_shape[0] = OUTPUT_VEC_ROWS;
     vector_shape[1] = OUTPUT_VEC_COLS;
-    oStencil.SetOutputVectorShape(vector_shape);
+    oStencil.SetShape(vector_shape);
     return oStencil;
 }
 

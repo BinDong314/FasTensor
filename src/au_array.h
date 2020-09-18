@@ -582,7 +582,7 @@ public:
 
           if (vector_type_flag == true)
           {
-            output_vector_shape = cell_return_stencil.GetOutputVectorShape();
+            output_vector_shape = cell_return_stencil.GetShape();
           }
 
           if (save_result_flag)

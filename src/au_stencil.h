@@ -417,7 +417,14 @@ public:
     return has_set_output_value_flag;
   }
 
-  inline std::vector<T> Read(std::vector<int> &start_offset, std::vector<int> &end_offset) const
+  /**
+   * @brief read neighborhood
+   * 
+   * @param start_offset 
+   * @param end_offset 
+   * @return std::vector<T> 
+   */
+  inline std::vector<T> ReadHood(std::vector<int> &start_offset, std::vector<int> &end_offset) const
   {
     std::vector<T> rv;
     int rank_temp = start_offset.size();
@@ -504,7 +511,15 @@ public:
     return rv;
   }
 
-  int Write(std::vector<int> &start_offset, std::vector<int> &end_offset, std::vector<T> &data) const
+  /**
+   * @brief WriteHood
+   * 
+   * @param start_offset 
+   * @param end_offset 
+   * @param data 
+   * @return int 
+   */
+  int WriteHood(std::vector<int> &start_offset, std::vector<int> &end_offset, std::vector<T> &data) const
   {
     int rank_temp = start_offset.size();
     /*std::vector<size_t> start_offset_size_t, end_offset_size_t;
@@ -789,22 +804,35 @@ public:
   }
 
   /**
-   * @brief Set the Output Vector Shape object
+   * @brief Set the Padding object
    * 
-   * @param output_vector_shape_p 
-   *        -1: using the size of vector as default
+   * @param padding_value_p 
    */
-  void SetOutputVectorShape(const std::vector<size_t> output_vector_shape_p)
+  void SetPadding(T padding_value_p)
   {
-    /*
-     * will check the size when it got used
-    if (dims != output_vector_shape_p.size())
-    {
-      AU_EXIT("size() of output_vector_shape_p is not equal to dims ");
-    }
-    */
+    has_padding_value_flag = true;
+    padding_value = padding_value_p;
+  }
+
+  /**
+   * @brief Get the Padding object
+   * 
+   * @return T 
+   */
+  T GetPadding()
+  {
+    return padding_value;
+  }
+
+  /**
+   * @brief Set the Shape of the Stencil object
+   * 
+   * @param shape_p shape vector
+   */
+  void SetShape(const std::vector<size_t> shape_p)
+  {
     is_output_vector_flag = true;
-    output_vector_shape = output_vector_shape_p;
+    output_vector_shape = shape_p;
   }
 
   /**
@@ -812,7 +840,7 @@ public:
    * 
    * @return std::vector<size_t> 
    */
-  std::vector<size_t> GetOutputVectorShape()
+  std::vector<size_t> GetShape()
   {
     if (!is_output_vector_flag)
     {
@@ -820,12 +848,6 @@ public:
     }
 
     return output_vector_shape;
-  }
-
-  void SetPadding(T padding_value_p)
-  {
-    has_padding_value_flag = true;
-    padding_value = padding_value_p;
   }
 };
 
