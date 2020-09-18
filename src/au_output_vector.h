@@ -121,7 +121,7 @@ void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> 
     unsigned long long write_vector_length = 1, temp_address;
     for (int i = 0; i < v_shape.size(); i++)
     {
-        if (i > rank) //have extra dimension to deal with
+        if (i >= rank) //have extra dimension to deal with
         {
             write_start_address.push_back(0);
             write_end_address.push_back(v_shape[i] - 1);
@@ -134,6 +134,7 @@ void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> 
             write_start_address[i] = write_start_address[i] * v_shape[i];
             write_end_address[i] = write_start_address[i] + (write_end_address[i] - temp_address + 1) * v_shape[i] - 1;
         }
+        std::cout << write_end_address[i] << "  ,,  " << write_start_address[i] << "\n";
         write_vector_size.push_back(write_end_address[i] - write_start_address[i] + 1);
         write_vector_length = write_vector_length * write_vector_size[i];
     }
@@ -147,10 +148,10 @@ void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> 
     //template <class T>
     //inline int ArrayViewAccessP(T * view_v, T * array_v, std::vector<unsigned long long> ///array_size, std::vector<unsigned long long> start, std::vector<unsigned long long> end, int read_write_code)
 
-    PrintVector("v_shape = ", v_shape);
-    PrintVector("write_vector_size = ", write_vector_size);
-    PrintVector("write_start_address = ", write_start_address);
-    PrintVector("write_end_address = ", write_end_address);
+    //PrintVector("v_shape = ", v_shape);
+    //PrintVector("write_vector_size = ", write_vector_size);
+    //PrintVector("write_start_address = ", write_start_address);
+    //PrintVector("write_end_address = ", write_end_address);
 
     std::vector<unsigned long long> view_start(rank), view_end(rank);
     for (size_t i = 0; i < v.size(); i++)

@@ -759,7 +759,7 @@ public:
       int rank = data_size_p.size();
       for (int i = 0; i < output_vector_shape.size(); i++)
       {
-        if (i > rank)
+        if (i >= rank)
         {
           data_size_p.push_back(output_vector_shape[i]);
           data_chunk_size_p.push_back(output_vector_shape[i]);
