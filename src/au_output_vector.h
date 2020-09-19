@@ -34,9 +34,9 @@
 inline void GetChunkAddress(const unsigned long long chunk_id, const std::vector<unsigned long long> array_size, const std::vector<size_t> chunk_size, std::vector<unsigned long long> &chunk_start_address, std::vector<unsigned long long> &chunk_end_address)
 {
     int rank = array_size.size();
-    PrintScalar("rank = ", rank);
-    PrintVector("array_size = ", array_size);
-    PrintVector("chunk_size = ", chunk_size);
+    //PrintScalar("rank = ", rank);
+    //PrintVector("array_size = ", array_size);
+    //PrintVector("chunk_size = ", chunk_size);
 
     std::vector<unsigned long long> chunks;
     unsigned long long total_chunks = 1;
@@ -60,8 +60,8 @@ inline void GetChunkAddress(const unsigned long long chunk_id, const std::vector
         AU_EXIT("chunk_id >= total_chunks: chunk_id =" + std::to_string(chunk_id) + ", total_chunks = " + std::to_string(total_chunks));
     }
     std::vector<unsigned long long> chunk_coordinate(rank);
-    PrintVector("chunks = ", chunks);
-    PrintScalar("chunk_id = ", chunk_id);
+    //PrintVector("chunks = ", chunks);
+    //PrintScalar("chunk_id = ", chunk_id);
     //PrintVector("chunk_coordinate = ", chunk_coordinate);
 
     ROW_MAJOR_ORDER_REVERSE_MACRO(chunk_id, chunks, rank, chunk_coordinate);
@@ -90,8 +90,8 @@ inline void GetChunkAddress(const unsigned long long chunk_id, const std::vector
         }
     }
 
-    PrintVector("chunk_start_address = ", chunk_start_address);
-    PrintVector("chunk_end_address = ", chunk_end_address);
+    //PrintVector("chunk_start_address = ", chunk_start_address);
+    //PrintVector("chunk_end_address = ", chunk_end_address);
 }
 
 /**
@@ -134,7 +134,7 @@ void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> 
             write_start_address[i] = write_start_address[i] * v_shape[i];
             write_end_address[i] = write_start_address[i] + (write_end_address[i] - temp_address + 1) * v_shape[i] - 1;
         }
-        std::cout << write_end_address[i] << "  ,,  " << write_start_address[i] << "\n";
+        //std::cout << write_end_address[i] << "  ,,  " << write_start_address[i] << "\n";
         write_vector_size.push_back(write_end_address[i] - write_start_address[i] + 1);
         write_vector_length = write_vector_length * write_vector_size[i];
     }

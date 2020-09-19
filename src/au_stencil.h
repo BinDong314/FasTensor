@@ -405,6 +405,78 @@ public:
     }
   }
 
+  //Generic version of the ()
+  inline T ReadPoint(std::vector<int> &ov) const
+  {
+    //std::vector<int> ov{{offsets...}};
+    int ov_rank = ov.size();
+    if (dims != ov_rank)
+    {
+      AU_EXIT("The # of offsets " + std::to_string(ov_rank) + " is not equal to the data's: " + std::to_string(dims));
+    }
+
+    //std::cout << "Call new index ! \n";
+    std::vector<int> coordinate_shift(dims);
+    std::vector<unsigned long long> coordinate(dims);
+
+    for (int i = 0; i < ov_rank; i++)
+    {
+      coordinate_shift[i] = ov[i];
+      if (coordinate_shift[i] == 0)
+      {
+        coordinate[i] = my_location[i];
+      }
+      else if (coordinate_shift[i] > 0)
+      {
+
+        coordinate[i] = my_location[i] + coordinate_shift[i];
+        if (coordinate[i] >= chunk_dim_size[i])
+        { //Check boundary :: Be careful with size overflow
+          coordinate[i] = chunk_dim_size[i] - 1;
+          //return the padding_value if go beyond boundary and has padding seting
+          if (has_padding_value_flag)
+          {
+            return padding_value;
+          }
+        }
+      }
+      else
+      {
+        coordinate[i] = -coordinate_shift[i]; //Convert to unsigned long long
+        if (my_location[i] < coordinate[i])
+        {
+          //return the padding_value if go beyond boundary and has padding seting
+          if (has_padding_value_flag)
+          {
+            return padding_value;
+          }
+          coordinate[i] = 0;
+        }
+        else
+        {
+          coordinate[i] = my_location[i] - coordinate[i]; //Check boundary :: Be careful with size overflow
+        }
+      }
+    }
+    unsigned long long shift_offset = coordinate[0];
+    for (int i = 1; i < ov_rank; i++)
+    {
+      shift_offset = shift_offset * chunk_dim_size[i] + coordinate[i];
+    }
+
+    if (shift_offset <= chunk_data_size)
+    {
+      return chunk_data_pointer[shift_offset];
+    }
+    else
+    {
+      PrintVector("ov = ", ov);
+      PrintVector("coordinate = ", coordinate);
+      PrintVector("chunk_dim_size = ", chunk_dim_size);
+      AU_EXIT("Error in operator() of Stencil");
+    }
+  }
+
   template <class TO>
   inline void operator=(TO &others)
   {
@@ -417,6 +489,48 @@ public:
     return has_set_output_value_flag;
   }
 
+  void ReadHoodBorder(std::vector<T> &rv, std::vector<int> &start_offset, std::vector<int> &end_offset) const
+  {
+    int rank_temp = start_offset.size();
+    size_t element_count = rv.size();
+
+    std::vector<unsigned long long> count_size_t(rank_temp);
+    for (int i = 0; i < rank_temp; i++)
+    {
+      count_size_t[i] = (end_offset[i] - start_offset[i] + 1);
+    }
+
+    if (rank_temp == 1)
+    {
+      for (int iii = start_offset[0]; iii <= end_offset[0]; iii++)
+      {
+        rv[iii] = this->operator()(iii);
+      }
+    }
+
+    if (rank_temp == 2)
+    {
+      //std::cout << "call out of border\n";
+      for (int iii = start_offset[0]; iii <= end_offset[0]; iii++)
+      {
+        for (int jjj = start_offset[1]; jjj <= end_offset[1]; jjj++)
+        {
+          rv[iii * count_size_t[1] + jjj] = this->operator()(iii, jjj);
+        }
+      }
+    }
+
+    unsigned long long array_buffer_offset = 0;
+    std::vector<int> ord(start_offset.begin(), start_offset.end());
+    for (unsigned long long i = 0; i < element_count; i++)
+    {
+      //ROW_MAJOR_ORDER_MACRO(chunk_dim_size, chunk_dim_size.size(), ord, array_buffer_offset);
+      // VIEW_ACCESS_HELP_P(view_v, view_buffer_offset, array_v, array_buffer_offset, 1, read_write_code, sizeof(T));
+      rv[i] = ReadPoint(ord);
+      //view_buffer_offset++;
+      ITERATOR_MACRO(ord, start_offset, end_offset); //update ord by increasing "1", row-major order
+    }
+  }
   /**
    * @brief read neighborhood
    * 
@@ -455,14 +569,32 @@ public:
     rv.resize(n);
 
     std::vector<unsigned long long> view_start(rank_temp), view_end(rank_temp);
+    bool out_of_border = false;
     for (int ii = 0; ii < rank_temp; ii++)
     {
       view_start[ii] = my_location[ii] + start_offset[ii];
       view_end[ii] = my_location[ii] + end_offset[ii];
+      if (view_end[ii] > (chunk_dim_size[ii] - 1))
+      {
+        out_of_border = true;
+      }
     }
     //ArrayViewAccess(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ, sizeof(T));
 
+    //PrintVector("view_start = ", view_start);
+    //PrintVector("view_end = ", view_end);
+    //PrintVector("chunk_dim_size = ", chunk_dim_size);
+
+    //we may go to use the () operator
+    if (out_of_border)
+    {
+      ReadHoodBorder(rv, start_offset, end_offset);
+      return rv;
+    }
+
     ArrayViewAccessP<T>(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ);
+    return rv;
+
     //ArrayViewAccess();
 
     //inline int ArrayViewAccess(void *view_buffer, void *array_buffer, std::vector<unsigned long long> &array_size, std::vector<unsigned long long> &start, std::vector<unsigned long long> &end, int read_write_code, int element_size);
