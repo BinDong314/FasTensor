@@ -8,6 +8,9 @@ int au_rank;
 
 MPI_COMM_TYPE au_mpi_comm_global = MPI_COMM_WORLD_DEFAULT;
 
+//std::vector<Endpoint *> endpoint_clean_vector;
+std::map<Endpoint *, bool> endpoint_clean_vector;
+
 void FT_Init(int argc, char *argv[], MPI_COMM_TYPE au_mpi_comm_user)
 {
     au_mpi_comm_global = au_mpi_comm_user;
@@ -23,6 +26,28 @@ void FT_Init(int argc, char *argv[], MPI_COMM_TYPE au_mpi_comm_user)
 
 void FT_Finalize()
 {
+
+    /*
+    if (endpoint_clean_vector.size() != 0)
+    {
+        for (int i = 0; i < endpoint_clean_vector.size(); i++)
+        {
+            if (endpoint_clean_vector[i] != NULL)
+                delete endpoint_clean_vector[i];
+        }
+    }*/
+
+    for (std::map<Endpoint *, bool>::iterator it = endpoint_clean_vector.begin(); it != endpoint_clean_vector.end(); ++it)
+    {
+        //std::cout << it->first << " => " << it->second << '\n';
+        if (it->second == true)
+        {
+            delete it->first;
+            std::cout << "call delete \n";
+        }
+        std::cout << "in finalize \n";
+    }
+
     dash::finalize();
     MPI_FINALIZE();
 }

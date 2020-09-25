@@ -30,6 +30,9 @@ extern int au_rank;
 #include "au_merge.h"
 #include "au_output_vector.h"
 
+// std::vector<Endpoint *> endpoint_clean_vector;
+extern std::map<Endpoint *, bool> endpoint_clean_vector;
+
 namespace FT
 {
 template <class T>
@@ -152,6 +155,7 @@ public:
 
     if (endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
+    endpoint_clean_vector[endpoint] = true;
   }
 
   /**
@@ -171,6 +175,8 @@ public:
     chunk_size_by_user_by_dimension_flag = true;
     if (endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
+
+    endpoint_clean_vector[endpoint] = true;
   }
 
   /**
@@ -193,6 +199,10 @@ public:
     chunk_size_by_user_flag = true;
     if (endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
+
+    //endpoint_clean_vector.push_back(endpoint);
+    endpoint_clean_vector[endpoint] = true;
+    std::cout << "Add to clean \n";
   }
 
   /**
@@ -217,6 +227,7 @@ public:
     }
 
     data_size = size_p;
+    endpoint_clean_vector[endpoint] = true;
   }
 
   /**
@@ -258,8 +269,10 @@ public:
    */
   ~Array()
   {
+    endpoint_clean_vector[endpoint] = false;
     if (endpoint != NULL)
       delete endpoint;
+    endpoint = nullptr;
   }
 
   /**
@@ -449,6 +462,18 @@ public:
   void Apply(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
   {
     Transform(UDF, B);
+  }
+
+  template <class UDFOutputType, class BType = UDFOutputType>
+  void Transform(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> &B)
+  {
+    Transform(UDF, &B);
+  }
+
+  template <class UDFOutputType, class BType = UDFOutputType>
+  void Transform(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &))
+  {
+    Transform(UDF, nullptr);
   }
 
   /**
