@@ -31,6 +31,8 @@ extern int au_rank;
 #include "au_output_vector.h"
 
 // std::vector<Endpoint *> endpoint_clean_vector;
+//extern std::map<Endpoint *, bool> endpoint_clean_vector;
+
 extern std::map<Endpoint *, bool> endpoint_clean_vector;
 
 namespace FT
@@ -269,10 +271,10 @@ public:
    */
   ~Array()
   {
-    endpoint_clean_vector[endpoint] = false;
-    if (endpoint != NULL)
-      delete endpoint;
-    endpoint = nullptr;
+    //endpoint_clean_vector[endpoint] = false;
+    //if (endpoint != NULL)
+    //  delete endpoint;
+    //endpoint = NULL;
   }
 
   /**

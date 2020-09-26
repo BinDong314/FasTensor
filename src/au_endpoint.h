@@ -197,6 +197,13 @@ public:
      */
     virtual int Close() = 0;
 
+    /**
+     * @brief call the finalize to close everything (like call Destractor)
+     * 
+     * @return int 
+     */
+    //virtual int Finalize() = 0;
+
     virtual void Map2MyType() = 0;
 
     virtual void EnableCollectiveIO();

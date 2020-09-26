@@ -43,9 +43,9 @@ void FT_Finalize()
         if (it->second == true)
         {
             delete it->first;
-            std::cout << "call delete \n";
+            //std::cout << "call delete \n";
         }
-        std::cout << "in finalize \n";
+        //std::cout << "in finalize \n";
     }
 
     dash::finalize();
