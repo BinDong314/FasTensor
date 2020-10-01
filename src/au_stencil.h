@@ -981,6 +981,38 @@ public:
 
     return output_vector_shape;
   }
+
+  /**
+   * @brief Get the Max Offset Upper
+   * 
+   * @return std::vector<int> , the maximum offset at upper side (including)
+   */
+  std::vector<int> GetMaxOffsetUpper() const
+  {
+    int rank = chunk_dim_size.size();
+    std::vector<int> max_offset;
+    for (int i = 0; i < rank; i++)
+    {
+      max_offset.push_back(chunk_dim_size[i] - my_location[i] - 1);
+    }
+    return max_offset;
+  }
+
+  /**
+   * @brief Get the Max Offset lower
+   * 
+   * @return std::vector<int> , the maximum offset at lower side (including)
+   */
+  std::vector<int> GetMaxOffsetLower() const
+  {
+    int rank = chunk_dim_size.size();
+    std::vector<int> max_offset;
+    for (int i = 0; i < rank; i++)
+    {
+      max_offset.push_back(my_location[i]);
+    }
+    return max_offset;
+  }
 };
 
 #endif

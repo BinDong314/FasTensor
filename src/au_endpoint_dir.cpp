@@ -118,11 +118,10 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     start_sub_endpoint[dir_data_merge_index] = 0;
     end_sub_endpoint[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
 
-    PrintVector("R: start : ", start);
-
-    PrintVector("R: end : ", end);
-    PrintVector("R: start_sub_endpoint : ", start_sub_endpoint);
-    PrintVector("R: end_sub_endpoint : ", end_sub_endpoint);
+    //PrintVector("R: start : ", start);
+    //PrintVector("R: end : ", end);
+    //PrintVector("R: start_sub_endpoint : ", start_sub_endpoint);
+    //PrintVector("R: end_sub_endpoint : ", end_sub_endpoint);
 
     size_t total_element;
     COUNT_CELLS(start_sub_endpoint, end_sub_endpoint, total_element);
@@ -142,9 +141,9 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
         view_start[dir_data_merge_index] = (i - sub_endpoint_index) * (end_sub_endpoint[dir_data_merge_index] + 1);
         view_end[dir_data_merge_index] = (i - sub_endpoint_index + 1) * (end_sub_endpoint[dir_data_merge_index] + 1) - 1;
 
-        PrintVector("R: count : ", count);
-        PrintVector("R: view_start : ", view_start);
-        PrintVector("R: view_end : ", view_end);
+        //PrintVector("R: count : ", count);
+        //PrintVector("R: view_start : ", view_start);
+        //PrintVector("R: view_end : ", view_end);
 
         switch (data_element_type)
         {

@@ -90,8 +90,8 @@ inline void GetChunkAddress(const unsigned long long chunk_id, const std::vector
         }
     }
 
-    //PrintVector("chunk_start_address = ", chunk_start_address);
-    //PrintVector("chunk_end_address = ", chunk_end_address);
+    PrintVector("chunk_start_address = ", chunk_start_address);
+    PrintVector("chunk_end_address = ", chunk_end_address);
 }
 
 /**
@@ -105,7 +105,7 @@ inline void GetChunkAddress(const unsigned long long chunk_id, const std::vector
  * @return void* the buffer containing the vector to write
  */
 template <typename T>
-void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> &v_shape, std::vector<unsigned long long> &write_start_address, std::vector<unsigned long long> &write_end_address)
+void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> &v_shape, std::vector<unsigned long long> &write_start_address, std::vector<unsigned long long> &write_end_address, bool last_chunk_flag, std::vector<size_t> &prev_v_shape)
 {
     //First to infer the size of the WriteVector from (write_end_address  -  write_start_address) and v_shape
 
@@ -131,7 +131,14 @@ void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> 
             // write_start_address = 2  write_end_address = 3  v_shape = 2
             //   ==> write_start_address = 4 write_end_address = 7
             temp_address = write_start_address[i];
-            write_start_address[i] = write_start_address[i] * v_shape[i];
+            if (last_chunk_flag)
+            {
+                write_start_address[i] = write_start_address[i] * prev_v_shape[i];
+            }
+            else
+            {
+                write_start_address[i] = write_start_address[i] * v_shape[i];
+            }
             write_end_address[i] = write_start_address[i] + (write_end_address[i] - temp_address + 1) * v_shape[i] - 1;
         }
         //std::cout << write_end_address[i] << "  ,,  " << write_start_address[i] << "\n";
@@ -148,10 +155,10 @@ void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> 
     //template <class T>
     //inline int ArrayViewAccessP(T * view_v, T * array_v, std::vector<unsigned long long> ///array_size, std::vector<unsigned long long> start, std::vector<unsigned long long> end, int read_write_code)
 
-    //PrintVector("v_shape = ", v_shape);
-    //PrintVector("write_vector_size = ", write_vector_size);
-    //PrintVector("write_start_address = ", write_start_address);
-    //PrintVector("write_end_address = ", write_end_address);
+    PrintVector("v_shape = ", v_shape);
+    PrintVector("write_vector_size = ", write_vector_size);
+    PrintVector("write_start_address = ", write_start_address);
+    PrintVector("write_end_address = ", write_end_address);
 
     std::vector<unsigned long long> view_start(rank), view_end(rank);
     for (size_t i = 0; i < v.size(); i++)
@@ -164,13 +171,13 @@ void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> 
 }
 
 template <typename T>
-void *InsertOutputVV2WriteV(std::vector<T> &v, std::vector<size_t> &v_shape, std::vector<unsigned long long> &write_start_address, std::vector<unsigned long long> &write_end_address)
+void *InsertOutputVV2WriteV(std::vector<T> &v, std::vector<size_t> &v_shape, std::vector<unsigned long long> &write_start_address, std::vector<unsigned long long> &write_end_address, bool last_chunk_flag, std::vector<size_t> &prev_v_shape)
 {
     AU_EXIT("This function should not be called !");
 }
 
 template <typename T>
-void *InsertOutputVV2WriteV(T &v, std::vector<size_t> &v_shape, std::vector<unsigned long long> &write_start_address, std::vector<unsigned long long> &write_end_address)
+void *InsertOutputVV2WriteV(T &v, std::vector<size_t> &v_shape, std::vector<unsigned long long> &write_start_address, std::vector<unsigned long long> &write_end_address, bool last_chunk_flag, std::vector<size_t> &prev_v_shape)
 {
     AU_EXIT("This function should not be called !");
 }

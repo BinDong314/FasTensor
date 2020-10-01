@@ -119,9 +119,15 @@ private:
   bool chunk_size_by_user_by_dimension_flag = false;
   bool endpoint_memory_flag = false;
   bool has_padding_value_flag = false;
+  bool skip_not_aligned_w_array_flag = false;
+  bool is_the_last_chunk = false;
 
+  bool is_endpoint_created_flag = false;
+
+  int skip_not_aligned_w_array_index;
   //The shape of output_vector when vector_type_flag = true
   std::vector<size_t> output_vector_shape;
+  std::vector<size_t> previous_output_vector_shape;
 
   //padding_value_p
   T padding_value;
@@ -403,11 +409,28 @@ public:
 
       for (int i = 0; i < data_dims; i++)
       {
-        if (data_size[i] % skip_size[i] != 0 || data_chunk_size[i] % skip_size[i] != 0)
+
+        /*if (data_size[i] % skip_size[i] != 0 || data_chunk_size[i] % skip_size[i] != 0)
         {
           AU_EXIT("Strip size must be aligned with size of both array and chunk ! \n");
+        }*/
+
+        if (data_chunk_size[i] % skip_size[i] != 0)
+        {
+          AU_EXIT("Strip size must be aligned with the size of chunk ! \n");
         }
-        skiped_dims_size[i] = data_size[i] / skip_size[i];
+
+        if (data_size[i] % skip_size[i] != 0)
+        {
+          skip_not_aligned_w_array_flag = true;
+          skip_not_aligned_w_array_index = i;
+          skiped_dims_size[i] = data_size[i] / skip_size[i] + 1;
+        }
+        else
+        {
+          skiped_dims_size[i] = data_size[i] / skip_size[i];
+        }
+
         skiped_chunk_size[i] = data_chunk_size[i] / skip_size[i];
         if (skiped_dims_size[i] % skiped_chunk_size[i] != 0)
         {
@@ -690,9 +713,11 @@ public:
           void *data_point;
           // data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
           // InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
-          data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v);
+          data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v, is_the_last_chunk, previous_output_vector_shape);
           CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
           B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+          PrintVector("current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+          PrintVector("current_chunk_end_offset_v = ", current_chunk_end_offset_v);
           B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
           free(data_point);
         }
@@ -705,6 +730,11 @@ public:
         }
       }
       time_write = time_write + AU_WTIME - t_start;
+
+      if (vector_type_flag == true)
+      {
+        previous_output_vector_shape = output_vector_shape;
+      }
 
       t_start = AU_WTIME;
       load_ret = LoadNextChunk(current_result_chunk_data_size);
@@ -794,7 +824,15 @@ public:
         }
         else
         {
-          data_size_p[i] = data_size_p[i] * output_vector_shape[i];
+          if (skip_not_aligned_w_array_flag && skip_not_aligned_w_array_index == i)
+          {
+            data_size_p[i] = (data_size_p[i] - 1) * output_vector_shape[i];
+            data_size_p[i] = data_size_p[i] + ((data_size[i] % skip_size[i]) * output_vector_shape[i]) / data_chunk_size[i];
+          }
+          else
+          {
+            data_size_p[i] = data_size_p[i] * output_vector_shape[i];
+          }
         }
       }
     }
@@ -921,6 +959,12 @@ public:
     if (!virtual_array_flag && endpoint->GetOpenFlag())
       return 0;
 
+    if (is_endpoint_created_flag)
+      return 0;
+
+    //cout << "CreateEndpoint: is_endpoint_created_flag " << is_endpoint_created_flag << "\n";
+    is_endpoint_created_flag = true;
+
     data_size = data_size_p;
     data_chunk_size = data_chunk_size_p;
     data_overlap_size = data_overlap_size_p;
@@ -1021,6 +1065,9 @@ public:
     {
       return 0;
     }
+
+    if (current_chunk_id == (data_total_chunks - 1))
+      is_the_last_chunk = true;
 
     result_vector_size = 0;
 

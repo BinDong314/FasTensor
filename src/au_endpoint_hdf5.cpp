@@ -206,6 +206,13 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
         offset[i] = start[i];
         count[i] = end[i] - start[i] + 1; //Starting from zero
     }
+    PrintVector("offset =", offset);
+    PrintVector("count =", count);
+
+    std::vector<unsigned long long> endpoint_dim_size_temp(endpoint_ranks);
+    H5Sget_simple_extent_dims(dataspace_id, &endpoint_dim_size_temp[0], NULL);
+
+    PrintVector("endpoint_dim_size = ", endpoint_dim_size_temp);
 
     hid_t memspace_id = H5Screate_simple(endpoint_ranks, &count[0], NULL);
     H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
