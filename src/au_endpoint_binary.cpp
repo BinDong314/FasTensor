@@ -403,7 +403,7 @@ std::string EndpointBinary::MapOpInt2Str(int op_int)
      */
 void EndpointBinary::EnableTranposeOnRead()
 {
-    std::cout << "EnableTranposeOnRead \n";
+    //std::cout << "EnableTranposeOnRead \n";
     tranpose_on_read_flag = true;
 }
 /**

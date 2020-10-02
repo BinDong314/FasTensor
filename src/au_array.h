@@ -210,7 +210,6 @@ public:
 
     //endpoint_clean_vector.push_back(endpoint);
     endpoint_clean_vector[endpoint] = true;
-    std::cout << "Add to clean \n";
   }
 
   /**
@@ -1066,7 +1065,8 @@ public:
       return 0;
     }
 
-    if (current_chunk_id == (data_total_chunks - 1))
+    //We only handle last chunk when skip is not even with the array size
+    if (current_chunk_id == (data_total_chunks - 1) && skip_not_aligned_w_array_flag)
       is_the_last_chunk = true;
 
     result_vector_size = 0;

@@ -59,7 +59,7 @@ int EndpointTDMS::ExtractMeta()
 
     int nPoint = ((file_size - nByte_header) / NBYTE_PER_DATUM) / nTrace;
 
-    std::cout << "nPoint = " << nPoint << " , nTrace = " << nTrace << "\n";
+    //std::cout << "nPoint = " << nPoint << " , nTrace = " << nTrace << "\n";
 
     endpoint_dim_size[0] = nTrace;
     endpoint_dim_size[1] = nPoint;
