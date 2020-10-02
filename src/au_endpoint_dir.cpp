@@ -13,6 +13,9 @@ int EndpointDIR::ExtractMeta()
 {
     std::vector<std::string> temp_dir_file_list = GetDirFileList(dir_str);
     //dir_file_list = GetDirFileList(dir_str);
+    if (temp_dir_file_list.size() <= 0)
+        AU_EXIT("No file under directory" + dir_str);
+
     if (input_replace_regex_flag)
     {
         dir_file_list.clear();
@@ -23,21 +26,21 @@ int EndpointDIR::ExtractMeta()
                 dir_file_list.push_back(temp_dir_file_list[i]);
             }
         }
+
+        if (dir_file_list.size() <= 0)
+            AU_EXIT("No file pass regex_match, reconsider your regex string? \n");
     }
     else
     {
         dir_file_list = temp_dir_file_list;
     }
 
-    if (dir_file_list.size() < 0)
-        AU_EXIT("No file under directory");
-
     //std::vector<unsigned long long> endpoint_dim_size;
     //int endpoint_ranks;
     std::vector<unsigned long long> temp_endpoint_dim_size;
     for (int i = 0; i < dir_file_list.size(); i++)
     {
-        //std::cout << dir_file_list[i] << ", in EndpointDIR::ExtractMeta\n";
+        std::cout << dir_file_list[i] << ", in EndpointDIR::ExtractMeta\n";
         sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
         sub_endpoint->ExtractMeta();
         temp_endpoint_dim_size = sub_endpoint->GetDimensions();
@@ -398,6 +401,7 @@ int EndpointDIR::SpecialOperator(int opt_code, std::vector<std::string> paramete
         {
             AU_EXIT("DIR_INPUT_SEARCH_RGX  needs 1 parameters: regex pattern and replace string pattern \n");
         }
+        std::cout << "regex string: " << parameter_v[0] << "\n";
         input_replace_regex_flag = true;
         input_filter_regex = new std::regex(parameter_v[0]);
         break;
