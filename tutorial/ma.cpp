@@ -23,7 +23,7 @@ inline Stencil<float> udf_ma(const Stencil<float> &iStencil)
     return oStencil;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[]) // start here
 {
     //Init the MPICH, etc.
     FT_Init(argc, argv);
@@ -33,10 +33,10 @@ int main(int argc, char *argv[])
     std::vector<int> overlap_size = {1, 1};
 
     //Input data
-    Array<float> *A = new Array<float>("EP_HDF5:tutorial.h5:/data", chunk_size, overlap_size);
+    Array<float> *A = new Array<float>("EP_HDF5:tutorial.h5:/dat", chunk_size, overlap_size);
 
     //Result data
-    Array<float> *B = new Array<float>("EP_HDF5:tutorial_ma.h5:/data");
+    Array<float> *B = new Array<float>("EP_HDF5:tutorial_ma.h5:/dat");
 
     //Run
     A->Transform(udf_ma, B);
