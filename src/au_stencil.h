@@ -538,7 +538,7 @@ public:
    * @param end_offset 
    * @return std::vector<T> 
    */
-  inline std::vector<T> ReadHood(std::vector<int> &start_offset, std::vector<int> &end_offset) const
+  inline std::vector<T> ReadNeighbors(std::vector<int> &start_offset, std::vector<int> &end_offset) const
   {
     std::vector<T> rv;
     int rank_temp = start_offset.size();
@@ -651,7 +651,7 @@ public:
    * @param data 
    * @return int 
    */
-  int WriteHood(std::vector<int> &start_offset, std::vector<int> &end_offset, std::vector<T> &data) const
+  int WriteNeighbors(std::vector<int> &start_offset, std::vector<int> &end_offset, std::vector<T> &data) const
   {
     int rank_temp = start_offset.size();
     /*std::vector<size_t> start_offset_size_t, end_offset_size_t;
