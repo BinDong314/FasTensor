@@ -1,4 +1,3 @@
-
 #ifndef AU_ARRAY_ITERATOR_H
 #define AU_ARRAY_ITERATOR_H
 
@@ -6,109 +5,94 @@
 #include <iostream>
 #include <vector>
 
-template <typename T>
-class ArrayIterator
-{
-    using A = std::vector<T>;
-    A b, i, e;
-    T N;
+/**
+ * @brief get the next ordinates_p from current ordinates_p 
+ *        call 
+ * @param ordinates_p, input and output for  current and next coordinate
+ * @param start_p  is the start range, n-dimensional, including 
+ * @param end_p is the end range, n-dimensional. including
+ */
+inline void
+iterate(std::vector<int> &ordinates_p, const std::vector<int> start_p, const std::vector<int> end_p);
 
-public:
-    /*
-    //The e_p is not included
-    //The b_p is included
-    //e.g., b_p  = (0, 0), e_p = (3,3)
-    //output is:
-        0, 0
-        0, 1
-        0, 2
-        1, 0
-        1, 1
-        1, 2
-        2, 0
-        2, 1
-        2, 2
-    */
-    ArrayIterator(const A &b_p, const A &e_p) : b(b_p), i(b_p), e(e_p), N(b_p.size()) {}
-
-    ArrayIterator &operator++()
-    {
-        for (size_t n = N - 1; n >= 0; --n)
-        {
-            if (++i[n] == e[n])
-            {
-                if (n >= 1)
-                    i[n] = b[n];
-            }
-            else
-            {
-                break;
-            }
-        }
-        return *this;
+#define ITERATOR_MACRO(ordinates_p, start_p, end_p)                                         \
+    {                                                                                       \
+        int dimensions = start_p.size();                                                    \
+        for (int dimension_index = dimensions - 1; dimension_index >= 0; dimension_index--) \
+        {                                                                                   \
+            if (ordinates_p[dimension_index] < end_p[dimension_index])                      \
+            {                                                                               \
+                ordinates_p[dimension_index]++;                                             \
+                break;                                                                      \
+            }                                                                               \
+            ordinates_p[dimension_index] = start_p[dimension_index];                        \
+        }                                                                                   \
     }
-    operator bool() { return i[0] != e[0]; }
-    T &operator[](size_t n) { return i[n]; }
-    const T &operator[](size_t n) const { return i[n]; }
-};
+
+#endif
 
 /*
+//Example file of usage
+#include <vector>
+#include <iostream>
+
+inline void
+iterate(std::vector<int> &ordinates, const std::vector<int> minimums, const std::vector<int> maximums)
+{
+    int dimensions = minimums.size();
+    // iterate over dimensions in reverse...
+    for (int dimension = dimensions - 1; dimension >= 0; dimension--)
+    {
+
+        if (ordinates[dimension] < maximums[dimension])
+        {
+            // If this dimension can handle another increment... then done.
+            ordinates[dimension]++;
+            break;
+        }
+
+        // Otherwise, reset this dimension and bubble up to the next dimension to take a look
+        ordinates[dimension] = minimums[dimension];
+    }
+}
+
 int main()
 {
-    using A = std::vector<size_t>;
+    int N = 3;
+    std::vector<int> min_c, max_c, ord_c;
+    min_c.resize(N);
+    max_c.resize(N);
+    ord_c.resize(N);
 
-    A begin = {1, 1};
-    A end = {4, 4};
-    A current(2);
+    min_c[0] = 1;
+    min_c[1] = 2;
+    min_c[2] = 1;
 
-    for (ArrayIterator<size_t> c(begin, end); c; ++c)
+    max_c[0] = 4;
+    max_c[1] = 5;
+    max_c[2] = 6;
+
+    ord_c[0] = min_c[0];
+    ord_c[1] = min_c[1];
+    ord_c[2] = min_c[2];
+
+    int maxIterations = 1;
+    for (int i = 0; i < N; i++)
     {
-        current[0] = c[0];
-        current[1] = c[1];
-        cout << current[0] << ", " << current[1] << endl;
+        maxIterations = maxIterations * (max_c[i] - min_c[i] + 1);
+    }
+
+    for (int iteration = 0; iteration < maxIterations; iteration++)
+    {
+        for (int i = 0; i < N; i++)
+        {
+            std::cout << ord_c[i] << " , ";
+        }
+        std::cout << "\n";
+        //iterate(n, ord, min, max)
+
+        iterate(ord_c, min_c, max_c);
     }
 }
+
 */
-
-//Some ref code
-/*
-class counter
-{
-	using A = std::array<T, N>;
-	A b, i, e;
-
-public:
-	counter(const A& b, const A& e) : b(b), i(b), e(e) { }
-
-	counter& operator++()
-	{
-		for (size_t n = 0; n < N; ++n)
-		{
-			if (++i[n] == e[n])
-			{
-				if (n < N - 1)
-					i[n] = b[n];
-			}
-			else
-				break;
-		}
-
-		return *this;
-	}
-
-	operator bool() { return i[N - 1] != e[N - 1]; }
-
-	T&       operator[](size_t n)       { return i[n]; }
-	const T& operator[](size_t n) const { return i[n]; }
-};
-
-template<typename S, typename T, size_t N>
-S& operator<<(S& s, const counter<T, N>& a)
-{
-	for (size_t n = 0; n < N; ++n)
-		s << a[n] << " ";
-
-	return s;
-}
-*/
-#endif

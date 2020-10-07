@@ -1,13 +1,7 @@
-/*
- *ArrayUDF Copyright (c) 2017, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
 
- *If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at  IPO@lbl.gov.
-
-* NOTICE. This Software was developed under funding from the U.S. Department of Energy and the U.S. Government consequently retains certain rights. As such, the U.S. Government has been granted for itself and others acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the Software to reproduce, distribute copies to the public, prepare derivative works, and perform publicly and display publicly, and to permit other to do so. 
- */
 /**
  *
- * Email questions to dbin@lbl.gov
+ * Author:  Bin Dong, dbin@lbl.gov
  * Scientific Data Management Research Group
  * Lawrence Berkeley National Laboratory
  *
@@ -17,10 +11,10 @@
 #include <stdarg.h>
 #include <vector>
 #include <stdlib.h>
-#include "au.h"
+#include "ft.h"
 
 using namespace std;
-using namespace AU;
+using namespace FT;
 
 #define VEC_SIZE 8
 
@@ -41,6 +35,11 @@ inline Stencil<std::vector<float>> udf_vector(const Stencil<float> &iStencil)
         temp_vec[i] = iStencil(0, i) * 2.0;
     }
     oStencil = temp_vec;
+
+    std::vector<size_t> vector_shape(2);
+    vector_shape[0] = 1;
+    vector_shape[1] = VEC_SIZE;
+    oStencil.SetShape(vector_shape);
     return oStencil;
 }
 
@@ -60,7 +59,7 @@ int main(int argc, char *argv[])
     Array<float> *B = new Array<float>("EP_HDF5:./test-data/testf-16x16-vector-output.h5:/testg/testd");
 
     //Set the direction to flat vector of output
-    A->SetVectorDirection(AU_FLAT_OUTPUT_ROW);
+    //A->SetVectorDirection(AU_FLAT_OUTPUT_ROW);
 
     //Skip paramter, run the udf_vector on the first cell of each row
     std::vector<int> skip_size = {1, 16};

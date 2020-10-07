@@ -20,15 +20,20 @@
 
 #define DIR_MERGE_INDEX 0
 #define DIR_SUB_CMD_ARG 1
+#define DIR_INPUT_SEARCH_RGX 2
+#define DIR_OUPUT_REPLACE_RGX 3
+#define DIR_OUPUT_REPLACE_RGX_ARG 4
 
 #include "au_utility.h"
 #include "au_type.h"
 #include "au_endpoint.h"
 #include "au_endpoint_hdf5.h"
+#include "au_endpoint_tdms.h"
 #include <string>
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <regex>
 
 //
 //I/O layer
@@ -47,6 +52,14 @@ private:
 
     int dir_data_merge_index = 0;
 
+    //http://www.cplusplus.com/reference/regex/ECMAScript/
+    bool input_replace_regex_flag = false;
+    std::regex *input_filter_regex; //The regex to "search" on list of file as input
+
+    bool output_replace_regex_flag = false;
+    std::regex *output_replace_regex; //The regex to "replace" on list of file as output (input)
+    std::string output_replace_regex_aug;
+
 public:
     /**
      * @brief Construct a new EndpointDIR object
@@ -60,8 +73,12 @@ public:
         if (sub_endpoint_type == EP_HDF5)
         {
             sub_endpoint = new EndpointHDF5();
-            sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, "");
-            sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, "");
+            sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, std::vector<std::string>());
+            sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, std::vector<std::string>());
+        }
+        else if (sub_endpoint_type == EP_TDMS)
+        {
+            sub_endpoint = new EndpointTDMS();
         }
         SetEndpointType(EP_DIR);
         sub_endpoint->SetDataElementType(data_element_type);
@@ -73,6 +90,8 @@ public:
 
     ~EndpointDIR()
     {
+        if (sub_endpoint != nullptr)
+            delete sub_endpoint;
     }
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
@@ -155,7 +174,7 @@ public:
      *                 dump file from MEMORY to HDF5
      * @param opt_code, specially defined code 
      */
-    int SpecialOperator(int opt_code, std::string parameter) override;
+    int SpecialOperator(int opt_code, std::vector<std::string> parameter_v) override;
 
     /**
      * @brief Set the Merge Index

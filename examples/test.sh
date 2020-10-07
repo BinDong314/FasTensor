@@ -45,6 +45,8 @@ mkdir ./test-data/test_1f1p_dir_2d > /dev/null 2>&1
 ./au_test_data_generator -f ./test-data/test_1f1p_dir_2d/testf-8x8-1f1p-4.h5 -g /testg -d /testg/testd -n 2 -s 8,8 -t 1 > /dev/null 2>&1
 
 
+./au_test_data_generator -f ./test-data/testf-16x16-vector-2d.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1 > /dev/null 2>&1
+
 echo "Start to run test  ..."
 
 # To test of running a command
@@ -96,10 +98,11 @@ function run_command_1f1p(){
 }
 
 ## Run the test code
-run_command ./au_example_hello_world testf-16x16-hello-world-output.h5 
+run_command ./au_example_simple testf-16x16-hello-world-output.h5 
 run_command ./au_example_vector testf-16x16-vector-output.h5 
 run_command ./au_example_array
 run_command ./au_example_vds testf-16x16-vds-output.h5
 run_command_1f1p ./au_example_1f1p 
-
 run_command  ./au_example_cache testf-16x16-cache-output.h5
+
+run_command  ./au_example_vector_2d testf-16x16-vector-2d-output.h5

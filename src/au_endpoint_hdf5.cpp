@@ -1,11 +1,4 @@
-/**
- *ArrayUDF Copyright (c) 2017, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
- *
- *If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at  IPO@lbl.gov.
- *
- * NOTICE. This Software was developed under funding from the U.S. Department of Energy and the U.S. Government consequently retains certain rights. As such, the U.S. Government has been granted for itself and others acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the Software to reproduce, distribute copies to the public, prepare derivative works, and perform publicly and display publicly, and to permit other to do so. 
- *
- */
+
 
 /**
  *
@@ -32,9 +25,11 @@ int EndpointHDF5::ExtractMeta()
 
 int EndpointHDF5::Create()
 {
+    // std::cout << "EndpointHDF5::Create :: " << fn_str << "\n";
+
     Map2MyType();
     std::string root_dir = "/";
-
+    //PrintInfo();
     //plist_id = H5Pcreate(H5P_FILE_ACCESS);
     //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
@@ -105,6 +100,8 @@ int EndpointHDF5::Create()
 
 int EndpointHDF5::Open()
 {
+    //std::cout << "EndpointHDF5::Open :: " << fn_str << "\n";
+    PrintInfo();
     if (file_exist(fn_str.c_str()) == 0)
     {
         Create();
@@ -209,6 +206,13 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
         offset[i] = start[i];
         count[i] = end[i] - start[i] + 1; //Starting from zero
     }
+    PrintVector("offset =", offset);
+    PrintVector("count =", count);
+
+    std::vector<unsigned long long> endpoint_dim_size_temp(endpoint_ranks);
+    H5Sget_simple_extent_dims(dataspace_id, &endpoint_dim_size_temp[0], NULL);
+
+    PrintVector("endpoint_dim_size = ", endpoint_dim_size_temp);
 
     hid_t memspace_id = H5Screate_simple(endpoint_ranks, &count[0], NULL);
     H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
@@ -380,6 +384,7 @@ int EndpointHDF5::ParseEndpointInfo()
      *                 dump file from MEMORY to HDF5
      * @param opt_code, specially defined code 
      */
+/** comment out 
 int EndpointHDF5::SpecialOperator(int opt_code, std::string parameter)
 {
     switch (opt_code)
@@ -399,6 +404,31 @@ int EndpointHDF5::SpecialOperator(int opt_code, std::string parameter)
     default:
         break;
     }
+}*/
 
-    return 0;
+/**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     */
+int EndpointHDF5::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
+{
+    switch (OP_ENABLE_MPI_IO)
+    {
+    case OP_ENABLE_MPI_IO:
+        EnableMPIIO();
+        break;
+    case OP_DISABLE_MPI_IO:
+        DisableMPIIO();
+        break;
+    case OP_ENABLE_COLLECTIVE_IO:
+        EnableCollectiveIO();
+        break;
+    case OP_DISABLE_COLLECTIVE_IO:
+        DisableCollectiveIO();
+        break;
+    default:
+        break;
+    }
 }

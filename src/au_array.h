@@ -1,11 +1,4 @@
-/**
- *ArrayUDF Copyright (c) 2017, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
- *
- *If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at  IPO@lbl.gov.
- *
- * NOTICE. This Software was developed under funding from the U.S. Department of Energy and the U.S. Government consequently retains certain rights. As such, the U.S. Government has been granted for itself and others acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the Software to reproduce, distribute copies to the public, prepare derivative works, and perform publicly and display publicly, and to permit other to do so. 
- *
- */
+
 
 /**
  *
@@ -24,6 +17,9 @@ extern int au_rank;
 #ifndef ARRAY_UDF_ARRAY_H
 #define ARRAY_UDF_ARRAY_H
 
+#include <assert.h>
+#include <stdarg.h>
+#include <regex>
 #include "mpi.h"
 #include "au_endpoint.h"
 #include "au_stencil.h"
@@ -32,11 +28,14 @@ extern int au_rank;
 #include "au_endpoint_factory.h"
 #include "au_mpi.h"
 #include "au_merge.h"
-#include <assert.h>
-#include <stdarg.h>
-#include <regex>
+#include "au_output_vector.h"
 
-namespace AU
+// std::vector<Endpoint *> endpoint_clean_vector;
+//extern std::map<Endpoint *, bool> endpoint_clean_vector;
+
+extern std::map<Endpoint *, bool> endpoint_clean_vector;
+
+namespace FT
 {
 template <class T>
 class Array
@@ -98,13 +97,15 @@ private:
 
   OutputVectorFlatDirection output_vector_flat_direction_index;
 
+  std::vector<size_t> output_vector_flat_shape;
+
   std::vector<Endpoint *> attribute_endpoint_vector; //vector of endpoints for a virtual array
 
   //For directory
   std::regex dir_input_regex, dir_output_regex;
   std::string dir_output_replace_str;
 
-  //Flag variable
+  //Flag variable for different purposes
   bool skip_flag = false;
   bool view_flag = false;
   bool cpp_vec_flag = false;
@@ -117,6 +118,19 @@ private:
   bool chunk_size_by_user_flag = false;
   bool chunk_size_by_user_by_dimension_flag = false;
   bool endpoint_memory_flag = false;
+  bool has_padding_value_flag = false;
+  bool skip_not_aligned_w_array_flag = false;
+  bool is_the_last_chunk = false;
+
+  bool is_endpoint_created_flag = false;
+
+  int skip_not_aligned_w_array_index;
+  //The shape of output_vector when vector_type_flag = true
+  std::vector<size_t> output_vector_shape;
+  std::vector<size_t> previous_output_vector_shape;
+
+  //padding_value_p
+  T padding_value;
 
   //help variable
   AU_WTIME_TYPE t_start, time_read = 0, time_udf = 0, time_write = 0, time_create = 0, time_sync = 0, time_nonvolatile = 0;
@@ -146,8 +160,10 @@ public:
     endpoint = EndpointFactory::NewEndpoint(data_endpoint);
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
+
     if (endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
+    endpoint_clean_vector[endpoint] = true;
   }
 
   /**
@@ -167,6 +183,8 @@ public:
     chunk_size_by_user_by_dimension_flag = true;
     if (endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
+
+    endpoint_clean_vector[endpoint] = true;
   }
 
   /**
@@ -189,6 +207,9 @@ public:
     chunk_size_by_user_flag = true;
     if (endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
+
+    //endpoint_clean_vector.push_back(endpoint);
+    endpoint_clean_vector[endpoint] = true;
   }
 
   /**
@@ -213,6 +234,7 @@ public:
     }
 
     data_size = size_p;
+    endpoint_clean_vector[endpoint] = true;
   }
 
   /**
@@ -254,8 +276,10 @@ public:
    */
   ~Array()
   {
-    if (endpoint != NULL)
-      delete endpoint;
+    //endpoint_clean_vector[endpoint] = false;
+    //if (endpoint != NULL)
+    //  delete endpoint;
+    //endpoint = NULL;
   }
 
   /**
@@ -294,22 +318,24 @@ public:
       }
     }
 
-    if (endpoint->GetEndpointType() == EP_DIR)
+    if (endpoint != NULL && endpoint->GetEndpointType() == EP_DIR)
     {
       //chunk_size_p = endpoint->GetChunkSize();
     }
-
     //optimal chunk_size
   }
 
   void UpdateOverlapSize()
   {
-    if (endpoint->GetEndpointType() == EP_DIR || chunk_size_by_user_by_dimension_flag)
+    if (endpoint != NULL)
     {
-      data_overlap_size.resize(data_dims);
-      for (int i = 0; i < data_dims; i++)
+      if (endpoint->GetEndpointType() == EP_DIR || chunk_size_by_user_by_dimension_flag)
       {
-        data_overlap_size[i] = 0;
+        data_overlap_size.resize(data_dims);
+        for (int i = 0; i < data_dims; i++)
+        {
+          data_overlap_size[i] = 0;
+        }
       }
     }
     //optimal overlap size
@@ -343,7 +369,6 @@ public:
     }
 
     UpdateChunkSize();
-    //UpdateOverlapSize(data_overlap_size);
     UpdateOverlapSize();
 
     current_chunk_start_offset.resize(data_dims);
@@ -383,15 +408,32 @@ public:
 
       for (int i = 0; i < data_dims; i++)
       {
-        if (data_size[i] % skip_size[i] != 0 || data_chunk_size[i] % skip_size[i] != 0)
+
+        /*if (data_size[i] % skip_size[i] != 0 || data_chunk_size[i] % skip_size[i] != 0)
         {
           PrintVector("data_size = ", data_size);
           PrintVector("data_chunk_size = ", data_chunk_size);
           PrintVector("skip_size = ", skip_size);
 
           AU_EXIT("Strip size must be aligned with size of both array and chunk ! \n");
+        }*/
+
+        if (data_chunk_size[i] % skip_size[i] != 0)
+        {
+          AU_EXIT("Strip size must be aligned with the size of chunk ! \n");
         }
-        skiped_dims_size[i] = data_size[i] / skip_size[i];
+
+        if (data_size[i] % skip_size[i] != 0)
+        {
+          skip_not_aligned_w_array_flag = true;
+          skip_not_aligned_w_array_index = i;
+          skiped_dims_size[i] = data_size[i] / skip_size[i] + 1;
+        }
+        else
+        {
+          skiped_dims_size[i] = data_size[i] / skip_size[i];
+        }
+
         skiped_chunk_size[i] = data_chunk_size[i] / skip_size[i];
         if (skiped_dims_size[i] % skiped_chunk_size[i] != 0)
         {
@@ -447,10 +489,37 @@ public:
   template <class UDFOutputType, class BType = UDFOutputType>
   void Apply(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
   {
+    Transform(UDF, B);
+  }
+
+  template <class UDFOutputType, class BType = UDFOutputType>
+  void Transform(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> &B)
+  {
+    Transform(UDF, &B);
+  }
+
+  template <class UDFOutputType, class BType = UDFOutputType>
+  void Transform(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &))
+  {
+    Transform(UDF, nullptr);
+  }
+
+  /**
+   * @brief Run a UDF on the data pointed by the array
+   * 
+   * @tparam UDFOutputType : the output type of UDF
+   * @tparam BType : The element type of output Array B
+   * @param UDF: pointer to user-defined function 
+   * @param B : Output Array B
+   */
+  template <class UDFOutputType, class BType = UDFOutputType>
+  void Transform(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
+  {
     //Set up the input data for LoadNextChunk
     InitializeApplyInput();
     std::vector<UDFOutputType> current_result_chunk_data;
     unsigned long long current_result_chunk_data_size = 1;
+
     vector_type_flag = InferVectorType<UDFOutputType>();
 
     t_start = AU_WTIME;
@@ -479,6 +548,10 @@ public:
         std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
         unsigned long long offset_ol;
         Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
+        if (has_padding_value_flag)
+        {
+          cell_target.SetPadding(padding_value);
+        }
         Stencil<UDFOutputType> cell_return_stencil;
         UDFOutputType cell_return_value;
         unsigned long long cell_target_g_location_rm;
@@ -542,7 +615,7 @@ public:
 
           //Update the offset with overlapping
           ROW_MAJOR_ORDER_MACRO(current_chunk_ol_size, current_chunk_ol_size.size(), cell_coordinate_ol, offset_ol);
-          if (endpoint->GetEndpointType() != EP_DIR)
+          if (endpoint != NULL && endpoint->GetEndpointType() != EP_DIR)
           {
             ROW_MAJOR_ORDER_MACRO(data_size, data_size.size(), global_cell_coordinate, cell_target_g_location_rm)
             cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size, global_cell_coordinate, cell_target_g_location_rm);
@@ -559,6 +632,11 @@ public:
 
           cell_return_stencil = UDF(cell_target); // Called by C++
           cell_return_value = cell_return_stencil.get_value();
+
+          if (vector_type_flag == true)
+          {
+            output_vector_shape = cell_return_stencil.GetShape();
+          }
 
           if (save_result_flag)
           {
@@ -632,12 +710,17 @@ public:
 
         if (vector_type_flag)
         {
+          //output_vector_shape
           size_t vector_size;
           std::vector<unsigned long long> current_chunk_start_offset_v = current_result_chunk_start_offset, current_chunk_end_offset_v = current_result_chunk_end_offset;
           void *data_point;
-          data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
-          InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
+          // data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
+          // InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
+          data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v, is_the_last_chunk, previous_output_vector_shape);
+          CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
           B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+          PrintVector("current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+          PrintVector("current_chunk_end_offset_v = ", current_chunk_end_offset_v);
           B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
           free(data_point);
         }
@@ -650,6 +733,11 @@ public:
         }
       }
       time_write = time_write + AU_WTIME - t_start;
+
+      if (vector_type_flag == true)
+      {
+        previous_output_vector_shape = output_vector_shape;
+      }
 
       t_start = AU_WTIME;
       load_ret = LoadNextChunk(current_result_chunk_data_size);
@@ -670,9 +758,11 @@ public:
     }
     else
     {
+
       int n = attribute_endpoint_vector.size();
       for (int i = 0; i < n; i++)
       {
+        //std::cout << "write " << i << " \n" ;
         void *current_chunk_data_void_p = ExtractAttributeFromVirtualArrayVector(data_p, i, attribute_endpoint_vector[i]->GetDataElementType(), attribute_endpoint_vector[i]->GetDataElementTypeSize());
         attribute_endpoint_vector[i]->Write(start_p, end_p, current_chunk_data_void_p);
         free(current_chunk_data_void_p);
@@ -700,6 +790,64 @@ public:
     return endpoint->Read(start_p, end_p, data);
   }
 
+  /**
+ * @brief Calculate the Size of Output array (B)
+ * 
+ * @param data_size_p, the size of the output array 
+ * @param data_chunk_size_p , the chunk size of the output array
+ * @param data_overlap_size_p , the overlap size of the output array
+ */
+  void inline CalculateOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p)
+  {
+    if (skip_flag)
+    {
+      data_size_p = skiped_dims_size;
+      data_chunk_size_p = skiped_chunk_size;
+      data_overlap_size_p = data_overlap_size; //Todo:  need to consider data_overlap size
+    }
+    else
+    {
+      data_size_p = data_size;
+      data_chunk_size_p = data_chunk_size;
+      data_overlap_size_p = data_overlap_size;
+    }
+
+    //we may update the data_size_p/data_chunk_size_p/data_overlap_size_p if vector used
+    //output_vector_shape is the parameter
+    if (vector_type_flag)
+    {
+      int rank = data_size_p.size();
+      for (int i = 0; i < output_vector_shape.size(); i++)
+      {
+        if (i >= rank)
+        {
+          data_size_p.push_back(output_vector_shape[i]);
+          data_chunk_size_p.push_back(output_vector_shape[i]);
+          data_overlap_size_p.push_back(0);
+        }
+        else
+        {
+          if (skip_not_aligned_w_array_flag && skip_not_aligned_w_array_index == i)
+          {
+            data_size_p[i] = (data_size_p[i] - 1) * output_vector_shape[i];
+            data_size_p[i] = data_size_p[i] + ((data_size[i] % skip_size[i]) * output_vector_shape[i]) / data_chunk_size[i];
+          }
+          else
+          {
+            data_size_p[i] = data_size_p[i] * output_vector_shape[i];
+          }
+        }
+      }
+    }
+  }
+  /**
+   * @brief infer the size for output array
+   * 
+   * @param data_size_p 
+   * @param data_chunk_size_p 
+   * @param data_overlap_size_p 
+   * @param output_vector_size 
+   */
   void inline InferOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p, size_t output_vector_size)
   {
     if (skip_flag)
@@ -814,6 +962,12 @@ public:
     if (!virtual_array_flag && endpoint->GetOpenFlag())
       return 0;
 
+    if (is_endpoint_created_flag)
+      return 0;
+
+    //cout << "CreateEndpoint: is_endpoint_created_flag " << is_endpoint_created_flag << "\n";
+    is_endpoint_created_flag = true;
+
     data_size = data_size_p;
     data_chunk_size = data_chunk_size_p;
     data_overlap_size = data_overlap_size_p;
@@ -826,6 +980,7 @@ public:
           return 0;
         attribute_endpoint_vector[i]->SetDimensions(data_size);
         attribute_endpoint_vector[i]->Create();
+        attribute_endpoint_vector[i]->Close(); //call it to make sure it is consistency
       }
       return 0;
     }
@@ -913,6 +1068,10 @@ public:
     {
       return 0;
     }
+
+    //We only handle last chunk when skip is not even with the array size
+    if (current_chunk_id == (data_total_chunks - 1) && skip_not_aligned_w_array_flag)
+      is_the_last_chunk = true;
 
     result_vector_size = 0;
 
@@ -1073,6 +1232,18 @@ public:
   void SetVectorDirection(OutputVectorFlatDirection flat_direction_index)
   {
     output_vector_flat_direction_index = flat_direction_index;
+  }
+
+  /**
+   * @brief A geneic verion of function to control how to deal with output vector during the run of Apply on Array. The output of Apply in this way is vector of vector (2D). We need to convert it into vector (1D). Also we need to control the shape of the 1D vector to write into output Array.
+   * 
+   * @param flat_direction,  the direction to flat the 2D vector to 1D vector
+   * @param flat_shape, the shape of the data after the flat from 2D to the 2D
+   */
+  void ControlOutputVector(OutputVectorFlatDirection flat_direction, std::vector<size_t> flat_shape)
+  {
+    output_vector_flat_direction_index = flat_direction;
+    output_vector_flat_shape = flat_shape;
   }
 
   template <typename... Is>
@@ -1285,8 +1456,9 @@ public:
     int ret;
     if (endpoint_memory_flag == true && target_endpoint_type == EP_HDF5)
     {
-      // std::cout << "Call Nonvolatile in array \n ";
-      ret = endpoint->SpecialOperator(0, endpoint_info);
+      std::vector<std::string> arg_v;
+      arg_v.push_back(target_endpoint->GetEndpointInfo());
+      ret = endpoint->SpecialOperator(0, arg_v);
     }
     else
     {
@@ -1309,7 +1481,9 @@ public:
     int ret;
     if (endpoint_memory_flag == true && target_endpoint->GetEndpointType() == EP_HDF5)
     {
-      ret = endpoint->SpecialOperator(1, target_endpoint->GetEndpointInfo());
+      std::vector<std::string> arg_v;
+      arg_v.push_back(target_endpoint->GetEndpointInfo());
+      ret = endpoint->SpecialOperator(1, arg_v);
     }
     else
     {
@@ -1327,7 +1501,9 @@ public:
    */
   int Clone(T intial_value)
   {
-    std::string intial_value_str = std::to_string(intial_value);
+    std::vector<std::string> intial_value_str;
+    intial_value_str.push_back(std::to_string(intial_value));
+
     endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
     return 0;
   }
@@ -1339,14 +1515,15 @@ public:
    */
   int Clone()
   {
-    std::string intial_value_str = ""; //Empty string
-    endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
+    //std::string intial_value_str = ""; //Empty string
+    endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, std::vector<std::string>());
     return 0;
   }
 
   int Merge(int Op)
   {
-    std::string op_str = std::to_string(Op);
+    std::vector<std::string> op_str;
+    op_str.push_back(std::to_string(Op));
     endpoint->SpecialOperator(DASH_MERGE_MIRRORS_CODE, op_str);
     return 0;
   }
@@ -1384,9 +1561,20 @@ public:
    * @param cmd_p : int cmd (specific to Endpoint)
    * @param arg_p : string arg (specific to cmd)
    */
-  void EndpointControl(int cmd_p, std::string arg_p)
+  //void EndpointControl(int cmd_p, std::string arg_p)
+  // {
+  //  endpoint->SpecialOperator(cmd_p, arg_p);
+  // }
+
+  /**
+   * @brief pass command cmd to Endpoint of Array
+   * 
+   * @param cmd_p : int cmd (specific to Endpoint)
+   * @param arg_v_p : a vector of arg. It is typed as string and specific to cmd_p
+   */
+  void EndpointControl(int cmd_p, std::vector<std::string> arg_v_p)
   {
-    endpoint->SpecialOperator(cmd_p, arg_p);
+    endpoint->SpecialOperator(cmd_p, arg_v_p);
   }
 
   /**
@@ -1431,7 +1619,15 @@ public:
     time_udf = 0;
   }
 
+  void SetPadding(T padding_value_p)
+  {
+    has_padding_value_flag = true;
+    padding_value = padding_value_p;
+  }
+
 }; // class of array
 
-} // namespace AU
+} // namespace FT
+
+namespace AU = FT;
 #endif

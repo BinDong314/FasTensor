@@ -39,6 +39,7 @@ AuEndpointDataType Endpoint::GetDataElementType()
      */
 int Endpoint::GetDataElementTypeSize()
 {
+    //std::cout << "data_element_type =" << data_element_type << "\n";
     switch (data_element_type)
     {
     case AU_SHORT:
@@ -316,7 +317,7 @@ std::vector<int> Endpoint::GetDirChunkSize()
      */
 void Endpoint::SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
 {
-    AU_EXIT("Error: should not be called");
+    AU_EXIT("Error: SetDirChunkSize is not implemented in endpoint");
 }
 
 /**
@@ -325,9 +326,22 @@ void Endpoint::SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
      *                 dump file from MEMORY to HDF5
      * @param opt_code, specially defined code 
      */
-int Endpoint::SpecialOperator(int opt_code, std::string parameter)
+//int Endpoint::SpecialOperator(int opt_code, std::string parameter)
+//{
+//    AU_EXIT("Error: SpecialOperator is not implemented in endpoint");
+//    return 0;
+//}
+
+/**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     * @param parameter_v, vector of argument
+     */
+int Endpoint::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
 {
-    AU_EXIT("Error: should not be called");
+    AU_EXIT("Error: SpecialOperator is not implemented in endpoint");
     return 0;
 }
 
@@ -337,4 +351,23 @@ void Endpoint::EnableCollectiveIO()
 
 void Endpoint::DisableCollectiveIO()
 {
+}
+
+int Endpoint::MapOpStr2Int(std::string op_cmd_str)
+{
+    AU_EXIT("Error: MapOpString2Int is not implemented in endpoint");
+
+    return 0;
+}
+
+/**
+     * @brief map op_int to string 
+     * 
+     * @param op_int 
+     * @return std::string 
+     */
+std::string Endpoint::MapOpInt2Str(int op_int)
+{
+    AU_EXIT("Error: MapOpInt2String is not implemented in endpoint");
+    return 0;
 }
