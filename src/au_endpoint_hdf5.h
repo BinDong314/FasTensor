@@ -35,6 +35,7 @@ private:
     std::string fn_str, gn_str, dn_str;
     hid_t plist_id = H5P_DEFAULT, plist_cio_id = H5P_DEFAULT;
     hid_t mem_type, disk_type;
+    bool is_mpi_enabled = false;
 
 public:
     /**
@@ -51,6 +52,7 @@ public:
         SetEndpointType(EP_HDF5);
         EnableMPIIO();
         EnableCollectiveIO();
+        is_mpi_enabled = true;
     }
     /**
      * @brief Construct a new Endpoint in HDF5 
@@ -63,13 +65,33 @@ public:
         SetEndpointType(EP_HDF5);
         EnableMPIIO();
         EnableCollectiveIO();
+        is_mpi_enabled = true;
+    }
+
+    /**
+     * @brief Construct a new EndpointHDF5 object without MPI
+     * 
+     * @param no_mpi  any number should work
+     */
+    EndpointHDF5(int no_mpi)
+    {
+        //endpoint_info = endpoint_info_p;
+        //ParseEndpointInfo();
+        SetOpenFlag(false);
+        SetRwFlag(H5F_ACC_RDONLY);
+        SetEndpointType(EP_HDF5);
+        //EnableMPIIO();
+        //EnableCollectiveIO();
     }
 
     ~EndpointHDF5()
     {
         Close();
-        DisableMPIIO();
-        DisableCollectiveIO();
+        if (is_mpi_enabled)
+        {
+            DisableMPIIO();
+            DisableCollectiveIO();
+        }
     }
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type

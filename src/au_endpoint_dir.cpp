@@ -40,7 +40,7 @@ int EndpointDIR::ExtractMeta()
     std::vector<unsigned long long> temp_endpoint_dim_size;
     for (int i = 0; i < dir_file_list.size(); i++)
     {
-        std::cout << dir_file_list[i] << ", in EndpointDIR::ExtractMeta\n";
+        //std::cout << dir_file_list[i] << ", in EndpointDIR::ExtractMeta\n";
         sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
         sub_endpoint->ExtractMeta();
         temp_endpoint_dim_size = sub_endpoint->GetDimensions();

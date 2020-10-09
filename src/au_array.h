@@ -1436,14 +1436,18 @@ public:
    */
   int Nonvolatile(std::string data_endpoint_p)
   {
-    std::string target_array_data_endpoint_info = data_endpoint_p;
-    Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
+    //std::string target_array_data_endpoint_info = data_endpoint_p;
+    //Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
+
+    AuEndpointType target_endpoint_type;
+    std::string endpoint_info;
+    ExtractEndpointTypeInfo(data_endpoint_p, target_endpoint_type, endpoint_info);
 
     int ret;
-    if (endpoint_memory_flag == true && target_endpoint->GetEndpointType() == EP_HDF5)
+    if (endpoint_memory_flag == true && target_endpoint_type == EP_HDF5)
     {
       std::vector<std::string> arg_v;
-      arg_v.push_back(target_endpoint->GetEndpointInfo());
+      arg_v.push_back(endpoint_info);
       ret = endpoint->SpecialOperator(0, arg_v);
     }
     else

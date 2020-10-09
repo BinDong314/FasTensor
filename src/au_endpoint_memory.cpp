@@ -339,7 +339,14 @@ int EndpointMEMORY::SpecialOperator(int opt_code, std::vector<std::string> param
         break;
     case DASH_ENABLE_LOCAL_MIRROR_CODE:
         local_mirror_flag = true;
-        ret = CreateLocalMirror(parameter_v[0]);
+        if (parameter_v.size() > 1)
+        {
+            ret = CreateLocalMirror(parameter_v[0]);
+        }
+        else
+        {
+            ret = CreateLocalMirror("");
+        }
         break;
     case DASH_MERGE_MIRRORS_CODE:
         ret = MergeMirrors(parameter_v[0]);
@@ -374,7 +381,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         AU_EXIT("Invalued endpoint_info");
     }
 
-    //std::cout << "Nonvolatile \n";
+    std::cout << "Nonvolatile \n";
 
     if (local_mirror_flag)
     {
@@ -387,7 +394,10 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
                 start[i] = 0;
                 end[i] = endpoint_dim_size[i] - 1;
             }
-            Endpoint *sub_endpoint = new EndpointHDF5();
+            Endpoint *sub_endpoint = new EndpointHDF5(1);
+            //sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, std::vector<std::string>());
+            //sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, std::vector<std::string>());
+
             sub_endpoint->SetDataElementType(data_element_type);
             sub_endpoint->SetDimensions(endpoint_dim_size);
             sub_endpoint->SetEndpointInfo(parameter);
