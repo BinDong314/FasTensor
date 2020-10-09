@@ -78,8 +78,8 @@ private:
   std::vector<unsigned long long> current_chunk_ol_size;         //Size of the chunk, euqal to end_offset - start_offset
   unsigned long long current_chunk_ol_cells;                     //The number of cells in current chunk
 
-  unsigned long long current_chunk_id; //Id of the current chunk (in memory) to apply UDF
-
+  unsigned long long current_chunk_id;              //Id of the current chunk (in memory) to apply UDF
+  unsigned long long prev_chunk_id;                 //for SetChunkID of CellTarget
   std::vector<int> skip_size;                       //Size to ship after each operation
   std::vector<unsigned long long> skiped_dims_size; //Size of the data after skip
   std::vector<unsigned long long> skiped_chunks;    //# of chunks after skip
@@ -548,6 +548,7 @@ public:
         {
           cell_target.SetPadding(padding_value);
         }
+        cell_target.SetChunkID(prev_chunk_id);
         Stencil<UDFOutputType> cell_return_stencil;
         UDFOutputType cell_return_value;
         unsigned long long cell_target_g_location_rm;
@@ -1039,6 +1040,7 @@ public:
    */
   void SchduleChunkNext()
   {
+    prev_chunk_id = current_chunk_id;
     //Next chunk id
     if (!reverse_apply_direction_flag)
     {

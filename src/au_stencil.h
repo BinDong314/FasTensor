@@ -1013,6 +1013,16 @@ public:
     }
     return max_offset;
   }
+
+  unsigned long long GetChunkID() const
+  {
+    return chunk_id;
+  }
+
+  void SetChunkID(unsigned long long chunk_id_p) const
+  {
+    chunk_id = chunk_id_p;
+  }
 };
 
 #endif
