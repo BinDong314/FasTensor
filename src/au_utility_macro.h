@@ -1,6 +1,11 @@
 #ifndef ARRAY_UDF_UTILITY_MACRO_H
 #define ARRAY_UDF_UTILITY_MACRO_H
 
+extern int au_mpi_size_global;
+extern int au_mpi_rank_global;
+extern int au_size;
+extern int au_rank;
+
 /**
  * @brief help function to counts cells between start/end
  * 
@@ -72,5 +77,10 @@
         std::cout << "Info at " << __FILE__ << ", " << __func__ << ", " << __LINE__ << std::endl; \
         std::cout << "Info : " << info << std::endl;                                              \
     }
-
+#define AU_VERBOSE(info_p, rank_p)           \
+    {                                        \
+        if (au_mpi_rank_global == rank_p)    \
+            std::cout << info_p << std::endl \
+                      << std::flush;         \
+    }
 #endif

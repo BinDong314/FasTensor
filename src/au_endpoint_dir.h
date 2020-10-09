@@ -23,6 +23,7 @@
 #define DIR_INPUT_SEARCH_RGX 2
 #define DIR_OUPUT_REPLACE_RGX 3
 #define DIR_OUPUT_REPLACE_RGX_ARG 4
+#define DIR_FILE_SORT_INDEXES 5
 
 #include "au_utility.h"
 #include "au_type.h"
@@ -59,6 +60,9 @@ private:
     bool output_replace_regex_flag = false;
     std::regex *output_replace_regex; //The regex to "replace" on list of file as output (input)
     std::string output_replace_regex_aug;
+
+    bool has_ordering_on_file_list; //User may apply ordering on list, based on sorted ordring
+    std::vector<size_t> order_on_file_list;
 
 public:
     /**

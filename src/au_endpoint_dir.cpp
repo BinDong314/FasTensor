@@ -9,12 +9,31 @@
 #include "au_endpoint_dir.h"
 #include "au_array_view_access.h"
 
+extern int au_mpi_size_global;
+extern int au_mpi_rank_global;
+extern int au_size;
+extern int au_rank;
+
 int EndpointDIR::ExtractMeta()
 {
     std::vector<std::string> temp_dir_file_list = GetDirFileList(dir_str);
     //dir_file_list = GetDirFileList(dir_str);
     if (temp_dir_file_list.size() <= 0)
         AU_EXIT("No file under directory" + dir_str);
+
+    if (has_ordering_on_file_list)
+    {
+        std::vector<std::string> temp_dir_file_list_ordered;
+        for (auto order : order_on_file_list)
+        {
+            if (order > temp_dir_file_list.size())
+            {
+                AU_EXIT("The sorted index [" + std::to_string(order) + "] is larger than the number of files listed [" + std::to_string(temp_dir_file_list.size()) + "] !\n");
+            }
+            temp_dir_file_list_ordered.push_back(temp_dir_file_list[order]);
+        }
+        temp_dir_file_list = temp_dir_file_list_ordered;
+    }
 
     if (input_replace_regex_flag)
     {
@@ -35,12 +54,13 @@ int EndpointDIR::ExtractMeta()
         dir_file_list = temp_dir_file_list;
     }
 
+    AU_VERBOSE("The [" + std::to_string(dir_file_list.size()) + "] files used by DIR (ordered): ", 0);
     //std::vector<unsigned long long> endpoint_dim_size;
     //int endpoint_ranks;
     std::vector<unsigned long long> temp_endpoint_dim_size;
     for (int i = 0; i < dir_file_list.size(); i++)
     {
-        //std::cout << dir_file_list[i] << ", in EndpointDIR::ExtractMeta\n";
+        AU_VERBOSE(dir_file_list[i], 0);
         sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
         sub_endpoint->ExtractMeta();
         temp_endpoint_dim_size = sub_endpoint->GetDimensions();
@@ -413,6 +433,14 @@ int EndpointDIR::SpecialOperator(int opt_code, std::vector<std::string> paramete
         output_replace_regex_flag = true;
         output_replace_regex = new std::regex(parameter_v[0]);
         output_replace_regex_aug = parameter_v[1];
+        break;
+    case DIR_FILE_SORT_INDEXES:
+        has_ordering_on_file_list = true;
+        if (parameter_v.size() < 1)
+        {
+            AU_EXIT("DIR_OUPUT_REPLACE_RGX  needs one parameters: order vector (as string) \n");
+        }
+        String2Vector(parameter_v[0], order_on_file_list);
         break;
     default:
         break;

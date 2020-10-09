@@ -376,4 +376,40 @@ inline void *ExtractAttributeFromVirtualArrayVector<std::complex<double>>(std::v
     AU_EXIT("std::complex<double> does work with cista::to_tuple<");
 }
 
+#include <vector>
+#include <iterator>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip>
+template <typename T>
+std::string Vector2String(const std::vector<T> &vec)
+{
+    std::ostringstream vts;
+    vts << std::setprecision(17); //force high prevision for float
+    if (!vec.empty())
+    {
+        // Convert all but the last element to avoid a trailing ","
+        std::copy(vec.begin(), std::prev(vec.end(), 1),
+                  std::ostream_iterator<T>(vts, ","));
+
+        // Now add the last element with no delimiter
+        vts << vec.back();
+    }
+    return vts.str();
+}
+
+template <typename T>
+void String2Vector(const std::string &str, std::vector<T> &vec_new)
+{
+    std::stringstream ss(str);
+
+    for (T i; ss >> i;)
+    {
+        vec_new.push_back(i);
+        if (ss.peek() == ',')
+            ss.ignore();
+    }
+}
+
 #endif

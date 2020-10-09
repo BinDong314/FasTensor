@@ -12,11 +12,10 @@
 
 int EndpointHDF5::ExtractMeta()
 {
-    cout << "Print Out : ExtractMeta\n";
-    PrintInfo();
+    //cout << "Print Out : ExtractMeta\n";
+    //PrintInfo();
     Open();
-    cout << "Print Out : ExtractMeta after open\n";
-
+    //cout << "Print Out : ExtractMeta after open\n";
     hid_t datatype = H5Dget_type(did); /* datatype handle */
     H5T_class_t type_class = H5Tget_class(datatype);
     dataspace_id = H5Dget_space(did);
@@ -32,25 +31,23 @@ int EndpointHDF5::Create()
 
     Map2MyType();
     std::string root_dir = "/";
-    PrintInfo();
+    //PrintInfo();
     //plist_id = H5Pcreate(H5P_FILE_ACCESS);
     //H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
     if (file_exist(fn_str.c_str()) == 0)
     {
-        std::cout << "Call H5Fcreate 1 : " << fn_str << "\n"
-                  << std::flush;
+        //std::cout << "Call H5Fcreate 1 : " << fn_str << "\n"<< std::flush;
 
         fid = H5Fcreate(fn_str.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
-        std::cout << "After Call H5Fcreate : af " << fn_str << "\n"
-                  << std::flush;
+        //std::cout << "After Call H5Fcreate : af " << fn_str << "\n"<< std::flush;
     }
     else
     {
         fid = H5Fopen(fn_str.c_str(), H5F_ACC_RDWR, plist_id);
         if (fid < 0)
         {
-            std::cout << "Call H5Fcreate 2\n";
+            //std::cout << "Call H5Fcreate 2\n";
             fid = H5Fcreate(fn_str.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
         }
         if (fid < 0)
@@ -61,7 +58,7 @@ int EndpointHDF5::Create()
 
     if (gn_str != root_dir)
     {
-        printf("Debug: %s:%d\n", __FILE__, __LINE__);
+        // printf("Debug: %s:%d\n", __FILE__, __LINE__);
         if (H5Lexists(fid, gn_str.c_str(), H5P_DEFAULT) == 0)
         {
             gid = H5Gcreate(fid, gn_str.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
@@ -92,11 +89,11 @@ int EndpointHDF5::Create()
         {
             H5Ldelete(fid, dn_str.c_str(), H5P_DEFAULT); //we delete
         }
-        printf("Debug: %s:%d\n", __FILE__, __LINE__);
+        //printf("Debug: %s:%d\n", __FILE__, __LINE__);
         did = H5Dcreate(fid, dn_str.c_str(), disk_type, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
         assert(did >= 0);
     }
-    printf("Debug: %s:%d\n", __FILE__, __LINE__);
+    //printf("Debug: %s:%d\n", __FILE__, __LINE__);
 
     dataspace_id = H5Dget_space(did);
     H5Sclose(ts_id);
@@ -109,8 +106,8 @@ int EndpointHDF5::Create()
 
 int EndpointHDF5::Open()
 {
-    std::cout << "EndpointHDF5::Open :: fn_str = " << fn_str << ", gn_str = " << gn_str << ", dn_str = " << dn_str << "\n";
-    PrintInfo();
+    //std::cout << "EndpointHDF5::Open :: fn_str = " << fn_str << ", gn_str = " << gn_str << ", dn_str = " << dn_str << "\n";
+    //PrintInfo();
     if (file_exist(fn_str.c_str()) == 0)
     {
         // should we return ?
