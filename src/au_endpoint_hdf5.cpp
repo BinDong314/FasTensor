@@ -100,7 +100,7 @@ int EndpointHDF5::Create()
     SetRwFlag(H5F_ACC_RDWR);
     SetOpenFlag(true);
 
-    //Close(); //Close for data consistency during writing
+    Close(); //Close for data consistency during writing
     return 0;
 }
 
@@ -110,9 +110,9 @@ int EndpointHDF5::Open()
     //PrintInfo();
     if (file_exist(fn_str.c_str()) == 0)
     {
-        // should we return ?
-        std::cout << "Call create in Open again !\n";
-        return Create();
+        //Since the create close it , we may reopen it again should we return ?
+        //std::cout << "Call create in Open again !\n";
+        Create();
     }
 
     fid = H5Fopen(fn_str.c_str(), read_write_flag, plist_id);
