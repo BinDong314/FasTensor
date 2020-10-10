@@ -190,10 +190,10 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
 {
     Map2MyType();
 
-    std::cout << "Write HDF5 \n";
+    //std::cout << "Write HDF5 \n";
     if (!GetOpenFlag())
     {
-        std::cout << "Write HDF5 before open \n";
+        //std::cout << "Write HDF5 before open \n";
         SetRwFlag(H5F_ACC_RDWR);
         ExtractMeta(); //Will call open
     }
@@ -215,13 +215,13 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
         offset[i] = start[i];
         count[i] = end[i] - start[i] + 1; //Starting from zero
     }
-    PrintVector("offset =", offset);
-    PrintVector("count =", count);
+    //PrintVector("offset =", offset);
+    //PrintVector("count =", count);
 
     std::vector<unsigned long long> endpoint_dim_size_temp(endpoint_ranks);
     H5Sget_simple_extent_dims(dataspace_id, &endpoint_dim_size_temp[0], NULL);
 
-    PrintVector("endpoint_dim_size = ", endpoint_dim_size_temp);
+    //PrintVector("endpoint_dim_size = ", endpoint_dim_size_temp);
 
     hid_t memspace_id = H5Screate_simple(endpoint_ranks, &count[0], NULL);
     H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
@@ -275,7 +275,7 @@ void EndpointHDF5::EnableCollectiveIO()
 
 void EndpointHDF5::DisableCollectiveIO()
 {
-    cout << "H5P_DEFAULT =" << H5P_DEFAULT << ", DisableCollectiveIO \n";
+    //cout << "H5P_DEFAULT =" << H5P_DEFAULT << ", DisableCollectiveIO \n";
     if (plist_cio_id > 0)
         H5Pclose(plist_cio_id);
     plist_cio_id = H5P_DEFAULT;
@@ -291,7 +291,7 @@ void EndpointHDF5::EnableMPIIO()
 
 void EndpointHDF5::DisableMPIIO()
 {
-    cout << "DisableMPIIO \n";
+    //cout << "DisableMPIIO \n";
     if (plist_id > 0)
         H5Pclose(plist_id);
     plist_id = H5P_DEFAULT;
