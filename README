@@ -69,4 +69,9 @@ You can resolve it by
 Note on Lawrencium at LBNL
 
 
-module load gcc/7.4.0 hdf5/1.10.5-gcc-p
+> module load gcc/7.4.0 hdf5/1.10.5-gcc-p
+> ./autogen.sh
+> ./configure --prefix=/clusterfs/bear/BinDong_DAS_Data/fasttensor/build --wit
+h-hdf5=/global/software/sl-7.x86_64/modules/gcc/7.4.0/hdf5/1.10.5-gcc-p CXX=mpic
+++ --with-dash=/clusterfs/bear/BinDong_DAS_Data/fasttensor/tools3rd/dash/build/o
+pt/dash-0.4.0/

@@ -37,7 +37,6 @@ include_HEADERS=au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5
                 au_endpoint_tdms.h \
                 au_endpoint_binary.h \
                 au_array_view_access.h \
-                au_array_iterator.h \
                 au_array_transpose.h \
                 au_utility_macro.h \
                 au_output_vector.h 
