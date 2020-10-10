@@ -1019,7 +1019,7 @@ public:
     return chunk_id;
   }
 
-  void SetChunkID(unsigned long long chunk_id_p) const
+  void SetChunkID(unsigned long long chunk_id_p)
   {
     chunk_id = chunk_id_p;
   }
