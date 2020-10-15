@@ -191,6 +191,26 @@ public:
     virtual int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) = 0;
 
     /**
+     * @brief Set the Attribute object
+     *   Do not need to be pure virtual method
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+    virtual int WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p = 0);
+
+    /**
+     * @brief Get the Attribute object
+     *  Do not need to be pure virtual method
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+    virtual int ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0);
+
+    virtual size_t GetAttributeSize(const std::string &name, FTDataType data_type_p);
+
+    /**
      * @brief close the end-point
      * 
      * @return int int < 0 error, >= 0 works

@@ -149,6 +149,8 @@ public:
 
     void Map2MyType() override;
 
+    void Map2MyTypeParameters(FTDataType ft_type, hid_t &mem_type, hid_t &disk_type);
+
     void EnableCollectiveIO() override;
 
     void DisableCollectiveIO() override;
@@ -179,5 +181,25 @@ public:
      * @param opt_code, specially defined code 
      */
     int SpecialOperator(int opt_code, std::vector<std::string> parameter_v) override;
+
+    /**
+     * @brief Set the Attribute object
+     * 
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+    int WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
+
+    /**
+     * @brief Get the Attribute object
+     * 
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+    int ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
+
+    size_t GetAttributeSize(const std::string &name, FTDataType data_type_p) override;
 };
 #endif

@@ -95,7 +95,8 @@ bin_PROGRAMS = au_test_data_generator$(EXEEXT) \
 	au_example_reduce$(EXEEXT) au_example_reduce2D_1f1p$(EXEEXT) \
 	au_example_adios$(EXEEXT) au_example_pnetcdf$(EXEEXT) \
 	au_example_simple$(EXEEXT) au_example_kf1p$(EXEEXT) \
-	au_example_vector_2d$(EXEEXT) au_example_padding$(EXEEXT)
+	au_example_vector_2d$(EXEEXT) au_example_padding$(EXEEXT) \
+	au_example_tag$(EXEEXT)
 subdir = examples
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -161,6 +162,10 @@ am_au_example_simple_OBJECTS = au_example_simple.$(OBJEXT)
 au_example_simple_OBJECTS = $(am_au_example_simple_OBJECTS)
 au_example_simple_LDADD = $(LDADD)
 au_example_simple_DEPENDENCIES = ../src/libArrayUDF.la
+am_au_example_tag_OBJECTS = au_example_tag.$(OBJEXT)
+au_example_tag_OBJECTS = $(am_au_example_tag_OBJECTS)
+au_example_tag_LDADD = $(LDADD)
+au_example_tag_DEPENDENCIES = ../src/libArrayUDF.la
 am_au_example_vds_OBJECTS = au_example_vds.$(OBJEXT)
 au_example_vds_OBJECTS = $(am_au_example_vds_OBJECTS)
 au_example_vds_LDADD = $(LDADD)
@@ -202,8 +207,8 @@ am__depfiles_remade = ./$(DEPDIR)/au_example_1f1p.Po \
 	./$(DEPDIR)/au_example_pnetcdf.Po \
 	./$(DEPDIR)/au_example_reduce.Po \
 	./$(DEPDIR)/au_example_reduce2D_1f1p.Po \
-	./$(DEPDIR)/au_example_simple.Po ./$(DEPDIR)/au_example_vds.Po \
-	./$(DEPDIR)/au_example_vector.Po \
+	./$(DEPDIR)/au_example_simple.Po ./$(DEPDIR)/au_example_tag.Po \
+	./$(DEPDIR)/au_example_vds.Po ./$(DEPDIR)/au_example_vector.Po \
 	./$(DEPDIR)/au_example_vector_2d.Po \
 	./$(DEPDIR)/au_test_data_generator.Po
 am__mv = mv -f
@@ -231,8 +236,9 @@ SOURCES = $(au_example_1f1p_SOURCES) $(au_example_adios_SOURCES) \
 	$(au_example_padding_SOURCES) $(au_example_pnetcdf_SOURCES) \
 	$(au_example_reduce_SOURCES) \
 	$(au_example_reduce2D_1f1p_SOURCES) \
-	$(au_example_simple_SOURCES) $(au_example_vds_SOURCES) \
-	$(au_example_vector_SOURCES) $(au_example_vector_2d_SOURCES) \
+	$(au_example_simple_SOURCES) $(au_example_tag_SOURCES) \
+	$(au_example_vds_SOURCES) $(au_example_vector_SOURCES) \
+	$(au_example_vector_2d_SOURCES) \
 	$(au_test_data_generator_SOURCES)
 DIST_SOURCES = $(au_example_1f1p_SOURCES) $(au_example_adios_SOURCES) \
 	$(au_example_array_SOURCES) $(au_example_cache_SOURCES) \
@@ -240,8 +246,9 @@ DIST_SOURCES = $(au_example_1f1p_SOURCES) $(au_example_adios_SOURCES) \
 	$(au_example_padding_SOURCES) $(au_example_pnetcdf_SOURCES) \
 	$(au_example_reduce_SOURCES) \
 	$(au_example_reduce2D_1f1p_SOURCES) \
-	$(au_example_simple_SOURCES) $(au_example_vds_SOURCES) \
-	$(au_example_vector_SOURCES) $(au_example_vector_2d_SOURCES) \
+	$(au_example_simple_SOURCES) $(au_example_tag_SOURCES) \
+	$(au_example_vds_SOURCES) $(au_example_vector_SOURCES) \
+	$(au_example_vector_2d_SOURCES) \
 	$(au_test_data_generator_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -432,6 +439,7 @@ au_example_simple_SOURCES = au_example_simple.cpp
 au_example_kf1p_SOURCES = au_example_kf1p.cpp
 au_example_vector_2d_SOURCES = au_example_vector_2d.cpp
 au_example_padding_SOURCES = au_example_padding.cpp
+au_example_tag_SOURCES = au_example_tag.cpp
 all: all-am
 
 .SUFFIXES:
@@ -559,6 +567,10 @@ au_example_simple$(EXEEXT): $(au_example_simple_OBJECTS) $(au_example_simple_DEP
 	@rm -f au_example_simple$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(au_example_simple_OBJECTS) $(au_example_simple_LDADD) $(LIBS)
 
+au_example_tag$(EXEEXT): $(au_example_tag_OBJECTS) $(au_example_tag_DEPENDENCIES) $(EXTRA_au_example_tag_DEPENDENCIES) 
+	@rm -f au_example_tag$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(au_example_tag_OBJECTS) $(au_example_tag_LDADD) $(LIBS)
+
 au_example_vds$(EXEEXT): $(au_example_vds_OBJECTS) $(au_example_vds_DEPENDENCIES) $(EXTRA_au_example_vds_DEPENDENCIES) 
 	@rm -f au_example_vds$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(au_example_vds_OBJECTS) $(au_example_vds_LDADD) $(LIBS)
@@ -592,6 +604,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_reduce.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_reduce2D_1f1p.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_simple.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_tag.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_vds.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_vector.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_vector_2d.Po@am__quote@ # am--include-marker
@@ -771,6 +784,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/au_example_reduce.Po
 	-rm -f ./$(DEPDIR)/au_example_reduce2D_1f1p.Po
 	-rm -f ./$(DEPDIR)/au_example_simple.Po
+	-rm -f ./$(DEPDIR)/au_example_tag.Po
 	-rm -f ./$(DEPDIR)/au_example_vds.Po
 	-rm -f ./$(DEPDIR)/au_example_vector.Po
 	-rm -f ./$(DEPDIR)/au_example_vector_2d.Po
@@ -831,6 +845,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/au_example_reduce.Po
 	-rm -f ./$(DEPDIR)/au_example_reduce2D_1f1p.Po
 	-rm -f ./$(DEPDIR)/au_example_simple.Po
+	-rm -f ./$(DEPDIR)/au_example_tag.Po
 	-rm -f ./$(DEPDIR)/au_example_vds.Po
 	-rm -f ./$(DEPDIR)/au_example_vector.Po
 	-rm -f ./$(DEPDIR)/au_example_vector_2d.Po

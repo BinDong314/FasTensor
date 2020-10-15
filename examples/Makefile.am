@@ -20,7 +20,8 @@ bin_PROGRAMS=   au_test_data_generator \
                 au_example_simple \
                 au_example_kf1p \
                 au_example_vector_2d \
-                au_example_padding
+                au_example_padding \
+                au_example_tag
 
                
 
@@ -42,3 +43,4 @@ au_example_simple_SOURCES=au_example_simple.cpp
 au_example_kf1p_SOURCES=au_example_kf1p.cpp
 au_example_vector_2d_SOURCES=au_example_vector_2d.cpp
 au_example_padding_SOURCES=au_example_padding.cpp
+au_example_tag_SOURCES=au_example_tag.cpp

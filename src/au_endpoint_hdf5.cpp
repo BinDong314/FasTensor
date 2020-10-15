@@ -354,6 +354,57 @@ void EndpointHDF5::Map2MyType()
     }
 };
 
+void EndpointHDF5::Map2MyTypeParameters(FTDataType ft_type, hid_t &mem_type_p, hid_t &disk_type_p)
+{
+    switch (ft_type)
+    {
+    case AU_SHORT:
+        mem_type_p = H5T_NATIVE_SHORT;
+        disk_type_p = H5T_STD_I16LE;
+        return;
+    case AU_INT:
+        mem_type_p = H5T_NATIVE_INT;
+        disk_type_p = H5T_STD_I32LE;
+        return;
+    case AU_LONG:
+        mem_type_p = H5T_NATIVE_LONG;
+        disk_type_p = H5T_STD_I64LE;
+        return;
+    case AU_LONG_LONG:
+        mem_type_p = H5T_NATIVE_LLONG;
+        disk_type_p = H5T_STD_I64LE;
+        return;
+    case AU_USHORT:
+        mem_type_p = H5T_NATIVE_UINT;
+        disk_type_p = H5T_STD_U32LE;
+        return;
+    case AU_UINT:
+        mem_type_p = H5T_NATIVE_USHORT;
+        disk_type_p = H5T_STD_U16LE;
+        return;
+    case AU_ULONG:
+        mem_type_p = H5T_NATIVE_ULONG;
+        disk_type_p = H5T_STD_U64LE;
+        return;
+    case AU_ULLONG:
+        mem_type_p = H5T_NATIVE_ULLONG;
+        disk_type_p = H5T_STD_U64LE;
+        return;
+    case AU_FLOAT:
+        mem_type_p = H5T_NATIVE_FLOAT;
+        disk_type_p = H5T_IEEE_F32LE;
+        return;
+    case AU_DOUBLE:
+        mem_type_p = H5T_NATIVE_DOUBLE;
+        disk_type_p = H5T_IEEE_F64LE;
+        return;
+    default:
+        std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+        std::flush(std::cout);
+        std::exit(EXIT_FAILURE);
+    }
+}
+
 /**
      * @brief parse endpoint_info to my own info
      *        In HDF5, it map endpoint_info to filename, group name and datasetname
@@ -441,4 +492,119 @@ int EndpointHDF5::SpecialOperator(int opt_code, std::vector<std::string> paramet
     }
 
     return 0;
+}
+
+/**
+     * @brief Set the Attribute object
+     * 
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+int EndpointHDF5::WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p)
+{
+    int ret = 0;
+    //std::cout << "Write HDF5 \n";
+    if (!GetOpenFlag())
+    {
+        //std::cout << "Write HDF5 before open \n";
+        SetRwFlag(H5F_ACC_RDWR);
+        ExtractMeta(); //Will call open
+    }
+
+    if (data_type_p != AU_STRING)
+    {
+        hid_t mem_type_l, disk_type_l;
+        Map2MyTypeParameters(data_type_p, mem_type_l, disk_type_l);
+        hsize_t attribute_dims = data_length_p;
+        hid_t attribute_dataspace_id = H5Screate_simple(1, &attribute_dims, NULL);
+        hid_t attribute_id = H5Acreate(did, name.c_str(), disk_type_l, attribute_dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
+        ret = H5Awrite(attribute_id, mem_type_l, data);
+        H5Sclose(attribute_dataspace_id);
+        H5Aclose(attribute_id);
+    }
+    else
+    {
+        hid_t attribute_space_scalar = H5Screate(H5S_SCALAR);
+        hid_t attribute_str_type = H5Tcopy(H5T_C_S1);
+        H5Tset_size(attribute_str_type, data_length_p);
+        //H5Tset_strpad(attribute_str_type, H5T_STR_NULLTERM);
+        hid_t attribute_id = H5Acreate(did, name.c_str(), attribute_str_type, attribute_space_scalar, H5P_DEFAULT, H5P_DEFAULT);
+        ret = H5Awrite(attribute_id, attribute_str_type, data);
+
+        H5Aclose(attribute_id);
+        H5Sclose(attribute_space_scalar);
+        H5Tclose(attribute_str_type);
+    }
+    return ret;
+}
+
+/**
+     * @brief Get the Attribute object
+     * 
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+int EndpointHDF5::ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p)
+{
+    int ret = 0;
+    //std::cout << "Write HDF5 \n";
+    if (!GetOpenFlag())
+    {
+        //std::cout << "Write HDF5 before open \n";
+        SetRwFlag(H5F_ACC_RDWR);
+        ExtractMeta(); //Will call open
+    }
+
+    if (data_type_p != AU_STRING)
+    {
+        hid_t mem_type_l, disk_type_l;
+        Map2MyTypeParameters(data_type_p, mem_type_l, disk_type_l);
+        //hsize_t attribute_dims = data_length_p;
+        //hid_t attribute_dataspace_id = H5Screate_simple(1, &attribute_dims, NULL);
+        //hid_t attribute_id = H5Acreate(did, name.c_str(), disk_type_l, attribute_dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
+        //hsize_t attribute_dims[1];
+        hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
+        //hid_t attribute_space = H5Aget_space(attribute_id);
+        //int attribute_ndims = H5Sget_simple_extent_dims(attribute_space, attribute_dims, NULL);
+        ret = H5Aread(attribute_id, mem_type_l, data);
+        //H5Sclose(attribute_dataspace_id);
+        H5Aclose(attribute_id);
+    }
+    else
+    {
+        hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
+        hid_t attribute_datatype = H5Aget_type(attribute_id);
+        size_t attribute_sdim = H5Tget_size(attribute_datatype);
+        hid_t attribute_memtype = H5Tcopy(H5T_C_S1);
+        H5Tset_size(attribute_memtype, attribute_sdim);
+        ret = H5Aread(attribute_id, attribute_memtype, data);
+        H5Aclose(attribute_id);
+        //H5Sclose(attribute_space_scalar);
+        //H5Tclose(attribute_str_type);
+    }
+    return ret;
+}
+
+size_t EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_type_p)
+{
+    if (data_type_p != AU_STRING)
+    {
+        hsize_t attribute_dims[1];
+        hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
+        hid_t attribute_space = H5Aget_space(attribute_id);
+        int attribute_ndims = H5Sget_simple_extent_dims(attribute_space, attribute_dims, NULL);
+        H5Aclose(attribute_id);
+        H5Sclose(attribute_space);
+        return attribute_dims[0];
+    }
+    else
+    {
+        hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
+        hid_t attribute_datatype = H5Aget_type(attribute_id);
+        size_t attribute_sdim = H5Tget_size(attribute_datatype);
+        H5Aclose(attribute_id);
+        return attribute_sdim;
+    }
 }

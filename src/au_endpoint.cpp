@@ -371,3 +371,35 @@ std::string Endpoint::MapOpInt2Str(int op_int)
     AU_EXIT("Error: MapOpInt2String is not implemented in endpoint");
     return 0;
 }
+
+/**
+     * @brief Set the Attribute object
+     * 
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+int Endpoint::WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p)
+{
+    AU_EXIT("Error: SetAttribute is not implemented in endpoint");
+    return 0;
+}
+
+/**
+     * @brief Get the Attribute object
+     * 
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+int Endpoint::ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p)
+{
+    AU_EXIT("Error: GetAttribute is not implemented in endpoint");
+    return 0;
+}
+
+size_t Endpoint::GetAttributeSize(const std::string &name, FTDataType data_type_p)
+{
+    AU_EXIT("Error: GetAttributeSize is not implemented in endpoint");
+    return 0;
+}

@@ -57,8 +57,11 @@ typedef enum AuEndpointDataType
   AU_FLOAT = 8,
   AU_DOUBLE = 9,
   AU_DOUBLE_COMPLEX = 10, //it is std::complex<double>
+  AU_STRING = 11,         //mostly used to store attribute
   AU_NCLASSES             /*this must be last                          */
 } AuEndpointDataType;
+
+typedef AuEndpointDataType FTDataType;
 
 /**
  * @brief It should follow the order of above AuEndpointDataType
@@ -112,6 +115,10 @@ AuEndpointDataType InferDataType()
   else if (std::is_same<T, std::complex<double>>::value)
   {
     return AU_DOUBLE_COMPLEX;
+  }
+  else if (std::is_same<T, std::string>::value)
+  {
+    return AU_STRING;
   }
   else
   {

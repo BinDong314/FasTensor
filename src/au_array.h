@@ -1617,8 +1617,63 @@ public:
     padding_value = padding_value_p;
   }
 
-}; // class of array
+  /**
+   * @brief Set the Attribute object
+   * 
+   * @tparam AType, the type of the value (can not be vector)
+   * @param name 
+   * @param value 
+   * @return int 
+   */
+  template <class PType>
+  int SetTag(const std::string &name, const PType &value)
+  {
+    AuEndpointDataType data_element_type = InferDataType<PType>();
+    //std::cout << AU_DOUBLE << ", " << data_element_type << "\n";
+    return endpoint->WriteAttribute(name, &value, data_element_type, 1);
+  }
 
+  int SetTag(const std::string &name, const std::string &value)
+  {
+    return endpoint->WriteAttribute(name, &value[0], AU_STRING, value.length());
+  }
+
+  template <class PType>
+  int SetTag(const std::string &name, const std::vector<PType> &value)
+  {
+    AuEndpointDataType data_element_type = InferDataType<PType>();
+    return endpoint->WriteAttribute(name, &value[0], data_element_type, value.size());
+  }
+  /**
+   * @brief Get the Attribute object
+   * 
+   * @tparam AType 
+   * @param name 
+   * @param value , return 
+   * @return int 
+   */
+  template <class PType>
+  int GetTag(const std::string &name, PType &value)
+  {
+    AuEndpointDataType data_element_type = InferDataType<PType>();
+    return endpoint->ReadAttribute(name, &value, data_element_type);
+  }
+
+  int GetTag(const std::string &name, std::string &value)
+  {
+    size_t str_len = endpoint->GetAttributeSize(name, AU_STRING);
+    value.resize(str_len);
+    return endpoint->ReadAttribute(name, &value[0], AU_STRING, value.length());
+  }
+  template <class PType>
+  int GetTag(const std::string &name, std::vector<PType> &value)
+  {
+    AuEndpointDataType data_element_type = InferDataType<PType>();
+    size_t vec_len = endpoint->GetAttributeSize(name, data_element_type);
+    value.resize(vec_len);
+    return endpoint->ReadAttribute(name, &value[0], data_element_type, value.size());
+  }
+}; // class of array
 } // namespace FT
 
 namespace AU = FT;
