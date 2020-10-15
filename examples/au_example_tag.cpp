@@ -41,34 +41,45 @@ int main(int argc, char *argv[])
     //Result data
     Array<float> *B = new Array<float>("EP_HDF5:./test-data/testf-16x16-tag-output.h5:/testg/testd");
 
-    auto start = std::chrono::system_clock::now();
     //Run
     A->Apply(udf_hello_world, B);
-    auto end = std::chrono::system_clock::now();
 
-    std::chrono::duration<double> elapsed_seconds = end - start;
-    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    std::cout << setprecision(17);
 
-    std::string end_time_str(std::ctime(&end_time));
-    B->SetTag("FinishedAt", end_time_str);
+    std::string test_str = "This is long test string for set tag";
+    B->SetTag("TestString", test_str);
 
-    double elapsed_seconds_count = elapsed_seconds.count();
-    B->SetTag("ElapsedTime", elapsed_seconds_count);
+    double test_double = 0.00001234;
+    B->SetTag("TestDouble", test_double);
 
-    std::vector<float> data_size = {16, 16};
-    B->SetTag("DataSize", data_size);
+    float test_float = 0.12345678;
+    B->SetTag("TestFloat", test_float);
 
-    std::string end_time_str_get;
-    B->GetTag("FinishedAt", end_time_str_get);
-    std::cout << "Get FinishedAt: " << end_time_str_get;
+    int test_int = 1234;
+    B->SetTag("TestInt", test_int);
 
-    double elapsed_seconds_count_get;
-    B->GetTag("ElapsedTime", elapsed_seconds_count_get);
-    std::cout << "Get ElapsedTime: " << elapsed_seconds_count_get << "\n";
+    std::vector<int> data_size = {16, 16};
+    B->SetTag("TestVector", data_size);
 
-    std::vector<float> data_size_get(2);
-    B->GetTag("DataSize", data_size_get);
-    std::cout << "Get DataSize: " << data_size_get[0] << ", " << data_size_get[1] << "\n";
+    std::string test_str_get;
+    B->GetTag("TestString", test_str_get);
+    std::cout << "Get TestString: " << test_str_get << "\n";
+
+    double test_double_get;
+    B->GetTag("TestDouble", test_double_get);
+    std::cout << "Get TestDouble: " << test_double_get << "\n";
+
+    float test_float_get;
+    B->GetTag("TestFloat", test_float_get);
+    std::cout << "Get TestFloat: " << test_float_get << "\n";
+
+    int test_int_get;
+    B->GetTag("TestInt", test_int_get);
+    std::cout << "Get TestInt: " << test_int_get << "\n";
+
+    std::vector<int> data_size_get(2);
+    B->GetTag("TestVector", data_size_get);
+    std::cout << "Get TestVector: " << data_size_get[0] << ", " << data_size_get[1] << "\n";
 
     //Clear
     delete A;
