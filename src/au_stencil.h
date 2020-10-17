@@ -531,6 +531,7 @@ public:
       ITERATOR_MACRO(ord, start_offset, end_offset); //update ord by increasing "1", row-major order
     }
   }
+
   /**
    * @brief read neighborhood
    * 
@@ -538,6 +539,73 @@ public:
    * @param end_offset 
    * @return std::vector<T> 
    */
+  inline int ReadNeighbors(std::vector<int> &start_offset, std::vector<int> &end_offset, std::vector<T> &rv) const
+  {
+    //std::vector<T> rv;
+    int rank_temp = start_offset.size();
+    std::vector<size_t> start_offset_size_t, end_offset_size_t;
+    std::vector<unsigned long long> count_size_t;
+    start_offset_size_t.resize(rank_temp);
+    end_offset_size_t.resize(rank_temp);
+    count_size_t.resize(rank_temp);
+
+    size_t n = 1;
+    for (int i = 0; i < rank_temp; i++)
+    {
+      count_size_t[i] = (end_offset[i] - start_offset[i] + 1);
+      n = n * count_size_t[i];
+      assert(start_offset[i] >= 0); //ArrayIterator any only process positive offset
+      assert(end_offset[i] >= 0);
+      start_offset_size_t[i] = start_offset[i];
+      end_offset_size_t[i] = end_offset[i] + 1;
+    }
+
+    if (count_size_t == chunk_dim_size)
+    {
+      //copy(&dataArray[0], &dataArray[dataArraySize], back_inserter(dataVec));
+      //std::vector<T> rv2(chunk_data_pointer, chunk_data_pointer + n);
+      //std::cout << "read all !" << std::endl;
+      //return rv2;
+      return copy(&chunk_data_pointer[0], &chunk_data_pointer[n], back_inserter(rv));
+    }
+
+    rv.resize(n);
+
+    std::vector<unsigned long long> view_start(rank_temp), view_end(rank_temp);
+    bool out_of_border = false;
+    for (int ii = 0; ii < rank_temp; ii++)
+    {
+      view_start[ii] = my_location[ii] + start_offset[ii];
+      view_end[ii] = my_location[ii] + end_offset[ii];
+      if (view_end[ii] > (chunk_dim_size[ii] - 1))
+      {
+        out_of_border = true;
+      }
+    }
+    //ArrayViewAccess(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ, sizeof(T));
+
+    //PrintVector("view_start = ", view_start);
+    //PrintVector("view_end = ", view_end);
+    //PrintVector("chunk_dim_size = ", chunk_dim_size);
+
+    //we may go to use the () operator
+    if (out_of_border)
+    {
+      ReadHoodBorder(rv, start_offset, end_offset);
+      return 0;
+    }
+
+    ArrayViewAccessP<T>(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ);
+    return 0;
+  }
+  /**
+   * @brief read neighborhood
+   * 
+   * @param start_offset 
+   * @param end_offset 
+   * @return std::vector<T> 
+   */
+  /*
   inline std::vector<T> ReadNeighbors(std::vector<int> &start_offset, std::vector<int> &end_offset) const
   {
     std::vector<T> rv;
@@ -601,8 +669,8 @@ public:
     //size_t offset, rv_offset = 0;
     //std::vector<size_t> coordinate;
     //coordinate.resize(rank_temp);
-
-    /*
+*/
+  /*
     for (ArrayIterator<size_t> c(start_offset_size_t, end_offset_size_t); c; ++c)
     {
       //PrintVector("ArrayIterator_c: ", c);
@@ -619,7 +687,7 @@ public:
       rv_offset = rv_offset + 1;
     }*/
 
-    /*
+  /*
     std::vector<int> coordinate_iterate(start_offset.begin(), start_offset.end());
 
     for (size_t ii = 0; ii < n; ii++)
@@ -640,8 +708,8 @@ public:
       ITERATOR_MACRO(coordinate_iterate, start_offset, end_offset);
     }*/
 
-    return rv;
-  }
+  //return rv;
+  //}
 
   /**
    * @brief WriteHood

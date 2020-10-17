@@ -746,7 +746,7 @@ public:
     return;
   }
 
-  int WriteArray(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, std::vector<T> &data_p)
+  int WriteArray(const std::vector<unsigned long long> &start_p, const std::vector<unsigned long long> &end_p, std::vector<T> &data_p)
   {
     //InitializeApplyInput();
     if (!virtual_array_flag)
@@ -990,6 +990,40 @@ public:
     }
   }
 
+  int ReadArray(const std::vector<unsigned long long> &start, const std::vector<unsigned long long> &end, std::vector<T> &data_vector)
+  {
+    //InitializeApplyInput();
+    unsigned long long data_vector_size;
+    COUNT_CELLS(start, end, data_vector_size);
+
+    //std::vector<T> data_vector;
+    data_vector.resize(data_vector_size);
+    if (!virtual_array_flag)
+    {
+      endpoint->Read(start, end, &data_vector[0]);
+    }
+    else
+    {
+      int n = attribute_endpoint_vector.size();
+      std::vector<AuEndpointDataTypeUnion> current_chunk_data_union_vector;
+      for (int i = 0; i < n; i++)
+      {
+        int element_type_size = attribute_endpoint_vector[i]->GetDataElementTypeSize();
+        void *current_chunk_data_temp = (void *)malloc(data_vector_size * element_type_size);
+        if (!current_chunk_data_temp)
+        {
+          AU_EXIT("Not enough memory");
+        }
+        attribute_endpoint_vector[i]->Read(start, end, current_chunk_data_temp);
+        current_chunk_data_union_vector = attribute_endpoint_vector[i]->Void2Union(current_chunk_data_temp, data_vector_size);
+        InsertAttribute2VirtualArrayVector(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), data_vector, i);
+        free(current_chunk_data_temp);
+      }
+    }
+    return 0;
+  }
+
+  /*
   std::vector<T> ReadArray(std::vector<unsigned long long> start, std::vector<unsigned long long> end)
   {
     //InitializeApplyInput();
@@ -1022,6 +1056,7 @@ public:
     }
     return data_vector;
   }
+  */
 
   bool HasNextChunk()
   {
@@ -1299,7 +1334,7 @@ public:
     else
     {
       std::vector<T> data_v;
-      data_v = ReadArray(start, end);
+      ReadArray(start, end, data_v);
       return data_v[0];
     }
   }

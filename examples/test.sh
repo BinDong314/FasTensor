@@ -113,4 +113,4 @@ run_command_1f1p ./au_example_1f1p
 run_command  ./au_example_cache testf-16x16-cache-output.h5
 
 run_command  ./au_example_vector_2d testf-16x16-vector-2d-output.h5
-run_command  ./au_example_tag testf-16x16-vector-tag-output.h5
+run_command  ./au_example_tag testf-16x16-tag-output.h5
