@@ -566,7 +566,8 @@ public:
       //std::vector<T> rv2(chunk_data_pointer, chunk_data_pointer + n);
       //std::cout << "read all !" << std::endl;
       //return rv2;
-      return copy(&chunk_data_pointer[0], &chunk_data_pointer[n], back_inserter(rv));
+      std::copy(&chunk_data_pointer[0], &chunk_data_pointer[n], back_inserter(rv));
+      return 0;
     }
 
     rv.resize(n);
@@ -605,7 +606,6 @@ public:
    * @param end_offset 
    * @return std::vector<T> 
    */
-  /*
   inline std::vector<T> ReadNeighbors(std::vector<int> &start_offset, std::vector<int> &end_offset) const
   {
     std::vector<T> rv;
@@ -669,8 +669,8 @@ public:
     //size_t offset, rv_offset = 0;
     //std::vector<size_t> coordinate;
     //coordinate.resize(rank_temp);
-*/
-  /*
+
+    /*
     for (ArrayIterator<size_t> c(start_offset_size_t, end_offset_size_t); c; ++c)
     {
       //PrintVector("ArrayIterator_c: ", c);
@@ -687,7 +687,7 @@ public:
       rv_offset = rv_offset + 1;
     }*/
 
-  /*
+    /*
     std::vector<int> coordinate_iterate(start_offset.begin(), start_offset.end());
 
     for (size_t ii = 0; ii < n; ii++)
@@ -708,8 +708,8 @@ public:
       ITERATOR_MACRO(coordinate_iterate, start_offset, end_offset);
     }*/
 
-  //return rv;
-  //}
+    return rv;
+  }
 
   /**
    * @brief WriteHood
