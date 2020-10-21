@@ -632,7 +632,7 @@ public:
 
           if (vector_type_flag == true)
           {
-            output_vector_shape = cell_return_stencil.GetShape();
+            cell_return_stencil.GetShape(output_vector_shape);
           }
 
           if (save_result_flag)

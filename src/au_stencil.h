@@ -1029,10 +1029,11 @@ public:
    * 
    * @param shape_p shape vector
    */
-  void SetShape(const std::vector<size_t> shape_p)
+  int SetShape(const std::vector<size_t> &shape_p)
   {
     is_output_vector_flag = true;
     output_vector_shape = shape_p;
+    return 0;
   }
 
   /**
@@ -1040,14 +1041,14 @@ public:
    * 
    * @return std::vector<size_t> 
    */
-  std::vector<size_t> GetShape()
+  int GetShape(std::vector<size_t> &shape_p)
   {
     if (!is_output_vector_flag)
     {
       AU_EXIT("The shape of output vector is not set in UDF !");
     }
-
-    return output_vector_shape;
+    shape_p = output_vector_shape;
+    return 0;
   }
 
   /**
@@ -1055,15 +1056,14 @@ public:
    * 
    * @return std::vector<int> , the maximum offset at upper side (including)
    */
-  std::vector<int> GetMaxOffsetUpper() const
+  int GetOffsetUpper(std::vector<int> &max_offset) const
   {
     int rank = chunk_dim_size.size();
-    std::vector<int> max_offset;
     for (int i = 0; i < rank; i++)
     {
       max_offset.push_back(chunk_dim_size[i] - my_location[i] - 1);
     }
-    return max_offset;
+    return 0;
   }
 
   /**
@@ -1071,15 +1071,15 @@ public:
    * 
    * @return std::vector<int> , the maximum offset at lower side (including)
    */
-  std::vector<int> GetMaxOffsetLower() const
+  int GetOffsetLower(std::vector<int> &max_offset) const
   {
     int rank = chunk_dim_size.size();
-    std::vector<int> max_offset;
+
     for (int i = 0; i < rank; i++)
     {
       max_offset.push_back(my_location[i]);
     }
-    return max_offset;
+    return 0;
   }
 
   unsigned long long GetChunkID() const
