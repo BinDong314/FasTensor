@@ -1229,13 +1229,14 @@ public:
 
   int EnableApplyStride(const std::vector<int> &skip_size_p)
   {
-    return SetStride(skip_size_p)
+    return SetStride(skip_size_p);
   }
 
   int SetStride(const std::vector<int> &skip_size_p)
   {
     skip_size = skip_size_p;
     skip_flag = true;
+    return 0;
   }
 
   void SetVectorDirection(OutputVectorFlatDirection flat_direction_index)
@@ -1518,7 +1519,7 @@ public:
   }
   int Nonvolatile(std::string data_endpoint_p) // used by the old code
   {
-    Backup(data_endpoint_p);
+    return Backup(data_endpoint_p);
   }
 
   /**
@@ -1631,12 +1632,12 @@ public:
    */
   int ControlEndpoint(int cmd_p, std::vector<std::string> &arg_v_p)
   {
-    endpoint->SpecialOperator(cmd_p, arg_v_p);
+    return endpoint->SpecialOperator(cmd_p, arg_v_p);
   }
 
   int EndpointControl(int cmd_p, std::vector<std::string> &arg_v_p)
   {
-    ControlEndpoint(cmd_p, arg_v_p);
+    return ControlEndpoint(cmd_p, arg_v_p);
   }
 
   /**
