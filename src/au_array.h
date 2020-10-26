@@ -1022,41 +1022,12 @@ public:
     }
     return 0;
   }
-
-  /*
-  std::vector<T> ReadArray(std::vector<unsigned long long> start, std::vector<unsigned long long> end)
+  std::vector<T> ReadArray(const std::vector<unsigned long long> start, const std::vector<unsigned long long> end) //used by the old code
   {
-    //InitializeApplyInput();
-    unsigned long long data_vector_size;
-    COUNT_CELLS(start, end, data_vector_size);
-
     std::vector<T> data_vector;
-    data_vector.resize(data_vector_size);
-    if (!virtual_array_flag)
-    {
-      endpoint->Read(start, end, &data_vector[0]);
-    }
-    else
-    {
-      int n = attribute_endpoint_vector.size();
-      std::vector<AuEndpointDataTypeUnion> current_chunk_data_union_vector;
-      for (int i = 0; i < n; i++)
-      {
-        int element_type_size = attribute_endpoint_vector[i]->GetDataElementTypeSize();
-        void *current_chunk_data_temp = (void *)malloc(data_vector_size * element_type_size);
-        if (!current_chunk_data_temp)
-        {
-          AU_EXIT("Not enough memory");
-        }
-        attribute_endpoint_vector[i]->Read(start, end, current_chunk_data_temp);
-        current_chunk_data_union_vector = attribute_endpoint_vector[i]->Void2Union(current_chunk_data_temp, data_vector_size);
-        InsertAttribute2VirtualArrayVector(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), data_vector, i);
-        free(current_chunk_data_temp);
-      }
-    }
+    ReadArray(start, end, data_vector);
     return data_vector;
   }
-  */
 
   bool HasNextChunk()
   {
@@ -1256,7 +1227,12 @@ public:
     }
   }
 
-  void EnableApplyStride(std::vector<int> skip_size_p)
+  int EnableApplyStride(const std::vector<int> &skip_size_p)
+  {
+    return SetStride(skip_size_p)
+  }
+
+  int SetStride(const std::vector<int> &skip_size_p)
   {
     skip_size = skip_size_p;
     skip_flag = true;
@@ -1374,6 +1350,52 @@ public:
     attribute_endpoint_vector.push_back(attribute_endpoint);
   }
 
+  template <class AttributeType>
+  int AppendAttribute(const std::string &data_endpoint)
+  {
+    if (attribute_endpoint_vector.size() == 0)
+      virtual_array_flag = true;
+    Endpoint *attribute_endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+    AuEndpointDataType data_element_type = InferDataType<AttributeType>();
+    attribute_endpoint->SetDataElementType(data_element_type);
+    if (attribute_endpoint->GetEndpointType() == EP_MEMORY)
+      endpoint_memory_flag = true;
+    attribute_endpoint_vector.push_back(attribute_endpoint);
+    return 0;
+  }
+
+  template <class AttributeType>
+  int InsertAttribute(const std::string &data_endpoint, const int index)
+  {
+    if (attribute_endpoint_vector.size() == 0)
+      virtual_array_flag = true;
+    Endpoint *attribute_endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+    AuEndpointDataType data_element_type = InferDataType<AttributeType>();
+    attribute_endpoint->SetDataElementType(data_element_type);
+    attribute_endpoint_vector.insert(attribute_endpoint_vector.begin() + index, attribute_endpoint);
+    if (attribute_endpoint->GetEndpointType() == EP_MEMORY)
+      endpoint_memory_flag = true;
+    return 0;
+  }
+
+  //index is zero based
+  int EraseAttribute(const int &index)
+  {
+    if (attribute_endpoint_vector[index] != NULL)
+    {
+      delete attribute_endpoint_vector[index];
+    }
+    attribute_endpoint_vector.erase(attribute_endpoint_vector.begin() + index);
+    return 0;
+  }
+
+  int GetAttribute(const int &index, std::string &endpoint_id)
+  {
+    if (attribute_endpoint_vector[index] != NULL)
+    {
+    }
+  }
+
   std::vector<Endpoint *> GetAttributeEndpoint()
   {
     return attribute_endpoint_vector;
@@ -1471,7 +1493,7 @@ public:
    * @param data_endpoint 
    * @return int 
    */
-  int Nonvolatile(std::string data_endpoint_p)
+  int Backup(std::string data_endpoint_p)
   {
     //std::string target_array_data_endpoint_info = data_endpoint_p;
     //Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
@@ -1494,6 +1516,10 @@ public:
 
     return ret;
   }
+  int Nonvolatile(std::string data_endpoint_p) // used by the old code
+  {
+    Backup(data_endpoint_p);
+  }
 
   /**
     * @brief load HDF5 array to IN_MEMORY array   
@@ -1501,7 +1527,7 @@ public:
   * @param data_endpoint_p 
   * @return int 
   */
-  int Volatile(std::string data_endpoint_p)
+  int Restore(std::string data_endpoint_p)
   {
     std::string target_array_data_endpoint_info = data_endpoint_p;
     Endpoint *target_endpoint = EndpointFactory::NewEndpoint(data_endpoint_p);
@@ -1518,6 +1544,10 @@ public:
     }
 
     return ret;
+  }
+  int Volatile(std::string data_endpoint_p) // used by the old code
+  {
+    Restore(data_endpoint_p);
   }
 
   /**
@@ -1599,9 +1629,14 @@ public:
    * @param cmd_p : int cmd (specific to Endpoint)
    * @param arg_v_p : a vector of arg. It is typed as string and specific to cmd_p
    */
-  void EndpointControl(int cmd_p, std::vector<std::string> arg_v_p)
+  int ControlEndpoint(int cmd_p, std::vector<std::string> &arg_v_p)
   {
     endpoint->SpecialOperator(cmd_p, arg_v_p);
+  }
+
+  int EndpointControl(int cmd_p, std::vector<std::string> &arg_v_p)
+  {
+    ControlEndpoint(cmd_p, arg_v_p);
   }
 
   /**

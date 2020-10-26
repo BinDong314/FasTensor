@@ -31,6 +31,7 @@ private:
   T value;
   int has_set_output_value_flag = false;
   std::vector<unsigned long long> my_location; //This is the coodinate with overlapping
+  std::vector<unsigned long long> my_location_no_ol;
   std::vector<unsigned long long> global_coordinate;
   unsigned long long global_coordinate_lineared;
 
@@ -794,12 +795,18 @@ public:
     return value;
   }
 
+  int GetValue(T &value_p)
+  {
+    value_p = value;
+    return 0;
+  }
+
   /**
    * @brief Set the value object
    * 
    * @param value_p 
    */
-  void SetValue(const T value_p)
+  int SetValue(const T value_p)
   {
     value = value_p;
   }
@@ -863,7 +870,7 @@ public:
     for (int i = 0; i < rank; i++)
     {
       my_location[i] = my_coordinate[i];
-      //my_location_no_ol[i]    = my_location_no_ol_p[i];
+      my_location_no_ol[i] = my_location_no_ol_p[i];
       //chunk_dim_size_no_ol[i] = chunk_dim_size_no_ol_p[i];
       //ol_origin_offset[i]     = ol_origin_offset_p[i];
       chunk_data_size_no_ol = chunk_data_size_no_ol * chunk_dim_size_no_ol_p[i];
@@ -930,6 +937,23 @@ public:
   std::vector<unsigned long long> GetCoordinate() const
   {
     return global_coordinate;
+  }
+
+  std::vector<unsigned long long> GetGlobalCoordinate() const
+  {
+    return global_coordinate;
+  }
+
+  int GetGlobalIndex(std::vector<unsigned long long> &index_p) const
+  {
+    index_p = global_coordinate;
+    return 0;
+  }
+
+  int GetLocalIndex(std::vector<unsigned long long> &index_p) const
+  {
+    index_p = my_location_no_ol;
+    return 0;
   }
 
   void set_trail_run_flag()
@@ -1085,6 +1109,12 @@ public:
   unsigned long long GetChunkID() const
   {
     return chunk_id;
+  }
+
+  int GetChunkID(unsigned long long &chunk_id_p) const
+  {
+    chunk_id_p = chunk_id;
+    return 0;
   }
 
   void SetChunkID(unsigned long long chunk_id_p)

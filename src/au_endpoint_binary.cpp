@@ -184,7 +184,8 @@ int EndpointBinary::Write(std::vector<unsigned long long> start, std::vector<uns
      */
 int EndpointBinary::Close()
 {
-    fclose(fp);
+    if (fp != NULL)
+        fclose(fp);
     fp = NULL;
     SetOpenFlag(false);
     return 0;

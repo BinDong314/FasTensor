@@ -24,6 +24,8 @@
 #define DIR_OUPUT_REPLACE_RGX 3
 #define DIR_OUPUT_REPLACE_RGX_ARG 4
 #define DIR_FILE_SORT_INDEXES 5
+#define DIR_N_FILES 6
+#define DIR_GET_FILE_SIZE 7
 
 #include "au_utility.h"
 #include "au_type.h"
