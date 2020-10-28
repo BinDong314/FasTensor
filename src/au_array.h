@@ -33,6 +33,8 @@ extern int au_rank;
 // std::vector<Endpoint *> endpoint_clean_vector;
 //extern std::map<Endpoint *, bool> endpoint_clean_vector;
 
+//#define AU_DEFAULT_CHUNK_SIZE_PER_DIM 1000
+
 extern std::map<Endpoint *, bool> endpoint_clean_vector;
 
 namespace FT
@@ -105,6 +107,9 @@ private:
   std::regex dir_input_regex, dir_output_regex;
   std::string dir_output_replace_str;
 
+  //For chunk operations
+  size_t set_chunk_size_by_mem_max_mem_size = 1073741824; //Byte, 1GB
+
   //Flag variable for different purposes
   bool skip_flag = false;
   bool view_flag = false;
@@ -115,14 +120,14 @@ private:
   bool mirror_value_flag = false;
   bool apply_replace_flag = false;
   bool vector_type_flag = false;
-  bool chunk_size_by_user_flag = false;
-  bool chunk_size_by_user_by_dimension_flag = false;
   bool endpoint_memory_flag = false;
   bool has_padding_value_flag = false;
   bool skip_not_aligned_w_array_flag = false;
   bool is_the_last_chunk = false;
-
   bool is_endpoint_created_flag = false;
+  bool chunk_size_by_user_flag = false;
+  bool chunk_size_by_user_by_dimension_flag = false;
+  bool set_chunk_size_by_mem_flag = false;
 
   int skip_not_aligned_w_array_index;
   //The shape of output_vector when vector_type_flag = true
@@ -167,23 +172,29 @@ public:
   }
 
   /**
-   * @brief Construct a new Array object for read, as Input of Apply 
+   * @brief Construct a new Array object for read, as Input of Apply
    * 
-   * @param data_endpoint file information ("AuDataEndpointType + file name") 
-   * @param auto_chunk_dim_index  fileinfo is chunked on auto_chunk_dim_index
+   * @param data_endpoint contains file info, ("AuDataEndpointType + file name")
+   * @param cs , chunk size
+   * @param os , ghost size
    */
-  Array(std::string data_endpoint, int auto_chunk_dim_index)
+  Array(std::string data_endpoint, std::vector<int> cs)
   {
     array_data_endpoint_info = data_endpoint;
-    data_auto_chunk_dim_index = auto_chunk_dim_index;
+    data_chunk_size = cs;
+    data_overlap_size.resize(cs.size());
+    std::fill(data_overlap_size.begin(), data_overlap_size.end(), 0);
+
     endpoint = EndpointFactory::NewEndpoint(data_endpoint);
-    //std::cout << data_endpoint << "\n";
+
     AuEndpointDataType data_element_type = InferDataType<T>();
     endpoint->SetDataElementType(data_element_type);
-    chunk_size_by_user_by_dimension_flag = true;
+
+    chunk_size_by_user_flag = true;
     if (endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
 
+    //endpoint_clean_vector.push_back(endpoint);
     endpoint_clean_vector[endpoint] = true;
   }
 
@@ -209,6 +220,27 @@ public:
       endpoint_memory_flag = true;
 
     //endpoint_clean_vector.push_back(endpoint);
+    endpoint_clean_vector[endpoint] = true;
+  }
+
+  /**
+   * @brief Construct a new Array object for read, as Input of Apply 
+   * 
+   * @param data_endpoint file information ("AuDataEndpointType + file name") 
+   * @param auto_chunk_dim_index  fileinfo is chunked on auto_chunk_dim_index
+   */
+  Array(std::string data_endpoint, int auto_chunk_dim_index)
+  {
+    array_data_endpoint_info = data_endpoint;
+    data_auto_chunk_dim_index = auto_chunk_dim_index;
+    endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+    //std::cout << data_endpoint << "\n";
+    AuEndpointDataType data_element_type = InferDataType<T>();
+    endpoint->SetDataElementType(data_element_type);
+    chunk_size_by_user_by_dimension_flag = true;
+    if (endpoint->GetEndpointType() == EP_MEMORY)
+      endpoint_memory_flag = true;
+
     endpoint_clean_vector[endpoint] = true;
   }
 
@@ -316,6 +348,58 @@ public:
         }
         //data_overlap_size[i] = 0;
       }
+
+      return;
+    }
+
+    if (set_chunk_size_by_mem_flag)
+    {
+      unsigned long long total_elements = 1;
+      for (int i = 0; i < data_dims; i++)
+      {
+        total_elements = data_size[i] * total_elements;
+      }
+      total_elements = total_elements / au_size;
+      if (total_elements > (set_chunk_size_by_mem_max_mem_size / sizeof(T)))
+      {
+        total_elements = set_chunk_size_by_mem_max_mem_size / sizeof(T);
+      }
+      std::vector<unsigned long long> chunk_size_temp = RowMajorOrderReverse(total_elements, data_size);
+      int replace_flag = 1;
+      for (int i = data_dims - 1; i > 0; i--)
+      {
+        if (chunk_size_temp[i] != data_size[i])
+        {
+          chunk_size_temp[i] = data_size[i];
+          if (chunk_size_temp[i - 1] != 0)
+          {
+            chunk_size_temp[i - 1] = chunk_size_temp[i - 1] - 1;
+          }
+          else
+          {
+            replace_flag = 0;
+            break;
+          }
+        }
+      }
+
+      for (int i = data_dims - 1; i >= 0; i--)
+      {
+        if (chunk_size_temp[i] == 0)
+          replace_flag = 0;
+      }
+
+      if (replace_flag)
+      {
+        //unsigned long long to int here
+        for (int i = 0; i < data_dims; i++)
+          data_chunk_size[i] = chunk_size_temp[i];
+      }
+      else
+      {
+        AU_EXIT("SetChunkSizeByMem failed ! Please try specify the chunk size via SetChunkSize !");
+      }
+      return;
     }
 
     if (endpoint != NULL && endpoint->GetEndpointType() == EP_DIR)
@@ -1455,14 +1539,36 @@ public:
     endpoint->SetDirChunkSize(dir_chunk_size_p);
   }
 
-  void SetChunkSize(std::vector<int> data_chunk_size_p)
+  int SetChunkSize(std::vector<int> data_chunk_size_p)
   {
     data_chunk_size = data_chunk_size_p;
+    return 0;
   }
 
+  int GetChunkSize(std::vector<int> &data_chunk_size_p)
+  {
+    data_chunk_size_p = data_chunk_size;
+    return 0;
+  }
   std::vector<int> GetChunkSize()
   {
-    return data_chunk_size;
+    std::vector<int> data_chunk_size_p;
+    GetChunkSize(data_chunk_size_p);
+    return data_chunk_size_p;
+  }
+
+  int SetChunkSizeByMem(size_t max_mem_size)
+  {
+    set_chunk_size_by_mem_flag = true;
+    set_chunk_size_by_mem_max_mem_size = max_mem_size;
+    return 0;
+  }
+
+  int SetChunkSizeByDim(int dim_rank)
+  {
+    chunk_size_by_user_by_dimension_flag = true;
+    data_auto_chunk_dim_index = dim_rank;
+    return 0;
   }
 
   /**
