@@ -125,9 +125,11 @@ private:
   bool skip_not_aligned_w_array_flag = false;
   bool is_the_last_chunk = false;
   bool is_endpoint_created_flag = false;
+
   bool chunk_size_by_user_flag = false;
   bool chunk_size_by_user_by_dimension_flag = false;
   bool set_chunk_size_by_mem_flag = false;
+  bool set_overlap_size_by_auto_detection_flag = false;
 
   int skip_not_aligned_w_array_index;
   //The shape of output_vector when vector_type_flag = true
@@ -409,7 +411,29 @@ public:
     //optimal chunk_size
   }
 
-  void UpdateOverlapSize()
+  int SetOverlapSize(const vector<int> os_p)
+  {
+    data_overlap_size = os_p;
+    return 0;
+  }
+  int SetOverlapSizeByDetection()
+  {
+    set_overlap_size_by_auto_detection_flag = true;
+    return 0;
+  }
+  int GetOverlapSize(vector<int> &os_p)
+  {
+    os_p = data_overlap_size;
+    return 0;
+  }
+  int SetOverlapPadding(const T &padding_value_p)
+  {
+    has_padding_value_flag = true;
+    padding_value = padding_value_p;
+    return 0;
+  }
+
+  int UpdateOverlapSize()
   {
     if (endpoint != NULL)
     {
@@ -421,8 +445,30 @@ public:
           data_overlap_size[i] = 0;
         }
       }
+      return 0;
     }
+    /*
+    if (set_overlap_size_by_auto_detection_flag)
+    {
+      t_start = MPI_Wtime();
+      std::vector<T> trail_data(0);
+      Stencil<T> trail_cell(data_dims, &trail_data[0]);
+      UDF(trail_cell);
+      trail_cell.get_trail_run_result(&data_overlap_size[0]);
+      t_end = MPI_Wtime();
+      trail_run_time = trail_run_time + t_end - t_start;
+      if (mpi_rank == 0)
+      {
+        std::cout << "Trailrun results: overlap size = : ";
+        for (int i = 0; i < data_dims; i++)
+        {
+          std::cout << ", " << data_overlap_size[i];
+        }
+        std::cout << std::endl;
+      }
+    }*/
     //optimal overlap size
+    return 0;
   }
 
   void InitializeApplyInput()
@@ -1786,12 +1832,6 @@ public:
     time_read = 0;
     time_write = 0;
     time_udf = 0;
-  }
-
-  void SetPadding(T padding_value_p)
-  {
-    has_padding_value_flag = true;
-    padding_value = padding_value_p;
   }
 
   /**

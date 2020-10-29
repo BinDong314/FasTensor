@@ -43,9 +43,11 @@ private:
   unsigned long long my_offset_no_ol;             //for hist
   std::vector<unsigned long long> chunk_dim_size; //This is the size with over-lapping
   int dims;
-  std::vector<int> coordinate_shift;
-  std::vector<unsigned long long> coordinate;
-  int trail_run_flag = 0; //When rail_run_flag = 1, it records the maximum overlap size
+  //std::vector<int> coordinate_shift;
+  //std::vector<unsigned long long> coordinate;
+
+  bool trail_run_flag = false; //When rail_run_flag = 1, it records the maximum overlap size
+  mutable std::vector<int> trail_run_overlap_size;
   //int padding_value_set_flag = 0;
   //T padding_value;
   int mpi_rank, mpi_size;
@@ -70,14 +72,13 @@ public:
   Stencil(int dims_input, T *chunk)
   {
     dims = dims_input;
-    coordinate_shift.resize(dims_input);
-    coordinate.resize(dims_input);
-    set_trail_run_flag();
+    //coordinate_shift.resize(dims_input);
+    //coordinate.resize(dims_input);
     chunk_data_pointer = chunk;
-
-#ifdef DEBUG
-    MpiRankSize(&mpi_rank, &mpi_size);
-#endif
+    //et_trail_run_flag();
+    trail_run_flag = true;
+    trail_run_overlap_size.resize(dims_input);
+    std::fill(trail_run_overlap_size.begin(), trail_run_overlap_size.end(), 0);
   }
 
   /**
@@ -117,8 +118,8 @@ public:
     dims = chunk_size.size();
     chunk_dim_size.resize(dims);
     my_location.resize(dims);
-    coordinate_shift.resize(dims);
-    coordinate.resize(dims);
+    //coordinate_shift.resize(dims);
+    //coordinate.resize(dims);
     chunk_data_size = 1;
     for (int i = 0; i < dims; i++)
     {
@@ -347,6 +348,16 @@ public:
     //std::cout << "Call new index ! \n";
     std::vector<int> coordinate_shift(dims);
     std::vector<unsigned long long> coordinate(dims);
+
+    if (trail_run_flag)
+    {
+      for (int i = 0; i < ov_rank; i++)
+      {
+        if (std::abs(ov[i]) > trail_run_overlap_size[i])
+          trail_run_overlap_size[i] = std::abs(ov[i]);
+      }
+      return chunk_data_pointer[0];
+    }
 
     for (int i = 0; i < ov_rank; i++)
     {
@@ -956,6 +967,18 @@ public:
     return 0;
   }
 
+  int GetTrailRunResult(std::vector<int> &overlap_size_p)
+  {
+    overlap_size_p.resize(trail_run_overlap_size.size());
+    if (trail_run_flag == 1)
+    {
+      for (int i = 0; i < trail_run_overlap_size.size(); i++)
+        overlap_size_p[i] = trail_run_overlap_size[i];
+    }
+    return 0;
+  }
+
+  /*
   void set_trail_run_flag()
   {
     trail_run_flag = 1;
@@ -971,7 +994,7 @@ public:
         overlap_size[i] = coordinate_shift[i];
       trail_run_flag = 0;
     }
-  }
+  }*/
 
   void set_my_g_location_rm(unsigned long long lrm)
   {
