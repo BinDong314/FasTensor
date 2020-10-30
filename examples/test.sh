@@ -52,6 +52,9 @@ mkdir ./test-data/test_1f1p_dir_2d > /dev/null 2>&1
 
 ./au_test_data_generator -f ./test-data/testf-16x16-tag.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1 > /dev/null 2>&1
 
+
+./au_test_data_generator -f ./test-data/testf-16x16-chunk-overlap.h5 -g /testg -d /testg/testd -n 2 -s 16,16 -t 1 > /dev/null 2>&1
+
 ###Create test data ends
 
 echo "Start to run test  ..."
@@ -114,3 +117,4 @@ run_command  ./au_example_cache testf-16x16-cache-output.h5
 
 run_command  ./au_example_vector_2d testf-16x16-vector-2d-output.h5
 run_command  ./au_example_tag testf-16x16-tag-output.h5
+run_command  ./au_example_chunk_overlap

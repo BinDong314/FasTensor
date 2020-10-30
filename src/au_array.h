@@ -101,6 +101,8 @@ private:
 
   std::vector<size_t> output_vector_flat_shape;
 
+  std::vector<std::string> attribute_array_data_endpoint_info;
+
   std::vector<Endpoint *> attribute_endpoint_vector; //vector of endpoints for a virtual array
 
   //For directory
@@ -411,29 +413,30 @@ public:
     //optimal chunk_size
   }
 
-  int SetOverlapSize(const vector<int> os_p)
+  inline int SetOverlapSize(const vector<int> os_p)
   {
     data_overlap_size = os_p;
     return 0;
   }
-  int SetOverlapSizeByDetection()
+  inline int SetOverlapSizeByDetection()
   {
     set_overlap_size_by_auto_detection_flag = true;
     return 0;
   }
-  int GetOverlapSize(vector<int> &os_p)
+  inline int GetOverlapSize(vector<int> &os_p)
   {
     os_p = data_overlap_size;
     return 0;
   }
-  int SetOverlapPadding(const T &padding_value_p)
+  inline int SetOverlapPadding(const T &padding_value_p)
   {
     has_padding_value_flag = true;
     padding_value = padding_value_p;
     return 0;
   }
 
-  int UpdateOverlapSize()
+  template <class UDFOutputType>
+  int UpdateOverlapSize(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &))
   {
     if (endpoint != NULL)
     {
@@ -447,31 +450,21 @@ public:
       }
       return 0;
     }
-    /*
+
     if (set_overlap_size_by_auto_detection_flag)
     {
-      t_start = MPI_Wtime();
-      std::vector<T> trail_data(0);
+      std::vector<T> trail_data;
+      trail_data.resize(1);
       Stencil<T> trail_cell(data_dims, &trail_data[0]);
       UDF(trail_cell);
-      trail_cell.get_trail_run_result(&data_overlap_size[0]);
-      t_end = MPI_Wtime();
-      trail_run_time = trail_run_time + t_end - t_start;
-      if (mpi_rank == 0)
-      {
-        std::cout << "Trailrun results: overlap size = : ";
-        for (int i = 0; i < data_dims; i++)
-        {
-          std::cout << ", " << data_overlap_size[i];
-        }
-        std::cout << std::endl;
-      }
-    }*/
+      trail_cell.GetTrailRunResult(data_overlap_size);
+    }
     //optimal overlap size
     return 0;
   }
 
-  void InitializeApplyInput()
+  template <class UDFOutputType>
+  void InitializeApplyInput(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &))
   {
     //Read the metadata (rank, dimension size) from endpoint
     if (virtual_array_flag && attribute_endpoint_vector.size() >= 1)
@@ -499,7 +492,7 @@ public:
     }
 
     UpdateChunkSize();
-    UpdateOverlapSize();
+    UpdateOverlapSize(UDF);
 
     current_chunk_start_offset.resize(data_dims);
     current_chunk_end_offset.resize(data_dims);
@@ -642,7 +635,13 @@ public:
   void Transform(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
   {
     //Set up the input data for LoadNextChunk
-    InitializeApplyInput();
+    InitializeApplyInput(UDF);
+
+    //reset timer to zero
+    time_read = 0;
+    time_write = 0;
+    time_udf = 0;
+
     std::vector<UDFOutputType> current_result_chunk_data;
     unsigned long long current_result_chunk_data_size = 1;
 
@@ -1152,7 +1151,7 @@ public:
     }
     return 0;
   }
-  std::vector<T> ReadArray(const std::vector<unsigned long long> start, const std::vector<unsigned long long> end) //used by the old code
+  inline std::vector<T> ReadArray(const std::vector<unsigned long long> start, const std::vector<unsigned long long> end) //used by the old code
   {
     std::vector<T> data_vector;
     ReadArray(start, end, data_vector);
@@ -1357,12 +1356,12 @@ public:
     }
   }
 
-  int EnableApplyStride(const std::vector<int> &skip_size_p)
+  inline int EnableApplyStride(const std::vector<int> &skip_size_p)
   {
     return SetStride(skip_size_p);
   }
 
-  int SetStride(const std::vector<int> &skip_size_p)
+  inline int SetStride(const std::vector<int> &skip_size_p)
   {
     skip_size = skip_size_p;
     skip_flag = true;
@@ -1492,6 +1491,7 @@ public:
     if (attribute_endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
     attribute_endpoint_vector.push_back(attribute_endpoint);
+    attribute_array_data_endpoint_info.push_back(data_endpoint);
     return 0;
   }
 
@@ -1504,6 +1504,7 @@ public:
     AuEndpointDataType data_element_type = InferDataType<AttributeType>();
     attribute_endpoint->SetDataElementType(data_element_type);
     attribute_endpoint_vector.insert(attribute_endpoint_vector.begin() + index, attribute_endpoint);
+    attribute_array_data_endpoint_info.insert(attribute_array_data_endpoint_info.begin() + index, data_endpoint);
     if (attribute_endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
     return 0;
@@ -1517,14 +1518,18 @@ public:
       delete attribute_endpoint_vector[index];
     }
     attribute_endpoint_vector.erase(attribute_endpoint_vector.begin() + index);
+    attribute_array_data_endpoint_info.erase(attribute_array_data_endpoint_info.begin() + index);
     return 0;
   }
 
   int GetAttribute(const int &index, std::string &endpoint_id)
   {
-    if (attribute_endpoint_vector[index] != NULL)
+    if (index < attribute_array_data_endpoint_info.size())
     {
+      endpoint_id = attribute_array_data_endpoint_info[index];
+      return 0;
     }
+    return -1;
   }
 
   std::vector<Endpoint *> GetAttributeEndpoint()
@@ -1580,65 +1585,89 @@ public:
     return endpoint->GetDirChunkSize();
   }
 
-  void SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
+  inline void SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
   {
     endpoint->SetDirChunkSize(dir_chunk_size_p);
   }
 
-  int SetChunkSize(std::vector<int> data_chunk_size_p)
+  inline int SetChunkSize(std::vector<int> data_chunk_size_p)
   {
     data_chunk_size = data_chunk_size_p;
     return 0;
   }
 
-  int GetChunkSize(std::vector<int> &data_chunk_size_p)
+  inline int GetChunkSize(std::vector<int> &data_chunk_size_p)
   {
     data_chunk_size_p = data_chunk_size;
     return 0;
   }
-  std::vector<int> GetChunkSize()
+  inline std::vector<int> GetChunkSize()
   {
     std::vector<int> data_chunk_size_p;
     GetChunkSize(data_chunk_size_p);
     return data_chunk_size_p;
   }
 
-  int SetChunkSizeByMem(size_t max_mem_size)
+  inline int SetChunkSizeByMem(size_t max_mem_size)
   {
     set_chunk_size_by_mem_flag = true;
     set_chunk_size_by_mem_max_mem_size = max_mem_size;
     return 0;
   }
 
-  int SetChunkSizeByDim(int dim_rank)
+  inline int SetChunkSizeByDim(int dim_rank)
   {
     chunk_size_by_user_by_dimension_flag = true;
     data_auto_chunk_dim_index = dim_rank;
     return 0;
   }
 
-  /**
- * @brief Set the Size object
- * 
- * @param size_p 
- */
+  inline int GetArraySize(std::vector<unsigned long long> &size_p)
+  {
+    if (endpoint != NULL)
+    {
+      endpoint->ExtractMeta();
+      data_size = endpoint->GetDimensions();
+      size_p = data_size;
+      return 0;
+    }
+    return -1;
+  }
+
+  inline int SetArraySize(const std::vector<unsigned long long> &size_p)
+  {
+    data_size = size_p;
+    return 0;
+  }
+
+  inline int GetArrayRank(int &rank)
+  {
+    if (endpoint != NULL)
+    {
+      endpoint->ExtractMeta();
+      data_size = endpoint->GetDimensions();
+      rank = data_size.size();
+      return 0;
+    }
+    return -1;
+  }
+
+  /*
   void SetSize(std::vector<unsigned long long> size_p)
   {
     data_size = size_p;
   }
-
-  /**
- * @brief Set the Size object
- * 
- * @param size_p 
- */
   std::vector<unsigned long long> GetSize()
   {
-    endpoint->ExtractMeta();
-    data_size = endpoint->GetDimensions();
-    data_dims = data_size.size();
-    return data_size;
-  }
+    if (endpoint != NULL)
+    {
+      endpoint->ExtractMeta();
+      data_size = endpoint->GetDimensions();
+      data_dims = data_size.size();
+      return data_size;
+    }
+   }
+   */
 
   /**
    * @brief write data to another endpoint type, e.g., HDF5 in disk
@@ -1669,7 +1698,7 @@ public:
 
     return ret;
   }
-  int Nonvolatile(std::string data_endpoint_p) // used by the old code
+  inline int Nonvolatile(std::string data_endpoint_p) // used by the old code
   {
     return Backup(data_endpoint_p);
   }
@@ -1698,7 +1727,7 @@ public:
 
     return ret;
   }
-  int Volatile(std::string data_endpoint_p) // used by the old code
+  inline int Volatile(std::string data_endpoint_p) // used by the old code
   {
     Restore(data_endpoint_p);
   }
@@ -1765,16 +1794,25 @@ public:
     return 0;
   }
 
-  /**
-   * @brief pass command cmd to Endpoint of Array
-   * 
-   * @param cmd_p : int cmd (specific to Endpoint)
-   * @param arg_p : string arg (specific to cmd)
-   */
-  //void EndpointControl(int cmd_p, std::string arg_p)
-  // {
-  //  endpoint->SpecialOperator(cmd_p, arg_p);
-  // }
+  inline int SetEndpoint(const string &endpoint_id)
+  {
+    array_data_endpoint_info = endpoint_id;
+    endpoint = EndpointFactory::NewEndpoint(endpoint_id);
+    AuEndpointDataType data_element_type = InferDataType<T>();
+    endpoint->SetDataElementType(data_element_type);
+
+    if (endpoint->GetEndpointType() == EP_MEMORY)
+    {
+      endpoint_memory_flag = true;
+    }
+    endpoint_clean_vector[endpoint] = true;
+    return 0;
+  }
+  inline int GetEndpoint(string &endpoint_id)
+  {
+    endpoint_id = array_data_endpoint_info;
+    return 0;
+  }
 
   /**
    * @brief pass command cmd to Endpoint of Array
@@ -1787,32 +1825,12 @@ public:
     return endpoint->SpecialOperator(cmd_p, arg_v_p);
   }
 
-  int EndpointControl(int cmd_p, std::vector<std::string> &arg_v_p)
+  inline int EndpointControl(int cmd_p, std::vector<std::string> &arg_v_p)
   {
     return ControlEndpoint(cmd_p, arg_v_p);
   }
 
-  /**
-   * @brief merge below to EndpointControl
-   * 
-   */
-  void DisableCollectiveIO()
-  {
-    if (endpoint->GetEndpointType() == EP_HDF5)
-    {
-      endpoint->DisableCollectiveIO();
-    }
-  }
-
-  void EnableCollectiveIO()
-  {
-    if (endpoint->GetEndpointType() == EP_HDF5)
-    {
-      endpoint->EnableCollectiveIO();
-    }
-  }
-
-  void ReportTime()
+  void inline ReportTime()
   {
     std::vector<double> mpi_stats_read, mpi_stats_udf, mpi_stats_write;
     MPIReduceStats(time_read, mpi_stats_read);
@@ -1827,11 +1845,23 @@ public:
       std::cout << "Write     time (s) : max = " << mpi_stats_write[0] << ", min = " << mpi_stats_write[0] << ", ave = " << mpi_stats_write[0] / au_size << std::endl;
       fflush(stdout);
     }
+  }
 
-    //reset timer to zero
-    time_read = 0;
-    time_write = 0;
-    time_udf = 0;
+  inline int GetReadCost(vector<double> &cost)
+  {
+    MPIReduceStats(time_read, cost);
+    return 0;
+  }
+
+  inline int GetWriteCost(vector<double> &cost)
+  {
+    MPIReduceStats(time_write, cost);
+    return 0;
+  }
+  inline int GetComputingCost(vector<double> &cost)
+  {
+    MPIReduceStats(time_udf, cost);
+    return 0;
   }
 
   /**
@@ -1889,6 +1919,29 @@ public:
     size_t vec_len = endpoint->GetAttributeSize(name, data_element_type);
     value.resize(vec_len);
     return endpoint->ReadAttribute(name, &value[0], data_element_type, value.size());
+  }
+
+  //
+  //Below code are not used and just kept in case
+  ///
+  /**
+   * @brief merge below to EndpointControl
+   * 
+   */
+  void DisableCollectiveIO()
+  {
+    if (endpoint->GetEndpointType() == EP_HDF5)
+    {
+      endpoint->DisableCollectiveIO();
+    }
+  }
+
+  void EnableCollectiveIO()
+  {
+    if (endpoint->GetEndpointType() == EP_HDF5)
+    {
+      endpoint->EnableCollectiveIO();
+    }
   }
 }; // class of array
 } // namespace FT

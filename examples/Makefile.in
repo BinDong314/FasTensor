@@ -96,7 +96,7 @@ bin_PROGRAMS = au_test_data_generator$(EXEEXT) \
 	au_example_adios$(EXEEXT) au_example_pnetcdf$(EXEEXT) \
 	au_example_simple$(EXEEXT) au_example_kf1p$(EXEEXT) \
 	au_example_vector_2d$(EXEEXT) au_example_padding$(EXEEXT) \
-	au_example_tag$(EXEEXT)
+	au_example_tag$(EXEEXT) au_example_chunk_overlap$(EXEEXT)
 subdir = examples
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -132,6 +132,12 @@ am_au_example_cache_OBJECTS = au_example_cache.$(OBJEXT)
 au_example_cache_OBJECTS = $(am_au_example_cache_OBJECTS)
 au_example_cache_LDADD = $(LDADD)
 au_example_cache_DEPENDENCIES = ../src/libArrayUDF.la
+am_au_example_chunk_overlap_OBJECTS =  \
+	au_example_chunk_overlap.$(OBJEXT)
+au_example_chunk_overlap_OBJECTS =  \
+	$(am_au_example_chunk_overlap_OBJECTS)
+au_example_chunk_overlap_LDADD = $(LDADD)
+au_example_chunk_overlap_DEPENDENCIES = ../src/libArrayUDF.la
 am_au_example_hello_world_OBJECTS = au_example_hello_world.$(OBJEXT)
 au_example_hello_world_OBJECTS = $(am_au_example_hello_world_OBJECTS)
 au_example_hello_world_LDADD = $(LDADD)
@@ -201,6 +207,7 @@ am__depfiles_remade = ./$(DEPDIR)/au_example_1f1p.Po \
 	./$(DEPDIR)/au_example_adios.Po \
 	./$(DEPDIR)/au_example_array.Po \
 	./$(DEPDIR)/au_example_cache.Po \
+	./$(DEPDIR)/au_example_chunk_overlap.Po \
 	./$(DEPDIR)/au_example_hello_world.Po \
 	./$(DEPDIR)/au_example_kf1p.Po \
 	./$(DEPDIR)/au_example_padding.Po \
@@ -232,6 +239,7 @@ am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
 SOURCES = $(au_example_1f1p_SOURCES) $(au_example_adios_SOURCES) \
 	$(au_example_array_SOURCES) $(au_example_cache_SOURCES) \
+	$(au_example_chunk_overlap_SOURCES) \
 	$(au_example_hello_world_SOURCES) $(au_example_kf1p_SOURCES) \
 	$(au_example_padding_SOURCES) $(au_example_pnetcdf_SOURCES) \
 	$(au_example_reduce_SOURCES) \
@@ -242,6 +250,7 @@ SOURCES = $(au_example_1f1p_SOURCES) $(au_example_adios_SOURCES) \
 	$(au_test_data_generator_SOURCES)
 DIST_SOURCES = $(au_example_1f1p_SOURCES) $(au_example_adios_SOURCES) \
 	$(au_example_array_SOURCES) $(au_example_cache_SOURCES) \
+	$(au_example_chunk_overlap_SOURCES) \
 	$(au_example_hello_world_SOURCES) $(au_example_kf1p_SOURCES) \
 	$(au_example_padding_SOURCES) $(au_example_pnetcdf_SOURCES) \
 	$(au_example_reduce_SOURCES) \
@@ -440,6 +449,7 @@ au_example_kf1p_SOURCES = au_example_kf1p.cpp
 au_example_vector_2d_SOURCES = au_example_vector_2d.cpp
 au_example_padding_SOURCES = au_example_padding.cpp
 au_example_tag_SOURCES = au_example_tag.cpp
+au_example_chunk_overlap_SOURCES = au_example_chunk_overlap.cpp
 all: all-am
 
 .SUFFIXES:
@@ -539,6 +549,10 @@ au_example_cache$(EXEEXT): $(au_example_cache_OBJECTS) $(au_example_cache_DEPEND
 	@rm -f au_example_cache$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(au_example_cache_OBJECTS) $(au_example_cache_LDADD) $(LIBS)
 
+au_example_chunk_overlap$(EXEEXT): $(au_example_chunk_overlap_OBJECTS) $(au_example_chunk_overlap_DEPENDENCIES) $(EXTRA_au_example_chunk_overlap_DEPENDENCIES) 
+	@rm -f au_example_chunk_overlap$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(au_example_chunk_overlap_OBJECTS) $(au_example_chunk_overlap_LDADD) $(LIBS)
+
 au_example_hello_world$(EXEEXT): $(au_example_hello_world_OBJECTS) $(au_example_hello_world_DEPENDENCIES) $(EXTRA_au_example_hello_world_DEPENDENCIES) 
 	@rm -f au_example_hello_world$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(au_example_hello_world_OBJECTS) $(au_example_hello_world_LDADD) $(LIBS)
@@ -597,6 +611,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_adios.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_array.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_cache.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_chunk_overlap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_hello_world.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_kf1p.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/au_example_padding.Po@am__quote@ # am--include-marker
@@ -777,6 +792,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/au_example_adios.Po
 	-rm -f ./$(DEPDIR)/au_example_array.Po
 	-rm -f ./$(DEPDIR)/au_example_cache.Po
+	-rm -f ./$(DEPDIR)/au_example_chunk_overlap.Po
 	-rm -f ./$(DEPDIR)/au_example_hello_world.Po
 	-rm -f ./$(DEPDIR)/au_example_kf1p.Po
 	-rm -f ./$(DEPDIR)/au_example_padding.Po
@@ -838,6 +854,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/au_example_adios.Po
 	-rm -f ./$(DEPDIR)/au_example_array.Po
 	-rm -f ./$(DEPDIR)/au_example_cache.Po
+	-rm -f ./$(DEPDIR)/au_example_chunk_overlap.Po
 	-rm -f ./$(DEPDIR)/au_example_hello_world.Po
 	-rm -f ./$(DEPDIR)/au_example_kf1p.Po
 	-rm -f ./$(DEPDIR)/au_example_padding.Po
