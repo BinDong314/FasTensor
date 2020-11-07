@@ -1825,6 +1825,12 @@ public:
     return endpoint->SpecialOperator(cmd_p, arg_v_p);
   }
 
+  int ControlEndpoint(int cmd_p)
+  {
+    std::vector<std::string> arg_v_p;
+    return endpoint->SpecialOperator(cmd_p, arg_v_p);
+  }
+
   inline int EndpointControl(int cmd_p, std::vector<std::string> &arg_v_p)
   {
     return ControlEndpoint(cmd_p, arg_v_p);
@@ -1847,20 +1853,20 @@ public:
     }
   }
 
-  inline int GetReadCost(vector<double> &cost)
+  inline int GetReadCost(vector<double> &cost_stats)
   {
-    MPIReduceStats(time_read, cost);
+    MPIReduceStats(time_read, cost_stats);
     return 0;
   }
 
-  inline int GetWriteCost(vector<double> &cost)
+  inline int GetWriteCost(vector<double> &cost_stats)
   {
-    MPIReduceStats(time_write, cost);
+    MPIReduceStats(time_write, cost_stats);
     return 0;
   }
-  inline int GetComputingCost(vector<double> &cost)
+  inline int GetComputingCost(vector<double> &cost_stats)
   {
-    MPIReduceStats(time_udf, cost);
+    MPIReduceStats(time_udf, cost_stats);
     return 0;
   }
 

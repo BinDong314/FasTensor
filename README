@@ -40,9 +40,16 @@ See copyright at the end.
       -DENABLE_HDF5=OFF 
    To   
       -DENABLE_HDF5=ON
-   Your may also need to setup HDF5_ROOT to HDF5 installation directory if DASH can not find HDF5
+ 
+   Change 
+     -DINSTALL_PREFIX=$HOME/opt/dash-0.4.0/
+   To
+     -DINSTALL_PREFIX=$PWD/install
 
+   Your may also need to setup HDF5_ROOT to HDF5 installation directory if DASH can not find HDF5
+ > ./build.minimal.sh
  > make -C ./build install 
+
 ```
 
 4, FastTensor
@@ -50,6 +57,7 @@ See copyright at the end.
 ```
  > ./configure --prefix=$PWD/build --with-hdf5=../hdf5-1.12.0/build/build/ CXX=mpic++ CC=mpicc --with-dash=/Users/dbin/opt/dash-0.4.0/
 ```
+
 
 5, Error issue with DASH/C++ compiler:
 
@@ -75,3 +83,10 @@ Note on Lawrencium at LBNL
 h-hdf5=/global/software/sl-7.x86_64/modules/gcc/7.4.0/hdf5/1.10.5-gcc-p CXX=mpic
 ++ --with-dash=/clusterfs/bear/BinDong_DAS_Data/fasttensor/tools3rd/dash/build/o
 pt/dash-0.4.0/
+
+
+Note on Cori at NERSC
+
+export HDF5_BASE=/opt/cray/pe/hdf5-parallel/1.10.5.2/GNU/8.2/
+vim CMakeExt/HDF5.cmake
+set (HDF5_LINKER_FLAGS "-lhdf5_hl -lhdf5 -ldl -lm -lz")

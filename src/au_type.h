@@ -62,6 +62,7 @@ typedef enum AuEndpointDataType
 } AuEndpointDataType;
 
 typedef AuEndpointDataType FTDataType;
+typedef AuEndpointDataType FTType;
 
 /**
  * @brief It should follow the order of above AuEndpointDataType
@@ -180,8 +181,10 @@ bool InferVectorVectorType()
 }
 
 //see more detail in third_party/cista.h
-#define AU_UDT_INIT(A) \
+#define AU_UDT_INIT(A) FT_UDT_INIT(A)
+
+//see more detail in third_party/cista.h
+#define FT_UDT_INIT(A) \
   CISTA_PRINTABLE(A)   \
   CISTA_COMPARABLE()
-
 #endif
