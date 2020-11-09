@@ -1879,20 +1879,20 @@ public:
    * @return int 
    */
   template <class PType>
-  int SetTag(const std::string &name, const PType &value)
+  int SetTag(const std::string &name, const PType value)
   {
     AuEndpointDataType data_element_type = InferDataType<PType>();
     //std::cout << AU_DOUBLE << ", " << data_element_type << "\n";
     return endpoint->WriteAttribute(name, &value, data_element_type, 1);
   }
 
-  int SetTag(const std::string &name, const std::string &value)
+  int SetTag(const std::string &name, const std::string value)
   {
     return endpoint->WriteAttribute(name, &value[0], AU_STRING, value.length());
   }
 
   template <class PType>
-  int SetTag(const std::string &name, const std::vector<PType> &value)
+  int SetTag(const std::string &name, const std::vector<PType> value)
   {
     AuEndpointDataType data_element_type = InferDataType<PType>();
     return endpoint->WriteAttribute(name, &value[0], data_element_type, value.size());
