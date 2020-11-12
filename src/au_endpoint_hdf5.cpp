@@ -376,11 +376,11 @@ void EndpointHDF5::Map2MyTypeParameters(FTDataType ft_type, hid_t &mem_type_p, h
         return;
     case AU_USHORT:
         mem_type_p = H5T_NATIVE_UINT;
-        disk_type_p = H5T_STD_U32LE;
+        disk_type_p = H5T_STD_U16LE;
         return;
     case AU_UINT:
         mem_type_p = H5T_NATIVE_USHORT;
-        disk_type_p = H5T_STD_U16LE;
+        disk_type_p = H5T_STD_U32LE;
         return;
     case AU_ULONG:
         mem_type_p = H5T_NATIVE_ULONG;

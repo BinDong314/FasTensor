@@ -855,7 +855,18 @@ public:
           InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, 0);
           B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
           //B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
-          B->WriteArray(current_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
+          if (!skip_flag)
+          {
+            //PrintVector("current_chunk_start_offset = ", current_chunk_start_offset);
+            //PrintVector("current_chunk_end_offset = ", current_chunk_end_offset);
+            B->WriteArray(current_result_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
+          }
+          else
+          {
+            //PrintVector("current_chunk_start_offset = ", current_result_chunk_start_offset);
+            //PrintVector("current_chunk_end_offset = ", current_result_chunk_end_offset);
+            B->WriteArray(current_result_chunk_start_offset, current_result_chunk_end_offset, current_result_chunk_data);
+          }
         }
       }
       time_write = time_write + AU_WTIME - t_start;
@@ -1836,7 +1847,7 @@ public:
     return ControlEndpoint(cmd_p, arg_v_p);
   }
 
-  void inline ReportTime()
+  void inline ReportCost()
   {
     std::vector<double> mpi_stats_read, mpi_stats_udf, mpi_stats_write;
     MPIReduceStats(time_read, mpi_stats_read);
@@ -1852,21 +1863,29 @@ public:
       fflush(stdout);
     }
   }
+  //Old-code
+  inline void ReportTime()
+  {
+    ReportCost();
+  }
 
   inline int GetReadCost(vector<double> &cost_stats)
   {
     MPIReduceStats(time_read, cost_stats);
+    cost_stats[2] = cost_stats[2] / au_size;
     return 0;
   }
 
   inline int GetWriteCost(vector<double> &cost_stats)
   {
     MPIReduceStats(time_write, cost_stats);
+    cost_stats[2] = cost_stats[2] / au_size;
     return 0;
   }
   inline int GetComputingCost(vector<double> &cost_stats)
   {
     MPIReduceStats(time_udf, cost_stats);
+    cost_stats[2] = cost_stats[2] / au_size;
     return 0;
   }
 

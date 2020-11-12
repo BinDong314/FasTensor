@@ -566,8 +566,8 @@ public:
     {
       count_size_t[i] = (end_offset[i] - start_offset[i] + 1);
       n = n * count_size_t[i];
-      assert(start_offset[i] >= 0); //ArrayIterator any only process positive offset
-      assert(end_offset[i] >= 0);
+      //assert(start_offset[i] >= 0); //ArrayIterator any only process positive offset
+      //assert(end_offset[i] >= 0);
       start_offset_size_t[i] = start_offset[i];
       end_offset_size_t[i] = end_offset[i] + 1;
     }

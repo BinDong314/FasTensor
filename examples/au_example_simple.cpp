@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
     //Run
     A->Apply(udf_hello_world, B);
 
+    A->ReportCost();
     //Clear
     delete A;
     delete B;
