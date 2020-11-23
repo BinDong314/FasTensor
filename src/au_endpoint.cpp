@@ -127,42 +127,42 @@ std::vector<AuEndpointDataTypeUnion> Endpoint::Void2Union(void *data_vector_in_v
     }
     case AU_LONG:
     {
-        VOID2UNION_HELPER(int, AU_INT);
+        VOID2UNION_HELPER(long, AU_LONG);
         break;
     }
     case AU_LONG_LONG:
     {
-        VOID2UNION_HELPER(int, AU_INT);
+        VOID2UNION_HELPER(long long, AU_LONG_LONG);
         break;
     }
     case AU_USHORT:
     {
-        VOID2UNION_HELPER(int, AU_INT);
+        VOID2UNION_HELPER(unsigned short, AU_USHORT);
         break;
     }
     case AU_UINT:
     {
-        VOID2UNION_HELPER(int, AU_INT);
+        VOID2UNION_HELPER(unsigned int, AU_UINT);
         break;
     }
     case AU_ULONG:
     {
-        VOID2UNION_HELPER(int, AU_INT);
+        VOID2UNION_HELPER(unsigned long, AU_ULONG);
         break;
     }
     case AU_ULLONG:
     {
-        VOID2UNION_HELPER(int, AU_INT);
+        VOID2UNION_HELPER(unsigned long long, AU_ULLONG);
         break;
     }
     case AU_FLOAT:
     {
-        VOID2UNION_HELPER(int, AU_INT);
+        VOID2UNION_HELPER(float, AU_FLOAT);
         break;
     }
     case AU_DOUBLE:
     {
-        VOID2UNION_HELPER(int, AU_INT);
+        VOID2UNION_HELPER(double, AU_DOUBLE);
         break;
     }
     default:
@@ -202,42 +202,42 @@ void *Endpoint::Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_
     }
     case AU_LONG:
     {
-        UNION2VOID_HELPER(int, AU_INT);
+        UNION2VOID_HELPER(long, AU_LONG);
         break;
     }
     case AU_LONG_LONG:
     {
-        UNION2VOID_HELPER(int, AU_INT);
+        UNION2VOID_HELPER(long long, AU_LONG_LONG);
         break;
     }
     case AU_USHORT:
     {
-        UNION2VOID_HELPER(int, AU_INT);
+        UNION2VOID_HELPER(unsigned short, AU_USHORT);
         break;
     }
     case AU_UINT:
     {
-        UNION2VOID_HELPER(int, AU_INT);
+        UNION2VOID_HELPER(unsigned int, AU_UINT);
         break;
     }
     case AU_ULONG:
     {
-        UNION2VOID_HELPER(int, AU_INT);
+        UNION2VOID_HELPER(unsigned long, AU_ULONG);
         break;
     }
     case AU_ULLONG:
     {
-        UNION2VOID_HELPER(int, AU_INT);
+        UNION2VOID_HELPER(unsigned long long, AU_ULLONG);
         break;
     }
     case AU_FLOAT:
     {
-        UNION2VOID_HELPER(int, AU_INT);
+        UNION2VOID_HELPER(float, AU_FLOAT);
         break;
     }
     case AU_DOUBLE:
     {
-        UNION2VOID_HELPER(int, AU_INT);
+        UNION2VOID_HELPER(double, AU_DOUBLE);
         break;
     }
     default:

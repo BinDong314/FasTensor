@@ -25,7 +25,7 @@ ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG) $(FFTW_FLAG)  $(DASH_FLAG) $(E
 
 .PHONY: all clean
 
-all: create_data ma padding conv ma_no_new tag
+all: create_data ma padding conv ma_no_new tag das vpic
 
 create_data: create_data.cpp 
 	$(CCC) $< -o $@ $(ALL_FLAGS)
@@ -46,6 +46,12 @@ ma_no_new: ma_no_new.cpp
 tag: tag.cpp
 	$(CCC) $< -o $@ $(ALL_FLAGS)	
 
+das: das.cpp
+	$(CCC) $< -o $@ $(ALL_FLAGS)
+
+vpic: vpic.cpp
+	$(CCC) $< -o $@ $(ALL_FLAGS)
+
 clean:
-	rm create_data ma padding conv ma_no_new tag
+	rm create_data ma padding conv ma_no_new tag das vpic
 

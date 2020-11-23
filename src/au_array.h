@@ -285,6 +285,12 @@ public:
     data_overlap_size = os;
   }
 
+  Array(std::vector<int> cs)
+  {
+    data_chunk_size = cs;
+    data_overlap_size.resize(cs.size());
+    std::fill(data_overlap_size.begin(), data_overlap_size.end(), 0);
+  }
   /**
    * @brief Construct a new Array object from in-memory vector
    *        The data are assumed to be 1D too here
@@ -493,6 +499,9 @@ public:
 
     UpdateChunkSize();
     UpdateOverlapSize(UDF);
+
+    PrintVector("data_chunk_size: ", data_chunk_size);
+    PrintVector("data_size: ", data_size);
 
     current_chunk_start_offset.resize(data_dims);
     current_chunk_end_offset.resize(data_dims);
@@ -1503,6 +1512,8 @@ public:
       endpoint_memory_flag = true;
     attribute_endpoint_vector.push_back(attribute_endpoint);
     attribute_array_data_endpoint_info.push_back(data_endpoint);
+    //add to clean
+    endpoint_clean_vector[attribute_endpoint] = true;
     return 0;
   }
 
@@ -1518,6 +1529,8 @@ public:
     attribute_array_data_endpoint_info.insert(attribute_array_data_endpoint_info.begin() + index, data_endpoint);
     if (attribute_endpoint->GetEndpointType() == EP_MEMORY)
       endpoint_memory_flag = true;
+    //add to clean
+    endpoint_clean_vector[attribute_endpoint] = true;
     return 0;
   }
 
