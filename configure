@@ -7530,16 +7530,11 @@ $as_echo "$lt_cv_ld_force_load" >&6; }
       _lt_dar_allow_undefined='$wl-undefined ${wl}suppress' ;;
     darwin1.*)
       _lt_dar_allow_undefined='$wl-flat_namespace $wl-undefined ${wl}suppress' ;;
-    darwin*) # darwin 5.x on
-      # if running on 10.5 or later, the deployment target defaults
-      # to the OS version, if on x86, and 10.4, the deployment
-      # target defaults to 10.4. Don't you love it?
-      case ${MACOSX_DEPLOYMENT_TARGET-10.0},$host in
-	10.0,*86*-darwin8*|10.0,*-darwin[91]*)
-	  _lt_dar_allow_undefined='$wl-undefined ${wl}dynamic_lookup' ;;
-	10.[012][,.]*)
+    darwin*)
+      case ${MACOSX_DEPLOYMENT_TARGET},$host in
+	10.[012],*|,*powerpc*)
 	  _lt_dar_allow_undefined='$wl-flat_namespace $wl-undefined ${wl}suppress' ;;
-	10.*)
+	*)
 	  _lt_dar_allow_undefined='$wl-undefined ${wl}dynamic_lookup' ;;
       esac
     ;;
@@ -16876,9 +16871,9 @@ if test "x$with_adios" != xno; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ADIOS at $ADIOS_HOME" >&5
 $as_echo_n "checking for ADIOS at $ADIOS_HOME... " >&6; }
   if test -d "$ADIOS_HOME"   && test -d "$ADIOS_HOME/include"  && test -d "$ADIOS_HOME/lib"; then
-  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS      -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI"
-  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI "
-  ARRAYUDF_LIBS="$ARRAYUDF_LIBS        /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c_mpi.2.5.0.dylib /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c.2.5.0.dylib  -DHAS_ADIOS_END_POINT -L$ADIOS_HOME/lib -DADIOS2_USE_MPI"
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS      -DADIOS2_USE_MPI -isystem $ADIOS_HOME/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI"
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DADIOS2_USE_MPI -isystem $ADIOS_HOME/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI "
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS  $ADIOS_HOME/lib/libadios2_c_mpi.2.5.0.dylib $ADIOS_HOME/lib/libadios2_c.2.5.0.dylib  -DHAS_ADIOS_END_POINT -L$ADIOS_HOME/lib -DADIOS2_USE_MPI"
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes !" >&5
 $as_echo "yes !" >&6; }
   else
@@ -16920,16 +16915,18 @@ else
 fi
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for DASH at $DASH_HOME" >&5
+if test "x$with_dash" != xno; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for DASH at $DASH_HOME" >&5
 $as_echo_n "checking for DASH at $DASH_HOME... " >&6; }
-if test -d "$DASH_HOME"   && test -d "$DASH_HOME/include"  && test -d "$DASH_HOME/lib"; then
-ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
-ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
-ARRAYUDF_LIBS="$ARRAYUDF_LIBS           -L$DASH_HOME/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+  if test -d "$DASH_HOME"   && test -d "$DASH_HOME/include"  && test -d "$DASH_HOME/lib"; then
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS    -DHAS_DASH_ENDPOINT   -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -DHAS_DASH_ENDPOINT  -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS        -DHAS_DASH_ENDPOINT   -L$DASH_HOME/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-else
-as_fn_error $? "no: DASH directory not found!" "$LINENO" 5
+  else
+  as_fn_error $? "no: DASH directory not found!" "$LINENO" 5
+  fi
 fi
 
 

@@ -64,9 +64,9 @@ AC_ARG_WITH([adios],
 if test "x$with_adios" != xno; then
   AC_MSG_CHECKING([for ADIOS at $ADIOS_HOME])
   if test -d "$ADIOS_HOME"   && test -d "$ADIOS_HOME/include"  && test -d "$ADIOS_HOME/lib"; then
-  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS      -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI"
-  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DADIOS2_USE_MPI -isystem /Users/dbin/work/soft/adios2-build/build/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI "
-  ARRAYUDF_LIBS="$ARRAYUDF_LIBS        /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c_mpi.2.5.0.dylib /Users/dbin/work/soft/adios2-build/build/lib/libadios2_c.2.5.0.dylib  -DHAS_ADIOS_END_POINT -L$ADIOS_HOME/lib -DADIOS2_USE_MPI"
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS      -DADIOS2_USE_MPI -isystem $ADIOS_HOME/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI"
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS  -DADIOS2_USE_MPI -isystem $ADIOS_HOME/include -DHAS_ADIOS_END_POINT -I$ADIOS_HOME/include -DADIOS2_USE_MPI "
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS  $ADIOS_HOME/lib/libadios2_c_mpi.2.5.0.dylib $ADIOS_HOME/lib/libadios2_c.2.5.0.dylib  -DHAS_ADIOS_END_POINT -L$ADIOS_HOME/lib -DADIOS2_USE_MPI"
   AC_MSG_RESULT([yes !])	    
   else
   AC_MSG_ERROR([no: ADIOS directory not found!])
@@ -99,14 +99,16 @@ AC_ARG_WITH([dash],
 [AC_MSG_ERROR([DASH must be specified using --with-dash option])]
 )
 
-AC_MSG_CHECKING([for DASH at $DASH_HOME])
-if test -d "$DASH_HOME"   && test -d "$DASH_HOME/include"  && test -d "$DASH_HOME/lib"; then
-ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
-ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
-ARRAYUDF_LIBS="$ARRAYUDF_LIBS           -L$DASH_HOME/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
-AC_MSG_RESULT([yes])	    
-else
-AC_MSG_ERROR([no: DASH directory not found!])
+if test "x$with_dash" != xno; then
+  AC_MSG_CHECKING([for DASH at $DASH_HOME])
+  if test -d "$DASH_HOME"   && test -d "$DASH_HOME/include"  && test -d "$DASH_HOME/lib"; then
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS    -DHAS_DASH_ENDPOINT   -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -DHAS_DASH_ENDPOINT  -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS        -DHAS_DASH_ENDPOINT   -L$DASH_HOME/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
+  AC_MSG_RESULT([yes])	    
+  else
+  AC_MSG_ERROR([no: DASH directory not found!])
+  fi
 fi
 
 AC_SUBST(AU_OLDCXX_ENABLED)

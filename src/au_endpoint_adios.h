@@ -149,6 +149,7 @@ public:
     EndpointADIOS(std::string endpoint_info_p)
     {
         std::cout << "EndpointADIOS is not configured and compiled ! \n";
+        AU_EXIT(-1);
     }
     ~EndpointADIOS()
     {

@@ -4,6 +4,8 @@
 extern int au_mpi_size_global;
 extern int au_mpi_rank_global;
 
+#ifdef HAS_DASH_ENDPOINT
+
 int EndpointMEMORY::ExtractMeta()
 {
 
@@ -1097,3 +1099,5 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
 
     return 0;
 }
+
+#endif

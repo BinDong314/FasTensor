@@ -30,21 +30,17 @@ struct Diagnostics
 inline Stencil<Diagnostics> udf_vpic_diag(const Stencil<Field> &iStencil)
 {
     Diagnostics dia;
-    //Total Current
+    //Total Current and Absolute Value of Current
     dia.jx = iStencil(0, 0, 0).ejx + iStencil(0, 0, 0).ijx;
     dia.jy = iStencil(0, 0, 0).ejy + iStencil(0, 0, 0).ijy;
     dia.jz = iStencil(0, 0, 0).ejz + iStencil(0, 0, 0).ijz;
-    //Absolute Value of Current
     dia.absJ = sqrtf(dia.jx * dia.jx + dia.jy * dia.jy + dia.jz * dia.jz);
     return Stencil<Diagnostics>(dia);
 }
-
 int main(int argc, char *argv[])
 {
     AU_Init(argc, argv);
-
     std::vector<int> cs = {4, 4, 4};
-
     FT::Array<Field> *A = new FT::Array<Field>(cs);
     A->AppendAttribute<float>("EP_HDF5:./hydro_electron.h5:/Timestep_1/jx");
     A->AppendAttribute<float>("EP_HDF5:./hydro_electron.h5:/Timestep_1/jy");

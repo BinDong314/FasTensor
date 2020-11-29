@@ -10,21 +10,13 @@
 
 #ifndef END_POINT_MEMORY_H
 #define END_POINT_MEMORY_H
-
+#include <string>
+#include <iostream>
+#include <vector>
 #include "au_type.h"
 #include "au_endpoint.h"
 #include "au_local_mirror.h"
 #include "au_endpoint_hdf5.h"
-
-#include <string>
-#include <iostream>
-#include <vector>
-
-#include <unistd.h>
-#include <iostream>
-#include <cstddef>
-#include <iomanip>
-#include <libdash.h>
 
 #define DASH_READ_FLAG 0
 #define DASH_WRITE_FLAG 1
@@ -33,6 +25,14 @@
 #define DASH_VOLATILE_CODE 1
 #define DASH_ENABLE_LOCAL_MIRROR_CODE 2
 #define DASH_MERGE_MIRRORS_CODE 3
+
+#ifdef HAS_DASH_ENDPOINT
+
+#include <unistd.h>
+#include <iostream>
+#include <cstddef>
+#include <iomanip>
+#include <libdash.h>
 
 using dash::io::hdf5::hdf5_options;
 using dash::io::hdf5::StoreHDF;
@@ -217,7 +217,7 @@ public:
         }                                                                                                           \
         case AU_USHORT:                                                                                             \
         {                                                                                                           \
-            dash_matrix_p_p = new dash::Matrix<unsigned int, rank_const_p, unsigned long>(dash_size_spec);          \
+            dash_matrix_p_p = new dash::Matrix<unsigned short, rank_const_p, unsigned long>(dash_size_spec);        \
             break;                                                                                                  \
         }                                                                                                           \
         case AU_UINT:                                                                                               \
@@ -977,4 +977,204 @@ public:
         }                                                                                                                                                    \
     }
 
+#else
+class EndpointMEMORY : public Endpoint
+{
+private:
+public:
+    /**
+     * @brief Construct a new EndpointMEMORY object
+     * 
+     * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
+     */
+    EndpointMEMORY(std::string endpoint_info_p)
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+    /**
+     * @brief Construct a new Endpoint in MEMORY 
+     *         Nothing to do there, can be used as sub-endpoint of directory
+     */
+    EndpointMEMORY()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    ~EndpointMEMORY()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+    /**
+     * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
+     * 
+     * @return int < 0 error, >= 0 works 
+     */
+    int ExtractMeta()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+    /**
+     * @brief print information about the endpoint
+     * 
+     * @return < 0 error, >= 0 works 
+     */
+    int PrintInfo()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief create the endpoint
+     * 
+     * @return  < 0 error, >= 0 works 
+     */
+    int Create()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief open the endpoint
+     * 
+     * @return < 0 error, >= 0 works 
+     */
+    int Open()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief read the data from end-point
+     * 
+     * @param start, coordinates of the cell to start (including)
+     * @param end , coordinates of the cell to end (including)
+     * @param data, store the result data 
+     * @return int < 0 error, >= 0 works
+     */
+    int Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+    /**
+     * @brief write the data to the end-point
+     * 
+     * @param start, coordinates of the cell to start (including)
+     * @param end , coordinates of the cell to end (including)
+     * @param data, store the result data 
+     * @return int < 0 error, >= 0 works
+     */
+    int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief close the end-point
+     * 
+     * @return int int < 0 error, >= 0 works
+     */
+    int Close()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    void Map2MyType()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    void EnableCollectiveIO()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    void DisableCollectiveIO()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief parse endpoint_info to my own info
+     *        In MEMORY, it map endpoint_info to filename, group name and datasetname
+     * @return int: 0 works,  < 0 error,
+     */
+    int ParseEndpointInfo()
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief call a special operator on endpoint
+     *        to dump file from MEMORY to HDF5, or in verse
+     *                 
+     * @param opt_code, specially defined code 
+     */
+    int SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief Nonvolatile the data in MEMORY to HDF5
+     * 
+     * @param parameter 
+     * @return int 
+     */
+    int Nonvolatile(std::string parameter)
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief Volatile the data from HDF5 to MEMORY
+     * 
+     * @param parameter 
+     * @return int 
+     */
+    int Volatile(std::string parameter)
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief Merger mirrors on all processes
+     * 
+     * @return int 
+     */
+    int MergeMirrors(std::string op_str)
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+
+    /**
+     * @brief Create a Local Mirror object
+     * 
+     * @return int 
+     */
+    int CreateLocalMirror(std::string init_value_str)
+    {
+        std::cout << "EP_MEMORY is not configured and compiled ! \n";
+        AU_EXIT(-1);
+    }
+};
+
+#endif
 #endif
