@@ -12,7 +12,6 @@ bin_PROGRAMS=   au_test_data_generator \
                 au_example_vector au_example_array \
                 au_example_vds \
                 au_example_1f1p \
-                au_example_cache \
                 au_example_reduce \
                 au_example_reduce2D_1f1p \
                 au_example_adios \
@@ -22,7 +21,9 @@ bin_PROGRAMS=   au_test_data_generator \
                 au_example_vector_2d \
                 au_example_padding \
                 au_example_tag \
-                au_example_chunk_overlap
+                au_example_chunk_overlap \
+                au_example_cache
+
 
                
 

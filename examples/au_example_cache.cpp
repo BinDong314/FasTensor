@@ -31,6 +31,8 @@ inline Stencil<float> udf_cache2(const Stencil<float> &iStencil)
     return oStencil;
 }
 
+#ifdef HAS_DASH_ENDPOINT
+
 int main(int argc, char *argv[])
 {
     //Init the MPICH, etc.
@@ -67,3 +69,40 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+#else
+
+int main(int argc, char *argv[])
+{
+    //Init the MPICH, etc.
+    AU_Init(argc, argv);
+
+    // set up the chunk size and the overlap size
+    std::vector<int> chunk_size = {4, 16};
+    std::vector<int> overlap_size = {1, 1};
+
+    //Input data
+    Array<float> *A = new Array<float>("EP_HDF5:./test-data/testf-16x16-cache.h5:/testg/testd", chunk_size, overlap_size);
+
+    //Intermediate data
+    Array<float> *B = new Array<float>("EP_HDF5:./test-data/testf-16x16-cache-intermediate.h5:/testg/testd");
+
+    //Intermediate data
+    Array<float> *C = new Array<float>("EP_HDF5:./test-data/testf-16x16-cache-output.h5:/testg/testd");
+
+    //Run
+    A->Apply(udf_cache1, B);
+
+    //Run analysis again
+    B->Apply(udf_cache2, C);
+
+    //Clear
+    delete A;
+    delete B;
+    delete C;
+
+    AU_Finalize();
+
+    return 0;
+}
+#endif

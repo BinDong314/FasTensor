@@ -96,7 +96,7 @@ AC_ARG_WITH([dash],
 [AS_HELP_STRING([--with-dash=DIR],
 [use DIR as the root directory for DASH include and lib])],
 [DASH_HOME="$withval"],
-[AC_MSG_ERROR([DASH must be specified using --with-dash option])]
+[with_dash=no]
 )
 
 if test "x$with_dash" != xno; then
