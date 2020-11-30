@@ -17,8 +17,10 @@
 #include "au_type.h"
 #include "au_array.h"
 #include "au_mpi.h"
-#include <libdash.h>
 
+#ifdef HAS_DASH_ENDPOINT
+#include <libdash.h>
+#endif
 extern int au_mpi_size_global;
 extern int au_mpi_rank_global;
 extern int au_size;
