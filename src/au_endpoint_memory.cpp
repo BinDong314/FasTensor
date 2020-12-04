@@ -15,13 +15,13 @@ int EndpointMEMORY::ExtractMeta()
 int EndpointMEMORY::Create()
 {
     std::vector<unsigned long> endpoint_dim_size_ul;
-    endpoint_dim_size_ul.resize(endpoint_dim_size.size());
-    for (int i = 0; i < endpoint_dim_size.size(); i++)
+    endpoint_dim_size_ul.resize(endpoint_size.size());
+    for (int i = 0; i < endpoint_size.size(); i++)
     {
-        endpoint_dim_size_ul[i] = endpoint_dim_size[i];
+        endpoint_dim_size_ul[i] = endpoint_size[i];
     }
     //PrintVector("Create endpoint_dim_size_ul = ", endpoint_dim_size_ul);
-    switch (endpoint_dim_size.size())
+    switch (endpoint_size.size())
     {
     case 1:
     {
@@ -83,7 +83,7 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
             start_ul[i] = start[i];
             end_ul[i] = end[i];
         }
-        switch (endpoint_dim_size.size())
+        switch (endpoint_size.size())
         {
         case 1:
         {
@@ -113,57 +113,57 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
         {
         case AU_SHORT:
         {
-            AccessLocalMirrorHelp<short>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<short>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_INT:
         {
-            AccessLocalMirrorHelp<int>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<int>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_LONG:
         {
-            AccessLocalMirrorHelp<long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<long>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_LONG_LONG:
         {
-            AccessLocalMirrorHelp<long long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<long long>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_USHORT:
         {
-            AccessLocalMirrorHelp<unsigned short>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<unsigned short>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_UINT:
         {
-            AccessLocalMirrorHelp<unsigned int>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<unsigned int>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_ULONG:
         {
-            AccessLocalMirrorHelp<unsigned long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<unsigned long>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_ULLONG:
         {
-            AccessLocalMirrorHelp<unsigned long long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<unsigned long long>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_FLOAT:
         {
-            AccessLocalMirrorHelp<float>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<float>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_DOUBLE:
         {
-            AccessLocalMirrorHelp<double>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<double>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         case AU_DOUBLE_COMPLEX:
         {
-            AccessLocalMirrorHelp<std::complex<double>>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
+            AccessLocalMirrorHelp<std::complex<double>>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_READ_FLAG);
             break;
         }
         default:
@@ -207,7 +207,7 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
             end_ul[i] = end[i];
         }
 
-        switch (endpoint_dim_size.size())
+        switch (endpoint_size.size())
         {
         case 1:
             AccessDashData1D(dash_array_p, start_ul, end_ul, data, data_element_type, DASH_WRITE_FLAG);
@@ -230,57 +230,57 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
         {
         case AU_SHORT:
         {
-            AccessLocalMirrorHelp<short>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<short>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_INT:
         {
-            AccessLocalMirrorHelp<int>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<int>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_LONG:
         {
-            AccessLocalMirrorHelp<long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<long>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_LONG_LONG:
         {
-            AccessLocalMirrorHelp<long long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<long long>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_USHORT:
         {
-            AccessLocalMirrorHelp<unsigned short>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<unsigned short>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_UINT:
         {
-            AccessLocalMirrorHelp<unsigned int>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<unsigned int>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_ULONG:
         {
-            AccessLocalMirrorHelp<unsigned long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<unsigned long>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_ULLONG:
         {
-            AccessLocalMirrorHelp<unsigned long long>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<unsigned long long>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_FLOAT:
         {
-            AccessLocalMirrorHelp<float>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<float>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_DOUBLE:
         {
-            AccessLocalMirrorHelp<double>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<double>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         case AU_DOUBLE_COMPLEX:
         {
-            AccessLocalMirrorHelp<std::complex<double>>(local_mirror_buffer, endpoint_dim_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
+            AccessLocalMirrorHelp<std::complex<double>>(local_mirror_buffer, endpoint_size, start, end, data, LOCAL_MIRROR_WRITE_FLAG);
             break;
         }
         default:
@@ -328,7 +328,7 @@ int EndpointMEMORY::ParseEndpointInfo()
     return 0;
 }
 
-int EndpointMEMORY::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
+int EndpointMEMORY::Control(int opt_code, std::vector<std::string> parameter_v)
 {
     int ret = 0;
     switch (opt_code)
@@ -389,19 +389,19 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
     {
         if (!au_mpi_rank_global)
         {
-            std::vector<unsigned long long> start(endpoint_dim_size.size()), end(endpoint_dim_size.size());
+            std::vector<unsigned long long> start(endpoint_size.size()), end(endpoint_size.size());
 
-            for (int i = 0; i < endpoint_dim_size.size(); i++)
+            for (int i = 0; i < endpoint_size.size(); i++)
             {
                 start[i] = 0;
-                end[i] = endpoint_dim_size[i] - 1;
+                end[i] = endpoint_size[i] - 1;
             }
             Endpoint *sub_endpoint = new EndpointHDF5(1);
             //sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, std::vector<std::string>());
             //sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, std::vector<std::string>());
 
             sub_endpoint->SetDataElementType(data_element_type);
-            sub_endpoint->SetDimensions(endpoint_dim_size);
+            sub_endpoint->SetDimensions(endpoint_size);
             sub_endpoint->SetEndpointInfo(parameter);
             //std::cout << sub_endpoint->GetEndpointInfo() << "\n";
             //PrintVector("endpoint_dim_size", endpoint_dim_size);
@@ -415,7 +415,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
     }
     else
     {
-        switch (endpoint_dim_size.size())
+        switch (endpoint_size.size())
         {
         case 1:
         {
@@ -884,18 +884,18 @@ int EndpointMEMORY::MergeMirrors(std::string op_str)
     if (!au_mpi_rank_global && false)
     {
         std::vector<unsigned long> start_ul, end_ul;
-        start_ul.resize(endpoint_dim_size.size());
-        end_ul.resize(endpoint_dim_size.size());
+        start_ul.resize(endpoint_size.size());
+        end_ul.resize(endpoint_size.size());
 
-        for (int i = 0; i < endpoint_dim_size.size(); i++)
+        for (int i = 0; i < endpoint_size.size(); i++)
         {
             start_ul[i] = 0;
-            end_ul[i] = endpoint_dim_size[i] - 1;
+            end_ul[i] = endpoint_size[i] - 1;
         }
         //PrintScalar("local_mirror_size = ", local_mirror_size);
-        //PrintVector("endpoint_dim_size = ", endpoint_dim_size);
+        //PrintVector("endpoint_size = ", endpoint_size);
 
-        switch (endpoint_dim_size.size())
+        switch (endpoint_size.size())
         {
         case 1:
             AccessDashData1D(dash_array_p, start_ul, end_ul, reduced_mirror_buffer, data_element_type, DASH_WRITE_FLAG);
@@ -923,9 +923,9 @@ int EndpointMEMORY::MergeMirrors(std::string op_str)
 int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
 {
     local_mirror_size = 1;
-    for (int i = 0; i < endpoint_dim_size.size(); i++)
+    for (int i = 0; i < endpoint_size.size(); i++)
     {
-        local_mirror_size = local_mirror_size * endpoint_dim_size[i];
+        local_mirror_size = local_mirror_size * endpoint_size[i];
     }
 
     switch (data_element_type)
@@ -1002,18 +1002,18 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
         if (!au_mpi_rank_global)
         {
             std::vector<unsigned long> start_ul, end_ul;
-            start_ul.resize(endpoint_dim_size.size());
-            end_ul.resize(endpoint_dim_size.size());
+            start_ul.resize(endpoint_size.size());
+            end_ul.resize(endpoint_size.size());
 
-            for (int i = 0; i < endpoint_dim_size.size(); i++)
+            for (int i = 0; i < endpoint_size.size(); i++)
             {
                 start_ul[i] = 0;
-                end_ul[i] = endpoint_dim_size[i] - 1;
+                end_ul[i] = endpoint_size[i] - 1;
             }
             //PrintScalar("local_mirror_size = ", local_mirror_size);
-            //PrintVector("endpoint_dim_size = ", endpoint_dim_size);
+            //PrintVector("endpoint_size = ", endpoint_size);
 
-            switch (endpoint_dim_size.size())
+            switch (endpoint_size.size())
             {
             case 1:
                 AccessDashData1D(dash_array_p, start_ul, end_ul, local_mirror_buffer, data_element_type, DASH_READ_FLAG);

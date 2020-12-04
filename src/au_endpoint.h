@@ -31,7 +31,8 @@ class Endpoint
 protected:
     AuEndpointType endpoint_type;
     std::string endpoint_info;
-    std::vector<unsigned long long> endpoint_dim_size;
+    std::vector<unsigned long long> endpoint_size;
+
     int endpoint_ranks;
     AuEndpointDataType data_element_type;
     std::string data_endpoint_orig;
@@ -273,8 +274,8 @@ public:
      * @param opt_code, specially defined code 
      * @param parameter_v, vector of argument
      */
-    virtual int SpecialOperator(int opt_code, std::vector<std::string> parameter_v);
-
+    //virtual int SpecialOperator(int opt_code, std::vector<std::string> parameter_v);
+    virtual int Control(int opt_code, std::vector<std::string> parameter_v);
     /**
      * @brief map a op_cmd_str to int as input of SpecialOperator
      * 

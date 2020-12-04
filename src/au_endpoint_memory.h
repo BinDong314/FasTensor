@@ -149,7 +149,7 @@ public:
      *                 
      * @param opt_code, specially defined code 
      */
-    int SpecialOperator(int opt_code, std::vector<std::string> parameter_v) override;
+    int Control(int opt_code, std::vector<std::string> parameter_v) override;
 
     /**
      * @brief Nonvolatile the data in MEMORY to HDF5

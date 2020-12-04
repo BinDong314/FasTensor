@@ -16910,7 +16910,7 @@ fi
 if test "${with_dash+set}" = set; then :
   withval=$with_dash; DASH_HOME="$withval"
 else
-  as_fn_error $? "DASH must be specified using --with-dash option" "$LINENO" 5
+  with_dash=no
 
 fi
 

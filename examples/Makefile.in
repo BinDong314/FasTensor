@@ -91,12 +91,12 @@ host_triplet = @host@
 bin_PROGRAMS = au_test_data_generator$(EXEEXT) \
 	au_example_hello_world$(EXEEXT) au_example_vector$(EXEEXT) \
 	au_example_array$(EXEEXT) au_example_vds$(EXEEXT) \
-	au_example_1f1p$(EXEEXT) au_example_cache$(EXEEXT) \
-	au_example_reduce$(EXEEXT) au_example_reduce2D_1f1p$(EXEEXT) \
-	au_example_adios$(EXEEXT) au_example_pnetcdf$(EXEEXT) \
-	au_example_simple$(EXEEXT) au_example_kf1p$(EXEEXT) \
-	au_example_vector_2d$(EXEEXT) au_example_padding$(EXEEXT) \
-	au_example_tag$(EXEEXT) au_example_chunk_overlap$(EXEEXT)
+	au_example_1f1p$(EXEEXT) au_example_reduce$(EXEEXT) \
+	au_example_reduce2D_1f1p$(EXEEXT) au_example_adios$(EXEEXT) \
+	au_example_pnetcdf$(EXEEXT) au_example_simple$(EXEEXT) \
+	au_example_kf1p$(EXEEXT) au_example_vector_2d$(EXEEXT) \
+	au_example_padding$(EXEEXT) au_example_tag$(EXEEXT) \
+	au_example_chunk_overlap$(EXEEXT) au_example_cache$(EXEEXT)
 subdir = examples
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \

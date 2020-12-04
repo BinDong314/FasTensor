@@ -20,8 +20,8 @@ int EndpointHDF5::ExtractMeta()
     H5T_class_t type_class = H5Tget_class(datatype);
     dataspace_id = H5Dget_space(did);
     endpoint_ranks = H5Sget_simple_extent_ndims(dataspace_id);
-    endpoint_dim_size.resize(endpoint_ranks);
-    H5Sget_simple_extent_dims(dataspace_id, &endpoint_dim_size[0], NULL);
+    endpoint_size.resize(endpoint_ranks);
+    H5Sget_simple_extent_dims(dataspace_id, &endpoint_size[0], NULL);
     return 0;
 }
 
@@ -70,7 +70,7 @@ int EndpointHDF5::Create()
     }
 
     std::vector<hsize_t> dims_out;
-    dims_out = endpoint_dim_size;
+    dims_out = endpoint_size;
     hid_t ts_id;
     ts_id = H5Screate_simple(endpoint_ranks, &dims_out[0], NULL);
 
@@ -471,7 +471,7 @@ int EndpointHDF5::SpecialOperator(int opt_code, std::string parameter)
      *                 dump file from MEMORY to HDF5
      * @param opt_code, specially defined code 
      */
-int EndpointHDF5::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
+int EndpointHDF5::Control(int opt_code, std::vector<std::string> parameter_v)
 {
     switch (opt_code)
     {

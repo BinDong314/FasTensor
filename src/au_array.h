@@ -1713,7 +1713,7 @@ public:
     {
       std::vector<std::string> arg_v;
       arg_v.push_back(endpoint_info);
-      ret = endpoint->SpecialOperator(0, arg_v);
+      ret = endpoint->Control(0, arg_v);
     }
     else
     {
@@ -1742,7 +1742,7 @@ public:
     {
       std::vector<std::string> arg_v;
       arg_v.push_back(target_endpoint->GetEndpointInfo());
-      ret = endpoint->SpecialOperator(1, arg_v);
+      ret = endpoint->Control(1, arg_v);
     }
     else
     {
@@ -1767,7 +1767,7 @@ public:
     std::vector<std::string> intial_value_str;
     intial_value_str.push_back(std::to_string(intial_value));
 
-    endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
+    endpoint->Control(DASH_ENABLE_LOCAL_MIRROR_CODE, intial_value_str);
     return 0;
   }
 
@@ -1779,7 +1779,7 @@ public:
   int Clone()
   {
     //std::string intial_value_str = ""; //Empty string
-    endpoint->SpecialOperator(DASH_ENABLE_LOCAL_MIRROR_CODE, std::vector<std::string>());
+    endpoint->Control(DASH_ENABLE_LOCAL_MIRROR_CODE, std::vector<std::string>());
     return 0;
   }
 
@@ -1787,7 +1787,7 @@ public:
   {
     std::vector<std::string> op_str;
     op_str.push_back(std::to_string(Op));
-    endpoint->SpecialOperator(DASH_MERGE_MIRRORS_CODE, op_str);
+    endpoint->Control(DASH_MERGE_MIRRORS_CODE, op_str);
     return 0;
   }
 
@@ -1846,13 +1846,13 @@ public:
    */
   int ControlEndpoint(int cmd_p, std::vector<std::string> &arg_v_p)
   {
-    return endpoint->SpecialOperator(cmd_p, arg_v_p);
+    return endpoint->Control(cmd_p, arg_v_p);
   }
 
   int ControlEndpoint(int cmd_p)
   {
     std::vector<std::string> arg_v_p;
-    return endpoint->SpecialOperator(cmd_p, arg_v_p);
+    return endpoint->Control(cmd_p, arg_v_p);
   }
 
   inline int EndpointControl(int cmd_p, std::vector<std::string> &arg_v_p)

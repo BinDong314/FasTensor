@@ -31,7 +31,7 @@ int EndpointTDMS::ExtractMeta()
     //endpoint_dim_size.resize(endpoint_ranks);
     //H5Sget_simple_extent_dims(dataspace_id, &endpoint_dim_size[0], NULL);
     endpoint_ranks = 2;
-    endpoint_dim_size.resize(endpoint_ranks);
+    endpoint_size.resize(endpoint_ranks);
 
     if (GetOpenFlag() == false)
     {
@@ -61,8 +61,8 @@ int EndpointTDMS::ExtractMeta()
 
     //std::cout << "nPoint = " << nPoint << " , nTrace = " << nTrace << "\n";
 
-    endpoint_dim_size[0] = nTrace;
-    endpoint_dim_size[1] = nPoint;
+    endpoint_size[0] = nTrace;
+    endpoint_size[1] = nPoint;
 
     return 0;
 }

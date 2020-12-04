@@ -67,11 +67,11 @@ int EndpointDIR::ExtractMeta()
 
         if (i == 0)
         {
-            endpoint_dim_size = temp_endpoint_dim_size;
+            endpoint_size = temp_endpoint_dim_size;
         }
         else
         {
-            if (endpoint_dim_size != temp_endpoint_dim_size)
+            if (endpoint_size != temp_endpoint_dim_size)
             {
                 AU_EXIT("Data under directory must have same size");
             }
@@ -79,20 +79,20 @@ int EndpointDIR::ExtractMeta()
     }
 
     //Set chunk size to be the size of a end_point
-    dir_chunk_size.resize(endpoint_dim_size.size());
-    dir_overlap_size.resize(endpoint_dim_size.size());
-    endpoint_ranks = endpoint_dim_size.size();
+    dir_chunk_size.resize(endpoint_size.size());
+    dir_overlap_size.resize(endpoint_size.size());
+    endpoint_ranks = endpoint_size.size();
     for (int i = 0; i < endpoint_ranks; i++)
     {
-        dir_chunk_size[i] = endpoint_dim_size[i];
+        dir_chunk_size[i] = endpoint_size[i];
         dir_overlap_size[i] = 0;
         if (i == dir_data_merge_index)
         {
-            endpoint_dim_size[i] = endpoint_dim_size[i] * dir_file_list.size();
+            endpoint_size[i] = endpoint_size[i] * dir_file_list.size();
         }
         else
         {
-            endpoint_dim_size[i] = endpoint_dim_size[i];
+            endpoint_size[i] = endpoint_size[i];
         }
     }
 
@@ -230,11 +230,11 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     //end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
     for (int i = 0; i < endpoint_ranks; i++)
     {
-        endpoint_dim_size[i] = end[i] - start[i] + 1;
+        endpoint_size[i] = end[i] - start[i] + 1;
         start[i] = 0;
-        end[i] = endpoint_dim_size[i] - 1;
+        end[i] = endpoint_size[i] - 1;
     }
-    PrintVector("EndpointDIR::Write endpoint_dim_size:", endpoint_dim_size);
+    PrintVector("EndpointDIR::Write endpoint_size:", endpoint_size);
 
     std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " + append_sub_endpoint_info << " \n";
 
@@ -256,7 +256,7 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     std::cout << "call write :  " << dir_str + "/" + new_file_name_after_regex + ": " + append_sub_endpoint_info << " \n";
 
     sub_endpoint->SetDataElementType(data_element_type);
-    sub_endpoint->SetDimensions(endpoint_dim_size);
+    sub_endpoint->SetDimensions(endpoint_size);
     //sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
     sub_endpoint->SetEndpointInfo(dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info);
     sub_endpoint->Create();
@@ -383,7 +383,7 @@ int EndpointDIR::SpecialOperator(int opt_code, std::string parameter)
     return 0;
 }*/
 
-int EndpointDIR::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
+int EndpointDIR::Control(int opt_code, std::vector<std::string> parameter_v)
 {
     int sub_cmd;
     std::vector<std::string> sub_cmd_arg;
@@ -414,7 +414,7 @@ int EndpointDIR::SpecialOperator(int opt_code, std::vector<std::string> paramete
         }
 
         if (sub_endpoint != nullptr)
-            sub_endpoint->SpecialOperator(sub_cmd, sub_cmd_arg);
+            sub_endpoint->Control(sub_cmd, sub_cmd_arg);
         break;
     case DIR_INPUT_SEARCH_RGX:
         if (parameter_v.size() < 1)
