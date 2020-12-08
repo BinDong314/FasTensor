@@ -41,6 +41,8 @@ int main(int argc, char *argv[])
     //Run
     A->Apply(udf_hello_world, B);
 
+    A->ControlEndpoint(OP_CREATE_VIS_SCRIPT);
+
     A->ReportCost();
     //Clear
     delete A;

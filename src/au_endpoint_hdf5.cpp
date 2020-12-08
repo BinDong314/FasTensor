@@ -487,6 +487,9 @@ int EndpointHDF5::Control(int opt_code, std::vector<std::string> parameter_v)
     case OP_DISABLE_COLLECTIVE_IO:
         DisableCollectiveIO();
         break;
+    case OP_CREATE_VIS_SCRIPT:
+        CreateXDMF();
+        break;
     default:
         break;
     }
@@ -607,4 +610,18 @@ size_t EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_t
         H5Aclose(attribute_id);
         return attribute_sdim;
     }
+}
+
+int EndpointHDF5::CreateXDMF()
+{
+    int ret = 0;
+    //std::cout << "Write HDF5 \n";
+    if (!GetOpenFlag())
+    {
+        //std::cout << "Write HDF5 before open \n";
+        SetRwFlag(H5F_ACC_RDWR);
+        ExtractMeta(); //Will call open
+    }
+    //int create_xdmf(std::string file_name, std::string dset_name, std::vector<unsigned long long> dimensions, FTType data_element_type)
+    create_xdmf(fn_str, gn_str + "/" + dn_str, endpoint_size, data_element_type);
 }

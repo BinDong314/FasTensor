@@ -13,6 +13,8 @@
 
 #include "au_type.h"
 #include "au_endpoint.h"
+#include "au_xdmf.h"
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -30,6 +32,8 @@
 #define OP_DISABLE_MPI_IO HDF5_DISABLE_MPI_IO
 #define OP_ENABLE_COLLECTIVE_IO HDF5_ENABLE_COLLECTIVE_IO
 #define OP_DISABLE_COLLECTIVE_IO HDF5_DISABLE_COLLECTIVE_IO
+
+#define OP_CREATE_VIS_SCRIPT 4
 
 //
 //I/O layer
@@ -207,5 +211,7 @@ public:
     int ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
 
     size_t GetAttributeSize(const std::string &name, FTDataType data_type_p) override;
+
+    int CreateXDMF();
 };
 #endif

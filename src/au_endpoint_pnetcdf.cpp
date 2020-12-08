@@ -176,7 +176,7 @@ int EndpointPnetCDF::Create()
     if (ret != NC_NOERR)
         handle_pnetcdf_error(ret, __LINE__);
 
-    int rank = endpoint_dim_size.size();
+    int rank = endpoint_size.size();
 
     std::vector<int> dimid;
     dimid.resize(rank);
@@ -185,7 +185,7 @@ int EndpointPnetCDF::Create()
     for (int i = 0; i < rank; i++)
     {
         dim_name = "dim" + std::to_string(i);
-        ret = ncmpi_def_dim(ncfile, dim_name.c_str(), endpoint_dim_size[i], &dimid[i]);
+        ret = ncmpi_def_dim(ncfile, dim_name.c_str(), endpoint_size[i], &dimid[i]);
         if (ret != NC_NOERR)
             handle_pnetcdf_error(ret, __LINE__);
     }

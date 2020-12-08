@@ -26,6 +26,12 @@
 #define DASH_ENABLE_LOCAL_MIRROR_CODE 2
 #define DASH_MERGE_MIRRORS_CODE 3
 
+#define MEMORY_BACKUP 0
+#define MEMORY_RESTORE 1
+#define MEMORY_CLONE 2
+#define MEMORY_MERGE 3
+#define MEMORY_SYNC_OVERLAP 4
+
 #ifdef HAS_DASH_ENDPOINT
 
 #include <unistd.h>
