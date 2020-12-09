@@ -1981,6 +1981,40 @@ public:
       endpoint->EnableCollectiveIO();
     }
   }
+
+  inline int CreateVisFile(FTVisType vis_type)
+  {
+    if (endpoint->GetEndpointType() == EP_HDF5 && vis_type == FT_VIS_XDMF)
+    {
+      std::vector<std::string> arg_v_p;
+
+      return endpoint->Control(OP_CREATE_VIS_SCRIPT, arg_v_p);
+    }
+    else
+    {
+      AU_EXIT("FT only supports Create XDMF on HDF5 now !\n");
+    }
+  }
+
+  inline int CreateVisFile()
+  {
+    // && vis_type == FT_VIS_XDMF
+    if (endpoint->GetEndpointType() == EP_HDF5)
+    {
+      std::vector<std::string> arg_v_p;
+
+      return endpoint->Control(OP_CREATE_VIS_SCRIPT, arg_v_p);
+    }
+    else
+    {
+      AU_EXIT("FT only supports Create XDMF on HDF5 now !\n");
+    }
+  }
+
+  inline int UpdateOverlap()
+  {
+  }
+
 }; // class of array
 } // namespace FT
 
