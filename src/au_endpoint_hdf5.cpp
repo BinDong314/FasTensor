@@ -471,7 +471,7 @@ int EndpointHDF5::SpecialOperator(int opt_code, std::string parameter)
      *                 dump file from MEMORY to HDF5
      * @param opt_code, specially defined code 
      */
-int EndpointHDF5::Control(int opt_code, std::vector<std::string> parameter_v)
+int EndpointHDF5::Control(int opt_code, std::vector<std::string> &parameter_v)
 {
     switch (opt_code)
     {
@@ -490,11 +490,18 @@ int EndpointHDF5::Control(int opt_code, std::vector<std::string> parameter_v)
     case OP_CREATE_VIS_SCRIPT:
         CreateXDMF();
         break;
+    case OP_LIST_TAG:
+        ReadAllAttributeName(parameter_v);
+        break;
     default:
         break;
     }
 
     return 0;
+}
+
+int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_name)
+{
 }
 
 /**

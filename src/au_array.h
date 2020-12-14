@@ -29,6 +29,8 @@ extern int au_rank;
 #include "au_mpi.h"
 #include "au_merge.h"
 #include "au_output_vector.h"
+#include "au_vis.h"
+#include "au_array_transpose.h"
 
 // std::vector<Endpoint *> endpoint_clean_vector;
 //extern std::map<Endpoint *, bool> endpoint_clean_vector;
@@ -1779,7 +1781,9 @@ public:
   int Clone()
   {
     //std::string intial_value_str = ""; //Empty string
-    endpoint->Control(DASH_ENABLE_LOCAL_MIRROR_CODE, std::vector<std::string>());
+    std::vector<std::string> op_str;
+
+    endpoint->Control(DASH_ENABLE_LOCAL_MIRROR_CODE, op_str);
     return 0;
   }
 
@@ -1855,6 +1859,7 @@ public:
     return endpoint->Control(cmd_p, arg_v_p);
   }
 
+  //For old code
   inline int EndpointControl(int cmd_p, std::vector<std::string> &arg_v_p)
   {
     return ControlEndpoint(cmd_p, arg_v_p);
@@ -1957,6 +1962,11 @@ public:
     size_t vec_len = endpoint->GetAttributeSize(name, data_element_type);
     value.resize(vec_len);
     return endpoint->ReadAttribute(name, &value[0], data_element_type, value.size());
+  }
+
+  int GetAllTagName(std::vector<string> &tag_name)
+  {
+    return endpoint->Control(OP_LIST_TAG, tag_name);
   }
 
   //

@@ -79,8 +79,9 @@ public:
         if (sub_endpoint_type == EP_HDF5)
         {
             sub_endpoint = new EndpointHDF5();
-            sub_endpoint->Control(OP_DISABLE_MPI_IO, std::vector<std::string>());
-            sub_endpoint->Control(OP_DISABLE_COLLECTIVE_IO, std::vector<std::string>());
+            std::vector<std::string> cmd_argv;
+            sub_endpoint->Control(OP_DISABLE_MPI_IO, cmd_argv);
+            sub_endpoint->Control(OP_DISABLE_COLLECTIVE_IO, cmd_argv);
         }
         else if (sub_endpoint_type == EP_TDMS)
         {
@@ -180,7 +181,7 @@ public:
      *                 dump file from MEMORY to HDF5
      * @param opt_code, specially defined code 
      */
-    int Control(int opt_code, std::vector<std::string> parameter_v) override;
+    int Control(int opt_code, std::vector<std::string> &parameter_v) override;
 
     /**
      * @brief Set the Merge Index

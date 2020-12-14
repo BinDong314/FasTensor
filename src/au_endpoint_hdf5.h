@@ -33,7 +33,10 @@
 #define OP_ENABLE_COLLECTIVE_IO HDF5_ENABLE_COLLECTIVE_IO
 #define OP_DISABLE_COLLECTIVE_IO HDF5_DISABLE_COLLECTIVE_IO
 
+//Todo:
+//This might be general command
 #define OP_CREATE_VIS_SCRIPT 4
+#define OP_LIST_TAG 5
 
 //
 //I/O layer
@@ -190,7 +193,7 @@ public:
      *                 dump file from MEMORY to HDF5
      * @param opt_code, specially defined code 
      */
-    int Control(int opt_code, std::vector<std::string> parameter_v) override;
+    int Control(int opt_code, std::vector<std::string> &parameter_v) override;
 
     /**
      * @brief Set the Attribute object
@@ -200,6 +203,14 @@ public:
      * @return int 
      */
     int WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
+
+    /**
+     * @brief Read all attribute name
+     * 
+     * @param attri_name 
+     * @return int 
+     */
+    int ReadAllAttributeName(std::vector<std::string> &attr_name);
 
     /**
      * @brief Get the Attribute object

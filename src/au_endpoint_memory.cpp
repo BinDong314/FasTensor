@@ -328,7 +328,7 @@ int EndpointMEMORY::ParseEndpointInfo()
     return 0;
 }
 
-int EndpointMEMORY::Control(int opt_code, std::vector<std::string> parameter_v)
+int EndpointMEMORY::Control(int opt_code, std::vector<std::string> &parameter_v)
 {
     int ret = 0;
     switch (opt_code)

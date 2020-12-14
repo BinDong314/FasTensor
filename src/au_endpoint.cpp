@@ -339,7 +339,7 @@ void Endpoint::SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
      * @param opt_code, specially defined code 
      * @param parameter_v, vector of argument
      */
-int Endpoint::Control(int opt_code, std::vector<std::string> parameter_v)
+int Endpoint::Control(int opt_code, std::vector<std::string> &parameter_v)
 {
     AU_EXIT("Error: Control is not implemented in endpoint");
     return 0;

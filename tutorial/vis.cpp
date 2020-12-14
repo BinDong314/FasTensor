@@ -15,37 +15,29 @@
 using namespace std;
 using namespace FT;
 
-//UDF One: duplicate the original data
-inline Stencil<float> udf_ma(const Stencil<float> &iStencil)
+inline Stencil<vector<float>> udf_tran(const Stencil<float> &iStencil)
 {
-    Stencil<float> oStencil;
-    oStencil = (iStencil(0, -1) + iStencil(0, 0) + iStencil(0, 1)) / 3.0;
-    return oStencil;
+    std::vector<int> start = {0, 0}, end = {15, 15};
+    std::vector<float> data_ori, data_tra(16 * 16);
+    iStencil.ReadNeighbors(start, end, data_ori);
+    transpose_data_2D(data_ori.data(), data_tra.data(), 16, 16);
+    std::vector<size_t> shape = {16, 16};
+    return Stencil<vector<float>>(data_tra, shape);
 }
 
 int main(int argc, char *argv[]) // start here
 {
-    //Init the MPICH, etc.
     FT_Init(argc, argv);
-
-    // set up the chunk size and the overlap size
-    std::vector<int> chunk_size = {4, 4};
-    std::vector<int> overlap_size = {1, 1};
-
-    //Input data
-    Array<float> *A = new Array<float>("EP_HDF5:tutorial.h5:/dat", chunk_size, overlap_size);
-
-    //Result data
-    Array<float> *B = new Array<float>("EP_HDF5:tutorial_ma.h5:/dat");
-
-    //Run
-    A->Transform(udf_ma, B);
-
-    //Clear
+    std::vector<int> chunk_size = {16, 16};
+    std::vector<int> ss = {16, 16};
+    Array<float> *A = new Array<float>("EP_HDF5:tutorial.h5:/dat", chunk_size);
+    A->SetStride(ss);
+    Array<float> *B = new Array<float>("EP_HDF5:tutorial_tran.h5:/dat");
+    A->Transform(udf_tran, B);
+    A->CreateVisFile();
+    B->CreateVisFile();
     delete A;
     delete B;
-
     FT_Finalize();
-
     return 0;
 }

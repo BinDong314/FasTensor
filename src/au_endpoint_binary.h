@@ -166,7 +166,7 @@ public:
      *        such as OP_SET_BINARY_SIZE
      * @param opt_code, specially defined code 
      */
-    int Control(int opt_code, std::vector<std::string> parameter_v) override;
+    int Control(int opt_code, std::vector<std::string> &parameter_v) override;
 
     /**
      * @brief Get file point

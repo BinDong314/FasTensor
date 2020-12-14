@@ -275,7 +275,7 @@ public:
      * @param parameter_v, vector of argument
      */
     //virtual int SpecialOperator(int opt_code, std::vector<std::string> parameter_v);
-    virtual int Control(int opt_code, std::vector<std::string> parameter_v);
+    virtual int Control(int opt_code, std::vector<std::string> &parameter_v);
     /**
      * @brief map a op_cmd_str to int as input of SpecialOperator
      * 

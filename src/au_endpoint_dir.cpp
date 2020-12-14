@@ -383,7 +383,7 @@ int EndpointDIR::SpecialOperator(int opt_code, std::string parameter)
     return 0;
 }*/
 
-int EndpointDIR::Control(int opt_code, std::vector<std::string> parameter_v)
+int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
 {
     int sub_cmd;
     std::vector<std::string> sub_cmd_arg;

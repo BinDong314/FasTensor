@@ -41,7 +41,8 @@ include_HEADERS=au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5
                 au_array_transpose.h \
                 au_utility_macro.h \
                 au_output_vector.h \
-                au_xdmf.h
+                au_xdmf.h \
+                au_vis.h
 
 
 

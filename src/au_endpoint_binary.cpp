@@ -305,7 +305,7 @@ int EndpointBinary::SpecialOperator(int opt_code, std::string parameter)
     return 0;
 } */
 
-int EndpointBinary::Control(int opt_code, std::vector<std::string> parameter_v)
+int EndpointBinary::Control(int opt_code, std::vector<std::string> &parameter_v)
 {
 
     switch (opt_code)
