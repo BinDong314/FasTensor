@@ -81,6 +81,11 @@ int main(int argc, char *argv[])
     B->GetTag("TestVector", data_size_get);
     std::cout << "Get TestVector: " << data_size_get[0] << ", " << data_size_get[1] << "\n";
 
+    std::vector<std::string> B_tags;
+    B->GetAllTagName(B_tags);
+    for (auto t : B_tags)
+        std::cout << t << "\n";
+
     //Clear
     delete A;
     delete B;

@@ -500,8 +500,34 @@ int EndpointHDF5::Control(int opt_code, std::vector<std::string> &parameter_v)
     return 0;
 }
 
-int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_name)
+int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
 {
+    int ret = 0;
+    //std::cout << "Write HDF5 \n";
+    if (!GetOpenFlag())
+    {
+        //std::cout << "Write HDF5 before open \n";
+        SetRwFlag(H5F_ACC_RDWR);
+        ExtractMeta(); //Will call open
+    }
+
+    int na;
+    hid_t aid;
+    int i;
+
+    na = H5Aget_num_attrs(did);
+    ssize_t len;
+    char buf[1024];
+    attr_names.clear();
+    for (i = 0; i < na; i++)
+    {
+        aid = H5Aopen_idx(did, (unsigned int)i);
+        memset(buf, '\0', 1024);
+        //do_attr(aid);
+        len = H5Aget_name(aid, 1024, buf);
+        attr_names.push_back(std::string(buf));
+        H5Aclose(aid);
+    }
 }
 
 /**
