@@ -27,6 +27,8 @@
 #define DIR_N_FILES 6
 #define DIR_GET_FILE_SIZE 7
 
+#define DIR_OUTPUT_SPLIT_FILE 8
+
 #include "au_utility.h"
 #include "au_type.h"
 #include "au_endpoint.h"

@@ -41,6 +41,8 @@ int main(int argc, char *argv[]) // start here
     //Run
     A->Transform(udf_ma, B);
 
+    B->CreateVisFile();
+
     //Clear
     delete A;
     delete B;

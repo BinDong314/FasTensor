@@ -135,6 +135,8 @@ private:
   bool set_chunk_size_by_mem_flag = false;
   bool set_overlap_size_by_auto_detection_flag = false;
 
+  bool set_direct_output_flag = false;
+
   int skip_not_aligned_w_array_index;
   //The shape of output_vector when vector_type_flag = true
   std::vector<size_t> output_vector_shape;
@@ -2023,6 +2025,11 @@ public:
 
   inline int UpdateOverlap()
   {
+  }
+
+  inline int SetDirectOutput()
+  {
+    set_direct_output_flag = true;
   }
 
 }; // class of array
