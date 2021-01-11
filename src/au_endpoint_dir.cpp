@@ -442,8 +442,8 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         }
         String2Vector(parameter_v[0], order_on_file_list);
         break;
-    case DIR_OUTPUT_SPLIT_FILE:
-        break;
+        //  case DIR_OUTPUT_SPLIT_FILE:
+        //      break;
     default:
         break;
     }
