@@ -27,7 +27,10 @@
 #define DIR_N_FILES 6
 #define DIR_GET_FILE_SIZE 7
 
-#define DIR_OUTPUT_SPLIT_FILE 8
+//Todo
+#define DIR_INPUT_ELASTIC_SIZE 8
+#define DIR_OUTPUT_ELASTIC_SIZE 9
+#define DIR_SET_OUTPUT_FILE_NAMES 10
 
 #include "au_utility.h"
 #include "au_type.h"

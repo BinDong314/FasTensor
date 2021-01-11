@@ -445,6 +445,21 @@ public:
     return 0;
   }
 
+  inline int SyncOverlap()
+  {
+    if (endpoint != NULL)
+    {
+      if (endpoint->GetEndpointType() == EP_MEMORY)
+      {
+        std::vector<std::string> arg_v;
+        return endpoint->Control(MEMORY_SYNC_OVERLAP, arg_v);
+      }
+      return 0;
+    }
+
+    return 0;
+  }
+
   template <class UDFOutputType>
   int UpdateOverlapSize(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &))
   {
@@ -719,12 +734,12 @@ public:
           if (skip_flag == 1)
           {
             skip_flag_on_cell = 0;
-            for (int i = 0; i < data_dims; i++)
+            for (int id = 0; id < data_dims; id++)
             {
               //The coordinate of the skip chunk this coordinate belong to
-              skip_chunk_coordinate[i] = std::floor(cell_coordinate[i] / skip_size[i]);
-              skip_chunk_coordinate_start[i] = skip_chunk_coordinate[i] * skip_size[i]; //first cell's coodinate of this skip chunk
-              if (skip_chunk_coordinate_start[i] != cell_coordinate[i])
+              skip_chunk_coordinate[id] = std::floor(cell_coordinate[id] / skip_size[id]);
+              skip_chunk_coordinate_start[id] = skip_chunk_coordinate[id] * skip_size[id]; //first cell's coodinate of this skip chunk
+              if (skip_chunk_coordinate_start[id] != cell_coordinate[id])
               { //we only run on the first  element of this skip chunk
                 skip_flag_on_cell = 1;
                 break;
