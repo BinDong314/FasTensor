@@ -94,6 +94,12 @@ inline void PrintVector(std::string name, std::vector<T> v)
     int n = v.size();
     if (name != "")
         std::cout << name << ": ";
+    if (!n)
+    {
+        std::cout << std::endl;
+        return;
+    }
+
     if (n > 8)
     {
         for (int i = 0; i < 4; i++)
