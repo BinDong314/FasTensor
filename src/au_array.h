@@ -870,6 +870,11 @@ public:
           void *data_point;
           // data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
           // InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
+          PrintVector("output_vector_shape = ", output_vector_shape);
+          PrintVector("current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+          PrintVector("current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+          PrintVector("previous_output_vector_shape = ", previous_output_vector_shape);
+
           data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v, is_the_last_chunk, previous_output_vector_shape);
           CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
           B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
