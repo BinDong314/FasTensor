@@ -37,6 +37,8 @@
 
 #define V2VOIDP(vv) static_cast<void *>(vv.data())
 
+extern int au_rank;
+
 /**
  * @brief expand the path to full directory 
  *    https://www.dreamincode.net/forums/topic/218601-realpath-and-tilde/
@@ -93,7 +95,7 @@ inline void PrintVector(std::string name, std::vector<T> v)
 {
     int n = v.size();
     if (name != "")
-        std::cout << name << ": ";
+        std::cout << "At rank " << au_rank << ", " << name << ": ";
     if (!n)
     {
         std::cout << std::endl;
@@ -155,7 +157,10 @@ inline void PrintVV(std::string name, std::vector<std::vector<T>> v)
 template <typename T>
 inline void PrintScalar(std::string name, T v)
 {
-    std::cout << name << ": " << v << std::endl;
+    if (name != "")
+        std::cout << "At rank " << au_rank << ", debug, " << name << ": "
+                  << ": " << v << std::endl;
+    //std::cout << name << ": " << v << std::endl;
 }
 
 /**

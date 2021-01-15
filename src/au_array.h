@@ -141,7 +141,7 @@ private:
   //The shape of output_vector when vector_type_flag = true
   std::vector<size_t> output_vector_shape;
   std::vector<size_t> previous_output_vector_shape;
-
+  //float input_output_ratio; // the ratio = size of input / size of output, only valid along output_vector_shape
   //padding_value_p
   T padding_value;
 
@@ -870,16 +870,31 @@ public:
           void *data_point;
           // data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
           // InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
-          PrintVector("output_vector_shape = ", output_vector_shape);
-          PrintVector("current_chunk_start_offset_v = ", current_chunk_start_offset_v);
-          PrintVector("current_chunk_end_offset_v = ", current_chunk_end_offset_v);
-          PrintVector("previous_output_vector_shape = ", previous_output_vector_shape);
+
+          if (is_the_last_chunk && (previous_output_vector_shape.size() == 0))
+          {
+            //int normal_chunk_output_size = data_chunk_size[i] / (current_chunk_ol_size[i] / output_vector_shape[i]);
+            previous_output_vector_shape = output_vector_shape;
+            for (int i = 0; i < output_vector_shape.size(); i++)
+            {
+              if (skip_not_aligned_w_array_flag && skip_not_aligned_w_array_index == i)
+              {
+                previous_output_vector_shape[i] = data_chunk_size[i] / (current_chunk_ol_size[i] / output_vector_shape[i]);
+              }
+            }
+          }
+          PrintVector("Debug:  output_vector_shape = ", output_vector_shape);
+          PrintVector("Debug:  current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+          PrintVector("Debug:  current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+          PrintVector("Debug:  previous_output_vector_shape = ", previous_output_vector_shape);
 
           data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v, is_the_last_chunk, previous_output_vector_shape);
           CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
+          PrintVector("Debug: create B_data_size = ", B_data_size);
+
           B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
-          PrintVector("current_chunk_start_offset_v = ", current_chunk_start_offset_v);
-          PrintVector("current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+          PrintVector("Debug: write current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+          PrintVector("Debug: write current_chunk_end_offset_v = ", current_chunk_end_offset_v);
           B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
           free(data_point);
         }
@@ -999,8 +1014,27 @@ public:
         {
           if (skip_not_aligned_w_array_flag && skip_not_aligned_w_array_index == i)
           {
-            data_size_p[i] = (data_size_p[i] - 1) * output_vector_shape[i];
-            data_size_p[i] = data_size_p[i] + ((data_size[i] % skip_size[i]) * output_vector_shape[i]) / data_chunk_size[i];
+            if (!is_the_last_chunk)
+            {
+              data_size_p[i] = (data_size_p[i] - 1) * output_vector_shape[i];
+              data_size_p[i] = data_size_p[i] + ((data_size[i] % skip_size[i]) * output_vector_shape[i]) / data_chunk_size[i];
+            }
+            else
+            {
+              //we need to update the output_vector_shape,  data_chunk_size, current_chunk_ol_size
+              //PrintVector("data_chunk_size");
+              int normal_chunk_output_size = data_chunk_size[i] / (current_chunk_ol_size[i] / output_vector_shape[i]);
+              PrintScalar("data_chunk_size[i] =", data_chunk_size[i]);
+              PrintScalar("current_chunk_ol_size[i] =", current_chunk_ol_size[i]);
+              PrintScalar("output_vector_shape[i] =", output_vector_shape[i]);
+              PrintScalar("normal_chunk_output_size =", normal_chunk_output_size);
+              PrintScalar("skip_size[i] = ", skip_size[i]);
+              PrintScalar("data_size[i] = ", data_size[i]);
+              PrintScalar("data_size[i] % skip_size[i] = ", data_size[i] % skip_size[i]);
+
+              data_size_p[i] = (data_size_p[i] - 1) * normal_chunk_output_size;
+              data_size_p[i] = data_size_p[i] + ((data_size[i] % skip_size[i]) * normal_chunk_output_size) / data_chunk_size[i];
+            }
           }
           else
           {

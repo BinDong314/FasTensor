@@ -572,11 +572,14 @@ public:
       end_offset_size_t[i] = end_offset[i] + 1;
     }
 
+    //PrintVector("count_size_t = ", count_size_t);
+    //PrintVector("chunk_dim_size = ", chunk_dim_size);
+
     if (count_size_t == chunk_dim_size)
     {
       //copy(&dataArray[0], &dataArray[dataArraySize], back_inserter(dataVec));
       //std::vector<T> rv2(chunk_data_pointer, chunk_data_pointer + n);
-      //std::cout << "read all !" << std::endl;
+      //std::cout << "read all ! n = " << n << std::endl;
       //return rv2;
       std::copy(&chunk_data_pointer[0], &chunk_data_pointer[n], back_inserter(rv));
       return 0;
