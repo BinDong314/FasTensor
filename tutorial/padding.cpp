@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     //Input data
     Array<float> *A = new Array<float>("EP_HDF5:tutorial.h5:/data", chunk_size, overlap_size);
 
-    A->SetPadding(0);
+    A->SetOverlapPadding(0);
 
     //Result data
     Array<float> *B = new Array<float>("EP_HDF5:tutorial_ma.h5:/data");

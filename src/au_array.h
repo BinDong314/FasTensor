@@ -931,6 +931,24 @@ public:
 
     } // end of while:: no more chunks to process
 
+    //May start a empty write for collective I/O
+    if (data_total_chunks / au_size != 0)
+    {
+      int leftover_chunks = data_total_chunks % au_size;
+      std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
+      std::cout << "leftover_chunks  = " << leftover_chunks << std::endl;
+
+      if ((current_chunk_id > leftover_chunks) && B != nullptr)
+      {
+        std::vector<unsigned long long> null_start; //Start offset on disk
+        std::vector<unsigned long long> null_end;   //End offset on disk
+        void *data_point = nullptr;
+        null_start.resize(data_dims, 0);
+        null_end.resize(data_dims, 0);
+        B->WriteEndpoint(null_start, null_end, data_point);
+      }
+    }
+
     return;
   }
 

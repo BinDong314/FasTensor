@@ -207,6 +207,7 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
     //SetRwFlag(H5F_ACC_RDWR);
     //Open(); //Re-open it
 
+    bool is_empty_write = false;
     std::vector<unsigned long long> offset, count;
     offset.resize(endpoint_ranks);
     count.resize(endpoint_ranks);
@@ -214,6 +215,14 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
     {
         offset[i] = start[i];
         count[i] = end[i] - start[i] + 1; //Starting from zero
+    }
+
+    bool is_zero_start = std::all_of(start.begin(), start.end(), [](int i) { return i == 0; });
+    bool is_zero_end = std::all_of(start.begin(), start.end(), [](int i) { return i == 0; });
+
+    if (data == nullptr && is_zero_start && is_zero_end)
+    {
+        is_empty_write = true;
     }
     //PrintVector("offset =", offset);
     //PrintVector("count =", count);
@@ -224,7 +233,14 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
     //PrintVector("endpoint_dim_size = ", endpoint_dim_size_temp);
 
     hid_t memspace_id = H5Screate_simple(endpoint_ranks, &count[0], NULL);
-    H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
+    if (is_empty_write)
+    {
+        H5Sselect_none(dataspace_id);
+    }
+    else
+    {
+        H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
+    }
     int ret = H5Dwrite(did, mem_type, memspace_id, dataspace_id, plist_cio_id, data);
     assert(ret >= 0);
     H5Sclose(memspace_id);
