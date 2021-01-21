@@ -932,7 +932,7 @@ public:
     } // end of while:: no more chunks to process
 
     //May start a empty write for collective I/O
-    if ((data_total_chunks % au_size != 0) && (current_chunk_id >= data_total_chunks) && B != nullptr)
+    if ((data_total_chunks % au_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + au_size - (data_total_chunks % au_size))) && B != nullptr)
     {
       std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
       std::cout << "leftover_chunks  = " << data_total_chunks % au_size << std::endl;
