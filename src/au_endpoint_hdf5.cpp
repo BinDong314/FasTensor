@@ -236,6 +236,7 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
     if (is_empty_write)
     {
         H5Sselect_none(dataspace_id);
+        H5Sselect_none(memspace_id);
     }
     else
     {
