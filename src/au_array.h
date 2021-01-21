@@ -936,7 +936,7 @@ public:
     {
       std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
       std::cout << "leftover_chunks  = " << data_total_chunks % au_size << std::endl;
-      std::cout << "data_total_chunks  = " << leftover_chunks << std::endl;
+      std::cout << "data_total_chunks  = " << data_total_chunks << std::endl;
       std::vector<unsigned long long> null_start; //Start offset on disk
       std::vector<unsigned long long> null_end;   //End offset on disk
       void *data_point = nullptr;
