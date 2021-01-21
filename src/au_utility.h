@@ -95,7 +95,8 @@ inline void PrintVector(std::string name, std::vector<T> v)
 {
     int n = v.size();
     if (name != "")
-        std::cout << "At rank " << au_rank << ", " << name << ": ";
+        std::cout << "Rank " << au_rank << ", " << name << ": ";
+
     if (!n)
     {
         std::cout << std::endl;
@@ -130,7 +131,14 @@ template <typename T>
 inline void PrintVV(std::string name, std::vector<std::vector<T>> v)
 {
     int n = v.size();
-    std::cout << name << ": ";
+    if (name != "")
+        std::cout << "Rank " << au_rank << ", " << name << ": ";
+
+    if (!n)
+    {
+        std::cout << std::endl;
+        return;
+    }
 
     if (n > 8)
     {
@@ -158,9 +166,15 @@ template <typename T>
 inline void PrintScalar(std::string name, T v)
 {
     if (name != "")
-        std::cout << "At rank " << au_rank << ", debug, " << name << ": "
+        std::cout << "Rank " << au_rank << ", " << name << ": "
                   << ": " << v << std::endl;
-    //std::cout << name << ": " << v << std::endl;
+}
+
+template <typename T>
+inline void PrintString(std::string name)
+{
+    if (name != "")
+        std::cout << "Rank " << au_rank << ", " << name << std::endl;
 }
 
 /**

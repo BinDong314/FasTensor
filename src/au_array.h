@@ -883,18 +883,18 @@ public:
               }
             }
           }
-          PrintVector("Debug:  output_vector_shape = ", output_vector_shape);
-          PrintVector("Debug:  current_chunk_start_offset_v = ", current_chunk_start_offset_v);
-          PrintVector("Debug:  current_chunk_end_offset_v = ", current_chunk_end_offset_v);
-          PrintVector("Debug:  previous_output_vector_shape = ", previous_output_vector_shape);
+          //PrintVector("Debug:  output_vector_shape = ", output_vector_shape);
+          //PrintVector("Debug:  current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+          //PrintVector("Debug:  current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+          //PrintVector("Debug:  previous_output_vector_shape = ", previous_output_vector_shape);
 
           data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v, is_the_last_chunk, previous_output_vector_shape);
           CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
-          PrintVector("Debug: create B_data_size = ", B_data_size);
+          //PrintVector("Debug: create B_data_size = ", B_data_size);
 
           B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
-          PrintVector("Debug: write current_chunk_start_offset_v = ", current_chunk_start_offset_v);
-          PrintVector("Debug: write current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+          //PrintVector("Debug: write current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+          //PrintVector("Debug: write current_chunk_end_offset_v = ", current_chunk_end_offset_v);
           B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
           free(data_point);
         }
@@ -934,9 +934,9 @@ public:
     //May start a empty write for collective I/O
     if ((data_total_chunks % au_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + au_size - (data_total_chunks % au_size))) && B != nullptr)
     {
-      std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
-      std::cout << "leftover_chunks  = " << data_total_chunks % au_size << std::endl;
-      std::cout << "data_total_chunks  = " << data_total_chunks << std::endl;
+      //std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
+      //std::cout << "leftover_chunks  = " << data_total_chunks % au_size << std::endl;
+      //std::cout << "data_total_chunks  = " << data_total_chunks << std::endl;
       std::vector<unsigned long long> null_start; //Start offset on disk
       std::vector<unsigned long long> null_end;   //End offset on disk
       void *data_point = nullptr;
