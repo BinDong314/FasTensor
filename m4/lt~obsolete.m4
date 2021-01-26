@@ -1,1 +1,1 @@
-/opt/local/share/aclocal/lt~obsolete.m4
+/usr/local/Cellar/libtool/2.4.6_2/share/aclocal/lt~obsolete.m4

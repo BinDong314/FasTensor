@@ -1,8 +1,8 @@
 #Bin's Mac
 AU_DIR=/Users/dbin/work/test-fasttensor/fasttensor/build
 HDF5_DIR=/Users/dbin/work/test-fasttensor/hdf5-1.12.0/build
-FFTW_DIR=/opt/local
-DASH_DIR=/Users/dbin/opt/dash-0.4.0
+FFTW_DIR=/Users/dbin/work/soft/fftw-3.3.9/build
+DASH_DIR=/Users/dbin/work/soft/dash/build/install
 EIGEN3_DIR=/Users/dbin/work/test-fasttensor/fasttensor/examples/dassa/Tools3rd
 
 #Lawrencium
@@ -21,7 +21,7 @@ HDF5_FLAG=-I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz
 FFTW_FLAG=-I$(FFTW_DIR)/include -L$(FFTW_DIR)/lib -lfftw3 
 DASH_FLAG=-I$(DASH_DIR)/include -L$(DASH_DIR)/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
 EIGEN3_FLAG=-I$(EIGEN3_DIR)
-ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG) $(FFTW_FLAG)  $(DASH_FLAG) $(EIGEN3_FLAG) 
+ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG) $(FFTW_FLAG)  $(EIGEN3_FLAG)  $(DASH_FLAG)
 
 .PHONY: all clean
 
