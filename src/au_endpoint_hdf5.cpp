@@ -519,6 +519,8 @@ int EndpointHDF5::Control(int opt_code, std::vector<std::string> &parameter_v)
 
 int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
 {
+
+    
     int ret = 0;
     //std::cout << "Write HDF5 \n";
     if (!GetOpenFlag())
