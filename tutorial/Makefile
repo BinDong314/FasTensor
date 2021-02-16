@@ -56,5 +56,5 @@ vis:vis.cpp
 	$(CCC) $< -o $@ $(ALL_FLAGS)
 
 clean:
-	rm create_data ma padding conv ma_no_new tag das vpic vis
+	rm create_data ma padding conv ma_no_new tag das vpic vis ft_ma
 

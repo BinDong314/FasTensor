@@ -1,5 +1,5 @@
-//ArrayUDF's extension cista to more variables
-//include this file in cista.h 
+//FasTensor's extension cista to more variables
+//include this file in cista.h
 
 MAKE_ARITY_FUNC(21)
 MAKE_ARITY_FUNC(22)
@@ -181,4 +181,3 @@ MAKE_ARITY_FUNC(197)
 MAKE_ARITY_FUNC(198)
 MAKE_ARITY_FUNC(199)
 MAKE_ARITY_FUNC(200)
-
