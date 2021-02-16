@@ -5,44 +5,48 @@ AM_CFLAGS = @ARRAYUDF_CFLAGS@  -I./third_part
 AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@    -I./third_part  
 AM_LDFLAGS = @ARRAYUDF_LIBS@   -all-static     -I./third_part
 
-lib_LTLIBRARIES=libArrayUDF.la
-libArrayUDF_la_SOURCES=ft.h ft.cpp \
-                       au_array.h au_array.cpp \
-                       au_endpoint.h au_endpoint.cpp \
-                       au_stencil.h \
-                       au_type.h au_type.cpp \
-                       au_endpoint_hdf5.h au_endpoint_hdf5.cpp \
-                       au_endpoint_factory.h \
-                       au_utility.cpp au_utility.h \
-                       au_endpoint_dir.cpp au_endpoint_dir.h \
-                       au_endpoint_memory.cpp au_endpoint_memory.h \
-                       au_endpoint_adios.h au_endpoint_adios.cpp \
-                       au_endpoint_pnetcdf.h au_endpoint_pnetcdf.cpp \
-                       au_endpoint_tdms.h  au_endpoint_tdms.cpp \
-                       au_endpoint_binary.h au_endpoint_binary.cpp \
-                       au_array_iterator.h au_array_iterator.cpp \
-                       au_array_view_access.h au_array_view_access.cpp \
-                       au_array_transpose.h \
-                       au_utility_macro.h \
-                       au_output_vector.h au_output_vector.cpp \
-                       au_xdmf.h au_xdmf.cpp 
+lib_LTLIBRARIES=libFastensor.la
+libFastensor_la_SOURCES=ft.h ft.cpp \
+                       ft_array.h ft_array.cpp \
+                       ft_endpoint.h ft_endpoint.cpp \
+                       ft_stencil.h \
+                       ft_type.h ft_type.cpp \
+                       ft_endpoint_hdf5.h ft_endpoint_hdf5.cpp \
+                       ft_endpoint_factory.h \
+                       ft_utility.cpp ft_utility.h \
+                       ft_endpoint_dir.cpp ft_endpoint_dir.h \
+                       ft_endpoint_memory.cpp ft_endpoint_memory.h \
+                       ft_endpoint_adios.h ft_endpoint_adios.cpp \
+                       ft_endpoint_pnetcdf.h ft_endpoint_pnetcdf.cpp \
+                       ft_endpoint_tdms.h  ft_endpoint_tdms.cpp \
+                       ft_endpoint_binary.h ft_endpoint_binary.cpp \
+                       ft_array_iterator.h ft_array_iterator.cpp \
+                       ft_array_view_access.h ft_array_view_access.cpp \
+                       ft_array_transpose.h \
+                       ft_utility_macro.h \
+                       ft_output_vector.h ft_output_vector.cpp \
+                       ft_xdmf.h ft_xdmf.cpp 
 
-libArrayUDF_la_LDFLAGS=-version-info 0:0:0  -all-static
-include_HEADERS=au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5.h \
-                au_utility.h third_part/cista.h third_part/cista_au_extended_ptr_tuple.h \
-                third_part/cista_au_extended_tuple.h third_part/cista_au_extended_arity.h au_endpoint_dir.h \
-                au_endpoint_memory.h ft.h au_endpoint_factory.h au_local_mirror.h  au_mpi.h au_merge.h \
-                au_array_iterator.h \
-                au_endpoint_adios.h \
-                au_endpoint_pnetcdf.h \
-                au_endpoint_tdms.h \
-                au_endpoint_binary.h \
-                au_array_view_access.h \
-                au_array_transpose.h \
-                au_utility_macro.h \
-                au_output_vector.h \
-                au_xdmf.h \
-                au_vis.h
+libFastensor_la_LDFLAGS=-version-info 0:0:1  -all-static
+include_HEADERS=ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hdf5.h \
+                ft_utility.h \
+                third_part/cista.h\
+                third_part/cista_au_extended_ptr_tuple.h \
+                third_part/cista_au_extended_tuple.h \
+                third_part/cista_au_extended_arity.h \
+                ft_endpoint_dir.h \
+                ft_endpoint_memory.h ft.h ft_endpoint_factory.h ft_local_mirror.h  ft_mpi.h ft_merge.h \
+                ft_array_iterator.h \
+                ft_endpoint_adios.h \
+                ft_endpoint_pnetcdf.h \
+                ft_endpoint_tdms.h \
+                ft_endpoint_binary.h \
+                ft_array_view_access.h \
+                ft_array_transpose.h \
+                ft_utility_macro.h \
+                ft_output_vector.h \
+                ft_xdmf.h \
+                ft_vis.h
 
 
 

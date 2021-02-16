@@ -7,43 +7,44 @@ AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part  @ARRAYUDF_CXX
 AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static  -ldl 
 #AM_LDFLAGS  = -Wl,--start-group @ARRAYUDF_LIBS@  -all-static  -ldl 
 
-bin_PROGRAMS=   au_test_data_generator \
-                au_example_hello_world \
-                au_example_vector au_example_array \
-                au_example_vds \
-                au_example_1f1p \
-                au_example_reduce \
-                au_example_reduce2D_1f1p \
-                au_example_adios \
-                au_example_pnetcdf \
-                au_example_simple \
-                au_example_kf1p \
-                au_example_vector_2d \
-                au_example_padding \
-                au_example_tag \
-                au_example_chunk_overlap \
-                au_example_cache
+bin_PROGRAMS=   ft_test_data_generator \
+                ft_example_hello_world \
+                ft_example_vector \
+                ft_example_array \
+                ft_example_vds \
+                ft_example_1f1p \
+                ft_example_reduce \
+                ft_example_reduce2D_1f1p \
+                ft_example_adios \
+                ft_example_pnetcdf \
+                ft_example_simple \
+                ft_example_kf1p \
+                ft_example_vector_2d \
+                ft_example_padding \
+                ft_example_tag \
+                ft_example_chunk_overlap \
+                ft_example_cache
 
 
                
 
-LDADD=../src/libArrayUDF.la @ARRAYUDF_LIBS@ 
-DEPENDENCIES=../src/libArrayUDF.la
+LDADD=../src/Fastensor.la @ARRAYUDF_LIBS@ 
+DEPENDENCIES=../src/libFastensor.la
 
-au_test_data_generator_SOURCES = au_test_data_generator.cpp
-au_example_hello_world_SOURCES=au_example_hello_world.cpp
-au_example_vector_SOURCES=au_example_vector.cpp
-au_example_array_SOURCES=au_example_array.cpp
-au_example_vds_SOURCES=au_example_vds.cpp
-au_example_1f1p_SOURCES=au_example_1f1p.cpp
-au_example_cache_SOURCES=au_example_cache.cpp
-au_example_reduce_SOURCES=au_example_reduce.cpp
-au_example_reduce2D_1f1p_SOURCES=au_example_reduce2D_1f1p.cpp
-au_example_adios_SOURCES=au_example_adios.cpp
-au_example_pnetcdf_SOURCES=au_example_pnetcdf.cpp
-au_example_simple_SOURCES=au_example_simple.cpp
-au_example_kf1p_SOURCES=au_example_kf1p.cpp
-au_example_vector_2d_SOURCES=au_example_vector_2d.cpp
-au_example_padding_SOURCES=au_example_padding.cpp
-au_example_tag_SOURCES=au_example_tag.cpp
-au_example_chunk_overlap_SOURCES=au_example_chunk_overlap.cpp
+ft_test_data_generator_SOURCES = ft_test_data_generator.cpp
+ft_example_hello_world_SOURCES=ft_example_hello_world.cpp
+ft_example_vector_SOURCES=ft_example_vector.cpp
+ft_example_array_SOURCES=ft_example_array.cpp
+ft_example_vds_SOURCES=ft_example_vds.cpp
+ft_example_1f1p_SOURCES=ft_example_1f1p.cpp
+ft_example_cache_SOURCES=ft_example_cache.cpp
+ft_example_reduce_SOURCES=ft_example_reduce.cpp
+ft_example_reduce2D_1f1p_SOURCES=ft_example_reduce2D_1f1p.cpp
+ft_example_adios_SOURCES=ft_example_adios.cpp
+ft_example_pnetcdf_SOURCES=ft_example_pnetcdf.cpp
+ft_example_simple_SOURCES=ft_example_simple.cpp
+ft_example_kf1p_SOURCES=ft_example_kf1p.cpp
+ft_example_vector_2d_SOURCES=ft_example_vector_2d.cpp
+ft_example_padding_SOURCES=ft_example_padding.cpp
+ft_example_tag_SOURCES=ft_example_tag.cpp
+ft_example_chunk_overlap_SOURCES=ft_example_chunk_overlap.cpp
