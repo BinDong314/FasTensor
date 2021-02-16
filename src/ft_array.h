@@ -90,16 +90,16 @@ extern int au_rank;
 #include <stdarg.h>
 #include <regex>
 #include "mpi.h"
-#include "au_endpoint.h"
-#include "au_stencil.h"
-#include "au_utility.h"
-#include "au_type.h"
-#include "au_endpoint_factory.h"
-#include "au_mpi.h"
-#include "au_merge.h"
-#include "au_output_vector.h"
-#include "au_vis.h"
-#include "au_array_transpose.h"
+#include "ft_endpoint.h"
+#include "ft_stencil.h"
+#include "ft_utility.h"
+#include "ft_type.h"
+#include "ft_endpoint_factory.h"
+#include "ft_mpi.h"
+#include "ft_merge.h"
+#include "ft_output_vector.h"
+#include "ft_vis.h"
+#include "ft_array_transpose.h"
 
 // std::vector<Endpoint *> endpoint_clean_vector;
 //extern std::map<Endpoint *, bool> endpoint_clean_vector;

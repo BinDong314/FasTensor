@@ -76,4 +76,4 @@ in binary and source code form.
  * Lawrence Berkeley National Laboratory
  *
  */
-#include "au_array.h"
+#include "ft_array.h"

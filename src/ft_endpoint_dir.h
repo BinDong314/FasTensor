@@ -94,11 +94,11 @@ in binary and source code form.
 #define DIR_OUTPUT_ELASTIC_SIZE 9
 #define DIR_SET_OUTPUT_FILE_NAMES 10
 
-#include "au_utility.h"
-#include "au_type.h"
-#include "au_endpoint.h"
-#include "au_endpoint_hdf5.h"
-#include "au_endpoint_tdms.h"
+#include "ft_utility.h"
+#include "ft_type.h"
+#include "ft_endpoint.h"
+#include "ft_endpoint_hdf5.h"
+#include "ft_endpoint_tdms.h"
 #include <string>
 #include <iostream>
 #include <vector>

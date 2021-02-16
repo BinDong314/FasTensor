@@ -98,9 +98,9 @@ in binary and source code form.
 #include <variant>
 #include <dirent.h>
 
-#include "au_type.h"
-#include "au_utility_macro.h"
-#include "au_utility.h"
+#include "ft_type.h"
+#include "ft_utility_macro.h"
+#include "ft_utility.h"
 
 int create_xdmf(std::string file_name, std::string dset_name, std::vector<unsigned long long> dimensions, FTType data_element_type);
 

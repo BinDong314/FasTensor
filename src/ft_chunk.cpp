@@ -76,7 +76,7 @@ in binary and source code form.
  * Lawrence Berkeley National Laboratory
  *
  */
-#include "au_chunk.h"
+#include "ft_chunk.h"
 
 int default_total_chunk_cells = 268435456; //It is 1GB in float type
 

@@ -78,7 +78,7 @@ in binary and source code form.
  *
  */
 
-#include "au_endpoint_adios.h"
+#include "ft_endpoint_adios.h"
 
 #ifdef HAS_ADIOS_END_POINT
 

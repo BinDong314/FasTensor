@@ -594,7 +594,7 @@ PACKAGE_STRING='ArrayUDF 0.0.1'
 PACKAGE_BUGREPORT='dbin@lbl.gov'
 PACKAGE_URL=''
 
-ac_unique_file="src/au_array.h"
+ac_unique_file="src/ft_array.h"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>

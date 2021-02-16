@@ -28,7 +28,7 @@ bin_PROGRAMS=   ft_test_data_generator \
 
                
 
-LDADD=../src/Fastensor.la @ARRAYUDF_LIBS@ 
+LDADD=../src/libFastensor.la @ARRAYUDF_LIBS@ 
 DEPENDENCIES=../src/libFastensor.la
 
 ft_test_data_generator_SOURCES = ft_test_data_generator.cpp

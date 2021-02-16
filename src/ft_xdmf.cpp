@@ -138,7 +138,7 @@ const char *footer = "\
 </Domain>\n\
 </Xdmf>";
 
-#include "au_xdmf.h"
+#include "ft_xdmf.h"
 
 int create_xdmf(std::string file_name, std::string dset_name, std::vector<unsigned long long> dimensions, FTType data_element_type)
 {

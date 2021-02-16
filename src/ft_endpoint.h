@@ -82,8 +82,8 @@ in binary and source code form.
 #ifndef END_POINT_H
 #define END_POINT_H
 
-#include "au_utility.h"
-#include "au_type.h"
+#include "ft_utility.h"
+#include "ft_type.h"
 #include <string>
 #include <iostream>
 #include <vector>

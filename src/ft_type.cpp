@@ -77,8 +77,8 @@ in binary and source code form.
  *
  */
 
-#include "au_type.h"
-#include "au_utility.h"
+#include "ft_type.h"
+#include "ft_utility.h"
 
 AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
 {

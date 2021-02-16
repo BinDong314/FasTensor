@@ -89,11 +89,11 @@ in binary and source code form.
 #define ARRAY_UDF_H
 
 #include <assert.h>
-#include "au_endpoint.h"
-#include "au_stencil.h"
-#include "au_type.h"
-#include "au_array.h"
-#include "au_mpi.h"
+#include "ft_endpoint.h"
+#include "ft_stencil.h"
+#include "ft_type.h"
+#include "ft_array.h"
+#include "ft_mpi.h"
 
 #ifdef HAS_DASH_ENDPOINT
 #include <libdash.h>

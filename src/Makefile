@@ -132,21 +132,21 @@ am__uninstall_files_from_dir = { \
   }
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libArrayUDF_la_LIBADD =
-am_libArrayUDF_la_OBJECTS = ft.lo au_array.lo au_endpoint.lo \
-	au_type.lo au_endpoint_hdf5.lo au_utility.lo \
-	au_endpoint_dir.lo au_endpoint_memory.lo au_endpoint_adios.lo \
-	au_endpoint_pnetcdf.lo au_endpoint_tdms.lo \
-	au_endpoint_binary.lo au_array_iterator.lo \
-	au_array_view_access.lo au_output_vector.lo au_xdmf.lo
-libArrayUDF_la_OBJECTS = $(am_libArrayUDF_la_OBJECTS)
+libFastensor_la_LIBADD =
+am_libFastensor_la_OBJECTS = ft.lo ft_array.lo ft_endpoint.lo \
+	ft_type.lo ft_endpoint_hdf5.lo ft_utility.lo \
+	ft_endpoint_dir.lo ft_endpoint_memory.lo ft_endpoint_adios.lo \
+	ft_endpoint_pnetcdf.lo ft_endpoint_tdms.lo \
+	ft_endpoint_binary.lo ft_array_iterator.lo \
+	ft_array_view_access.lo ft_output_vector.lo ft_xdmf.lo
+libFastensor_la_OBJECTS = $(am_libFastensor_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libArrayUDF_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+libFastensor_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(libArrayUDF_la_LDFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS) $(libFastensor_la_LDFLAGS) \
 	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -163,19 +163,18 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/au_array.Plo \
-	./$(DEPDIR)/au_array_iterator.Plo \
-	./$(DEPDIR)/au_array_view_access.Plo \
-	./$(DEPDIR)/au_endpoint.Plo ./$(DEPDIR)/au_endpoint_adios.Plo \
-	./$(DEPDIR)/au_endpoint_binary.Plo \
-	./$(DEPDIR)/au_endpoint_dir.Plo \
-	./$(DEPDIR)/au_endpoint_hdf5.Plo \
-	./$(DEPDIR)/au_endpoint_memory.Plo \
-	./$(DEPDIR)/au_endpoint_pnetcdf.Plo \
-	./$(DEPDIR)/au_endpoint_tdms.Plo \
-	./$(DEPDIR)/au_output_vector.Plo ./$(DEPDIR)/au_type.Plo \
-	./$(DEPDIR)/au_utility.Plo ./$(DEPDIR)/au_xdmf.Plo \
-	./$(DEPDIR)/ft.Plo
+am__depfiles_remade = ./$(DEPDIR)/ft.Plo ./$(DEPDIR)/ft_array.Plo \
+	./$(DEPDIR)/ft_array_iterator.Plo \
+	./$(DEPDIR)/ft_array_view_access.Plo \
+	./$(DEPDIR)/ft_endpoint.Plo ./$(DEPDIR)/ft_endpoint_adios.Plo \
+	./$(DEPDIR)/ft_endpoint_binary.Plo \
+	./$(DEPDIR)/ft_endpoint_dir.Plo \
+	./$(DEPDIR)/ft_endpoint_hdf5.Plo \
+	./$(DEPDIR)/ft_endpoint_memory.Plo \
+	./$(DEPDIR)/ft_endpoint_pnetcdf.Plo \
+	./$(DEPDIR)/ft_endpoint_tdms.Plo \
+	./$(DEPDIR)/ft_output_vector.Plo ./$(DEPDIR)/ft_type.Plo \
+	./$(DEPDIR)/ft_utility.Plo ./$(DEPDIR)/ft_xdmf.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -213,8 +212,8 @@ AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libArrayUDF_la_SOURCES)
-DIST_SOURCES = $(libArrayUDF_la_SOURCES)
+SOURCES = $(libFastensor_la_SOURCES)
+DIST_SOURCES = $(libFastensor_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -388,44 +387,48 @@ AM_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include  -I./third_pa
 AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include  -I./third_part
 AM_CXXFLAGS =     -std=c++17 -g3    -I./third_part  
 AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz   -all-static     -I./third_part
-lib_LTLIBRARIES = libArrayUDF.la
-libArrayUDF_la_SOURCES = ft.h ft.cpp \
-                       au_array.h au_array.cpp \
-                       au_endpoint.h au_endpoint.cpp \
-                       au_stencil.h \
-                       au_type.h au_type.cpp \
-                       au_endpoint_hdf5.h au_endpoint_hdf5.cpp \
-                       au_endpoint_factory.h \
-                       au_utility.cpp au_utility.h \
-                       au_endpoint_dir.cpp au_endpoint_dir.h \
-                       au_endpoint_memory.cpp au_endpoint_memory.h \
-                       au_endpoint_adios.h au_endpoint_adios.cpp \
-                       au_endpoint_pnetcdf.h au_endpoint_pnetcdf.cpp \
-                       au_endpoint_tdms.h  au_endpoint_tdms.cpp \
-                       au_endpoint_binary.h au_endpoint_binary.cpp \
-                       au_array_iterator.h au_array_iterator.cpp \
-                       au_array_view_access.h au_array_view_access.cpp \
-                       au_array_transpose.h \
-                       au_utility_macro.h \
-                       au_output_vector.h au_output_vector.cpp \
-                       au_xdmf.h au_xdmf.cpp 
+lib_LTLIBRARIES = libFastensor.la
+libFastensor_la_SOURCES = ft.h ft.cpp \
+                       ft_array.h ft_array.cpp \
+                       ft_endpoint.h ft_endpoint.cpp \
+                       ft_stencil.h \
+                       ft_type.h ft_type.cpp \
+                       ft_endpoint_hdf5.h ft_endpoint_hdf5.cpp \
+                       ft_endpoint_factory.h \
+                       ft_utility.cpp ft_utility.h \
+                       ft_endpoint_dir.cpp ft_endpoint_dir.h \
+                       ft_endpoint_memory.cpp ft_endpoint_memory.h \
+                       ft_endpoint_adios.h ft_endpoint_adios.cpp \
+                       ft_endpoint_pnetcdf.h ft_endpoint_pnetcdf.cpp \
+                       ft_endpoint_tdms.h  ft_endpoint_tdms.cpp \
+                       ft_endpoint_binary.h ft_endpoint_binary.cpp \
+                       ft_array_iterator.h ft_array_iterator.cpp \
+                       ft_array_view_access.h ft_array_view_access.cpp \
+                       ft_array_transpose.h \
+                       ft_utility_macro.h \
+                       ft_output_vector.h ft_output_vector.cpp \
+                       ft_xdmf.h ft_xdmf.cpp 
 
-libArrayUDF_la_LDFLAGS = -version-info 0:0:0  -all-static
-include_HEADERS = au_array.h	au_endpoint.h au_stencil.h au_type.h au_endpoint_hdf5.h \
-                au_utility.h third_part/cista.h third_part/cista_au_extended_ptr_tuple.h \
-                third_part/cista_au_extended_tuple.h third_part/cista_au_extended_arity.h au_endpoint_dir.h \
-                au_endpoint_memory.h ft.h au_endpoint_factory.h au_local_mirror.h  au_mpi.h au_merge.h \
-                au_array_iterator.h \
-                au_endpoint_adios.h \
-                au_endpoint_pnetcdf.h \
-                au_endpoint_tdms.h \
-                au_endpoint_binary.h \
-                au_array_view_access.h \
-                au_array_transpose.h \
-                au_utility_macro.h \
-                au_output_vector.h \
-                au_xdmf.h \
-                au_vis.h
+libFastensor_la_LDFLAGS = -version-info 0:0:0  -all-static
+include_HEADERS = ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hdf5.h \
+                ft_utility.h \
+                third_part/cista.h\
+                third_part/cista_au_extended_ptr_tuple.h \
+                third_part/cista_au_extended_tuple.h \
+                third_part/cista_au_extended_arity.h \
+                ft_endpoint_dir.h \
+                ft_endpoint_memory.h ft.h ft_endpoint_factory.h ft_local_mirror.h  ft_mpi.h ft_merge.h \
+                ft_array_iterator.h \
+                ft_endpoint_adios.h \
+                ft_endpoint_pnetcdf.h \
+                ft_endpoint_tdms.h \
+                ft_endpoint_binary.h \
+                ft_array_view_access.h \
+                ft_array_transpose.h \
+                ft_utility_macro.h \
+                ft_output_vector.h \
+                ft_xdmf.h \
+                ft_vis.h
 
 all: all-am
 
@@ -496,8 +499,8 @@ clean-libLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-libArrayUDF.la: $(libArrayUDF_la_OBJECTS) $(libArrayUDF_la_DEPENDENCIES) $(EXTRA_libArrayUDF_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(libArrayUDF_la_LINK) -rpath $(libdir) $(libArrayUDF_la_OBJECTS) $(libArrayUDF_la_LIBADD) $(LIBS)
+libFastensor.la: $(libFastensor_la_OBJECTS) $(libFastensor_la_DEPENDENCIES) $(EXTRA_libFastensor_la_DEPENDENCIES) 
+	$(AM_V_CXXLD)$(libFastensor_la_LINK) -rpath $(libdir) $(libFastensor_la_OBJECTS) $(libFastensor_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -505,22 +508,22 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/au_array.Plo # am--include-marker
-include ./$(DEPDIR)/au_array_iterator.Plo # am--include-marker
-include ./$(DEPDIR)/au_array_view_access.Plo # am--include-marker
-include ./$(DEPDIR)/au_endpoint.Plo # am--include-marker
-include ./$(DEPDIR)/au_endpoint_adios.Plo # am--include-marker
-include ./$(DEPDIR)/au_endpoint_binary.Plo # am--include-marker
-include ./$(DEPDIR)/au_endpoint_dir.Plo # am--include-marker
-include ./$(DEPDIR)/au_endpoint_hdf5.Plo # am--include-marker
-include ./$(DEPDIR)/au_endpoint_memory.Plo # am--include-marker
-include ./$(DEPDIR)/au_endpoint_pnetcdf.Plo # am--include-marker
-include ./$(DEPDIR)/au_endpoint_tdms.Plo # am--include-marker
-include ./$(DEPDIR)/au_output_vector.Plo # am--include-marker
-include ./$(DEPDIR)/au_type.Plo # am--include-marker
-include ./$(DEPDIR)/au_utility.Plo # am--include-marker
-include ./$(DEPDIR)/au_xdmf.Plo # am--include-marker
 include ./$(DEPDIR)/ft.Plo # am--include-marker
+include ./$(DEPDIR)/ft_array.Plo # am--include-marker
+include ./$(DEPDIR)/ft_array_iterator.Plo # am--include-marker
+include ./$(DEPDIR)/ft_array_view_access.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_adios.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_binary.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_dir.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_hdf5.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_memory.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_tdms.Plo # am--include-marker
+include ./$(DEPDIR)/ft_output_vector.Plo # am--include-marker
+include ./$(DEPDIR)/ft_type.Plo # am--include-marker
+include ./$(DEPDIR)/ft_utility.Plo # am--include-marker
+include ./$(DEPDIR)/ft_xdmf.Plo # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -707,22 +710,22 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/au_array.Plo
-	-rm -f ./$(DEPDIR)/au_array_iterator.Plo
-	-rm -f ./$(DEPDIR)/au_array_view_access.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_adios.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_binary.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_dir.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_memory.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_pnetcdf.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_tdms.Plo
-	-rm -f ./$(DEPDIR)/au_output_vector.Plo
-	-rm -f ./$(DEPDIR)/au_type.Plo
-	-rm -f ./$(DEPDIR)/au_utility.Plo
-	-rm -f ./$(DEPDIR)/au_xdmf.Plo
-	-rm -f ./$(DEPDIR)/ft.Plo
+		-rm -f ./$(DEPDIR)/ft.Plo
+	-rm -f ./$(DEPDIR)/ft_array.Plo
+	-rm -f ./$(DEPDIR)/ft_array_iterator.Plo
+	-rm -f ./$(DEPDIR)/ft_array_view_access.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_adios.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_binary.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_dir.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_hdf5.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
+	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
+	-rm -f ./$(DEPDIR)/ft_type.Plo
+	-rm -f ./$(DEPDIR)/ft_utility.Plo
+	-rm -f ./$(DEPDIR)/ft_xdmf.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -768,22 +771,22 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/au_array.Plo
-	-rm -f ./$(DEPDIR)/au_array_iterator.Plo
-	-rm -f ./$(DEPDIR)/au_array_view_access.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_adios.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_binary.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_dir.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_hdf5.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_memory.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_pnetcdf.Plo
-	-rm -f ./$(DEPDIR)/au_endpoint_tdms.Plo
-	-rm -f ./$(DEPDIR)/au_output_vector.Plo
-	-rm -f ./$(DEPDIR)/au_type.Plo
-	-rm -f ./$(DEPDIR)/au_utility.Plo
-	-rm -f ./$(DEPDIR)/au_xdmf.Plo
-	-rm -f ./$(DEPDIR)/ft.Plo
+		-rm -f ./$(DEPDIR)/ft.Plo
+	-rm -f ./$(DEPDIR)/ft_array.Plo
+	-rm -f ./$(DEPDIR)/ft_array_iterator.Plo
+	-rm -f ./$(DEPDIR)/ft_array_view_access.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_adios.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_binary.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_dir.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_hdf5.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
+	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
+	-rm -f ./$(DEPDIR)/ft_type.Plo
+	-rm -f ./$(DEPDIR)/ft_utility.Plo
+	-rm -f ./$(DEPDIR)/ft_xdmf.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

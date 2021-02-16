@@ -77,7 +77,7 @@ in binary and source code form.
  *
  */
 
-#include "au_array_iterator.h"
+#include "ft_array_iterator.h"
 
 /**
  * @brief get the next ordinates_p from current ordinates_p 

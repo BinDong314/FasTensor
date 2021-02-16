@@ -77,7 +77,7 @@ in binary and source code form.
  *
  */
 
-#include "au_endpoint_memory.h"
+#include "ft_endpoint_memory.h"
 
 //see au.h for its definations
 extern int au_mpi_size_global;

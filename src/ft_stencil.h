@@ -88,9 +88,9 @@ in binary and source code form.
 #include <vector>
 #include <cmath>
 #include <stdlib.h>
-#include "au_utility.h"
-#include "au_array_view_access.h"
-#include "au_utility.h"
+#include "ft_utility.h"
+#include "ft_array_view_access.h"
+#include "ft_utility.h"
 
 using namespace std;
 extern double time_address_cal, row_major_order_cal, pre_row_major_order_cal, data_access_time;

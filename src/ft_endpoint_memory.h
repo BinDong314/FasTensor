@@ -84,10 +84,10 @@ in binary and source code form.
 #include <string>
 #include <iostream>
 #include <vector>
-#include "au_type.h"
-#include "au_endpoint.h"
-#include "au_local_mirror.h"
-#include "au_endpoint_hdf5.h"
+#include "ft_type.h"
+#include "ft_endpoint.h"
+#include "ft_local_mirror.h"
+#include "ft_endpoint_hdf5.h"
 
 #define DASH_READ_FLAG 0
 #define DASH_WRITE_FLAG 1

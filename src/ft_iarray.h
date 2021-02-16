@@ -83,7 +83,7 @@ in binary and source code form.
 #define AU_IARRAY_H
 
 #include <vector>
-#include "au_type.h"
+#include "ft_type.h"
 
 /**
  * @brief array of local data

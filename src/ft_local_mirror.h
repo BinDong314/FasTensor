@@ -89,8 +89,8 @@ in binary and source code form.
 #include <sstream>  // std::istringstream
 #include <string>   // std::string
 
-#include "au_utility.h"
-#include "au_mpi.h"
+#include "ft_utility.h"
+#include "ft_mpi.h"
 
 //see au.h for its definations
 extern int au_mpi_size_global;

@@ -77,8 +77,8 @@ in binary and source code form.
  *
  */
 
-#include "au_endpoint_dir.h"
-#include "au_array_view_access.h"
+#include "ft_endpoint_dir.h"
+#include "ft_array_view_access.h"
 
 extern int au_mpi_size_global;
 extern int au_mpi_rank_global;

@@ -77,7 +77,7 @@ in binary and source code form.
  *
  */
 
-#include "au_endpoint_tdms.h"
+#include "ft_endpoint_tdms.h"
 
 void EndpointTDMS::UpdateSeekOffset()
 {

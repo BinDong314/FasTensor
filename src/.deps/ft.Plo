@@ -78,7 +78,7 @@ ft.lo: ft.cpp ft.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__nullptr \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/limits \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__undef_macros \
-  au_endpoint.h au_utility.h \
+  ft_endpoint.h ft_utility.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iosfwd \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/wchar.h \
@@ -244,7 +244,7 @@ ft.lo: ft.cpp ft.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/array \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/dirent.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/dirent.h \
-  au_type.h \
+  ft_type.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/complex \
   third_part/cista.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/map \
@@ -258,15 +258,15 @@ ft.lo: ft.cpp ft.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/xlocale/_inttypes.h \
   third_part/cista_au_extended_arity.h \
   third_part/cista_au_extended_tuple.h \
-  third_part/cista_au_extended_ptr_tuple.h au_utility_macro.h \
+  third_part/cista_au_extended_ptr_tuple.h ft_utility_macro.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iomanip \
-  au_stencil.h /usr/local/Cellar/mpich/3.3.2_1/include/mpi.h \
+  ft_stencil.h /usr/local/Cellar/mpich/3.3.2_1/include/mpi.h \
   /usr/local/Cellar/mpich/3.3.2_1/include/mpio.h \
   /usr/local/Cellar/mpich/3.3.2_1/include/mpicxx.h \
-  au_array_view_access.h au_array_iterator.h au_array.h \
+  ft_array_view_access.h ft_array_iterator.h ft_array.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/regex \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/deque \
-  au_endpoint_factory.h au_endpoint_hdf5.h au_xdmf.h \
+  ft_endpoint_factory.h ft_endpoint_hdf5.h ft_xdmf.h \
   /Users/dbin/work/soft/hdf5-1.12.0/build/include/hdf5.h \
   /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5public.h \
   /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5pubconf.h \
@@ -311,10 +311,10 @@ ft.lo: ft.cpp ft.h \
   /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5FDsec2.h \
   /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5FDstdio.h \
   /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5VLpassthru.h \
-  au_endpoint_dir.h au_endpoint_tdms.h au_endpoint_binary.h \
-  au_endpoint_memory.h au_local_mirror.h au_mpi.h au_merge.h \
-  au_endpoint_adios.h au_endpoint_pnetcdf.h au_output_vector.h au_vis.h \
-  au_array_transpose.h
+  ft_endpoint_dir.h ft_endpoint_tdms.h ft_endpoint_binary.h \
+  ft_endpoint_memory.h ft_local_mirror.h ft_mpi.h ft_merge.h \
+  ft_endpoint_adios.h ft_endpoint_pnetcdf.h ft_output_vector.h ft_vis.h \
+  ft_array_transpose.h
 
 ft.h:
 
@@ -476,9 +476,9 @@ ft.h:
 
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__undef_macros:
 
-au_endpoint.h:
+ft_endpoint.h:
 
-au_utility.h:
+ft_utility.h:
 
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector:
 
@@ -810,7 +810,7 @@ au_utility.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/dirent.h:
 
-au_type.h:
+ft_type.h:
 
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/complex:
 
@@ -840,11 +840,11 @@ third_part/cista_au_extended_tuple.h:
 
 third_part/cista_au_extended_ptr_tuple.h:
 
-au_utility_macro.h:
+ft_utility_macro.h:
 
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iomanip:
 
-au_stencil.h:
+ft_stencil.h:
 
 /usr/local/Cellar/mpich/3.3.2_1/include/mpi.h:
 
@@ -852,21 +852,21 @@ au_stencil.h:
 
 /usr/local/Cellar/mpich/3.3.2_1/include/mpicxx.h:
 
-au_array_view_access.h:
+ft_array_view_access.h:
 
-au_array_iterator.h:
+ft_array_iterator.h:
 
-au_array.h:
+ft_array.h:
 
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/regex:
 
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/deque:
 
-au_endpoint_factory.h:
+ft_endpoint_factory.h:
 
-au_endpoint_hdf5.h:
+ft_endpoint_hdf5.h:
 
-au_xdmf.h:
+ft_xdmf.h:
 
 /Users/dbin/work/soft/hdf5-1.12.0/build/include/hdf5.h:
 
@@ -956,26 +956,26 @@ au_xdmf.h:
 
 /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5VLpassthru.h:
 
-au_endpoint_dir.h:
+ft_endpoint_dir.h:
 
-au_endpoint_tdms.h:
+ft_endpoint_tdms.h:
 
-au_endpoint_binary.h:
+ft_endpoint_binary.h:
 
-au_endpoint_memory.h:
+ft_endpoint_memory.h:
 
-au_local_mirror.h:
+ft_local_mirror.h:
 
-au_mpi.h:
+ft_mpi.h:
 
-au_merge.h:
+ft_merge.h:
 
-au_endpoint_adios.h:
+ft_endpoint_adios.h:
 
-au_endpoint_pnetcdf.h:
+ft_endpoint_pnetcdf.h:
 
-au_output_vector.h:
+ft_output_vector.h:
 
-au_vis.h:
+ft_vis.h:
 
-au_array_transpose.h:
+ft_array_transpose.h:

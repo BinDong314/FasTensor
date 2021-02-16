@@ -82,8 +82,8 @@ in binary and source code form.
 #ifndef END_POINT_PNETCDF_H
 #define END_POINT_PNETCDF_H
 
-#include "au_type.h"
-#include "au_endpoint.h"
+#include "ft_type.h"
+#include "ft_endpoint.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -91,7 +91,7 @@ in binary and source code form.
 
 #ifdef HAS_PNETCDF_END_POINT
 
-#include "au_mpi.h"
+#include "ft_mpi.h"
 #include "pnetcdf.h"
 
 class EndpointPnetCDF : public Endpoint

@@ -83,8 +83,8 @@ in binary and source code form.
 #include <vector>
 #include <cstdint>
 #include <cstring>
-#include "au_array_iterator.h"
-#include "au_utility_macro.h"
+#include "ft_array_iterator.h"
+#include "ft_utility_macro.h"
 
 #define ARRAY_VIEW_READ 0
 #define ARRAY_VIEW_WRITE 1

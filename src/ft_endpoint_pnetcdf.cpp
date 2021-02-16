@@ -78,7 +78,7 @@ in binary and source code form.
  *
  */
 
-#include "au_endpoint_pnetcdf.h"
+#include "ft_endpoint_pnetcdf.h"
 
 #ifdef HAS_PNETCDF_END_POINT
 

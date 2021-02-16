@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([ArrayUDF], [0.0.1], [dbin@lbl.gov])
-AC_CONFIG_SRCDIR([src/au_array.h])
+AC_CONFIG_SRCDIR([src/ft_array.h])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([subdir-objects])

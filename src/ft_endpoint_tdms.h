@@ -82,9 +82,9 @@ in binary and source code form.
 #ifndef END_POINT_TDMS_H
 #define END_POINT_TDMS_H
 
-#include "au_type.h"
-#include "au_endpoint.h"
-#include "au_endpoint_binary.h"
+#include "ft_type.h"
+#include "ft_endpoint.h"
+#include "ft_endpoint_binary.h"
 #include <string>
 #include <iostream>
 #include <vector>

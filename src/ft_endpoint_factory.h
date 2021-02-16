@@ -77,12 +77,12 @@ in binary and source code form.
  *
  */
 
-#include "au_endpoint.h"
-#include "au_endpoint_hdf5.h"
-#include "au_endpoint_dir.h"
-#include "au_endpoint_memory.h"
-#include "au_endpoint_adios.h"
-#include "au_endpoint_pnetcdf.h"
+#include "ft_endpoint.h"
+#include "ft_endpoint_hdf5.h"
+#include "ft_endpoint_dir.h"
+#include "ft_endpoint_memory.h"
+#include "ft_endpoint_adios.h"
+#include "ft_endpoint_pnetcdf.h"
 
 #include <string.h>
 

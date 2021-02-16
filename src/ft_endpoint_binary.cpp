@@ -78,8 +78,8 @@ in binary and source code form.
  * Lawrence Berkeley National Laboratory
  *
  */
-#include "au_endpoint_binary.h"
-#include "au_array_transpose.h"
+#include "ft_endpoint_binary.h"
+#include "ft_array_transpose.h"
 
 int EndpointBinary::ExtractMeta()
 {

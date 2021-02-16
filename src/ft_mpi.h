@@ -82,7 +82,7 @@ in binary and source code form.
 
 #include <ctime>
 #include <iostream>
-#include "au_merge.h"
+#include "ft_merge.h"
 
 #define ENABLE_MPI 1
 
