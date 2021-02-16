@@ -1,5 +1,6 @@
-This package contains the FastTensor, a new version of ArrayUDF from the project SDS (Scientific Data Services) framework at LBNL. This project is supported by the DOE.   See copyright at the end. 
-
+This package contains the FastTensor, a new version of ArrayUDF from the project SDS (Scientific Data Services) framework at LBNL. This project is supported by the DOE.  
+See copyright at the end. 
+Please report any problem you've encountered in using this package to  Bin Dong: dbin@lbl.gov
 
 1, Required software packages:
 
