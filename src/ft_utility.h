@@ -108,7 +108,7 @@ in binary and source code form.
 
 #define V2VOIDP(vv) static_cast<void *>(vv.data())
 
-extern int au_rank;
+extern int ft_rank;
 
 /**
  * @brief expand the path to full directory 
@@ -166,7 +166,7 @@ inline void PrintVector(std::string name, std::vector<T> v)
 {
     int n = v.size();
     if (name != "")
-        std::cout << "Rank " << au_rank << ", " << name << ": ";
+        std::cout << "Rank " << ft_rank << ", " << name << ": ";
 
     if (!n)
     {
@@ -203,7 +203,7 @@ inline void PrintVV(std::string name, std::vector<std::vector<T>> v)
 {
     int n = v.size();
     if (name != "")
-        std::cout << "Rank " << au_rank << ", " << name << ": ";
+        std::cout << "Rank " << ft_rank << ", " << name << ": ";
 
     if (!n)
     {
@@ -237,7 +237,7 @@ template <typename T>
 inline void PrintScalar(std::string name, T v)
 {
     if (name != "")
-        std::cout << "Rank " << au_rank << ", " << name << ": "
+        std::cout << "Rank " << ft_rank << ", " << name << ": "
                   << ": " << v << std::endl;
 }
 
@@ -245,7 +245,7 @@ template <typename T>
 inline void PrintString(std::string name)
 {
     if (name != "")
-        std::cout << "Rank " << au_rank << ", " << name << std::endl;
+        std::cout << "Rank " << ft_rank << ", " << name << std::endl;
 }
 
 /**

@@ -78,10 +78,10 @@ in binary and source code form.
  */
 
 //see au.h for its definations
-extern int au_mpi_size_global;
-extern int au_mpi_rank_global;
-extern int au_size;
-extern int au_rank;
+//extern int ft_size;
+//extern int ft_rank;
+extern int ft_size;
+extern int ft_rank;
 
 #ifndef ARRAY_UDF_ARRAY_H
 #define ARRAY_UDF_ARRAY_H
@@ -416,13 +416,13 @@ namespace FT
         {
           if (data_auto_chunk_dim_index == i)
           {
-            if (data_size[i] % au_size == 0)
+            if (data_size[i] % ft_size == 0)
             {
-              data_chunk_size[i] = data_size[i] / au_size;
+              data_chunk_size[i] = data_size[i] / ft_size;
             }
             else
             {
-              data_chunk_size[i] = data_size[i] / au_size + 1;
+              data_chunk_size[i] = data_size[i] / ft_size + 1;
             }
           }
           else
@@ -442,7 +442,7 @@ namespace FT
         {
           total_elements = data_size[i] * total_elements;
         }
-        total_elements = total_elements / au_size;
+        total_elements = total_elements / ft_size;
         if (total_elements > (set_chunk_size_by_mem_max_mem_size / sizeof(T)))
         {
           total_elements = set_chunk_size_by_mem_max_mem_size / sizeof(T);
@@ -662,10 +662,10 @@ namespace FT
         }
       }
 
-      current_chunk_id = au_mpi_rank_global; //Each process deal with one chunk one time, starting from its rank
+      current_chunk_id = ft_rank; //Each process deal with one chunk one time, starting from its rank
 
       //#ifdef DEBUG
-      if (au_mpi_rank_global == 0)
+      if (ft_rank == 0)
       {
         if (!virtual_array_flag)
           endpoint->PrintInfo();
@@ -1001,10 +1001,10 @@ namespace FT
       } // end of while:: no more chunks to process
 
       //May start a empty write for collective I/O
-      if ((data_total_chunks % au_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + au_size - (data_total_chunks % au_size))) && B != nullptr)
+      if ((data_total_chunks % ft_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + ft_size - (data_total_chunks % ft_size))) && B != nullptr)
       {
         //std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
-        //std::cout << "leftover_chunks  = " << data_total_chunks % au_size << std::endl;
+        //std::cout << "leftover_chunks  = " << data_total_chunks % ft_size << std::endl;
         //std::cout << "data_total_chunks  = " << data_total_chunks << std::endl;
         std::vector<unsigned long long> null_start; //Start offset on disk
         std::vector<unsigned long long> null_end;   //End offset on disk
@@ -1340,11 +1340,11 @@ namespace FT
       //Next chunk id
       if (!reverse_apply_direction_flag)
       {
-        current_chunk_id = current_chunk_id + au_mpi_size_global;
+        current_chunk_id = current_chunk_id + ft_size;
       }
       else
       {
-        current_chunk_id = current_chunk_id - au_mpi_size_global;
+        current_chunk_id = current_chunk_id - ft_size;
       }
     }
     /**
@@ -1942,7 +1942,7 @@ namespace FT
    */
     int Fill(T fill_value)
     {
-      if (!au_mpi_rank_global)
+      if (!ft_rank)
       {
         unsigned long long total_size = 1;
         std::vector<unsigned long long> start_p(data_size.size());
@@ -2011,12 +2011,12 @@ namespace FT
       MPIReduceStats(time_udf, mpi_stats_udf);
       MPIReduceStats(time_write, mpi_stats_write);
 
-      if (au_rank == 0)
+      if (ft_rank == 0)
       {
         std::cout << "Timing Results of All " << std::endl;
-        std::cout << "Read      time (s) : max = " << mpi_stats_read[0] << ", min = " << mpi_stats_read[1] << ", ave = " << mpi_stats_read[2] / au_size << std::endl;
-        std::cout << "UDF       time (s) : max = " << mpi_stats_udf[0] << ", min = " << mpi_stats_udf[0] << ", ave = " << mpi_stats_udf[0] / au_size << std::endl;
-        std::cout << "Write     time (s) : max = " << mpi_stats_write[0] << ", min = " << mpi_stats_write[0] << ", ave = " << mpi_stats_write[0] / au_size << std::endl;
+        std::cout << "Read      time (s) : max = " << mpi_stats_read[0] << ", min = " << mpi_stats_read[1] << ", ave = " << mpi_stats_read[2] / ft_size << std::endl;
+        std::cout << "UDF       time (s) : max = " << mpi_stats_udf[0] << ", min = " << mpi_stats_udf[0] << ", ave = " << mpi_stats_udf[0] / ft_size << std::endl;
+        std::cout << "Write     time (s) : max = " << mpi_stats_write[0] << ", min = " << mpi_stats_write[0] << ", ave = " << mpi_stats_write[0] / ft_size << std::endl;
         fflush(stdout);
       }
     }
@@ -2029,20 +2029,20 @@ namespace FT
     inline int GetReadCost(vector<double> &cost_stats)
     {
       MPIReduceStats(time_read, cost_stats);
-      cost_stats[2] = cost_stats[2] / au_size;
+      cost_stats[2] = cost_stats[2] / ft_size;
       return 0;
     }
 
     inline int GetWriteCost(vector<double> &cost_stats)
     {
       MPIReduceStats(time_write, cost_stats);
-      cost_stats[2] = cost_stats[2] / au_size;
+      cost_stats[2] = cost_stats[2] / ft_size;
       return 0;
     }
     inline int GetComputingCost(vector<double> &cost_stats)
     {
       MPIReduceStats(time_udf, cost_stats);
-      cost_stats[2] = cost_stats[2] / au_size;
+      cost_stats[2] = cost_stats[2] / ft_size;
       return 0;
     }
 

@@ -98,10 +98,10 @@ in binary and source code form.
 #ifdef HAS_DASH_ENDPOINT
 #include <libdash.h>
 #endif
-extern int au_mpi_size_global;
-extern int au_mpi_rank_global;
-extern int au_size;
-extern int au_rank;
+extern int ft_mpi_size_global;
+extern int ft_mpi_rank_global;
+extern int ft_size;
+extern int ft_rank;
 
 extern MPI_COMM_TYPE au_mpi_comm_global;
 void FT_Init(int argc, char *argv[], MPI_COMM_TYPE au_mpi_comm = MPI_COMM_WORLD_DEFAULT);

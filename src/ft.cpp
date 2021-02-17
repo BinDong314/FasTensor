@@ -79,30 +79,30 @@ in binary and source code form.
 
 #include "ft.h"
 
-int au_mpi_size_global;
-int au_mpi_rank_global;
+int ft_mpi_size_global;
+int ft_mpi_rank_global;
 
-int au_size;
-int au_rank;
+int ft_size;
+int ft_rank;
 
-MPI_COMM_TYPE au_mpi_comm_global = MPI_COMM_WORLD_DEFAULT;
+MPI_COMM_TYPE ft_mpi_comm_global = MPI_COMM_WORLD_DEFAULT;
 
 //std::vector<Endpoint *> endpoint_clean_vector;
 std::map<Endpoint *, bool> endpoint_clean_vector;
 
 void FT_Init(int argc, char *argv[], MPI_COMM_TYPE au_mpi_comm_user)
 {
-    au_mpi_comm_global = au_mpi_comm_user;
+    ft_mpi_comm_global = au_mpi_comm_user;
 #ifdef HAS_DASH_ENDPOINT
     dash::init(&argc, &argv);
 #endif
     //size_t team_size = dash::Team::All().size();
     //std::cout << "DASH team size : " << team_size << "\n";
-    MPI_INIT(argc, argv, au_mpi_comm_global, au_mpi_rank_global, au_mpi_size_global);
-    au_size = au_mpi_size_global;
-    au_rank = au_mpi_rank_global;
-    if (!au_rank)
-        std::cout << "RUN analysis with  [" << au_size << "] processes \n";
+    MPI_INIT(argc, argv, ft_mpi_comm_global, ft_mpi_rank_global, ft_mpi_size_global);
+    ft_size = ft_mpi_size_global;
+    ft_rank = ft_mpi_rank_global;
+    if (!ft_rank)
+        std::cout << "RUN analysis with  [" << ft_size << "] processes \n";
 }
 
 void FT_Finalize()

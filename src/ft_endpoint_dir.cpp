@@ -80,10 +80,10 @@ in binary and source code form.
 #include "ft_endpoint_dir.h"
 #include "ft_array_view_access.h"
 
-extern int au_mpi_size_global;
-extern int au_mpi_rank_global;
-extern int au_size;
-extern int au_rank;
+extern int ft_mpi_size_global;
+extern int ft_mpi_rank_global;
+extern int ft_size;
+extern int ft_rank;
 
 int EndpointDIR::ExtractMeta()
 {

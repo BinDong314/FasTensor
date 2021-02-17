@@ -80,10 +80,10 @@ in binary and source code form.
 #ifndef ARRAY_UDF_UTILITY_MACRO_H
 #define ARRAY_UDF_UTILITY_MACRO_H
 
-extern int au_mpi_size_global;
-extern int au_mpi_rank_global;
-extern int au_size;
-extern int au_rank;
+extern int ft_mpi_size_global;
+extern int ft_mpi_rank_global;
+extern int ft_size;
+extern int ft_rank;
 
 /**
  * @brief help function to counts cells between start/end
@@ -158,7 +158,7 @@ extern int au_rank;
     }
 #define AU_VERBOSE(info_p, rank_p)           \
     {                                        \
-        if (au_mpi_rank_global == rank_p)    \
+        if (ft_rank == rank_p)    \
             std::cout << info_p << std::endl \
                       << std::flush;         \
     }
