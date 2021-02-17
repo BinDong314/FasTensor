@@ -1,5 +1,5 @@
-This package contains the FastTensor, a new version of ArrayUDF from the project SDS (Scientific Data Services) framework at LBNL. This project is supported by the DOE.  
-See copyright at the end. 
+This package contains the FastTensor, a new version of ArrayUDF from the project SDS (Scientific Data Services) framework at LBNL. This project is supported by the DOE. Please see copyright at the end. 
+
 Please report any problem you've encountered in using this package to  Bin Dong: dbin@lbl.gov
 
 1, Required software packages:
@@ -15,7 +15,9 @@ Please report any problem you've encountered in using this package to  Bin Dong:
    -- HDF5 from https://www.hdfgroup.org/
        https://www.hdfgroup.org/downloads/hdf5/source-code/
 
+  Other Optional packages
    -- DASH from  https://github.com/dash-project/dash/   
+   -- ADIOS https://github.com/ornladios/ADIOS2
 ```
 
 2, HDF5
