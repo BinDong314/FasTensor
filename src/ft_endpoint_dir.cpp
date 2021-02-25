@@ -515,6 +515,20 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         break;
         //  case DIR_OUTPUT_SPLIT_FILE:
         //      break;
+    case DIR_N_FILES:
+        ExtractMeta();
+        //dir_file_list.size()
+        std::string n_files_str = std::to_string(dir_file_list.size());
+        parameter_v.clear();
+        parameter_v.push_back(n_files_str);
+        break;
+    case DIR_GET_FILE_SIZE:
+        ExtractMeta();
+        //dir_chunk_size
+        std::string file_size_str = Vector2String(dir_chunk_size);
+        parameter_v.clear();
+        parameter_v.push_back(file_size_str);
+        break;
     default:
         break;
     }
