@@ -93,8 +93,8 @@ in binary and source code form.
 #include "ft_mpi.h"
 
 //see au.h for its definations
-extern int au_mpi_size_global;
-extern int au_mpi_rank_global;
+extern int ft_size;
+extern int ft_rank;
 
 template <typename T>
 void *CreateLocalMirrorHelp(std::string init_value_str, size_t local_mirror_size)
@@ -245,7 +245,7 @@ template <typename T>
 T *MergeMirrorsHelp(void *local_mirror_buffer, unsigned long long &local_mirror_size, std::string &opt_str)
 {
     T *reduced_mirror_buffer = NULL;
-    if (!au_mpi_rank_global)
+    if (!ft_rank)
     {
         reduced_mirror_buffer = (T *)malloc(local_mirror_size * sizeof(T));
     }
@@ -254,7 +254,7 @@ T *MergeMirrorsHelp(void *local_mirror_buffer, unsigned long long &local_mirror_
 
     AU_Reduce(local_mirror_buffer, reduced_mirror_buffer, local_mirror_size, merge_data_type, merge_op, 0, MPI_COMM_WORLD_DEFAULT);
 
-    if (!au_mpi_rank_global)
+    if (!ft_rank)
     {
         std::memcpy(local_mirror_buffer, reduced_mirror_buffer, local_mirror_size * sizeof(T));
     }

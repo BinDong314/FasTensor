@@ -86,8 +86,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = x86_64-apple-darwin20.2.0
-host_triplet = x86_64-apple-darwin20.2.0
+build_triplet = x86_64-apple-darwin20.3.0
+host_triplet = x86_64-apple-darwin20.3.0
 bin_PROGRAMS = ft_test_data_generator$(EXEEXT) \
 	ft_example_hello_world$(EXEEXT) ft_example_vector$(EXEEXT) \
 	ft_example_array$(EXEEXT) ft_example_vds$(EXEEXT) \
@@ -289,11 +289,11 @@ ACLOCAL = ${SHELL} '/Users/dbin/work/fastensor/missing' aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include
-ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include
+ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include    -DHAS_DASH_ENDPOINT   -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
+ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include -DHAS_DASH_ENDPOINT  -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
 ARRAYUDF_CXXFLAGS =     -std=c++17 -g3
 ARRAYUDF_LDFLAGS = 
-ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz
+ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
 ARRAY_UDF_PYTHON_ENABLED = false
 AUPY_CFLAGS = 
 AUPY_CPPFLAGS = 
@@ -331,7 +331,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LD = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+LD = /Library/Developer/CommandLineTools/usr/bin/ld
 LDFLAGS = 
 LIBOBJS = 
 LIBS = 
@@ -383,10 +383,10 @@ am__quote =
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build = x86_64-apple-darwin20.2.0
+build = x86_64-apple-darwin20.3.0
 build_alias = 
 build_cpu = x86_64
-build_os = darwin20.2.0
+build_os = darwin20.3.0
 build_vendor = apple
 builddir = .
 datadir = ${datarootdir}
@@ -394,10 +394,10 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = x86_64-apple-darwin20.2.0
+host = x86_64-apple-darwin20.3.0
 host_alias = 
 host_cpu = x86_64
-host_os = darwin20.2.0
+host_os = darwin20.3.0
 host_vendor = apple
 htmldir = ${docdir}
 includedir = ${prefix}/include
@@ -427,11 +427,11 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AUTOMAKE_OPTIONS = gnu
-AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part     -I/Users/dbin/work/soft/hdf5-1.12.0/build/include   -ldl 
-AM_CFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part         -I/Users/dbin/work/soft/hdf5-1.12.0/build/include    -ldl 
+AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part     -I/Users/dbin/work/soft/hdf5-1.12.0/build/include -DHAS_DASH_ENDPOINT  -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'   -ldl 
+AM_CFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part         -I/Users/dbin/work/soft/hdf5-1.12.0/build/include    -DHAS_DASH_ENDPOINT   -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'    -ldl 
 AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part      -std=c++17 -g3    -ldl 
-AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz  -all-static  -ldl 
-LDADD = ../src/libFastensor.la            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz 
+AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'  -all-static  -ldl 
+LDADD = ../src/libFastensor.la            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich' 
 DEPENDENCIES = ../src/libFastensor.la
 ft_test_data_generator_SOURCES = ft_test_data_generator.cpp
 ft_example_hello_world_SOURCES = ft_example_hello_world.cpp

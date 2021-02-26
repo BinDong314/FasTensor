@@ -80,8 +80,8 @@ in binary and source code form.
 #include "ft_endpoint_memory.h"
 
 //see au.h for its definations
-extern int au_mpi_size_global;
-extern int au_mpi_rank_global;
+extern int ft_size;
+extern int ft_rank;
 
 #ifdef HAS_DASH_ENDPOINT
 
@@ -466,7 +466,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
 
     if (local_mirror_flag)
     {
-        if (!au_mpi_rank_global)
+        if (!ft_rank)
         {
             std::vector<unsigned long long> start(endpoint_size.size()), end(endpoint_size.size());
 
@@ -501,52 +501,52 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
             if (data_element_type == AU_SHORT)
             {
                 dash::Matrix<short, 1, unsigned long> *dash_array_typed = (dash::Matrix<short, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_INT)
             {
                 dash::Matrix<int, 1, unsigned long> *dash_array_typed = (dash::Matrix<int, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG)
             {
                 dash::Matrix<long, 1, unsigned long> *dash_array_typed = (dash::Matrix<long, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG_LONG)
             {
                 dash::Matrix<long long, 1, unsigned long> *dash_array_typed = (dash::Matrix<long long, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_USHORT)
             {
                 dash::Matrix<unsigned short, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_UINT)
             {
                 dash::Matrix<unsigned int, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULONG)
             {
                 dash::Matrix<unsigned long, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULLONG)
             {
                 dash::Matrix<unsigned long long, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_FLOAT)
             {
                 dash::Matrix<float, 1, unsigned long> *dash_array_typed = (dash::Matrix<float, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_DOUBLE)
             {
                 dash::Matrix<double, 1, unsigned long> *dash_array_typed = (dash::Matrix<double, 1, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else
             {
@@ -559,52 +559,52 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
             if (data_element_type == AU_SHORT)
             {
                 dash::Matrix<short, 2, unsigned long> *dash_array_typed = (dash::Matrix<short, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_INT)
             {
                 dash::Matrix<int, 2, unsigned long> *dash_array_typed = (dash::Matrix<int, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG)
             {
                 dash::Matrix<long, 2, unsigned long> *dash_array_typed = (dash::Matrix<long, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG_LONG)
             {
                 dash::Matrix<long long, 2, unsigned long> *dash_array_typed = (dash::Matrix<long long, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_USHORT)
             {
                 dash::Matrix<unsigned short, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_UINT)
             {
                 dash::Matrix<unsigned int, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULONG)
             {
                 dash::Matrix<unsigned long, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULLONG)
             {
                 dash::Matrix<unsigned long long, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_FLOAT)
             {
                 dash::Matrix<float, 2, unsigned long> *dash_array_typed = (dash::Matrix<float, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_DOUBLE)
             {
                 dash::Matrix<double, 2, unsigned long> *dash_array_typed = (dash::Matrix<double, 2, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else
             {
@@ -617,52 +617,52 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
             if (data_element_type == AU_SHORT)
             {
                 dash::Matrix<short, 3, unsigned long> *dash_array_typed = (dash::Matrix<short, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_INT)
             {
                 dash::Matrix<int, 3, unsigned long> *dash_array_typed = (dash::Matrix<int, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG)
             {
                 dash::Matrix<long, 3, unsigned long> *dash_array_typed = (dash::Matrix<long, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG_LONG)
             {
                 dash::Matrix<long long, 3, unsigned long> *dash_array_typed = (dash::Matrix<long long, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_USHORT)
             {
                 dash::Matrix<unsigned short, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_UINT)
             {
                 dash::Matrix<unsigned int, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULONG)
             {
                 dash::Matrix<unsigned long, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULLONG)
             {
                 dash::Matrix<unsigned long long, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_FLOAT)
             {
                 dash::Matrix<float, 3, unsigned long> *dash_array_typed = (dash::Matrix<float, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_DOUBLE)
             {
                 dash::Matrix<double, 3, unsigned long> *dash_array_typed = (dash::Matrix<double, 3, unsigned long> *)dash_array_p;
-                StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else
             {
@@ -959,8 +959,8 @@ int EndpointMEMORY::MergeMirrors(std::string op_str)
     }
     }
 
-    //if(!au_mpi_rank_global) std::cout << "Pre write merged result to dash disabled\n" ;
-    if (!au_mpi_rank_global && false)
+    //if(!ft_rank) std::cout << "Pre write merged result to dash disabled\n" ;
+    if (!ft_rank && false)
     {
         std::vector<unsigned long> start_ul, end_ul;
         start_ul.resize(endpoint_size.size());
@@ -1071,14 +1071,14 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
     }
     }
 
-    //std::cout << "Pre init_value_str at " << au_mpi_rank_global << "\n" <<  std::flush;
+    //std::cout << "Pre init_value_str at " << ft_rank << "\n" <<  std::flush;
 
     //Error:
     //Disable them for DASH distribution issue.
     //AccessDashData1D may access data from different nodes
     if (init_value_str == "" && false)
     {
-        if (!au_mpi_rank_global)
+        if (!ft_rank)
         {
             std::vector<unsigned long> start_ul, end_ul;
             start_ul.resize(endpoint_size.size());
@@ -1164,7 +1164,7 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
         }
         case AU_DOUBLE_COMPLEX:
         {
-            std::cout << "Pre BcastHelp at " << au_mpi_rank_global << "\n";
+            std::cout << "Pre BcastHelp at " << ft_rank << "\n";
             BcastHelp<std::complex<double>>(local_mirror_buffer, local_mirror_size);
             break;
         }

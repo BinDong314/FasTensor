@@ -87,8 +87,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = x86_64-apple-darwin20.2.0
-host_triplet = x86_64-apple-darwin20.2.0
+build_triplet = x86_64-apple-darwin20.3.0
+host_triplet = x86_64-apple-darwin20.3.0
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -245,11 +245,11 @@ ACLOCAL = ${SHELL} '/Users/dbin/work/fastensor/missing' aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include
-ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include
+ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include    -DHAS_DASH_ENDPOINT   -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
+ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include -DHAS_DASH_ENDPOINT  -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
 ARRAYUDF_CXXFLAGS =     -std=c++17 -g3
 ARRAYUDF_LDFLAGS = 
-ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz
+ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
 ARRAY_UDF_PYTHON_ENABLED = false
 AUPY_CFLAGS = 
 AUPY_CPPFLAGS = 
@@ -287,7 +287,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LD = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+LD = /Library/Developer/CommandLineTools/usr/bin/ld
 LDFLAGS = 
 LIBOBJS = 
 LIBS = 
@@ -339,10 +339,10 @@ am__quote =
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build = x86_64-apple-darwin20.2.0
+build = x86_64-apple-darwin20.3.0
 build_alias = 
 build_cpu = x86_64
-build_os = darwin20.2.0
+build_os = darwin20.3.0
 build_vendor = apple
 builddir = .
 datadir = ${datarootdir}
@@ -350,10 +350,10 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = x86_64-apple-darwin20.2.0
+host = x86_64-apple-darwin20.3.0
 host_alias = 
 host_cpu = x86_64
-host_os = darwin20.2.0
+host_os = darwin20.3.0
 host_vendor = apple
 htmldir = ${docdir}
 includedir = ${prefix}/include
@@ -383,10 +383,10 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AUTOMAKE_OPTIONS = gnu
-AM_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include  -I./third_part
-AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include  -I./third_part
+AM_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include -DHAS_DASH_ENDPOINT  -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'  -I./third_part
+AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include    -DHAS_DASH_ENDPOINT   -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'  -I./third_part
 AM_CXXFLAGS =     -std=c++17 -g3    -I./third_part  
-AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz   -all-static     -I./third_part
+AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'   -all-static     -I./third_part
 lib_LTLIBRARIES = libFastensor.la
 libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_array.h ft_array.cpp \
