@@ -499,7 +499,7 @@ template <typename T>
 void String2Vector(const std::string &str, std::vector<T> &vec_new)
 {
     std::stringstream ss(str);
-
+    vec_new.clear();
     for (T i; ss >> i;)
     {
         vec_new.push_back(i);
