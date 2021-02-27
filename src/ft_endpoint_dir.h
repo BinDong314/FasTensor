@@ -88,11 +88,12 @@ in binary and source code form.
 #define DIR_FILE_SORT_INDEXES 5
 #define DIR_N_FILES 6
 #define DIR_GET_FILE_SIZE 7
+#define DIR_SET_CHUNK_SIZE 8
 
 //Todo
-#define DIR_INPUT_ELASTIC_SIZE 8
-#define DIR_OUTPUT_ELASTIC_SIZE 9
-#define DIR_SET_OUTPUT_FILE_NAMES 10
+#define DIR_INPUT_ELASTIC_SIZE 9
+#define DIR_OUTPUT_ELASTIC_SIZE 10
+#define DIR_SET_OUTPUT_FILE_NAMES 11
 
 #include "ft_utility.h"
 #include "ft_type.h"

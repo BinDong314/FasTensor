@@ -294,6 +294,8 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
 {
     PrintVector("EndpointDIR::Write start :", start);
     PrintVector("EndpointDIR::Write end :", end);
+    PrintVector("EndpointDIR::dir_chunk_size :", dir_chunk_size);
+
     std::cout << " dir_data_merge_index = " << dir_data_merge_index << " \n";
     int sub_endpoint_index = 0;
     sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
@@ -307,7 +309,7 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     }
     PrintVector("EndpointDIR::Write endpoint_size:", endpoint_size);
 
-    std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " + append_sub_endpoint_info << " \n";
+    std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " + append_sub_endpoint_info << ", dir_data_merge_index = " << dir_data_merge_index << " \n";
 
     PrintVector("EndpointDIR::Write start (after):", start);
     PrintVector("EndpointDIR::Write end (after) :", end);
@@ -523,6 +525,9 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         //std::string file_size_str = ;
         parameter_v.clear();
         parameter_v.push_back(Vector2String(dir_chunk_size));
+        break;
+    case DIR_SET_CHUNK_SIZE:
+        String2Vector(parameter_v[0], dir_chunk_size);
         break;
     default:
         break;

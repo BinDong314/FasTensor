@@ -158,7 +158,7 @@ extern int ft_rank;
     }
 #define AU_VERBOSE(info_p, rank_p)           \
     {                                        \
-        if (ft_rank == rank_p)    \
+        if (ft_rank == rank_p)               \
             std::cout << info_p << std::endl \
                       << std::flush;         \
     }
