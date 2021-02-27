@@ -296,17 +296,24 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     PrintVector("EndpointDIR::Write end :", end);
     PrintVector("EndpointDIR::dir_chunk_size :", dir_chunk_size);
 
-    std::cout << " dir_data_merge_index = " << dir_data_merge_index << " \n";
-    int sub_endpoint_index = 0;
-    sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
     //start[dir_data_merge_index] = 0;
     //end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
+    bool has_smaller_chunk_size = false;
     for (int i = 0; i < endpoint_ranks; i++)
     {
         endpoint_size[i] = end[i] - start[i] + 1;
         start[i] = 0;
         end[i] = endpoint_size[i] - 1;
+        if (endpoint_size[i] < dir_chunk_size[i])
+        {
+            dir_chunk_size[i] = endpoint_size[i];
+        }
     }
+
+    std::cout << " dir_data_merge_index = " << dir_data_merge_index << " \n";
+    int sub_endpoint_index = 0;
+    sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
+
     PrintVector("EndpointDIR::Write endpoint_size:", endpoint_size);
 
     std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " + append_sub_endpoint_info << ", dir_data_merge_index = " << dir_data_merge_index << " \n";
