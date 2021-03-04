@@ -583,8 +583,10 @@ int EndpointDIR::ReadAllAttributeName(std::vector<std::string> &attr_name)
     sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
     //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
-    sub_endpoint->ReadAllAttributeName(attr_name);
+    sub_endpoint->Control(OP_LIST_TAG, attr_name);
     sub_endpoint->Close();
+
+    return 0;
 }
 
 /**
@@ -594,13 +596,15 @@ int EndpointDIR::ReadAllAttributeName(std::vector<std::string> &attr_name)
      * @param data 
      * @return int 
      */
-int EndpointDIR::WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p = 0)
+int EndpointDIR::WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p)
 {
     sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
     //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
     sub_endpoint->WriteAttribute(name, data, data_type_p, data_length_p);
     sub_endpoint->Close();
+
+    return 0;
 }
 
 /**
@@ -610,11 +614,24 @@ int EndpointDIR::WriteAttribute(const std::string &name, const void *data, FTDat
      * @param data 
      * @return int 
      */
-int EndpointDIR::ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0)
+int EndpointDIR::ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p)
 {
     sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
     //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
     sub_endpoint->ReadAttribute(name, data, data_type_p, data_length_p);
     sub_endpoint->Close();
+
+    return 0;
+}
+
+size_t EndpointDIR::GetAttributeSize(const std::string &name, FTDataType data_type_p)
+{
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    sub_endpoint->Open();
+    size_t a_size = sub_endpoint->GetAttributeSize(name, data_type_p);
+    //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
+    sub_endpoint->Close();
+
+    return 0;
 }
