@@ -1222,15 +1222,18 @@ public:
     chunk_id = chunk_id_p;
   }
 
-  inline int SetTagMap(const std::map<std::string, std::string> &stencil_tag_map_p)
+  inline int SetTagMap(std::map<std::string, std::string> &stencil_tag_map_p)
   {
     is_stencil_tag = true;
     stencil_tag_map = stencil_tag_map_p;
+
+    return 0;
   }
 
   inline int GetTagMap(std::map<std::string, std::string> &stencil_tag_map_p)
   {
     stencil_tag_map_p = stencil_tag_map;
+    return 0;
   }
 
   inline bool HasTagMap()
