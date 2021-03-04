@@ -528,7 +528,7 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         has_ordering_on_file_list = true;
         if (parameter_v.size() < 1)
         {
-            AU_EXIT("DIR_OUPUT_REPLACE_RGX  needs one parameters: order vector (as string) \n");
+            AU_EXIT("DIR_FILE_SORT_INDEXES needs one parameters: order vector (as string) !! \n");
         }
         String2Vector(parameter_v[0], order_on_file_list);
         break;
@@ -545,6 +545,9 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         break;
     case DIR_SET_CHUNK_SIZE:
         String2Vector(parameter_v[0], dir_chunk_size);
+        break;
+    case OP_LIST_TAG:
+        ReadAllAttributeName(parameter_v);
         break;
     default:
         break;

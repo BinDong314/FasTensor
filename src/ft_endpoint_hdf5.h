@@ -102,11 +102,6 @@ in binary and source code form.
 #define OP_ENABLE_COLLECTIVE_IO HDF5_ENABLE_COLLECTIVE_IO
 #define OP_DISABLE_COLLECTIVE_IO HDF5_DISABLE_COLLECTIVE_IO
 
-//Todo:
-//This might be general command
-#define OP_CREATE_VIS_SCRIPT 4
-#define OP_LIST_TAG 5
-
 //
 //I/O layer
 class EndpointHDF5 : public Endpoint

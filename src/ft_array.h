@@ -2215,6 +2215,7 @@ namespace FT
     inline int GetStencilTag()
     {
       get_stencil_tag_flag = true;
+      return 0;
     }
   }; // class of array
 } // namespace FT

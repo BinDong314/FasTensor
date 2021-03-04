@@ -1230,13 +1230,13 @@ public:
     return 0;
   }
 
-  inline int GetTagMap(std::map<std::string, std::string> &stencil_tag_map_p)
+  inline int GetTagMap(std::map<std::string, std::string> &stencil_tag_map_p) const
   {
     stencil_tag_map_p = stencil_tag_map;
     return 0;
   }
 
-  inline bool HasTagMap()
+  inline bool HasTagMap() const
   {
     return is_stencil_tag;
   }

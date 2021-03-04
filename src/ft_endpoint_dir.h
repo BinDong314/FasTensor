@@ -85,7 +85,7 @@ in binary and source code form.
 #define DIR_INPUT_SEARCH_RGX 2
 #define DIR_OUPUT_REPLACE_RGX 3
 #define DIR_OUPUT_REPLACE_RGX_ARG 4
-#define DIR_FILE_SORT_INDEXES 5
+#define DIR_FILE_SORT_INDEXES 15
 #define DIR_N_FILES 6
 #define DIR_GET_FILE_SIZE 7
 #define DIR_SET_CHUNK_SIZE 8

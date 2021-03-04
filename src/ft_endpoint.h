@@ -91,6 +91,11 @@ in binary and source code form.
 
 using namespace std;
 
+//Todo:
+//This might be general command
+#define OP_CREATE_VIS_SCRIPT 4
+#define OP_LIST_TAG 5
+
 /**
  * @brief Define the class for the Endpoint used by ArrayUDF 
  * to store the data. It contains basic infomation for the endpoint
