@@ -206,6 +206,10 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
     sub_endpoint_index_end = (end[dir_data_merge_index] + 1) / dir_chunk_size[dir_data_merge_index];
 
+    //save for metadata operation
+    // TODO: we only consider the first file here and try to consider more file here
+    dir_file_list_current_index = sub_endpoint_index;
+
     std::vector<unsigned long long> start_sub_endpoint(start.begin(), start.end());
     std::vector<unsigned long long> end_sub_endpoint(end.begin(), end.end());
 
@@ -316,6 +320,9 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
         start[i] = 0;
         end[i] = endpoint_size[i] - 1;
     }
+
+    //save for metadata operation
+    dir_file_list_current_index = sub_endpoint_index;
 
     PrintVector("EndpointDIR::Write endpoint_size:", endpoint_size);
 
@@ -563,4 +570,51 @@ void EndpointDIR::SetMergeIndex(int index_p)
 int EndpointDIR::GetMergeIndex()
 {
     return dir_data_merge_index;
+}
+
+/**
+     * @brief Read all attribute name
+     * 
+     * @param attri_name 
+     * @return int 
+     */
+int EndpointDIR::ReadAllAttributeName(std::vector<std::string> &attr_name)
+{
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    sub_endpoint->Open();
+    //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
+    sub_endpoint->ReadAllAttributeName(attr_name);
+    sub_endpoint->Close();
+}
+
+/**
+     * @brief Set the Attribute object
+     *   Do not need to be pure virtual method
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+int EndpointDIR::WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p = 0)
+{
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    sub_endpoint->Open();
+    //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
+    sub_endpoint->WriteAttribute(name, data, data_type_p, data_length_p);
+    sub_endpoint->Close();
+}
+
+/**
+     * @brief Get the Attribute object
+     *  Do not need to be pure virtual method
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+int EndpointDIR::ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0)
+{
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    sub_endpoint->Open();
+    //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
+    sub_endpoint->ReadAttribute(name, data, data_type_p, data_length_p);
+    sub_endpoint->Close();
 }

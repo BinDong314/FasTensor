@@ -206,6 +206,12 @@ namespace FT
 
     bool set_direct_output_flag = false;
 
+    bool get_stencil_tag_flag = false;
+    std::map<std::string, std::string> stencil_metadata_map;
+
+    bool has_output_stencil_tag_flag = false;
+    std::map<std::string, std::string> output_stencil_metadata_map;
+
     int skip_not_aligned_w_array_index;
     //The shape of output_vector when vector_type_flag = true
     std::vector<size_t> output_vector_shape;
@@ -775,6 +781,11 @@ namespace FT
             cell_target.SetPadding(padding_value);
           }
           cell_target.SetChunkID(prev_chunk_id);
+
+          if (get_stencil_tag_flag)
+          {
+            cell_target.SetTagMap(stencil_metadata_map);
+          }
           Stencil<UDFOutputType> cell_return_stencil;
           UDFOutputType cell_return_value;
           unsigned long long cell_target_g_location_rm;
@@ -859,6 +870,12 @@ namespace FT
             if (vector_type_flag == true)
             {
               cell_return_stencil.GetShape(output_vector_shape);
+            }
+
+            if (cell_return_stencil.HasTagMap())
+            {
+              has_output_stencil_tag_flag = true;
+              cell_return_stencil.GetTagMap(output_stencil_metadata_map);
             }
 
             if (save_result_flag)
@@ -986,6 +1003,18 @@ namespace FT
             }
           }
         }
+
+        if (has_output_stencil_tag_flag)
+        {
+          for (std::map<std::string, std::string>::iterator it = output_stencil_metadata_map.begin(); it != output_stencil_metadata_map.end(); ++it)
+          {
+
+            B->SetTag(it->first, it->second);
+            //std::cout << "Key: " << it->first << std::endl();
+            //std::cout << "Value: " << it->second << std::endl();
+          }
+        }
+
         time_write = time_write + AU_WTIME - t_start;
 
         if (vector_type_flag == true)
@@ -1494,6 +1523,20 @@ namespace FT
       if (!virtual_array_flag)
       {
         endpoint->Read(current_chunk_ol_start_offset, current_chunk_ol_end_offset, &current_chunk_data[0]);
+        //Get the tag if needed
+        if (get_stencil_tag_flag)
+        {
+          std::vector<std::string> stencil_tag_names;
+          GetAllTagName(stencil_tag_names);
+          //Here we assume all value are string
+          std::string tag_value;
+          for (int i = 0; i < stencil_tag_names.size(); i++)
+          {
+            GetTag(stencil_tag_names[i], tag_value);
+            stencil_metadata_map[stencil_tag_names[i]] = tag_value;
+          }
+          //endpoint->Control(stencil_metadata_map);
+        }
         return 1;
       }
       else
@@ -2169,6 +2212,10 @@ namespace FT
       set_direct_output_flag = true;
     }
 
+    inline int GetStencilTag()
+    {
+      get_stencil_tag_flag = true;
+    }
   }; // class of array
 } // namespace FT
 

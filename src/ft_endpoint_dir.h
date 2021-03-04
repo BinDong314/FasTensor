@@ -89,11 +89,13 @@ in binary and source code form.
 #define DIR_N_FILES 6
 #define DIR_GET_FILE_SIZE 7
 #define DIR_SET_CHUNK_SIZE 8
+#define DIR_GET_ALL_CHUNK_TAGS 9
+#define DIR_SET_ALL_CHUNK_TAGS 10
 
 //Todo
-#define DIR_INPUT_ELASTIC_SIZE 9
-#define DIR_OUTPUT_ELASTIC_SIZE 10
-#define DIR_SET_OUTPUT_FILE_NAMES 11
+#define DIR_INPUT_ELASTIC_SIZE 11
+#define DIR_OUTPUT_ELASTIC_SIZE 12
+#define DIR_SET_OUTPUT_FILE_NAMES 13
 
 #include "ft_utility.h"
 #include "ft_type.h"
@@ -118,6 +120,8 @@ private:
 
     std::string dir_str;
     std::vector<std::string> dir_file_list;
+    int dir_file_list_current_index = 0; //index of the current one in read/write
+
     std::string append_sub_endpoint_info;              //dir_file_list[i] + append_sub_endpoint_info is the finale sub_endpoint_info
     std::vector<int> dir_chunk_size, dir_overlap_size; //set chunk size to be each sub_endpoint
 
@@ -264,5 +268,33 @@ public:
      * @return int 
      */
     int GetMergeIndex();
+
+    /**
+     * @brief Set the Attribute object
+     *   Do not need to be pure virtual method
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+    int WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
+
+    /**
+     * @brief Get the Attribute object
+     *  Do not need to be pure virtual method
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+    int ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
+
+    size_t GetAttributeSize(const std::string &name, FTDataType data_type_p) override;
+
+    /**
+     * @brief Read all attribute name
+     * 
+     * @param attri_name 
+     * @return int 
+     */
+    int ReadAllAttributeName(std::vector<std::string> &attr_name);
 };
 #endif

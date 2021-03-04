@@ -135,6 +135,9 @@ private:
   bool has_padding_value_flag = false;
   T padding_value;
 
+  bool is_stencil_tag = false;
+  std::map<std::string, std::string> stencil_tag_map;
+
 public:
   //For test only
   Stencil(){};
@@ -1217,6 +1220,22 @@ public:
   void SetChunkID(unsigned long long chunk_id_p)
   {
     chunk_id = chunk_id_p;
+  }
+
+  inline int SetTagMap(const std::map<std::string, std::string> &stencil_tag_map_p)
+  {
+    is_stencil_tag = true;
+    stencil_tag_map = stencil_tag_map_p;
+  }
+
+  inline int GetTagMap(std::map<std::string, std::string> &stencil_tag_map_p)
+  {
+    stencil_tag_map_p = stencil_tag_map;
+  }
+
+  inline bool HasTagMap()
+  {
+    return is_stencil_tag;
   }
 };
 
