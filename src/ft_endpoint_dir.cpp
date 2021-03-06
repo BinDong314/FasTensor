@@ -601,8 +601,21 @@ int EndpointDIR::ReadAllAttributeName(std::vector<std::string> &attr_name)
      */
 int EndpointDIR::WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p)
 {
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    std::string new_file_name_after_regex;
+    //regex re("^(.*)\\.tdms$");
+
+    if (output_replace_regex_flag)
+    {
+        new_file_name_after_regex = std::regex_replace(dir_file_list[dir_file_list_current_index], *output_replace_regex, output_replace_regex_aug);
+    }
+    else
+    {
+        new_file_name_after_regex = dir_file_list[dir_file_list_current_index];
+    }
+
+    sub_endpoint->SetEndpointInfo(dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
+    std::cout << " write attribute: " << dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info << " \n";
     //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
     sub_endpoint->WriteAttribute(name, data, data_type_p, data_length_p);
     sub_endpoint->Close();
@@ -636,5 +649,5 @@ size_t EndpointDIR::GetAttributeSize(const std::string &name, FTDataType data_ty
     //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
     sub_endpoint->Close();
 
-    return 0;
+    return a_size;
 }

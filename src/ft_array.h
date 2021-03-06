@@ -1013,6 +1013,7 @@ namespace FT
             //std::cout << "Key: " << it->first << std::endl();
             //std::cout << "Value: " << it->second << std::endl();
           }
+          has_output_stencil_tag_flag = false;
         }
 
         time_write = time_write + AU_WTIME - t_start;
@@ -1534,6 +1535,7 @@ namespace FT
           {
             GetTag(stencil_tag_names[i], tag_value);
             stencil_metadata_map[stencil_tag_names[i]] = tag_value;
+            std::cout << " tag name " << stencil_tag_names[i] << " , tag value = " << tag_value << "\n";
           }
           //endpoint->Control(stencil_metadata_map);
         }
