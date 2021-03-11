@@ -241,7 +241,19 @@ int EndpointHDF5::Read(std::vector<unsigned long long> start, std::vector<unsign
     hid_t memspace_id = H5Screate_simple(endpoint_ranks, &count[0], NULL);
     H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, &offset[0], NULL, &count[0], NULL);
 
-    int ret = H5Dread(did, mem_type, memspace_id, dataspace_id, plist_cio_id, data);
+    hid_t dset_type_id = H5Dget_type(did);
+    hid_t typeclass = H5Tget_class(dset_type_id);
+    int ret;
+    if (typeclass != H5T_COMPOUND)
+    {
+
+        ret = H5Dread(did, mem_type, memspace_id, dataspace_id, plist_cio_id, data);
+    }
+    else
+    {
+        hid_t mem_typeclass = H5Tget_native_type(dset_type_id, H5T_DIR_ASCEND);
+        ret = H5Dread(did, mem_typeclass, memspace_id, dataspace_id, plist_cio_id, data);
+    }
     assert(ret >= 0);
     H5Sclose(memspace_id);
     return ret;

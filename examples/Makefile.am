@@ -23,7 +23,8 @@ bin_PROGRAMS=   ft_test_data_generator \
                 ft_example_padding \
                 ft_example_tag \
                 ft_example_chunk_overlap \
-                ft_example_cache
+                ft_example_cache \
+                ft_example_cmpd
 
 
                
@@ -48,3 +49,4 @@ ft_example_vector_2d_SOURCES=ft_example_vector_2d.cpp
 ft_example_padding_SOURCES=ft_example_padding.cpp
 ft_example_tag_SOURCES=ft_example_tag.cpp
 ft_example_chunk_overlap_SOURCES=ft_example_chunk_overlap.cpp
+ft_example_cmpd_SOURCES=ft_example_cmpd.cpp
