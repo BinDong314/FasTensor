@@ -445,6 +445,10 @@ void EndpointHDF5::Map2MyType()
         mem_type = H5T_NATIVE_DOUBLE;
         disk_type = H5T_IEEE_F64LE;
         return;
+    case AU_NO_TYPE:
+        mem_type = -1;
+        disk_type = -1;
+        return;
     default:
         std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
         std::flush(std::cout);

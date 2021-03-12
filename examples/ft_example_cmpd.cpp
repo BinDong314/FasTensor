@@ -94,7 +94,7 @@ struct InputStruct
     float f1;
     int i1;
     double d2;
-    double d3
+    double d3;
 };
 
 struct OutputStruct
@@ -111,9 +111,9 @@ inline Stencil<OutputStruct> udf_vds(const Stencil<InputStruct> &iStencil)
     OutputStruct ovds;
     Stencil<OutputStruct> oStencil;
 
-    ovds.i = iStencil(0, 0).i1;
-    ovds.f = iStencil(0, 0).f1;
-    ovds.d_ave = (iStencil(0, 0).d1 + iStencil(0, 0).d2 + iStencil(0, 0).d3) / 3.0;
+    ovds.i = iStencil(0).i1;
+    ovds.f = iStencil(0).f1;
+    ovds.d_ave = (iStencil(0).d1 + iStencil(0).d2 + iStencil(0).d3) / 3.0;
 
     oStencil = ovds;
     return oStencil;
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
     std::vector<int> overlap_size = {0};
 
     //Input data
-    Array<InputStruct> *A = new Array<InputStruct>(chunk_size, overlap_size, "EP_HDF5:./test-data/cmpd.h5:/DS1");
+    Array<InputStruct> *A = new Array<InputStruct>("EP_HDF5:./test-data/cmpd.h5:/DS1", chunk_size, overlap_size);
 
     std::cout << A->GetValue(0, 0) << "\n";
 
