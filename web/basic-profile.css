@@ -28,3 +28,5 @@ h1,h2,h3 {font-weight:700; line-height:1.4em;}
 .credits {display:block; clear:left; font-size:0.9em; color:#aaa; margin:20px 0;}
 .credits a {color:#888;}
 .clear {clear:both;}
+
+hr.new5{border: 10px solid green;border-radius: 5px;}
