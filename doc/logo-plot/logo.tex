@@ -1,4 +1,7 @@
-\documentclass[12pt]{standalone}
+%https://tex.stackexchange.com/questions/236815/how-to-remove-the-background-for-png-picture
+%$ gs -sDEVICE=pngalpha -q -dQUIET -dSAFER -dBATCH -dNOPAUSE -dNOPROMPT -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=2 -dUseFastColor=true -dPDFSETTINGS=/prepress -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r216x216 -sOutputFile=test.png -ftest.pdf
+
+\documentclass[border=10pt,tikz]{standalone}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \begin{document}

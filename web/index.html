@@ -4,22 +4,24 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="description" content="Fastensor is ">
-	<meta name="keywords" content="ArrayUDF, Spark, MapReduce, SciDB">
+	<meta name="description"
+		content="FasTensor is generic programming model for large-scale data analysis with high performance computing system. It is much faster than the MapReduce, Spark, and TensorFlow.">
+	<meta name="keywords" content="FasTensor, ArrayUDF, Spark, MapReduce, SciDB, User-defined Function">
 	<meta name="author" content="Bin Dong">
-	<link rel="stylesheet" type="text/css" href="./index/basic-profile.css" title="Fastensor" media="all">
-	<title>Fastensor</title>
+	<link rel="stylesheet" type="text/css" href="basic-profile.css" title="FasFensor" media="all">
+	<link rel="icon" href="./figure/logo.png">
+	<title>FasTensor</title>
 </head>
 
 <body>
 	<div id="wrap">
 		<div id="sidebar">
-			<img src="./figure/logo.png" width="160" height="160" alt="Sample logotype">
-			<h1>Fastensor</h1>
-			<p class="slogan">Find unseen from data quickly and easily</p>
+			<img src="./figure/logo.png" width="180" height="180" alt="Sample logotype">
+			<h1>FasTensor</h1>
+			<p class="slogan">Transform supercomputer for big data</p>
 			<ul>
-				<li><a href="https://bitbucket.org/berkeleylab/fastensor/src/master/">Source Code</a><br>
-					Jump to bitbucket.org
+				<li><a href="https://bitbucket.org/berkeleylab/fastensor/src/master/">Download</a><br>
+					from bitbucket.org
 				</li>
 				<li><a href="#ftinstallationguide">Installation Guide</a><br> git, make, c++, ...
 				</li>
@@ -34,21 +36,93 @@
 
 		<div id="content">
 			<h3>Overview</h3>
-			<p>FasTensor is a generic parallel programming model for big data analyses with user- defined
-				operations.
-				FasTensor exploits the structural-locality in the multidimensional arrays to automate file
-				operations,
-				data partitioning, communication, parallel execution, and common data management operations.</p>
+			<p>FasTensor, formerly known as ArrayUDF, is a generic parallel programming model for big data analyses with
+				any user-defined functions (UDF). These functions may express data analysis operations from traditional
+				database (DB)
+				systems to advanced machine learning pipelines. FasTensor exploits the structural-locality in the
+				multidimensional arrays to automate file operations, data partitioning, communication, parallel
+				execution, and common data management operations. </p>
 
-			<img src="./figure/ft-vs-spark.png" width="280" height="280" alt="Sample logotype">
-			<img src="./figure/ft-vs-ft.png" width="280" height="280" alt="Sample logotype">
+			<p> FasTensor has the same idea as the MapReduce and Apache Spark to reduce the programming efforts. But,
+				FasTensor consistently outperforms (49X) them because it is directly defined and executed on the
+				multidimensional array, as shown below. Even comparing with highly optimized code in TensorFlow,
+				FasTensor can achieve up to 13X performance speedup in executing expensive steps in CNN. FasTensor can
+				scale up to over 10,000 CPU cores on supercomputers efficiently.</p>
+
+			<img src="./figure/ft-vs-spark.png" width="280" height="280" alt="FT vs Spark">
+			<img src="./figure/ft-vs-ft.png" width="280" height="280" alt="FT vs TF">
 
 			<h3 id="ftinstallationguide">Installation Guide</h3>
 
 			<h3 id="ftquickstartexample">Quick Start Example</h3>
+			<!--https://tohtml.com/-->
+			<div id="cppcode">
+				Below is an example to use FasTensor to perform a three-point moving average operation on a 2D array
+				stored in a
+				HDF5 file. The three-point moving average operation is expressed as a user- defined function udf_ma.
+				FasTensor uses the C++ main function to set up both input and output, to transform the data from the
+				input to the output based on the expression in udf_ma. Note that the example code can run either
+				sequentially on a single CPU or parallel on multiple CPUs across multiple computing nodes without any
+				modification.
+				<hr>
+				<pre style='color:#000000;background:#ffffff;'><span style='color:#7f0055; '>#</span><span style='color:#7f0055; '>include </span><span style='color:#2a00ff; '>"</span><span style='color:#3f3fbf; '>ft.h</span><span style='color:#2a00ff; '>"</span>
 
+<span style='color:#7f0055; font-weight:bold; '>using</span> <span style='color:#7f0055; font-weight:bold; '>namespace</span> std;
+<span style='color:#7f0055; font-weight:bold; '>using</span> <span style='color:#7f0055; font-weight:bold; '>namespace</span> FT;
+					
+<span style='color:#7f0055; font-weight:bold; '>inline</span> Stencil&lt;<span style='color:#7f0055; font-weight:bold; '>float</span>> udf_ma(<span style='color:#7f0055; font-weight:bold; '>const</span> Stencil&lt;<span style='color:#7f0055; font-weight:bold; '>float</span>> &amp;iStencil)
+{
+	Stencil&lt;<span style='color:#7f0055; font-weight:bold; '>float</span>> oStencil;
+	oStencil = (iStencil(0, -1) + iStencil(0, 0) + iStencil(0, 1)) / 3.0;
+	<span style='color:#7f0055; font-weight:bold; '>return</span> oStencil;
+}
+					
+<span style='color:#7f0055; font-weight:bold; '>int</span> <span style='color:#7f0055; font-weight:bold; '>main</span>(<span style='color:#7f0055; font-weight:bold; '>int</span> argc, <span style='color:#7f0055; font-weight:bold; '>char</span> *argv[])
+{
+	FT_Init(argc, argv);
+	std::<span style='color:#7f0055; font-weight:bold; '>vector</span>&lt;<span style='color:#7f0055; font-weight:bold; '>int</span>> chunk_size = {4, 4};
+	std::<span style='color:#7f0055; font-weight:bold; '>vector</span>&lt;<span style='color:#7f0055; font-weight:bold; '>int</span>> overlap_size = {0, 1};
+	Array&lt;<span style='color:#7f0055; font-weight:bold; '>float</span>> A(<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>EP_HDF5:tutorial.h5:/dat</span><span style='color:#2a00ff; '>"</span>, chunk_size, overlap_size);
+	Array&lt;<span style='color:#7f0055; font-weight:bold; '>float</span>> B(<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>EP_HDF5:tutorial_ma_new.h5:/dat</span><span style='color:#2a00ff; '>"</span>);
+	A.Transform(udf_ma, B);
+	FT_Finalize();
+	<span style='color:#7f0055; font-weight:bold; '>return</span> 0;
+}
+</pre>
+				<!--Created using ToHtml.com on 2021-03-17 22:52:22 UTC -->
+				<hr>
+			</div>
 			<h3 id="ftpublications">Publications</h3>
-
+			<ul>
+				<li>
+					Bin Dong, Kesheng Wu, Suren Byna, Houjun Tang, "SLOPE: Structural Locality-Aware Programming Model
+					for Composing Array Data Analysis", International Conference on High Performance Computing, January
+					1, 2019, 61--80, <a href="https://crd.lbl.gov/assets/Uploads/slope-cr.pdf">PDF</a>
+				</li>
+				<li>
+					Bin Dong, Kesheng Wu, Surendra Byna, Jialin Liu, Weijie Zhao, Florin Rusu, "ArrayUDF: User-defined
+					scientific data analysis on arrays", Proceedings of the 26th International Symposium on
+					High-Performance Parallel and Distributed Computing, January 1, 2017, 53--64, <a
+						href="https://crd.lbl.gov/assets/Uploads/hpdc02.pdf">PDF</a>
+				</li>
+				<li>
+					Xin Xing, Bin Dong, Jonathan Ajo-Franklin, Kesheng Wu, "Automated Parallel Data Processing Engine
+					with Application to Large-Scale Feature Extraction", 2018 IEEE/ACM Machine Learning in HPC
+					Environments (MLHPC), January 1, 2018, 37--46, <a
+						href="https://crd.lbl.gov/assets/Uploads/arrayudf-das.pdf"> PDF</a>
+				</li>
+				<li>
+					Bin Dong, Patrick Kilian, Xiaocan Li, Fan Guo, Suren Byna, Kesheng Wu, "Terabyte-scale Particle Data
+					Analysis: An ArrayUDF Case Study", Proceedings of the 31st International Conference on Scientific
+					and Statistical Database Management, January 1, 2019, 202--205, <a
+						href="https://crd.lbl.gov/assets/Uploads/VPIC-SSDBM-Camera-ready.pdf"> PDF </a>
+				</li>
+				<li>
+					Bin Dong, Veronica Rodriguez Tribaldos, Xin Xing, Suren Byna, Jonathan Ajo-Franklin, Kesheng
+					Wu, "DASSA: Parallel DAS Data Storage and Analysis for Subsurface Event Detection", 2020
+					IEEE International Parallel and Distributed Processing Symposium (IPDPS), July 14, 2020, 254--263,
+				</li>
+			</ul>
 			<h3>Recent News</h3>
 			<p class="timestamp"> JANUARY 2, 2018<br>
 				Tags: <a

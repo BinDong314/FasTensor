@@ -78,9 +78,16 @@ in binary and source code form.
  */
 
 #include "ft.h"
+
 using namespace std;
 using namespace FT;
-inline Stencil<float> udf_ma(const Stencil<float> &iStencil);
+
+inline Stencil<float> udf_ma(const Stencil<float> &iStencil)
+{
+    Stencil<float> oStencil;
+    oStencil = (iStencil(0, -1) + iStencil(0, 0) + iStencil(0, 1)) / 3.0;
+    return oStencil;
+}
 
 int main(int argc, char *argv[])
 {
@@ -97,10 +104,4 @@ int main(int argc, char *argv[])
     A.Transform(udf_ma, B);
     FT_Finalize();
     return 0;
-}
-inline Stencil<float> udf_ma(const Stencil<float> &iStencil)
-{
-    Stencil<float> oStencil;
-    oStencil = (iStencil(0, -1) + iStencil(0, 0) + iStencil(0, 1)) / 3.0;
-    return oStencil;
 }
