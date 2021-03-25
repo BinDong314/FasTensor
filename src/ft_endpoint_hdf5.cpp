@@ -518,14 +518,14 @@ int EndpointHDF5::ParseEndpointInfo()
     std::stringstream ss(endpoint_info);
     if (!std::getline(ss, fn_str, ':'))
     {
-        AU_EXIT("Invalued endpoint_info");
+        AU_EXIT("Invalid endpoint_info");
     }
 
     std::string group_dataset_name_str;
 
     if (!std::getline(ss, group_dataset_name_str, ':'))
     {
-        AU_EXIT("Invalued endpoint_info");
+        AU_EXIT("Invalid endpoint_info");
     }
 
     gn_str = ExtractPath(group_dataset_name_str);
@@ -666,7 +666,15 @@ int EndpointHDF5::WriteAttribute(const std::string &name, const void *data, FTDa
     {
         hid_t attribute_space_scalar = H5Screate(H5S_SCALAR);
         hid_t attribute_str_type = H5Tcopy(H5T_C_S1);
-        H5Tset_size(attribute_str_type, data_length_p);
+        if (data_length_p > 0)
+        {
+            H5Tset_size(attribute_str_type, data_length_p);
+        }
+        else
+        {
+            std::cout << "WriteAttribute: name " << name << ", data_length_p = " << data_length_p << "\n";
+            H5Tset_size(attribute_str_type, 1);
+        }
         //H5Tset_strpad(attribute_str_type, H5T_STR_NULLTERM);
         hid_t attribute_id = H5Acreate(did, name.c_str(), attribute_str_type, attribute_space_scalar, H5P_DEFAULT, H5P_DEFAULT);
         ret = H5Awrite(attribute_id, attribute_str_type, data);
@@ -678,6 +686,8 @@ int EndpointHDF5::WriteAttribute(const std::string &name, const void *data, FTDa
     return ret;
 }
 
+//https://support.hdfgroup.org/ftp/HDF5/examples/misc-examples/attrvstr.c
+//https://support.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_10/C/H5T/h5ex_t_vlstringatt.c
 /**
      * @brief Get the Attribute object
      * 
@@ -700,15 +710,8 @@ int EndpointHDF5::ReadAttribute(const std::string &name, void *data, FTDataType 
     {
         hid_t mem_type_l, disk_type_l;
         Map2MyTypeParameters(data_type_p, mem_type_l, disk_type_l);
-        //hsize_t attribute_dims = data_length_p;
-        //hid_t attribute_dataspace_id = H5Screate_simple(1, &attribute_dims, NULL);
-        //hid_t attribute_id = H5Acreate(did, name.c_str(), disk_type_l, attribute_dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
-        //hsize_t attribute_dims[1];
         hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
-        //hid_t attribute_space = H5Aget_space(attribute_id);
-        //int attribute_ndims = H5Sget_simple_extent_dims(attribute_space, attribute_dims, NULL);
         ret = H5Aread(attribute_id, mem_type_l, data);
-        //H5Sclose(attribute_dataspace_id);
         H5Aclose(attribute_id);
     }
     else
@@ -717,8 +720,22 @@ int EndpointHDF5::ReadAttribute(const std::string &name, void *data, FTDataType 
         hid_t attribute_datatype = H5Aget_type(attribute_id);
         size_t attribute_sdim = H5Tget_size(attribute_datatype);
         hid_t attribute_memtype = H5Tcopy(H5T_C_S1);
-        H5Tset_size(attribute_memtype, attribute_sdim);
-        ret = H5Aread(attribute_id, attribute_memtype, data);
+
+        if (H5Tis_variable_str(attribute_datatype))
+        {
+            char *string_attr;
+            H5Tset_size(attribute_memtype, H5T_VARIABLE);
+            ret = H5Aread(attribute_id, attribute_memtype, &string_attr);
+            std::string temp_str(string_attr);
+            //std::cout << "ReadAttribute: name " << name << ", value = " << std::string(string_attr) << "\n";
+            memcpy(data, temp_str.data(), temp_str.size());
+        }
+        else
+        {
+            H5Tset_size(attribute_memtype, attribute_sdim);
+            ret = H5Aread(attribute_id, attribute_memtype, data);
+        }
+
         H5Aclose(attribute_id);
         //H5Sclose(attribute_space_scalar);
         //H5Tclose(attribute_str_type);
@@ -736,15 +753,38 @@ size_t EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_t
         int attribute_ndims = H5Sget_simple_extent_dims(attribute_space, attribute_dims, NULL);
         H5Aclose(attribute_id);
         H5Sclose(attribute_space);
+        //printf("attribute_dims[0] GetAttributeSize = %d \n\n", attribute_dims[0]);
         return attribute_dims[0];
     }
     else
     {
         hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
+        size_t attribute_size;
+        hid_t attribute_space = H5Aget_space(attribute_id);
         hid_t attribute_datatype = H5Aget_type(attribute_id);
-        size_t attribute_sdim = H5Tget_size(attribute_datatype);
+        if (H5Tis_variable_str(attribute_datatype))
+        {
+            //printf("It is H5Tis_variable_str!\n");
+            hid_t attribute_memtype = H5Tcopy(H5T_C_S1);
+            char **string_attr;
+            H5Tset_size(attribute_memtype, H5T_VARIABLE);
+            string_attr = (char **)malloc(1 * sizeof(char *));
+            H5Aread(attribute_id, attribute_memtype, string_attr);
+            std::string temp_str(string_attr[0]);
+            attribute_size = temp_str.size();
+            H5Dvlen_reclaim(attribute_memtype, attribute_space, H5P_DEFAULT, string_attr);
+            free(string_attr);
+            H5Tclose(attribute_memtype);
+        }
+        else
+        {
+            attribute_size = H5Tget_size(attribute_datatype);
+            //printf("It is NOT NOT H5Tis_variable_str!\n");
+        }
+        H5Tclose(attribute_datatype);
+        H5Sclose(attribute_space);
         H5Aclose(attribute_id);
-        return attribute_sdim;
+        return attribute_size;
     }
 }
 

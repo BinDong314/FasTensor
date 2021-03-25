@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     B->PrintEndpointInfo();
 
     //Run
-    A->Apply(udf_vds, B);
+    A->Transform(udf_vds, B);
 
     //Clear
     delete A;
