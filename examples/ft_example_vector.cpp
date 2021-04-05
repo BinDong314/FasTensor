@@ -123,10 +123,10 @@ int main(int argc, char *argv[])
     std::vector<int> overlap_size = {0, 0};
 
     //Orginal data set
-    Array<float> *A = new Array<float>("EP_HDF5:./test-data/testf-16x16-vector.h5:/testg/testd", chunk_size, overlap_size);
+    FT::Array<float> *A = new Array<float>("EP_HDF5:./test-data/testf-16x16-vector.h5:/testg/testd", chunk_size, overlap_size);
 
     //Results data to be stored in a file
-    Array<float> *B = new Array<float>("EP_HDF5:./test-data/testf-16x16-vector-output.h5:/testg/testd");
+    FT::Array<float> *B = new Array<float>("EP_HDF5:./test-data/testf-16x16-vector-output.h5:/testg/testd");
 
     //Set the direction to flat vector of output
     //A->SetVectorDirection(AU_FLAT_OUTPUT_ROW);
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     A->EnableApplyStride(skip_size);
 
     //Run udf_vector
-    A->Apply(udf_vector, B);
+    A->Transform(udf_vector, B);
 
     //Clear
     delete A;

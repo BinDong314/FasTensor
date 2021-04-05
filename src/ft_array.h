@@ -110,8 +110,54 @@ extern std::map<Endpoint *, bool> endpoint_clean_vector;
 
 namespace FT
 {
+
+/**
+ * @brief transform the ArrayBase object to one with the type A_TYPE
+ *        can call the transform function 
+ * 
+ */
+#define TRANSFORM(A_BASE_OBJECT, UDF, B, A_TYPE, UDF_OUT_TYPE)                          \
+  {                                                                                     \
+    switch (A_TYPE)                                                                     \
+    {                                                                                   \
+    case AuEndpointDataType::AU_SHORT:                                                  \
+      static_cast<FT::Array<short> *>(A_BASE_OBJECT)->Transform<UDF_OUT_TYPE>(UDF, B);  \
+      break;                                                                            \
+    case AuEndpointDataType::AU_DOUBLE:                                                 \
+      static_cast<FT::Array<double> *>(A_BASE_OBJECT)->Transform<UDF_OUT_TYPE>(UDF, B); \
+      break;                                                                            \
+    case AuEndpointDataType::AU_FLOAT:                                                  \
+      static_cast<FT::Array<float> *>(A_BASE_OBJECT)->Transform<UDF_OUT_TYPE>(UDF, B);  \
+      break;                                                                            \
+    case AuEndpointDataType::AU_INT:                                                    \
+      static_cast<FT::Array<int> *>(A_BASE_OBJECT)->Transform<UDF_OUT_TYPE>(UDF, B);    \
+      break;                                                                            \
+    default:                                                                            \
+      AU_EXIT("Not supported type yet in TRANSFORM macro !");                           \
+    }                                                                                   \
+  }
+
+  /**
+   * @brief the object to the ArrayBase
+   * 
+   */
+  class ArrayBase
+  {
+  public:
+    virtual int EnableApplyStride(const std::vector<int> &skip_size_p) = 0;
+    virtual void SetVectorDirection(OutputVectorFlatDirection flat_direction_index) = 0;
+    virtual void ReportCost() = 0;
+    virtual int ControlEndpoint(int cmd_p) = 0;
+    virtual int ControlEndpoint(int cmd_p, std::vector<std::string> &arg_v_p) = 0;
+    virtual int SetChunkSize(std::vector<int> data_chunk_size_p) = 0;
+    virtual int SetOverlapSize(const vector<int> os_p) = 0;
+    virtual int GetArraySize(std::vector<unsigned long long> &size_p) = 0;
+    virtual int GetStencilTag() = 0;
+    virtual ~ArrayBase() = default;
+  };
+
   template <class T>
-  class Array
+  class Array : public ArrayBase
   {
   private:
     /**

@@ -97,7 +97,7 @@ bin_PROGRAMS = ft_test_data_generator$(EXEEXT) \
 	ft_example_kf1p$(EXEEXT) ft_example_vector_2d$(EXEEXT) \
 	ft_example_padding$(EXEEXT) ft_example_tag$(EXEEXT) \
 	ft_example_chunk_overlap$(EXEEXT) ft_example_cache$(EXEEXT) \
-	ft_example_cmpd$(EXEEXT)
+	ft_example_cmpd$(EXEEXT) ft_example_base$(EXEEXT)
 subdir = examples
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -129,6 +129,10 @@ am_ft_example_array_OBJECTS = ft_example_array.$(OBJEXT)
 ft_example_array_OBJECTS = $(am_ft_example_array_OBJECTS)
 ft_example_array_LDADD = $(LDADD)
 ft_example_array_DEPENDENCIES = ../src/libFastensor.la
+am_ft_example_base_OBJECTS = ft_example_base.$(OBJEXT)
+ft_example_base_OBJECTS = $(am_ft_example_base_OBJECTS)
+ft_example_base_LDADD = $(LDADD)
+ft_example_base_DEPENDENCIES = ../src/libFastensor.la
 am_ft_example_cache_OBJECTS = ft_example_cache.$(OBJEXT)
 ft_example_cache_OBJECTS = $(am_ft_example_cache_OBJECTS)
 ft_example_cache_LDADD = $(LDADD)
@@ -210,7 +214,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/ft_example_1f1p.Po \
 	./$(DEPDIR)/ft_example_adios.Po \
-	./$(DEPDIR)/ft_example_array.Po \
+	./$(DEPDIR)/ft_example_array.Po ./$(DEPDIR)/ft_example_base.Po \
 	./$(DEPDIR)/ft_example_cache.Po \
 	./$(DEPDIR)/ft_example_chunk_overlap.Po \
 	./$(DEPDIR)/ft_example_cmpd.Po \
@@ -244,7 +248,8 @@ am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
 SOURCES = $(ft_example_1f1p_SOURCES) $(ft_example_adios_SOURCES) \
-	$(ft_example_array_SOURCES) $(ft_example_cache_SOURCES) \
+	$(ft_example_array_SOURCES) $(ft_example_base_SOURCES) \
+	$(ft_example_cache_SOURCES) \
 	$(ft_example_chunk_overlap_SOURCES) $(ft_example_cmpd_SOURCES) \
 	$(ft_example_hello_world_SOURCES) $(ft_example_kf1p_SOURCES) \
 	$(ft_example_padding_SOURCES) $(ft_example_pnetcdf_SOURCES) \
@@ -255,7 +260,8 @@ SOURCES = $(ft_example_1f1p_SOURCES) $(ft_example_adios_SOURCES) \
 	$(ft_example_vector_2d_SOURCES) \
 	$(ft_test_data_generator_SOURCES)
 DIST_SOURCES = $(ft_example_1f1p_SOURCES) $(ft_example_adios_SOURCES) \
-	$(ft_example_array_SOURCES) $(ft_example_cache_SOURCES) \
+	$(ft_example_array_SOURCES) $(ft_example_base_SOURCES) \
+	$(ft_example_cache_SOURCES) \
 	$(ft_example_chunk_overlap_SOURCES) $(ft_example_cmpd_SOURCES) \
 	$(ft_example_hello_world_SOURCES) $(ft_example_kf1p_SOURCES) \
 	$(ft_example_padding_SOURCES) $(ft_example_pnetcdf_SOURCES) \
@@ -457,6 +463,7 @@ ft_example_padding_SOURCES = ft_example_padding.cpp
 ft_example_tag_SOURCES = ft_example_tag.cpp
 ft_example_chunk_overlap_SOURCES = ft_example_chunk_overlap.cpp
 ft_example_cmpd_SOURCES = ft_example_cmpd.cpp
+ft_example_base_SOURCES = ft_example_base.cpp
 all: all-am
 
 .SUFFIXES:
@@ -552,6 +559,10 @@ ft_example_array$(EXEEXT): $(ft_example_array_OBJECTS) $(ft_example_array_DEPEND
 	@rm -f ft_example_array$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(ft_example_array_OBJECTS) $(ft_example_array_LDADD) $(LIBS)
 
+ft_example_base$(EXEEXT): $(ft_example_base_OBJECTS) $(ft_example_base_DEPENDENCIES) $(EXTRA_ft_example_base_DEPENDENCIES) 
+	@rm -f ft_example_base$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(ft_example_base_OBJECTS) $(ft_example_base_LDADD) $(LIBS)
+
 ft_example_cache$(EXEEXT): $(ft_example_cache_OBJECTS) $(ft_example_cache_DEPENDENCIES) $(EXTRA_ft_example_cache_DEPENDENCIES) 
 	@rm -f ft_example_cache$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(ft_example_cache_OBJECTS) $(ft_example_cache_LDADD) $(LIBS)
@@ -621,6 +632,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_example_1f1p.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_example_adios.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_example_array.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_example_base.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_example_cache.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_example_chunk_overlap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_example_cmpd.Po@am__quote@ # am--include-marker
@@ -803,6 +815,7 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/ft_example_1f1p.Po
 	-rm -f ./$(DEPDIR)/ft_example_adios.Po
 	-rm -f ./$(DEPDIR)/ft_example_array.Po
+	-rm -f ./$(DEPDIR)/ft_example_base.Po
 	-rm -f ./$(DEPDIR)/ft_example_cache.Po
 	-rm -f ./$(DEPDIR)/ft_example_chunk_overlap.Po
 	-rm -f ./$(DEPDIR)/ft_example_cmpd.Po
@@ -866,6 +879,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/ft_example_1f1p.Po
 	-rm -f ./$(DEPDIR)/ft_example_adios.Po
 	-rm -f ./$(DEPDIR)/ft_example_array.Po
+	-rm -f ./$(DEPDIR)/ft_example_base.Po
 	-rm -f ./$(DEPDIR)/ft_example_cache.Po
 	-rm -f ./$(DEPDIR)/ft_example_chunk_overlap.Po
 	-rm -f ./$(DEPDIR)/ft_example_cmpd.Po
