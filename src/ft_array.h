@@ -2183,7 +2183,7 @@ namespace FT
     {
       size_t str_len = endpoint->GetAttributeSize(name, AU_STRING);
       value.resize(str_len);
-      std::cout << "GetTag : name = " << name << ", str_len = " << str_len << "\n";
+      //std::cout << "GetTag : name = " << name << ", str_len = " << str_len << "\n";
       return endpoint->ReadAttribute(name, &value[0], AU_STRING, value.length());
     }
     template <class PType>
