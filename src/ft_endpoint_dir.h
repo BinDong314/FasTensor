@@ -134,6 +134,7 @@ private:
     bool output_replace_regex_flag = false;
     std::regex *output_replace_regex; //The regex to "replace" on list of file as output (input)
     std::string output_replace_regex_aug;
+    std::string output_replace_regex_match_str;
 
     bool has_ordering_on_file_list = false; //User may apply ordering on list, based on sorted ordring
     std::vector<size_t> order_on_file_list;

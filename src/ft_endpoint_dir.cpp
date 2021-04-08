@@ -308,10 +308,10 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
         }
     }
 
-    PrintVector("EndpointDIR::Write start :", start);
-    PrintVector("EndpointDIR::Write end :", end);
-    PrintVector("EndpointDIR::dir_chunk_size :", dir_chunk_size);
-    std::cout << " dir_data_merge_index = " << dir_data_merge_index << " \n";
+    //PrintVector("EndpointDIR::Write start :", start);
+    //PrintVector("EndpointDIR::Write end :", end);
+    //PrintVector("EndpointDIR::dir_chunk_size :", dir_chunk_size);
+    //std::cout << " dir_data_merge_index = " << dir_data_merge_index << " \n";
     int sub_endpoint_index = 0;
     sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
     for (int i = 0; i < endpoint_ranks; i++)
@@ -324,26 +324,43 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     //save for metadata operation
     dir_file_list_current_index = sub_endpoint_index;
 
-    PrintVector("EndpointDIR::Write endpoint_size:", endpoint_size);
+    //PrintVector("EndpointDIR::Write endpoint_size:", endpoint_size);
 
-    std::cout << "call write :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " + append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << " \n";
+    //std::cout << "call write (before) :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " + append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << " \n";
 
-    PrintVector("EndpointDIR::Write start (after):", start);
-    PrintVector("EndpointDIR::Write end (after) :", end);
+    //PrintVector("EndpointDIR::Write start (after):", start);
+    //PrintVector("EndpointDIR::Write end (after) :", end);
 
     std::string new_file_name_after_regex;
-    //regex re("^(.*)\\.tdms$");
+
+    //output_replace_regex_match_str
+    //std::regex re_test("^(.*)\\.h5$");
+    std::regex re_test(output_replace_regex_match_str, std::regex_constants::ECMAScript);
+
+    /*if (output_replace_regex_match_str == "^(.*)\\.h5$")
+    {
+        std::cout << "Yes, they are equal ! \n";
+    }
+    else
+    {
+        std::cout << "No, they are not equal ! "
+                  << " output_replace_regex_match_str = " << output_replace_regex_match_str << ", "
+                  << "^(.*)\\.h5$" << std::endl;
+    }*/
 
     if (output_replace_regex_flag)
     {
-        new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], *output_replace_regex, output_replace_regex_aug);
+        //new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], *output_replace_regex, output_replace_regex_aug);
+        new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], re_test, output_replace_regex_aug);
+
+        //std::cout << " output_replace_regex_aug = " << output_replace_regex_aug << ", new_file_name_after_regex = " << new_file_name_after_regex << ", dir_file_list[sub_endpoint_index] =" << dir_file_list[sub_endpoint_index] << ", output_replace_regex_match_str =" << output_replace_regex_match_str << "\n";
     }
     else
     {
         new_file_name_after_regex = dir_file_list[sub_endpoint_index];
     }
 
-    std::cout << "call write :  " << dir_str + "/" + new_file_name_after_regex + ": " + append_sub_endpoint_info << " \n";
+    //std::cout << "call write (after) :  " << dir_str + "/" + new_file_name_after_regex + ": " + append_sub_endpoint_info << " \n";
 
     sub_endpoint->SetDataElementType(data_element_type);
     sub_endpoint->SetDimensions(endpoint_size);
@@ -520,8 +537,10 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         {
             AU_EXIT("DIR_OUPUT_REPLACE_RGX  needs two parameters: regex pattern and replace string pattern \n");
         }
+        std::cout << " output_replace_regex = " << parameter_v[0] << "\n";
         output_replace_regex_flag = true;
         output_replace_regex = new std::regex(parameter_v[0]);
+        output_replace_regex_match_str = parameter_v[0];
         output_replace_regex_aug = parameter_v[1];
         break;
     case DIR_FILE_SORT_INDEXES:
@@ -615,7 +634,7 @@ int EndpointDIR::WriteAttribute(const std::string &name, const void *data, FTDat
 
     sub_endpoint->SetEndpointInfo(dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
-    std::cout << " write attribute: " << dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info << " \n";
+    //std::cout << " write attribute: " << dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info << " \n";
     //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
     sub_endpoint->WriteAttribute(name, data, data_type_p, data_length_p);
     sub_endpoint->Close();
