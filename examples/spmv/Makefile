@@ -1,0 +1,32 @@
+#Bin's Mac
+AU_DIR=/Users/dbin/work/fastensor/build
+HDF5_DIR=/Users/dbin/work/soft/hdf5-1.12.0/build
+DASH_DIR=/Users/dbin/work/soft/dash/build/install
+
+
+#Lawrencium
+#AU_DIR=/clusterfs/bear/BinDong_DAS_Data/fasttensor/build
+#DASH_DIR=/clusterfs/bear/BinDong_DAS_Data/fasttensor/tools3rd/dash/build/opt/dash-0.4.0
+#EIGEN3_DIR=${PWD}/Tools3rd/
+
+
+SHELL:=/bin/bash
+
+CCC=mpicxx
+OTHER_FLAGS=-g3  -std=c++17 
+
+AU_FLAG=-I$(AU_DIR)/include -L$(AU_DIR)/lib -lFastensor
+HDF5_FLAG=-I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz
+DASH_FLAG=-I$(DASH_DIR)/include -L$(DASH_DIR)/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
+ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG)  $(DASH_FLAG) 
+
+.PHONY:all
+all:create_data
+
+create_data:create_data.cpp
+	$(CCC) -o create_data create_data.cpp $(ALL_FLAGS)
+
+clean:
+	rm -rf create_data create_data.dSYM
+
+	

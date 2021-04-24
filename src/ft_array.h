@@ -1095,6 +1095,10 @@ namespace FT
 
     int WriteArray(const std::vector<unsigned long long> &start_p, const std::vector<unsigned long long> &end_p, std::vector<T> &data_p)
     {
+      if (!is_endpoint_created_flag)
+      {
+        CreateEndpoint(data_size, data_chunk_size, data_overlap_size);
+      }
       //InitializeApplyInput();
       if (!virtual_array_flag)
       {
@@ -1698,7 +1702,7 @@ namespace FT
     }
 
     template <typename... Is>
-    inline void SetValue(T data_p, Is... indexs) const
+    inline void SetValue(T data_p, Is... indexs)
     {
       std::vector<int> iv{{indexs...}};
       std::vector<unsigned long long> start;
@@ -1714,6 +1718,10 @@ namespace FT
       {
         start[i] = iv[i];
         end[i] = iv[i];
+      }
+      if (!is_endpoint_created_flag)
+      {
+        CreateEndpoint(data_size, data_chunk_size, data_overlap_size);
       }
 
       endpoint->Write(start, end, static_cast<void *>(data_v.data()));

@@ -137,7 +137,8 @@ int EndpointHDF5::Create()
             gid = H5Gopen(fid, gn_str.c_str(), H5P_DEFAULT);
         }
     }
-
+    //PrintVector("endpoint_size = ", endpoint_size);
+    //printf("endpoint_ranks = %d \n", endpoint_ranks);
     std::vector<hsize_t> dims_out;
     dims_out = endpoint_size;
     hid_t ts_id;
