@@ -105,8 +105,9 @@ extern int ft_rank;
 //extern std::map<Endpoint *, bool> endpoint_clean_vector;
 
 //#define AU_DEFAULT_CHUNK_SIZE_PER_DIM 1000
+//extern std::map<Endpoint *, bool> endpoint_clean_vector;
 
-extern std::map<Endpoint *, bool> endpoint_clean_vector;
+extern std::vector<Endpoint *> endpoint_to_clean_vector;
 
 namespace FT
 {
@@ -297,7 +298,8 @@ namespace FT
 
       if (endpoint->GetEndpointType() == EP_MEMORY)
         endpoint_memory_flag = true;
-      endpoint_clean_vector[endpoint] = true;
+      //endpoint_clean_vector[endpoint] = true;
+      endpoint_to_clean_vector.push_back(endpoint);
     }
 
     /**
@@ -324,7 +326,8 @@ namespace FT
         endpoint_memory_flag = true;
 
       //endpoint_clean_vector.push_back(endpoint);
-      endpoint_clean_vector[endpoint] = true;
+      //endpoint_clean_vector[endpoint] = true;
+      endpoint_to_clean_vector.push_back(endpoint);
     }
 
     /**
@@ -349,7 +352,8 @@ namespace FT
         endpoint_memory_flag = true;
 
       //endpoint_clean_vector.push_back(endpoint);
-      endpoint_clean_vector[endpoint] = true;
+      //endpoint_clean_vector[endpoint] = true;
+      endpoint_to_clean_vector.push_back(endpoint);
     }
 
     /**
@@ -370,7 +374,8 @@ namespace FT
       if (endpoint->GetEndpointType() == EP_MEMORY)
         endpoint_memory_flag = true;
 
-      endpoint_clean_vector[endpoint] = true;
+      //endpoint_clean_vector[endpoint] = true;
+      endpoint_to_clean_vector.push_back(endpoint);
     }
 
     /**
@@ -395,7 +400,8 @@ namespace FT
       }
 
       data_size = size_p;
-      endpoint_clean_vector[endpoint] = true;
+      //endpoint_clean_vector[endpoint] = true;
+      endpoint_to_clean_vector.push_back(endpoint);
     }
 
     /**
@@ -640,8 +646,8 @@ namespace FT
       UpdateChunkSize();
       UpdateOverlapSize(UDF);
 
-      PrintVector("data_chunk_size: ", data_chunk_size);
-      PrintVector("data_size: ", data_size);
+      //PrintVector("data_chunk_size: ", data_chunk_size);
+      //PrintVector("data_size: ", data_size);
 
       current_chunk_start_offset.resize(data_dims);
       current_chunk_end_offset.resize(data_dims);
@@ -821,7 +827,7 @@ namespace FT
         {
           std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
           unsigned long long offset_ol;
-          Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size);
+          Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size, data_size);
           if (has_padding_value_flag)
           {
             cell_target.SetPadding(padding_value);
@@ -1453,6 +1459,7 @@ namespace FT
       current_result_chunk_cells = 1;
       current_chunk_ol_cells = 1;
 
+      //PrintVector("LoadNextChunk.data_chunked_size = ", data_chunked_size);
       std::vector<unsigned long long> chunk_coordinate = RowMajorOrderReverse(current_chunk_id, data_chunked_size);
       std::vector<unsigned long long> skiped_chunk_coordinate;
       if (skip_flag)
@@ -1753,7 +1760,9 @@ namespace FT
       attribute_endpoint_vector.push_back(attribute_endpoint);
       attribute_array_data_endpoint_info.push_back(data_endpoint);
       //add to clean
-      endpoint_clean_vector[attribute_endpoint] = true;
+      //endpoint_clean_vector[attribute_endpoint] = true;
+      endpoint_to_clean_vector.push_back(attribute_endpoint);
+
       return 0;
     }
 
@@ -1770,7 +1779,8 @@ namespace FT
       if (attribute_endpoint->GetEndpointType() == EP_MEMORY)
         endpoint_memory_flag = true;
       //add to clean
-      endpoint_clean_vector[attribute_endpoint] = true;
+      //endpoint_clean_vector[attribute_endpoint] = true;
+      endpoint_to_clean_vector.push_back(attribute_endpoint);
       return 0;
     }
 
@@ -2071,7 +2081,9 @@ namespace FT
       {
         endpoint_memory_flag = true;
       }
-      endpoint_clean_vector[endpoint] = true;
+      //endpoint_clean_vector[endpoint] = true;
+      endpoint_to_clean_vector.push_back(endpoint);
+
       return 0;
     }
     inline int GetEndpoint(string &endpoint_id)

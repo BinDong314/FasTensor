@@ -123,6 +123,7 @@ private:
   //T padding_value;
   int mpi_rank, mpi_size;
 
+  std::vector<unsigned long long> global_data_size;
   /**
    * @brief is_output_vector_flag;
    * 
@@ -182,7 +183,7 @@ public:
   }
 
   //For production
-  Stencil(unsigned long long my_offset, T *chunk, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &chunk_size)
+  Stencil(unsigned long long my_offset, T *chunk, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &chunk_size, std::vector<unsigned long long> &global_data_size_p)
   {
 #ifdef DEBUG
     MpiRankSize(&mpi_rank, &mpi_size);
@@ -192,6 +193,7 @@ public:
     dims = chunk_size.size();
     chunk_dim_size.resize(dims);
     my_location.resize(dims);
+    global_data_size.resize(dims);
     //coordinate_shift.resize(dims);
     //coordinate.resize(dims);
     chunk_data_size = 1;
@@ -200,6 +202,7 @@ public:
       chunk_data_size = chunk_data_size * chunk_size[i];
       chunk_dim_size[i] = chunk_size[i];
       my_location[i] = my_coordinate[i];
+      global_data_size[i] = global_data_size_p[i];
     }
 
     chunk_data_size = chunk_data_size - 1;
@@ -1040,7 +1043,8 @@ public:
 
   int GetLocalIndex(std::vector<unsigned long long> &index_p) const
   {
-    index_p = my_location_no_ol;
+    //PrintVector("my_location_no_ol = ", my_location);
+    index_p = my_location;
     return 0;
   }
 
@@ -1182,6 +1186,8 @@ public:
    */
   int GetOffsetUpper(std::vector<int> &max_offset) const
   {
+    //PrintVector("GetOffsetUpper.chunk_dim_size = ", chunk_dim_size);
+    //PrintVector("GetOffsetUpper.my_location = ", my_location);
     int rank = chunk_dim_size.size();
     for (int i = 0; i < rank; i++)
     {
@@ -1239,6 +1245,32 @@ public:
   inline bool HasTagMap() const
   {
     return is_stencil_tag;
+  }
+
+  /**
+   * @brief Get the size of the current chunk which base cell is located
+   *        This may be different from one run to another
+   * 
+   * @param chunk_size, the size of the current chunk 
+   * @return int 
+   */
+  int GetCurrentChunkSize(std::vector<unsigned long long> &chunk_size) const
+  {
+    //int rank = chunk_dim_size.size();
+    chunk_size = chunk_dim_size;
+    return 0;
+  }
+
+  int GetArraySize(std::vector<unsigned long long> &array_size) const
+  {
+    array_size = global_data_size;
+    return 0;
+  }
+
+  int SetArraySize(std::vector<unsigned long long> &array_size) const
+  {
+    global_data_size = array_size;
+    return 0;
   }
 };
 

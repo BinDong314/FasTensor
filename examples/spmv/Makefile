@@ -21,12 +21,14 @@ DASH_FLAG=-I$(DASH_DIR)/include -L$(DASH_DIR)/lib -ldash-mpi -ldart-mpi -ldart-b
 ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG)  $(DASH_FLAG) 
 
 .PHONY:all
-all:create_data
+all:create_data spmv
 
 create_data:create_data.cpp
 	$(CCC) -o create_data create_data.cpp $(ALL_FLAGS)
 
-clean:
-	rm -rf create_data create_data.dSYM
+spmv:spmv.cpp
+	$(CCC) -o spmv spmv.cpp $(ALL_FLAGS)
 
-	
+clean:
+	rm -rf create_data create_data.dSYM spmv spmv.dSYM
+

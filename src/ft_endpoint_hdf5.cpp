@@ -201,6 +201,7 @@ int EndpointHDF5::Open()
     }
     else
     {
+        gid = -1;
         did = H5Dopen(fid, dn_str.c_str(), H5P_DEFAULT);
     }
     assert(did >= 0);
@@ -338,22 +339,26 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
      */
 int EndpointHDF5::Close()
 {
+    //std::cout << "Rank " << ft_rank << ", Enter Close \n";
+    //std::cout << "Rank " << ft_rank << ", fid= " << fid << ", H5Fflush \n";
     if (fid > 0)
         H5Fflush(fid, H5F_SCOPE_GLOBAL);
-    /*if (plist_id > 0)
-        H5Pclose(plist_id);
-    if (plist_cio_id > 0)
-        H5Pclose(plist_cio_id);*/
+
+    //std::cout << "Rank " << ft_rank << ", dataspace_id= " << dataspace_id << ", H5Sclose \n";
     if (dataspace_id > 0)
         H5Sclose(dataspace_id);
+
+    //std::cout << "Rank " << ft_rank << ", did= " << did << ", H5Dclose \n";
     if (did > 0)
         H5Dclose(did);
+
+    //std::cout << "Rank " << ft_rank << ", gid= " << gid << ", H5Gclose \n";
     if (gid > 0)
         H5Gclose(gid);
+
     if (fid > 0)
-        H5Fclose(fid);
-    //plist_id = H5P_DEFAULT;
-    //plist_cio_id = H5P_DEFAULT;
+        assert(H5Fclose(fid) >= 0);
+
     dataspace_id = -1;
     did = -1;
     gid = -1;

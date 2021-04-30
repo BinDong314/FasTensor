@@ -85,41 +85,113 @@ in binary and source code form.
 
 using namespace std;
 using namespace FT;
+std::vector<double> VI, VJ, VV;
 
 //UDF One: duplicate the original data
-inline Stencil<float> udf_hello_world(const Stencil<float> &iStencil)
+inline Stencil<std::vector<double>> udf_spmv(const Stencil<double> &iStencil)
 {
-    Stencil<float> oStencil;
-    oStencil = iStencil(0, 0) * 2.0;
+
+    std::vector<double> result_vector, BV;
+
+    //Get vector b
+    std::vector<unsigned long long> current_chunk_size;
+    iStencil.GetCurrentChunkSize(current_chunk_size);
+    std::vector<int> start_address, end_address;
+    start_address.push_back(0);
+    end_address.push_back(current_chunk_size[0] - 1);
+    iStencil.ReadNeighbors(start_address, end_address, BV);
+
+    std::vector<unsigned long long> B_start_index_global;
+    iStencil.GetGlobalIndex(B_start_index_global);
+    std::vector<unsigned long long> B_start_index_local;
+    iStencil.GetLocalIndex(B_start_index_local);
+
+    int result_start_index = B_start_index_global[0];
+    B_start_index_global[0] = B_start_index_global[0] - B_start_index_local[0];
+
+    int result_vector_size_local = 0, result_vector_size_min = VI[0], result_vector_size_max = VI[0];
+    for (int i = 0; i < VI.size(); i++)
+    {
+        if (VI[i] < result_vector_size_min)
+            result_vector_size_min = VI[i];
+        if (VI[i] > result_vector_size_max)
+            result_vector_size_max = VI[i];
+    }
+    result_vector_size_local = result_vector_size_max - result_vector_size_min + 1;
+    result_vector.resize(result_vector_size_local, 0);
+    //std::cout << 1 * 0.1 - 2 * 1.1 + 1 * 2.1 << " , ddd\n";
+
+    //Assume that VJ is sorted
+    int result_index = 0, b_index;
+    for (int i = 0; i < VI.size(); i++)
+    {
+        result_index = VI[i] - result_start_index;
+        b_index = VJ[i] - B_start_index_global[0];
+
+        if (b_index <= BV.size())
+        {
+            result_vector[result_index] = result_vector[result_index] + VV[i] * BV[b_index];
+        }
+        else
+        {
+            std::cout << "Error: i = " << i << ", (VI VJ VV)=  (" << VI[i] << ", " << VJ[i] << " , " << VV[i] << "), B_start_index_global[0] = " << B_start_index_global[0] << ", b_index =" << b_index << ", BV.size() = " << BV.size() << "\n";
+            //exit(-1);
+            result_vector[result_index] += 0;
+        }
+    }
+
+    //PrintVector("result_vector = ", result_vector);
+    Stencil<std::vector<double>> oStencil;
+    std::vector<size_t> vector_shape(1);
+    vector_shape[0] = result_vector.size();
+    oStencil = result_vector;
+    oStencil.SetShape(vector_shape);
     return oStencil;
 }
 
 int main(int argc, char *argv[])
 {
     //Init the MPICH, etc.
-    AU_Init(argc, argv);
+    FT_Init(argc, argv);
 
     // set up the chunk size and the overlap size
-    std::vector<int> chunk_size = {4, 16};
-    std::vector<int> overlap_size = {1, 1};
+    std::vector<int> chunk_size = {1535};
+    std::vector<int> overlap_size = {0};
 
     //Input data
-    Array<float> *A = new Array<float>("EP_HDF5:./test-data/testf-16x16-hello-world.h5:/testg/testd", chunk_size, overlap_size);
+    FT::Array<double> *AI = new Array<double>("EP_HDF5:./matrix_i.h5:/i", chunk_size, overlap_size);
+    FT::Array<double> *AJ = new Array<double>("EP_HDF5:./matrix_j.h5:/j", chunk_size, overlap_size);
+    FT::Array<double> *AV = new Array<double>("EP_HDF5:./matrix_v.h5:/v", chunk_size, overlap_size);
+    std::vector<unsigned long long> start, end;
+    start.push_back(ft_rank * 1535);
+    end.push_back(ft_rank * 1535 + 1535 - 1);
 
-    //Result data
-    Array<float> *B = new Array<float>("EP_HDF5:./test-data/testf-16x16-hello-world-output.h5:/testg/testd");
+    AI->ReadArray(start, end, VI);
+    AJ->ReadArray(start, end, VJ);
+    AV->ReadArray(start, end, VV);
+
+    std::vector<int> chunk_size_v = {512};
+    std::vector<int> overlap_size_v = {1};
+
+    FT::Array<double> *X = new Array<double>("EP_HDF5:./vector.h5:/v", chunk_size_v, overlap_size_v);
+
+    FT::Array<double> *Y = new Array<double>("EP_HDF5:./y.h5:/v", chunk_size_v, overlap_size_v);
+
+    X->EnableApplyStride(chunk_size_v);
 
     //Run
-    A->Apply(udf_hello_world, B);
+    X->Transform(udf_spmv, Y);
 
-    A->ControlEndpoint(OP_CREATE_VIS_SCRIPT);
-
-    A->ReportCost();
+    X->ReportCost();
     //Clear
-    delete A;
-    delete B;
 
-    AU_Finalize();
+    delete AI;
+    delete AJ;
+    delete AV;
+    delete X;
+    delete Y;
+
+    FT_Finalize();
 
     return 0;
 }

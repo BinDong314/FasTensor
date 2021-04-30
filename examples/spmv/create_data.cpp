@@ -96,9 +96,9 @@ int main(int argc, char *argv[])
     AU_Init(argc, argv);
 
     //Input data
-    Array<float> *AI = new Array<float>("EP_HDF5:./matrix.h5:/i");
-    Array<float> *AJ = new Array<float>("EP_HDF5:./matrix.h5:/j");
-    Array<float> *AV = new Array<float>("EP_HDF5:./matrix.h5:/v");
+    Array<double> *AI = new Array<double>("EP_HDF5:./matrix_i.h5:/i");
+    Array<double> *AJ = new Array<double>("EP_HDF5:./matrix_j.h5:/j");
+    Array<double> *AV = new Array<double>("EP_HDF5:./matrix_v.h5:/v");
 
     std::vector<unsigned long long> data_size;
 
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
      * Write data point
      * 
      */
-    std::vector<float> IV, JV, VV, XV;
+    std::vector<double> IV, JV, VV, XV;
     for (int i = 0; i < MATRIX_M; i++)
     {
         if (i - 1 >= 0)
@@ -143,10 +143,10 @@ int main(int argc, char *argv[])
     AV->WriteArray(start_addr, end_addr, VV);
 
     //Input data
-    Array<float> *AX = new Array<float>("EP_HDF5:./vector.h5:/v");
+    Array<double> *AX = new Array<double>("EP_HDF5:./vector.h5:/v");
     for (int i = 0; i < MATRIX_N; i++)
     {
-        XV.push_back(0.5);
+        XV.push_back(i + 0.1);
     }
 
     data_size.clear();

@@ -245,11 +245,11 @@ ACLOCAL = ${SHELL} '/Users/dbin/work/fastensor/missing' aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include    -DHAS_DASH_ENDPOINT   -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
-ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include -DHAS_DASH_ENDPOINT  -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
+ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include
+ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include
 ARRAYUDF_CXXFLAGS =     -std=c++17 -g3
 ARRAYUDF_LDFLAGS = 
-ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
+ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz
 ARRAY_UDF_PYTHON_ENABLED = false
 AUPY_CFLAGS = 
 AUPY_CPPFLAGS = 
@@ -383,10 +383,10 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AUTOMAKE_OPTIONS = gnu
-AM_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include -DHAS_DASH_ENDPOINT  -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'  -I./third_part
-AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include    -DHAS_DASH_ENDPOINT   -I/Users/dbin/work/soft/dash/build/install/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'  -I./third_part
+AM_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-1.12.0/build/include  -I./third_part
+AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-1.12.0/build/include  -I./third_part
 AM_CXXFLAGS =     -std=c++17 -g3    -I./third_part  
-AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'   -all-static     -I./third_part
+AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-1.12.0/build/lib -lhdf5 -lhdf5_hl -lz   -all-static     -I./third_part
 lib_LTLIBRARIES = libFastensor.la
 libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_array.h ft_array.cpp \

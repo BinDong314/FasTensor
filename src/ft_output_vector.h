@@ -169,8 +169,8 @@ inline void GetChunkAddress(const unsigned long long chunk_id, const std::vector
         }
     }
 
-    PrintVector("chunk_start_address = ", chunk_start_address);
-    PrintVector("chunk_end_address = ", chunk_end_address);
+    //PrintVector("chunk_start_address = ", chunk_start_address);
+    //PrintVector("chunk_end_address = ", chunk_end_address);
 }
 
 /**
@@ -234,10 +234,10 @@ void *InsertOutputVV2WriteV(std::vector<std::vector<T>> &v, std::vector<size_t> 
     //template <class T>
     //inline int ArrayViewAccessP(T * view_v, T * array_v, std::vector<unsigned long long> ///array_size, std::vector<unsigned long long> start, std::vector<unsigned long long> end, int read_write_code)
 
-    PrintVector("v_shape = ", v_shape);
-    PrintVector("write_vector_size = ", write_vector_size);
-    PrintVector("write_start_address = ", write_start_address);
-    PrintVector("write_end_address = ", write_end_address);
+    //PrintVector("v_shape = ", v_shape);
+    //PrintVector("write_vector_size = ", write_vector_size);
+    //PrintVector("write_start_address = ", write_start_address);
+    //PrintVector("write_end_address = ", write_end_address);
 
     std::vector<unsigned long long> view_start(rank), view_end(rank);
     for (size_t i = 0; i < v.size(); i++)
