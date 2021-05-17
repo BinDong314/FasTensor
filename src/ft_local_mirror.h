@@ -152,12 +152,12 @@ int AccessLocalMirrorHelp(void *local_mirror_buffer, std::vector<unsigned long l
         }
         return 0;
     }
-    else
-    {
-        PrintVector("read_count: ", read_count);
-        PrintVector("mirror_size: ", mirror_size);
-        std::cout << "Not Access local whole ! \n";
-    }
+    // else
+    // {
+    //     PrintVector("read_count: ", read_count);
+    //     PrintVector("mirror_size: ", mirror_size);
+    //     //std::cout << "Not Access local whole ! \n";
+    // }
 
     switch (mirror_size.size())
     {

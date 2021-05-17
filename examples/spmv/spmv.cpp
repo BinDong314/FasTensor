@@ -119,24 +119,27 @@ inline Stencil<std::vector<double>> udf_spmv(const Stencil<double> &iStencil)
     }
     result_vector_size_local = result_vector_size_max - result_vector_size_min + 1;
     result_vector.resize(result_vector_size_local, 0);
-    //std::cout << 1 * 0.1 - 2 * 1.1 + 1 * 2.1 << " , ddd\n";
+    //std::cout << 1 * 0.1 - 2 * 1.1 + 1 * 2.1 << "\n";
+    // float result = 0
+    // result =  result + 1 * 0.1
+    // result =  result - 2 * 1.1
+    // result =  result + 1 * 2.1
+    // result is not 0
 
-    //Assume that VJ is sorted
     int result_index = 0, b_index;
     for (int i = 0; i < VI.size(); i++)
     {
         result_index = VI[i] - result_start_index;
         b_index = VJ[i] - B_start_index_global[0];
 
-        if (b_index <= BV.size())
+        if (b_index < BV.size())
         {
             result_vector[result_index] = result_vector[result_index] + VV[i] * BV[b_index];
         }
         else
         {
             std::cout << "Error: i = " << i << ", (VI VJ VV)=  (" << VI[i] << ", " << VJ[i] << " , " << VV[i] << "), B_start_index_global[0] = " << B_start_index_global[0] << ", b_index =" << b_index << ", BV.size() = " << BV.size() << "\n";
-            //exit(-1);
-            result_vector[result_index] += 0;
+            exit(-1);
         }
     }
 
@@ -158,23 +161,30 @@ int main(int argc, char *argv[])
     std::vector<int> chunk_size = {1535};
     std::vector<int> overlap_size = {0};
 
-    //Input data
-    FT::Array<double> *AI = new Array<double>("EP_HDF5:./matrix_i.h5:/i", chunk_size, overlap_size);
-    FT::Array<double> *AJ = new Array<double>("EP_HDF5:./matrix_j.h5:/j", chunk_size, overlap_size);
-    FT::Array<double> *AV = new Array<double>("EP_HDF5:./matrix_v.h5:/v", chunk_size, overlap_size);
+    //Input Matrix
+    //  Problem: partition a single row on different processes
+    //           -> should we keep overlap_size == 0
+    //           -> if not, how to decide the overlap_size ==0
+    FT::Array<double> *AI = new Array<double>("EP_HDF5:./matrix.h5:/i", chunk_size, overlap_size);
+    FT::Array<double> *AJ = new Array<double>("EP_HDF5:./matrix.h5:/j", chunk_size, overlap_size);
+    FT::Array<double> *AV = new Array<double>("EP_HDF5:./matrix.h5:/v", chunk_size, overlap_size);
+
+    //Problem: Restore AI/AJ/AV into memory by chunk
     std::vector<unsigned long long> start, end;
     start.push_back(ft_rank * 1535);
     end.push_back(ft_rank * 1535 + 1535 - 1);
-
     AI->ReadArray(start, end, VI);
     AJ->ReadArray(start, end, VJ);
     AV->ReadArray(start, end, VV);
 
+    //Problem:
+    //  1) overlap_size is not-predefined
     std::vector<int> chunk_size_v = {512};
     std::vector<int> overlap_size_v = {1};
 
     FT::Array<double> *X = new Array<double>("EP_HDF5:./vector.h5:/v", chunk_size_v, overlap_size_v);
 
+    //Y =  A * X
     FT::Array<double> *Y = new Array<double>("EP_HDF5:./y.h5:/v", chunk_size_v, overlap_size_v);
 
     X->EnableApplyStride(chunk_size_v);
@@ -182,9 +192,10 @@ int main(int argc, char *argv[])
     //Run
     X->Transform(udf_spmv, Y);
 
+    //Report the cost of UDF, I/O, etc,
     X->ReportCost();
-    //Clear
 
+    //Clear
     delete AI;
     delete AJ;
     delete AV;

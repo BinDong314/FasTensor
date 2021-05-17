@@ -313,6 +313,243 @@ ft.lo: ft.cpp ft.h \
   /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5VLpassthru.h \
   ft_endpoint_dir.h ft_endpoint_tdms.h ft_endpoint_binary.h \
   ft_endpoint_memory.h ft_local_mirror.h ft_mpi.h ft_merge.h \
+  /Users/dbin/work/soft/dash/build/install/include/libdash.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/internal/Config.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/internal/Macro.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Version.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Types.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_types.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/internal/Unit.h \
+  /Users/dbin/work/soft/dash/build/install/include/cpp17/cstddef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Meta.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/meta/TypeInfo.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Init.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_config.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_util.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_initialization.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_team_group.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_globmem.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_communication.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_synchronization.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Team.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Exception.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/exception/RuntimeError.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/exception/InvalidArgument.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/exception/OutOfRange.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/exception/NotImplemented.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/exception/AssertionFailed.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/exception/StackTrace.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/execinfo.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/os/base.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/os/availability.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/uuid/uuid.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/cxxabi.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/__cxxabi_config.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/internal/Logging.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/internal/StreamConversion.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Range.h \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/set \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/Locality.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/Config.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/StaticConfig.h \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/unordered_map \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__hash_table \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_locality.h \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/list \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Cartesian.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Dimensional.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Distribution.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/internal/Math.h \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/numeric \
+  /Users/dbin/work/soft/dash/build/install/include/dash/TeamSpec.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Iterator.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/iterator/IteratorTraits.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/iterator/GlobIter.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/GlobPtr.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/atomic/Type_traits.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/iterator/internal/GlobPtrBase.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/MemorySpaceBase.h \
+  /Users/dbin/work/soft/dash/build/install/include/cpp17/polymorphic_allocator.h \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/scoped_allocator \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/internal/MemorySpaceRegistry.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/GlobRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Onesided.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/iterator/internal/GlobRefBase.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Pattern.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/BlockPattern.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/PatternProperties.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/internal/PatternArguments.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/BlockPattern1D.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/TilePattern.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/TilePattern1D.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/ShiftTilePattern.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/ShiftTilePattern1D.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/SeqTilePattern.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/CSRPattern.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/LoadBalancePattern.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/TeamLocality.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/LocalityDomain.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/internal/String.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/UnitLocality.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/PatternIterator.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/pattern/MakePattern.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/iterator/GlobViewIter.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Allocator.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/allocator/AllocatorTraits.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/MemorySpace.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/HBWSpace.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/HostSpace.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobLocalMemoryPool.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/allocator/AllocationPolicy.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/allocator/internal/Types.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobStaticMem.h \
+  /Users/dbin/work/soft/dash/build/install/include/cpp17/type_traits.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/allocator/GlobalAllocator.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/allocator/EpochSynchronizedAllocator.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/allocator/AllocatorBase.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/SimpleMemoryPoolResource.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/View.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/Apply.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/ViewMod.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/UniversalMember.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/ArrayExpr.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/IndexSequence.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/IndexSet.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/ViewTraits.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/Origin.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/Domain.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/Local.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/SetUnion.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/Global.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/FunctionalExpr.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/iterator/internal/IteratorBase.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/ViewIterator.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/ViewOrigin.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/ViewMod1D.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/Block.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/Chunked.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/SetIntersect.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/Sub.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/Remote.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/IndexRange.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/CartView.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/MultiView.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/StridedView.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/view/ViewBlocksMod.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Memory.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobHeapMem.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/GlobSharedRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Operation.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Array.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/GlobAsyncRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/HView.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/UniquePtr.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/MinMax.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/LocalRange.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/LocalRanges.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/Trace.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/Timer.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/Timestamp.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/TimeMeasure.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/internal/TimestampCounterPosix.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/internal/TimestampClockPosix.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/time.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_timeval64.h \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/fstream \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/filesystem \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/stack \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Copy.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Future.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/iterator/internal/ContiguousRange.h \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/future \
+  /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/thread \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobHeapPtr.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobHeapLocalPtr.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/memory/internal/GlobHeapMemTypes.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/LaunchPolicy.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Container.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Matrix.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/matrix/MatrixRefView.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/matrix/internal/MatrixRefView-inl.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/matrix/MatrixRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/matrix/internal/MatrixRef-inl.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/matrix/LocalMatrixRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/matrix/internal/LocalMatrixRef-inl.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/matrix/internal/Matrix-inl.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Coarray.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/coarray/Utils.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Coevent.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Atomic.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/atomic/GlobAtomicRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/atomic/GlobAtomicAsyncRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/atomic/Operation.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Fill.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/coarray/CoEventIter.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/coarray/CoEventRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/List.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/list/ListRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/list/internal/ListTypes.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/list/LocalListRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/list/GlobListIter.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/UnorderedMap.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/map/UnorderedMap.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/map/UnorderedMapLocalRef.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/map/UnorderedMapLocalIter.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/map/UnorderedMapGlobIter.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/map/HashPolicy.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Shared.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/SharedCounter.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Algorithm.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/ForEach.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Transform.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Bcast.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Reduce.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Generate.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/AllOf.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Find.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/AnyOf.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Equal.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Sort.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/internal/Sort-inl.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/algorithm/SUMMA.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/Mutex.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/halo/HaloMatrixWrapper.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/halo/StencilOperator.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/halo/iterator/StencilIterator.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/halo/Halo.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/halo/Types.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/halo/Region.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/halo/Stencil.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/halo/HaloMemory.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/halo/CoordinateAccess.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/BenchmarkParams.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/PatternMetrics.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/util/LocalityJSONPrinter.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/IO.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/IOStream.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/HDF5.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/StorageDriver.h \
+  /Users/dbin/work/soft/hdf5-1.12.0/build/include/hdf5_hl.h \
+  /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5DOpublic.h \
+  /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5DSpublic.h \
+  /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5LTpublic.h \
+  /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5IMpublic.h \
+  /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5TBpublic.h \
+  /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5PTpublic.h \
+  /Users/dbin/work/soft/hdf5-1.12.0/build/include/H5LDpublic.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_io.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/DriverImplZeroCopy.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/DriverImplBuffered.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/DriverImplNdBlock.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/StorageDriver-inl.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/IOStream.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/IOManip.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/InputStream.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/InputStream-inl.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/OutputStream.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/OutputStream-inl.h \
+  /Users/dbin/work/soft/dash/build/install/include/dash/tools/PatternVisualizer.h \
   ft_endpoint_adios.h ft_endpoint_pnetcdf.h ft_output_vector.h ft_vis.h \
   ft_array_transpose.h
 
@@ -969,6 +1206,480 @@ ft_local_mirror.h:
 ft_mpi.h:
 
 ft_merge.h:
+
+/Users/dbin/work/soft/dash/build/install/include/libdash.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/internal/Config.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/internal/Macro.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Version.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Types.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_types.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/internal/Unit.h:
+
+/Users/dbin/work/soft/dash/build/install/include/cpp17/cstddef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Meta.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/meta/TypeInfo.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Init.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_config.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_util.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_initialization.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_team_group.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_globmem.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_communication.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_synchronization.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Team.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Exception.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/exception/RuntimeError.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/exception/InvalidArgument.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/exception/OutOfRange.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/exception/NotImplemented.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/exception/AssertionFailed.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/exception/StackTrace.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/execinfo.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/os/base.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/os/availability.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/uuid/uuid.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/cxxabi.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/__cxxabi_config.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/internal/Logging.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/internal/StreamConversion.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Range.h:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/set:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/Locality.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/Config.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/StaticConfig.h:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/unordered_map:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__hash_table:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_locality.h:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/list:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Cartesian.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Dimensional.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Distribution.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/internal/Math.h:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/numeric:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/TeamSpec.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Iterator.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/iterator/IteratorTraits.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/iterator/GlobIter.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/GlobPtr.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/atomic/Type_traits.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/iterator/internal/GlobPtrBase.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/MemorySpaceBase.h:
+
+/Users/dbin/work/soft/dash/build/install/include/cpp17/polymorphic_allocator.h:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/scoped_allocator:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/internal/MemorySpaceRegistry.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/GlobRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Onesided.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/iterator/internal/GlobRefBase.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Pattern.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/BlockPattern.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/PatternProperties.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/internal/PatternArguments.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/BlockPattern1D.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/TilePattern.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/TilePattern1D.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/ShiftTilePattern.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/ShiftTilePattern1D.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/SeqTilePattern.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/CSRPattern.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/LoadBalancePattern.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/TeamLocality.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/LocalityDomain.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/internal/String.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/UnitLocality.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/PatternIterator.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/pattern/MakePattern.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/iterator/GlobViewIter.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Allocator.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/allocator/AllocatorTraits.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/MemorySpace.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/HBWSpace.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/HostSpace.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobLocalMemoryPool.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/allocator/AllocationPolicy.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/allocator/internal/Types.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobStaticMem.h:
+
+/Users/dbin/work/soft/dash/build/install/include/cpp17/type_traits.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/allocator/GlobalAllocator.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/allocator/EpochSynchronizedAllocator.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/allocator/AllocatorBase.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/SimpleMemoryPoolResource.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/View.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/Apply.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/ViewMod.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/UniversalMember.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/ArrayExpr.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/IndexSequence.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/IndexSet.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/ViewTraits.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/Origin.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/Domain.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/Local.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/SetUnion.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/Global.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/FunctionalExpr.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/iterator/internal/IteratorBase.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/ViewIterator.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/ViewOrigin.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/ViewMod1D.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/Block.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/Chunked.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/SetIntersect.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/Sub.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/Remote.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/IndexRange.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/CartView.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/MultiView.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/StridedView.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/view/ViewBlocksMod.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Memory.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobHeapMem.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/GlobSharedRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Operation.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Array.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/GlobAsyncRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/HView.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/UniquePtr.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/MinMax.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/LocalRange.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/LocalRanges.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/Trace.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/Timer.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/Timestamp.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/TimeMeasure.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/internal/TimestampCounterPosix.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/internal/TimestampClockPosix.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/time.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/_types/_timeval64.h:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/fstream:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/filesystem:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/stack:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Copy.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Future.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/iterator/internal/ContiguousRange.h:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/future:
+
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/thread:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobHeapPtr.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/GlobHeapLocalPtr.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/memory/internal/GlobHeapMemTypes.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/LaunchPolicy.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Container.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Matrix.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/matrix/MatrixRefView.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/matrix/internal/MatrixRefView-inl.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/matrix/MatrixRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/matrix/internal/MatrixRef-inl.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/matrix/LocalMatrixRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/matrix/internal/LocalMatrixRef-inl.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/matrix/internal/Matrix-inl.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Coarray.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/coarray/Utils.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Coevent.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Atomic.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/atomic/GlobAtomicRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/atomic/GlobAtomicAsyncRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/atomic/Operation.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Fill.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/coarray/CoEventIter.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/coarray/CoEventRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/List.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/list/ListRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/list/internal/ListTypes.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/list/LocalListRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/list/GlobListIter.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/UnorderedMap.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/map/UnorderedMap.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/map/UnorderedMapLocalRef.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/map/UnorderedMapLocalIter.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/map/UnorderedMapGlobIter.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/map/HashPolicy.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Shared.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/SharedCounter.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Algorithm.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/ForEach.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Transform.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Bcast.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Reduce.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Generate.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/AllOf.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Find.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/AnyOf.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Equal.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/Sort.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/internal/Sort-inl.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/algorithm/SUMMA.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/Mutex.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/halo/HaloMatrixWrapper.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/halo/StencilOperator.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/halo/iterator/StencilIterator.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/halo/Halo.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/halo/Types.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/halo/Region.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/halo/Stencil.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/halo/HaloMemory.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/halo/CoordinateAccess.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/BenchmarkParams.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/PatternMetrics.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/util/LocalityJSONPrinter.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/IO.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/IOStream.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/HDF5.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/StorageDriver.h:
+
+/Users/dbin/work/soft/hdf5-1.12.0/build/include/hdf5_hl.h:
+
+/Users/dbin/work/soft/hdf5-1.12.0/build/include/H5DOpublic.h:
+
+/Users/dbin/work/soft/hdf5-1.12.0/build/include/H5DSpublic.h:
+
+/Users/dbin/work/soft/hdf5-1.12.0/build/include/H5LTpublic.h:
+
+/Users/dbin/work/soft/hdf5-1.12.0/build/include/H5IMpublic.h:
+
+/Users/dbin/work/soft/hdf5-1.12.0/build/include/H5TBpublic.h:
+
+/Users/dbin/work/soft/hdf5-1.12.0/build/include/H5PTpublic.h:
+
+/Users/dbin/work/soft/hdf5-1.12.0/build/include/H5LDpublic.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/dart/if/dart_io.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/DriverImplZeroCopy.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/DriverImplBuffered.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/DriverImplNdBlock.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/StorageDriver-inl.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/IOStream.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/IOManip.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/InputStream.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/InputStream-inl.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/OutputStream.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/OutputStream-inl.h:
+
+/Users/dbin/work/soft/dash/build/install/include/dash/tools/PatternVisualizer.h:
 
 ft_endpoint_adios.h:
 

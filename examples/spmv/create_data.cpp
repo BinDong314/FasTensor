@@ -96,9 +96,9 @@ int main(int argc, char *argv[])
     AU_Init(argc, argv);
 
     //Input data
-    Array<double> *AI = new Array<double>("EP_HDF5:./matrix_i.h5:/i");
-    Array<double> *AJ = new Array<double>("EP_HDF5:./matrix_j.h5:/j");
-    Array<double> *AV = new Array<double>("EP_HDF5:./matrix_v.h5:/v");
+    Array<double> *AI = new Array<double>("EP_HDF5:./matrix.h5:/i");
+    Array<double> *AJ = new Array<double>("EP_HDF5:./matrix.h5:/j");
+    Array<double> *AV = new Array<double>("EP_HDF5:./matrix.h5:/v");
 
     std::vector<unsigned long long> data_size;
 
@@ -160,6 +160,12 @@ int main(int argc, char *argv[])
     end_addr.push_back(MATRIX_N - 1);
 
     AX->WriteArray(start_addr, end_addr, XV);
+
+    std::string array_size_str;
+    array_size_str = std::to_string(MATRIX_M) + " " + std::to_string(MATRIX_N);
+    AI->SetTag("ArraySize", array_size_str);
+    AJ->SetTag("ArraySize", array_size_str);
+    AV->SetTag("ArraySize", array_size_str);
 
     delete AI;
     delete AJ;

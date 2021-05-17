@@ -300,8 +300,10 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
         count[i] = end[i] - start[i] + 1; //Starting from zero
     }
 
-    bool is_zero_start = std::all_of(start.begin(), start.end(), [](int i) { return i == 0; });
-    bool is_zero_end = std::all_of(start.begin(), start.end(), [](int i) { return i == 0; });
+    bool is_zero_start = std::all_of(start.begin(), start.end(), [](int i)
+                                     { return i == 0; });
+    bool is_zero_end = std::all_of(start.begin(), start.end(), [](int i)
+                                   { return i == 0; });
 
     if (data == nullptr && is_zero_start && is_zero_end)
     {
@@ -716,12 +718,20 @@ int EndpointHDF5::ReadAttribute(const std::string &name, void *data, FTDataType 
     {
         hid_t mem_type_l, disk_type_l;
         Map2MyTypeParameters(data_type_p, mem_type_l, disk_type_l);
+        if (!H5Aexists(did, name.c_str()))
+        {
+            return -1;
+        }
         hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
         ret = H5Aread(attribute_id, mem_type_l, data);
         H5Aclose(attribute_id);
     }
     else
     {
+        if (!H5Aexists(did, name.c_str()))
+        {
+            return -1;
+        }
         hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
         hid_t attribute_datatype = H5Aget_type(attribute_id);
         size_t attribute_sdim = H5Tget_size(attribute_datatype);
@@ -749,11 +759,23 @@ int EndpointHDF5::ReadAttribute(const std::string &name, void *data, FTDataType 
     return ret;
 }
 
-size_t EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_type_p)
+int EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_type_p)
 {
+    //std::cout << "Write HDF5 \n";
+    if (!GetOpenFlag())
+    {
+        //std::cout << "Write HDF5 before open \n";
+        SetRwFlag(H5F_ACC_RDWR);
+        ExtractMeta(); //Will call open
+    }
+
     if (data_type_p != AU_STRING)
     {
         hsize_t attribute_dims[1];
+        if (!H5Aexists(did, name.c_str()))
+        {
+            return -1;
+        }
         hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
         hid_t attribute_space = H5Aget_space(attribute_id);
         int attribute_ndims = H5Sget_simple_extent_dims(attribute_space, attribute_dims, NULL);
@@ -764,6 +786,10 @@ size_t EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_t
     }
     else
     {
+        if (!H5Aexists(did, name.c_str()))
+        {
+            return -1;
+        }
         hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
         size_t attribute_size;
         hid_t attribute_space = H5Aget_space(attribute_id);

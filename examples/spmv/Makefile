@@ -17,11 +17,11 @@ OTHER_FLAGS=-g3  -std=c++17
 
 AU_FLAG=-I$(AU_DIR)/include -L$(AU_DIR)/lib -lFastensor
 HDF5_FLAG=-I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz
-DASH_FLAG=-I$(DASH_DIR)/include -L$(DASH_DIR)/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'
+DASH_FLAG=-I$(DASH_DIR)/include -L$(DASH_DIR)/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich' -DHAS_DASH_ENDPOINT
 ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG)  $(DASH_FLAG) 
 
 .PHONY:all
-all:create_data spmv
+all:create_data spmv spmv-v2
 
 create_data:create_data.cpp
 	$(CCC) -o create_data create_data.cpp $(ALL_FLAGS)
@@ -29,6 +29,9 @@ create_data:create_data.cpp
 spmv:spmv.cpp
 	$(CCC) -o spmv spmv.cpp $(ALL_FLAGS)
 
+spmv-v2:spmv-v2.cpp
+	$(CCC) -o spmv-v2 spmv-v2.cpp $(ALL_FLAGS)
+
 clean:
-	rm -rf create_data create_data.dSYM spmv spmv.dSYM
+	rm -rf create_data create_data.dSYM spmv spmv.dSYM spmv-v2 spmv-v2.dSYM
 

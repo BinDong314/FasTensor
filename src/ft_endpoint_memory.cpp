@@ -462,7 +462,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         AU_EXIT("Invalued endpoint_info");
     }
 
-    std::cout << "Nonvolatile \n";
+    //std::cout << "Nonvolatile \n";
 
     if (local_mirror_flag)
     {

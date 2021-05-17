@@ -154,6 +154,7 @@ namespace FT
     virtual int SetOverlapSize(const vector<int> os_p) = 0;
     virtual int GetArraySize(std::vector<unsigned long long> &size_p) = 0;
     virtual int GetStencilTag() = 0;
+    virtual int GetTag(const std::string &name, std::string &value) = 0;
     virtual ~ArrayBase() = default;
   };
 
@@ -771,12 +772,13 @@ namespace FT
     {
       Transform(UDF, &B);
     }
-
-    template <class UDFOutputType, class BType = UDFOutputType>
+    /*
+    template <class UDFOutputType>
     void Transform(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &))
     {
       Transform(UDF, nullptr);
     }
+  */
 
     /**
    * @brief Run a UDF on the data pointed by the array
@@ -1122,6 +1124,47 @@ namespace FT
           free(current_chunk_data_void_p);
         }
         return 1;
+      }
+    }
+
+    /**
+     * @brief Test a new API to read modfy and write a array.
+     *        It is useful for cases that you have a incremently updated array
+     *        //https://en.wikipedia.org/wiki/Read%E2%80%93modify%E2%80%93write
+     * @param start_p 
+     * @param end_p 
+     * @param data_p 
+     * @param op 
+     * @return int 
+     */
+    int ReadModifyWriteArray(const std::vector<unsigned long long> &start_p, const std::vector<unsigned long long> &end_p, std::vector<T> &data_p, AU_Op op)
+    {
+      if (!is_endpoint_created_flag)
+      {
+        CreateEndpoint(data_size, data_chunk_size, data_overlap_size);
+      }
+      //InitializeApplyInput();
+      if (!virtual_array_flag)
+      {
+        std::vector<T> data_p_read;
+        data_p_read.resize(data_p.size());
+        endpoint->Read(start_p, end_p, static_cast<void *>(data_p.data()));
+        switch (op)
+        {
+        case AU_SUM:
+          std::transform(data_p_read.begin(), data_p_read.end(), data_p.begin(), data_p.begin(), std::plus<T>());
+          break;
+        default:
+          AU_EXIT("Not supported op type in ReadModifyWriteArray now\n");
+          break;
+        }
+        return endpoint->Write(start_p, end_p, static_cast<void *>(data_p.data()));
+      }
+      else
+      {
+
+        AU_EXIT("Not supported ReadModifyWriteArray on virtual array yet !\n");
+        return -1;
       }
     }
 
@@ -1744,6 +1787,12 @@ namespace FT
       attribute_endpoint->SetDataElementType(data_element_type);
       if (attribute_endpoint->GetEndpointType() == EP_MEMORY)
         endpoint_memory_flag = true;
+
+      //Fixme: here it assign first attribute's endpoint to the object's endpoint
+      if (attribute_endpoint_vector.size() == 0)
+      {
+        endpoint = attribute_endpoint;
+      }
       attribute_endpoint_vector.push_back(attribute_endpoint);
     }
 
@@ -2201,7 +2250,11 @@ namespace FT
 
     int GetTag(const std::string &name, std::string &value)
     {
-      size_t str_len = endpoint->GetAttributeSize(name, AU_STRING);
+      int str_len = endpoint->GetAttributeSize(name, AU_STRING);
+      if (str_len < 0)
+      {
+        return -1;
+      }
       value.resize(str_len);
       //std::cout << "GetTag : name = " << name << ", str_len = " << str_len << "\n";
       return endpoint->ReadAttribute(name, &value[0], AU_STRING, value.length());
@@ -2210,7 +2263,7 @@ namespace FT
     int GetTag(const std::string &name, std::vector<PType> &value)
     {
       AuEndpointDataType data_element_type = InferDataType<PType>();
-      size_t vec_len = endpoint->GetAttributeSize(name, data_element_type);
+      int vec_len = endpoint->GetAttributeSize(name, data_element_type);
       value.resize(vec_len);
       return endpoint->ReadAttribute(name, &value[0], data_element_type, value.size());
     }

@@ -285,7 +285,7 @@ public:
      */
     virtual int ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0);
 
-    virtual size_t GetAttributeSize(const std::string &name, FTDataType data_type_p);
+    virtual int GetAttributeSize(const std::string &name, FTDataType data_type_p);
 
     /**
      * @brief close the end-point

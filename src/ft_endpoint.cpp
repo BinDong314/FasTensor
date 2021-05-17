@@ -477,7 +477,7 @@ int Endpoint::ReadAttribute(const std::string &name, void *data, FTDataType data
     return 0;
 }
 
-size_t Endpoint::GetAttributeSize(const std::string &name, FTDataType data_type_p)
+int Endpoint::GetAttributeSize(const std::string &name, FTDataType data_type_p)
 {
     AU_EXIT("Error: GetAttributeSize is not implemented in endpoint");
     return 0;

@@ -288,7 +288,7 @@ public:
      */
     int ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
 
-    size_t GetAttributeSize(const std::string &name, FTDataType data_type_p) override;
+    int GetAttributeSize(const std::string &name, FTDataType data_type_p) override;
 
     /**
      * @brief Read all attribute name
