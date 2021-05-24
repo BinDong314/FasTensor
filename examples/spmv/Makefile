@@ -21,7 +21,7 @@ DASH_FLAG=-I$(DASH_DIR)/include -L$(DASH_DIR)/lib -ldash-mpi -ldart-mpi -ldart-b
 ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG)  $(DASH_FLAG) 
 
 .PHONY:all
-all:create_data spmv spmv-v2
+all:create_data spmv spmv-v2 spmv-stencil
 
 create_data:create_data.cpp
 	$(CCC) -o create_data create_data.cpp $(ALL_FLAGS)
@@ -32,6 +32,9 @@ spmv:spmv.cpp
 spmv-v2:spmv-v2.cpp
 	$(CCC) -o spmv-v2 spmv-v2.cpp $(ALL_FLAGS)
 
+spmv-stencil:spmv-stencil.cpp
+	$(CCC) -o spmv-stencil spmv-stencil.cpp $(ALL_FLAGS)
+
 clean:
-	rm -rf create_data create_data.dSYM spmv spmv.dSYM spmv-v2 spmv-v2.dSYM
+	rm -rf create_data create_data.dSYM spmv spmv.dSYM spmv-v2 spmv-v2.dSYM  spmv-stencil spmv-stencil.dSYM
 

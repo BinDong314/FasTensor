@@ -2175,8 +2175,8 @@ namespace FT
       {
         std::cout << "Timing Results of All " << std::endl;
         std::cout << "Read      time (s) : max = " << mpi_stats_read[0] << ", min = " << mpi_stats_read[1] << ", ave = " << mpi_stats_read[2] / ft_size << std::endl;
-        std::cout << "UDF       time (s) : max = " << mpi_stats_udf[0] << ", min = " << mpi_stats_udf[0] << ", ave = " << mpi_stats_udf[0] / ft_size << std::endl;
-        std::cout << "Write     time (s) : max = " << mpi_stats_write[0] << ", min = " << mpi_stats_write[0] << ", ave = " << mpi_stats_write[0] / ft_size << std::endl;
+        std::cout << "UDF       time (s) : max = " << mpi_stats_udf[0] << ", min = " << mpi_stats_udf[1] << ", ave = " << mpi_stats_udf[2] / ft_size << std::endl;
+        std::cout << "Write     time (s) : max = " << mpi_stats_write[0] << ", min = " << mpi_stats_write[1] << ", ave = " << mpi_stats_write[2] / ft_size << std::endl;
         fflush(stdout);
       }
     }
