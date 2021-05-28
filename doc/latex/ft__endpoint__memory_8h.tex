@@ -1,0 +1,108 @@
+\hypertarget{ft__endpoint__memory_8h}{}\doxysection{ft\+\_\+endpoint\+\_\+memory.\+h File Reference}
+\label{ft__endpoint__memory_8h}\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+type.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+local\+\_\+mirror.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint\+\_\+hdf5.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y}{Endpoint\+MEMORY}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_a999be804c2520f066b76845cbfc21fa0}{DASH\+\_\+\+READ\+\_\+\+FLAG}}~0
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_a1815846cac5a83d64aeed3b0460e4e60}{DASH\+\_\+\+WRITE\+\_\+\+FLAG}}~1
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_aca51d1992b501b728795736f3d8d8405}{DASH\+\_\+\+NONVOLATILE\+\_\+\+CODE}}~0
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_a6b2c7b8359d2d6e540e693cee8bdaf0f}{DASH\+\_\+\+VOLATILE\+\_\+\+CODE}}~1
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_a2d54aa3dfbaa71614ca47e290c943956}{DASH\+\_\+\+ENABLE\+\_\+\+LOCAL\+\_\+\+MIRROR\+\_\+\+CODE}}~2
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_ae6609cce5b909c41f660e242e29ecdd2}{DASH\+\_\+\+MERGE\+\_\+\+MIRRORS\+\_\+\+CODE}}~3
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_a3861350a124d29d9367ad86cde009420}{MEMORY\+\_\+\+BACKUP}}~0
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_ab5bc2b4784271adf330e77c3da7f8f09}{MEMORY\+\_\+\+RESTORE}}~1
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_a64b67ed9e7f5d4880430c1735c25715e}{MEMORY\+\_\+\+CLONE}}~2
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_a326170d85ff99d15092197a5df1c76f3}{MEMORY\+\_\+\+MERGE}}~3
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__memory_8h_a2561cd08cc03015e232b0eb2a5e8edac}{MEMORY\+\_\+\+SYNC\+\_\+\+OVERLAP}}~4
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__endpoint__memory_8h_a2d54aa3dfbaa71614ca47e290c943956}\label{ft__endpoint__memory_8h_a2d54aa3dfbaa71614ca47e290c943956}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!DASH\_ENABLE\_LOCAL\_MIRROR\_CODE@{DASH\_ENABLE\_LOCAL\_MIRROR\_CODE}}
+\index{DASH\_ENABLE\_LOCAL\_MIRROR\_CODE@{DASH\_ENABLE\_LOCAL\_MIRROR\_CODE}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{DASH\_ENABLE\_LOCAL\_MIRROR\_CODE}{DASH\_ENABLE\_LOCAL\_MIRROR\_CODE}}
+{\footnotesize\ttfamily \#define DASH\+\_\+\+ENABLE\+\_\+\+LOCAL\+\_\+\+MIRROR\+\_\+\+CODE~2}
+
+\mbox{\Hypertarget{ft__endpoint__memory_8h_ae6609cce5b909c41f660e242e29ecdd2}\label{ft__endpoint__memory_8h_ae6609cce5b909c41f660e242e29ecdd2}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!DASH\_MERGE\_MIRRORS\_CODE@{DASH\_MERGE\_MIRRORS\_CODE}}
+\index{DASH\_MERGE\_MIRRORS\_CODE@{DASH\_MERGE\_MIRRORS\_CODE}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{DASH\_MERGE\_MIRRORS\_CODE}{DASH\_MERGE\_MIRRORS\_CODE}}
+{\footnotesize\ttfamily \#define DASH\+\_\+\+MERGE\+\_\+\+MIRRORS\+\_\+\+CODE~3}
+
+\mbox{\Hypertarget{ft__endpoint__memory_8h_aca51d1992b501b728795736f3d8d8405}\label{ft__endpoint__memory_8h_aca51d1992b501b728795736f3d8d8405}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!DASH\_NONVOLATILE\_CODE@{DASH\_NONVOLATILE\_CODE}}
+\index{DASH\_NONVOLATILE\_CODE@{DASH\_NONVOLATILE\_CODE}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{DASH\_NONVOLATILE\_CODE}{DASH\_NONVOLATILE\_CODE}}
+{\footnotesize\ttfamily \#define DASH\+\_\+\+NONVOLATILE\+\_\+\+CODE~0}
+
+\mbox{\Hypertarget{ft__endpoint__memory_8h_a999be804c2520f066b76845cbfc21fa0}\label{ft__endpoint__memory_8h_a999be804c2520f066b76845cbfc21fa0}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!DASH\_READ\_FLAG@{DASH\_READ\_FLAG}}
+\index{DASH\_READ\_FLAG@{DASH\_READ\_FLAG}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{DASH\_READ\_FLAG}{DASH\_READ\_FLAG}}
+{\footnotesize\ttfamily \#define DASH\+\_\+\+READ\+\_\+\+FLAG~0}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__endpoint__memory_8h_a6b2c7b8359d2d6e540e693cee8bdaf0f}\label{ft__endpoint__memory_8h_a6b2c7b8359d2d6e540e693cee8bdaf0f}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!DASH\_VOLATILE\_CODE@{DASH\_VOLATILE\_CODE}}
+\index{DASH\_VOLATILE\_CODE@{DASH\_VOLATILE\_CODE}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{DASH\_VOLATILE\_CODE}{DASH\_VOLATILE\_CODE}}
+{\footnotesize\ttfamily \#define DASH\+\_\+\+VOLATILE\+\_\+\+CODE~1}
+
+\mbox{\Hypertarget{ft__endpoint__memory_8h_a1815846cac5a83d64aeed3b0460e4e60}\label{ft__endpoint__memory_8h_a1815846cac5a83d64aeed3b0460e4e60}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!DASH\_WRITE\_FLAG@{DASH\_WRITE\_FLAG}}
+\index{DASH\_WRITE\_FLAG@{DASH\_WRITE\_FLAG}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{DASH\_WRITE\_FLAG}{DASH\_WRITE\_FLAG}}
+{\footnotesize\ttfamily \#define DASH\+\_\+\+WRITE\+\_\+\+FLAG~1}
+
+\mbox{\Hypertarget{ft__endpoint__memory_8h_a3861350a124d29d9367ad86cde009420}\label{ft__endpoint__memory_8h_a3861350a124d29d9367ad86cde009420}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!MEMORY\_BACKUP@{MEMORY\_BACKUP}}
+\index{MEMORY\_BACKUP@{MEMORY\_BACKUP}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{MEMORY\_BACKUP}{MEMORY\_BACKUP}}
+{\footnotesize\ttfamily \#define MEMORY\+\_\+\+BACKUP~0}
+
+\mbox{\Hypertarget{ft__endpoint__memory_8h_a64b67ed9e7f5d4880430c1735c25715e}\label{ft__endpoint__memory_8h_a64b67ed9e7f5d4880430c1735c25715e}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!MEMORY\_CLONE@{MEMORY\_CLONE}}
+\index{MEMORY\_CLONE@{MEMORY\_CLONE}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{MEMORY\_CLONE}{MEMORY\_CLONE}}
+{\footnotesize\ttfamily \#define MEMORY\+\_\+\+CLONE~2}
+
+\mbox{\Hypertarget{ft__endpoint__memory_8h_a326170d85ff99d15092197a5df1c76f3}\label{ft__endpoint__memory_8h_a326170d85ff99d15092197a5df1c76f3}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!MEMORY\_MERGE@{MEMORY\_MERGE}}
+\index{MEMORY\_MERGE@{MEMORY\_MERGE}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{MEMORY\_MERGE}{MEMORY\_MERGE}}
+{\footnotesize\ttfamily \#define MEMORY\+\_\+\+MERGE~3}
+
+\mbox{\Hypertarget{ft__endpoint__memory_8h_ab5bc2b4784271adf330e77c3da7f8f09}\label{ft__endpoint__memory_8h_ab5bc2b4784271adf330e77c3da7f8f09}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!MEMORY\_RESTORE@{MEMORY\_RESTORE}}
+\index{MEMORY\_RESTORE@{MEMORY\_RESTORE}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{MEMORY\_RESTORE}{MEMORY\_RESTORE}}
+{\footnotesize\ttfamily \#define MEMORY\+\_\+\+RESTORE~1}
+
+\mbox{\Hypertarget{ft__endpoint__memory_8h_a2561cd08cc03015e232b0eb2a5e8edac}\label{ft__endpoint__memory_8h_a2561cd08cc03015e232b0eb2a5e8edac}} 
+\index{ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}!MEMORY\_SYNC\_OVERLAP@{MEMORY\_SYNC\_OVERLAP}}
+\index{MEMORY\_SYNC\_OVERLAP@{MEMORY\_SYNC\_OVERLAP}!ft\_endpoint\_memory.h@{ft\_endpoint\_memory.h}}
+\doxysubsubsection{\texorpdfstring{MEMORY\_SYNC\_OVERLAP}{MEMORY\_SYNC\_OVERLAP}}
+{\footnotesize\ttfamily \#define MEMORY\+\_\+\+SYNC\+\_\+\+OVERLAP~4}
+

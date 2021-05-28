@@ -1,0 +1,94 @@
+\hypertarget{ft__local__mirror_8h}{}\doxysection{ft\+\_\+local\+\_\+mirror.\+h File Reference}
+\label{ft__local__mirror_8h}\index{ft\_local\_mirror.h@{ft\_local\_mirror.h}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+utility.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+mpi.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__local__mirror_8h_aefc790d47e54ac93d96f2615b2f45093}{LOCAL\+\_\+\+MIRROR\+\_\+\+READ\+\_\+\+FLAG}}~0
+\item 
+\#define \mbox{\hyperlink{ft__local__mirror_8h_a17268923e6a21ec001b5aa7285d56c69}{LOCAL\+\_\+\+MIRROR\+\_\+\+WRITE\+\_\+\+FLAG}}~1
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\void $\ast$ \mbox{\hyperlink{ft__local__mirror_8h_a0bb5c3b2c0c4b60f452ccec60d5028fb}{Create\+Local\+Mirror\+Help}} (std\+::string init\+\_\+value\+\_\+str, size\+\_\+t local\+\_\+mirror\+\_\+size)
+\item 
+{\footnotesize template$<$typename T $>$ }\\int \mbox{\hyperlink{ft__local__mirror_8h_ab72abdc307774af73e7a31d2144f11cd}{Access\+Local\+Mirror\+Help}} (void $\ast$local\+\_\+mirror\+\_\+buffer, std\+::vector$<$ unsigned long long $>$ \&mirror\+\_\+size, std\+::vector$<$ unsigned long long $>$ \&start, std\+::vector$<$ unsigned long long $>$ \&end, void $\ast$data, int read\+\_\+write\+\_\+code)
+\item 
+{\footnotesize template$<$typename T $>$ }\\T $\ast$ \mbox{\hyperlink{ft__local__mirror_8h_a72f84a3c38e367e5508db349533993ac}{Merge\+Mirrors\+Help}} (void $\ast$local\+\_\+mirror\+\_\+buffer, unsigned long long \&local\+\_\+mirror\+\_\+size, std\+::string \&opt\+\_\+str)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{ft__local__mirror_8h_a6f8a15961903c1cccc9822a69f3225ce}{Bcast\+Help}} (void $\ast$local\+\_\+mirror\+\_\+buffer, unsigned long long \&local\+\_\+mirror\+\_\+size)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{ft__local__mirror_8h_ad9938e784090fa51bc1d573b2fc7c937}{ft\+\_\+size}}
+\item 
+int \mbox{\hyperlink{ft__local__mirror_8h_a1241af5ea5c1b51733696ad265a2f3a2}{ft\+\_\+rank}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__local__mirror_8h_aefc790d47e54ac93d96f2615b2f45093}\label{ft__local__mirror_8h_aefc790d47e54ac93d96f2615b2f45093}} 
+\index{ft\_local\_mirror.h@{ft\_local\_mirror.h}!LOCAL\_MIRROR\_READ\_FLAG@{LOCAL\_MIRROR\_READ\_FLAG}}
+\index{LOCAL\_MIRROR\_READ\_FLAG@{LOCAL\_MIRROR\_READ\_FLAG}!ft\_local\_mirror.h@{ft\_local\_mirror.h}}
+\doxysubsubsection{\texorpdfstring{LOCAL\_MIRROR\_READ\_FLAG}{LOCAL\_MIRROR\_READ\_FLAG}}
+{\footnotesize\ttfamily \#define LOCAL\+\_\+\+MIRROR\+\_\+\+READ\+\_\+\+FLAG~0}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__local__mirror_8h_a17268923e6a21ec001b5aa7285d56c69}\label{ft__local__mirror_8h_a17268923e6a21ec001b5aa7285d56c69}} 
+\index{ft\_local\_mirror.h@{ft\_local\_mirror.h}!LOCAL\_MIRROR\_WRITE\_FLAG@{LOCAL\_MIRROR\_WRITE\_FLAG}}
+\index{LOCAL\_MIRROR\_WRITE\_FLAG@{LOCAL\_MIRROR\_WRITE\_FLAG}!ft\_local\_mirror.h@{ft\_local\_mirror.h}}
+\doxysubsubsection{\texorpdfstring{LOCAL\_MIRROR\_WRITE\_FLAG}{LOCAL\_MIRROR\_WRITE\_FLAG}}
+{\footnotesize\ttfamily \#define LOCAL\+\_\+\+MIRROR\+\_\+\+WRITE\+\_\+\+FLAG~1}
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__local__mirror_8h_ab72abdc307774af73e7a31d2144f11cd}\label{ft__local__mirror_8h_ab72abdc307774af73e7a31d2144f11cd}} 
+\index{ft\_local\_mirror.h@{ft\_local\_mirror.h}!AccessLocalMirrorHelp@{AccessLocalMirrorHelp}}
+\index{AccessLocalMirrorHelp@{AccessLocalMirrorHelp}!ft\_local\_mirror.h@{ft\_local\_mirror.h}}
+\doxysubsubsection{\texorpdfstring{AccessLocalMirrorHelp()}{AccessLocalMirrorHelp()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int Access\+Local\+Mirror\+Help (\begin{DoxyParamCaption}\item[{void $\ast$}]{local\+\_\+mirror\+\_\+buffer,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{mirror\+\_\+size,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{end,  }\item[{void $\ast$}]{data,  }\item[{int}]{read\+\_\+write\+\_\+code }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__local__mirror_8h_a6f8a15961903c1cccc9822a69f3225ce}\label{ft__local__mirror_8h_a6f8a15961903c1cccc9822a69f3225ce}} 
+\index{ft\_local\_mirror.h@{ft\_local\_mirror.h}!BcastHelp@{BcastHelp}}
+\index{BcastHelp@{BcastHelp}!ft\_local\_mirror.h@{ft\_local\_mirror.h}}
+\doxysubsubsection{\texorpdfstring{BcastHelp()}{BcastHelp()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Bcast\+Help (\begin{DoxyParamCaption}\item[{void $\ast$}]{local\+\_\+mirror\+\_\+buffer,  }\item[{unsigned long long \&}]{local\+\_\+mirror\+\_\+size }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__local__mirror_8h_a0bb5c3b2c0c4b60f452ccec60d5028fb}\label{ft__local__mirror_8h_a0bb5c3b2c0c4b60f452ccec60d5028fb}} 
+\index{ft\_local\_mirror.h@{ft\_local\_mirror.h}!CreateLocalMirrorHelp@{CreateLocalMirrorHelp}}
+\index{CreateLocalMirrorHelp@{CreateLocalMirrorHelp}!ft\_local\_mirror.h@{ft\_local\_mirror.h}}
+\doxysubsubsection{\texorpdfstring{CreateLocalMirrorHelp()}{CreateLocalMirrorHelp()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void$\ast$ Create\+Local\+Mirror\+Help (\begin{DoxyParamCaption}\item[{std\+::string}]{init\+\_\+value\+\_\+str,  }\item[{size\+\_\+t}]{local\+\_\+mirror\+\_\+size }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__local__mirror_8h_a72f84a3c38e367e5508db349533993ac}\label{ft__local__mirror_8h_a72f84a3c38e367e5508db349533993ac}} 
+\index{ft\_local\_mirror.h@{ft\_local\_mirror.h}!MergeMirrorsHelp@{MergeMirrorsHelp}}
+\index{MergeMirrorsHelp@{MergeMirrorsHelp}!ft\_local\_mirror.h@{ft\_local\_mirror.h}}
+\doxysubsubsection{\texorpdfstring{MergeMirrorsHelp()}{MergeMirrorsHelp()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T$\ast$ Merge\+Mirrors\+Help (\begin{DoxyParamCaption}\item[{void $\ast$}]{local\+\_\+mirror\+\_\+buffer,  }\item[{unsigned long long \&}]{local\+\_\+mirror\+\_\+size,  }\item[{std\+::string \&}]{opt\+\_\+str }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ft__local__mirror_8h_a1241af5ea5c1b51733696ad265a2f3a2}\label{ft__local__mirror_8h_a1241af5ea5c1b51733696ad265a2f3a2}} 
+\index{ft\_local\_mirror.h@{ft\_local\_mirror.h}!ft\_rank@{ft\_rank}}
+\index{ft\_rank@{ft\_rank}!ft\_local\_mirror.h@{ft\_local\_mirror.h}}
+\doxysubsubsection{\texorpdfstring{ft\_rank}{ft\_rank}}
+{\footnotesize\ttfamily int ft\+\_\+rank\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{ft__local__mirror_8h_ad9938e784090fa51bc1d573b2fc7c937}\label{ft__local__mirror_8h_ad9938e784090fa51bc1d573b2fc7c937}} 
+\index{ft\_local\_mirror.h@{ft\_local\_mirror.h}!ft\_size@{ft\_size}}
+\index{ft\_size@{ft\_size}!ft\_local\_mirror.h@{ft\_local\_mirror.h}}
+\doxysubsubsection{\texorpdfstring{ft\_size}{ft\_size}}
+{\footnotesize\ttfamily int ft\+\_\+size\hspace{0.3cm}{\ttfamily [extern]}}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 

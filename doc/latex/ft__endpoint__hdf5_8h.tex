@@ -1,0 +1,85 @@
+\hypertarget{ft__endpoint__hdf5_8h}{}\doxysection{ft\+\_\+endpoint\+\_\+hdf5.\+h File Reference}
+\label{ft__endpoint__hdf5_8h}\index{ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}}
+{\ttfamily \#include \char`\"{}ft\+\_\+type.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+xdmf.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}hdf5.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_endpoint_h_d_f5}{Endpoint\+HDF5}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__hdf5_8h_a637111a6de4628768f0ef24a97a69d3b}{HDF5\+\_\+\+ENABLE\+\_\+\+MPI\+\_\+\+IO}}~0
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__hdf5_8h_a02e3614674c6cf891bb4dfa901cabeca}{HDF5\+\_\+\+DISABLE\+\_\+\+MPI\+\_\+\+IO}}~1
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__hdf5_8h_ab9ef446f708ad7e6e79709d5e5b599b0}{HDF5\+\_\+\+ENABLE\+\_\+\+COLLECTIVE\+\_\+\+IO}}~2
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__hdf5_8h_aaa8ed0fc3046def7385d80df47905f58}{HDF5\+\_\+\+DISABLE\+\_\+\+COLLECTIVE\+\_\+\+IO}}~3
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__hdf5_8h_ab0efc28cd291867aa19a0ad687261703}{OP\+\_\+\+ENABLE\+\_\+\+MPI\+\_\+\+IO}}~\mbox{\hyperlink{ft__endpoint__hdf5_8h_a637111a6de4628768f0ef24a97a69d3b}{HDF5\+\_\+\+ENABLE\+\_\+\+MPI\+\_\+\+IO}}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__hdf5_8h_aa93e64ba8da3e1a91cccb840193c5ada}{OP\+\_\+\+DISABLE\+\_\+\+MPI\+\_\+\+IO}}~\mbox{\hyperlink{ft__endpoint__hdf5_8h_a02e3614674c6cf891bb4dfa901cabeca}{HDF5\+\_\+\+DISABLE\+\_\+\+MPI\+\_\+\+IO}}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__hdf5_8h_a266853ad14809bda042261d05d53f22d}{OP\+\_\+\+ENABLE\+\_\+\+COLLECTIVE\+\_\+\+IO}}~\mbox{\hyperlink{ft__endpoint__hdf5_8h_ab9ef446f708ad7e6e79709d5e5b599b0}{HDF5\+\_\+\+ENABLE\+\_\+\+COLLECTIVE\+\_\+\+IO}}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__hdf5_8h_a45e300b03cb29fdb38a9ab887944c518}{OP\+\_\+\+DISABLE\+\_\+\+COLLECTIVE\+\_\+\+IO}}~\mbox{\hyperlink{ft__endpoint__hdf5_8h_aaa8ed0fc3046def7385d80df47905f58}{HDF5\+\_\+\+DISABLE\+\_\+\+COLLECTIVE\+\_\+\+IO}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__endpoint__hdf5_8h_aaa8ed0fc3046def7385d80df47905f58}\label{ft__endpoint__hdf5_8h_aaa8ed0fc3046def7385d80df47905f58}} 
+\index{ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}!HDF5\_DISABLE\_COLLECTIVE\_IO@{HDF5\_DISABLE\_COLLECTIVE\_IO}}
+\index{HDF5\_DISABLE\_COLLECTIVE\_IO@{HDF5\_DISABLE\_COLLECTIVE\_IO}!ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}}
+\doxysubsubsection{\texorpdfstring{HDF5\_DISABLE\_COLLECTIVE\_IO}{HDF5\_DISABLE\_COLLECTIVE\_IO}}
+{\footnotesize\ttfamily \#define HDF5\+\_\+\+DISABLE\+\_\+\+COLLECTIVE\+\_\+\+IO~3}
+
+\mbox{\Hypertarget{ft__endpoint__hdf5_8h_a02e3614674c6cf891bb4dfa901cabeca}\label{ft__endpoint__hdf5_8h_a02e3614674c6cf891bb4dfa901cabeca}} 
+\index{ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}!HDF5\_DISABLE\_MPI\_IO@{HDF5\_DISABLE\_MPI\_IO}}
+\index{HDF5\_DISABLE\_MPI\_IO@{HDF5\_DISABLE\_MPI\_IO}!ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}}
+\doxysubsubsection{\texorpdfstring{HDF5\_DISABLE\_MPI\_IO}{HDF5\_DISABLE\_MPI\_IO}}
+{\footnotesize\ttfamily \#define HDF5\+\_\+\+DISABLE\+\_\+\+MPI\+\_\+\+IO~1}
+
+\mbox{\Hypertarget{ft__endpoint__hdf5_8h_ab9ef446f708ad7e6e79709d5e5b599b0}\label{ft__endpoint__hdf5_8h_ab9ef446f708ad7e6e79709d5e5b599b0}} 
+\index{ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}!HDF5\_ENABLE\_COLLECTIVE\_IO@{HDF5\_ENABLE\_COLLECTIVE\_IO}}
+\index{HDF5\_ENABLE\_COLLECTIVE\_IO@{HDF5\_ENABLE\_COLLECTIVE\_IO}!ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}}
+\doxysubsubsection{\texorpdfstring{HDF5\_ENABLE\_COLLECTIVE\_IO}{HDF5\_ENABLE\_COLLECTIVE\_IO}}
+{\footnotesize\ttfamily \#define HDF5\+\_\+\+ENABLE\+\_\+\+COLLECTIVE\+\_\+\+IO~2}
+
+\mbox{\Hypertarget{ft__endpoint__hdf5_8h_a637111a6de4628768f0ef24a97a69d3b}\label{ft__endpoint__hdf5_8h_a637111a6de4628768f0ef24a97a69d3b}} 
+\index{ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}!HDF5\_ENABLE\_MPI\_IO@{HDF5\_ENABLE\_MPI\_IO}}
+\index{HDF5\_ENABLE\_MPI\_IO@{HDF5\_ENABLE\_MPI\_IO}!ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}}
+\doxysubsubsection{\texorpdfstring{HDF5\_ENABLE\_MPI\_IO}{HDF5\_ENABLE\_MPI\_IO}}
+{\footnotesize\ttfamily \#define HDF5\+\_\+\+ENABLE\+\_\+\+MPI\+\_\+\+IO~0}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__endpoint__hdf5_8h_a45e300b03cb29fdb38a9ab887944c518}\label{ft__endpoint__hdf5_8h_a45e300b03cb29fdb38a9ab887944c518}} 
+\index{ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}!OP\_DISABLE\_COLLECTIVE\_IO@{OP\_DISABLE\_COLLECTIVE\_IO}}
+\index{OP\_DISABLE\_COLLECTIVE\_IO@{OP\_DISABLE\_COLLECTIVE\_IO}!ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}}
+\doxysubsubsection{\texorpdfstring{OP\_DISABLE\_COLLECTIVE\_IO}{OP\_DISABLE\_COLLECTIVE\_IO}}
+{\footnotesize\ttfamily \#define OP\+\_\+\+DISABLE\+\_\+\+COLLECTIVE\+\_\+\+IO~\mbox{\hyperlink{ft__endpoint__hdf5_8h_aaa8ed0fc3046def7385d80df47905f58}{HDF5\+\_\+\+DISABLE\+\_\+\+COLLECTIVE\+\_\+\+IO}}}
+
+\mbox{\Hypertarget{ft__endpoint__hdf5_8h_aa93e64ba8da3e1a91cccb840193c5ada}\label{ft__endpoint__hdf5_8h_aa93e64ba8da3e1a91cccb840193c5ada}} 
+\index{ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}!OP\_DISABLE\_MPI\_IO@{OP\_DISABLE\_MPI\_IO}}
+\index{OP\_DISABLE\_MPI\_IO@{OP\_DISABLE\_MPI\_IO}!ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}}
+\doxysubsubsection{\texorpdfstring{OP\_DISABLE\_MPI\_IO}{OP\_DISABLE\_MPI\_IO}}
+{\footnotesize\ttfamily \#define OP\+\_\+\+DISABLE\+\_\+\+MPI\+\_\+\+IO~\mbox{\hyperlink{ft__endpoint__hdf5_8h_a02e3614674c6cf891bb4dfa901cabeca}{HDF5\+\_\+\+DISABLE\+\_\+\+MPI\+\_\+\+IO}}}
+
+\mbox{\Hypertarget{ft__endpoint__hdf5_8h_a266853ad14809bda042261d05d53f22d}\label{ft__endpoint__hdf5_8h_a266853ad14809bda042261d05d53f22d}} 
+\index{ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}!OP\_ENABLE\_COLLECTIVE\_IO@{OP\_ENABLE\_COLLECTIVE\_IO}}
+\index{OP\_ENABLE\_COLLECTIVE\_IO@{OP\_ENABLE\_COLLECTIVE\_IO}!ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}}
+\doxysubsubsection{\texorpdfstring{OP\_ENABLE\_COLLECTIVE\_IO}{OP\_ENABLE\_COLLECTIVE\_IO}}
+{\footnotesize\ttfamily \#define OP\+\_\+\+ENABLE\+\_\+\+COLLECTIVE\+\_\+\+IO~\mbox{\hyperlink{ft__endpoint__hdf5_8h_ab9ef446f708ad7e6e79709d5e5b599b0}{HDF5\+\_\+\+ENABLE\+\_\+\+COLLECTIVE\+\_\+\+IO}}}
+
+\mbox{\Hypertarget{ft__endpoint__hdf5_8h_ab0efc28cd291867aa19a0ad687261703}\label{ft__endpoint__hdf5_8h_ab0efc28cd291867aa19a0ad687261703}} 
+\index{ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}!OP\_ENABLE\_MPI\_IO@{OP\_ENABLE\_MPI\_IO}}
+\index{OP\_ENABLE\_MPI\_IO@{OP\_ENABLE\_MPI\_IO}!ft\_endpoint\_hdf5.h@{ft\_endpoint\_hdf5.h}}
+\doxysubsubsection{\texorpdfstring{OP\_ENABLE\_MPI\_IO}{OP\_ENABLE\_MPI\_IO}}
+{\footnotesize\ttfamily \#define OP\+\_\+\+ENABLE\+\_\+\+MPI\+\_\+\+IO~\mbox{\hyperlink{ft__endpoint__hdf5_8h_a637111a6de4628768f0ef24a97a69d3b}{HDF5\+\_\+\+ENABLE\+\_\+\+MPI\+\_\+\+IO}}}
+

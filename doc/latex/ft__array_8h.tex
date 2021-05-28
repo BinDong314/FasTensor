@@ -1,0 +1,103 @@
+\hypertarget{ft__array_8h}{}\doxysection{ft\+\_\+array.\+h File Reference}
+\label{ft__array_8h}\index{ft\_array.h@{ft\_array.h}}
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$regex$>$}\newline
+{\ttfamily \#include \char`\"{}mpi.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+stencil.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+utility.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+type.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint\+\_\+factory.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+mpi.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+merge.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+output\+\_\+vector.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+vis.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+array\+\_\+transpose.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_f_t_1_1_array_base}{FT\+::\+Array\+Base}}
+\begin{DoxyCompactList}\small\item\em the object to the \mbox{\hyperlink{class_f_t_1_1_array_base}{Array\+Base}} \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array$<$ T $>$}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespace_f_t}{FT}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__array_8h_aac8f38a254049b13194b8792b2be8bc4}{TRANSFORM}}(A\+\_\+\+BASE\+\_\+\+OBJECT,  UDF,  B,  A\+\_\+\+TYPE,  UDF\+\_\+\+OUT\+\_\+\+TYPE)
+\begin{DoxyCompactList}\small\item\em transform the Array\+Base object to one with the type A\+\_\+\+TYPE can call the transform function \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{ft__array_8h_ad9938e784090fa51bc1d573b2fc7c937}{ft\+\_\+size}}
+\item 
+int \mbox{\hyperlink{ft__array_8h_a1241af5ea5c1b51733696ad265a2f3a2}{ft\+\_\+rank}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_endpoint}{Endpoint}} $\ast$ $>$ \mbox{\hyperlink{ft__array_8h_ab0165a4273c30704621b63a3c3f22c3e}{endpoint\+\_\+to\+\_\+clean\+\_\+vector}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__array_8h_aac8f38a254049b13194b8792b2be8bc4}\label{ft__array_8h_aac8f38a254049b13194b8792b2be8bc4}} 
+\index{ft\_array.h@{ft\_array.h}!TRANSFORM@{TRANSFORM}}
+\index{TRANSFORM@{TRANSFORM}!ft\_array.h@{ft\_array.h}}
+\doxysubsubsection{\texorpdfstring{TRANSFORM}{TRANSFORM}}
+{\footnotesize\ttfamily \#define TRANSFORM(\begin{DoxyParamCaption}\item[{}]{A\+\_\+\+BASE\+\_\+\+OBJECT,  }\item[{}]{UDF,  }\item[{}]{B,  }\item[{}]{A\+\_\+\+TYPE,  }\item[{}]{UDF\+\_\+\+OUT\+\_\+\+TYPE }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{  \{                                                                                     \(\backslash\)}
+\DoxyCodeLine{    switch (A\_TYPE)                                                                     \(\backslash\)}
+\DoxyCodeLine{    \{                                                                                   \(\backslash\)}
+\DoxyCodeLine{    case \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ac495e2c0a1bf6e884246db80e167ff2f}{AuEndpointDataType::AU\_SHORT}}:                                                  \(\backslash\)}
+\DoxyCodeLine{      static\_cast<FT::Array<short> *>(A\_BASE\_OBJECT)-\/>Transform<UDF\_OUT\_TYPE>(UDF, B);  \(\backslash\)}
+\DoxyCodeLine{      break;                                                                            \(\backslash\)}
+\DoxyCodeLine{    case \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a1bf9ff3cd5cb1f0828e8fe78da194a8a}{AuEndpointDataType::AU\_DOUBLE}}:                                                 \(\backslash\)}
+\DoxyCodeLine{      static\_cast<FT::Array<double> *>(A\_BASE\_OBJECT)-\/>Transform<UDF\_OUT\_TYPE>(UDF, B); \(\backslash\)}
+\DoxyCodeLine{      break;                                                                            \(\backslash\)}
+\DoxyCodeLine{    case \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2bc03d49babea89b29bff2eff044dad9}{AuEndpointDataType::AU\_FLOAT}}:                                                  \(\backslash\)}
+\DoxyCodeLine{      static\_cast<FT::Array<float> *>(A\_BASE\_OBJECT)-\/>Transform<UDF\_OUT\_TYPE>(UDF, B);  \(\backslash\)}
+\DoxyCodeLine{      break;                                                                            \(\backslash\)}
+\DoxyCodeLine{    case \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2d1a9c7d96f2a1ae4627c0bd16808a76}{AuEndpointDataType::AU\_INT}}:                                                    \(\backslash\)}
+\DoxyCodeLine{      static\_cast<FT::Array<int> *>(A\_BASE\_OBJECT)-\/>Transform<UDF\_OUT\_TYPE>(UDF, B);    \(\backslash\)}
+\DoxyCodeLine{      break;                                                                            \(\backslash\)}
+\DoxyCodeLine{    default:                                                                            \(\backslash\)}
+\DoxyCodeLine{      AU\_EXIT(\textcolor{stringliteral}{"{}Not supported type yet in TRANSFORM macro !"{}});                           \(\backslash\)}
+\DoxyCodeLine{    \}                                                                                   \(\backslash\)}
+\DoxyCodeLine{  \}}
+
+\end{DoxyCode}
+
+
+transform the Array\+Base object to one with the type A\+\_\+\+TYPE can call the transform function 
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_base_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+base.\+cpp}}.\end{Desc}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ft__array_8h_ab0165a4273c30704621b63a3c3f22c3e}\label{ft__array_8h_ab0165a4273c30704621b63a3c3f22c3e}} 
+\index{ft\_array.h@{ft\_array.h}!endpoint\_to\_clean\_vector@{endpoint\_to\_clean\_vector}}
+\index{endpoint\_to\_clean\_vector@{endpoint\_to\_clean\_vector}!ft\_array.h@{ft\_array.h}}
+\doxysubsubsection{\texorpdfstring{endpoint\_to\_clean\_vector}{endpoint\_to\_clean\_vector}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{class_endpoint}{Endpoint}} $\ast$$>$ endpoint\+\_\+to\+\_\+clean\+\_\+vector\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{ft__array_8h_a1241af5ea5c1b51733696ad265a2f3a2}\label{ft__array_8h_a1241af5ea5c1b51733696ad265a2f3a2}} 
+\index{ft\_array.h@{ft\_array.h}!ft\_rank@{ft\_rank}}
+\index{ft\_rank@{ft\_rank}!ft\_array.h@{ft\_array.h}}
+\doxysubsubsection{\texorpdfstring{ft\_rank}{ft\_rank}}
+{\footnotesize\ttfamily int ft\+\_\+rank\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{ft__array_8h_ad9938e784090fa51bc1d573b2fc7c937}\label{ft__array_8h_ad9938e784090fa51bc1d573b2fc7c937}} 
+\index{ft\_array.h@{ft\_array.h}!ft\_size@{ft\_size}}
+\index{ft\_size@{ft\_size}!ft\_array.h@{ft\_array.h}}
+\doxysubsubsection{\texorpdfstring{ft\_size}{ft\_size}}
+{\footnotesize\ttfamily int ft\+\_\+size\hspace{0.3cm}{\ttfamily [extern]}}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 

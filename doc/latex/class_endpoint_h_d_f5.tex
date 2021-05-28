@@ -1,0 +1,444 @@
+\hypertarget{class_endpoint_h_d_f5}{}\doxysection{Endpoint\+HDF5 Class Reference}
+\label{class_endpoint_h_d_f5}\index{EndpointHDF5@{EndpointHDF5}}
+
+
+{\ttfamily \#include $<$ft\+\_\+endpoint\+\_\+hdf5.\+h$>$}
+
+Inheritance diagram for Endpoint\+HDF5\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_endpoint_h_d_f5}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_endpoint_h_d_f5_afd58fcd34b160d5ff264d8a5dcee05cc}{Endpoint\+HDF5}} (std\+::string endpoint\+\_\+info\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_endpoint_h_d_f5}{Endpoint\+HDF5}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_endpoint_h_d_f5_a49d2e54d22afb07ee1a8f6ab101d95d5}{Endpoint\+HDF5}} ()
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_endpoint}{Endpoint}} in HDF5 Nothing to do there, can be used as sub-\/endpoint of directory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_endpoint_h_d_f5_a7042b374bd3bfcc50d80b52bf6fa0ad6}{Endpoint\+HDF5}} (int no\+\_\+mpi)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_endpoint_h_d_f5}{Endpoint\+HDF5}} object without MPI. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_endpoint_h_d_f5_a431c6762a41dadb46981d8111a62f3ac}{$\sim$\+Endpoint\+HDF5}} ()
+\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_accec4de5d11d16cfe8c1bd2a58ed18ae}{Extract\+Meta}} () override
+\begin{DoxyCompactList}\small\item\em extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/data\+\_\+element\+\_\+type \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_a4b64355179d33d15576071612e8cdc27}{Print\+Info}} () override
+\begin{DoxyCompactList}\small\item\em print information about the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_a32dd75613e841b1e09c0f8e0e6562db3}{Create}} () override
+\begin{DoxyCompactList}\small\item\em create the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_aee7920b6a0c5444ead314e5c42aabbf8}{Open}} () override
+\begin{DoxyCompactList}\small\item\em open the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_ac0454482c63e852009fec81faa488e50}{Read}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data) override
+\begin{DoxyCompactList}\small\item\em read the data from end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_aaf26e458676e00b3eff69ceaf0bde72d}{Write}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data) override
+\begin{DoxyCompactList}\small\item\em write the data to the end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_ae31265783ff52f1f361d38343d7ca709}{Close}} () override
+\begin{DoxyCompactList}\small\item\em close the end-\/point \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_h_d_f5_a83082e41a822ad0056007ff4e6aa1bb9}{Map2\+My\+Type}} () override
+\begin{DoxyCompactList}\small\item\em call the finalize to close everything (like call Destractor) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_h_d_f5_a8e6ce090f36c9e1462e68fb9a09a1e4a}{Map2\+My\+Type\+Parameters}} (\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} ft\+\_\+type, hid\+\_\+t \&mem\+\_\+type, hid\+\_\+t \&disk\+\_\+type)
+\item 
+void \mbox{\hyperlink{class_endpoint_h_d_f5_af261249fb08b0450020a5563fa91054c}{Enable\+Collective\+IO}} () override
+\item 
+void \mbox{\hyperlink{class_endpoint_h_d_f5_ac47efc670b6a7fdc7233c241fdd10ee9}{Disable\+Collective\+IO}} () override
+\item 
+void \mbox{\hyperlink{class_endpoint_h_d_f5_aea0ac54fc54ed83a5923f0141a0911b2}{Enable\+MPIIO}} ()
+\item 
+void \mbox{\hyperlink{class_endpoint_h_d_f5_aa175acaf1eedf3bb717742f76bb041a8}{Disable\+MPIIO}} ()
+\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_a0d51472f198239873e23df742b75e30a}{Parse\+Endpoint\+Info}} () override
+\begin{DoxyCompactList}\small\item\em parse endpoint\+\_\+info to my own info In HDF5, it map endpoint\+\_\+info to filename, group name and datasetname \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_ab920c5b3e03ee1a9a46708580ed08fc0}{Control}} (int opt\+\_\+code, std\+::vector$<$ std\+::string $>$ \&parameter\+\_\+v) override
+\begin{DoxyCompactList}\small\item\em call a special operator on endpoint such as, enable collective I/O for HDF5 dump file from MEMORY to HDF5 \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_a5f5ff432638d4560585eabfa9afef3d8}{Write\+Attribute}} (const std\+::string \&name, const void $\ast$data, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} data\+\_\+type\+\_\+p, const size\+\_\+t \&data\+\_\+length\+\_\+p=0) override
+\begin{DoxyCompactList}\small\item\em Set the Attribute object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_a1b8312715251695c226f672b1bdc2add}{Read\+All\+Attribute\+Name}} (std\+::vector$<$ std\+::string $>$ \&attr\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Read all attribute name. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_a926333246a65281d1f9e6b8e32788b43}{Read\+Attribute}} (const std\+::string \&name, void $\ast$data, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} data\+\_\+type\+\_\+p, const size\+\_\+t \&data\+\_\+length\+\_\+p=0) override
+\begin{DoxyCompactList}\small\item\em Get the Attribute object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_a1b5dab772b82c1ffe89cf2a3cd788823}{Get\+Attribute\+Size}} (const std\+::string \&name, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} data\+\_\+type\+\_\+p) override
+\item 
+int \mbox{\hyperlink{class_endpoint_h_d_f5_ae64fe41b78f7789ffa5235c2af36dc23}{Create\+XDMF}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_endpoint_h_d_f5_afd58fcd34b160d5ff264d8a5dcee05cc}\label{class_endpoint_h_d_f5_afd58fcd34b160d5ff264d8a5dcee05cc}} 
+\index{EndpointHDF5@{EndpointHDF5}!EndpointHDF5@{EndpointHDF5}}
+\index{EndpointHDF5@{EndpointHDF5}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{EndpointHDF5()}{EndpointHDF5()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Endpoint\+HDF5\+::\+Endpoint\+HDF5 (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+info\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_endpoint_h_d_f5}{Endpoint\+HDF5}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & contains the info of the endpoint, e.\+g., file type + file info \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a49d2e54d22afb07ee1a8f6ab101d95d5}\label{class_endpoint_h_d_f5_a49d2e54d22afb07ee1a8f6ab101d95d5}} 
+\index{EndpointHDF5@{EndpointHDF5}!EndpointHDF5@{EndpointHDF5}}
+\index{EndpointHDF5@{EndpointHDF5}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{EndpointHDF5()}{EndpointHDF5()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Endpoint\+HDF5\+::\+Endpoint\+HDF5 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_endpoint}{Endpoint}} in HDF5 Nothing to do there, can be used as sub-\/endpoint of directory. 
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a7042b374bd3bfcc50d80b52bf6fa0ad6}\label{class_endpoint_h_d_f5_a7042b374bd3bfcc50d80b52bf6fa0ad6}} 
+\index{EndpointHDF5@{EndpointHDF5}!EndpointHDF5@{EndpointHDF5}}
+\index{EndpointHDF5@{EndpointHDF5}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{EndpointHDF5()}{EndpointHDF5()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Endpoint\+HDF5\+::\+Endpoint\+HDF5 (\begin{DoxyParamCaption}\item[{int}]{no\+\_\+mpi }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_endpoint_h_d_f5}{Endpoint\+HDF5}} object without MPI. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em no\+\_\+mpi} & any number should work \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a431c6762a41dadb46981d8111a62f3ac}\label{class_endpoint_h_d_f5_a431c6762a41dadb46981d8111a62f3ac}} 
+\index{EndpointHDF5@{EndpointHDF5}!````~EndpointHDF5@{$\sim$EndpointHDF5}}
+\index{````~EndpointHDF5@{$\sim$EndpointHDF5}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{$\sim$EndpointHDF5()}{~EndpointHDF5()}}
+{\footnotesize\ttfamily Endpoint\+HDF5\+::$\sim$\+Endpoint\+HDF5 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_endpoint_h_d_f5_ae31265783ff52f1f361d38343d7ca709}\label{class_endpoint_h_d_f5_ae31265783ff52f1f361d38343d7ca709}} 
+\index{EndpointHDF5@{EndpointHDF5}!Close@{Close}}
+\index{Close@{Close}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{Close()}{Close()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+close the end-\/point 
+
+\begin{DoxyReturn}{Returns}
+int int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a76379a7d9acbf7d429d315fbddadb2ad}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_ab920c5b3e03ee1a9a46708580ed08fc0}\label{class_endpoint_h_d_f5_ab920c5b3e03ee1a9a46708580ed08fc0}} 
+\index{EndpointHDF5@{EndpointHDF5}!Control@{Control}}
+\index{Control@{Control}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{Control()}{Control()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Control (\begin{DoxyParamCaption}\item[{int}]{opt\+\_\+code,  }\item[{std\+::vector$<$ std\+::string $>$ \&}]{parameter\+\_\+v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+call a special operator on endpoint such as, enable collective I/O for HDF5 dump file from MEMORY to HDF5 
+
+
+\begin{DoxyParams}{Parameters}
+{\em opt\+\_\+code,specially} & defined code\\
+\hline
+\end{DoxyParams}
+call a special operator on endpoint such as, enable collective I/O for HDF5 dump file from MEMORY to HDF5 
+\begin{DoxyParams}{Parameters}
+{\em opt\+\_\+code,specially} & defined code\\
+\hline
+{\em opt\+\_\+code,specially} & defined code comment out int Endpoint\+HDF5\+::\+Special\+Operator(int opt\+\_\+code, std\+::string parameter) \{ switch (OP\+\_\+\+ENABLE\+\_\+\+MPI\+\_\+\+IO) \{ case OP\+\_\+\+ENABLE\+\_\+\+MPI\+\_\+\+IO\+: \mbox{\hyperlink{class_endpoint_h_d_f5_aea0ac54fc54ed83a5923f0141a0911b2}{Enable\+MPIIO()}}; break; case OP\+\_\+\+DISABLE\+\_\+\+MPI\+\_\+\+IO\+: \mbox{\hyperlink{class_endpoint_h_d_f5_aa175acaf1eedf3bb717742f76bb041a8}{Disable\+MPIIO()}}; break; case OP\+\_\+\+ENABLE\+\_\+\+COLLECTIVE\+\_\+\+IO\+: \mbox{\hyperlink{class_endpoint_h_d_f5_af261249fb08b0450020a5563fa91054c}{Enable\+Collective\+IO()}}; break; case OP\+\_\+\+DISABLE\+\_\+\+COLLECTIVE\+\_\+\+IO\+: \mbox{\hyperlink{class_endpoint_h_d_f5_ac47efc670b6a7fdc7233c241fdd10ee9}{Disable\+Collective\+IO()}}; break; default\+: break; \} \}\\
+\hline
+\end{DoxyParams}
+call a special operator on endpoint such as, enable collective I/O for HDF5 dump file from MEMORY to HDF5 
+\begin{DoxyParams}{Parameters}
+{\em opt\+\_\+code,specially} & defined code \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_ad469d082a014d0a45be6a892352527d4}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a32dd75613e841b1e09c0f8e0e6562db3}\label{class_endpoint_h_d_f5_a32dd75613e841b1e09c0f8e0e6562db3}} 
+\index{EndpointHDF5@{EndpointHDF5}!Create@{Create}}
+\index{Create@{Create}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{Create()}{Create()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+create the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_add0ecdbfabcc9382356bbac955ddb638}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_ae64fe41b78f7789ffa5235c2af36dc23}\label{class_endpoint_h_d_f5_ae64fe41b78f7789ffa5235c2af36dc23}} 
+\index{EndpointHDF5@{EndpointHDF5}!CreateXDMF@{CreateXDMF}}
+\index{CreateXDMF@{CreateXDMF}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{CreateXDMF()}{CreateXDMF()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Create\+XDMF (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_ac47efc670b6a7fdc7233c241fdd10ee9}\label{class_endpoint_h_d_f5_ac47efc670b6a7fdc7233c241fdd10ee9}} 
+\index{EndpointHDF5@{EndpointHDF5}!DisableCollectiveIO@{DisableCollectiveIO}}
+\index{DisableCollectiveIO@{DisableCollectiveIO}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{DisableCollectiveIO()}{DisableCollectiveIO()}}
+{\footnotesize\ttfamily void Endpoint\+HDF5\+::\+Disable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_af8c636c2a09098d6a7ba91dbef96e9ba}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_aa175acaf1eedf3bb717742f76bb041a8}\label{class_endpoint_h_d_f5_aa175acaf1eedf3bb717742f76bb041a8}} 
+\index{EndpointHDF5@{EndpointHDF5}!DisableMPIIO@{DisableMPIIO}}
+\index{DisableMPIIO@{DisableMPIIO}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{DisableMPIIO()}{DisableMPIIO()}}
+{\footnotesize\ttfamily void Endpoint\+HDF5\+::\+Disable\+MPIIO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_af261249fb08b0450020a5563fa91054c}\label{class_endpoint_h_d_f5_af261249fb08b0450020a5563fa91054c}} 
+\index{EndpointHDF5@{EndpointHDF5}!EnableCollectiveIO@{EnableCollectiveIO}}
+\index{EnableCollectiveIO@{EnableCollectiveIO}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{EnableCollectiveIO()}{EnableCollectiveIO()}}
+{\footnotesize\ttfamily void Endpoint\+HDF5\+::\+Enable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_a53f5bcbf1fe56d9ebb56d270bb92311e}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_aea0ac54fc54ed83a5923f0141a0911b2}\label{class_endpoint_h_d_f5_aea0ac54fc54ed83a5923f0141a0911b2}} 
+\index{EndpointHDF5@{EndpointHDF5}!EnableMPIIO@{EnableMPIIO}}
+\index{EnableMPIIO@{EnableMPIIO}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{EnableMPIIO()}{EnableMPIIO()}}
+{\footnotesize\ttfamily void Endpoint\+HDF5\+::\+Enable\+MPIIO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_accec4de5d11d16cfe8c1bd2a58ed18ae}\label{class_endpoint_h_d_f5_accec4de5d11d16cfe8c1bd2a58ed18ae}} 
+\index{EndpointHDF5@{EndpointHDF5}!ExtractMeta@{ExtractMeta}}
+\index{ExtractMeta@{ExtractMeta}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{ExtractMeta()}{ExtractMeta()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Extract\+Meta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/data\+\_\+element\+\_\+type 
+
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works
+\end{DoxyReturn}
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 
+
+Implements \mbox{\hyperlink{class_endpoint_a43bcd87f7b7da0b2eefd3010e06c5cd5}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a1b5dab772b82c1ffe89cf2a3cd788823}\label{class_endpoint_h_d_f5_a1b5dab772b82c1ffe89cf2a3cd788823}} 
+\index{EndpointHDF5@{EndpointHDF5}!GetAttributeSize@{GetAttributeSize}}
+\index{GetAttributeSize@{GetAttributeSize}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{GetAttributeSize()}{GetAttributeSize()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Get\+Attribute\+Size (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{data\+\_\+type\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_aec350eedd85b64a9f261f8474aefd007}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a83082e41a822ad0056007ff4e6aa1bb9}\label{class_endpoint_h_d_f5_a83082e41a822ad0056007ff4e6aa1bb9}} 
+\index{EndpointHDF5@{EndpointHDF5}!Map2MyType@{Map2MyType}}
+\index{Map2MyType@{Map2MyType}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{Map2MyType()}{Map2MyType()}}
+{\footnotesize\ttfamily void Endpoint\+HDF5\+::\+Map2\+My\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+call the finalize to close everything (like call Destractor) 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a755ef0b10d5c4a639d9a11f5e1c7d9a3}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a8e6ce090f36c9e1462e68fb9a09a1e4a}\label{class_endpoint_h_d_f5_a8e6ce090f36c9e1462e68fb9a09a1e4a}} 
+\index{EndpointHDF5@{EndpointHDF5}!Map2MyTypeParameters@{Map2MyTypeParameters}}
+\index{Map2MyTypeParameters@{Map2MyTypeParameters}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{Map2MyTypeParameters()}{Map2MyTypeParameters()}}
+{\footnotesize\ttfamily void Endpoint\+HDF5\+::\+Map2\+My\+Type\+Parameters (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{ft\+\_\+type,  }\item[{hid\+\_\+t \&}]{mem\+\_\+type,  }\item[{hid\+\_\+t \&}]{disk\+\_\+type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_aee7920b6a0c5444ead314e5c42aabbf8}\label{class_endpoint_h_d_f5_aee7920b6a0c5444ead314e5c42aabbf8}} 
+\index{EndpointHDF5@{EndpointHDF5}!Open@{Open}}
+\index{Open@{Open}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{Open()}{Open()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+open the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a481874b61d83081b4a96a0c2b21a8dbd}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a0d51472f198239873e23df742b75e30a}\label{class_endpoint_h_d_f5_a0d51472f198239873e23df742b75e30a}} 
+\index{EndpointHDF5@{EndpointHDF5}!ParseEndpointInfo@{ParseEndpointInfo}}
+\index{ParseEndpointInfo@{ParseEndpointInfo}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{ParseEndpointInfo()}{ParseEndpointInfo()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Parse\+Endpoint\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+parse endpoint\+\_\+info to my own info In HDF5, it map endpoint\+\_\+info to filename, group name and datasetname 
+
+\begin{DoxyReturn}{Returns}
+int\+: 0 works, $<$ 0 error, 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a973927c11f35be4f393f456a8b2e2a1e}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a4b64355179d33d15576071612e8cdc27}\label{class_endpoint_h_d_f5_a4b64355179d33d15576071612e8cdc27}} 
+\index{EndpointHDF5@{EndpointHDF5}!PrintInfo@{PrintInfo}}
+\index{PrintInfo@{PrintInfo}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{PrintInfo()}{PrintInfo()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Print\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+print information about the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_af014eb78eb2097f23cd48d48c2004b16}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_ac0454482c63e852009fec81faa488e50}\label{class_endpoint_h_d_f5_ac0454482c63e852009fec81faa488e50}} 
+\index{EndpointHDF5@{EndpointHDF5}!Read@{Read}}
+\index{Read@{Read}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Read (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+read the data from end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a2ea7ed58e917ba63cb222ffbda09aa0c}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a1b8312715251695c226f672b1bdc2add}\label{class_endpoint_h_d_f5_a1b8312715251695c226f672b1bdc2add}} 
+\index{EndpointHDF5@{EndpointHDF5}!ReadAllAttributeName@{ReadAllAttributeName}}
+\index{ReadAllAttributeName@{ReadAllAttributeName}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{ReadAllAttributeName()}{ReadAllAttributeName()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Read\+All\+Attribute\+Name (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::string $>$ \&}]{attr\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Read all attribute name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em attri\+\_\+name} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a926333246a65281d1f9e6b8e32788b43}\label{class_endpoint_h_d_f5_a926333246a65281d1f9e6b8e32788b43}} 
+\index{EndpointHDF5@{EndpointHDF5}!ReadAttribute@{ReadAttribute}}
+\index{ReadAttribute@{ReadAttribute}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{ReadAttribute()}{ReadAttribute()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Read\+Attribute (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{void $\ast$}]{data,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{data\+\_\+type\+\_\+p,  }\item[{const size\+\_\+t \&}]{data\+\_\+length\+\_\+p = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the Attribute object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \\
+\hline
+{\em data} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_a1a12705a507c7a8d2fa1cb470d49c11a}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_aaf26e458676e00b3eff69ceaf0bde72d}\label{class_endpoint_h_d_f5_aaf26e458676e00b3eff69ceaf0bde72d}} 
+\index{EndpointHDF5@{EndpointHDF5}!Write@{Write}}
+\index{Write@{Write}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{Write()}{Write()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Write (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+write the data to the end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a4bcb3e885bfb1343c610a3163fc01c77}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_h_d_f5_a5f5ff432638d4560585eabfa9afef3d8}\label{class_endpoint_h_d_f5_a5f5ff432638d4560585eabfa9afef3d8}} 
+\index{EndpointHDF5@{EndpointHDF5}!WriteAttribute@{WriteAttribute}}
+\index{WriteAttribute@{WriteAttribute}!EndpointHDF5@{EndpointHDF5}}
+\doxysubsubsection{\texorpdfstring{WriteAttribute()}{WriteAttribute()}}
+{\footnotesize\ttfamily int Endpoint\+HDF5\+::\+Write\+Attribute (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const void $\ast$}]{data,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{data\+\_\+type\+\_\+p,  }\item[{const size\+\_\+t \&}]{data\+\_\+length\+\_\+p = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the Attribute object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \\
+\hline
+{\em data} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_aecfbfb70e1b63027f447628f94e2bc35}{Endpoint}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__endpoint__hdf5_8h}{ft\+\_\+endpoint\+\_\+hdf5.\+h}}\item 
+\mbox{\hyperlink{ft__endpoint__hdf5_8cpp}{ft\+\_\+endpoint\+\_\+hdf5.\+cpp}}\end{DoxyCompactItemize}

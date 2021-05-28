@@ -1,0 +1,689 @@
+\hypertarget{class_stencil}{}\doxysection{Stencil$<$ T $>$ Class Template Reference}
+\label{class_stencil}\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+
+
+{\ttfamily \#include $<$ft\+\_\+stencil.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_stencil_ad1bf999ffd8ecf301c01a60d746c5cb1}{Stencil}} ()
+\item 
+\mbox{\hyperlink{class_stencil_abbe3f52f9b400a7158fdf96e0b31313e}{Stencil}} (int dims\+\_\+input, T $\ast$chunk)
+\item 
+\mbox{\hyperlink{class_stencil_a48ee3a010107b0abe7d8e488440974cd}{Stencil}} (T value\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_stencil}{Stencil}} object contains the value Mostly, it is used as output. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_stencil_aae5b466a6b2330612ac98ccdb7d6a48f}{Stencil}} (T value\+\_\+p, std\+::vector$<$ size\+\_\+t $>$ shape\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_stencil}{Stencil}} object contains the value and the value has the shape for n-\/dimensional array Mostly, it is used as output. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_stencil_af45875ca39bd53c3689be4a8c0965c2d}{Stencil}} (unsigned long long my\+\_\+offset, T $\ast$chunk, std\+::vector$<$ unsigned long long $>$ \&my\+\_\+coordinate, std\+::vector$<$ unsigned long long $>$ \&chunk\+\_\+size, std\+::vector$<$ unsigned long long $>$ \&global\+\_\+data\+\_\+size\+\_\+p)
+\item 
+\mbox{\hyperlink{class_stencil_ac835defa797bbd099420ad2dd6915502}{$\sim$\+Stencil}} ()
+\item 
+{\footnotesize template$<$typename... Is$>$ }\\T \mbox{\hyperlink{class_stencil_a45bf406b3fcda223bb45c6d24dec5982}{operator()}} (Is... offsets) const
+\item 
+T \mbox{\hyperlink{class_stencil_a9a638d848fc4d201f93d37537625fc99}{Read\+Point}} (std\+::vector$<$ int $>$ \&ov) const
+\item 
+{\footnotesize template$<$class TO $>$ }\\void \mbox{\hyperlink{class_stencil_a4abda2f32e94bd4f619b8058a6b7329d}{operator=}} (TO \&others)
+\item 
+bool \mbox{\hyperlink{class_stencil_a95fede2193ec6ad391862b1cfe98063b}{has\+\_\+output\+\_\+value}} ()
+\item 
+void \mbox{\hyperlink{class_stencil_aa4caad5f6f84207ca810d014f89a4308}{Read\+Hood\+Border}} (std\+::vector$<$ T $>$ \&rv, std\+::vector$<$ int $>$ \&start\+\_\+offset, std\+::vector$<$ int $>$ \&end\+\_\+offset) const
+\item 
+int \mbox{\hyperlink{class_stencil_acfbe078189d01c545b85534971eaaed1}{Read\+Neighbors}} (std\+::vector$<$ int $>$ \&start\+\_\+offset, std\+::vector$<$ int $>$ \&end\+\_\+offset, std\+::vector$<$ T $>$ \&rv) const
+\begin{DoxyCompactList}\small\item\em read neighborhood \end{DoxyCompactList}\item 
+std\+::vector$<$ T $>$ \mbox{\hyperlink{class_stencil_acac01f22401652d9df5b8cb3846a96a3}{Read\+Neighbors}} (std\+::vector$<$ int $>$ \&start\+\_\+offset, std\+::vector$<$ int $>$ \&end\+\_\+offset) const
+\begin{DoxyCompactList}\small\item\em read neighborhood \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_stencil_ac6172831fd864c7dd0db100140e3b22a}{Write\+Neighbors}} (std\+::vector$<$ int $>$ \&start\+\_\+offset, std\+::vector$<$ int $>$ \&end\+\_\+offset, std\+::vector$<$ T $>$ \&data) const
+\begin{DoxyCompactList}\small\item\em Write\+Hood. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_stencil_a994b64eceafa633ad372a195306dbf2f}{get\+\_\+value}} ()
+\begin{DoxyCompactList}\small\item\em Get the value object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_stencil_ad7f966d83b0782d1076c7b176212097b}{set\+\_\+value}} (const T value\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the value object. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_stencil_a671f7622ccca33b341bf75c57a74d1dd}{Get\+Value}} ()
+\begin{DoxyCompactList}\small\item\em Get the Value object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_stencil_a811dffba82607e14f4d4711584e1f491}{Get\+Value}} (T \&value\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_stencil_a157ba8d4f5e54686f47e61877378cfa5}{Set\+Value}} (const T value\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the value object. \end{DoxyCompactList}\item 
+unsigned long long \mbox{\hyperlink{class_stencil_a00d7fbf1dae80b06f4949915adcb5f4b}{get\+\_\+local\+\_\+neighbors\+\_\+count\+\_\+at\+\_\+left}} () const
+\item 
+T \mbox{\hyperlink{class_stencil_a20038755b3d197a39a26ff62d1292e38}{get\+\_\+prev\+\_\+value}} ()
+\item 
+void \mbox{\hyperlink{class_stencil_a00ad7355bce3958c81aad7395b91ca27}{Set\+Location}} (unsigned long long my\+\_\+offset, std\+::vector$<$ unsigned long long $>$ \&my\+\_\+coordinate, std\+::vector$<$ unsigned long long $>$ \&my\+\_\+location\+\_\+no\+\_\+ol\+\_\+p, std\+::vector$<$ unsigned long long $>$ \&chunk\+\_\+dim\+\_\+size\+\_\+no\+\_\+ol\+\_\+p, std\+::vector$<$ long long $>$ ol\+\_\+origin\+\_\+offset\+\_\+p, std\+::vector$<$ unsigned long long $>$ current\+\_\+chunk\+\_\+ol\+\_\+size)
+\item 
+void \mbox{\hyperlink{class_stencil_a29e29b0e2a80912cb900542f1b9fa284}{Set\+Location}} (unsigned long long \&my\+\_\+offset, std\+::vector$<$ unsigned long long $>$ \&my\+\_\+coordinate, std\+::vector$<$ unsigned long long $>$ \&my\+\_\+location\+\_\+no\+\_\+ol\+\_\+p, std\+::vector$<$ unsigned long long $>$ \&chunk\+\_\+dim\+\_\+size\+\_\+no\+\_\+ol\+\_\+p, std\+::vector$<$ long long $>$ \&ol\+\_\+origin\+\_\+offset\+\_\+p, std\+::vector$<$ unsigned long long $>$ \&current\+\_\+chunk\+\_\+ol\+\_\+size, std\+::vector$<$ unsigned long long $>$ \&global\+\_\+coordinate\+\_\+p, unsigned long long \&global\+\_\+coordinate\+\_\+lineared\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the Location object. \end{DoxyCompactList}\item 
+std\+::vector$<$ unsigned long long $>$ \mbox{\hyperlink{class_stencil_abcf6c4afbc916eb6eef27e58b791030e}{Get\+Coordinate}} () const
+\begin{DoxyCompactList}\small\item\em return the global coodinate of the current \mbox{\hyperlink{class_stencil}{Stencil}} \end{DoxyCompactList}\item 
+std\+::vector$<$ unsigned long long $>$ \mbox{\hyperlink{class_stencil_a83eca2a9db6797141e82f46579f4419e}{Get\+Global\+Coordinate}} () const
+\item 
+int \mbox{\hyperlink{class_stencil_a0968514cba93e5016b65301e6d241413}{Get\+Global\+Index}} (std\+::vector$<$ unsigned long long $>$ \&index\+\_\+p) const
+\item 
+int \mbox{\hyperlink{class_stencil_a164a64307c85716b2528910be5018629}{Get\+Local\+Index}} (std\+::vector$<$ unsigned long long $>$ \&index\+\_\+p) const
+\item 
+int \mbox{\hyperlink{class_stencil_aaece97a73df6d612aa506b2b9eebd1ee}{Get\+Trail\+Run\+Result}} (std\+::vector$<$ int $>$ \&overlap\+\_\+size\+\_\+p)
+\item 
+void \mbox{\hyperlink{class_stencil_af0e543bee654744216c3fadb95bb0f96}{set\+\_\+my\+\_\+g\+\_\+location\+\_\+rm}} (unsigned long long lrm)
+\item 
+unsigned long long \mbox{\hyperlink{class_stencil_a74cd412edbc93c58d04f08981873efa3}{get\+\_\+my\+\_\+g\+\_\+location\+\_\+rm}} () const
+\item 
+unsigned long long \mbox{\hyperlink{class_stencil_ad5e40491a1c9c7c4a66a6871599e3d78}{get\+\_\+id}} () const
+\item 
+void \mbox{\hyperlink{class_stencil_afb673fea1c6a6e493dbfc97562c4eb49}{Set\+Output\+Vector\+Flag}} (const bool is\+\_\+output\+\_\+vector\+\_\+flag\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the Output Vector Flag object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_stencil_a44339673c4421de930776a72cd5e34e2}{Get\+Output\+Vector\+Flag}} ()
+\begin{DoxyCompactList}\small\item\em Get the Output Vector Flag object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_stencil_ab68534e51a5145ad7c3043d3022c649b}{Set\+Output\+Vector\+Flat\+Direction}} (\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} output\+\_\+vector\+\_\+flat\+\_\+direction\+\_\+p)
+\item 
+\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} \mbox{\hyperlink{class_stencil_ac17d2c19d2a00bd7829067da7e16e154}{Get\+Output\+Vector\+Flat\+Direction}} ()
+\item 
+void \mbox{\hyperlink{class_stencil_a6e6713f30bcc5fe191ad0a5d0b2eb7ca}{Set\+Padding}} (T padding\+\_\+value\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the Padding object. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_stencil_a2485ed83811ce8f6571e0197e25ffd5f}{Get\+Padding}} ()
+\begin{DoxyCompactList}\small\item\em Get the Padding object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_stencil_a03b873b1884e5e0e866d62f0a8829235}{Set\+Shape}} (const std\+::vector$<$ size\+\_\+t $>$ \&shape\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the Shape of the \mbox{\hyperlink{class_stencil}{Stencil}} object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_stencil_a70663fc9cea3bccec152f8c18daf657f}{Get\+Shape}} (std\+::vector$<$ size\+\_\+t $>$ \&shape\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Get the Output Vector Shape object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_stencil_a4a49ef1b08e591a28e45834bf6571efc}{Get\+Offset\+Upper}} (std\+::vector$<$ int $>$ \&max\+\_\+offset) const
+\begin{DoxyCompactList}\small\item\em Get the Max Offset Upper. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_stencil_a9a0e1576e4307569b1d4d2222fb38bab}{Get\+Offset\+Lower}} (std\+::vector$<$ int $>$ \&max\+\_\+offset) const
+\begin{DoxyCompactList}\small\item\em Get the Max Offset lower. \end{DoxyCompactList}\item 
+unsigned long long \mbox{\hyperlink{class_stencil_a6165a62a96e49cb68c53c9b95fc9c609}{Get\+Chunk\+ID}} () const
+\item 
+int \mbox{\hyperlink{class_stencil_ae5eedcb0c3374a706e7aeb47cb4b06cf}{Get\+Chunk\+ID}} (unsigned long long \&chunk\+\_\+id\+\_\+p) const
+\item 
+void \mbox{\hyperlink{class_stencil_a569cfb6e87da0683d5d0ae40f728a278}{Set\+Chunk\+ID}} (unsigned long long chunk\+\_\+id\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_stencil_a1d7213daa3e8b82d6df670e614e851a1}{Set\+Tag\+Map}} (std\+::map$<$ std\+::string, std\+::string $>$ \&stencil\+\_\+tag\+\_\+map\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_stencil_a9d4789a1059c3805c295d308d05ffa58}{Get\+Tag\+Map}} (std\+::map$<$ std\+::string, std\+::string $>$ \&stencil\+\_\+tag\+\_\+map\+\_\+p) const
+\item 
+bool \mbox{\hyperlink{class_stencil_a72321f58c98104bf291fa91b8fbec94f}{Has\+Tag\+Map}} () const
+\item 
+int \mbox{\hyperlink{class_stencil_a74cc09cfc8b4a7c12d5cc01dd1b9ca0b}{Get\+Current\+Chunk\+Size}} (std\+::vector$<$ unsigned long long $>$ \&chunk\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Get the size of the current chunk which base cell is located This may be different from one run to another. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_stencil_a8b0e7a071f9bf1954106db752d1447bf}{Get\+Array\+Size}} (std\+::vector$<$ unsigned long long $>$ \&array\+\_\+size) const
+\item 
+int \mbox{\hyperlink{class_stencil_a42d4168c9fa10a0a72d2703db6025148}{Set\+Array\+Size}} (std\+::vector$<$ unsigned long long $>$ \&array\+\_\+size) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class T$>$\newline
+class Stencil$<$ T $>$}
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_1f1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+1f1p.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_base_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+base.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_cache_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+cache.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_chunk_overlap_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+chunk\+\_\+overlap.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_cmpd_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+cmpd.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_filter_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+filter.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_kf1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+kf1p.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_padding_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+padding.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_reduce_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+reduce.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_reduce2_d_1f1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+reduce2\+D\+\_\+1f1p.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_tag_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+tag.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_vds_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+vds.\+cpp}}, and \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_vector_2d_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+vector\+\_\+2d.\+cpp}}.\end{Desc}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_stencil_ad1bf999ffd8ecf301c01a60d746c5cb1}\label{class_stencil_ad1bf999ffd8ecf301c01a60d746c5cb1}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!Stencil@{Stencil}}
+\index{Stencil@{Stencil}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Stencil()}{Stencil()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::\mbox{\hyperlink{class_stencil}{Stencil}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_abbe3f52f9b400a7158fdf96e0b31313e}\label{class_stencil_abbe3f52f9b400a7158fdf96e0b31313e}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!Stencil@{Stencil}}
+\index{Stencil@{Stencil}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Stencil()}{Stencil()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::\mbox{\hyperlink{class_stencil}{Stencil}} (\begin{DoxyParamCaption}\item[{int}]{dims\+\_\+input,  }\item[{T $\ast$}]{chunk }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a48ee3a010107b0abe7d8e488440974cd}\label{class_stencil_a48ee3a010107b0abe7d8e488440974cd}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!Stencil@{Stencil}}
+\index{Stencil@{Stencil}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Stencil()}{Stencil()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::\mbox{\hyperlink{class_stencil}{Stencil}} (\begin{DoxyParamCaption}\item[{T}]{value\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_stencil}{Stencil}} object contains the value Mostly, it is used as output. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value,value} & to be contained \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_stencil_aae5b466a6b2330612ac98ccdb7d6a48f}\label{class_stencil_aae5b466a6b2330612ac98ccdb7d6a48f}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!Stencil@{Stencil}}
+\index{Stencil@{Stencil}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Stencil()}{Stencil()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::\mbox{\hyperlink{class_stencil}{Stencil}} (\begin{DoxyParamCaption}\item[{T}]{value\+\_\+p,  }\item[{std\+::vector$<$ size\+\_\+t $>$}]{shape\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_stencil}{Stencil}} object contains the value and the value has the shape for n-\/dimensional array Mostly, it is used as output. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value,the} & value to be contained in \mbox{\hyperlink{class_stencil}{Stencil}} object \\
+\hline
+{\em shape,the} & shape fo the output data \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_stencil_af45875ca39bd53c3689be4a8c0965c2d}\label{class_stencil_af45875ca39bd53c3689be4a8c0965c2d}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!Stencil@{Stencil}}
+\index{Stencil@{Stencil}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Stencil()}{Stencil()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::\mbox{\hyperlink{class_stencil}{Stencil}} (\begin{DoxyParamCaption}\item[{unsigned long long}]{my\+\_\+offset,  }\item[{T $\ast$}]{chunk,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{my\+\_\+coordinate,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{chunk\+\_\+size,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{global\+\_\+data\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_ac835defa797bbd099420ad2dd6915502}\label{class_stencil_ac835defa797bbd099420ad2dd6915502}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!````~Stencil@{$\sim$Stencil}}
+\index{````~Stencil@{$\sim$Stencil}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$Stencil()}{~Stencil()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_stencil}{Stencil}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_stencil_ad5e40491a1c9c7c4a66a6871599e3d78}\label{class_stencil_ad5e40491a1c9c7c4a66a6871599e3d78}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!get\_id@{get\_id}}
+\index{get\_id@{get\_id}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_id()}{get\_id()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+unsigned long long \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::get\+\_\+id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a00d7fbf1dae80b06f4949915adcb5f4b}\label{class_stencil_a00d7fbf1dae80b06f4949915adcb5f4b}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!get\_local\_neighbors\_count\_at\_left@{get\_local\_neighbors\_count\_at\_left}}
+\index{get\_local\_neighbors\_count\_at\_left@{get\_local\_neighbors\_count\_at\_left}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_local\_neighbors\_count\_at\_left()}{get\_local\_neighbors\_count\_at\_left()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+unsigned long long \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::get\+\_\+local\+\_\+neighbors\+\_\+count\+\_\+at\+\_\+left (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a74cd412edbc93c58d04f08981873efa3}\label{class_stencil_a74cd412edbc93c58d04f08981873efa3}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!get\_my\_g\_location\_rm@{get\_my\_g\_location\_rm}}
+\index{get\_my\_g\_location\_rm@{get\_my\_g\_location\_rm}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_my\_g\_location\_rm()}{get\_my\_g\_location\_rm()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+unsigned long long \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::get\+\_\+my\+\_\+g\+\_\+location\+\_\+rm (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a20038755b3d197a39a26ff62d1292e38}\label{class_stencil_a20038755b3d197a39a26ff62d1292e38}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!get\_prev\_value@{get\_prev\_value}}
+\index{get\_prev\_value@{get\_prev\_value}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_prev\_value()}{get\_prev\_value()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+T \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::get\+\_\+prev\+\_\+value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a994b64eceafa633ad372a195306dbf2f}\label{class_stencil_a994b64eceafa633ad372a195306dbf2f}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!get\_value@{get\_value}}
+\index{get\_value@{get\_value}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_value()}{get\_value()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+T \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::get\+\_\+value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the value object. 
+
+\begin{DoxyReturn}{Returns}
+T 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_a8b0e7a071f9bf1954106db752d1447bf}\label{class_stencil_a8b0e7a071f9bf1954106db752d1447bf}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetArraySize@{GetArraySize}}
+\index{GetArraySize@{GetArraySize}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetArraySize()}{GetArraySize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Array\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{array\+\_\+size }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a6165a62a96e49cb68c53c9b95fc9c609}\label{class_stencil_a6165a62a96e49cb68c53c9b95fc9c609}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetChunkID@{GetChunkID}}
+\index{GetChunkID@{GetChunkID}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetChunkID()}{GetChunkID()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+unsigned long long \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Chunk\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_ae5eedcb0c3374a706e7aeb47cb4b06cf}\label{class_stencil_ae5eedcb0c3374a706e7aeb47cb4b06cf}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetChunkID@{GetChunkID}}
+\index{GetChunkID@{GetChunkID}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetChunkID()}{GetChunkID()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Chunk\+ID (\begin{DoxyParamCaption}\item[{unsigned long long \&}]{chunk\+\_\+id\+\_\+p }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_abcf6c4afbc916eb6eef27e58b791030e}\label{class_stencil_abcf6c4afbc916eb6eef27e58b791030e}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetCoordinate@{GetCoordinate}}
+\index{GetCoordinate@{GetCoordinate}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetCoordinate()}{GetCoordinate()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+std\+::vector$<$unsigned long long$>$ \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Coordinate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+return the global coodinate of the current \mbox{\hyperlink{class_stencil}{Stencil}} 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$unsigned long long$>$ 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_reduce2_d_1f1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+reduce2\+D\+\_\+1f1p.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{class_stencil_a74cc09cfc8b4a7c12d5cc01dd1b9ca0b}\label{class_stencil_a74cc09cfc8b4a7c12d5cc01dd1b9ca0b}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetCurrentChunkSize@{GetCurrentChunkSize}}
+\index{GetCurrentChunkSize@{GetCurrentChunkSize}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetCurrentChunkSize()}{GetCurrentChunkSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Current\+Chunk\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{chunk\+\_\+size }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the size of the current chunk which base cell is located This may be different from one run to another. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em chunk\+\_\+size,the} & size of the current chunk \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_a83eca2a9db6797141e82f46579f4419e}\label{class_stencil_a83eca2a9db6797141e82f46579f4419e}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetGlobalCoordinate@{GetGlobalCoordinate}}
+\index{GetGlobalCoordinate@{GetGlobalCoordinate}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetGlobalCoordinate()}{GetGlobalCoordinate()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+std\+::vector$<$unsigned long long$>$ \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Global\+Coordinate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a0968514cba93e5016b65301e6d241413}\label{class_stencil_a0968514cba93e5016b65301e6d241413}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetGlobalIndex@{GetGlobalIndex}}
+\index{GetGlobalIndex@{GetGlobalIndex}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetGlobalIndex()}{GetGlobalIndex()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Global\+Index (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{index\+\_\+p }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a164a64307c85716b2528910be5018629}\label{class_stencil_a164a64307c85716b2528910be5018629}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetLocalIndex@{GetLocalIndex}}
+\index{GetLocalIndex@{GetLocalIndex}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetLocalIndex()}{GetLocalIndex()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Local\+Index (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{index\+\_\+p }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a9a0e1576e4307569b1d4d2222fb38bab}\label{class_stencil_a9a0e1576e4307569b1d4d2222fb38bab}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetOffsetLower@{GetOffsetLower}}
+\index{GetOffsetLower@{GetOffsetLower}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetOffsetLower()}{GetOffsetLower()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Offset\+Lower (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{max\+\_\+offset }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Max Offset lower. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$int$>$ , the maximum offset at lower side (including) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_a4a49ef1b08e591a28e45834bf6571efc}\label{class_stencil_a4a49ef1b08e591a28e45834bf6571efc}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetOffsetUpper@{GetOffsetUpper}}
+\index{GetOffsetUpper@{GetOffsetUpper}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetOffsetUpper()}{GetOffsetUpper()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Offset\+Upper (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{max\+\_\+offset }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Max Offset Upper. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$int$>$ , the maximum offset at upper side (including) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_a44339673c4421de930776a72cd5e34e2}\label{class_stencil_a44339673c4421de930776a72cd5e34e2}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetOutputVectorFlag@{GetOutputVectorFlag}}
+\index{GetOutputVectorFlag@{GetOutputVectorFlag}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetOutputVectorFlag()}{GetOutputVectorFlag()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Output\+Vector\+Flag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Output Vector Flag object. 
+
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_ac17d2c19d2a00bd7829067da7e16e154}\label{class_stencil_ac17d2c19d2a00bd7829067da7e16e154}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetOutputVectorFlatDirection@{GetOutputVectorFlatDirection}}
+\index{GetOutputVectorFlatDirection@{GetOutputVectorFlatDirection}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetOutputVectorFlatDirection()}{GetOutputVectorFlatDirection()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Output\+Vector\+Flat\+Direction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a2485ed83811ce8f6571e0197e25ffd5f}\label{class_stencil_a2485ed83811ce8f6571e0197e25ffd5f}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetPadding@{GetPadding}}
+\index{GetPadding@{GetPadding}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetPadding()}{GetPadding()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+T \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Padding (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Padding object. 
+
+\begin{DoxyReturn}{Returns}
+T 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_a70663fc9cea3bccec152f8c18daf657f}\label{class_stencil_a70663fc9cea3bccec152f8c18daf657f}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetShape@{GetShape}}
+\index{GetShape@{GetShape}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetShape()}{GetShape()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Shape (\begin{DoxyParamCaption}\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{shape\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Output Vector Shape object. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$size\+\_\+t$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_a9d4789a1059c3805c295d308d05ffa58}\label{class_stencil_a9d4789a1059c3805c295d308d05ffa58}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetTagMap@{GetTagMap}}
+\index{GetTagMap@{GetTagMap}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetTagMap()}{GetTagMap()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Tag\+Map (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::string, std\+::string $>$ \&}]{stencil\+\_\+tag\+\_\+map\+\_\+p }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_aaece97a73df6d612aa506b2b9eebd1ee}\label{class_stencil_aaece97a73df6d612aa506b2b9eebd1ee}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetTrailRunResult@{GetTrailRunResult}}
+\index{GetTrailRunResult@{GetTrailRunResult}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetTrailRunResult()}{GetTrailRunResult()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Trail\+Run\+Result (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{overlap\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a671f7622ccca33b341bf75c57a74d1dd}\label{class_stencil_a671f7622ccca33b341bf75c57a74d1dd}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetValue@{GetValue}}
+\index{GetValue@{GetValue}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetValue()}{GetValue()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+T \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Value object. 
+
+\begin{DoxyReturn}{Returns}
+T 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_a811dffba82607e14f4d4711584e1f491}\label{class_stencil_a811dffba82607e14f4d4711584e1f491}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!GetValue@{GetValue}}
+\index{GetValue@{GetValue}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetValue()}{GetValue()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Get\+Value (\begin{DoxyParamCaption}\item[{T \&}]{value\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a95fede2193ec6ad391862b1cfe98063b}\label{class_stencil_a95fede2193ec6ad391862b1cfe98063b}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!has\_output\_value@{has\_output\_value}}
+\index{has\_output\_value@{has\_output\_value}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{has\_output\_value()}{has\_output\_value()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::has\+\_\+output\+\_\+value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a72321f58c98104bf291fa91b8fbec94f}\label{class_stencil_a72321f58c98104bf291fa91b8fbec94f}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!HasTagMap@{HasTagMap}}
+\index{HasTagMap@{HasTagMap}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{HasTagMap()}{HasTagMap()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Has\+Tag\+Map (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a45bf406b3fcda223bb45c6d24dec5982}\label{class_stencil_a45bf406b3fcda223bb45c6d24dec5982}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!operator()@{operator()}}
+\index{operator()@{operator()}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$typename... Is$>$ \\
+T \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::operator() (\begin{DoxyParamCaption}\item[{Is...}]{offsets }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a4abda2f32e94bd4f619b8058a6b7329d}\label{class_stencil_a4abda2f32e94bd4f619b8058a6b7329d}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class TO $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::operator= (\begin{DoxyParamCaption}\item[{TO \&}]{others }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_aa4caad5f6f84207ca810d014f89a4308}\label{class_stencil_aa4caad5f6f84207ca810d014f89a4308}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!ReadHoodBorder@{ReadHoodBorder}}
+\index{ReadHoodBorder@{ReadHoodBorder}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReadHoodBorder()}{ReadHoodBorder()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Read\+Hood\+Border (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{rv,  }\item[{std\+::vector$<$ int $>$ \&}]{start\+\_\+offset,  }\item[{std\+::vector$<$ int $>$ \&}]{end\+\_\+offset }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_acac01f22401652d9df5b8cb3846a96a3}\label{class_stencil_acac01f22401652d9df5b8cb3846a96a3}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!ReadNeighbors@{ReadNeighbors}}
+\index{ReadNeighbors@{ReadNeighbors}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReadNeighbors()}{ReadNeighbors()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+std\+::vector$<$T$>$ \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Read\+Neighbors (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{start\+\_\+offset,  }\item[{std\+::vector$<$ int $>$ \&}]{end\+\_\+offset }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+read neighborhood 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+\_\+offset} & \\
+\hline
+{\em end\+\_\+offset} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+T$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_acfbe078189d01c545b85534971eaaed1}\label{class_stencil_acfbe078189d01c545b85534971eaaed1}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!ReadNeighbors@{ReadNeighbors}}
+\index{ReadNeighbors@{ReadNeighbors}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReadNeighbors()}{ReadNeighbors()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Read\+Neighbors (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{start\+\_\+offset,  }\item[{std\+::vector$<$ int $>$ \&}]{end\+\_\+offset,  }\item[{std\+::vector$<$ T $>$ \&}]{rv }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+read neighborhood 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+\_\+offset} & \\
+\hline
+{\em end\+\_\+offset} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+T$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_stencil_a9a638d848fc4d201f93d37537625fc99}\label{class_stencil_a9a638d848fc4d201f93d37537625fc99}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!ReadPoint@{ReadPoint}}
+\index{ReadPoint@{ReadPoint}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReadPoint()}{ReadPoint()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+T \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Read\+Point (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{ov }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_af0e543bee654744216c3fadb95bb0f96}\label{class_stencil_af0e543bee654744216c3fadb95bb0f96}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!set\_my\_g\_location\_rm@{set\_my\_g\_location\_rm}}
+\index{set\_my\_g\_location\_rm@{set\_my\_g\_location\_rm}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{set\_my\_g\_location\_rm()}{set\_my\_g\_location\_rm()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::set\+\_\+my\+\_\+g\+\_\+location\+\_\+rm (\begin{DoxyParamCaption}\item[{unsigned long long}]{lrm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_ad7f966d83b0782d1076c7b176212097b}\label{class_stencil_ad7f966d83b0782d1076c7b176212097b}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!set\_value@{set\_value}}
+\index{set\_value@{set\_value}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{set\_value()}{set\_value()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::set\+\_\+value (\begin{DoxyParamCaption}\item[{const T}]{value\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the value object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_stencil_a42d4168c9fa10a0a72d2703db6025148}\label{class_stencil_a42d4168c9fa10a0a72d2703db6025148}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetArraySize@{SetArraySize}}
+\index{SetArraySize@{SetArraySize}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetArraySize()}{SetArraySize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Array\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{array\+\_\+size }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a569cfb6e87da0683d5d0ae40f728a278}\label{class_stencil_a569cfb6e87da0683d5d0ae40f728a278}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetChunkID@{SetChunkID}}
+\index{SetChunkID@{SetChunkID}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetChunkID()}{SetChunkID()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Chunk\+ID (\begin{DoxyParamCaption}\item[{unsigned long long}]{chunk\+\_\+id\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a29e29b0e2a80912cb900542f1b9fa284}\label{class_stencil_a29e29b0e2a80912cb900542f1b9fa284}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetLocation@{SetLocation}}
+\index{SetLocation@{SetLocation}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetLocation()}{SetLocation()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Location (\begin{DoxyParamCaption}\item[{unsigned long long \&}]{my\+\_\+offset,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{my\+\_\+coordinate,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{my\+\_\+location\+\_\+no\+\_\+ol\+\_\+p,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{chunk\+\_\+dim\+\_\+size\+\_\+no\+\_\+ol\+\_\+p,  }\item[{std\+::vector$<$ long long $>$ \&}]{ol\+\_\+origin\+\_\+offset\+\_\+p,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{current\+\_\+chunk\+\_\+ol\+\_\+size,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{global\+\_\+coordinate\+\_\+p,  }\item[{unsigned long long \&}]{global\+\_\+coordinate\+\_\+lineared\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the Location object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em my\+\_\+offset} & within the local chunk \\
+\hline
+{\em my\+\_\+coordinate} & within the local chunk \\
+\hline
+{\em my\+\_\+location\+\_\+no\+\_\+ol\+\_\+p} & \\
+\hline
+{\em chunk\+\_\+dim\+\_\+size\+\_\+no\+\_\+ol\+\_\+p} & chunk size withiout considering overlap \\
+\hline
+{\em ol\+\_\+origin\+\_\+offset\+\_\+p} & chunk offset from the global (0, 0) \\
+\hline
+{\em current\+\_\+chunk\+\_\+ol\+\_\+size} & overlap size \\
+\hline
+{\em global\+\_\+coordinate} & current cell\textquotesingle{}s global coodinate \\
+\hline
+{\em global\+\_\+coordinate\+\_\+lm} & linearized global\+\_\+coordinate \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_stencil_a00ad7355bce3958c81aad7395b91ca27}\label{class_stencil_a00ad7355bce3958c81aad7395b91ca27}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetLocation@{SetLocation}}
+\index{SetLocation@{SetLocation}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetLocation()}{SetLocation()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Location (\begin{DoxyParamCaption}\item[{unsigned long long}]{my\+\_\+offset,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{my\+\_\+coordinate,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{my\+\_\+location\+\_\+no\+\_\+ol\+\_\+p,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{chunk\+\_\+dim\+\_\+size\+\_\+no\+\_\+ol\+\_\+p,  }\item[{std\+::vector$<$ long long $>$}]{ol\+\_\+origin\+\_\+offset\+\_\+p,  }\item[{std\+::vector$<$ unsigned long long $>$}]{current\+\_\+chunk\+\_\+ol\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_afb673fea1c6a6e493dbfc97562c4eb49}\label{class_stencil_afb673fea1c6a6e493dbfc97562c4eb49}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetOutputVectorFlag@{SetOutputVectorFlag}}
+\index{SetOutputVectorFlag@{SetOutputVectorFlag}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetOutputVectorFlag()}{SetOutputVectorFlag()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Output\+Vector\+Flag (\begin{DoxyParamCaption}\item[{const bool}]{is\+\_\+output\+\_\+vector\+\_\+flag\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the Output Vector Flag object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+output\+\_\+vector\+\_\+flag\+\_\+p} & \+: true or false \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_stencil_ab68534e51a5145ad7c3043d3022c649b}\label{class_stencil_ab68534e51a5145ad7c3043d3022c649b}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetOutputVectorFlatDirection@{SetOutputVectorFlatDirection}}
+\index{SetOutputVectorFlatDirection@{SetOutputVectorFlatDirection}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetOutputVectorFlatDirection()}{SetOutputVectorFlatDirection()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Output\+Vector\+Flat\+Direction (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}}}]{output\+\_\+vector\+\_\+flat\+\_\+direction\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a6e6713f30bcc5fe191ad0a5d0b2eb7ca}\label{class_stencil_a6e6713f30bcc5fe191ad0a5d0b2eb7ca}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetPadding@{SetPadding}}
+\index{SetPadding@{SetPadding}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetPadding()}{SetPadding()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Padding (\begin{DoxyParamCaption}\item[{T}]{padding\+\_\+value\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the Padding object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em padding\+\_\+value\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_stencil_a03b873b1884e5e0e866d62f0a8829235}\label{class_stencil_a03b873b1884e5e0e866d62f0a8829235}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetShape@{SetShape}}
+\index{SetShape@{SetShape}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetShape()}{SetShape()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Shape (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{shape\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the Shape of the \mbox{\hyperlink{class_stencil}{Stencil}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em shape\+\_\+p} & shape vector \\
+\hline
+\end{DoxyParams}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_vector_2d_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+vector\+\_\+2d.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{class_stencil_a1d7213daa3e8b82d6df670e614e851a1}\label{class_stencil_a1d7213daa3e8b82d6df670e614e851a1}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetTagMap@{SetTagMap}}
+\index{SetTagMap@{SetTagMap}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetTagMap()}{SetTagMap()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Tag\+Map (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::string, std\+::string $>$ \&}]{stencil\+\_\+tag\+\_\+map\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_stencil_a157ba8d4f5e54686f47e61877378cfa5}\label{class_stencil_a157ba8d4f5e54686f47e61877378cfa5}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!SetValue@{SetValue}}
+\index{SetValue@{SetValue}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetValue()}{SetValue()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Set\+Value (\begin{DoxyParamCaption}\item[{const T}]{value\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the value object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_stencil_ac6172831fd864c7dd0db100140e3b22a}\label{class_stencil_ac6172831fd864c7dd0db100140e3b22a}} 
+\index{Stencil$<$ T $>$@{Stencil$<$ T $>$}!WriteNeighbors@{WriteNeighbors}}
+\index{WriteNeighbors@{WriteNeighbors}!Stencil$<$ T $>$@{Stencil$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{WriteNeighbors()}{WriteNeighbors()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$\+::Write\+Neighbors (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{start\+\_\+offset,  }\item[{std\+::vector$<$ int $>$ \&}]{end\+\_\+offset,  }\item[{std\+::vector$<$ T $>$ \&}]{data }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Write\+Hood. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+\_\+offset} & \\
+\hline
+{\em end\+\_\+offset} & \\
+\hline
+{\em data} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__stencil_8h}{ft\+\_\+stencil.\+h}}\end{DoxyCompactItemize}

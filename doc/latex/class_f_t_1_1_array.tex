@@ -1,0 +1,1324 @@
+\hypertarget{class_f_t_1_1_array}{}\doxysection{FT\+::Array$<$ T $>$ Class Template Reference}
+\label{class_f_t_1_1_array}\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+
+
+{\ttfamily \#include $<$ft\+\_\+array.\+h$>$}
+
+Inheritance diagram for FT\+::Array$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_f_t_1_1_array}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_f_t_1_1_array_aa593faf412ed6503abf84de2c49f3e93}{Array}} ()
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for Write The data can be cached or dumped later. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_f_t_1_1_array_a83c027a592fe7ac9ea9e97f13ba0a437}{Array}} (std\+::string data\+\_\+endpoint)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for either Input or Output For Input, data\+\_\+endpoint is opened before Apply For Ouput, data\+\_\+endpoint is created during Apply. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_f_t_1_1_array_a54c6aace3e7e546fe663ed0ee5cb3123}{Array}} (std\+::string data\+\_\+endpoint, std\+::vector$<$ int $>$ cs)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for read, as Input of Apply. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_f_t_1_1_array_afd20487937252c7d4bcb7a6ca50a3d51}{Array}} (std\+::string data\+\_\+endpoint, std\+::vector$<$ int $>$ cs, std\+::vector$<$ int $>$ os)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for read, as Input of Apply. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_f_t_1_1_array_a5f97da3c58bd3baeafad1416455c008a}{Array}} (std\+::string data\+\_\+endpoint, int auto\+\_\+chunk\+\_\+dim\+\_\+index)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for read, as Input of Apply. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_f_t_1_1_array_a86526763e003a669fcc9f7ef9adb6e2c}{Array}} (std\+::string data\+\_\+endpoint, std\+::vector$<$ unsigned long long $>$ size\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for read, as Input of Apply. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_f_t_1_1_array_afeddaa56b88102a9ace7b8b74234aadc}{Array}} (std\+::vector$<$ int $>$ cs, std\+::vector$<$ int $>$ os)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object with only chunk size and overlap size Mostly, this is used for virtual array which has uniform chunk size and overlap size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_f_t_1_1_array_a7a25d3feead51cbc98c0e5d5b315cfe9}{Array}} (std\+::vector$<$ int $>$ cs)
+\item 
+\mbox{\hyperlink{class_f_t_1_1_array_a7e8a6a8bba2ef511c123caa352658672}{Array}} (std\+::vector$<$ T $>$ \&data\+\_\+vector\+\_\+endpoint)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object from in-\/memory vector The data are assumed to be 1D too here. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_f_t_1_1_array_a1b6c37c88a808459b0bda0f047a25837}{Array}} (std\+::vector$<$ T $>$ \&data\+\_\+vector\+\_\+endpoint, std\+::vector$<$ int $>$ cs, std\+::vector$<$ int $>$ os)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_f_t_1_1_array_a572b8540e142b610379ada8b306d5168}{$\sim$\+Array}} ()
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object from in-\/memory vector The data are assumed to be 1D too here. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a567d192b970cbefdfd6425e20375c7f1}{Update\+Chunk\+Size}} ()
+\begin{DoxyCompactList}\small\item\em Update the chunk size, given chunk\+\_\+size\+\_\+by\+\_\+user\+\_\+flag/chunk\+\_\+size\+\_\+by\+\_\+user\+\_\+by\+\_\+dimension\+\_\+flag. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a6f4ff0b7ca2f0b052ebaee51acf364a2}{Set\+Overlap\+Size}} (const vector$<$ int $>$ os\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_aec8c9b2105425f1e8a2938a094939145}{Set\+Overlap\+Size\+By\+Detection}} ()
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a81e2569d629490d6f463ecb8aed5467d}{Get\+Overlap\+Size}} (vector$<$ int $>$ \&os\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a1c40b87376540186a86d0408332bcc3e}{Set\+Overlap\+Padding}} (const T \&padding\+\_\+value\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a020d97c2c7928d84cb9404ea16abe303}{Sync\+Overlap}} ()
+\item 
+{\footnotesize template$<$class UDFOutput\+Type $>$ }\\int \mbox{\hyperlink{class_f_t_1_1_array_af75ff8aa617a43e6f87691cc7494c67b}{Update\+Overlap\+Size}} (\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$UDF)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&))
+\item 
+{\footnotesize template$<$class UDFOutput\+Type $>$ }\\void \mbox{\hyperlink{class_f_t_1_1_array_a4b8ae5bef4e27490637ede5adebc6e7b}{Initialize\+Apply\+Input}} (\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$UDF)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&))
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_aab7659ffd9657d9a5e72d7d89eae63da}{Print\+Endpoint\+Info}} ()
+\begin{DoxyCompactList}\small\item\em print endpoint info of this array \end{DoxyCompactList}\item 
+{\footnotesize template$<$class UDFOutput\+Type , class BType  = UDFOutput\+Type$>$ }\\void \mbox{\hyperlink{class_f_t_1_1_array_a8e76194a9ec53382d350df8bcd52e53d}{Apply}} (\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$UDF)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&), \mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$ BType $>$ $\ast$B=nullptr)
+\begin{DoxyCompactList}\small\item\em Run a UDF on the data pointed by the array. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class UDFOutput\+Type , class BType  = UDFOutput\+Type$>$ }\\void \mbox{\hyperlink{class_f_t_1_1_array_a11c9bf70762af77394b054f27a8831e7}{Transform}} (\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$UDF)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&), \mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$ BType $>$ \&B)
+\item 
+{\footnotesize template$<$class UDFOutput\+Type , class BType  = UDFOutput\+Type$>$ }\\void \mbox{\hyperlink{class_f_t_1_1_array_adcfce357e9ee01956dd7d91d642a45fa}{Transform}} (\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$UDF)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&), \mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$ BType $>$ $\ast$B=nullptr)
+\begin{DoxyCompactList}\small\item\em Run a UDF on the data pointed by the array. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a122b69316151f427940cb24a8022fa01}{Write\+Array}} (const std\+::vector$<$ unsigned long long $>$ \&start\+\_\+p, const std\+::vector$<$ unsigned long long $>$ \&end\+\_\+p, std\+::vector$<$ T $>$ \&data\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a629252eb85e020b01eb384ca0064370e}{Read\+Modify\+Write\+Array}} (const std\+::vector$<$ unsigned long long $>$ \&start\+\_\+p, const std\+::vector$<$ unsigned long long $>$ \&end\+\_\+p, std\+::vector$<$ T $>$ \&data\+\_\+p, \mbox{\hyperlink{ft__merge_8h_ae88fed0c16b0bc517219c6ecebb61a50}{AU\+\_\+\+Op}} op)
+\begin{DoxyCompactList}\small\item\em Test a new API to read modfy and write a array. It is useful for cases that you have a incremently updated array //https\+://en.wikipedia.\+org/wiki/\+ReadE2\%80\%93modifyE2\%80\%93write. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a81949a3a4d4e3ba21243854b2ff0885c}{Write\+Array}} (std\+::vector$<$ unsigned long long $>$ \&start\+\_\+p, std\+::vector$<$ unsigned long long $>$ \&end\+\_\+p, std\+::vector$<$ std\+::vector$<$ T $>$$>$ data\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a2c418c0a4ef9ac38d4783daf5a6b5e65}{Write\+Endpoint}} (std\+::vector$<$ unsigned long long $>$ \&start\+\_\+p, std\+::vector$<$ unsigned long long $>$ \&end\+\_\+p, void $\ast$data)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_ac97b7daa918a4bd5b6cc9b94ba631ad7}{Read\+Endpoint}} (std\+::vector$<$ unsigned long long $>$ \&start\+\_\+p, std\+::vector$<$ unsigned long long $>$ \&end\+\_\+p, void $\ast$data)
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a76694facbd192bc9af94e59cb89d5101}{Calculate\+Output\+Size}} (std\+::vector$<$ unsigned long long $>$ \&data\+\_\+size\+\_\+p, std\+::vector$<$ int $>$ \&data\+\_\+chunk\+\_\+size\+\_\+p, std\+::vector$<$ int $>$ \&data\+\_\+overlap\+\_\+size\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Calculate the Size of Output array (B) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a68dd701b5e47a468bb23ce4e3b9fc372}{Infer\+Output\+Size}} (std\+::vector$<$ unsigned long long $>$ \&data\+\_\+size\+\_\+p, std\+::vector$<$ int $>$ \&data\+\_\+chunk\+\_\+size\+\_\+p, std\+::vector$<$ int $>$ \&data\+\_\+overlap\+\_\+size\+\_\+p, size\+\_\+t output\+\_\+vector\+\_\+size)
+\begin{DoxyCompactList}\small\item\em infer the size for output array \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a68f9f0fb91865ebd15944f7a955d7d00}{Create\+Endpoint}} (std\+::vector$<$ unsigned long long $>$ data\+\_\+size\+\_\+p, std\+::vector$<$ int $>$ data\+\_\+chunk\+\_\+size\+\_\+p, std\+::vector$<$ int $>$ data\+\_\+overlap\+\_\+size\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_ad34d3fe15a14b09d8dc087196df484af}{Read\+Array}} (const std\+::vector$<$ unsigned long long $>$ \&start, const std\+::vector$<$ unsigned long long $>$ \&end, std\+::vector$<$ T $>$ \&data\+\_\+vector)
+\item 
+std\+::vector$<$ T $>$ \mbox{\hyperlink{class_f_t_1_1_array_ad9338ae1f6e0caf89a4ccd69d00510a9}{Read\+Array}} (const std\+::vector$<$ unsigned long long $>$ start, const std\+::vector$<$ unsigned long long $>$ end)
+\item 
+bool \mbox{\hyperlink{class_f_t_1_1_array_ac5d211e0b4a60315fc2cbdff94378a95}{Has\+Next\+Chunk}} ()
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a28f746eaaee6c8f2bdb50591ca943e7f}{Schdule\+Chunk\+Next}} ()
+\begin{DoxyCompactList}\small\item\em update current\+\_\+chunk\+\_\+id \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_aff89f8d31137d9b31d9b0367bf68e7e4}{Load\+Next\+Chunk}} (unsigned long long \&result\+\_\+vector\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Load the next chunk. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a24aae4f8ec9f6721a41893fc49ca43ec}{Enable\+Apply\+Stride}} (const std\+::vector$<$ int $>$ \&skip\+\_\+size\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a686ede8c1e9371d9290ba7a8ca7aa8c3}{Set\+Stride}} (const std\+::vector$<$ int $>$ \&skip\+\_\+size\+\_\+p)
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a5b141e53070a3cfed4d0b60883fcf14d}{Set\+Vector\+Direction}} (\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} flat\+\_\+direction\+\_\+index)
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a339e2e8025c3b3d657c528eff1f3d727}{Control\+Output\+Vector}} (\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} flat\+\_\+direction, std\+::vector$<$ size\+\_\+t $>$ flat\+\_\+shape)
+\begin{DoxyCompactList}\small\item\em A geneic verion of function to control how to deal with output vector during the run of Apply on \mbox{\hyperlink{class_f_t_1_1_array}{Array}}. The output of Apply in this way is vector of vector (2D). We need to convert it into vector (1D). Also we need to control the shape of the 1D vector to write into output \mbox{\hyperlink{class_f_t_1_1_array}{Array}}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename... Is$>$ }\\T \mbox{\hyperlink{class_f_t_1_1_array_a0c5a9c28230aeb9f5d3f7750b6a6a3a3}{operator()}} (Is... indexs) const
+\item 
+{\footnotesize template$<$typename... Is$>$ }\\T \mbox{\hyperlink{class_f_t_1_1_array_af1b95a05b7dff887d128f5e2144c82b1}{Get\+Value}} (Is... indexs)
+\begin{DoxyCompactList}\small\item\em Get the Value at indexs. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename... Is$>$ }\\void \mbox{\hyperlink{class_f_t_1_1_array_ac1371ce90f70807a221dfb7122b1ae36}{Set\+Value}} (T data\+\_\+p, Is... indexs)
+\item 
+{\footnotesize template$<$class Attribute\+Type $>$ }\\void \mbox{\hyperlink{class_f_t_1_1_array_a83889fc455be1561a40dd8fa03f0b825}{Push\+Back\+Attribute}} (std\+::string data\+\_\+endpoint)
+\item 
+{\footnotesize template$<$class Attribute\+Type $>$ }\\int \mbox{\hyperlink{class_f_t_1_1_array_a2748f7aaac891916782d97930df0311b}{Append\+Attribute}} (const std\+::string \&data\+\_\+endpoint)
+\item 
+{\footnotesize template$<$class Attribute\+Type $>$ }\\int \mbox{\hyperlink{class_f_t_1_1_array_a859e182680617fca13377a31b621831e}{Insert\+Attribute}} (const std\+::string \&data\+\_\+endpoint, const int index)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a4866dbf1585bcc94d13013ad62fab357}{Erase\+Attribute}} (const int \&index)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_af074659357a6adb1278fc373ae7f2105}{Get\+Attribute}} (const int \&index, std\+::string \&endpoint\+\_\+id)
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_endpoint}{Endpoint}} $\ast$ $>$ \mbox{\hyperlink{class_f_t_1_1_array_a49d4f8f05c5bf1419a6cb4b724dcfe18}{Get\+Attribute\+Endpoint}} ()
+\item 
+bool \mbox{\hyperlink{class_f_t_1_1_array_af9dc5d1d9945a01d6c7b6edcb7ecaccb}{Get\+Virtual\+Array\+Flag}} ()
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a2e8ec0f1d40db406991b1f3bc55cc734}{Set\+Virtual\+Array\+Flag}} (bool flag\+\_\+p)
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a762a3e4bba498b55593a55a847a238e0}{Set\+Dir\+Output\+Regex\+Replace}} (std\+::regex \&regex\+\_\+p, std\+::string \&replace\+\_\+str\+\_\+p)
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a8645ccb4337f14af47b2b8b079f5ed05}{Set\+Dir\+Input\+Regex\+Search}} (std\+::regex \&regex\+\_\+p)
+\item 
+\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \mbox{\hyperlink{class_f_t_1_1_array_a5646cc971b14ab4a0fa1886d4cf6c0e0}{Get\+Endpoint\+Type}} ()
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{class_f_t_1_1_array_a1c76ce65cbc0e1205b336f98e6167d0f}{Get\+Dir\+File}} ()
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a38fc6cc3f5113a2739000a9148babdb4}{Set\+Dir\+File}} (std\+::vector$<$ std\+::string $>$ \&file\+\_\+list)
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_f_t_1_1_array_a70a2234c19f9f91c3e6f3246d002548c}{Get\+Dir\+Chunk\+Size}} ()
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a5ba3316999f0eb50815fedc5da6f996b}{Set\+Dir\+Chunk\+Size}} (std\+::vector$<$ int $>$ \&dir\+\_\+chunk\+\_\+size\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a1ab6e449e0a651e81aca41fccbaafba3}{Set\+Chunk\+Size}} (std\+::vector$<$ int $>$ data\+\_\+chunk\+\_\+size\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a0b8fe003176e7b73633a792a5d63f8b1}{Get\+Chunk\+Size}} (std\+::vector$<$ int $>$ \&data\+\_\+chunk\+\_\+size\+\_\+p)
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_f_t_1_1_array_a3ce74f6d5713f044f01b064c9201ef76}{Get\+Chunk\+Size}} ()
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_afb82cb416925fb1e65ae1b9c1333c40d}{Set\+Chunk\+Size\+By\+Mem}} (size\+\_\+t max\+\_\+mem\+\_\+size)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a289615bda73d4c948a267849041dda9d}{Set\+Chunk\+Size\+By\+Dim}} (int dim\+\_\+rank)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_ad9bb416fc64bb3d02c1029a3fe0ffd63}{Get\+Array\+Size}} (std\+::vector$<$ unsigned long long $>$ \&size\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a4f53c6bda047c07c40a2597ddffd780a}{Set\+Array\+Size}} (const std\+::vector$<$ unsigned long long $>$ \&size\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a77782ea3e56ffb18c412dac713be7389}{Get\+Array\+Rank}} (int \&rank)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_af5a37eb015e970f02e63837070212d69}{Backup}} (std\+::string data\+\_\+endpoint\+\_\+p)
+\begin{DoxyCompactList}\small\item\em write data to another endpoint type, e.\+g., HDF5 in disk \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a86651947497fb99cfc1651f879d19f4c}{Nonvolatile}} (std\+::string data\+\_\+endpoint\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a960f5eb03f57189337bd0ddfadbc3efa}{Restore}} (std\+::string data\+\_\+endpoint\+\_\+p)
+\begin{DoxyCompactList}\small\item\em load HDF5 array to IN\+\_\+\+MEMORY array ~\newline
+ \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a3c2cef55e3608598c6f6cb0826f98b46}{Volatile}} (std\+::string data\+\_\+endpoint\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a3a93c9b07f4f2b2049d8d17d8b13b7f0}{Clone}} (T intial\+\_\+value)
+\begin{DoxyCompactList}\small\item\em create a local mirror (clone) of array with the inital value \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_ab95ac95525bee5ea69770c8a1a0bc797}{Clone}} ()
+\begin{DoxyCompactList}\small\item\em create a local miroor (clone of array) without intial value so, it needs to copy the whole array \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a87cf29e570e941617f75b13d20de9fdc}{Merge}} (int Op)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a8d4e7e2932271213f90dcb714d4143b5}{Fill}} (T fill\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Fill the array with value (only on rank 0) \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_ab9264d141603dc489790042cdf49c621}{Set\+Endpoint}} (const string \&endpoint\+\_\+id)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_ab65f1725c7fba24d744c76e90a4fab67}{Get\+Endpoint}} (string \&endpoint\+\_\+id)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a14cc3a509b8f17244f7bc68887457475}{Control\+Endpoint}} (int cmd\+\_\+p, std\+::vector$<$ std\+::string $>$ \&arg\+\_\+v\+\_\+p)
+\begin{DoxyCompactList}\small\item\em pass command cmd to \mbox{\hyperlink{class_endpoint}{Endpoint}} of \mbox{\hyperlink{class_f_t_1_1_array}{Array}} \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a11e072c28a4684f5dbe4ca246e7a8dc9}{Control\+Endpoint}} (int cmd\+\_\+p)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a05d7d8ee07bfc2915941b3e2cba73815}{Endpoint\+Control}} (int cmd\+\_\+p, std\+::vector$<$ std\+::string $>$ \&arg\+\_\+v\+\_\+p)
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a1e6fde4d6e644b23ccae0af99f77e452}{Report\+Cost}} ()
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_acf107824703815e9a3e0a84073c9442c}{Report\+Time}} ()
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a5c1e94bdd975288dbcd9c9fb8363302d}{Get\+Read\+Cost}} (vector$<$ double $>$ \&cost\+\_\+stats)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a7fc168ab66834e40d9a02c4570fd7491}{Get\+Write\+Cost}} (vector$<$ double $>$ \&cost\+\_\+stats)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_ae39ad841c6c138f51128a773d549ae6f}{Get\+Computing\+Cost}} (vector$<$ double $>$ \&cost\+\_\+stats)
+\item 
+{\footnotesize template$<$class PType $>$ }\\int \mbox{\hyperlink{class_f_t_1_1_array_ac6c9004840453df4c79da5be45a3b0dc}{Set\+Tag}} (const std\+::string \&name, const PType value)
+\begin{DoxyCompactList}\small\item\em Set the Attribute object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a68ee4a7bb65c7fd3023ce6146879988b}{Set\+Tag}} (const std\+::string \&name, const std\+::string value)
+\item 
+{\footnotesize template$<$class PType $>$ }\\int \mbox{\hyperlink{class_f_t_1_1_array_a28709bc5f64ef6113bea9eca2db5b6f3}{Set\+Tag}} (const std\+::string \&name, const std\+::vector$<$ PType $>$ value)
+\item 
+{\footnotesize template$<$class PType $>$ }\\int \mbox{\hyperlink{class_f_t_1_1_array_abf252b09deab50876e1b074144b4b89c}{Get\+Tag}} (const std\+::string \&name, PType \&value)
+\begin{DoxyCompactList}\small\item\em Get the Attribute object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_ac64a1e5e75dd0513b405156c41ab2ad6}{Get\+Tag}} (const std\+::string \&name, std\+::string \&value)
+\item 
+{\footnotesize template$<$class PType $>$ }\\int \mbox{\hyperlink{class_f_t_1_1_array_ae47e16d8f40ceaebeb9cacf7745acb0f}{Get\+Tag}} (const std\+::string \&name, std\+::vector$<$ PType $>$ \&value)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a00321fc8b7c5b06b0b108defec7b235b}{Get\+All\+Tag\+Name}} (std\+::vector$<$ string $>$ \&tag\+\_\+name)
+\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a35e20ac8122326bf35d80c1d41a7454a}{Disable\+Collective\+IO}} ()
+\begin{DoxyCompactList}\small\item\em merge below to Endpoint\+Control \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_f_t_1_1_array_a86865fa5d5c3adc9c14fc7e99e904353}{Enable\+Collective\+IO}} ()
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a1a47e840900086dbe54a30218ea2b95d}{Create\+Vis\+File}} (\mbox{\hyperlink{ft__vis_8h_a38d2b2902129bcc7e6265c10b428ee50}{FTVis\+Type}} vis\+\_\+type)
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a72de4e5dd7413c367e5dcb322358dc8a}{Create\+Vis\+File}} ()
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a3405d09b73373461be47e00c65c42ee0}{Update\+Overlap}} ()
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a1679399559286ede6632361f672091b1}{Set\+Direct\+Output}} ()
+\item 
+int \mbox{\hyperlink{class_f_t_1_1_array_a49351829efcd1d460f068e13725cb260}{Get\+Stencil\+Tag}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_f_t_1_1_array_aa593faf412ed6503abf84de2c49f3e93}\label{class_f_t_1_1_array_aa593faf412ed6503abf84de2c49f3e93}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [1/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for Write The data can be cached or dumped later. 
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a83c027a592fe7ac9ea9e97f13ba0a437}\label{class_f_t_1_1_array_a83c027a592fe7ac9ea9e97f13ba0a437}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [2/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for either Input or Output For Input, data\+\_\+endpoint is opened before Apply For Ouput, data\+\_\+endpoint is created during Apply. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & file information, (\char`\"{}\+Au\+Data\+Endpoint\+Type + \mbox{[}file name\mbox{]}\char`\"{}) data\+\_\+endpoint get chunk infro from Apply \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a54c6aace3e7e546fe663ed0ee5cb3123}\label{class_f_t_1_1_array_a54c6aace3e7e546fe663ed0ee5cb3123}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [3/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint,  }\item[{std\+::vector$<$ int $>$}]{cs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for read, as Input of Apply. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & contains file info, (\char`\"{}\+Au\+Data\+Endpoint\+Type + file name\char`\"{}) \\
+\hline
+{\em cs,chunk} & size \\
+\hline
+{\em os,ghost} & size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_afd20487937252c7d4bcb7a6ca50a3d51}\label{class_f_t_1_1_array_afd20487937252c7d4bcb7a6ca50a3d51}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [4/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint,  }\item[{std\+::vector$<$ int $>$}]{cs,  }\item[{std\+::vector$<$ int $>$}]{os }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for read, as Input of Apply. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & contains file info, (\char`\"{}\+Au\+Data\+Endpoint\+Type + file name\char`\"{}) \\
+\hline
+{\em cs,chunk} & size \\
+\hline
+{\em os,ghost} & size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a5f97da3c58bd3baeafad1416455c008a}\label{class_f_t_1_1_array_a5f97da3c58bd3baeafad1416455c008a}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [5/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint,  }\item[{int}]{auto\+\_\+chunk\+\_\+dim\+\_\+index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for read, as Input of Apply. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & file information (\char`\"{}\+Au\+Data\+Endpoint\+Type + file name\char`\"{}) \\
+\hline
+{\em auto\+\_\+chunk\+\_\+dim\+\_\+index} & fileinfo is chunked on auto\+\_\+chunk\+\_\+dim\+\_\+index \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a86526763e003a669fcc9f7ef9adb6e2c}\label{class_f_t_1_1_array_a86526763e003a669fcc9f7ef9adb6e2c}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [6/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint,  }\item[{std\+::vector$<$ unsigned long long $>$}]{size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object for read, as Input of Apply. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & contains file info, (\char`\"{}\+Au\+Data\+Endpoint\+Type + file name\char`\"{}) \\
+\hline
+{\em cs,chunk} & size \\
+\hline
+{\em os,ghost} & size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_afeddaa56b88102a9ace7b8b74234aadc}\label{class_f_t_1_1_array_afeddaa56b88102a9ace7b8b74234aadc}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [7/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$}]{cs,  }\item[{std\+::vector$<$ int $>$}]{os }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object with only chunk size and overlap size Mostly, this is used for virtual array which has uniform chunk size and overlap size. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cs} & chunk size \\
+\hline
+{\em os} & overlap size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a7a25d3feead51cbc98c0e5d5b315cfe9}\label{class_f_t_1_1_array_a7a25d3feead51cbc98c0e5d5b315cfe9}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [8/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$}]{cs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a7e8a6a8bba2ef511c123caa352658672}\label{class_f_t_1_1_array_a7e8a6a8bba2ef511c123caa352658672}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [9/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{data\+\_\+vector\+\_\+endpoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object from in-\/memory vector The data are assumed to be 1D too here. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+vector\+\_\+endpoint} & the data to intialize \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a1b6c37c88a808459b0bda0f047a25837}\label{class_f_t_1_1_array_a1b6c37c88a808459b0bda0f047a25837}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Array@{Array}}
+\index{Array@{Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Array()}{Array()}\hspace{0.1cm}{\footnotesize\ttfamily [10/10]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{data\+\_\+vector\+\_\+endpoint,  }\item[{std\+::vector$<$ int $>$}]{cs,  }\item[{std\+::vector$<$ int $>$}]{os }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+vector\+\_\+endpoint} & \\
+\hline
+{\em cs} & \\
+\hline
+{\em os} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a572b8540e142b610379ada8b306d5168}\label{class_f_t_1_1_array_a572b8540e142b610379ada8b306d5168}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!````~Array@{$\sim$Array}}
+\index{````~Array@{$\sim$Array}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$Array()}{~Array()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_f_t_1_1_array}{Array}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_f_t_1_1_array}{Array}} object from in-\/memory vector The data are assumed to be 1D too here. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+vector\+\_\+endpoint} & the data to intialize \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_f_t_1_1_array_a2748f7aaac891916782d97930df0311b}\label{class_f_t_1_1_array_a2748f7aaac891916782d97930df0311b}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!AppendAttribute@{AppendAttribute}}
+\index{AppendAttribute@{AppendAttribute}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{AppendAttribute()}{AppendAttribute()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class Attribute\+Type $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Append\+Attribute (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{data\+\_\+endpoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a8e76194a9ec53382d350df8bcd52e53d}\label{class_f_t_1_1_array_a8e76194a9ec53382d350df8bcd52e53d}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Apply@{Apply}}
+\index{Apply@{Apply}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Apply()}{Apply()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class UDFOutput\+Type , class BType  = UDFOutput\+Type$>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Apply (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&)}]{UDF,  }\item[{\mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$ BType $>$ $\ast$}]{B = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Run a UDF on the data pointed by the array. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em UDFOutput\+Type} & \+: the output type of UDF \\
+\hline
+{\em BType} & \+: The element type of output \mbox{\hyperlink{class_f_t_1_1_array}{Array}} B \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em UDF} & pointer to user-\/defined function \\
+\hline
+{\em B} & \+: Output \mbox{\hyperlink{class_f_t_1_1_array}{Array}} B \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_af5a37eb015e970f02e63837070212d69}\label{class_f_t_1_1_array_af5a37eb015e970f02e63837070212d69}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Backup@{Backup}}
+\index{Backup@{Backup}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Backup()}{Backup()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Backup (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+write data to another endpoint type, e.\+g., HDF5 in disk 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_a76694facbd192bc9af94e59cb89d5101}\label{class_f_t_1_1_array_a76694facbd192bc9af94e59cb89d5101}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!CalculateOutputSize@{CalculateOutputSize}}
+\index{CalculateOutputSize@{CalculateOutputSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateOutputSize()}{CalculateOutputSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Calculate\+Output\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{data\+\_\+size\+\_\+p,  }\item[{std\+::vector$<$ int $>$ \&}]{data\+\_\+chunk\+\_\+size\+\_\+p,  }\item[{std\+::vector$<$ int $>$ \&}]{data\+\_\+overlap\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Calculate the Size of Output array (B) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+size\+\_\+p,the} & size of the output array \\
+\hline
+{\em data\+\_\+chunk\+\_\+size\+\_\+p,the} & chunk size of the output array \\
+\hline
+{\em data\+\_\+overlap\+\_\+size\+\_\+p,the} & overlap size of the output array \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_ab95ac95525bee5ea69770c8a1a0bc797}\label{class_f_t_1_1_array_ab95ac95525bee5ea69770c8a1a0bc797}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Clone@{Clone}}
+\index{Clone@{Clone}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Clone()}{Clone()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Clone (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+create a local miroor (clone of array) without intial value so, it needs to copy the whole array 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_a3a93c9b07f4f2b2049d8d17d8b13b7f0}\label{class_f_t_1_1_array_a3a93c9b07f4f2b2049d8d17d8b13b7f0}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Clone@{Clone}}
+\index{Clone@{Clone}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Clone()}{Clone()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Clone (\begin{DoxyParamCaption}\item[{T}]{intial\+\_\+value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+create a local mirror (clone) of array with the inital value 
+
+
+\begin{DoxyParams}{Parameters}
+{\em intial\+\_\+value} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_a11e072c28a4684f5dbe4ca246e7a8dc9}\label{class_f_t_1_1_array_a11e072c28a4684f5dbe4ca246e7a8dc9}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!ControlEndpoint@{ControlEndpoint}}
+\index{ControlEndpoint@{ControlEndpoint}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ControlEndpoint()}{ControlEndpoint()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Control\+Endpoint (\begin{DoxyParamCaption}\item[{int}]{cmd\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_ab1285016f0a5f121f5e7746fe866dd41}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a14cc3a509b8f17244f7bc68887457475}\label{class_f_t_1_1_array_a14cc3a509b8f17244f7bc68887457475}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!ControlEndpoint@{ControlEndpoint}}
+\index{ControlEndpoint@{ControlEndpoint}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ControlEndpoint()}{ControlEndpoint()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Control\+Endpoint (\begin{DoxyParamCaption}\item[{int}]{cmd\+\_\+p,  }\item[{std\+::vector$<$ std\+::string $>$ \&}]{arg\+\_\+v\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+pass command cmd to \mbox{\hyperlink{class_endpoint}{Endpoint}} of \mbox{\hyperlink{class_f_t_1_1_array}{Array}} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd\+\_\+p} & \+: int cmd (specific to \mbox{\hyperlink{class_endpoint}{Endpoint}}) \\
+\hline
+{\em arg\+\_\+v\+\_\+p} & \+: a vector of arg. It is typed as string and specific to cmd\+\_\+p \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_a89f80d118f7762cffd44238c0e205c5c}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a339e2e8025c3b3d657c528eff1f3d727}\label{class_f_t_1_1_array_a339e2e8025c3b3d657c528eff1f3d727}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!ControlOutputVector@{ControlOutputVector}}
+\index{ControlOutputVector@{ControlOutputVector}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ControlOutputVector()}{ControlOutputVector()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Control\+Output\+Vector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}}}]{flat\+\_\+direction,  }\item[{std\+::vector$<$ size\+\_\+t $>$}]{flat\+\_\+shape }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+A geneic verion of function to control how to deal with output vector during the run of Apply on \mbox{\hyperlink{class_f_t_1_1_array}{Array}}. The output of Apply in this way is vector of vector (2D). We need to convert it into vector (1D). Also we need to control the shape of the 1D vector to write into output \mbox{\hyperlink{class_f_t_1_1_array}{Array}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flat\+\_\+direction,the} & direction to flat the 2D vector to 1D vector \\
+\hline
+{\em flat\+\_\+shape,the} & shape of the data after the flat from 2D to the 2D \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a68f9f0fb91865ebd15944f7a955d7d00}\label{class_f_t_1_1_array_a68f9f0fb91865ebd15944f7a955d7d00}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!CreateEndpoint@{CreateEndpoint}}
+\index{CreateEndpoint@{CreateEndpoint}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{CreateEndpoint()}{CreateEndpoint()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Create\+Endpoint (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{data\+\_\+size\+\_\+p,  }\item[{std\+::vector$<$ int $>$}]{data\+\_\+chunk\+\_\+size\+\_\+p,  }\item[{std\+::vector$<$ int $>$}]{data\+\_\+overlap\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a72de4e5dd7413c367e5dcb322358dc8a}\label{class_f_t_1_1_array_a72de4e5dd7413c367e5dcb322358dc8a}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!CreateVisFile@{CreateVisFile}}
+\index{CreateVisFile@{CreateVisFile}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{CreateVisFile()}{CreateVisFile()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Create\+Vis\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a1a47e840900086dbe54a30218ea2b95d}\label{class_f_t_1_1_array_a1a47e840900086dbe54a30218ea2b95d}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!CreateVisFile@{CreateVisFile}}
+\index{CreateVisFile@{CreateVisFile}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{CreateVisFile()}{CreateVisFile()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Create\+Vis\+File (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{ft__vis_8h_a38d2b2902129bcc7e6265c10b428ee50}{FTVis\+Type}}}]{vis\+\_\+type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a35e20ac8122326bf35d80c1d41a7454a}\label{class_f_t_1_1_array_a35e20ac8122326bf35d80c1d41a7454a}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!DisableCollectiveIO@{DisableCollectiveIO}}
+\index{DisableCollectiveIO@{DisableCollectiveIO}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{DisableCollectiveIO()}{DisableCollectiveIO()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Disable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+merge below to Endpoint\+Control 
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a24aae4f8ec9f6721a41893fc49ca43ec}\label{class_f_t_1_1_array_a24aae4f8ec9f6721a41893fc49ca43ec}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!EnableApplyStride@{EnableApplyStride}}
+\index{EnableApplyStride@{EnableApplyStride}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{EnableApplyStride()}{EnableApplyStride()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Enable\+Apply\+Stride (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int $>$ \&}]{skip\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_a174ac289f98ae051b296139c4b197aaa}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a86865fa5d5c3adc9c14fc7e99e904353}\label{class_f_t_1_1_array_a86865fa5d5c3adc9c14fc7e99e904353}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!EnableCollectiveIO@{EnableCollectiveIO}}
+\index{EnableCollectiveIO@{EnableCollectiveIO}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{EnableCollectiveIO()}{EnableCollectiveIO()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Enable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a05d7d8ee07bfc2915941b3e2cba73815}\label{class_f_t_1_1_array_a05d7d8ee07bfc2915941b3e2cba73815}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!EndpointControl@{EndpointControl}}
+\index{EndpointControl@{EndpointControl}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{EndpointControl()}{EndpointControl()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Endpoint\+Control (\begin{DoxyParamCaption}\item[{int}]{cmd\+\_\+p,  }\item[{std\+::vector$<$ std\+::string $>$ \&}]{arg\+\_\+v\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a4866dbf1585bcc94d13013ad62fab357}\label{class_f_t_1_1_array_a4866dbf1585bcc94d13013ad62fab357}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!EraseAttribute@{EraseAttribute}}
+\index{EraseAttribute@{EraseAttribute}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{EraseAttribute()}{EraseAttribute()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Erase\+Attribute (\begin{DoxyParamCaption}\item[{const int \&}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a8d4e7e2932271213f90dcb714d4143b5}\label{class_f_t_1_1_array_a8d4e7e2932271213f90dcb714d4143b5}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Fill@{Fill}}
+\index{Fill@{Fill}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Fill()}{Fill()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Fill (\begin{DoxyParamCaption}\item[{T}]{fill\+\_\+value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Fill the array with value (only on rank 0) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_a00321fc8b7c5b06b0b108defec7b235b}\label{class_f_t_1_1_array_a00321fc8b7c5b06b0b108defec7b235b}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetAllTagName@{GetAllTagName}}
+\index{GetAllTagName@{GetAllTagName}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetAllTagName()}{GetAllTagName()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+All\+Tag\+Name (\begin{DoxyParamCaption}\item[{std\+::vector$<$ string $>$ \&}]{tag\+\_\+name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a77782ea3e56ffb18c412dac713be7389}\label{class_f_t_1_1_array_a77782ea3e56ffb18c412dac713be7389}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetArrayRank@{GetArrayRank}}
+\index{GetArrayRank@{GetArrayRank}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetArrayRank()}{GetArrayRank()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Array\+Rank (\begin{DoxyParamCaption}\item[{int \&}]{rank }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ad9bb416fc64bb3d02c1029a3fe0ffd63}\label{class_f_t_1_1_array_ad9bb416fc64bb3d02c1029a3fe0ffd63}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetArraySize@{GetArraySize}}
+\index{GetArraySize@{GetArraySize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetArraySize()}{GetArraySize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Array\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_a76dbca47631409aa6f9175fc7cfb3d5c}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_af074659357a6adb1278fc373ae7f2105}\label{class_f_t_1_1_array_af074659357a6adb1278fc373ae7f2105}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetAttribute@{GetAttribute}}
+\index{GetAttribute@{GetAttribute}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetAttribute()}{GetAttribute()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Attribute (\begin{DoxyParamCaption}\item[{const int \&}]{index,  }\item[{std\+::string \&}]{endpoint\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a49d4f8f05c5bf1419a6cb4b724dcfe18}\label{class_f_t_1_1_array_a49d4f8f05c5bf1419a6cb4b724dcfe18}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetAttributeEndpoint@{GetAttributeEndpoint}}
+\index{GetAttributeEndpoint@{GetAttributeEndpoint}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetAttributeEndpoint()}{GetAttributeEndpoint()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+std\+::vector$<$\mbox{\hyperlink{class_endpoint}{Endpoint}} $\ast$$>$ \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Attribute\+Endpoint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a3ce74f6d5713f044f01b064c9201ef76}\label{class_f_t_1_1_array_a3ce74f6d5713f044f01b064c9201ef76}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetChunkSize@{GetChunkSize}}
+\index{GetChunkSize@{GetChunkSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetChunkSize()}{GetChunkSize()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+std\+::vector$<$int$>$ \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Chunk\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a0b8fe003176e7b73633a792a5d63f8b1}\label{class_f_t_1_1_array_a0b8fe003176e7b73633a792a5d63f8b1}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetChunkSize@{GetChunkSize}}
+\index{GetChunkSize@{GetChunkSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetChunkSize()}{GetChunkSize()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Chunk\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{data\+\_\+chunk\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ae39ad841c6c138f51128a773d549ae6f}\label{class_f_t_1_1_array_ae39ad841c6c138f51128a773d549ae6f}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetComputingCost@{GetComputingCost}}
+\index{GetComputingCost@{GetComputingCost}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetComputingCost()}{GetComputingCost()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Computing\+Cost (\begin{DoxyParamCaption}\item[{vector$<$ double $>$ \&}]{cost\+\_\+stats }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a70a2234c19f9f91c3e6f3246d002548c}\label{class_f_t_1_1_array_a70a2234c19f9f91c3e6f3246d002548c}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetDirChunkSize@{GetDirChunkSize}}
+\index{GetDirChunkSize@{GetDirChunkSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetDirChunkSize()}{GetDirChunkSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+std\+::vector$<$int$>$ \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Dir\+Chunk\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a1c76ce65cbc0e1205b336f98e6167d0f}\label{class_f_t_1_1_array_a1c76ce65cbc0e1205b336f98e6167d0f}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetDirFile@{GetDirFile}}
+\index{GetDirFile@{GetDirFile}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetDirFile()}{GetDirFile()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+std\+::vector$<$std\+::string$>$ \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Dir\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ab65f1725c7fba24d744c76e90a4fab67}\label{class_f_t_1_1_array_ab65f1725c7fba24d744c76e90a4fab67}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetEndpoint@{GetEndpoint}}
+\index{GetEndpoint@{GetEndpoint}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetEndpoint()}{GetEndpoint()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Endpoint (\begin{DoxyParamCaption}\item[{string \&}]{endpoint\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a5646cc971b14ab4a0fa1886d4cf6c0e0}\label{class_f_t_1_1_array_a5646cc971b14ab4a0fa1886d4cf6c0e0}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetEndpointType@{GetEndpointType}}
+\index{GetEndpointType@{GetEndpointType}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetEndpointType()}{GetEndpointType()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Endpoint\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a81e2569d629490d6f463ecb8aed5467d}\label{class_f_t_1_1_array_a81e2569d629490d6f463ecb8aed5467d}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetOverlapSize@{GetOverlapSize}}
+\index{GetOverlapSize@{GetOverlapSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetOverlapSize()}{GetOverlapSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Overlap\+Size (\begin{DoxyParamCaption}\item[{vector$<$ int $>$ \&}]{os\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a5c1e94bdd975288dbcd9c9fb8363302d}\label{class_f_t_1_1_array_a5c1e94bdd975288dbcd9c9fb8363302d}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetReadCost@{GetReadCost}}
+\index{GetReadCost@{GetReadCost}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetReadCost()}{GetReadCost()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Read\+Cost (\begin{DoxyParamCaption}\item[{vector$<$ double $>$ \&}]{cost\+\_\+stats }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a49351829efcd1d460f068e13725cb260}\label{class_f_t_1_1_array_a49351829efcd1d460f068e13725cb260}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetStencilTag@{GetStencilTag}}
+\index{GetStencilTag@{GetStencilTag}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetStencilTag()}{GetStencilTag()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Stencil\+Tag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_ab314f2b47fec667bbdaab8aca2590c1b}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_abf252b09deab50876e1b074144b4b89c}\label{class_f_t_1_1_array_abf252b09deab50876e1b074144b4b89c}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetTag@{GetTag}}
+\index{GetTag@{GetTag}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetTag()}{GetTag()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class PType $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Tag (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{PType \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Attribute object. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em AType} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \\
+\hline
+{\em value,return} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_ac64a1e5e75dd0513b405156c41ab2ad6}\label{class_f_t_1_1_array_ac64a1e5e75dd0513b405156c41ab2ad6}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetTag@{GetTag}}
+\index{GetTag@{GetTag}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetTag()}{GetTag()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Tag (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{std\+::string \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_a7f9b0c106a19247a9a5c7c9d65af857a}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ae47e16d8f40ceaebeb9cacf7745acb0f}\label{class_f_t_1_1_array_ae47e16d8f40ceaebeb9cacf7745acb0f}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetTag@{GetTag}}
+\index{GetTag@{GetTag}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetTag()}{GetTag()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class PType $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Tag (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{std\+::vector$<$ PType $>$ \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_af1b95a05b7dff887d128f5e2144c82b1}\label{class_f_t_1_1_array_af1b95a05b7dff887d128f5e2144c82b1}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetValue@{GetValue}}
+\index{GetValue@{GetValue}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetValue()}{GetValue()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$typename... Is$>$ \\
+T \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Value (\begin{DoxyParamCaption}\item[{Is...}]{indexs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Value at indexs. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Is} & \+: index type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em indexs} & \+: the index of data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T \+: the value at indexs 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_af9dc5d1d9945a01d6c7b6edcb7ecaccb}\label{class_f_t_1_1_array_af9dc5d1d9945a01d6c7b6edcb7ecaccb}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetVirtualArrayFlag@{GetVirtualArrayFlag}}
+\index{GetVirtualArrayFlag@{GetVirtualArrayFlag}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetVirtualArrayFlag()}{GetVirtualArrayFlag()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Virtual\+Array\+Flag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a7fc168ab66834e40d9a02c4570fd7491}\label{class_f_t_1_1_array_a7fc168ab66834e40d9a02c4570fd7491}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!GetWriteCost@{GetWriteCost}}
+\index{GetWriteCost@{GetWriteCost}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetWriteCost()}{GetWriteCost()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Get\+Write\+Cost (\begin{DoxyParamCaption}\item[{vector$<$ double $>$ \&}]{cost\+\_\+stats }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ac5d211e0b4a60315fc2cbdff94378a95}\label{class_f_t_1_1_array_ac5d211e0b4a60315fc2cbdff94378a95}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!HasNextChunk@{HasNextChunk}}
+\index{HasNextChunk@{HasNextChunk}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{HasNextChunk()}{HasNextChunk()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Has\+Next\+Chunk (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a68dd701b5e47a468bb23ce4e3b9fc372}\label{class_f_t_1_1_array_a68dd701b5e47a468bb23ce4e3b9fc372}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!InferOutputSize@{InferOutputSize}}
+\index{InferOutputSize@{InferOutputSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{InferOutputSize()}{InferOutputSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Infer\+Output\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{data\+\_\+size\+\_\+p,  }\item[{std\+::vector$<$ int $>$ \&}]{data\+\_\+chunk\+\_\+size\+\_\+p,  }\item[{std\+::vector$<$ int $>$ \&}]{data\+\_\+overlap\+\_\+size\+\_\+p,  }\item[{size\+\_\+t}]{output\+\_\+vector\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+infer the size for output array 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+size\+\_\+p} & \\
+\hline
+{\em data\+\_\+chunk\+\_\+size\+\_\+p} & \\
+\hline
+{\em data\+\_\+overlap\+\_\+size\+\_\+p} & \\
+\hline
+{\em output\+\_\+vector\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a4b8ae5bef4e27490637ede5adebc6e7b}\label{class_f_t_1_1_array_a4b8ae5bef4e27490637ede5adebc6e7b}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!InitializeApplyInput@{InitializeApplyInput}}
+\index{InitializeApplyInput@{InitializeApplyInput}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{InitializeApplyInput()}{InitializeApplyInput()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class UDFOutput\+Type $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Initialize\+Apply\+Input (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&)}]{UDF }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a859e182680617fca13377a31b621831e}\label{class_f_t_1_1_array_a859e182680617fca13377a31b621831e}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!InsertAttribute@{InsertAttribute}}
+\index{InsertAttribute@{InsertAttribute}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{InsertAttribute()}{InsertAttribute()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class Attribute\+Type $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Insert\+Attribute (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{data\+\_\+endpoint,  }\item[{const int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_aff89f8d31137d9b31d9b0367bf68e7e4}\label{class_f_t_1_1_array_aff89f8d31137d9b31d9b0367bf68e7e4}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!LoadNextChunk@{LoadNextChunk}}
+\index{LoadNextChunk@{LoadNextChunk}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{LoadNextChunk()}{LoadNextChunk()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Load\+Next\+Chunk (\begin{DoxyParamCaption}\item[{unsigned long long \&}]{result\+\_\+vector\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Load the next chunk. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em result\+\_\+vector\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1, data read into local\+\_\+chunk\+\_\+data 0, end of file (no data left to handle) -\/1\+: error happen 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_a87cf29e570e941617f75b13d20de9fdc}\label{class_f_t_1_1_array_a87cf29e570e941617f75b13d20de9fdc}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Merge@{Merge}}
+\index{Merge@{Merge}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Merge()}{Merge()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Merge (\begin{DoxyParamCaption}\item[{int}]{Op }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a86651947497fb99cfc1651f879d19f4c}\label{class_f_t_1_1_array_a86651947497fb99cfc1651f879d19f4c}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Nonvolatile@{Nonvolatile}}
+\index{Nonvolatile@{Nonvolatile}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Nonvolatile()}{Nonvolatile()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Nonvolatile (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a0c5a9c28230aeb9f5d3f7750b6a6a3a3}\label{class_f_t_1_1_array_a0c5a9c28230aeb9f5d3f7750b6a6a3a3}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!operator()@{operator()}}
+\index{operator()@{operator()}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$typename... Is$>$ \\
+T \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::operator() (\begin{DoxyParamCaption}\item[{Is...}]{indexs }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_aab7659ffd9657d9a5e72d7d89eae63da}\label{class_f_t_1_1_array_aab7659ffd9657d9a5e72d7d89eae63da}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!PrintEndpointInfo@{PrintEndpointInfo}}
+\index{PrintEndpointInfo@{PrintEndpointInfo}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{PrintEndpointInfo()}{PrintEndpointInfo()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Print\+Endpoint\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+print endpoint info of this array 
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a83889fc455be1561a40dd8fa03f0b825}\label{class_f_t_1_1_array_a83889fc455be1561a40dd8fa03f0b825}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!PushBackAttribute@{PushBackAttribute}}
+\index{PushBackAttribute@{PushBackAttribute}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{PushBackAttribute()}{PushBackAttribute()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class Attribute\+Type $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Push\+Back\+Attribute (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ad34d3fe15a14b09d8dc087196df484af}\label{class_f_t_1_1_array_ad34d3fe15a14b09d8dc087196df484af}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!ReadArray@{ReadArray}}
+\index{ReadArray@{ReadArray}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReadArray()}{ReadArray()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Read\+Array (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ unsigned long long $>$ \&}]{start,  }\item[{const std\+::vector$<$ unsigned long long $>$ \&}]{end,  }\item[{std\+::vector$<$ T $>$ \&}]{data\+\_\+vector }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ad9338ae1f6e0caf89a4ccd69d00510a9}\label{class_f_t_1_1_array_ad9338ae1f6e0caf89a4ccd69d00510a9}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!ReadArray@{ReadArray}}
+\index{ReadArray@{ReadArray}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReadArray()}{ReadArray()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+std\+::vector$<$T$>$ \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Read\+Array (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{const std\+::vector$<$ unsigned long long $>$}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ac97b7daa918a4bd5b6cc9b94ba631ad7}\label{class_f_t_1_1_array_ac97b7daa918a4bd5b6cc9b94ba631ad7}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!ReadEndpoint@{ReadEndpoint}}
+\index{ReadEndpoint@{ReadEndpoint}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReadEndpoint()}{ReadEndpoint()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Read\+Endpoint (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{start\+\_\+p,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{end\+\_\+p,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a629252eb85e020b01eb384ca0064370e}\label{class_f_t_1_1_array_a629252eb85e020b01eb384ca0064370e}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!ReadModifyWriteArray@{ReadModifyWriteArray}}
+\index{ReadModifyWriteArray@{ReadModifyWriteArray}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReadModifyWriteArray()}{ReadModifyWriteArray()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Read\+Modify\+Write\+Array (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ unsigned long long $>$ \&}]{start\+\_\+p,  }\item[{const std\+::vector$<$ unsigned long long $>$ \&}]{end\+\_\+p,  }\item[{std\+::vector$<$ T $>$ \&}]{data\+\_\+p,  }\item[{\mbox{\hyperlink{ft__merge_8h_ae88fed0c16b0bc517219c6ecebb61a50}{AU\+\_\+\+Op}}}]{op }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Test a new API to read modfy and write a array. It is useful for cases that you have a incremently updated array //https\+://en.wikipedia.\+org/wiki/\+ReadE2\%80\%93modifyE2\%80\%93write. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+\_\+p} & \\
+\hline
+{\em end\+\_\+p} & \\
+\hline
+{\em data\+\_\+p} & \\
+\hline
+{\em op} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_a1e6fde4d6e644b23ccae0af99f77e452}\label{class_f_t_1_1_array_a1e6fde4d6e644b23ccae0af99f77e452}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!ReportCost@{ReportCost}}
+\index{ReportCost@{ReportCost}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReportCost()}{ReportCost()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Report\+Cost (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_ac2ec2f3b74907881acf7b190e0e43d35}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_acf107824703815e9a3e0a84073c9442c}\label{class_f_t_1_1_array_acf107824703815e9a3e0a84073c9442c}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!ReportTime@{ReportTime}}
+\index{ReportTime@{ReportTime}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReportTime()}{ReportTime()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Report\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a960f5eb03f57189337bd0ddfadbc3efa}\label{class_f_t_1_1_array_a960f5eb03f57189337bd0ddfadbc3efa}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Restore@{Restore}}
+\index{Restore@{Restore}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Restore()}{Restore()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Restore (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+load HDF5 array to IN\+\_\+\+MEMORY array ~\newline
+ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_a28f746eaaee6c8f2bdb50591ca943e7f}\label{class_f_t_1_1_array_a28f746eaaee6c8f2bdb50591ca943e7f}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SchduleChunkNext@{SchduleChunkNext}}
+\index{SchduleChunkNext@{SchduleChunkNext}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SchduleChunkNext()}{SchduleChunkNext()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Schdule\+Chunk\+Next (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+update current\+\_\+chunk\+\_\+id 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_a4f53c6bda047c07c40a2597ddffd780a}\label{class_f_t_1_1_array_a4f53c6bda047c07c40a2597ddffd780a}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetArraySize@{SetArraySize}}
+\index{SetArraySize@{SetArraySize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetArraySize()}{SetArraySize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Array\+Size (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ unsigned long long $>$ \&}]{size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a1ab6e449e0a651e81aca41fccbaafba3}\label{class_f_t_1_1_array_a1ab6e449e0a651e81aca41fccbaafba3}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetChunkSize@{SetChunkSize}}
+\index{SetChunkSize@{SetChunkSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetChunkSize()}{SetChunkSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Chunk\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$}]{data\+\_\+chunk\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_a725e9ae66a926e57d2c28e77c4418a9e}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a289615bda73d4c948a267849041dda9d}\label{class_f_t_1_1_array_a289615bda73d4c948a267849041dda9d}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetChunkSizeByDim@{SetChunkSizeByDim}}
+\index{SetChunkSizeByDim@{SetChunkSizeByDim}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetChunkSizeByDim()}{SetChunkSizeByDim()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Chunk\+Size\+By\+Dim (\begin{DoxyParamCaption}\item[{int}]{dim\+\_\+rank }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_afb82cb416925fb1e65ae1b9c1333c40d}\label{class_f_t_1_1_array_afb82cb416925fb1e65ae1b9c1333c40d}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetChunkSizeByMem@{SetChunkSizeByMem}}
+\index{SetChunkSizeByMem@{SetChunkSizeByMem}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetChunkSizeByMem()}{SetChunkSizeByMem()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Chunk\+Size\+By\+Mem (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{max\+\_\+mem\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a5ba3316999f0eb50815fedc5da6f996b}\label{class_f_t_1_1_array_a5ba3316999f0eb50815fedc5da6f996b}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetDirChunkSize@{SetDirChunkSize}}
+\index{SetDirChunkSize@{SetDirChunkSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetDirChunkSize()}{SetDirChunkSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Dir\+Chunk\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{dir\+\_\+chunk\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a1679399559286ede6632361f672091b1}\label{class_f_t_1_1_array_a1679399559286ede6632361f672091b1}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetDirectOutput@{SetDirectOutput}}
+\index{SetDirectOutput@{SetDirectOutput}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetDirectOutput()}{SetDirectOutput()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Direct\+Output (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a38fc6cc3f5113a2739000a9148babdb4}\label{class_f_t_1_1_array_a38fc6cc3f5113a2739000a9148babdb4}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetDirFile@{SetDirFile}}
+\index{SetDirFile@{SetDirFile}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetDirFile()}{SetDirFile()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Dir\+File (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::string $>$ \&}]{file\+\_\+list }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a8645ccb4337f14af47b2b8b079f5ed05}\label{class_f_t_1_1_array_a8645ccb4337f14af47b2b8b079f5ed05}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetDirInputRegexSearch@{SetDirInputRegexSearch}}
+\index{SetDirInputRegexSearch@{SetDirInputRegexSearch}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetDirInputRegexSearch()}{SetDirInputRegexSearch()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Dir\+Input\+Regex\+Search (\begin{DoxyParamCaption}\item[{std\+::regex \&}]{regex\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a762a3e4bba498b55593a55a847a238e0}\label{class_f_t_1_1_array_a762a3e4bba498b55593a55a847a238e0}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetDirOutputRegexReplace@{SetDirOutputRegexReplace}}
+\index{SetDirOutputRegexReplace@{SetDirOutputRegexReplace}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetDirOutputRegexReplace()}{SetDirOutputRegexReplace()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Dir\+Output\+Regex\+Replace (\begin{DoxyParamCaption}\item[{std\+::regex \&}]{regex\+\_\+p,  }\item[{std\+::string \&}]{replace\+\_\+str\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ab9264d141603dc489790042cdf49c621}\label{class_f_t_1_1_array_ab9264d141603dc489790042cdf49c621}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetEndpoint@{SetEndpoint}}
+\index{SetEndpoint@{SetEndpoint}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetEndpoint()}{SetEndpoint()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Endpoint (\begin{DoxyParamCaption}\item[{const string \&}]{endpoint\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a1c40b87376540186a86d0408332bcc3e}\label{class_f_t_1_1_array_a1c40b87376540186a86d0408332bcc3e}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetOverlapPadding@{SetOverlapPadding}}
+\index{SetOverlapPadding@{SetOverlapPadding}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetOverlapPadding()}{SetOverlapPadding()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Overlap\+Padding (\begin{DoxyParamCaption}\item[{const T \&}]{padding\+\_\+value\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a6f4ff0b7ca2f0b052ebaee51acf364a2}\label{class_f_t_1_1_array_a6f4ff0b7ca2f0b052ebaee51acf364a2}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetOverlapSize@{SetOverlapSize}}
+\index{SetOverlapSize@{SetOverlapSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetOverlapSize()}{SetOverlapSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Overlap\+Size (\begin{DoxyParamCaption}\item[{const vector$<$ int $>$}]{os\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_a63c4e423883ec00defa1f5447f3d37ba}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_aec8c9b2105425f1e8a2938a094939145}\label{class_f_t_1_1_array_aec8c9b2105425f1e8a2938a094939145}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetOverlapSizeByDetection@{SetOverlapSizeByDetection}}
+\index{SetOverlapSizeByDetection@{SetOverlapSizeByDetection}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetOverlapSizeByDetection()}{SetOverlapSizeByDetection()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Overlap\+Size\+By\+Detection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a686ede8c1e9371d9290ba7a8ca7aa8c3}\label{class_f_t_1_1_array_a686ede8c1e9371d9290ba7a8ca7aa8c3}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetStride@{SetStride}}
+\index{SetStride@{SetStride}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetStride()}{SetStride()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Stride (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int $>$ \&}]{skip\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ac6c9004840453df4c79da5be45a3b0dc}\label{class_f_t_1_1_array_ac6c9004840453df4c79da5be45a3b0dc}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetTag@{SetTag}}
+\index{SetTag@{SetTag}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetTag()}{SetTag()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class PType $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Tag (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const PType}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the Attribute object. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em AType,the} & type of the value (can not be vector) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \\
+\hline
+{\em value} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_f_t_1_1_array_a68ee4a7bb65c7fd3023ce6146879988b}\label{class_f_t_1_1_array_a68ee4a7bb65c7fd3023ce6146879988b}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetTag@{SetTag}}
+\index{SetTag@{SetTag}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetTag()}{SetTag()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Tag (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const std\+::string}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a28709bc5f64ef6113bea9eca2db5b6f3}\label{class_f_t_1_1_array_a28709bc5f64ef6113bea9eca2db5b6f3}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetTag@{SetTag}}
+\index{SetTag@{SetTag}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetTag()}{SetTag()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class PType $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Tag (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const std\+::vector$<$ PType $>$}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_ac1371ce90f70807a221dfb7122b1ae36}\label{class_f_t_1_1_array_ac1371ce90f70807a221dfb7122b1ae36}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetValue@{SetValue}}
+\index{SetValue@{SetValue}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetValue()}{SetValue()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$typename... Is$>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Value (\begin{DoxyParamCaption}\item[{T}]{data\+\_\+p,  }\item[{Is...}]{indexs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a5b141e53070a3cfed4d0b60883fcf14d}\label{class_f_t_1_1_array_a5b141e53070a3cfed4d0b60883fcf14d}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetVectorDirection@{SetVectorDirection}}
+\index{SetVectorDirection@{SetVectorDirection}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetVectorDirection()}{SetVectorDirection()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Vector\+Direction (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}}}]{flat\+\_\+direction\+\_\+index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_f_t_1_1_array_base_a800e7bd5bacbb97419b4b0cd00d05532}{FT\+::\+Array\+Base}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a2e8ec0f1d40db406991b1f3bc55cc734}\label{class_f_t_1_1_array_a2e8ec0f1d40db406991b1f3bc55cc734}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SetVirtualArrayFlag@{SetVirtualArrayFlag}}
+\index{SetVirtualArrayFlag@{SetVirtualArrayFlag}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SetVirtualArrayFlag()}{SetVirtualArrayFlag()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Set\+Virtual\+Array\+Flag (\begin{DoxyParamCaption}\item[{bool}]{flag\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a020d97c2c7928d84cb9404ea16abe303}\label{class_f_t_1_1_array_a020d97c2c7928d84cb9404ea16abe303}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!SyncOverlap@{SyncOverlap}}
+\index{SyncOverlap@{SyncOverlap}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{SyncOverlap()}{SyncOverlap()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Sync\+Overlap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a11c9bf70762af77394b054f27a8831e7}\label{class_f_t_1_1_array_a11c9bf70762af77394b054f27a8831e7}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Transform@{Transform}}
+\index{Transform@{Transform}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Transform()}{Transform()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class UDFOutput\+Type , class BType  = UDFOutput\+Type$>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Transform (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&)}]{UDF,  }\item[{\mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$ BType $>$ \&}]{B }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_adcfce357e9ee01956dd7d91d642a45fa}\label{class_f_t_1_1_array_adcfce357e9ee01956dd7d91d642a45fa}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Transform@{Transform}}
+\index{Transform@{Transform}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Transform()}{Transform()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class UDFOutput\+Type , class BType  = UDFOutput\+Type$>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Transform (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&)}]{UDF,  }\item[{\mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$ BType $>$ $\ast$}]{B = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Run a UDF on the data pointed by the array. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em UDFOutput\+Type} & \+: the output type of UDF \\
+\hline
+{\em BType} & \+: The element type of output \mbox{\hyperlink{class_f_t_1_1_array}{Array}} B \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em UDF} & pointer to user-\/defined function \\
+\hline
+{\em B} & \+: Output \mbox{\hyperlink{class_f_t_1_1_array}{Array}} B \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a567d192b970cbefdfd6425e20375c7f1}\label{class_f_t_1_1_array_a567d192b970cbefdfd6425e20375c7f1}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!UpdateChunkSize@{UpdateChunkSize}}
+\index{UpdateChunkSize@{UpdateChunkSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{UpdateChunkSize()}{UpdateChunkSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Update\+Chunk\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Update the chunk size, given chunk\+\_\+size\+\_\+by\+\_\+user\+\_\+flag/chunk\+\_\+size\+\_\+by\+\_\+user\+\_\+by\+\_\+dimension\+\_\+flag. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em chunk\+\_\+size\+\_\+p} & \\
+\hline
+{\em overlap\+\_\+size\+\_\+p} & \\
+\hline
+{\em data\+\_\+size} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_f_t_1_1_array_a3405d09b73373461be47e00c65c42ee0}\label{class_f_t_1_1_array_a3405d09b73373461be47e00c65c42ee0}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!UpdateOverlap@{UpdateOverlap}}
+\index{UpdateOverlap@{UpdateOverlap}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{UpdateOverlap()}{UpdateOverlap()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Update\+Overlap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_af75ff8aa617a43e6f87691cc7494c67b}\label{class_f_t_1_1_array_af75ff8aa617a43e6f87691cc7494c67b}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!UpdateOverlapSize@{UpdateOverlapSize}}
+\index{UpdateOverlapSize@{UpdateOverlapSize}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{UpdateOverlapSize()}{UpdateOverlapSize()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+template$<$class UDFOutput\+Type $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Update\+Overlap\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_stencil}{Stencil}}$<$ UDFOutput\+Type $>$($\ast$)(const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ T $>$ \&)}]{UDF }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a3c2cef55e3608598c6f6cb0826f98b46}\label{class_f_t_1_1_array_a3c2cef55e3608598c6f6cb0826f98b46}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!Volatile@{Volatile}}
+\index{Volatile@{Volatile}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Volatile()}{Volatile()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Volatile (\begin{DoxyParamCaption}\item[{std\+::string}]{data\+\_\+endpoint\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a122b69316151f427940cb24a8022fa01}\label{class_f_t_1_1_array_a122b69316151f427940cb24a8022fa01}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!WriteArray@{WriteArray}}
+\index{WriteArray@{WriteArray}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{WriteArray()}{WriteArray()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Write\+Array (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ unsigned long long $>$ \&}]{start\+\_\+p,  }\item[{const std\+::vector$<$ unsigned long long $>$ \&}]{end\+\_\+p,  }\item[{std\+::vector$<$ T $>$ \&}]{data\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a81949a3a4d4e3ba21243854b2ff0885c}\label{class_f_t_1_1_array_a81949a3a4d4e3ba21243854b2ff0885c}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!WriteArray@{WriteArray}}
+\index{WriteArray@{WriteArray}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{WriteArray()}{WriteArray()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Write\+Array (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{start\+\_\+p,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{end\+\_\+p,  }\item[{std\+::vector$<$ std\+::vector$<$ T $>$$>$}]{data\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_f_t_1_1_array_a2c418c0a4ef9ac38d4783daf5a6b5e65}\label{class_f_t_1_1_array_a2c418c0a4ef9ac38d4783daf5a6b5e65}} 
+\index{FT::Array$<$ T $>$@{FT::Array$<$ T $>$}!WriteEndpoint@{WriteEndpoint}}
+\index{WriteEndpoint@{WriteEndpoint}!FT::Array$<$ T $>$@{FT::Array$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{WriteEndpoint()}{WriteEndpoint()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int \mbox{\hyperlink{class_f_t_1_1_array}{FT\+::\+Array}}$<$ T $>$\+::Write\+Endpoint (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{start\+\_\+p,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{end\+\_\+p,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__array_8h}{ft\+\_\+array.\+h}}\end{DoxyCompactItemize}

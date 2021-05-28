@@ -1,0 +1,808 @@
+\hypertarget{class_endpoint}{}\doxysection{Endpoint Class Reference}
+\label{class_endpoint}\index{Endpoint@{Endpoint}}
+
+
+Define the class for the \mbox{\hyperlink{class_endpoint}{Endpoint}} used by Array\+UDF to store the data. It contains basic infomation for the endpoint as well as the operations supported by the endpoint.  
+
+
+
+
+{\ttfamily \#include $<$ft\+\_\+endpoint.\+h$>$}
+
+Inheritance diagram for Endpoint\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.222222cm]{class_endpoint}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_endpoint_a09fbae9c5b20bb0ab27ebe42c7b64b75}{Endpoint}} ()
+\item 
+virtual \mbox{\hyperlink{class_endpoint_a43154220b552bcb3c5e218fa82f51759}{$\sim$\+Endpoint}} ()
+\item 
+std\+::vector$<$ unsigned long long $>$ \mbox{\hyperlink{class_endpoint_aed5b34af06fd01e21c4a1519a7204f96}{Get\+Dimensions}} ()
+\begin{DoxyCompactList}\small\item\em Get the Dimensions of the data. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_a765f413661414c530ecf0ec7fe7da936}{Set\+Dimensions}} (std\+::vector$<$ unsigned long long $>$ endpoint\+\_\+dim\+\_\+size\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the Dimensions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_a62e3daa09dbf44bf959618ee9268a931}{Set\+Data\+Element\+Type}} (\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} data\+\_\+element\+\_\+type\+\_\+p)
+\begin{DoxyCompactList}\small\item\em set the type of data element \end{DoxyCompactList}\item 
+\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \mbox{\hyperlink{class_endpoint_a847890c421f27a882d481e48f136b52c}{Get\+Data\+Element\+Type}} ()
+\begin{DoxyCompactList}\small\item\em Get the Type of Data Element. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_a17fbafbe07043e606235ff7bb29166af}{Get\+Data\+Element\+Type\+Size}} ()
+\begin{DoxyCompactList}\small\item\em Get the size of the type for the element. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_a73b581813f9a33ed3c48c9544a9dc7b3}{Set\+Endpoint\+Type}} (\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} endpoint\+\_\+type\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the \mbox{\hyperlink{class_endpoint}{Endpoint}} Type object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \mbox{\hyperlink{class_endpoint_af96fa347a90fe6015abe6b375f5d06a0}{Get\+Endpoint\+Type}} ()
+\begin{DoxyCompactList}\small\item\em Get the \mbox{\hyperlink{class_endpoint}{Endpoint}} Type object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_endpoint_a1b7b0373ea823c2b2e3e2d1342e0d3af}{Get\+Open\+Flag}} ()
+\item 
+void \mbox{\hyperlink{class_endpoint_aa1fa8caaf40b48a729a81a6e74d27bf8}{Set\+Open\+Flag}} (bool open\+\_\+flag\+\_\+p)
+\item 
+bool \mbox{\hyperlink{class_endpoint_a6d264cda70c8c268ac60ca5d21bfb299}{Get\+Create\+Flag}} ()
+\item 
+void \mbox{\hyperlink{class_endpoint_a55aba380dcaceab6b8f80ae72a78878d}{Set\+Create\+Flag}} (bool open\+\_\+flag\+\_\+p)
+\item 
+void \mbox{\hyperlink{class_endpoint_afeeebde30f360f8d92c9058ef5a51fa6}{Set\+Rw\+Flag}} (unsigned read\+\_\+write\+\_\+flag\+\_\+p)
+\item 
+unsigned \mbox{\hyperlink{class_endpoint_a15eb39ca6d803119be230809b2272b3a}{Get\+Rw\+Flag}} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}{Au\+Endpoint\+Data\+Type\+Union}} $>$ \mbox{\hyperlink{class_endpoint_a4c42cd9b10558a4567ee0d7eb5160022}{Void2\+Union}} (void $\ast$vp, size\+\_\+t n\+\_\+elements)
+\begin{DoxyCompactList}\small\item\em convert my data in (void $\ast$) type to Union type \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{class_endpoint_adbacf27482b32ffa60dafa45c431c0f6}{Union2\+Void}} (std\+::vector$<$ \mbox{\hyperlink{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}{Au\+Endpoint\+Data\+Type\+Union}} $>$ \&data\+\_\+vector\+\_\+in\+\_\+union\+\_\+type)
+\begin{DoxyCompactList}\small\item\em convert data from union to void type \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_a59f729f946d46ef48bc6a17fcb29241f}{Set\+Endpoint\+Info}} (std\+::string endpoint\+\_\+info\+\_\+p)
+\begin{DoxyCompactList}\small\item\em set the endpoint\+\_\+info string \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_endpoint_a51665a0bc4d245e087b49f4e00614893}{Get\+Endpoint\+Info}} ()
+\begin{DoxyCompactList}\small\item\em Get the endpoint\+\_\+info string. \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_a973927c11f35be4f393f456a8b2e2a1e}{Parse\+Endpoint\+Info}} ()=0
+\begin{DoxyCompactList}\small\item\em parse endpoint\+\_\+info to my own info \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_a43bcd87f7b7da0b2eefd3010e06c5cd5}{Extract\+Meta}} ()=0
+\begin{DoxyCompactList}\small\item\em extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/other ep\+\_\+type dependents ones \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_af014eb78eb2097f23cd48d48c2004b16}{Print\+Info}} ()=0
+\begin{DoxyCompactList}\small\item\em print information about the endpoint \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_add0ecdbfabcc9382356bbac955ddb638}{Create}} ()=0
+\begin{DoxyCompactList}\small\item\em create the endpoint \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_a481874b61d83081b4a96a0c2b21a8dbd}{Open}} ()=0
+\begin{DoxyCompactList}\small\item\em open the endpoint \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_a2ea7ed58e917ba63cb222ffbda09aa0c}{Read}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data)=0
+\begin{DoxyCompactList}\small\item\em read the data from end-\/point \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_a4bcb3e885bfb1343c610a3163fc01c77}{Write}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data)=0
+\begin{DoxyCompactList}\small\item\em write the data to the end-\/point \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_aecfbfb70e1b63027f447628f94e2bc35}{Write\+Attribute}} (const std\+::string \&name, const void $\ast$data, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} data\+\_\+type\+\_\+p, const size\+\_\+t \&data\+\_\+length\+\_\+p=0)
+\begin{DoxyCompactList}\small\item\em Set the Attribute object Do not need to be pure virtual method. \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_a1a12705a507c7a8d2fa1cb470d49c11a}{Read\+Attribute}} (const std\+::string \&name, void $\ast$data, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} data\+\_\+type\+\_\+p, const size\+\_\+t \&data\+\_\+length\+\_\+p=0)
+\begin{DoxyCompactList}\small\item\em Get the Attribute object Do not need to be pure virtual method. \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_aec350eedd85b64a9f261f8474aefd007}{Get\+Attribute\+Size}} (const std\+::string \&name, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} data\+\_\+type\+\_\+p)
+\item 
+virtual int \mbox{\hyperlink{class_endpoint_a76379a7d9acbf7d429d315fbddadb2ad}{Close}} ()=0
+\begin{DoxyCompactList}\small\item\em close the end-\/point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_endpoint_a755ef0b10d5c4a639d9a11f5e1c7d9a3}{Map2\+My\+Type}} ()=0
+\begin{DoxyCompactList}\small\item\em call the finalize to close everything (like call Destractor) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_endpoint_a53f5bcbf1fe56d9ebb56d270bb92311e}{Enable\+Collective\+IO}} ()
+\item 
+virtual void \mbox{\hyperlink{class_endpoint_af8c636c2a09098d6a7ba91dbef96e9ba}{Disable\+Collective\+IO}} ()
+\item 
+virtual std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{class_endpoint_ab22a5ddcc29289e68e28df993db16595}{Get\+Dir\+File\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em Get the Dir File Vector object. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_endpoint_ad97cb0d1525ac7cd27711922e095d2bc}{Set\+Dir\+File\+Vector}} (std\+::vector$<$ std\+::string $>$ \&file\+\_\+list)
+\begin{DoxyCompactList}\small\item\em Set the Dir File Vector object. \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ int $>$ \mbox{\hyperlink{class_endpoint_a5c16bba6a4878414b4a375a17d6a06ac}{Get\+Dir\+Chunk\+Size}} ()
+\begin{DoxyCompactList}\small\item\em Get the Dir Chunk Size object. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_endpoint_ab58739c271672f2559b13b5bda71445b}{Set\+Dir\+Chunk\+Size}} (std\+::vector$<$ int $>$ \&dir\+\_\+chunk\+\_\+size\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the Dir Chunk Size object. \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_ad469d082a014d0a45be6a892352527d4}{Control}} (int opt\+\_\+code, std\+::vector$<$ std\+::string $>$ \&parameter\+\_\+v)
+\begin{DoxyCompactList}\small\item\em call a special operator on endpoint such as, enable collective I/O for HDF5 dump file from MEMORY to HDF5 \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_endpoint_a843d0df544c43b0aa0081ad17c9f854c}{Map\+Op\+Str2\+Int}} (std\+::string op\+\_\+cmd\+\_\+str)
+\begin{DoxyCompactList}\small\item\em map a op\+\_\+cmd\+\_\+str to int as input of Special\+Operator \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{class_endpoint_af4dd2b2ee92adc7860e5b8f3e8dfbb32}{Map\+Op\+Int2\+Str}} (int op\+\_\+int)
+\begin{DoxyCompactList}\small\item\em map op\+\_\+int to string \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \mbox{\hyperlink{class_endpoint_a0974db1dbe4efb77766f08fc2a93ec66}{endpoint\+\_\+type}}
+\item 
+std\+::string \mbox{\hyperlink{class_endpoint_acbd327c08c76a6ae61e58a1802319402}{endpoint\+\_\+info}}
+\item 
+std\+::vector$<$ unsigned long long $>$ \mbox{\hyperlink{class_endpoint_a3ce9756fcb2baed8eaef1298ab3be15c}{endpoint\+\_\+size}}
+\item 
+int \mbox{\hyperlink{class_endpoint_a25188f3dad4d8606368f3355850c02b3}{endpoint\+\_\+ranks}}
+\item 
+\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \mbox{\hyperlink{class_endpoint_aad1ddf047697536ddcaa6990e7bfa37a}{data\+\_\+element\+\_\+type}}
+\item 
+std\+::string \mbox{\hyperlink{class_endpoint_a051d0e934e5454072ffdc3e939ffca4c}{data\+\_\+endpoint\+\_\+orig}}
+\item 
+bool \mbox{\hyperlink{class_endpoint_aa555ee5a5cd914f8581fc84106800459}{set\+\_\+endpoint\+\_\+dim\+\_\+size\+\_\+flag}} = false
+\item 
+bool \mbox{\hyperlink{class_endpoint_a521a4568a888a64f769ef3a38bd44a65}{open\+\_\+flag}} = false
+\item 
+bool \mbox{\hyperlink{class_endpoint_a978064e4f5466519ad156ef594a72459}{create\+\_\+flag}} = false
+\item 
+unsigned \mbox{\hyperlink{class_endpoint_a9057641edd0c6ed840016b7e6b191688}{read\+\_\+write\+\_\+flag}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Define the class for the \mbox{\hyperlink{class_endpoint}{Endpoint}} used by Array\+UDF to store the data. It contains basic infomation for the endpoint as well as the operations supported by the endpoint. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_endpoint_a09fbae9c5b20bb0ab27ebe42c7b64b75}\label{class_endpoint_a09fbae9c5b20bb0ab27ebe42c7b64b75}} 
+\index{Endpoint@{Endpoint}!Endpoint@{Endpoint}}
+\index{Endpoint@{Endpoint}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Endpoint()}{Endpoint()}}
+{\footnotesize\ttfamily Endpoint\+::\+Endpoint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_endpoint_a43154220b552bcb3c5e218fa82f51759}\label{class_endpoint_a43154220b552bcb3c5e218fa82f51759}} 
+\index{Endpoint@{Endpoint}!````~Endpoint@{$\sim$Endpoint}}
+\index{````~Endpoint@{$\sim$Endpoint}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{$\sim$Endpoint()}{~Endpoint()}}
+{\footnotesize\ttfamily virtual Endpoint\+::$\sim$\+Endpoint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_endpoint_a76379a7d9acbf7d429d315fbddadb2ad}\label{class_endpoint_a76379a7d9acbf7d429d315fbddadb2ad}} 
+\index{Endpoint@{Endpoint}!Close@{Close}}
+\index{Close@{Close}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Close()}{Close()}}
+{\footnotesize\ttfamily virtual int Endpoint\+::\+Close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+close the end-\/point 
+
+\begin{DoxyReturn}{Returns}
+int int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_endpoint_pnet_c_d_f_adad5a37732453d84f5cddaf967975665}{Endpoint\+Pnet\+CDF}}, \mbox{\hyperlink{class_endpoint_h_d_f5_ae31265783ff52f1f361d38343d7ca709}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_ae810354d998a6d90bd2b1660104c5431}{Endpoint\+DIR}}, \mbox{\hyperlink{class_endpoint_binary_a07f0537ebe2cbf0ead39a838139b3151}{Endpoint\+Binary}}, \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a0bd0956847eddffe1c9fde3730ad46e4}{Endpoint\+ADIOS}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_ab4ed7c34c4ae6cff1b9c8421c87a8231}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_ad469d082a014d0a45be6a892352527d4}\label{class_endpoint_ad469d082a014d0a45be6a892352527d4}} 
+\index{Endpoint@{Endpoint}!Control@{Control}}
+\index{Control@{Control}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Control()}{Control()}}
+{\footnotesize\ttfamily int Endpoint\+::\+Control (\begin{DoxyParamCaption}\item[{int}]{opt\+\_\+code,  }\item[{std\+::vector$<$ std\+::string $>$ \&}]{parameter\+\_\+v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+call a special operator on endpoint such as, enable collective I/O for HDF5 dump file from MEMORY to HDF5 
+
+
+\begin{DoxyParams}{Parameters}
+{\em opt\+\_\+code,specially} & defined code\\
+\hline
+\end{DoxyParams}
+call a special operator on endpoint such as, enable collective I/O for HDF5 dump file from MEMORY to HDF5 
+\begin{DoxyParams}{Parameters}
+{\em opt\+\_\+code,specially} & defined code \\
+\hline
+{\em parameter\+\_\+v,vector} & of argument \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_h_d_f5_ab920c5b3e03ee1a9a46708580ed08fc0}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_ada4a43db3db8861b254b6d51d3c4d92c}{Endpoint\+DIR}}, and \mbox{\hyperlink{class_endpoint_binary_af672d95bd8546b5192c10f01bd5603ab}{Endpoint\+Binary}}.
+
+\mbox{\Hypertarget{class_endpoint_add0ecdbfabcc9382356bbac955ddb638}\label{class_endpoint_add0ecdbfabcc9382356bbac955ddb638}} 
+\index{Endpoint@{Endpoint}!Create@{Create}}
+\index{Create@{Create}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Create()}{Create()}}
+{\footnotesize\ttfamily virtual int Endpoint\+::\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+create the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_endpoint_pnet_c_d_f_a2b56f9a12c5130ef687cd383353037ac}{Endpoint\+Pnet\+CDF}}, \mbox{\hyperlink{class_endpoint_h_d_f5_a32dd75613e841b1e09c0f8e0e6562db3}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_a12a310e7574318f9e297364957f7d268}{Endpoint\+DIR}}, \mbox{\hyperlink{class_endpoint_binary_a64fa51bfeb933f3308a7d9820e88074e}{Endpoint\+Binary}}, \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a313ef7aa354b507767517199a3e9695d}{Endpoint\+ADIOS}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a0ad58ca4a616e18fa2a885ca25ff14f3}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_af8c636c2a09098d6a7ba91dbef96e9ba}\label{class_endpoint_af8c636c2a09098d6a7ba91dbef96e9ba}} 
+\index{Endpoint@{Endpoint}!DisableCollectiveIO@{DisableCollectiveIO}}
+\index{DisableCollectiveIO@{DisableCollectiveIO}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{DisableCollectiveIO()}{DisableCollectiveIO()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Disable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_h_d_f5_ac47efc670b6a7fdc7233c241fdd10ee9}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_abf4f17346aaba8f4c7f6f8acfc74a99e}{Endpoint\+DIR}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a8b0a1b39539d18c8de3037e0f95ba32d}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_a53f5bcbf1fe56d9ebb56d270bb92311e}\label{class_endpoint_a53f5bcbf1fe56d9ebb56d270bb92311e}} 
+\index{Endpoint@{Endpoint}!EnableCollectiveIO@{EnableCollectiveIO}}
+\index{EnableCollectiveIO@{EnableCollectiveIO}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{EnableCollectiveIO()}{EnableCollectiveIO()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Enable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_h_d_f5_af261249fb08b0450020a5563fa91054c}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_abf94530078f36fe816a480cf9984c220}{Endpoint\+DIR}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a6113a3eb08313e6484e29780086821b3}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_a43bcd87f7b7da0b2eefd3010e06c5cd5}\label{class_endpoint_a43bcd87f7b7da0b2eefd3010e06c5cd5}} 
+\index{Endpoint@{Endpoint}!ExtractMeta@{ExtractMeta}}
+\index{ExtractMeta@{ExtractMeta}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{ExtractMeta()}{ExtractMeta()}}
+{\footnotesize\ttfamily virtual int Endpoint\+::\+Extract\+Meta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/other ep\+\_\+type dependents ones 
+
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_endpoint_t_d_m_s_a668afa7999a9793e6d3228d64f2d5bc1}{Endpoint\+TDMS}}, \mbox{\hyperlink{class_endpoint_pnet_c_d_f_a9fa8a859d23d57732e5bb8ba8a54a2d7}{Endpoint\+Pnet\+CDF}}, \mbox{\hyperlink{class_endpoint_h_d_f5_accec4de5d11d16cfe8c1bd2a58ed18ae}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_ab347946562a94e387487c4127e6efb8a}{Endpoint\+DIR}}, \mbox{\hyperlink{class_endpoint_binary_a098f2ed0120af63a9cc7e86b16449583}{Endpoint\+Binary}}, \mbox{\hyperlink{class_endpoint_a_d_i_o_s_ac64183230102718d9bf5d5a2b9bbcc55}{Endpoint\+ADIOS}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_aa13f836b34006efbcc1e4ec784ce95fa}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_aec350eedd85b64a9f261f8474aefd007}\label{class_endpoint_aec350eedd85b64a9f261f8474aefd007}} 
+\index{Endpoint@{Endpoint}!GetAttributeSize@{GetAttributeSize}}
+\index{GetAttributeSize@{GetAttributeSize}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetAttributeSize()}{GetAttributeSize()}}
+{\footnotesize\ttfamily int Endpoint\+::\+Get\+Attribute\+Size (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{data\+\_\+type\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_h_d_f5_a1b5dab772b82c1ffe89cf2a3cd788823}{Endpoint\+HDF5}}, and \mbox{\hyperlink{class_endpoint_d_i_r_aba554bd87c19d25a288513a6e148964a}{Endpoint\+DIR}}.
+
+\mbox{\Hypertarget{class_endpoint_a6d264cda70c8c268ac60ca5d21bfb299}\label{class_endpoint_a6d264cda70c8c268ac60ca5d21bfb299}} 
+\index{Endpoint@{Endpoint}!GetCreateFlag@{GetCreateFlag}}
+\index{GetCreateFlag@{GetCreateFlag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetCreateFlag()}{GetCreateFlag()}}
+{\footnotesize\ttfamily bool Endpoint\+::\+Get\+Create\+Flag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_a847890c421f27a882d481e48f136b52c}\label{class_endpoint_a847890c421f27a882d481e48f136b52c}} 
+\index{Endpoint@{Endpoint}!GetDataElementType@{GetDataElementType}}
+\index{GetDataElementType@{GetDataElementType}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetDataElementType()}{GetDataElementType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} Endpoint\+::\+Get\+Data\+Element\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the Type of Data Element. 
+
+\begin{DoxyReturn}{Returns}
+Au\+Endpoint\+Data\+Type 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_a17fbafbe07043e606235ff7bb29166af}\label{class_endpoint_a17fbafbe07043e606235ff7bb29166af}} 
+\index{Endpoint@{Endpoint}!GetDataElementTypeSize@{GetDataElementTypeSize}}
+\index{GetDataElementTypeSize@{GetDataElementTypeSize}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetDataElementTypeSize()}{GetDataElementTypeSize()}}
+{\footnotesize\ttfamily int Endpoint\+::\+Get\+Data\+Element\+Type\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the size of the type for the element. 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_aed5b34af06fd01e21c4a1519a7204f96}\label{class_endpoint_aed5b34af06fd01e21c4a1519a7204f96}} 
+\index{Endpoint@{Endpoint}!GetDimensions@{GetDimensions}}
+\index{GetDimensions@{GetDimensions}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetDimensions()}{GetDimensions()}}
+{\footnotesize\ttfamily std\+::vector$<$ unsigned long long $>$ Endpoint\+::\+Get\+Dimensions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the Dimensions of the data. 
+
+\begin{DoxyReturn}{Returns}
+vector for the size of data endpoint\+\_\+dim\+\_\+size.\+size() is the rank
+\end{DoxyReturn}
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory
+
+\begin{DoxyReturn}{Returns}
+vector for the size of data endpoint\+\_\+dim\+\_\+size.\+size() is the rank 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_a5c16bba6a4878414b4a375a17d6a06ac}\label{class_endpoint_a5c16bba6a4878414b4a375a17d6a06ac}} 
+\index{Endpoint@{Endpoint}!GetDirChunkSize@{GetDirChunkSize}}
+\index{GetDirChunkSize@{GetDirChunkSize}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetDirChunkSize()}{GetDirChunkSize()}}
+{\footnotesize\ttfamily std\+::vector$<$ int $>$ Endpoint\+::\+Get\+Dir\+Chunk\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Get the Dir Chunk Size object. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$int$>$ 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_d_i_r_af94f6284126a7fed85f54c6a9d012a3c}{Endpoint\+DIR}}.
+
+\mbox{\Hypertarget{class_endpoint_ab22a5ddcc29289e68e28df993db16595}\label{class_endpoint_ab22a5ddcc29289e68e28df993db16595}} 
+\index{Endpoint@{Endpoint}!GetDirFileVector@{GetDirFileVector}}
+\index{GetDirFileVector@{GetDirFileVector}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetDirFileVector()}{GetDirFileVector()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ Endpoint\+::\+Get\+Dir\+File\+Vector (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Get the Dir File Vector object. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$std\+::string$>$ 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_d_i_r_a520b2318f2cd61fae46d1d13730a4bfe}{Endpoint\+DIR}}.
+
+\mbox{\Hypertarget{class_endpoint_a51665a0bc4d245e087b49f4e00614893}\label{class_endpoint_a51665a0bc4d245e087b49f4e00614893}} 
+\index{Endpoint@{Endpoint}!GetEndpointInfo@{GetEndpointInfo}}
+\index{GetEndpointInfo@{GetEndpointInfo}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetEndpointInfo()}{GetEndpointInfo()}}
+{\footnotesize\ttfamily std\+::string Endpoint\+::\+Get\+Endpoint\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the endpoint\+\_\+info string. 
+
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_af96fa347a90fe6015abe6b375f5d06a0}\label{class_endpoint_af96fa347a90fe6015abe6b375f5d06a0}} 
+\index{Endpoint@{Endpoint}!GetEndpointType@{GetEndpointType}}
+\index{GetEndpointType@{GetEndpointType}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetEndpointType()}{GetEndpointType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} Endpoint\+::\+Get\+Endpoint\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the \mbox{\hyperlink{class_endpoint}{Endpoint}} Type object. 
+
+\begin{DoxyReturn}{Returns}
+Au\+Endpoint\+Type 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_a1b7b0373ea823c2b2e3e2d1342e0d3af}\label{class_endpoint_a1b7b0373ea823c2b2e3e2d1342e0d3af}} 
+\index{Endpoint@{Endpoint}!GetOpenFlag@{GetOpenFlag}}
+\index{GetOpenFlag@{GetOpenFlag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetOpenFlag()}{GetOpenFlag()}}
+{\footnotesize\ttfamily bool Endpoint\+::\+Get\+Open\+Flag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_a15eb39ca6d803119be230809b2272b3a}\label{class_endpoint_a15eb39ca6d803119be230809b2272b3a}} 
+\index{Endpoint@{Endpoint}!GetRwFlag@{GetRwFlag}}
+\index{GetRwFlag@{GetRwFlag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetRwFlag()}{GetRwFlag()}}
+{\footnotesize\ttfamily unsigned Endpoint\+::\+Get\+Rw\+Flag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_a755ef0b10d5c4a639d9a11f5e1c7d9a3}\label{class_endpoint_a755ef0b10d5c4a639d9a11f5e1c7d9a3}} 
+\index{Endpoint@{Endpoint}!Map2MyType@{Map2MyType}}
+\index{Map2MyType@{Map2MyType}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Map2MyType()}{Map2MyType()}}
+{\footnotesize\ttfamily virtual void Endpoint\+::\+Map2\+My\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+call the finalize to close everything (like call Destractor) 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_endpoint_pnet_c_d_f_a685940182a2d9c3b6f5b988c3362af09}{Endpoint\+Pnet\+CDF}}, \mbox{\hyperlink{class_endpoint_h_d_f5_a83082e41a822ad0056007ff4e6aa1bb9}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_a99e204896e7830951c3337fbef507faf}{Endpoint\+DIR}}, \mbox{\hyperlink{class_endpoint_binary_a4a18bc2094d573849f5fe7b5c112a43b}{Endpoint\+Binary}}, \mbox{\hyperlink{class_endpoint_a_d_i_o_s_aed8537731e1fd6f51f08a484e7f34f62}{Endpoint\+ADIOS}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a783a2c9bf09fdc23823fe803fd8af35a}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_af4dd2b2ee92adc7860e5b8f3e8dfbb32}\label{class_endpoint_af4dd2b2ee92adc7860e5b8f3e8dfbb32}} 
+\index{Endpoint@{Endpoint}!MapOpInt2Str@{MapOpInt2Str}}
+\index{MapOpInt2Str@{MapOpInt2Str}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{MapOpInt2Str()}{MapOpInt2Str()}}
+{\footnotesize\ttfamily std\+::string Endpoint\+::\+Map\+Op\+Int2\+Str (\begin{DoxyParamCaption}\item[{int}]{op\+\_\+int }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+map op\+\_\+int to string 
+
+
+\begin{DoxyParams}{Parameters}
+{\em op\+\_\+int} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_binary_a6e00e97643db32892b95f7e59c88aa0b}{Endpoint\+Binary}}.
+
+\mbox{\Hypertarget{class_endpoint_a843d0df544c43b0aa0081ad17c9f854c}\label{class_endpoint_a843d0df544c43b0aa0081ad17c9f854c}} 
+\index{Endpoint@{Endpoint}!MapOpStr2Int@{MapOpStr2Int}}
+\index{MapOpStr2Int@{MapOpStr2Int}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{MapOpStr2Int()}{MapOpStr2Int()}}
+{\footnotesize\ttfamily int Endpoint\+::\+Map\+Op\+Str2\+Int (\begin{DoxyParamCaption}\item[{std\+::string}]{op\+\_\+cmd\+\_\+str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+map a op\+\_\+cmd\+\_\+str to int as input of Special\+Operator 
+
+
+\begin{DoxyParams}{Parameters}
+{\em op\+\_\+cmd\+\_\+str} & cmd string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_binary_a68320186a6789010a2c90790eccbcbf8}{Endpoint\+Binary}}.
+
+\mbox{\Hypertarget{class_endpoint_a481874b61d83081b4a96a0c2b21a8dbd}\label{class_endpoint_a481874b61d83081b4a96a0c2b21a8dbd}} 
+\index{Endpoint@{Endpoint}!Open@{Open}}
+\index{Open@{Open}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Open()}{Open()}}
+{\footnotesize\ttfamily virtual int Endpoint\+::\+Open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+open the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_endpoint_pnet_c_d_f_a58d1d99a375824d79076c24ac585cd62}{Endpoint\+Pnet\+CDF}}, \mbox{\hyperlink{class_endpoint_h_d_f5_aee7920b6a0c5444ead314e5c42aabbf8}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_ac35becfdd8a96791a1996bf0818f446a}{Endpoint\+DIR}}, \mbox{\hyperlink{class_endpoint_binary_a2d168b130be234c59468e12787d7d400}{Endpoint\+Binary}}, \mbox{\hyperlink{class_endpoint_a_d_i_o_s_ac48da881a222704b8c4cb1feb6f9dc2f}{Endpoint\+ADIOS}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_ade75c9e83f0eaff220657aa9f3ed9282}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_a973927c11f35be4f393f456a8b2e2a1e}\label{class_endpoint_a973927c11f35be4f393f456a8b2e2a1e}} 
+\index{Endpoint@{Endpoint}!ParseEndpointInfo@{ParseEndpointInfo}}
+\index{ParseEndpointInfo@{ParseEndpointInfo}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{ParseEndpointInfo()}{ParseEndpointInfo()}}
+{\footnotesize\ttfamily virtual int Endpoint\+::\+Parse\+Endpoint\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+parse endpoint\+\_\+info to my own info 
+
+\begin{DoxyReturn}{Returns}
+int\+: 0 works, $<$ 0 error, 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_endpoint_pnet_c_d_f_a3f22d6374f642ef2fada62551e1227d8}{Endpoint\+Pnet\+CDF}}, \mbox{\hyperlink{class_endpoint_h_d_f5_a0d51472f198239873e23df742b75e30a}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_a053ee1fa4e63e0264826c8f098cffcad}{Endpoint\+DIR}}, \mbox{\hyperlink{class_endpoint_binary_ad0e6536bc8ea78e618b96abbd2527863}{Endpoint\+Binary}}, \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a21046493d18d8c757eeb5306057387b0}{Endpoint\+ADIOS}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a81917fffc167025bd52cbb9a7193b702}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_af014eb78eb2097f23cd48d48c2004b16}\label{class_endpoint_af014eb78eb2097f23cd48d48c2004b16}} 
+\index{Endpoint@{Endpoint}!PrintInfo@{PrintInfo}}
+\index{PrintInfo@{PrintInfo}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{PrintInfo()}{PrintInfo()}}
+{\footnotesize\ttfamily virtual int Endpoint\+::\+Print\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+print information about the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_endpoint_pnet_c_d_f_a365a40d95b800c543b3c5e87321e4974}{Endpoint\+Pnet\+CDF}}, \mbox{\hyperlink{class_endpoint_h_d_f5_a4b64355179d33d15576071612e8cdc27}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_a0835da8836981bdebe12786adc93cb2a}{Endpoint\+DIR}}, \mbox{\hyperlink{class_endpoint_binary_ae59e1a805ae90dd0715d9e551b17f1c3}{Endpoint\+Binary}}, \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a4a6faef2368fa2fff86bfff9d2eb39ed}{Endpoint\+ADIOS}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a2d2d9a45998165cb5f9183de39333a21}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_a2ea7ed58e917ba63cb222ffbda09aa0c}\label{class_endpoint_a2ea7ed58e917ba63cb222ffbda09aa0c}} 
+\index{Endpoint@{Endpoint}!Read@{Read}}
+\index{Read@{Read}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}}
+{\footnotesize\ttfamily virtual int Endpoint\+::\+Read (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+read the data from end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_endpoint_pnet_c_d_f_a592dc09ee677561f9fe1144451311012}{Endpoint\+Pnet\+CDF}}, \mbox{\hyperlink{class_endpoint_h_d_f5_ac0454482c63e852009fec81faa488e50}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_a3fb2183436f1425433b68f9216a89a55}{Endpoint\+DIR}}, \mbox{\hyperlink{class_endpoint_binary_af970026ed7a7adfac906be740b952f29}{Endpoint\+Binary}}, \mbox{\hyperlink{class_endpoint_a_d_i_o_s_af860bada32ada8f6d03f997017093d37}{Endpoint\+ADIOS}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a08e8cb0fc299971c0d6754d8d2fce0d6}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_a1a12705a507c7a8d2fa1cb470d49c11a}\label{class_endpoint_a1a12705a507c7a8d2fa1cb470d49c11a}} 
+\index{Endpoint@{Endpoint}!ReadAttribute@{ReadAttribute}}
+\index{ReadAttribute@{ReadAttribute}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{ReadAttribute()}{ReadAttribute()}}
+{\footnotesize\ttfamily int Endpoint\+::\+Read\+Attribute (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{void $\ast$}]{data,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{data\+\_\+type\+\_\+p,  }\item[{const size\+\_\+t \&}]{data\+\_\+length\+\_\+p = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Get the Attribute object Do not need to be pure virtual method. 
+
+Get the Attribute object.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \\
+\hline
+{\em data} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_h_d_f5_a926333246a65281d1f9e6b8e32788b43}{Endpoint\+HDF5}}, and \mbox{\hyperlink{class_endpoint_d_i_r_a402be6945f57628a3ba71d2deff79444}{Endpoint\+DIR}}.
+
+\mbox{\Hypertarget{class_endpoint_a55aba380dcaceab6b8f80ae72a78878d}\label{class_endpoint_a55aba380dcaceab6b8f80ae72a78878d}} 
+\index{Endpoint@{Endpoint}!SetCreateFlag@{SetCreateFlag}}
+\index{SetCreateFlag@{SetCreateFlag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{SetCreateFlag()}{SetCreateFlag()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Set\+Create\+Flag (\begin{DoxyParamCaption}\item[{bool}]{open\+\_\+flag\+\_\+p }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_a62e3daa09dbf44bf959618ee9268a931}\label{class_endpoint_a62e3daa09dbf44bf959618ee9268a931}} 
+\index{Endpoint@{Endpoint}!SetDataElementType@{SetDataElementType}}
+\index{SetDataElementType@{SetDataElementType}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{SetDataElementType()}{SetDataElementType()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Set\+Data\+Element\+Type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}}}]{data\+\_\+element\+\_\+type\+\_\+p }\end{DoxyParamCaption})}
+
+
+
+set the type of data element 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+element\+\_\+type\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_a765f413661414c530ecf0ec7fe7da936}\label{class_endpoint_a765f413661414c530ecf0ec7fe7da936}} 
+\index{Endpoint@{Endpoint}!SetDimensions@{SetDimensions}}
+\index{SetDimensions@{SetDimensions}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{SetDimensions()}{SetDimensions()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Set\+Dimensions (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{endpoint\+\_\+dim\+\_\+size\+\_\+p }\end{DoxyParamCaption})}
+
+
+
+Set the Dimensions. 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, works otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_ab58739c271672f2559b13b5bda71445b}\label{class_endpoint_ab58739c271672f2559b13b5bda71445b}} 
+\index{Endpoint@{Endpoint}!SetDirChunkSize@{SetDirChunkSize}}
+\index{SetDirChunkSize@{SetDirChunkSize}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{SetDirChunkSize()}{SetDirChunkSize()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Set\+Dir\+Chunk\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{dir\+\_\+chunk\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Set the Dir Chunk Size object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dir\+\_\+chunk\+\_\+size\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_d_i_r_ab6756d3423a0a56b530f12b81358e176}{Endpoint\+DIR}}.
+
+\mbox{\Hypertarget{class_endpoint_ad97cb0d1525ac7cd27711922e095d2bc}\label{class_endpoint_ad97cb0d1525ac7cd27711922e095d2bc}} 
+\index{Endpoint@{Endpoint}!SetDirFileVector@{SetDirFileVector}}
+\index{SetDirFileVector@{SetDirFileVector}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{SetDirFileVector()}{SetDirFileVector()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Set\+Dir\+File\+Vector (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::string $>$ \&}]{file\+\_\+list }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Set the Dir File Vector object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+\_\+list} & \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_d_i_r_a5641f495d44dd17dc800b5b02976d52e}{Endpoint\+DIR}}.
+
+\mbox{\Hypertarget{class_endpoint_a59f729f946d46ef48bc6a17fcb29241f}\label{class_endpoint_a59f729f946d46ef48bc6a17fcb29241f}} 
+\index{Endpoint@{Endpoint}!SetEndpointInfo@{SetEndpointInfo}}
+\index{SetEndpointInfo@{SetEndpointInfo}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{SetEndpointInfo()}{SetEndpointInfo()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Set\+Endpoint\+Info (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+info\+\_\+p }\end{DoxyParamCaption})}
+
+
+
+set the endpoint\+\_\+info string 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint\+\_\+info} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_a73b581813f9a33ed3c48c9544a9dc7b3}\label{class_endpoint_a73b581813f9a33ed3c48c9544a9dc7b3}} 
+\index{Endpoint@{Endpoint}!SetEndpointType@{SetEndpointType}}
+\index{SetEndpointType@{SetEndpointType}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{SetEndpointType()}{SetEndpointType()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Set\+Endpoint\+Type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}}}]{endpoint\+\_\+type\+\_\+p }\end{DoxyParamCaption})}
+
+
+
+Set the \mbox{\hyperlink{class_endpoint}{Endpoint}} Type object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint\+\_\+type\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_aa1fa8caaf40b48a729a81a6e74d27bf8}\label{class_endpoint_aa1fa8caaf40b48a729a81a6e74d27bf8}} 
+\index{Endpoint@{Endpoint}!SetOpenFlag@{SetOpenFlag}}
+\index{SetOpenFlag@{SetOpenFlag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{SetOpenFlag()}{SetOpenFlag()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Set\+Open\+Flag (\begin{DoxyParamCaption}\item[{bool}]{open\+\_\+flag\+\_\+p }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_afeeebde30f360f8d92c9058ef5a51fa6}\label{class_endpoint_afeeebde30f360f8d92c9058ef5a51fa6}} 
+\index{Endpoint@{Endpoint}!SetRwFlag@{SetRwFlag}}
+\index{SetRwFlag@{SetRwFlag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{SetRwFlag()}{SetRwFlag()}}
+{\footnotesize\ttfamily void Endpoint\+::\+Set\+Rw\+Flag (\begin{DoxyParamCaption}\item[{unsigned}]{read\+\_\+write\+\_\+flag\+\_\+p }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_endpoint_adbacf27482b32ffa60dafa45c431c0f6}\label{class_endpoint_adbacf27482b32ffa60dafa45c431c0f6}} 
+\index{Endpoint@{Endpoint}!Union2Void@{Union2Void}}
+\index{Union2Void@{Union2Void}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Union2Void()}{Union2Void()}}
+{\footnotesize\ttfamily void $\ast$ Endpoint\+::\+Union2\+Void (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}{Au\+Endpoint\+Data\+Type\+Union}} $>$ \&}]{data\+\_\+vector\+\_\+in\+\_\+union\+\_\+type }\end{DoxyParamCaption})}
+
+
+
+convert data from union to void type 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+vector\+\_\+in\+\_\+union\+\_\+type} & \+: vector of data in union type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void$\ast$ \+: pointer to data (for write) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_a4c42cd9b10558a4567ee0d7eb5160022}\label{class_endpoint_a4c42cd9b10558a4567ee0d7eb5160022}} 
+\index{Endpoint@{Endpoint}!Void2Union@{Void2Union}}
+\index{Void2Union@{Void2Union}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Void2Union()}{Void2Union()}}
+{\footnotesize\ttfamily std\+::vector$<$ \mbox{\hyperlink{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}{Au\+Endpoint\+Data\+Type\+Union}} $>$ Endpoint\+::\+Void2\+Union (\begin{DoxyParamCaption}\item[{void $\ast$}]{vp,  }\item[{size\+\_\+t}]{n\+\_\+elements }\end{DoxyParamCaption})}
+
+
+
+convert my data in (void $\ast$) type to Union type 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vp} & \+: pointer to data (after read) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+Au\+Endpoint\+Data\+Type\+Union$>$ \+: return value 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_a4bcb3e885bfb1343c610a3163fc01c77}\label{class_endpoint_a4bcb3e885bfb1343c610a3163fc01c77}} 
+\index{Endpoint@{Endpoint}!Write@{Write}}
+\index{Write@{Write}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{Write()}{Write()}}
+{\footnotesize\ttfamily virtual int Endpoint\+::\+Write (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+write the data to the end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_endpoint_pnet_c_d_f_a70dfd37217ba4472239fcfcf4117e5b5}{Endpoint\+Pnet\+CDF}}, \mbox{\hyperlink{class_endpoint_h_d_f5_aaf26e458676e00b3eff69ceaf0bde72d}{Endpoint\+HDF5}}, \mbox{\hyperlink{class_endpoint_d_i_r_a850f021afe74c9ceccef0f428eb54898}{Endpoint\+DIR}}, \mbox{\hyperlink{class_endpoint_binary_aa78096ac8a3283a0d56c22f9f6a9bfd0}{Endpoint\+Binary}}, \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a4c34266d48d3fb7919ca773cda86c678}{Endpoint\+ADIOS}}, and \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a07570e7d3fe54f22968f286c838e9c16}{Endpoint\+MEMORY}}.
+
+\mbox{\Hypertarget{class_endpoint_aecfbfb70e1b63027f447628f94e2bc35}\label{class_endpoint_aecfbfb70e1b63027f447628f94e2bc35}} 
+\index{Endpoint@{Endpoint}!WriteAttribute@{WriteAttribute}}
+\index{WriteAttribute@{WriteAttribute}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{WriteAttribute()}{WriteAttribute()}}
+{\footnotesize\ttfamily int Endpoint\+::\+Write\+Attribute (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const void $\ast$}]{data,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{data\+\_\+type\+\_\+p,  }\item[{const size\+\_\+t \&}]{data\+\_\+length\+\_\+p = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Set the Attribute object Do not need to be pure virtual method. 
+
+Set the Attribute object.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \\
+\hline
+{\em data} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_h_d_f5_a5f5ff432638d4560585eabfa9afef3d8}{Endpoint\+HDF5}}, and \mbox{\hyperlink{class_endpoint_d_i_r_a2af36c64dc85663aad82b515f452d0ce}{Endpoint\+DIR}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_endpoint_a978064e4f5466519ad156ef594a72459}\label{class_endpoint_a978064e4f5466519ad156ef594a72459}} 
+\index{Endpoint@{Endpoint}!create\_flag@{create\_flag}}
+\index{create\_flag@{create\_flag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{create\_flag}{create\_flag}}
+{\footnotesize\ttfamily bool Endpoint\+::create\+\_\+flag = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_endpoint_aad1ddf047697536ddcaa6990e7bfa37a}\label{class_endpoint_aad1ddf047697536ddcaa6990e7bfa37a}} 
+\index{Endpoint@{Endpoint}!data\_element\_type@{data\_element\_type}}
+\index{data\_element\_type@{data\_element\_type}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{data\_element\_type}{data\_element\_type}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} Endpoint\+::data\+\_\+element\+\_\+type\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_endpoint_a051d0e934e5454072ffdc3e939ffca4c}\label{class_endpoint_a051d0e934e5454072ffdc3e939ffca4c}} 
+\index{Endpoint@{Endpoint}!data\_endpoint\_orig@{data\_endpoint\_orig}}
+\index{data\_endpoint\_orig@{data\_endpoint\_orig}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{data\_endpoint\_orig}{data\_endpoint\_orig}}
+{\footnotesize\ttfamily std\+::string Endpoint\+::data\+\_\+endpoint\+\_\+orig\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_endpoint_acbd327c08c76a6ae61e58a1802319402}\label{class_endpoint_acbd327c08c76a6ae61e58a1802319402}} 
+\index{Endpoint@{Endpoint}!endpoint\_info@{endpoint\_info}}
+\index{endpoint\_info@{endpoint\_info}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{endpoint\_info}{endpoint\_info}}
+{\footnotesize\ttfamily std\+::string Endpoint\+::endpoint\+\_\+info\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_endpoint_a25188f3dad4d8606368f3355850c02b3}\label{class_endpoint_a25188f3dad4d8606368f3355850c02b3}} 
+\index{Endpoint@{Endpoint}!endpoint\_ranks@{endpoint\_ranks}}
+\index{endpoint\_ranks@{endpoint\_ranks}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{endpoint\_ranks}{endpoint\_ranks}}
+{\footnotesize\ttfamily int Endpoint\+::endpoint\+\_\+ranks\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_endpoint_a3ce9756fcb2baed8eaef1298ab3be15c}\label{class_endpoint_a3ce9756fcb2baed8eaef1298ab3be15c}} 
+\index{Endpoint@{Endpoint}!endpoint\_size@{endpoint\_size}}
+\index{endpoint\_size@{endpoint\_size}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{endpoint\_size}{endpoint\_size}}
+{\footnotesize\ttfamily std\+::vector$<$unsigned long long$>$ Endpoint\+::endpoint\+\_\+size\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_endpoint_a0974db1dbe4efb77766f08fc2a93ec66}\label{class_endpoint_a0974db1dbe4efb77766f08fc2a93ec66}} 
+\index{Endpoint@{Endpoint}!endpoint\_type@{endpoint\_type}}
+\index{endpoint\_type@{endpoint\_type}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{endpoint\_type}{endpoint\_type}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} Endpoint\+::endpoint\+\_\+type\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_endpoint_a521a4568a888a64f769ef3a38bd44a65}\label{class_endpoint_a521a4568a888a64f769ef3a38bd44a65}} 
+\index{Endpoint@{Endpoint}!open\_flag@{open\_flag}}
+\index{open\_flag@{open\_flag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{open\_flag}{open\_flag}}
+{\footnotesize\ttfamily bool Endpoint\+::open\+\_\+flag = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_endpoint_a9057641edd0c6ed840016b7e6b191688}\label{class_endpoint_a9057641edd0c6ed840016b7e6b191688}} 
+\index{Endpoint@{Endpoint}!read\_write\_flag@{read\_write\_flag}}
+\index{read\_write\_flag@{read\_write\_flag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{read\_write\_flag}{read\_write\_flag}}
+{\footnotesize\ttfamily unsigned Endpoint\+::read\+\_\+write\+\_\+flag\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_endpoint_aa555ee5a5cd914f8581fc84106800459}\label{class_endpoint_aa555ee5a5cd914f8581fc84106800459}} 
+\index{Endpoint@{Endpoint}!set\_endpoint\_dim\_size\_flag@{set\_endpoint\_dim\_size\_flag}}
+\index{set\_endpoint\_dim\_size\_flag@{set\_endpoint\_dim\_size\_flag}!Endpoint@{Endpoint}}
+\doxysubsubsection{\texorpdfstring{set\_endpoint\_dim\_size\_flag}{set\_endpoint\_dim\_size\_flag}}
+{\footnotesize\ttfamily bool Endpoint\+::set\+\_\+endpoint\+\_\+dim\+\_\+size\+\_\+flag = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__endpoint_8h}{ft\+\_\+endpoint.\+h}}\item 
+\mbox{\hyperlink{ft__endpoint_8cpp}{ft\+\_\+endpoint.\+cpp}}\end{DoxyCompactItemize}

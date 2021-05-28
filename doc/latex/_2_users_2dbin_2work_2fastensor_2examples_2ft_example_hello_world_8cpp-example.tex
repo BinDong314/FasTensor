@@ -1,0 +1,105 @@
+\hypertarget{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_hello_world_8cpp-example}{}\doxysection{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+hello\+\_\+world.\+cpp}
+This example show how to setup basic environment for Fas\+Tensor . ~\newline
+ \begin{DoxyAuthor}{Author}
+Bin Dong (\href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/05-\/28
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021
+\end{DoxyCopyright}
+
+\begin{DoxyCodeInclude}{0}
+\DoxyCodeLine{\textcolor{comment}{/*}}
+\DoxyCodeLine{\textcolor{comment}{****************************}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{FasTensor (FT) Copyright (c) 2021, The Regents of the University of}}
+\DoxyCodeLine{\textcolor{comment}{California, through Lawrence Berkeley National Laboratory (subject to}}
+\DoxyCodeLine{\textcolor{comment}{receipt of any required approvals from the U.S. Dept. of Energy). }}
+\DoxyCodeLine{\textcolor{comment}{All rights reserved.}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{If you have questions about your rights to use or distribute this software,}}
+\DoxyCodeLine{\textcolor{comment}{please contact Berkeley Lab's Intellectual Property Office at}}
+\DoxyCodeLine{\textcolor{comment}{IPO@lbl.gov.}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{NOTICE.  This Software was developed under funding from the U.S. Department}}
+\DoxyCodeLine{\textcolor{comment}{of Energy and the U.S. Government consequently retains certain rights.  As}}
+\DoxyCodeLine{\textcolor{comment}{such, the U.S. Government has been granted for itself and others acting on}}
+\DoxyCodeLine{\textcolor{comment}{its behalf a paid-\/up, nonexclusive, irrevocable, worldwide license in the}}
+\DoxyCodeLine{\textcolor{comment}{Software to reproduce, distribute copies to the public, prepare derivative }}
+\DoxyCodeLine{\textcolor{comment}{works, and perform publicly and display publicly, and to permit others to do so.}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{****************************}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{*** License Agreement ***}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{FasTensor (FT) Copyright (c) 2021, The Regents of the University of}}
+\DoxyCodeLine{\textcolor{comment}{California, through Lawrence Berkeley National Laboratory (subject to}}
+\DoxyCodeLine{\textcolor{comment}{receipt of any required approvals from the U.S. Dept. of Energy). }}
+\DoxyCodeLine{\textcolor{comment}{All rights reserved.}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{Redistribution and use in source and binary forms, with or without}}
+\DoxyCodeLine{\textcolor{comment}{modification, are permitted provided that the following conditions are met:}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{(1) Redistributions of source code must retain the above copyright notice,}}
+\DoxyCodeLine{\textcolor{comment}{this list of conditions and the following disclaimer.}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{(2) Redistributions in binary form must reproduce the above copyright}}
+\DoxyCodeLine{\textcolor{comment}{notice, this list of conditions and the following disclaimer in the}}
+\DoxyCodeLine{\textcolor{comment}{documentation and/or other materials provided with the distribution.}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{(3) Neither the name of the University of California, Lawrence Berkeley}}
+\DoxyCodeLine{\textcolor{comment}{National Laboratory, U.S. Dept. of Energy nor the names of its contributors}}
+\DoxyCodeLine{\textcolor{comment}{may be used to endorse or promote products derived from this software}}
+\DoxyCodeLine{\textcolor{comment}{without specific prior written permission.}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "{}AS IS"{}}}
+\DoxyCodeLine{\textcolor{comment}{AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE}}
+\DoxyCodeLine{\textcolor{comment}{IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE}}
+\DoxyCodeLine{\textcolor{comment}{ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE}}
+\DoxyCodeLine{\textcolor{comment}{LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR}}
+\DoxyCodeLine{\textcolor{comment}{CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF}}
+\DoxyCodeLine{\textcolor{comment}{SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS}}
+\DoxyCodeLine{\textcolor{comment}{INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN}}
+\DoxyCodeLine{\textcolor{comment}{CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)}}
+\DoxyCodeLine{\textcolor{comment}{ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE}}
+\DoxyCodeLine{\textcolor{comment}{POSSIBILITY OF SUCH DAMAGE.}}
+\DoxyCodeLine{\textcolor{comment}{}}
+\DoxyCodeLine{\textcolor{comment}{You are under no obligation whatsoever to provide any bug fixes, patches,}}
+\DoxyCodeLine{\textcolor{comment}{or upgrades to the features, functionality or performance of the source}}
+\DoxyCodeLine{\textcolor{comment}{code ("{}Enhancements"{}) to anyone; however, if you choose to make your}}
+\DoxyCodeLine{\textcolor{comment}{Enhancements available either publicly, or directly to Lawrence Berkeley}}
+\DoxyCodeLine{\textcolor{comment}{National Laboratory, without imposing a separate written license agreement}}
+\DoxyCodeLine{\textcolor{comment}{for such Enhancements, then you hereby grant the following license: a}}
+\DoxyCodeLine{\textcolor{comment}{non-\/exclusive, royalty-\/free perpetual license to install, use, modify,}}
+\DoxyCodeLine{\textcolor{comment}{prepare derivative works, incorporate into other computer software,}}
+\DoxyCodeLine{\textcolor{comment}{distribute, and sublicense such enhancements or derivative works thereof,}}
+\DoxyCodeLine{\textcolor{comment}{in binary and source code form.}}
+\DoxyCodeLine{\textcolor{comment}{*/}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{ft_8h}{ft.h}}"{}}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{using namespace }std;}
+\DoxyCodeLine{\textcolor{keyword}{using namespace }\mbox{\hyperlink{namespace_f_t}{FT}};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{int} \mbox{\hyperlink{au__example__1f1p_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char} *argv[])}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{    \textcolor{comment}{//Init the ArrayUDF, MPI, etc.}}
+\DoxyCodeLine{    \mbox{\hyperlink{ft_8h_a431d3e09d3b2d6ce2bb5944af7e73ee7}{AU\_Init}}(argc, argv);}
+\DoxyCodeLine{}
+\DoxyCodeLine{    cout << \textcolor{stringliteral}{"{}Hello word!"{}} << endl;}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \mbox{\hyperlink{ft_8h_a52987d19f550018ced56aa710d9979b4}{AU\_Finalize}}();}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCodeInclude}
+ 

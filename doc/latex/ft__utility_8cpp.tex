@@ -1,0 +1,139 @@
+\hypertarget{ft__utility_8cpp}{}\doxysection{ft\+\_\+utility.\+cpp File Reference}
+\label{ft__utility_8cpp}\index{ft\_utility.cpp@{ft\_utility.cpp}}
+{\ttfamily \#include \char`\"{}ft\+\_\+utility.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$limits.\+h$>$}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{ft__utility_8cpp_a7c5f0884e04ebd10227aa82cb66ebd61}{realpath\+Ex}} (std\+::string path)
+\begin{DoxyCompactList}\small\item\em expand the path to full directory \href{https://www.dreamincode.net/forums/topic/218601-realpath-and-tilde/}{\texttt{ https\+://www.\+dreamincode.\+net/forums/topic/218601-\/realpath-\/and-\/tilde/}} \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ft__utility_8cpp_a5f6e25362bb25b4301fe8736e308751d}{Extract\+Endpoint\+Type\+Info}} (std\+::string endpoint\+\_\+type\+\_\+info, \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \&endpoint\+\_\+type, std\+::string \&endpoint\+\_\+info)
+\begin{DoxyCompactList}\small\item\em Split endpoint\+\_\+type\+\_\+info string to type and information. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ft__utility_8cpp_ae51b692bea533096e5839a3dc5500780}{file\+\_\+exist}} (const char $\ast$filename)
+\begin{DoxyCompactList}\small\item\em Check wether the file exists. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{ft__utility_8cpp_a5d6a1a80f07a9e010461db5f66544a69}{Extract\+File\+Name}} (const std\+::string \&full\+Path)
+\item 
+std\+::string \mbox{\hyperlink{ft__utility_8cpp_a0df160ce239e76e09b19432d28e15670}{Extract\+Path}} (const std\+::string \&full\+Path)
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{ft__utility_8cpp_a507561a48b2245fee377dffb566a5925}{Get\+Dir\+File\+List}} (std\+::string dir\+\_\+str\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Get file list of a direction. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \mbox{\hyperlink{ft__utility_8cpp_a68828c4c089049b3bf1c9f3389e91e13}{Map\+String2\+Endpoint\+Type}} (std\+::string endpoint\+\_\+type\+\_\+str)
+\begin{DoxyCompactList}\small\item\em map string typed name of type to Au\+Endpoint\+Type \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__utility_8cpp_a5f6e25362bb25b4301fe8736e308751d}\label{ft__utility_8cpp_a5f6e25362bb25b4301fe8736e308751d}} 
+\index{ft\_utility.cpp@{ft\_utility.cpp}!ExtractEndpointTypeInfo@{ExtractEndpointTypeInfo}}
+\index{ExtractEndpointTypeInfo@{ExtractEndpointTypeInfo}!ft\_utility.cpp@{ft\_utility.cpp}}
+\doxysubsubsection{\texorpdfstring{ExtractEndpointTypeInfo()}{ExtractEndpointTypeInfo()}}
+{\footnotesize\ttfamily int Extract\+Endpoint\+Type\+Info (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+type\+\_\+info,  }\item[{\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \&}]{endpoint\+\_\+type,  }\item[{std\+::string \&}]{endpoint\+\_\+info }\end{DoxyParamCaption})}
+
+
+
+Split endpoint\+\_\+type\+\_\+info string to type and information. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint\+\_\+type\+\_\+info,information} & string for the endpoint \\
+\hline
+{\em endpoint\+\_\+type,output} & value containing the type \\
+\hline
+{\em endpoint\+\_\+info,output} & value containging all other parts \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8cpp_a5d6a1a80f07a9e010461db5f66544a69}\label{ft__utility_8cpp_a5d6a1a80f07a9e010461db5f66544a69}} 
+\index{ft\_utility.cpp@{ft\_utility.cpp}!ExtractFileName@{ExtractFileName}}
+\index{ExtractFileName@{ExtractFileName}!ft\_utility.cpp@{ft\_utility.cpp}}
+\doxysubsubsection{\texorpdfstring{ExtractFileName()}{ExtractFileName()}}
+{\footnotesize\ttfamily std\+::string Extract\+File\+Name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{full\+Path }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em full\+Path} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8cpp_a0df160ce239e76e09b19432d28e15670}\label{ft__utility_8cpp_a0df160ce239e76e09b19432d28e15670}} 
+\index{ft\_utility.cpp@{ft\_utility.cpp}!ExtractPath@{ExtractPath}}
+\index{ExtractPath@{ExtractPath}!ft\_utility.cpp@{ft\_utility.cpp}}
+\doxysubsubsection{\texorpdfstring{ExtractPath()}{ExtractPath()}}
+{\footnotesize\ttfamily std\+::string Extract\+Path (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{full\+Path }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em full\+Path} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8cpp_ae51b692bea533096e5839a3dc5500780}\label{ft__utility_8cpp_ae51b692bea533096e5839a3dc5500780}} 
+\index{ft\_utility.cpp@{ft\_utility.cpp}!file\_exist@{file\_exist}}
+\index{file\_exist@{file\_exist}!ft\_utility.cpp@{ft\_utility.cpp}}
+\doxysubsubsection{\texorpdfstring{file\_exist()}{file\_exist()}}
+{\footnotesize\ttfamily int file\+\_\+exist (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename }\end{DoxyParamCaption})}
+
+
+
+Check wether the file exists. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8cpp_a507561a48b2245fee377dffb566a5925}\label{ft__utility_8cpp_a507561a48b2245fee377dffb566a5925}} 
+\index{ft\_utility.cpp@{ft\_utility.cpp}!GetDirFileList@{GetDirFileList}}
+\index{GetDirFileList@{GetDirFileList}!ft\_utility.cpp@{ft\_utility.cpp}}
+\doxysubsubsection{\texorpdfstring{GetDirFileList()}{GetDirFileList()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ Get\+Dir\+File\+List (\begin{DoxyParamCaption}\item[{std\+::string}]{dir\+\_\+str\+\_\+p }\end{DoxyParamCaption})}
+
+
+
+Get file list of a direction. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dir\+\_\+str\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$std\+::string$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8cpp_a68828c4c089049b3bf1c9f3389e91e13}\label{ft__utility_8cpp_a68828c4c089049b3bf1c9f3389e91e13}} 
+\index{ft\_utility.cpp@{ft\_utility.cpp}!MapString2EndpointType@{MapString2EndpointType}}
+\index{MapString2EndpointType@{MapString2EndpointType}!ft\_utility.cpp@{ft\_utility.cpp}}
+\doxysubsubsection{\texorpdfstring{MapString2EndpointType()}{MapString2EndpointType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} Map\+String2\+Endpoint\+Type (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+type\+\_\+str }\end{DoxyParamCaption})}
+
+
+
+map string typed name of type to Au\+Endpoint\+Type 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint\+\_\+type\+\_\+str} & input of string name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Au\+Endpoint\+Type output of type
+\end{DoxyReturn}
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__utility_8cpp_a7c5f0884e04ebd10227aa82cb66ebd61}\label{ft__utility_8cpp_a7c5f0884e04ebd10227aa82cb66ebd61}} 
+\index{ft\_utility.cpp@{ft\_utility.cpp}!realpathEx@{realpathEx}}
+\index{realpathEx@{realpathEx}!ft\_utility.cpp@{ft\_utility.cpp}}
+\doxysubsubsection{\texorpdfstring{realpathEx()}{realpathEx()}}
+{\footnotesize\ttfamily std\+::string realpath\+Ex (\begin{DoxyParamCaption}\item[{std\+::string}]{path }\end{DoxyParamCaption})}
+
+
+
+expand the path to full directory \href{https://www.dreamincode.net/forums/topic/218601-realpath-and-tilde/}{\texttt{ https\+://www.\+dreamincode.\+net/forums/topic/218601-\/realpath-\/and-\/tilde/}} 
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 

@@ -1,0 +1,354 @@
+\hypertarget{ft__utility_8h}{}\doxysection{ft\+\_\+utility.\+h File Reference}
+\label{ft__utility_8h}\index{ft\_utility.h@{ft\_utility.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$type\+\_\+traits$>$}\newline
+{\ttfamily \#include $<$cstring$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$sys/types.\+h$>$}\newline
+{\ttfamily \#include $<$sys/stat.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$tuple$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$iterator$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include $<$variant$>$}\newline
+{\ttfamily \#include $<$dirent.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+type.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+utility\+\_\+macro.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$iomanip$>$}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__utility_8h_aa823b44c4dcbd1ba281668ede3fffe78}{V2\+VOIDP}}(vv)~static\+\_\+cast$<$void $\ast$$>$(vv.\+data())
+\item 
+\#define \mbox{\hyperlink{ft__utility_8h_aabfb3e4c40c45ea32d47b84f887a76b5}{Extract\+Attribute\+From\+Virtual\+Array\+Vector\+\_\+\+HELPER}}(ELEMENT\+\_\+\+TYPE)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{ft__utility_8h_a7c5f0884e04ebd10227aa82cb66ebd61}{realpath\+Ex}} (std\+::string path)
+\begin{DoxyCompactList}\small\item\em expand the path to full directory \href{https://www.dreamincode.net/forums/topic/218601-realpath-and-tilde/}{\texttt{ https\+://www.\+dreamincode.\+net/forums/topic/218601-\/realpath-\/and-\/tilde/}} \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{ft__utility_8h_a507561a48b2245fee377dffb566a5925}{Get\+Dir\+File\+List}} (std\+::string dir\+\_\+str\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Get file list of a direction. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ft__utility_8h_a5f6e25362bb25b4301fe8736e308751d}{Extract\+Endpoint\+Type\+Info}} (std\+::string endpoint\+\_\+type\+\_\+info, \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \&endpoint\+\_\+type, std\+::string \&endpoint\+\_\+info)
+\begin{DoxyCompactList}\small\item\em Split endpoint\+\_\+type\+\_\+info string to type and information. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ft__utility_8h_ae51b692bea533096e5839a3dc5500780}{file\+\_\+exist}} (const char $\ast$filename)
+\begin{DoxyCompactList}\small\item\em Check wether the file exists. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{ft__utility_8h_a5d6a1a80f07a9e010461db5f66544a69}{Extract\+File\+Name}} (const std\+::string \&full\+Path)
+\item 
+std\+::string \mbox{\hyperlink{ft__utility_8h_a0df160ce239e76e09b19432d28e15670}{Extract\+Path}} (const std\+::string \&full\+Path)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{ft__utility_8h_a3bb8c3c86721391778ec4ce4ca4969ed}{Print\+Vector}} (std\+::string name, std\+::vector$<$ T $>$ v)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{ft__utility_8h_a0fe4c9435ffb2de148c32151d5b47e2c}{Print\+VV}} (std\+::string name, std\+::vector$<$ std\+::vector$<$ T $>$$>$ v)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{ft__utility_8h_adba28896bac9a2c8e13bcb6ebe02c19b}{Print\+Scalar}} (std\+::string name, T v)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{ft__utility_8h_a8de271361d26ecafec3438a63de6bf1a}{Print\+String}} (std\+::string name)
+\item 
+unsigned long long \mbox{\hyperlink{ft__utility_8h_a423edb89af25fd2db95479b545c445b7}{Row\+Major\+Order}} (std\+::vector$<$ unsigned long long $>$ dsize, std\+::vector$<$ unsigned long long $>$ coordinate)
+\begin{DoxyCompactList}\small\item\em convert coordinate to linearized one \end{DoxyCompactList}\item 
+std\+::vector$<$ unsigned long long $>$ \mbox{\hyperlink{ft__utility_8h_a41d37d330fd3c7e2fa24f1635295245b}{Row\+Major\+Order\+Reverse}} (unsigned long long offset, std\+::vector$<$ unsigned long long $>$ dsize)
+\begin{DoxyCompactList}\small\item\em convert linearized coordinate to multidimensional one \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T1 , class T2 $>$ }\\void \mbox{\hyperlink{ft__utility_8h_a5f1b3b721b451333b80602fc2594f38b}{Insert\+Attribute2\+Virtual\+Array\+Vector}} (const std\+::vector$<$ T1 $>$ \&attribute\+\_\+vector, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} union\+\_\+index, std\+::vector$<$ T2 $>$ \&virtual\+\_\+array\+\_\+vector, int attribute\+\_\+index)
+\item 
+template$<$$>$ void \mbox{\hyperlink{ft__utility_8h_aea5f6b609c253c0a38f510ea1fe5f3d5}{Insert\+Attribute2\+Virtual\+Array\+Vector$<$ Au\+Endpoint\+Data\+Type\+Union, std\+::complex$<$ double $>$ $>$}} (const std\+::vector$<$ \mbox{\hyperlink{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}{Au\+Endpoint\+Data\+Type\+Union}} $>$ \&attribute\+\_\+vector, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} union\+\_\+index, std\+::vector$<$ std\+::complex$<$ double $>$$>$ \&virtual\+\_\+array\+\_\+vector, int attribute\+\_\+index)
+\item 
+{\footnotesize template$<$class T2 $>$ }\\void $\ast$ \mbox{\hyperlink{ft__utility_8h_a16e1d5b2638f1f152289229b6e2b4b42}{Extract\+Attribute\+From\+Virtual\+Array\+Vector}} (std\+::vector$<$ T2 $>$ \&virtual\+\_\+array\+\_\+vector, int attribute\+\_\+index, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} element\+\_\+type, int element\+\_\+type\+\_\+size)
+\item 
+template$<$$>$ void $\ast$ \mbox{\hyperlink{ft__utility_8h_aa33051209d5a4fb42cae770a2eb338c5}{Extract\+Attribute\+From\+Virtual\+Array\+Vector$<$ std\+::complex$<$ double $>$ $>$}} (std\+::vector$<$ std\+::complex$<$ double $>$$>$ \&virtual\+\_\+array\+\_\+vector, int attribute\+\_\+index, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} element\+\_\+type, int element\+\_\+type\+\_\+size)
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::string \mbox{\hyperlink{ft__utility_8h_a203cff490903f7c9755e3916e5ef4845}{Vector2\+String}} (const std\+::vector$<$ T $>$ \&vec)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{ft__utility_8h_ab8ec928d675ac742b65bee4881e654da}{String2\+Vector}} (const std\+::string \&str, std\+::vector$<$ T $>$ \&vec\+\_\+new)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{ft__utility_8h_a1241af5ea5c1b51733696ad265a2f3a2}{ft\+\_\+rank}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__utility_8h_aabfb3e4c40c45ea32d47b84f887a76b5}\label{ft__utility_8h_aabfb3e4c40c45ea32d47b84f887a76b5}} 
+\index{ft\_utility.h@{ft\_utility.h}!ExtractAttributeFromVirtualArrayVector\_HELPER@{ExtractAttributeFromVirtualArrayVector\_HELPER}}
+\index{ExtractAttributeFromVirtualArrayVector\_HELPER@{ExtractAttributeFromVirtualArrayVector\_HELPER}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{ExtractAttributeFromVirtualArrayVector\_HELPER}{ExtractAttributeFromVirtualArrayVector\_HELPER}}
+{\footnotesize\ttfamily \#define Extract\+Attribute\+From\+Virtual\+Array\+Vector\+\_\+\+HELPER(\begin{DoxyParamCaption}\item[{}]{ELEMENT\+\_\+\+TYPE }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                                                                     \(\backslash\)}
+\DoxyCodeLine{        ELEMENT\_TYPE *attribute\_data\_typed = (ELEMENT\_TYPE *)attribute\_data\_void\_pointer;                                 \(\backslash\)}
+\DoxyCodeLine{        for (\textcolor{keywordtype}{size\_t} i = 0; i < n; i++)                                                                                    \(\backslash\)}
+\DoxyCodeLine{        \{                                                                                                                 \(\backslash\)}
+\DoxyCodeLine{            int m\_index = 0;                                                                                              \(\backslash\)}
+\DoxyCodeLine{            ELEMENT\_TYPE temp\_attribute\_value;                                                                            \(\backslash\)}
+\DoxyCodeLine{            cista::for\_each\_field(virtual\_array\_vector[i], [\&m\_index, attribute\_index, \&temp\_attribute\_value](\textcolor{keyword}{auto} \&\&m) \{ \(\backslash\)}
+\DoxyCodeLine{                if (m\_index == attribute\_index)                                                                           \(\backslash\)}
+\DoxyCodeLine{                \{                                                                                                         \(\backslash\)}
+\DoxyCodeLine{                    temp\_attribute\_value = m;                                                                             \(\backslash\)}
+\DoxyCodeLine{                \}                                                                                                         \(\backslash\)}
+\DoxyCodeLine{                m\_index++;                                                                                                \(\backslash\)}
+\DoxyCodeLine{            \});                                                                                                           \(\backslash\)}
+\DoxyCodeLine{            attribute\_data\_typed[i] = temp\_attribute\_value;                                                               \(\backslash\)}
+\DoxyCodeLine{        \}                                                                                                                 \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__utility_8h_aa823b44c4dcbd1ba281668ede3fffe78}\label{ft__utility_8h_aa823b44c4dcbd1ba281668ede3fffe78}} 
+\index{ft\_utility.h@{ft\_utility.h}!V2VOIDP@{V2VOIDP}}
+\index{V2VOIDP@{V2VOIDP}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{V2VOIDP}{V2VOIDP}}
+{\footnotesize\ttfamily \#define V2\+VOIDP(\begin{DoxyParamCaption}\item[{}]{vv }\end{DoxyParamCaption})~static\+\_\+cast$<$void $\ast$$>$(vv.\+data())}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__utility_8h_a16e1d5b2638f1f152289229b6e2b4b42}\label{ft__utility_8h_a16e1d5b2638f1f152289229b6e2b4b42}} 
+\index{ft\_utility.h@{ft\_utility.h}!ExtractAttributeFromVirtualArrayVector@{ExtractAttributeFromVirtualArrayVector}}
+\index{ExtractAttributeFromVirtualArrayVector@{ExtractAttributeFromVirtualArrayVector}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{ExtractAttributeFromVirtualArrayVector()}{ExtractAttributeFromVirtualArrayVector()}}
+{\footnotesize\ttfamily template$<$class T2 $>$ \\
+void$\ast$ Extract\+Attribute\+From\+Virtual\+Array\+Vector (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T2 $>$ \&}]{virtual\+\_\+array\+\_\+vector,  }\item[{int}]{attribute\+\_\+index,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}}}]{element\+\_\+type,  }\item[{int}]{element\+\_\+type\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ft__utility_8h_aa33051209d5a4fb42cae770a2eb338c5}\label{ft__utility_8h_aa33051209d5a4fb42cae770a2eb338c5}} 
+\index{ft\_utility.h@{ft\_utility.h}!ExtractAttributeFromVirtualArrayVector$<$ std::complex$<$ double $>$ $>$@{ExtractAttributeFromVirtualArrayVector$<$ std::complex$<$ double $>$ $>$}}
+\index{ExtractAttributeFromVirtualArrayVector$<$ std::complex$<$ double $>$ $>$@{ExtractAttributeFromVirtualArrayVector$<$ std::complex$<$ double $>$ $>$}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{ExtractAttributeFromVirtualArrayVector$<$ std::complex$<$ double $>$ $>$()}{ExtractAttributeFromVirtualArrayVector< std::complex< double > >()}}
+{\footnotesize\ttfamily template$<$$>$ \\
+void$\ast$ \mbox{\hyperlink{ft__utility_8h_a16e1d5b2638f1f152289229b6e2b4b42}{Extract\+Attribute\+From\+Virtual\+Array\+Vector}}$<$ std\+::complex$<$ double $>$ $>$ (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::complex$<$ double $>$$>$ \&}]{virtual\+\_\+array\+\_\+vector,  }\item[{int}]{attribute\+\_\+index,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}}}]{element\+\_\+type,  }\item[{int}]{element\+\_\+type\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ft__utility_8h_a5f6e25362bb25b4301fe8736e308751d}\label{ft__utility_8h_a5f6e25362bb25b4301fe8736e308751d}} 
+\index{ft\_utility.h@{ft\_utility.h}!ExtractEndpointTypeInfo@{ExtractEndpointTypeInfo}}
+\index{ExtractEndpointTypeInfo@{ExtractEndpointTypeInfo}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{ExtractEndpointTypeInfo()}{ExtractEndpointTypeInfo()}}
+{\footnotesize\ttfamily int Extract\+Endpoint\+Type\+Info (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+type\+\_\+info,  }\item[{\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \&}]{endpoint\+\_\+type,  }\item[{std\+::string \&}]{endpoint\+\_\+info }\end{DoxyParamCaption})}
+
+
+
+Split endpoint\+\_\+type\+\_\+info string to type and information. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint\+\_\+type\+\_\+info,information} & string for the endpoint \\
+\hline
+{\em endpoint\+\_\+type,output} & value containing the type \\
+\hline
+{\em endpoint\+\_\+info,output} & value containging all other parts \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8h_a5d6a1a80f07a9e010461db5f66544a69}\label{ft__utility_8h_a5d6a1a80f07a9e010461db5f66544a69}} 
+\index{ft\_utility.h@{ft\_utility.h}!ExtractFileName@{ExtractFileName}}
+\index{ExtractFileName@{ExtractFileName}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{ExtractFileName()}{ExtractFileName()}}
+{\footnotesize\ttfamily std\+::string Extract\+File\+Name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{full\+Path }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em full\+Path} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8h_a0df160ce239e76e09b19432d28e15670}\label{ft__utility_8h_a0df160ce239e76e09b19432d28e15670}} 
+\index{ft\_utility.h@{ft\_utility.h}!ExtractPath@{ExtractPath}}
+\index{ExtractPath@{ExtractPath}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{ExtractPath()}{ExtractPath()}}
+{\footnotesize\ttfamily std\+::string Extract\+Path (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{full\+Path }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em full\+Path} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8h_ae51b692bea533096e5839a3dc5500780}\label{ft__utility_8h_ae51b692bea533096e5839a3dc5500780}} 
+\index{ft\_utility.h@{ft\_utility.h}!file\_exist@{file\_exist}}
+\index{file\_exist@{file\_exist}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{file\_exist()}{file\_exist()}}
+{\footnotesize\ttfamily int file\+\_\+exist (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename }\end{DoxyParamCaption})}
+
+
+
+Check wether the file exists. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8h_a507561a48b2245fee377dffb566a5925}\label{ft__utility_8h_a507561a48b2245fee377dffb566a5925}} 
+\index{ft\_utility.h@{ft\_utility.h}!GetDirFileList@{GetDirFileList}}
+\index{GetDirFileList@{GetDirFileList}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{GetDirFileList()}{GetDirFileList()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ Get\+Dir\+File\+List (\begin{DoxyParamCaption}\item[{std\+::string}]{dir\+\_\+str\+\_\+p }\end{DoxyParamCaption})}
+
+
+
+Get file list of a direction. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dir\+\_\+str\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$std\+::string$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8h_a5f1b3b721b451333b80602fc2594f38b}\label{ft__utility_8h_a5f1b3b721b451333b80602fc2594f38b}} 
+\index{ft\_utility.h@{ft\_utility.h}!InsertAttribute2VirtualArrayVector@{InsertAttribute2VirtualArrayVector}}
+\index{InsertAttribute2VirtualArrayVector@{InsertAttribute2VirtualArrayVector}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{InsertAttribute2VirtualArrayVector()}{InsertAttribute2VirtualArrayVector()}}
+{\footnotesize\ttfamily template$<$class T1 , class T2 $>$ \\
+void Insert\+Attribute2\+Virtual\+Array\+Vector (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ T1 $>$ \&}]{attribute\+\_\+vector,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}}}]{union\+\_\+index,  }\item[{std\+::vector$<$ T2 $>$ \&}]{virtual\+\_\+array\+\_\+vector,  }\item[{int}]{attribute\+\_\+index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T1} & \\
+\hline
+{\em T2} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em attribute\+\_\+vector} & it is type of Au\+Endpoint\+Data\+Type\+Union \\
+\hline
+{\em virtual\+\_\+array\+\_\+vector} & \\
+\hline
+{\em index} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{ft__utility_8h_aea5f6b609c253c0a38f510ea1fe5f3d5}\label{ft__utility_8h_aea5f6b609c253c0a38f510ea1fe5f3d5}} 
+\index{ft\_utility.h@{ft\_utility.h}!InsertAttribute2VirtualArrayVector$<$ AuEndpointDataTypeUnion, std::complex$<$ double $>$ $>$@{InsertAttribute2VirtualArrayVector$<$ AuEndpointDataTypeUnion, std::complex$<$ double $>$ $>$}}
+\index{InsertAttribute2VirtualArrayVector$<$ AuEndpointDataTypeUnion, std::complex$<$ double $>$ $>$@{InsertAttribute2VirtualArrayVector$<$ AuEndpointDataTypeUnion, std::complex$<$ double $>$ $>$}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{InsertAttribute2VirtualArrayVector$<$ AuEndpointDataTypeUnion, std::complex$<$ double $>$ $>$()}{InsertAttribute2VirtualArrayVector< AuEndpointDataTypeUnion, std::complex< double > >()}}
+{\footnotesize\ttfamily template$<$$>$ \\
+void \mbox{\hyperlink{ft__utility_8h_a5f1b3b721b451333b80602fc2594f38b}{Insert\+Attribute2\+Virtual\+Array\+Vector}}$<$ \mbox{\hyperlink{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}{Au\+Endpoint\+Data\+Type\+Union}}, std\+::complex$<$ double $>$ $>$ (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}{Au\+Endpoint\+Data\+Type\+Union}} $>$ \&}]{attribute\+\_\+vector,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}}}]{union\+\_\+index,  }\item[{std\+::vector$<$ std\+::complex$<$ double $>$$>$ \&}]{virtual\+\_\+array\+\_\+vector,  }\item[{int}]{attribute\+\_\+index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ft__utility_8h_adba28896bac9a2c8e13bcb6ebe02c19b}\label{ft__utility_8h_adba28896bac9a2c8e13bcb6ebe02c19b}} 
+\index{ft\_utility.h@{ft\_utility.h}!PrintScalar@{PrintScalar}}
+\index{PrintScalar@{PrintScalar}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{PrintScalar()}{PrintScalar()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Print\+Scalar (\begin{DoxyParamCaption}\item[{std\+::string}]{name,  }\item[{T}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ft__utility_8h_a8de271361d26ecafec3438a63de6bf1a}\label{ft__utility_8h_a8de271361d26ecafec3438a63de6bf1a}} 
+\index{ft\_utility.h@{ft\_utility.h}!PrintString@{PrintString}}
+\index{PrintString@{PrintString}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{PrintString()}{PrintString()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Print\+String (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ft__utility_8h_a3bb8c3c86721391778ec4ce4ca4969ed}\label{ft__utility_8h_a3bb8c3c86721391778ec4ce4ca4969ed}} 
+\index{ft\_utility.h@{ft\_utility.h}!PrintVector@{PrintVector}}
+\index{PrintVector@{PrintVector}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{PrintVector()}{PrintVector()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Print\+Vector (\begin{DoxyParamCaption}\item[{std\+::string}]{name,  }\item[{std\+::vector$<$ T $>$}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_chunk_overlap_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+chunk\+\_\+overlap.\+cpp}}, and \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_vector_2d_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+vector\+\_\+2d.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{ft__utility_8h_a0fe4c9435ffb2de148c32151d5b47e2c}\label{ft__utility_8h_a0fe4c9435ffb2de148c32151d5b47e2c}} 
+\index{ft\_utility.h@{ft\_utility.h}!PrintVV@{PrintVV}}
+\index{PrintVV@{PrintVV}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{PrintVV()}{PrintVV()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Print\+VV (\begin{DoxyParamCaption}\item[{std\+::string}]{name,  }\item[{std\+::vector$<$ std\+::vector$<$ T $>$$>$}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ft__utility_8h_a7c5f0884e04ebd10227aa82cb66ebd61}\label{ft__utility_8h_a7c5f0884e04ebd10227aa82cb66ebd61}} 
+\index{ft\_utility.h@{ft\_utility.h}!realpathEx@{realpathEx}}
+\index{realpathEx@{realpathEx}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{realpathEx()}{realpathEx()}}
+{\footnotesize\ttfamily std\+::string realpath\+Ex (\begin{DoxyParamCaption}\item[{std\+::string}]{path }\end{DoxyParamCaption})}
+
+
+
+expand the path to full directory \href{https://www.dreamincode.net/forums/topic/218601-realpath-and-tilde/}{\texttt{ https\+://www.\+dreamincode.\+net/forums/topic/218601-\/realpath-\/and-\/tilde/}} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \\
+\hline
+{\em buff} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char$\ast$
+\end{DoxyReturn}
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__utility_8h_a423edb89af25fd2db95479b545c445b7}\label{ft__utility_8h_a423edb89af25fd2db95479b545c445b7}} 
+\index{ft\_utility.h@{ft\_utility.h}!RowMajorOrder@{RowMajorOrder}}
+\index{RowMajorOrder@{RowMajorOrder}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{RowMajorOrder()}{RowMajorOrder()}}
+{\footnotesize\ttfamily unsigned long long Row\+Major\+Order (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{dsize,  }\item[{std\+::vector$<$ unsigned long long $>$}]{coordinate }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+convert coordinate to linearized one 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dsize} & \+: size of all dimensions of the data \\
+\hline
+{\em coordinate} & \+: multidimensional coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned long long \+: linearized one 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8h_a41d37d330fd3c7e2fa24f1635295245b}\label{ft__utility_8h_a41d37d330fd3c7e2fa24f1635295245b}} 
+\index{ft\_utility.h@{ft\_utility.h}!RowMajorOrderReverse@{RowMajorOrderReverse}}
+\index{RowMajorOrderReverse@{RowMajorOrderReverse}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{RowMajorOrderReverse()}{RowMajorOrderReverse()}}
+{\footnotesize\ttfamily std\+::vector$<$unsigned long long$>$ Row\+Major\+Order\+Reverse (\begin{DoxyParamCaption}\item[{unsigned long long}]{offset,  }\item[{std\+::vector$<$ unsigned long long $>$}]{dsize }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+convert linearized coordinate to multidimensional one 
+
+
+\begin{DoxyParams}{Parameters}
+{\em offset} & \+: linearized coordinate \\
+\hline
+{\em dsize} & \+: data size \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$unsigned long long$>$ \+:multidimensional coordinate 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__utility_8h_ab8ec928d675ac742b65bee4881e654da}\label{ft__utility_8h_ab8ec928d675ac742b65bee4881e654da}} 
+\index{ft\_utility.h@{ft\_utility.h}!String2Vector@{String2Vector}}
+\index{String2Vector@{String2Vector}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{String2Vector()}{String2Vector()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void String2\+Vector (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{str,  }\item[{std\+::vector$<$ T $>$ \&}]{vec\+\_\+new }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__utility_8h_a203cff490903f7c9755e3916e5ef4845}\label{ft__utility_8h_a203cff490903f7c9755e3916e5ef4845}} 
+\index{ft\_utility.h@{ft\_utility.h}!Vector2String@{Vector2String}}
+\index{Vector2String@{Vector2String}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{Vector2String()}{Vector2String()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::string Vector2\+String (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ T $>$ \&}]{vec }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ft__utility_8h_a1241af5ea5c1b51733696ad265a2f3a2}\label{ft__utility_8h_a1241af5ea5c1b51733696ad265a2f3a2}} 
+\index{ft\_utility.h@{ft\_utility.h}!ft\_rank@{ft\_rank}}
+\index{ft\_rank@{ft\_rank}!ft\_utility.h@{ft\_utility.h}}
+\doxysubsubsection{\texorpdfstring{ft\_rank}{ft\_rank}}
+{\footnotesize\ttfamily int ft\+\_\+rank\hspace{0.3cm}{\ttfamily [extern]}}
+

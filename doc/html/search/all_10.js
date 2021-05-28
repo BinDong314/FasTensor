@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['rank_445',['rank',['../structi_array_local.html#a4ad363d1091db4d080a554e2f81b4cc7',1,'iArrayLocal']]],
+  ['read_446',['Read',['../class_endpoint.html#a2ea7ed58e917ba63cb222ffbda09aa0c',1,'Endpoint::Read()'],['../class_endpoint_a_d_i_o_s.html#af860bada32ada8f6d03f997017093d37',1,'EndpointADIOS::Read()'],['../class_endpoint_binary.html#af970026ed7a7adfac906be740b952f29',1,'EndpointBinary::Read()'],['../class_endpoint_d_i_r.html#a3fb2183436f1425433b68f9216a89a55',1,'EndpointDIR::Read()'],['../class_endpoint_h_d_f5.html#ac0454482c63e852009fec81faa488e50',1,'EndpointHDF5::Read()'],['../class_endpoint_m_e_m_o_r_y.html#a08e8cb0fc299971c0d6754d8d2fce0d6',1,'EndpointMEMORY::Read()'],['../class_endpoint_pnet_c_d_f.html#a592dc09ee677561f9fe1144451311012',1,'EndpointPnetCDF::Read()']]],
+  ['read_5fwrite_5fflag_447',['read_write_flag',['../class_endpoint.html#a9057641edd0c6ed840016b7e6b191688',1,'Endpoint']]],
+  ['readallattributename_448',['ReadAllAttributeName',['../class_endpoint_d_i_r.html#a4f1fa35bc4b6cb78db6aa50116eda563',1,'EndpointDIR::ReadAllAttributeName()'],['../class_endpoint_h_d_f5.html#a1b8312715251695c226f672b1bdc2add',1,'EndpointHDF5::ReadAllAttributeName()']]],
+  ['readarray_449',['ReadArray',['../class_f_t_1_1_array.html#ad34d3fe15a14b09d8dc087196df484af',1,'FT::Array::ReadArray(const std::vector&lt; unsigned long long &gt; &amp;start, const std::vector&lt; unsigned long long &gt; &amp;end, std::vector&lt; T &gt; &amp;data_vector)'],['../class_f_t_1_1_array.html#ad9338ae1f6e0caf89a4ccd69d00510a9',1,'FT::Array::ReadArray(const std::vector&lt; unsigned long long &gt; start, const std::vector&lt; unsigned long long &gt; end)']]],
+  ['readattribute_450',['ReadAttribute',['../class_endpoint.html#a1a12705a507c7a8d2fa1cb470d49c11a',1,'Endpoint::ReadAttribute()'],['../class_endpoint_d_i_r.html#a402be6945f57628a3ba71d2deff79444',1,'EndpointDIR::ReadAttribute()'],['../class_endpoint_h_d_f5.html#a926333246a65281d1f9e6b8e32788b43',1,'EndpointHDF5::ReadAttribute()']]],
+  ['readendpoint_451',['ReadEndpoint',['../class_f_t_1_1_array.html#ac97b7daa918a4bd5b6cc9b94ba631ad7',1,'FT::Array']]],
+  ['readhoodborder_452',['ReadHoodBorder',['../class_stencil.html#aa4caad5f6f84207ca810d014f89a4308',1,'Stencil']]],
+  ['readme_2emd_453',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
+  ['readmodifywritearray_454',['ReadModifyWriteArray',['../class_f_t_1_1_array.html#a629252eb85e020b01eb384ca0064370e',1,'FT::Array']]],
+  ['readneighbors_455',['ReadNeighbors',['../class_stencil.html#acfbe078189d01c545b85534971eaaed1',1,'Stencil::ReadNeighbors(std::vector&lt; int &gt; &amp;start_offset, std::vector&lt; int &gt; &amp;end_offset, std::vector&lt; T &gt; &amp;rv) const'],['../class_stencil.html#acac01f22401652d9df5b8cb3846a96a3',1,'Stencil::ReadNeighbors(std::vector&lt; int &gt; &amp;start_offset, std::vector&lt; int &gt; &amp;end_offset) const']]],
+  ['readpoint_456',['ReadPoint',['../class_stencil.html#a9a638d848fc4d201f93d37537625fc99',1,'Stencil']]],
+  ['realpathex_457',['realpathEx',['../ft__utility_8cpp.html#a7c5f0884e04ebd10227aa82cb66ebd61',1,'realpathEx(std::string path):&#160;ft_utility.cpp'],['../ft__utility_8h.html#a7c5f0884e04ebd10227aa82cb66ebd61',1,'realpathEx(std::string path):&#160;ft_utility.cpp']]],
+  ['reportcost_458',['ReportCost',['../class_f_t_1_1_array_base.html#ac2ec2f3b74907881acf7b190e0e43d35',1,'FT::ArrayBase::ReportCost()'],['../class_f_t_1_1_array.html#a1e6fde4d6e644b23ccae0af99f77e452',1,'FT::Array::ReportCost()']]],
+  ['reporttime_459',['ReportTime',['../class_f_t_1_1_array.html#acf107824703815e9a3e0a84073c9442c',1,'FT::Array']]],
+  ['restore_460',['Restore',['../class_f_t_1_1_array.html#a960f5eb03f57189337bd0ddfadbc3efa',1,'FT::Array']]],
+  ['row_5fmajor_5forder_5fcal_461',['row_major_order_cal',['../ft__stencil_8h.html#ab003733c35bb4ee58aee50c19e4d31cb',1,'ft_stencil.h']]],
+  ['row_5fmajor_5forder_5fmacro_462',['ROW_MAJOR_ORDER_MACRO',['../ft__utility__macro_8h.html#a721f29634a9b176ff7f9773844840249',1,'ft_utility_macro.h']]],
+  ['row_5fmajor_5forder_5freverse_5fmacro_463',['ROW_MAJOR_ORDER_REVERSE_MACRO',['../ft__utility__macro_8h.html#a6578377cd7962de7c73ef8dc4a992664',1,'ft_utility_macro.h']]],
+  ['row_5fstride_464',['row_stride',['../structi_array_local.html#aea1129a35e17aad8d521040d40278810',1,'iArrayLocal']]],
+  ['rowmajororder_465',['RowMajorOrder',['../ft__utility_8h.html#a423edb89af25fd2db95479b545c445b7',1,'ft_utility.h']]],
+  ['rowmajororderreverse_466',['RowMajorOrderReverse',['../ft__utility_8h.html#a41d37d330fd3c7e2fa24f1635295245b',1,'ft_utility.h']]],
+  ['rows_5fchunk_467',['rows_chunk',['../ft__example__kf1p_8cpp.html#a8c34c3da71d80ac7ce8305c226471f9a',1,'ft_example_kf1p.cpp']]]
+];

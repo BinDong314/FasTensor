@@ -77,6 +77,17 @@ in binary and source code form.
  *
  */
 
+/**
+ * @example
+ * @author Bin Dong (dbin@lbl.gov)
+ * @brief This example show how to use 1f1p pattern EP_DIR.  
+ * @version 0.1
+ * @date 2021-05-28
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #include <iostream>
 #include <stdarg.h>
 #include <vector>
@@ -94,6 +105,13 @@ inline Stencil<float> udf_1f1p(const Stencil<float> &iStencil)
     return oStencil;
 }
 
+/**
+ * @brief show how to use 1f1p pattern in FT
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
 int main(int argc, char *argv[])
 {
     //Init the MPICH, etc.

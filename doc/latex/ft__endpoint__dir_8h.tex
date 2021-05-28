@@ -1,0 +1,147 @@
+\hypertarget{ft__endpoint__dir_8h}{}\doxysection{ft\+\_\+endpoint\+\_\+dir.\+h File Reference}
+\label{ft__endpoint__dir_8h}\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+{\ttfamily \#include \char`\"{}ft\+\_\+utility.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+type.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint\+\_\+hdf5.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint\+\_\+tdms.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$regex$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_endpoint_d_i_r}{Endpoint\+DIR}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_ad8be3c43712c1bee933cf2ac9981ac52}{DIR\+\_\+\+MERGE\+\_\+\+INDEX}}~0
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a2f406b25a86b1881bfbb46b67e93b170}{DIR\+\_\+\+SUB\+\_\+\+CMD\+\_\+\+ARG}}~1
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_ae5af6ba68ac7b93a102dda0e79c3eb65}{DIR\+\_\+\+INPUT\+\_\+\+SEARCH\+\_\+\+RGX}}~2
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a717795875ac2f1e24ea2cdc6beb5bac5}{DIR\+\_\+\+OUPUT\+\_\+\+REPLACE\+\_\+\+RGX}}~3
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a98292521889cb42dc06f741f68c420bf}{DIR\+\_\+\+OUPUT\+\_\+\+REPLACE\+\_\+\+RGX\+\_\+\+ARG}}~4
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a2570a93e60d37c1ee5827e60b03507d8}{DIR\+\_\+\+FILE\+\_\+\+SORT\+\_\+\+INDEXES}}~15
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_aa5790168510c044e51e1fa9c03286d8b}{DIR\+\_\+\+N\+\_\+\+FILES}}~6
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_ac3a33524ad27ac54d9422a88303f6eb4}{DIR\+\_\+\+GET\+\_\+\+FILE\+\_\+\+SIZE}}~7
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a34842d95cd65010276361dbe5470fe26}{DIR\+\_\+\+SET\+\_\+\+CHUNK\+\_\+\+SIZE}}~8
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a0ce887c9461acfabe22a2651e56faeba}{DIR\+\_\+\+GET\+\_\+\+ALL\+\_\+\+CHUNK\+\_\+\+TAGS}}~9
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a4db466d118e2851b9751c4ffbe4813cd}{DIR\+\_\+\+SET\+\_\+\+ALL\+\_\+\+CHUNK\+\_\+\+TAGS}}~10
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a108f3cc8eef3f77bdedac51af86074a7}{DIR\+\_\+\+INPUT\+\_\+\+ELASTIC\+\_\+\+SIZE}}~11
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a257e03ce4676f3d76b3cab6c78c5cae9}{DIR\+\_\+\+OUTPUT\+\_\+\+ELASTIC\+\_\+\+SIZE}}~12
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__dir_8h_a97068c61574aa46ecdc045d1dd8c8a15}{DIR\+\_\+\+SET\+\_\+\+OUTPUT\+\_\+\+FILE\+\_\+\+NAMES}}~13
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a2570a93e60d37c1ee5827e60b03507d8}\label{ft__endpoint__dir_8h_a2570a93e60d37c1ee5827e60b03507d8}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_FILE\_SORT\_INDEXES@{DIR\_FILE\_SORT\_INDEXES}}
+\index{DIR\_FILE\_SORT\_INDEXES@{DIR\_FILE\_SORT\_INDEXES}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_FILE\_SORT\_INDEXES}{DIR\_FILE\_SORT\_INDEXES}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+FILE\+\_\+\+SORT\+\_\+\+INDEXES~15}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a0ce887c9461acfabe22a2651e56faeba}\label{ft__endpoint__dir_8h_a0ce887c9461acfabe22a2651e56faeba}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_GET\_ALL\_CHUNK\_TAGS@{DIR\_GET\_ALL\_CHUNK\_TAGS}}
+\index{DIR\_GET\_ALL\_CHUNK\_TAGS@{DIR\_GET\_ALL\_CHUNK\_TAGS}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_GET\_ALL\_CHUNK\_TAGS}{DIR\_GET\_ALL\_CHUNK\_TAGS}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+GET\+\_\+\+ALL\+\_\+\+CHUNK\+\_\+\+TAGS~9}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_ac3a33524ad27ac54d9422a88303f6eb4}\label{ft__endpoint__dir_8h_ac3a33524ad27ac54d9422a88303f6eb4}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_GET\_FILE\_SIZE@{DIR\_GET\_FILE\_SIZE}}
+\index{DIR\_GET\_FILE\_SIZE@{DIR\_GET\_FILE\_SIZE}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_GET\_FILE\_SIZE}{DIR\_GET\_FILE\_SIZE}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+GET\+\_\+\+FILE\+\_\+\+SIZE~7}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a108f3cc8eef3f77bdedac51af86074a7}\label{ft__endpoint__dir_8h_a108f3cc8eef3f77bdedac51af86074a7}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_INPUT\_ELASTIC\_SIZE@{DIR\_INPUT\_ELASTIC\_SIZE}}
+\index{DIR\_INPUT\_ELASTIC\_SIZE@{DIR\_INPUT\_ELASTIC\_SIZE}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_INPUT\_ELASTIC\_SIZE}{DIR\_INPUT\_ELASTIC\_SIZE}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+INPUT\+\_\+\+ELASTIC\+\_\+\+SIZE~11}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_ae5af6ba68ac7b93a102dda0e79c3eb65}\label{ft__endpoint__dir_8h_ae5af6ba68ac7b93a102dda0e79c3eb65}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_INPUT\_SEARCH\_RGX@{DIR\_INPUT\_SEARCH\_RGX}}
+\index{DIR\_INPUT\_SEARCH\_RGX@{DIR\_INPUT\_SEARCH\_RGX}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_INPUT\_SEARCH\_RGX}{DIR\_INPUT\_SEARCH\_RGX}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+INPUT\+\_\+\+SEARCH\+\_\+\+RGX~2}
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_kf1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+kf1p.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{ft__endpoint__dir_8h_ad8be3c43712c1bee933cf2ac9981ac52}\label{ft__endpoint__dir_8h_ad8be3c43712c1bee933cf2ac9981ac52}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_MERGE\_INDEX@{DIR\_MERGE\_INDEX}}
+\index{DIR\_MERGE\_INDEX@{DIR\_MERGE\_INDEX}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_MERGE\_INDEX}{DIR\_MERGE\_INDEX}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+MERGE\+\_\+\+INDEX~0}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_kf1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+kf1p.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{ft__endpoint__dir_8h_aa5790168510c044e51e1fa9c03286d8b}\label{ft__endpoint__dir_8h_aa5790168510c044e51e1fa9c03286d8b}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_N\_FILES@{DIR\_N\_FILES}}
+\index{DIR\_N\_FILES@{DIR\_N\_FILES}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_N\_FILES}{DIR\_N\_FILES}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+N\+\_\+\+FILES~6}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a717795875ac2f1e24ea2cdc6beb5bac5}\label{ft__endpoint__dir_8h_a717795875ac2f1e24ea2cdc6beb5bac5}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_OUPUT\_REPLACE\_RGX@{DIR\_OUPUT\_REPLACE\_RGX}}
+\index{DIR\_OUPUT\_REPLACE\_RGX@{DIR\_OUPUT\_REPLACE\_RGX}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_OUPUT\_REPLACE\_RGX}{DIR\_OUPUT\_REPLACE\_RGX}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+OUPUT\+\_\+\+REPLACE\+\_\+\+RGX~3}
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_kf1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+kf1p.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a98292521889cb42dc06f741f68c420bf}\label{ft__endpoint__dir_8h_a98292521889cb42dc06f741f68c420bf}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_OUPUT\_REPLACE\_RGX\_ARG@{DIR\_OUPUT\_REPLACE\_RGX\_ARG}}
+\index{DIR\_OUPUT\_REPLACE\_RGX\_ARG@{DIR\_OUPUT\_REPLACE\_RGX\_ARG}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_OUPUT\_REPLACE\_RGX\_ARG}{DIR\_OUPUT\_REPLACE\_RGX\_ARG}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+OUPUT\+\_\+\+REPLACE\+\_\+\+RGX\+\_\+\+ARG~4}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a257e03ce4676f3d76b3cab6c78c5cae9}\label{ft__endpoint__dir_8h_a257e03ce4676f3d76b3cab6c78c5cae9}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_OUTPUT\_ELASTIC\_SIZE@{DIR\_OUTPUT\_ELASTIC\_SIZE}}
+\index{DIR\_OUTPUT\_ELASTIC\_SIZE@{DIR\_OUTPUT\_ELASTIC\_SIZE}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_OUTPUT\_ELASTIC\_SIZE}{DIR\_OUTPUT\_ELASTIC\_SIZE}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+OUTPUT\+\_\+\+ELASTIC\+\_\+\+SIZE~12}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a4db466d118e2851b9751c4ffbe4813cd}\label{ft__endpoint__dir_8h_a4db466d118e2851b9751c4ffbe4813cd}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_SET\_ALL\_CHUNK\_TAGS@{DIR\_SET\_ALL\_CHUNK\_TAGS}}
+\index{DIR\_SET\_ALL\_CHUNK\_TAGS@{DIR\_SET\_ALL\_CHUNK\_TAGS}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_SET\_ALL\_CHUNK\_TAGS}{DIR\_SET\_ALL\_CHUNK\_TAGS}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+SET\+\_\+\+ALL\+\_\+\+CHUNK\+\_\+\+TAGS~10}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a34842d95cd65010276361dbe5470fe26}\label{ft__endpoint__dir_8h_a34842d95cd65010276361dbe5470fe26}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_SET\_CHUNK\_SIZE@{DIR\_SET\_CHUNK\_SIZE}}
+\index{DIR\_SET\_CHUNK\_SIZE@{DIR\_SET\_CHUNK\_SIZE}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_SET\_CHUNK\_SIZE}{DIR\_SET\_CHUNK\_SIZE}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+SET\+\_\+\+CHUNK\+\_\+\+SIZE~8}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a97068c61574aa46ecdc045d1dd8c8a15}\label{ft__endpoint__dir_8h_a97068c61574aa46ecdc045d1dd8c8a15}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_SET\_OUTPUT\_FILE\_NAMES@{DIR\_SET\_OUTPUT\_FILE\_NAMES}}
+\index{DIR\_SET\_OUTPUT\_FILE\_NAMES@{DIR\_SET\_OUTPUT\_FILE\_NAMES}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_SET\_OUTPUT\_FILE\_NAMES}{DIR\_SET\_OUTPUT\_FILE\_NAMES}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+SET\+\_\+\+OUTPUT\+\_\+\+FILE\+\_\+\+NAMES~13}
+
+\mbox{\Hypertarget{ft__endpoint__dir_8h_a2f406b25a86b1881bfbb46b67e93b170}\label{ft__endpoint__dir_8h_a2f406b25a86b1881bfbb46b67e93b170}} 
+\index{ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}!DIR\_SUB\_CMD\_ARG@{DIR\_SUB\_CMD\_ARG}}
+\index{DIR\_SUB\_CMD\_ARG@{DIR\_SUB\_CMD\_ARG}!ft\_endpoint\_dir.h@{ft\_endpoint\_dir.h}}
+\doxysubsubsection{\texorpdfstring{DIR\_SUB\_CMD\_ARG}{DIR\_SUB\_CMD\_ARG}}
+{\footnotesize\ttfamily \#define DIR\+\_\+\+SUB\+\_\+\+CMD\+\_\+\+ARG~1}
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_kf1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+kf1p.\+cpp}}.\end{Desc}

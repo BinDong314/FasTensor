@@ -1,0 +1,141 @@
+\hypertarget{ft__array__view__access_8h}{}\doxysection{ft\+\_\+array\+\_\+view\+\_\+access.\+h File Reference}
+\label{ft__array__view__access_8h}\index{ft\_array\_view\_access.h@{ft\_array\_view\_access.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$cstring$>$}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+array\+\_\+iterator.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+utility\+\_\+macro.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__array__view__access_8h_aa54672a7fc38b24e48a5c42d745b4553}{ARRAY\+\_\+\+VIEW\+\_\+\+READ}}~0
+\item 
+\#define \mbox{\hyperlink{ft__array__view__access_8h_a9783c966f5b061a9e1a2e602f12b39a0}{ARRAY\+\_\+\+VIEW\+\_\+\+WRITE}}~1
+\item 
+\#define \mbox{\hyperlink{ft__array__view__access_8h_a8d934312c0b5079bcf6757516e2dec54}{VIEW\+\_\+\+ACCESS\+\_\+\+HELP\+\_\+V}}(v\+\_\+bu,  v\+\_\+st,  a\+\_\+bu,  a\+\_\+st,  count\+\_\+n,  rw)
+\begin{DoxyCompactList}\small\item\em Access a subset between v\+\_\+bu (view buffer) and a\+\_\+bu (array buffer) \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{ft__array__view__access_8h_a11677ca7b9d960e9636b7fcc7589bf2d}{VIEW\+\_\+\+ACCESS\+\_\+\+HELP\+\_\+P}}(v\+\_\+bu,  v\+\_\+st,  a\+\_\+bu,  a\+\_\+st,  count\+\_\+n,  rw,  type\+\_\+size)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class T $>$ }\\int \mbox{\hyperlink{ft__array__view__access_8h_a98bd874f3c1f9eecb232fc7f58d2ae5d}{Array\+View\+AccessV}} (std\+::vector$<$ T $>$ \&view\+\_\+v, std\+::vector$<$ T $>$ \&array\+\_\+v, std\+::vector$<$ unsigned long long $>$ \&array\+\_\+size, std\+::vector$<$ unsigned long long $>$ \&start, std\+::vector$<$ unsigned long long $>$ \&end, int read\+\_\+write\+\_\+code)
+\begin{DoxyCompactList}\small\item\em Access an view (subset) of an array. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T $>$ }\\int \mbox{\hyperlink{ft__array__view__access_8h_a5c357bf473ce887866e5af2df7f88075}{Array\+View\+AccessP}} (T $\ast$view\+\_\+v, T $\ast$array\+\_\+v, std\+::vector$<$ unsigned long long $>$ array\+\_\+size, std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, int read\+\_\+write\+\_\+code)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__array__view__access_8h_aa54672a7fc38b24e48a5c42d745b4553}\label{ft__array__view__access_8h_aa54672a7fc38b24e48a5c42d745b4553}} 
+\index{ft\_array\_view\_access.h@{ft\_array\_view\_access.h}!ARRAY\_VIEW\_READ@{ARRAY\_VIEW\_READ}}
+\index{ARRAY\_VIEW\_READ@{ARRAY\_VIEW\_READ}!ft\_array\_view\_access.h@{ft\_array\_view\_access.h}}
+\doxysubsubsection{\texorpdfstring{ARRAY\_VIEW\_READ}{ARRAY\_VIEW\_READ}}
+{\footnotesize\ttfamily \#define ARRAY\+\_\+\+VIEW\+\_\+\+READ~0}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__array__view__access_8h_a9783c966f5b061a9e1a2e602f12b39a0}\label{ft__array__view__access_8h_a9783c966f5b061a9e1a2e602f12b39a0}} 
+\index{ft\_array\_view\_access.h@{ft\_array\_view\_access.h}!ARRAY\_VIEW\_WRITE@{ARRAY\_VIEW\_WRITE}}
+\index{ARRAY\_VIEW\_WRITE@{ARRAY\_VIEW\_WRITE}!ft\_array\_view\_access.h@{ft\_array\_view\_access.h}}
+\doxysubsubsection{\texorpdfstring{ARRAY\_VIEW\_WRITE}{ARRAY\_VIEW\_WRITE}}
+{\footnotesize\ttfamily \#define ARRAY\+\_\+\+VIEW\+\_\+\+WRITE~1}
+
+\mbox{\Hypertarget{ft__array__view__access_8h_a11677ca7b9d960e9636b7fcc7589bf2d}\label{ft__array__view__access_8h_a11677ca7b9d960e9636b7fcc7589bf2d}} 
+\index{ft\_array\_view\_access.h@{ft\_array\_view\_access.h}!VIEW\_ACCESS\_HELP\_P@{VIEW\_ACCESS\_HELP\_P}}
+\index{VIEW\_ACCESS\_HELP\_P@{VIEW\_ACCESS\_HELP\_P}!ft\_array\_view\_access.h@{ft\_array\_view\_access.h}}
+\doxysubsubsection{\texorpdfstring{VIEW\_ACCESS\_HELP\_P}{VIEW\_ACCESS\_HELP\_P}}
+{\footnotesize\ttfamily \#define VIEW\+\_\+\+ACCESS\+\_\+\+HELP\+\_\+P(\begin{DoxyParamCaption}\item[{}]{v\+\_\+bu,  }\item[{}]{v\+\_\+st,  }\item[{}]{a\+\_\+bu,  }\item[{}]{a\+\_\+st,  }\item[{}]{count\+\_\+n,  }\item[{}]{rw,  }\item[{}]{type\+\_\+size }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                      \(\backslash\)}
+\DoxyCodeLine{        if (rw == \mbox{\hyperlink{ft__array__view__access_8h_aa54672a7fc38b24e48a5c42d745b4553}{ARRAY\_VIEW\_READ}})                                         \(\backslash\)}
+\DoxyCodeLine{        \{                                                                  \(\backslash\)}
+\DoxyCodeLine{            std::memcpy(v\_bu + v\_st, a\_bu + a\_st, count\_n * type\_size);    \(\backslash\)}
+\DoxyCodeLine{        \}                                                                  \(\backslash\)}
+\DoxyCodeLine{        else                                                               \(\backslash\)}
+\DoxyCodeLine{        \{                                                                  \(\backslash\)}
+\DoxyCodeLine{            std::memcpy(a\_bu + a\_st, v\_bu + v\_st, count\_n * type\_size);    \(\backslash\)}
+\DoxyCodeLine{        \}                                                                  \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__array__view__access_8h_a8d934312c0b5079bcf6757516e2dec54}\label{ft__array__view__access_8h_a8d934312c0b5079bcf6757516e2dec54}} 
+\index{ft\_array\_view\_access.h@{ft\_array\_view\_access.h}!VIEW\_ACCESS\_HELP\_V@{VIEW\_ACCESS\_HELP\_V}}
+\index{VIEW\_ACCESS\_HELP\_V@{VIEW\_ACCESS\_HELP\_V}!ft\_array\_view\_access.h@{ft\_array\_view\_access.h}}
+\doxysubsubsection{\texorpdfstring{VIEW\_ACCESS\_HELP\_V}{VIEW\_ACCESS\_HELP\_V}}
+{\footnotesize\ttfamily \#define VIEW\+\_\+\+ACCESS\+\_\+\+HELP\+\_\+V(\begin{DoxyParamCaption}\item[{}]{v\+\_\+bu,  }\item[{}]{v\+\_\+st,  }\item[{}]{a\+\_\+bu,  }\item[{}]{a\+\_\+st,  }\item[{}]{count\+\_\+n,  }\item[{}]{rw }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                                           \(\backslash\)}
+\DoxyCodeLine{        if (rw == \mbox{\hyperlink{ft__array__view__access_8h_aa54672a7fc38b24e48a5c42d745b4553}{ARRAY\_VIEW\_READ}})                                                              \(\backslash\)}
+\DoxyCodeLine{        \{                                                                                       \(\backslash\)}
+\DoxyCodeLine{            std::memcpy();                                                                      \(\backslash\)}
+\DoxyCodeLine{            std::copy(a\_bu.begin() + a\_st, a\_bu.begin() + a\_st + count\_n, v\_bu.begin() + v\_st); \(\backslash\)}
+\DoxyCodeLine{        \}                                                                                       \(\backslash\)}
+\DoxyCodeLine{        else                                                                                    \(\backslash\)}
+\DoxyCodeLine{        \{                                                                                       \(\backslash\)}
+\DoxyCodeLine{            std::copy(v\_bu.begin() + v\_st, v\_bu.begin() + v\_st + count\_n, a\_bu.begin() + a\_st); \(\backslash\)}
+\DoxyCodeLine{        \}                                                                                       \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+
+
+Access a subset between v\+\_\+bu (view buffer) and a\+\_\+bu (array buffer) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v\+\_\+bu} & view buffer \\
+\hline
+{\em v\+\_\+st} & start of view buffer \\
+\hline
+{\em a\+\_\+bu} & array buffer \\
+\hline
+{\em a\+\_\+st} & start of array buffer \\
+\hline
+{\em count\+\_\+n} & element to access \\
+\hline
+{\em rm} & flag to read or write, ARRAY\+\_\+\+VIEW\+\_\+\+READ and ARRAY\+\_\+\+VIEW\+\_\+\+WRITE \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__array__view__access_8h_a5c357bf473ce887866e5af2df7f88075}\label{ft__array__view__access_8h_a5c357bf473ce887866e5af2df7f88075}} 
+\index{ft\_array\_view\_access.h@{ft\_array\_view\_access.h}!ArrayViewAccessP@{ArrayViewAccessP}}
+\index{ArrayViewAccessP@{ArrayViewAccessP}!ft\_array\_view\_access.h@{ft\_array\_view\_access.h}}
+\doxysubsubsection{\texorpdfstring{ArrayViewAccessP()}{ArrayViewAccessP()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int Array\+View\+AccessP (\begin{DoxyParamCaption}\item[{T $\ast$}]{view\+\_\+v,  }\item[{T $\ast$}]{array\+\_\+v,  }\item[{std\+::vector$<$ unsigned long long $>$}]{array\+\_\+size,  }\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{int}]{read\+\_\+write\+\_\+code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ft__array__view__access_8h_a98bd874f3c1f9eecb232fc7f58d2ae5d}\label{ft__array__view__access_8h_a98bd874f3c1f9eecb232fc7f58d2ae5d}} 
+\index{ft\_array\_view\_access.h@{ft\_array\_view\_access.h}!ArrayViewAccessV@{ArrayViewAccessV}}
+\index{ArrayViewAccessV@{ArrayViewAccessV}!ft\_array\_view\_access.h@{ft\_array\_view\_access.h}}
+\doxysubsubsection{\texorpdfstring{ArrayViewAccessV()}{ArrayViewAccessV()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+int Array\+View\+AccessV (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{view\+\_\+v,  }\item[{std\+::vector$<$ T $>$ \&}]{array\+\_\+v,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{array\+\_\+size,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{end,  }\item[{int}]{read\+\_\+write\+\_\+code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Access an view (subset) of an array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em view\+\_\+buffer} & \+: pointer to the buffer for the view \\
+\hline
+{\em array\+\_\+buffer} & \+: pointer to the buffer for the array \\
+\hline
+{\em array\+\_\+size} & \+: the size for the array \\
+\hline
+{\em start} & \+: the start address of the view \\
+\hline
+{\em end} & \+: the end address of the view \\
+\hline
+{\em read\+\_\+write\+\_\+code} & \+: mode to read or write, e.\+g., ARRAY\+\_\+\+VIEW\+\_\+\+READ , ARRAY\+\_\+\+VIEW\+\_\+\+WRITE 1 \\
+\hline
+{\em element\+\_\+size} & \+: the size of each element data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \+: non zero if works, otherwise failed 
+\end{DoxyReturn}

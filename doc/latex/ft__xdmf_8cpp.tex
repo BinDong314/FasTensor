@@ -1,0 +1,166 @@
+\hypertarget{ft__xdmf_8cpp}{}\doxysection{ft\+\_\+xdmf.\+cpp File Reference}
+\label{ft__xdmf_8cpp}\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+{\ttfamily \#include \char`\"{}ft\+\_\+xdmf.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{ft__xdmf_8cpp_a0bfedcd956d745999ba8a2378a69533d}{create\+\_\+xdmf}} (std\+::string file\+\_\+name, std\+::string dset\+\_\+name, std\+::vector$<$ unsigned long long $>$ dimensions, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTType}} data\+\_\+element\+\_\+type)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_ae64f2c0aa53b2c8ed55b251ca159af46}{header}}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_adcda23924905523a5ce43b42a39c6b1f}{topology\+\_\+type\+\_\+2d}} = \char`\"{}2DCo\+Rect\+Mesh\char`\"{}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_aca7bdc7fb39d290b8f7bc3606e09b68e}{topology\+\_\+type\+\_\+3d}} = \char`\"{}3DCo\+Rect\+Mesh\char`\"{}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_aa8ec2aa5eb187e3bf4b0c97c907bf84c}{topology}} = \char`\"{}$<$Topology Dimensions=\textbackslash{}\char`\"{}\%s\textbackslash{}\char`\"{} Topology\+Type=\textbackslash{}\char`\"{}\%s\textbackslash{}\char`\"{}/$>$\textbackslash{}n\char`\"{}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_a1ef6d12095fac73c9833d524cddd4035}{geometry\+\_\+type\+\_\+2d}} = \char`\"{}ORIGIN\+\_\+\+DXDY\char`\"{}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_a2447394ee92726b1695a22cf1668f74d}{geometry\+\_\+type\+\_\+3d}} = \char`\"{}ORIGIN\+\_\+\+DXDYXZ\char`\"{}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_a9880195f99c3b69aeafb629d38f88584}{geometry\+\_\+origin\+\_\+2d}} = \char`\"{}0.\+000000 0.\+000000\char`\"{}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_acd8d6a430f340e8ee252f04c5ba98f21}{geometry\+\_\+origin\+\_\+3d}} = \char`\"{}0.\+000000 0.\+000000 0.\+000000\char`\"{}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_ac81b14476398c2c73ff6db535e264781}{geometry\+\_\+dxdy\+\_\+2d}} = \char`\"{}1.\+000000 1.\+000000\char`\"{}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_a3029d6dd44ad30b352866600c3cd06ca}{geometry\+\_\+dydydz\+\_\+3d}} = \char`\"{}1.\+000000 1.\+000000 1.\+000000\char`\"{}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_a3512ed15de220f178dc26334564c6463}{geometry}}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_a03bb82447853275719f6685fb63201ac}{attribute\+\_\+dataitem}}
+\item 
+const char $\ast$ \mbox{\hyperlink{ft__xdmf_8cpp_aef81668b98a62c1aef2bfa4481484e07}{footer}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__xdmf_8cpp_a0bfedcd956d745999ba8a2378a69533d}\label{ft__xdmf_8cpp_a0bfedcd956d745999ba8a2378a69533d}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!create\_xdmf@{create\_xdmf}}
+\index{create\_xdmf@{create\_xdmf}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{create\_xdmf()}{create\_xdmf()}}
+{\footnotesize\ttfamily int create\+\_\+xdmf (\begin{DoxyParamCaption}\item[{std\+::string}]{file\+\_\+name,  }\item[{std\+::string}]{dset\+\_\+name,  }\item[{std\+::vector$<$ unsigned long long $>$}]{dimensions,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTType}}}]{data\+\_\+element\+\_\+type }\end{DoxyParamCaption})}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ft__xdmf_8cpp_a03bb82447853275719f6685fb63201ac}\label{ft__xdmf_8cpp_a03bb82447853275719f6685fb63201ac}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!attribute\_dataitem@{attribute\_dataitem}}
+\index{attribute\_dataitem@{attribute\_dataitem}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{attribute\_dataitem}{attribute\_dataitem}}
+{\footnotesize\ttfamily const char$\ast$ attribute\+\_\+dataitem}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \textcolor{stringliteral}{"{}\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<Attribute AttributeType =\(\backslash\)"{}Scalar\(\backslash\)"{} Center=\(\backslash\)"{}Node\(\backslash\)"{}  Name=\(\backslash\)"{}\%s\(\backslash\)"{}>   \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<DataItem ItemType=\(\backslash\)"{}Uniform\(\backslash\)"{} Dimensions=\(\backslash\)"{}\%s\(\backslash\)"{} DataType=\(\backslash\)"{}Float\(\backslash\)"{} Precision=\(\backslash\)"{}4\(\backslash\)"{} Format=\(\backslash\)"{}HDF\(\backslash\)"{}> \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{    \%s:\%s  \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{</DataItem>   \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{</Attribute>  \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__xdmf_8cpp_aef81668b98a62c1aef2bfa4481484e07}\label{ft__xdmf_8cpp_aef81668b98a62c1aef2bfa4481484e07}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!footer@{footer}}
+\index{footer@{footer}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{footer}{footer}}
+{\footnotesize\ttfamily const char$\ast$ footer}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \textcolor{stringliteral}{"{}\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{</Grid> \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{</Domain>\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{</Xdmf>"{}}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__xdmf_8cpp_a3512ed15de220f178dc26334564c6463}\label{ft__xdmf_8cpp_a3512ed15de220f178dc26334564c6463}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!geometry@{geometry}}
+\index{geometry@{geometry}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{geometry}{geometry}}
+{\footnotesize\ttfamily const char$\ast$ geometry}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \textcolor{stringliteral}{"{}\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<Geometry Type=\(\backslash\)"{}\%s\(\backslash\)"{}> \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<DataItem Dimensions=\(\backslash\)"{}\%d\(\backslash\)"{} Format=\(\backslash\)"{}XML\(\backslash\)"{}>\%s</DataItem> \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<DataItem Dimensions=\(\backslash\)"{}\%d\(\backslash\)"{} Format=\(\backslash\)"{}XML\(\backslash\)"{}>\%s</DataItem> \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{</Geometry> \(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__xdmf_8cpp_ac81b14476398c2c73ff6db535e264781}\label{ft__xdmf_8cpp_ac81b14476398c2c73ff6db535e264781}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!geometry\_dxdy\_2d@{geometry\_dxdy\_2d}}
+\index{geometry\_dxdy\_2d@{geometry\_dxdy\_2d}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{geometry\_dxdy\_2d}{geometry\_dxdy\_2d}}
+{\footnotesize\ttfamily const char$\ast$ geometry\+\_\+dxdy\+\_\+2d = \char`\"{}1.\+000000 1.\+000000\char`\"{}}
+
+\mbox{\Hypertarget{ft__xdmf_8cpp_a3029d6dd44ad30b352866600c3cd06ca}\label{ft__xdmf_8cpp_a3029d6dd44ad30b352866600c3cd06ca}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!geometry\_dydydz\_3d@{geometry\_dydydz\_3d}}
+\index{geometry\_dydydz\_3d@{geometry\_dydydz\_3d}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{geometry\_dydydz\_3d}{geometry\_dydydz\_3d}}
+{\footnotesize\ttfamily const char$\ast$ geometry\+\_\+dydydz\+\_\+3d = \char`\"{}1.\+000000 1.\+000000 1.\+000000\char`\"{}}
+
+\mbox{\Hypertarget{ft__xdmf_8cpp_a9880195f99c3b69aeafb629d38f88584}\label{ft__xdmf_8cpp_a9880195f99c3b69aeafb629d38f88584}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!geometry\_origin\_2d@{geometry\_origin\_2d}}
+\index{geometry\_origin\_2d@{geometry\_origin\_2d}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{geometry\_origin\_2d}{geometry\_origin\_2d}}
+{\footnotesize\ttfamily const char$\ast$ geometry\+\_\+origin\+\_\+2d = \char`\"{}0.\+000000 0.\+000000\char`\"{}}
+
+\mbox{\Hypertarget{ft__xdmf_8cpp_acd8d6a430f340e8ee252f04c5ba98f21}\label{ft__xdmf_8cpp_acd8d6a430f340e8ee252f04c5ba98f21}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!geometry\_origin\_3d@{geometry\_origin\_3d}}
+\index{geometry\_origin\_3d@{geometry\_origin\_3d}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{geometry\_origin\_3d}{geometry\_origin\_3d}}
+{\footnotesize\ttfamily const char$\ast$ geometry\+\_\+origin\+\_\+3d = \char`\"{}0.\+000000 0.\+000000 0.\+000000\char`\"{}}
+
+\mbox{\Hypertarget{ft__xdmf_8cpp_a1ef6d12095fac73c9833d524cddd4035}\label{ft__xdmf_8cpp_a1ef6d12095fac73c9833d524cddd4035}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!geometry\_type\_2d@{geometry\_type\_2d}}
+\index{geometry\_type\_2d@{geometry\_type\_2d}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{geometry\_type\_2d}{geometry\_type\_2d}}
+{\footnotesize\ttfamily const char$\ast$ geometry\+\_\+type\+\_\+2d = \char`\"{}ORIGIN\+\_\+\+DXDY\char`\"{}}
+
+\mbox{\Hypertarget{ft__xdmf_8cpp_a2447394ee92726b1695a22cf1668f74d}\label{ft__xdmf_8cpp_a2447394ee92726b1695a22cf1668f74d}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!geometry\_type\_3d@{geometry\_type\_3d}}
+\index{geometry\_type\_3d@{geometry\_type\_3d}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{geometry\_type\_3d}{geometry\_type\_3d}}
+{\footnotesize\ttfamily const char$\ast$ geometry\+\_\+type\+\_\+3d = \char`\"{}ORIGIN\+\_\+\+DXDYXZ\char`\"{}}
+
+\mbox{\Hypertarget{ft__xdmf_8cpp_ae64f2c0aa53b2c8ed55b251ca159af46}\label{ft__xdmf_8cpp_ae64f2c0aa53b2c8ed55b251ca159af46}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!header@{header}}
+\index{header@{header}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{header}{header}}
+{\footnotesize\ttfamily const char$\ast$ header}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \textcolor{stringliteral}{"{}\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<?xml version=\(\backslash\)"{}1.0\(\backslash\)"{}?>\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<!DOCTYPE Xdmf SYSTEM \(\backslash\)"{}Xdmf.dtd\(\backslash\)"{} []>\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<Xdmf xmlns:xi=\(\backslash\)"{}http://www.w3.org/2001/XInclude\(\backslash\)"{} Version=\(\backslash\)"{}2.0\(\backslash\)"{}>\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<Domain>\(\backslash\)n\(\backslash\)}}
+\DoxyCodeLine{\textcolor{stringliteral}{<Grid GridType=\(\backslash\)"{}Uniform\(\backslash\)"{}>\(\backslash\)n"{}}}
+
+\end{DoxyCode}
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__xdmf_8cpp_aa8ec2aa5eb187e3bf4b0c97c907bf84c}\label{ft__xdmf_8cpp_aa8ec2aa5eb187e3bf4b0c97c907bf84c}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!topology@{topology}}
+\index{topology@{topology}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{topology}{topology}}
+{\footnotesize\ttfamily const char$\ast$ topology = \char`\"{}$<$Topology Dimensions=\textbackslash{}\char`\"{}\%s\textbackslash{}\char`\"{} Topology\+Type=\textbackslash{}\char`\"{}\%s\textbackslash{}\char`\"{}/$>$\textbackslash{}n\char`\"{}}
+
+\mbox{\Hypertarget{ft__xdmf_8cpp_adcda23924905523a5ce43b42a39c6b1f}\label{ft__xdmf_8cpp_adcda23924905523a5ce43b42a39c6b1f}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!topology\_type\_2d@{topology\_type\_2d}}
+\index{topology\_type\_2d@{topology\_type\_2d}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{topology\_type\_2d}{topology\_type\_2d}}
+{\footnotesize\ttfamily const char$\ast$ topology\+\_\+type\+\_\+2d = \char`\"{}2DCo\+Rect\+Mesh\char`\"{}}
+
+\mbox{\Hypertarget{ft__xdmf_8cpp_aca7bdc7fb39d290b8f7bc3606e09b68e}\label{ft__xdmf_8cpp_aca7bdc7fb39d290b8f7bc3606e09b68e}} 
+\index{ft\_xdmf.cpp@{ft\_xdmf.cpp}!topology\_type\_3d@{topology\_type\_3d}}
+\index{topology\_type\_3d@{topology\_type\_3d}!ft\_xdmf.cpp@{ft\_xdmf.cpp}}
+\doxysubsubsection{\texorpdfstring{topology\_type\_3d}{topology\_type\_3d}}
+{\footnotesize\ttfamily const char$\ast$ topology\+\_\+type\+\_\+3d = \char`\"{}3DCo\+Rect\+Mesh\char`\"{}}
+

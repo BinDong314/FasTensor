@@ -86,7 +86,12 @@ in binary and source code form.
 using namespace std;
 using namespace FT;
 
-//UDF One: duplicate the original data
+/**
+ * @brief  duplicate the original data
+ * 
+ * @param iStencil 
+ * @return Stencil<float> 
+ */
 inline Stencil<float> udf_hello_world(const Stencil<float> &iStencil)
 {
     Stencil<float> oStencil;
@@ -94,6 +99,10 @@ inline Stencil<float> udf_hello_world(const Stencil<float> &iStencil)
     return oStencil;
 }
 
+/**
+ *  @example testexample testexample.cpp
+ *  An example of the test class.
+ */
 int main(int argc, char *argv[])
 {
     //Init the MPICH, etc.

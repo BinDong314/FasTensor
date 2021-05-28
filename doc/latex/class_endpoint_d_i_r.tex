@@ -1,0 +1,491 @@
+\hypertarget{class_endpoint_d_i_r}{}\doxysection{Endpoint\+DIR Class Reference}
+\label{class_endpoint_d_i_r}\index{EndpointDIR@{EndpointDIR}}
+
+
+{\ttfamily \#include $<$ft\+\_\+endpoint\+\_\+dir.\+h$>$}
+
+Inheritance diagram for Endpoint\+DIR\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_endpoint_d_i_r}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_endpoint_d_i_r_a8fe7d54f949a581c36eb54d106c1a1ca}{Endpoint\+DIR}} (std\+::string endpoint\+\_\+info\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_endpoint_d_i_r}{Endpoint\+DIR}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_endpoint_d_i_r_a589cb256296b5ca3d52688378e1b3747}{Endpoint\+DIR}} ()
+\item 
+\mbox{\hyperlink{class_endpoint_d_i_r_a795d638528e96d080b2ed5627f04be55}{$\sim$\+Endpoint\+DIR}} ()
+\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_ab347946562a94e387487c4127e6efb8a}{Extract\+Meta}} () override
+\begin{DoxyCompactList}\small\item\em extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/data\+\_\+element\+\_\+type \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_a0835da8836981bdebe12786adc93cb2a}{Print\+Info}} () override
+\begin{DoxyCompactList}\small\item\em print information about the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_a12a310e7574318f9e297364957f7d268}{Create}} () override
+\begin{DoxyCompactList}\small\item\em create the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_ac35becfdd8a96791a1996bf0818f446a}{Open}} () override
+\begin{DoxyCompactList}\small\item\em open the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_a3fb2183436f1425433b68f9216a89a55}{Read}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data) override
+\begin{DoxyCompactList}\small\item\em read the data from end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_a850f021afe74c9ceccef0f428eb54898}{Write}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data) override
+\begin{DoxyCompactList}\small\item\em write the data to the end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_ae810354d998a6d90bd2b1660104c5431}{Close}} () override
+\begin{DoxyCompactList}\small\item\em close the end-\/point \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_d_i_r_a99e204896e7830951c3337fbef507faf}{Map2\+My\+Type}} () override
+\begin{DoxyCompactList}\small\item\em call the finalize to close everything (like call Destractor) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_d_i_r_abf94530078f36fe816a480cf9984c220}{Enable\+Collective\+IO}} () override
+\item 
+void \mbox{\hyperlink{class_endpoint_d_i_r_abf4f17346aaba8f4c7f6f8acfc74a99e}{Disable\+Collective\+IO}} () override
+\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_a053ee1fa4e63e0264826c8f098cffcad}{Parse\+Endpoint\+Info}} () override
+\begin{DoxyCompactList}\small\item\em parse endpoint\+\_\+info to my own info \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_endpoint_d_i_r_af94f6284126a7fed85f54c6a9d012a3c}{Get\+Dir\+Chunk\+Size}} () override
+\begin{DoxyCompactList}\small\item\em Get the Chunk Size object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_d_i_r_ab6756d3423a0a56b530f12b81358e176}{Set\+Dir\+Chunk\+Size}} (std\+::vector$<$ int $>$ \&dir\+\_\+chunk\+\_\+size\+\_\+p) override
+\begin{DoxyCompactList}\small\item\em Set the Dir Chunk Size object. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{class_endpoint_d_i_r_a520b2318f2cd61fae46d1d13730a4bfe}{Get\+Dir\+File\+Vector}} () override
+\begin{DoxyCompactList}\small\item\em Get the Dir File Vector object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_d_i_r_a5641f495d44dd17dc800b5b02976d52e}{Set\+Dir\+File\+Vector}} (std\+::vector$<$ std\+::string $>$ \&file\+\_\+list) override
+\begin{DoxyCompactList}\small\item\em Set the Dir File Vector object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_ada4a43db3db8861b254b6d51d3c4d92c}{Control}} (int opt\+\_\+code, std\+::vector$<$ std\+::string $>$ \&parameter\+\_\+v) override
+\begin{DoxyCompactList}\small\item\em call a special operator on endpoint such as, enable collective I/O for HDF5 dump file from MEMORY to HDF5 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_d_i_r_aa65c576953992f7d1a8cfde038d9cab8}{Set\+Merge\+Index}} (int index\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the Merge Index. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_a5b3a2dc488fa25f59be8b178c881bfac}{Get\+Merge\+Index}} ()
+\begin{DoxyCompactList}\small\item\em Get the Merge Index object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_a2af36c64dc85663aad82b515f452d0ce}{Write\+Attribute}} (const std\+::string \&name, const void $\ast$data, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} data\+\_\+type\+\_\+p, const size\+\_\+t \&data\+\_\+length\+\_\+p=0) override
+\begin{DoxyCompactList}\small\item\em Set the Attribute object Do not need to be pure virtual method. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_a402be6945f57628a3ba71d2deff79444}{Read\+Attribute}} (const std\+::string \&name, void $\ast$data, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} data\+\_\+type\+\_\+p, const size\+\_\+t \&data\+\_\+length\+\_\+p=0) override
+\begin{DoxyCompactList}\small\item\em Get the Attribute object Do not need to be pure virtual method. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_aba554bd87c19d25a288513a6e148964a}{Get\+Attribute\+Size}} (const std\+::string \&name, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}} data\+\_\+type\+\_\+p) override
+\item 
+int \mbox{\hyperlink{class_endpoint_d_i_r_a4f1fa35bc4b6cb78db6aa50116eda563}{Read\+All\+Attribute\+Name}} (std\+::vector$<$ std\+::string $>$ \&attr\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Read all attribute name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_endpoint_d_i_r_a8fe7d54f949a581c36eb54d106c1a1ca}\label{class_endpoint_d_i_r_a8fe7d54f949a581c36eb54d106c1a1ca}} 
+\index{EndpointDIR@{EndpointDIR}!EndpointDIR@{EndpointDIR}}
+\index{EndpointDIR@{EndpointDIR}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{EndpointDIR()}{EndpointDIR()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Endpoint\+DIR\+::\+Endpoint\+DIR (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+info\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_endpoint_d_i_r}{Endpoint\+DIR}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & contains the info of the endpoint, e.\+g., file type + file info \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_d_i_r_a589cb256296b5ca3d52688378e1b3747}\label{class_endpoint_d_i_r_a589cb256296b5ca3d52688378e1b3747}} 
+\index{EndpointDIR@{EndpointDIR}!EndpointDIR@{EndpointDIR}}
+\index{EndpointDIR@{EndpointDIR}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{EndpointDIR()}{EndpointDIR()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Endpoint\+DIR\+::\+Endpoint\+DIR (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a795d638528e96d080b2ed5627f04be55}\label{class_endpoint_d_i_r_a795d638528e96d080b2ed5627f04be55}} 
+\index{EndpointDIR@{EndpointDIR}!````~EndpointDIR@{$\sim$EndpointDIR}}
+\index{````~EndpointDIR@{$\sim$EndpointDIR}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{$\sim$EndpointDIR()}{~EndpointDIR()}}
+{\footnotesize\ttfamily Endpoint\+DIR\+::$\sim$\+Endpoint\+DIR (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_endpoint_d_i_r_ae810354d998a6d90bd2b1660104c5431}\label{class_endpoint_d_i_r_ae810354d998a6d90bd2b1660104c5431}} 
+\index{EndpointDIR@{EndpointDIR}!Close@{Close}}
+\index{Close@{Close}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{Close()}{Close()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+close the end-\/point 
+
+\begin{DoxyReturn}{Returns}
+int int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a76379a7d9acbf7d429d315fbddadb2ad}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_ada4a43db3db8861b254b6d51d3c4d92c}\label{class_endpoint_d_i_r_ada4a43db3db8861b254b6d51d3c4d92c}} 
+\index{EndpointDIR@{EndpointDIR}!Control@{Control}}
+\index{Control@{Control}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{Control()}{Control()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Control (\begin{DoxyParamCaption}\item[{int}]{opt\+\_\+code,  }\item[{std\+::vector$<$ std\+::string $>$ \&}]{parameter\+\_\+v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+call a special operator on endpoint such as, enable collective I/O for HDF5 dump file from MEMORY to HDF5 
+
+
+\begin{DoxyParams}{Parameters}
+{\em opt\+\_\+code,specially} & defined code \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_ad469d082a014d0a45be6a892352527d4}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a12a310e7574318f9e297364957f7d268}\label{class_endpoint_d_i_r_a12a310e7574318f9e297364957f7d268}} 
+\index{EndpointDIR@{EndpointDIR}!Create@{Create}}
+\index{Create@{Create}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{Create()}{Create()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+create the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_add0ecdbfabcc9382356bbac955ddb638}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_abf4f17346aaba8f4c7f6f8acfc74a99e}\label{class_endpoint_d_i_r_abf4f17346aaba8f4c7f6f8acfc74a99e}} 
+\index{EndpointDIR@{EndpointDIR}!DisableCollectiveIO@{DisableCollectiveIO}}
+\index{DisableCollectiveIO@{DisableCollectiveIO}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{DisableCollectiveIO()}{DisableCollectiveIO()}}
+{\footnotesize\ttfamily void Endpoint\+DIR\+::\+Disable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_af8c636c2a09098d6a7ba91dbef96e9ba}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_abf94530078f36fe816a480cf9984c220}\label{class_endpoint_d_i_r_abf94530078f36fe816a480cf9984c220}} 
+\index{EndpointDIR@{EndpointDIR}!EnableCollectiveIO@{EnableCollectiveIO}}
+\index{EnableCollectiveIO@{EnableCollectiveIO}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{EnableCollectiveIO()}{EnableCollectiveIO()}}
+{\footnotesize\ttfamily void Endpoint\+DIR\+::\+Enable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_a53f5bcbf1fe56d9ebb56d270bb92311e}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_ab347946562a94e387487c4127e6efb8a}\label{class_endpoint_d_i_r_ab347946562a94e387487c4127e6efb8a}} 
+\index{EndpointDIR@{EndpointDIR}!ExtractMeta@{ExtractMeta}}
+\index{ExtractMeta@{ExtractMeta}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{ExtractMeta()}{ExtractMeta()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Extract\+Meta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/data\+\_\+element\+\_\+type 
+
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a43bcd87f7b7da0b2eefd3010e06c5cd5}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_aba554bd87c19d25a288513a6e148964a}\label{class_endpoint_d_i_r_aba554bd87c19d25a288513a6e148964a}} 
+\index{EndpointDIR@{EndpointDIR}!GetAttributeSize@{GetAttributeSize}}
+\index{GetAttributeSize@{GetAttributeSize}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{GetAttributeSize()}{GetAttributeSize()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Get\+Attribute\+Size (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{data\+\_\+type\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_aec350eedd85b64a9f261f8474aefd007}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_af94f6284126a7fed85f54c6a9d012a3c}\label{class_endpoint_d_i_r_af94f6284126a7fed85f54c6a9d012a3c}} 
+\index{EndpointDIR@{EndpointDIR}!GetDirChunkSize@{GetDirChunkSize}}
+\index{GetDirChunkSize@{GetDirChunkSize}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{GetDirChunkSize()}{GetDirChunkSize()}}
+{\footnotesize\ttfamily std\+::vector$<$ int $>$ Endpoint\+DIR\+::\+Get\+Dir\+Chunk\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the Chunk Size object. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$int$>$ 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_a5c16bba6a4878414b4a375a17d6a06ac}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a520b2318f2cd61fae46d1d13730a4bfe}\label{class_endpoint_d_i_r_a520b2318f2cd61fae46d1d13730a4bfe}} 
+\index{EndpointDIR@{EndpointDIR}!GetDirFileVector@{GetDirFileVector}}
+\index{GetDirFileVector@{GetDirFileVector}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{GetDirFileVector()}{GetDirFileVector()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ Endpoint\+DIR\+::\+Get\+Dir\+File\+Vector (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the Dir File Vector object. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$std\+::string$>$ 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_ab22a5ddcc29289e68e28df993db16595}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a5b3a2dc488fa25f59be8b178c881bfac}\label{class_endpoint_d_i_r_a5b3a2dc488fa25f59be8b178c881bfac}} 
+\index{EndpointDIR@{EndpointDIR}!GetMergeIndex@{GetMergeIndex}}
+\index{GetMergeIndex@{GetMergeIndex}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{GetMergeIndex()}{GetMergeIndex()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Get\+Merge\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the Merge Index object. 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_d_i_r_a99e204896e7830951c3337fbef507faf}\label{class_endpoint_d_i_r_a99e204896e7830951c3337fbef507faf}} 
+\index{EndpointDIR@{EndpointDIR}!Map2MyType@{Map2MyType}}
+\index{Map2MyType@{Map2MyType}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{Map2MyType()}{Map2MyType()}}
+{\footnotesize\ttfamily void Endpoint\+DIR\+::\+Map2\+My\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+call the finalize to close everything (like call Destractor) 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a755ef0b10d5c4a639d9a11f5e1c7d9a3}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_ac35becfdd8a96791a1996bf0818f446a}\label{class_endpoint_d_i_r_ac35becfdd8a96791a1996bf0818f446a}} 
+\index{EndpointDIR@{EndpointDIR}!Open@{Open}}
+\index{Open@{Open}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{Open()}{Open()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+open the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a481874b61d83081b4a96a0c2b21a8dbd}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a053ee1fa4e63e0264826c8f098cffcad}\label{class_endpoint_d_i_r_a053ee1fa4e63e0264826c8f098cffcad}} 
+\index{EndpointDIR@{EndpointDIR}!ParseEndpointInfo@{ParseEndpointInfo}}
+\index{ParseEndpointInfo@{ParseEndpointInfo}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{ParseEndpointInfo()}{ParseEndpointInfo()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Parse\+Endpoint\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+parse endpoint\+\_\+info to my own info 
+
+\begin{DoxyReturn}{Returns}
+int\+: 0 works, $<$ 0 error, 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a973927c11f35be4f393f456a8b2e2a1e}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a0835da8836981bdebe12786adc93cb2a}\label{class_endpoint_d_i_r_a0835da8836981bdebe12786adc93cb2a}} 
+\index{EndpointDIR@{EndpointDIR}!PrintInfo@{PrintInfo}}
+\index{PrintInfo@{PrintInfo}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{PrintInfo()}{PrintInfo()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Print\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+print information about the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_af014eb78eb2097f23cd48d48c2004b16}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a3fb2183436f1425433b68f9216a89a55}\label{class_endpoint_d_i_r_a3fb2183436f1425433b68f9216a89a55}} 
+\index{EndpointDIR@{EndpointDIR}!Read@{Read}}
+\index{Read@{Read}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Read (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+read the data from end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a2ea7ed58e917ba63cb222ffbda09aa0c}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a4f1fa35bc4b6cb78db6aa50116eda563}\label{class_endpoint_d_i_r_a4f1fa35bc4b6cb78db6aa50116eda563}} 
+\index{EndpointDIR@{EndpointDIR}!ReadAllAttributeName@{ReadAllAttributeName}}
+\index{ReadAllAttributeName@{ReadAllAttributeName}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{ReadAllAttributeName()}{ReadAllAttributeName()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Read\+All\+Attribute\+Name (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::string $>$ \&}]{attr\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Read all attribute name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em attri\+\_\+name} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_d_i_r_a402be6945f57628a3ba71d2deff79444}\label{class_endpoint_d_i_r_a402be6945f57628a3ba71d2deff79444}} 
+\index{EndpointDIR@{EndpointDIR}!ReadAttribute@{ReadAttribute}}
+\index{ReadAttribute@{ReadAttribute}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{ReadAttribute()}{ReadAttribute()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Read\+Attribute (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{void $\ast$}]{data,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{data\+\_\+type\+\_\+p,  }\item[{const size\+\_\+t \&}]{data\+\_\+length\+\_\+p = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the Attribute object Do not need to be pure virtual method. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \\
+\hline
+{\em data} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_a1a12705a507c7a8d2fa1cb470d49c11a}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_ab6756d3423a0a56b530f12b81358e176}\label{class_endpoint_d_i_r_ab6756d3423a0a56b530f12b81358e176}} 
+\index{EndpointDIR@{EndpointDIR}!SetDirChunkSize@{SetDirChunkSize}}
+\index{SetDirChunkSize@{SetDirChunkSize}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{SetDirChunkSize()}{SetDirChunkSize()}}
+{\footnotesize\ttfamily void Endpoint\+DIR\+::\+Set\+Dir\+Chunk\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{dir\+\_\+chunk\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the Dir Chunk Size object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dir\+\_\+chunk\+\_\+size\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_ab58739c271672f2559b13b5bda71445b}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a5641f495d44dd17dc800b5b02976d52e}\label{class_endpoint_d_i_r_a5641f495d44dd17dc800b5b02976d52e}} 
+\index{EndpointDIR@{EndpointDIR}!SetDirFileVector@{SetDirFileVector}}
+\index{SetDirFileVector@{SetDirFileVector}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{SetDirFileVector()}{SetDirFileVector()}}
+{\footnotesize\ttfamily void Endpoint\+DIR\+::\+Set\+Dir\+File\+Vector (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::string $>$ \&}]{file\+\_\+list }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the Dir File Vector object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+\_\+list} & \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_ad97cb0d1525ac7cd27711922e095d2bc}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_aa65c576953992f7d1a8cfde038d9cab8}\label{class_endpoint_d_i_r_aa65c576953992f7d1a8cfde038d9cab8}} 
+\index{EndpointDIR@{EndpointDIR}!SetMergeIndex@{SetMergeIndex}}
+\index{SetMergeIndex@{SetMergeIndex}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{SetMergeIndex()}{SetMergeIndex()}}
+{\footnotesize\ttfamily void Endpoint\+DIR\+::\+Set\+Merge\+Index (\begin{DoxyParamCaption}\item[{int}]{index\+\_\+p }\end{DoxyParamCaption})}
+
+
+
+Set the Merge Index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index\+\_\+p} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_d_i_r_a850f021afe74c9ceccef0f428eb54898}\label{class_endpoint_d_i_r_a850f021afe74c9ceccef0f428eb54898}} 
+\index{EndpointDIR@{EndpointDIR}!Write@{Write}}
+\index{Write@{Write}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{Write()}{Write()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Write (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+write the data to the end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a4bcb3e885bfb1343c610a3163fc01c77}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_d_i_r_a2af36c64dc85663aad82b515f452d0ce}\label{class_endpoint_d_i_r_a2af36c64dc85663aad82b515f452d0ce}} 
+\index{EndpointDIR@{EndpointDIR}!WriteAttribute@{WriteAttribute}}
+\index{WriteAttribute@{WriteAttribute}!EndpointDIR@{EndpointDIR}}
+\doxysubsubsection{\texorpdfstring{WriteAttribute()}{WriteAttribute()}}
+{\footnotesize\ttfamily int Endpoint\+DIR\+::\+Write\+Attribute (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const void $\ast$}]{data,  }\item[{\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}]{data\+\_\+type\+\_\+p,  }\item[{const size\+\_\+t \&}]{data\+\_\+length\+\_\+p = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the Attribute object Do not need to be pure virtual method. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \\
+\hline
+{\em data} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_aecfbfb70e1b63027f447628f94e2bc35}{Endpoint}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__endpoint__dir_8h}{ft\+\_\+endpoint\+\_\+dir.\+h}}\item 
+\mbox{\hyperlink{ft__endpoint__dir_8cpp}{ft\+\_\+endpoint\+\_\+dir.\+cpp}}\end{DoxyCompactItemize}

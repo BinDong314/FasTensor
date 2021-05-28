@@ -1,0 +1,115 @@
+\hypertarget{ft__example__stack_8cpp}{}\doxysection{ft\+\_\+example\+\_\+stack.\+cpp File Reference}
+\label{ft__example__stack_8cpp}\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}au.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Das\+Lib.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__example__stack_8cpp_affdbc3d92087aa22d3c30b2d68bb5c6f}{LTS}}~14999
+\begin{DoxyCompactList}\small\item\em Example to sum each row of A (8 x 8) Store result in H (8 x 2) H\mbox{[}0,0\mbox{]} = sum (A\mbox{[}0,0\mbox{]}, A\mbox{[}0,1\mbox{]}, A\mbox{[}0,2\mbox{]}, A\mbox{[}0,3\mbox{]}) ~\newline
+ H\mbox{[}0,1\mbox{]} = sum (A\mbox{[}0,4\mbox{]}, A\mbox{[}0,5\mbox{]}, A\mbox{[}0,6\mbox{]}, A\mbox{[}0,7\mbox{]}) ~\newline
+ H\mbox{[}1,0\mbox{]} = sum (A\mbox{[}1,0\mbox{]}, A\mbox{[}1,1\mbox{]}, A\mbox{[}1,2\mbox{]}, A\mbox{[}1,3\mbox{]}) ... ... \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{ft__example__stack_8cpp_a4a49f898beebe4cd295c33b99d57fff7}{CHS}}~201
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_stencil}{Stencil}}$<$ double $>$ \mbox{\hyperlink{ft__example__stack_8cpp_a8f8f27e55ae9ff216943b071c8bf4c68}{stack\+\_\+udf}} (const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ double $>$ \&i\+Stencil)
+\item 
+int \mbox{\hyperlink{ft__example__stack_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{ft__example__stack_8cpp_a1b01a4354147da92a548ea1a5f96d592}{t\+\_\+start}} = -\/59.\+9920000000000
+\item 
+double \mbox{\hyperlink{ft__example__stack_8cpp_a4b637c5fff609e604a3b2b2787f4a9fa}{t\+\_\+end}} = 59.\+9920000000000
+\item 
+double \mbox{\hyperlink{ft__example__stack_8cpp_a5cd2077a80052e0e93450f6259fa5f92}{sample\+\_\+rate}} = 0.\+00800000000000000
+\item 
+std\+::vector$<$ unsigned long long $>$ \mbox{\hyperlink{ft__example__stack_8cpp_a878c6c71a75a97384792c3770a4aac81}{H\+\_\+size}} = \{\mbox{\hyperlink{ft__example__stack_8cpp_a4a49f898beebe4cd295c33b99d57fff7}{CHS}}, \mbox{\hyperlink{ft__example__stack_8cpp_affdbc3d92087aa22d3c30b2d68bb5c6f}{LTS}}\}
+\item 
+\mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$ double $>$ $\ast$ \mbox{\hyperlink{ft__example__stack_8cpp_a1e7bf4cb02d2e28b892c9e6d40b0c926}{H}}
+\item 
+\mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$ double $>$ \mbox{\hyperlink{ft__example__stack_8cpp_ac076f7a8fbab29d0ecaaaa614d23fcae}{semblance\+Sum\+\_\+denom}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__example__stack_8cpp_a4a49f898beebe4cd295c33b99d57fff7}\label{ft__example__stack_8cpp_a4a49f898beebe4cd295c33b99d57fff7}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!CHS@{CHS}}
+\index{CHS@{CHS}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{CHS}{CHS}}
+{\footnotesize\ttfamily \#define CHS~201}
+
+\mbox{\Hypertarget{ft__example__stack_8cpp_affdbc3d92087aa22d3c30b2d68bb5c6f}\label{ft__example__stack_8cpp_affdbc3d92087aa22d3c30b2d68bb5c6f}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!LTS@{LTS}}
+\index{LTS@{LTS}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{LTS}{LTS}}
+{\footnotesize\ttfamily \#define LTS~14999}
+
+
+
+Example to sum each row of A (8 x 8) Store result in H (8 x 2) H\mbox{[}0,0\mbox{]} = sum (A\mbox{[}0,0\mbox{]}, A\mbox{[}0,1\mbox{]}, A\mbox{[}0,2\mbox{]}, A\mbox{[}0,3\mbox{]}) ~\newline
+ H\mbox{[}0,1\mbox{]} = sum (A\mbox{[}0,4\mbox{]}, A\mbox{[}0,5\mbox{]}, A\mbox{[}0,6\mbox{]}, A\mbox{[}0,7\mbox{]}) ~\newline
+ H\mbox{[}1,0\mbox{]} = sum (A\mbox{[}1,0\mbox{]}, A\mbox{[}1,1\mbox{]}, A\mbox{[}1,2\mbox{]}, A\mbox{[}1,3\mbox{]}) ... ... 
+
+A points to a list of files and each have size of 8 x 8. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__example__stack_8cpp_a0ddf1224851353fc92bfbff6f499fa97}\label{ft__example__stack_8cpp_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!main@{main}}
+\index{main@{main}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__example__stack_8cpp_a8f8f27e55ae9ff216943b071c8bf4c68}\label{ft__example__stack_8cpp_a8f8f27e55ae9ff216943b071c8bf4c68}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!stack\_udf@{stack\_udf}}
+\index{stack\_udf@{stack\_udf}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{stack\_udf()}{stack\_udf()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_stencil}{Stencil}}$<$double$>$ stack\+\_\+udf (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ double $>$ \&}]{i\+Stencil }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ft__example__stack_8cpp_a1e7bf4cb02d2e28b892c9e6d40b0c926}\label{ft__example__stack_8cpp_a1e7bf4cb02d2e28b892c9e6d40b0c926}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!H@{H}}
+\index{H@{H}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{H}{H}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$double$>$$\ast$ H}
+
+\mbox{\Hypertarget{ft__example__stack_8cpp_a878c6c71a75a97384792c3770a4aac81}\label{ft__example__stack_8cpp_a878c6c71a75a97384792c3770a4aac81}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!H\_size@{H\_size}}
+\index{H\_size@{H\_size}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{H\_size}{H\_size}}
+{\footnotesize\ttfamily std\+::vector$<$unsigned long long$>$ H\+\_\+size = \{\mbox{\hyperlink{ft__example__stack_8cpp_a4a49f898beebe4cd295c33b99d57fff7}{CHS}}, \mbox{\hyperlink{ft__example__stack_8cpp_affdbc3d92087aa22d3c30b2d68bb5c6f}{LTS}}\}}
+
+\mbox{\Hypertarget{ft__example__stack_8cpp_a5cd2077a80052e0e93450f6259fa5f92}\label{ft__example__stack_8cpp_a5cd2077a80052e0e93450f6259fa5f92}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!sample\_rate@{sample\_rate}}
+\index{sample\_rate@{sample\_rate}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{sample\_rate}{sample\_rate}}
+{\footnotesize\ttfamily double sample\+\_\+rate = 0.\+00800000000000000}
+
+\mbox{\Hypertarget{ft__example__stack_8cpp_ac076f7a8fbab29d0ecaaaa614d23fcae}\label{ft__example__stack_8cpp_ac076f7a8fbab29d0ecaaaa614d23fcae}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!semblanceSum\_denom@{semblanceSum\_denom}}
+\index{semblanceSum\_denom@{semblanceSum\_denom}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{semblanceSum\_denom}{semblanceSum\_denom}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_f_t_1_1_array}{Array}}$<$double$>$ semblance\+Sum\+\_\+denom}
+
+\mbox{\Hypertarget{ft__example__stack_8cpp_a4b637c5fff609e604a3b2b2787f4a9fa}\label{ft__example__stack_8cpp_a4b637c5fff609e604a3b2b2787f4a9fa}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!t\_end@{t\_end}}
+\index{t\_end@{t\_end}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{t\_end}{t\_end}}
+{\footnotesize\ttfamily double t\+\_\+end = 59.\+9920000000000}
+
+\mbox{\Hypertarget{ft__example__stack_8cpp_a1b01a4354147da92a548ea1a5f96d592}\label{ft__example__stack_8cpp_a1b01a4354147da92a548ea1a5f96d592}} 
+\index{ft\_example\_stack.cpp@{ft\_example\_stack.cpp}!t\_start@{t\_start}}
+\index{t\_start@{t\_start}!ft\_example\_stack.cpp@{ft\_example\_stack.cpp}}
+\doxysubsubsection{\texorpdfstring{t\_start}{t\_start}}
+{\footnotesize\ttfamily double t\+\_\+start = -\/59.\+9920000000000}
+

@@ -1,0 +1,164 @@
+\hypertarget{ft__output__vector_8h}{}\doxysection{ft\+\_\+output\+\_\+vector.\+h File Reference}
+\label{ft__output__vector_8h}\index{ft\_output\_vector.h@{ft\_output\_vector.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$type\+\_\+traits$>$}\newline
+{\ttfamily \#include $<$cstring$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$sys/types.\+h$>$}\newline
+{\ttfamily \#include $<$sys/stat.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$tuple$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$iterator$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include $<$variant$>$}\newline
+{\ttfamily \#include $<$dirent.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+type.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+utility\+\_\+macro.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+array\+\_\+view\+\_\+access.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{ft__output__vector_8h_ac8b7787409d5c2aa117c85730f91012c}{Get\+Chunk\+Address}} (const unsigned long long chunk\+\_\+id, const std\+::vector$<$ unsigned long long $>$ array\+\_\+size, const std\+::vector$<$ size\+\_\+t $>$ chunk\+\_\+size, std\+::vector$<$ unsigned long long $>$ \&chunk\+\_\+start\+\_\+address, std\+::vector$<$ unsigned long long $>$ \&chunk\+\_\+end\+\_\+address)
+\begin{DoxyCompactList}\small\item\em Get the Chunk Address object. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void $\ast$ \mbox{\hyperlink{ft__output__vector_8h_acf562e9149302e98e7ebcff63b541d3a}{Insert\+Output\+VV2\+WriteV}} (std\+::vector$<$ std\+::vector$<$ T $>$$>$ \&v, std\+::vector$<$ size\+\_\+t $>$ \&v\+\_\+shape, std\+::vector$<$ unsigned long long $>$ \&write\+\_\+start\+\_\+address, std\+::vector$<$ unsigned long long $>$ \&write\+\_\+end\+\_\+address, bool last\+\_\+chunk\+\_\+flag, std\+::vector$<$ size\+\_\+t $>$ \&prev\+\_\+v\+\_\+shape)
+\begin{DoxyCompactList}\small\item\em Insert output (vector of vector) into a buffer (vector) to write. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void $\ast$ \mbox{\hyperlink{ft__output__vector_8h_a9a8f0f55e3f56213538b28df4aae3331}{Insert\+Output\+VV2\+WriteV}} (std\+::vector$<$ T $>$ \&v, std\+::vector$<$ size\+\_\+t $>$ \&v\+\_\+shape, std\+::vector$<$ unsigned long long $>$ \&write\+\_\+start\+\_\+address, std\+::vector$<$ unsigned long long $>$ \&write\+\_\+end\+\_\+address, bool last\+\_\+chunk\+\_\+flag, std\+::vector$<$ size\+\_\+t $>$ \&prev\+\_\+v\+\_\+shape)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void $\ast$ \mbox{\hyperlink{ft__output__vector_8h_a3d1b6718a79657fb679800bf0b5f485e}{Insert\+Output\+VV2\+WriteV}} (T \&v, std\+::vector$<$ size\+\_\+t $>$ \&v\+\_\+shape, std\+::vector$<$ unsigned long long $>$ \&write\+\_\+start\+\_\+address, std\+::vector$<$ unsigned long long $>$ \&write\+\_\+end\+\_\+address, bool last\+\_\+chunk\+\_\+flag, std\+::vector$<$ size\+\_\+t $>$ \&prev\+\_\+v\+\_\+shape)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void $\ast$ \mbox{\hyperlink{ft__output__vector_8h_a75028a9ce87211660eff92655fe7d9ec}{Flat\+Vector}} (std\+::vector$<$ std\+::vector$<$ T $>$$>$ \&v, \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} direction, std\+::vector$<$ unsigned long long $>$ \&start\+\_\+address, std\+::vector$<$ unsigned long long $>$ \&end\+\_\+address, size\+\_\+t \&v\+\_\+size)
+\begin{DoxyCompactList}\small\item\em flat vector of vector to 1D vector direction specify row-\/major or colum major AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+ROW (0)\+: row major, e.\+g., for a 2 by 2 vector of vector v\mbox{[}0\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}0\mbox{]}\mbox{[}1\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}1\mbox{]} AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+COL (1)\+: column major, e.\+g., for a 2 by 2 vector of vector v\mbox{[}0\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}0\mbox{]}\mbox{[}1\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}1\mbox{]} \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void $\ast$ \mbox{\hyperlink{ft__output__vector_8h_aa70ec4d83b8ff312edff1f72872929ed}{Flat\+Vector}} (std\+::vector$<$ T $>$ \&v, \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} direction, std\+::vector$<$ unsigned long long $>$ \&start\+\_\+address, std\+::vector$<$ unsigned long long $>$ \&end\+\_\+address, size\+\_\+t \&v\+\_\+size)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void $\ast$ \mbox{\hyperlink{ft__output__vector_8h_a0eb330d95aec1b568a1a50d504f4431c}{Flat\+Vector}} (T \&v, \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} direction, std\+::vector$<$ unsigned long long $>$ \&start\+\_\+address, std\+::vector$<$ unsigned long long $>$ \&end\+\_\+address, size\+\_\+t \&v\+\_\+size)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__output__vector_8h_a75028a9ce87211660eff92655fe7d9ec}\label{ft__output__vector_8h_a75028a9ce87211660eff92655fe7d9ec}} 
+\index{ft\_output\_vector.h@{ft\_output\_vector.h}!FlatVector@{FlatVector}}
+\index{FlatVector@{FlatVector}!ft\_output\_vector.h@{ft\_output\_vector.h}}
+\doxysubsubsection{\texorpdfstring{FlatVector()}{FlatVector()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void$\ast$ Flat\+Vector (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ T $>$$>$ \&}]{v,  }\item[{\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}}}]{direction,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{start\+\_\+address,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{end\+\_\+address,  }\item[{size\+\_\+t \&}]{v\+\_\+size }\end{DoxyParamCaption})}
+
+
+
+flat vector of vector to 1D vector direction specify row-\/major or colum major AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+ROW (0)\+: row major, e.\+g., for a 2 by 2 vector of vector v\mbox{[}0\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}0\mbox{]}\mbox{[}1\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}1\mbox{]} AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+COL (1)\+: column major, e.\+g., for a 2 by 2 vector of vector v\mbox{[}0\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}0\mbox{]}\mbox{[}1\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}1\mbox{]} 
+
+AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+RC\+: both row and column major, e.\+g. for a 2 by 2 vector of vector v\mbox{[}0\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}0\mbox{]}\mbox{[}1\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}1\mbox{]} Then, linearized as v\mbox{[}0\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}0\mbox{]}\mbox{[}1\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}0\mbox{]} v\mbox{[}1\mbox{]}\mbox{[}1\mbox{]} It looks like AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+ROW, but the start\+\_\+address and end\+\_\+address are handled differently start\+\_\+address is adjusted by v.\+size() end\+\_\+address is adjusted by v\mbox{[}0\mbox{]}.size() ~\newline
+ AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+CR\+: both row and column major, e.\+g. for a 2 by 2 vector of vector
+
+Since this is the support function to Write\+Endpoint, It also convert the address associated with it.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & type of data element \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em v} & the vector of vector \\
+\hline
+{\em direction} & how to flat the data \\
+\hline
+{\em start\+\_\+address} & the start address before/after flat, it may chage the \# of dimensions \\
+\hline
+{\em end\+\_\+address} & the end address before/after flat, it may chage the \# of dimensions \\
+\hline
+{\em v\+\_\+size,the} & size of each element vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void$\ast$ the flat data 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__output__vector_8h_aa70ec4d83b8ff312edff1f72872929ed}\label{ft__output__vector_8h_aa70ec4d83b8ff312edff1f72872929ed}} 
+\index{ft\_output\_vector.h@{ft\_output\_vector.h}!FlatVector@{FlatVector}}
+\index{FlatVector@{FlatVector}!ft\_output\_vector.h@{ft\_output\_vector.h}}
+\doxysubsubsection{\texorpdfstring{FlatVector()}{FlatVector()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void$\ast$ Flat\+Vector (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{v,  }\item[{\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}}}]{direction,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{start\+\_\+address,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{end\+\_\+address,  }\item[{size\+\_\+t \&}]{v\+\_\+size }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__output__vector_8h_a0eb330d95aec1b568a1a50d504f4431c}\label{ft__output__vector_8h_a0eb330d95aec1b568a1a50d504f4431c}} 
+\index{ft\_output\_vector.h@{ft\_output\_vector.h}!FlatVector@{FlatVector}}
+\index{FlatVector@{FlatVector}!ft\_output\_vector.h@{ft\_output\_vector.h}}
+\doxysubsubsection{\texorpdfstring{FlatVector()}{FlatVector()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void$\ast$ Flat\+Vector (\begin{DoxyParamCaption}\item[{T \&}]{v,  }\item[{\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}}}]{direction,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{start\+\_\+address,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{end\+\_\+address,  }\item[{size\+\_\+t \&}]{v\+\_\+size }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__output__vector_8h_ac8b7787409d5c2aa117c85730f91012c}\label{ft__output__vector_8h_ac8b7787409d5c2aa117c85730f91012c}} 
+\index{ft\_output\_vector.h@{ft\_output\_vector.h}!GetChunkAddress@{GetChunkAddress}}
+\index{GetChunkAddress@{GetChunkAddress}!ft\_output\_vector.h@{ft\_output\_vector.h}}
+\doxysubsubsection{\texorpdfstring{GetChunkAddress()}{GetChunkAddress()}}
+{\footnotesize\ttfamily void Get\+Chunk\+Address (\begin{DoxyParamCaption}\item[{const unsigned long long}]{chunk\+\_\+id,  }\item[{const std\+::vector$<$ unsigned long long $>$}]{array\+\_\+size,  }\item[{const std\+::vector$<$ size\+\_\+t $>$}]{chunk\+\_\+size,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{chunk\+\_\+start\+\_\+address,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{chunk\+\_\+end\+\_\+address }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Chunk Address object. 
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory
+
+
+\begin{DoxyParams}{Parameters}
+{\em chunk\+\_\+id} & \\
+\hline
+{\em array\+\_\+size} & \\
+\hline
+{\em chunk\+\_\+size} & \\
+\hline
+{\em chunk\+\_\+start\+\_\+address} & \\
+\hline
+{\em chunk\+\_\+end\+\_\+address} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__output__vector_8h_acf562e9149302e98e7ebcff63b541d3a}\label{ft__output__vector_8h_acf562e9149302e98e7ebcff63b541d3a}} 
+\index{ft\_output\_vector.h@{ft\_output\_vector.h}!InsertOutputVV2WriteV@{InsertOutputVV2WriteV}}
+\index{InsertOutputVV2WriteV@{InsertOutputVV2WriteV}!ft\_output\_vector.h@{ft\_output\_vector.h}}
+\doxysubsubsection{\texorpdfstring{InsertOutputVV2WriteV()}{InsertOutputVV2WriteV()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void$\ast$ Insert\+Output\+VV2\+WriteV (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ T $>$$>$ \&}]{v,  }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{v\+\_\+shape,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{write\+\_\+start\+\_\+address,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{write\+\_\+end\+\_\+address,  }\item[{bool}]{last\+\_\+chunk\+\_\+flag,  }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{prev\+\_\+v\+\_\+shape }\end{DoxyParamCaption})}
+
+
+
+Insert output (vector of vector) into a buffer (vector) to write. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T,element} & type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em v,the} & output vector of vector \\
+\hline
+{\em v\+\_\+shape,the} & shape of the output in array space \\
+\hline
+{\em write\+\_\+start\+\_\+address,the} & start address to write (get updated by the function too) \\
+\hline
+{\em write\+\_\+end\+\_\+address,the} & end address to write (get updated by the function too) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void$\ast$ the buffer containing the vector to write 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ft__output__vector_8h_a9a8f0f55e3f56213538b28df4aae3331}\label{ft__output__vector_8h_a9a8f0f55e3f56213538b28df4aae3331}} 
+\index{ft\_output\_vector.h@{ft\_output\_vector.h}!InsertOutputVV2WriteV@{InsertOutputVV2WriteV}}
+\index{InsertOutputVV2WriteV@{InsertOutputVV2WriteV}!ft\_output\_vector.h@{ft\_output\_vector.h}}
+\doxysubsubsection{\texorpdfstring{InsertOutputVV2WriteV()}{InsertOutputVV2WriteV()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void$\ast$ Insert\+Output\+VV2\+WriteV (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{v,  }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{v\+\_\+shape,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{write\+\_\+start\+\_\+address,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{write\+\_\+end\+\_\+address,  }\item[{bool}]{last\+\_\+chunk\+\_\+flag,  }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{prev\+\_\+v\+\_\+shape }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__output__vector_8h_a3d1b6718a79657fb679800bf0b5f485e}\label{ft__output__vector_8h_a3d1b6718a79657fb679800bf0b5f485e}} 
+\index{ft\_output\_vector.h@{ft\_output\_vector.h}!InsertOutputVV2WriteV@{InsertOutputVV2WriteV}}
+\index{InsertOutputVV2WriteV@{InsertOutputVV2WriteV}!ft\_output\_vector.h@{ft\_output\_vector.h}}
+\doxysubsubsection{\texorpdfstring{InsertOutputVV2WriteV()}{InsertOutputVV2WriteV()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void$\ast$ Insert\+Output\+VV2\+WriteV (\begin{DoxyParamCaption}\item[{T \&}]{v,  }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{v\+\_\+shape,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{write\+\_\+start\+\_\+address,  }\item[{std\+::vector$<$ unsigned long long $>$ \&}]{write\+\_\+end\+\_\+address,  }\item[{bool}]{last\+\_\+chunk\+\_\+flag,  }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{prev\+\_\+v\+\_\+shape }\end{DoxyParamCaption})}
+

@@ -1,0 +1,62 @@
+\hypertarget{ft__array__iterator_8h}{}\doxysection{ft\+\_\+array\+\_\+iterator.\+h File Reference}
+\label{ft__array__iterator_8h}\index{ft\_array\_iterator.h@{ft\_array\_iterator.h}}
+{\ttfamily \#include $<$array$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__array__iterator_8h_a602c1cd38f297aad15118255b83176e9}{ITERATOR\+\_\+\+MACRO}}(ordinates\+\_\+p,  start\+\_\+p,  end\+\_\+p)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{ft__array__iterator_8h_a535505dd57dd1ba60fd6a1c8f4e8c4f7}{iterate}} (std\+::vector$<$ int $>$ \&ordinates\+\_\+p, const std\+::vector$<$ int $>$ start\+\_\+p, const std\+::vector$<$ int $>$ end\+\_\+p)
+\begin{DoxyCompactList}\small\item\em get the next ordinates\+\_\+p from current ordinates\+\_\+p call \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__array__iterator_8h_a602c1cd38f297aad15118255b83176e9}\label{ft__array__iterator_8h_a602c1cd38f297aad15118255b83176e9}} 
+\index{ft\_array\_iterator.h@{ft\_array\_iterator.h}!ITERATOR\_MACRO@{ITERATOR\_MACRO}}
+\index{ITERATOR\_MACRO@{ITERATOR\_MACRO}!ft\_array\_iterator.h@{ft\_array\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ITERATOR\_MACRO}{ITERATOR\_MACRO}}
+{\footnotesize\ttfamily \#define ITERATOR\+\_\+\+MACRO(\begin{DoxyParamCaption}\item[{}]{ordinates\+\_\+p,  }\item[{}]{start\+\_\+p,  }\item[{}]{end\+\_\+p }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                                       \(\backslash\)}
+\DoxyCodeLine{        int dimensions = start\_p.size();                                                    \(\backslash\)}
+\DoxyCodeLine{        for (\textcolor{keywordtype}{int} dimension\_index = dimensions -\/ 1; dimension\_index >= 0; dimension\_index-\/-\/) \(\backslash\)}
+\DoxyCodeLine{        \{                                                                                   \(\backslash\)}
+\DoxyCodeLine{            if (ordinates\_p[dimension\_index] < end\_p[dimension\_index])                      \(\backslash\)}
+\DoxyCodeLine{            \{                                                                               \(\backslash\)}
+\DoxyCodeLine{                ordinates\_p[dimension\_index]++;                                             \(\backslash\)}
+\DoxyCodeLine{                break;                                                                      \(\backslash\)}
+\DoxyCodeLine{            \}                                                                               \(\backslash\)}
+\DoxyCodeLine{            ordinates\_p[dimension\_index] = start\_p[dimension\_index];                        \(\backslash\)}
+\DoxyCodeLine{        \}                                                                                   \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__array__iterator_8h_a535505dd57dd1ba60fd6a1c8f4e8c4f7}\label{ft__array__iterator_8h_a535505dd57dd1ba60fd6a1c8f4e8c4f7}} 
+\index{ft\_array\_iterator.h@{ft\_array\_iterator.h}!iterate@{iterate}}
+\index{iterate@{iterate}!ft\_array\_iterator.h@{ft\_array\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{iterate()}{iterate()}}
+{\footnotesize\ttfamily void iterate (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{ordinates\+\_\+p,  }\item[{const std\+::vector$<$ int $>$}]{start\+\_\+p,  }\item[{const std\+::vector$<$ int $>$}]{end\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get the next ordinates\+\_\+p from current ordinates\+\_\+p call 
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 
+\begin{DoxyParams}{Parameters}
+{\em ordinates\+\_\+p,input} & and output for current and next coordinate \\
+\hline
+{\em start\+\_\+p} & is the start range, n-\/dimensional, including \\
+\hline
+{\em end\+\_\+p} & is the end range, n-\/dimensional. including \\
+\hline
+\end{DoxyParams}

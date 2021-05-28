@@ -1,0 +1,195 @@
+\hypertarget{ft__utility__macro_8h}{}\doxysection{ft\+\_\+utility\+\_\+macro.\+h File Reference}
+\label{ft__utility__macro_8h}\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__utility__macro_8h_a9d5a32c2233155e1bc1407f6e29ec346}{COUNT\+\_\+\+CELLS}}(start\+\_\+address\+\_\+p,  end\+\_\+address\+\_\+p,  cells\+\_\+count\+\_\+p)
+\begin{DoxyCompactList}\small\item\em help function to counts cells between start/end \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{ft__utility__macro_8h_ab95658e50b7e049aa16b6214942f1297}{COUNT\+\_\+\+RANGES}}(start\+\_\+address\+\_\+p,  end\+\_\+address\+\_\+p,  count\+\_\+p)
+\begin{DoxyCompactList}\small\item\em help function to counts cells between start/end \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{ft__utility__macro_8h_a721f29634a9b176ff7f9773844840249}{ROW\+\_\+\+MAJOR\+\_\+\+ORDER\+\_\+\+MACRO}}(dsize,  dsize\+\_\+len,  coordinate,  offset)
+\begin{DoxyCompactList}\small\item\em macro version of above two functions for speed \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{ft__utility__macro_8h_a6578377cd7962de7c73ef8dc4a992664}{ROW\+\_\+\+MAJOR\+\_\+\+ORDER\+\_\+\+REVERSE\+\_\+\+MACRO}}(offset,  dsize,  dsize\+\_\+len,  result\+\_\+coord\+\_\+v)
+\item 
+\#define \mbox{\hyperlink{ft__utility__macro_8h_a98eb529164882f3ec5030a7fc5fff035}{AU\+\_\+\+EXIT}}(info)
+\item 
+\#define \mbox{\hyperlink{ft__utility__macro_8h_ac96eb3c4d064f5dfb9c24202915e3259}{AU\+\_\+\+INFO}}(info)
+\item 
+\#define \mbox{\hyperlink{ft__utility__macro_8h_ae60313d1931294f35dcfced04a9f3fc1}{AU\+\_\+\+VERBOSE}}(info\+\_\+p,  rank\+\_\+p)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{ft__utility__macro_8h_a71a9f6c6b1e7aa7f3e2e417d3521cd55}{ft\+\_\+mpi\+\_\+size\+\_\+global}}
+\item 
+int \mbox{\hyperlink{ft__utility__macro_8h_adfbd5f092a8d4b80bae31b31bbf73afc}{ft\+\_\+mpi\+\_\+rank\+\_\+global}}
+\item 
+int \mbox{\hyperlink{ft__utility__macro_8h_ad9938e784090fa51bc1d573b2fc7c937}{ft\+\_\+size}}
+\item 
+int \mbox{\hyperlink{ft__utility__macro_8h_a1241af5ea5c1b51733696ad265a2f3a2}{ft\+\_\+rank}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__utility__macro_8h_a98eb529164882f3ec5030a7fc5fff035}\label{ft__utility__macro_8h_a98eb529164882f3ec5030a7fc5fff035}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!AU\_EXIT@{AU\_EXIT}}
+\index{AU\_EXIT@{AU\_EXIT}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{AU\_EXIT}{AU\_EXIT}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+EXIT(\begin{DoxyParamCaption}\item[{}]{info }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                                                                            \(\backslash\)}
+\DoxyCodeLine{        std::cout << \textcolor{stringliteral}{"{}Exit happens at file: "{}} << \_\_FILE\_\_ << \textcolor{stringliteral}{"{},  function: "{}} << \_\_func\_\_ << \textcolor{stringliteral}{"{}, line: "{}} << \_\_LINE\_\_ << std::endl; \(\backslash\)}
+\DoxyCodeLine{        std::cout << \textcolor{stringliteral}{"{}Log : "{}} << info << std::endl;                                                                              \(\backslash\)}
+\DoxyCodeLine{        std::exit(EXIT\_FAILURE);                                                                                                 \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__utility__macro_8h_ac96eb3c4d064f5dfb9c24202915e3259}\label{ft__utility__macro_8h_ac96eb3c4d064f5dfb9c24202915e3259}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!AU\_INFO@{AU\_INFO}}
+\index{AU\_INFO@{AU\_INFO}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{AU\_INFO}{AU\_INFO}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+INFO(\begin{DoxyParamCaption}\item[{}]{info }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                                             \(\backslash\)}
+\DoxyCodeLine{        std::cout << \textcolor{stringliteral}{"{}Info at "{}} << \_\_FILE\_\_ << \textcolor{stringliteral}{"{}, "{}} << \_\_func\_\_ << \textcolor{stringliteral}{"{}, "{}} << \_\_LINE\_\_ << std::endl; \(\backslash\)}
+\DoxyCodeLine{        std::cout << \textcolor{stringliteral}{"{}Info : "{}} << info << std::endl;                                              \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_chunk_overlap_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+chunk\+\_\+overlap.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{ft__utility__macro_8h_ae60313d1931294f35dcfced04a9f3fc1}\label{ft__utility__macro_8h_ae60313d1931294f35dcfced04a9f3fc1}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!AU\_VERBOSE@{AU\_VERBOSE}}
+\index{AU\_VERBOSE@{AU\_VERBOSE}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{AU\_VERBOSE}{AU\_VERBOSE}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+VERBOSE(\begin{DoxyParamCaption}\item[{}]{info\+\_\+p,  }\item[{}]{rank\+\_\+p }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                        \(\backslash\)}
+\DoxyCodeLine{        if (\mbox{\hyperlink{ft__utility__macro_8h_a1241af5ea5c1b51733696ad265a2f3a2}{ft\_rank}} == rank\_p)               \(\backslash\)}
+\DoxyCodeLine{            std::cout << info\_p << std::endl \(\backslash\)}
+\DoxyCodeLine{                      << std::flush;         \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__utility__macro_8h_a9d5a32c2233155e1bc1407f6e29ec346}\label{ft__utility__macro_8h_a9d5a32c2233155e1bc1407f6e29ec346}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!COUNT\_CELLS@{COUNT\_CELLS}}
+\index{COUNT\_CELLS@{COUNT\_CELLS}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{COUNT\_CELLS}{COUNT\_CELLS}}
+{\footnotesize\ttfamily \#define COUNT\+\_\+\+CELLS(\begin{DoxyParamCaption}\item[{}]{start\+\_\+address\+\_\+p,  }\item[{}]{end\+\_\+address\+\_\+p,  }\item[{}]{cells\+\_\+count\+\_\+p }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                                    \(\backslash\)}
+\DoxyCodeLine{        assert(start\_address\_p.size() == end\_address\_p.size());                          \(\backslash\)}
+\DoxyCodeLine{        cells\_count\_p = 1;                                                               \(\backslash\)}
+\DoxyCodeLine{        for (\textcolor{keywordtype}{int} i = 0; i < start\_address\_p.size(); i++)                                 \(\backslash\)}
+\DoxyCodeLine{        \{                                                                                \(\backslash\)}
+\DoxyCodeLine{            cells\_count\_p = cells\_count\_p * (end\_address\_p[i] -\/ start\_address\_p[i] + 1); \(\backslash\)}
+\DoxyCodeLine{        \}                                                                                \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+
+
+help function to counts cells between start/end 
+
+\mbox{\Hypertarget{ft__utility__macro_8h_ab95658e50b7e049aa16b6214942f1297}\label{ft__utility__macro_8h_ab95658e50b7e049aa16b6214942f1297}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!COUNT\_RANGES@{COUNT\_RANGES}}
+\index{COUNT\_RANGES@{COUNT\_RANGES}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{COUNT\_RANGES}{COUNT\_RANGES}}
+{\footnotesize\ttfamily \#define COUNT\+\_\+\+RANGES(\begin{DoxyParamCaption}\item[{}]{start\+\_\+address\+\_\+p,  }\item[{}]{end\+\_\+address\+\_\+p,  }\item[{}]{count\+\_\+p }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                               \(\backslash\)}
+\DoxyCodeLine{        assert(start\_address\_p.size() == end\_address\_p.size());     \(\backslash\)}
+\DoxyCodeLine{        if (count\_p.size() != start\_address\_p.size())               \(\backslash\)}
+\DoxyCodeLine{        \{                                                           \(\backslash\)}
+\DoxyCodeLine{            count\_p.resize(start\_address\_p.size());                 \(\backslash\)}
+\DoxyCodeLine{        \}                                                           \(\backslash\)}
+\DoxyCodeLine{        for (\textcolor{keywordtype}{int} i = 0; i < start\_address\_p.size(); i++)            \(\backslash\)}
+\DoxyCodeLine{        \{                                                           \(\backslash\)}
+\DoxyCodeLine{            count\_p[i] = end\_address\_p[i] -\/ start\_address\_p[i] + 1; \(\backslash\)}
+\DoxyCodeLine{        \}                                                           \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+
+
+help function to counts cells between start/end 
+
+\mbox{\Hypertarget{ft__utility__macro_8h_a721f29634a9b176ff7f9773844840249}\label{ft__utility__macro_8h_a721f29634a9b176ff7f9773844840249}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!ROW\_MAJOR\_ORDER\_MACRO@{ROW\_MAJOR\_ORDER\_MACRO}}
+\index{ROW\_MAJOR\_ORDER\_MACRO@{ROW\_MAJOR\_ORDER\_MACRO}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{ROW\_MAJOR\_ORDER\_MACRO}{ROW\_MAJOR\_ORDER\_MACRO}}
+{\footnotesize\ttfamily \#define ROW\+\_\+\+MAJOR\+\_\+\+ORDER\+\_\+\+MACRO(\begin{DoxyParamCaption}\item[{}]{dsize,  }\item[{}]{dsize\+\_\+len,  }\item[{}]{coordinate,  }\item[{}]{offset }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                               \(\backslash\)}
+\DoxyCodeLine{        offset = coordinate[0];                                     \(\backslash\)}
+\DoxyCodeLine{        for (\textcolor{keywordtype}{int} iii = 1; iii < dsize\_len; iii++)                   \(\backslash\)}
+\DoxyCodeLine{        \{                                                           \(\backslash\)}
+\DoxyCodeLine{            offset = offset * dsize[iii] + coordinate[iii];         \(\backslash\)}
+\DoxyCodeLine{        \}                                                           \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+
+
+macro version of above two functions for speed 
+
+\mbox{\Hypertarget{ft__utility__macro_8h_a6578377cd7962de7c73ef8dc4a992664}\label{ft__utility__macro_8h_a6578377cd7962de7c73ef8dc4a992664}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!ROW\_MAJOR\_ORDER\_REVERSE\_MACRO@{ROW\_MAJOR\_ORDER\_REVERSE\_MACRO}}
+\index{ROW\_MAJOR\_ORDER\_REVERSE\_MACRO@{ROW\_MAJOR\_ORDER\_REVERSE\_MACRO}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{ROW\_MAJOR\_ORDER\_REVERSE\_MACRO}{ROW\_MAJOR\_ORDER\_REVERSE\_MACRO}}
+{\footnotesize\ttfamily \#define ROW\+\_\+\+MAJOR\+\_\+\+ORDER\+\_\+\+REVERSE\+\_\+\+MACRO(\begin{DoxyParamCaption}\item[{}]{offset,  }\item[{}]{dsize,  }\item[{}]{dsize\+\_\+len,  }\item[{}]{result\+\_\+coord\+\_\+v }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                           \(\backslash\)}
+\DoxyCodeLine{        unsigned \textcolor{keywordtype}{long} \textcolor{keywordtype}{long} temp\_offset = offset;                                \(\backslash\)}
+\DoxyCodeLine{        for (\textcolor{keywordtype}{int} iii = dsize\_len -\/ 1; iii >= 1; iii-\/-\/)                          \(\backslash\)}
+\DoxyCodeLine{        \{                                                                       \(\backslash\)}
+\DoxyCodeLine{            result\_coord\_v[iii] = temp\_offset \% dsize[iii];                     \(\backslash\)}
+\DoxyCodeLine{            temp\_offset = temp\_offset / dsize[iii];                             \(\backslash\)}
+\DoxyCodeLine{        \}                                                                       \(\backslash\)}
+\DoxyCodeLine{        result\_coord\_v[0] = temp\_offset;                                        \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ft__utility__macro_8h_adfbd5f092a8d4b80bae31b31bbf73afc}\label{ft__utility__macro_8h_adfbd5f092a8d4b80bae31b31bbf73afc}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!ft\_mpi\_rank\_global@{ft\_mpi\_rank\_global}}
+\index{ft\_mpi\_rank\_global@{ft\_mpi\_rank\_global}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{ft\_mpi\_rank\_global}{ft\_mpi\_rank\_global}}
+{\footnotesize\ttfamily int ft\+\_\+mpi\+\_\+rank\+\_\+global\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{ft__utility__macro_8h_a71a9f6c6b1e7aa7f3e2e417d3521cd55}\label{ft__utility__macro_8h_a71a9f6c6b1e7aa7f3e2e417d3521cd55}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!ft\_mpi\_size\_global@{ft\_mpi\_size\_global}}
+\index{ft\_mpi\_size\_global@{ft\_mpi\_size\_global}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{ft\_mpi\_size\_global}{ft\_mpi\_size\_global}}
+{\footnotesize\ttfamily int ft\+\_\+mpi\+\_\+size\+\_\+global\hspace{0.3cm}{\ttfamily [extern]}}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__utility__macro_8h_a1241af5ea5c1b51733696ad265a2f3a2}\label{ft__utility__macro_8h_a1241af5ea5c1b51733696ad265a2f3a2}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!ft\_rank@{ft\_rank}}
+\index{ft\_rank@{ft\_rank}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{ft\_rank}{ft\_rank}}
+{\footnotesize\ttfamily int ft\+\_\+rank\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{ft__utility__macro_8h_ad9938e784090fa51bc1d573b2fc7c937}\label{ft__utility__macro_8h_ad9938e784090fa51bc1d573b2fc7c937}} 
+\index{ft\_utility\_macro.h@{ft\_utility\_macro.h}!ft\_size@{ft\_size}}
+\index{ft\_size@{ft\_size}!ft\_utility\_macro.h@{ft\_utility\_macro.h}}
+\doxysubsubsection{\texorpdfstring{ft\_size}{ft\_size}}
+{\footnotesize\ttfamily int ft\+\_\+size\hspace{0.3cm}{\ttfamily [extern]}}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 

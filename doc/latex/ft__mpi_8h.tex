@@ -1,0 +1,196 @@
+\hypertarget{ft__mpi_8h}{}\doxysection{ft\+\_\+mpi.\+h File Reference}
+\label{ft__mpi_8h}\index{ft\_mpi.h@{ft\_mpi.h}}
+{\ttfamily \#include $<$ctime$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+merge.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}mpi.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_aa84164aed4ba3c6c236edde52de3930b}{ENABLE\+\_\+\+MPI}}~1
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_a3e41745970da74b7b48efaa6575c56d8}{MPI\+\_\+\+COMM\+\_\+\+TYPE}}~MPI\+\_\+\+Comm
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_a12ecdb68a395670493c5b47209e983b0}{AU\+\_\+\+WTIME\+\_\+\+TYPE}}~double
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_abb50d3f0736416c38d965324ddfa4e06}{AU\+\_\+\+WTIME}}~MPI\+\_\+\+Wtime()
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_a7688ec42526d21314ccf954b185f12d8}{MPI\+\_\+\+COMM\+\_\+\+WORLD\+\_\+\+DEFAULT}}~MPI\+\_\+\+COMM\+\_\+\+WORLD
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_a000b66125aa79bcf325554d2a3b18ad4}{MPI\+\_\+\+INFO\+\_\+\+NULL\+\_\+\+DEFAULT}}~MPI\+\_\+\+INFO\+\_\+\+NULL
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_a19133b9416a0853f0c48f5416a708ab1}{AU\+\_\+\+MPI\+\_\+\+Datatype}}~MPI\+\_\+\+Datatype
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_a75460230e689fafd0923d6a1ee101fb3}{AU\+\_\+\+MPI\+\_\+\+Op}}~MPI\+\_\+\+Op
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_afd6144d20b57e8dc26845094fff2a5a2}{MPI\+\_\+\+INIT}}(argc,  argv,  \mbox{\hyperlink{ft_8h_a1cb610d10182779f719c714df5f0acf2}{au\+\_\+mpi\+\_\+comm\+\_\+global}},  au\+\_\+mpi\+\_\+rank\+\_\+global,  au\+\_\+mpi\+\_\+size\+\_\+global)
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_a2c4e65e7b8b4f24a9d119ae5abb89d12}{MPI\+\_\+\+FINALIZE}}()
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_af23bf91c598bde31d3dcfdd668881e41}{AU\+\_\+\+Reduce}}(local\+\_\+buffer\+\_\+p,  reduced\+\_\+buffer\+\_\+p,  size,  type,  op,  root,  comm)
+\item 
+\#define \mbox{\hyperlink{ft__mpi_8h_ae9b7cd43bef20139ca6cb822569c2fe7}{AU\+\_\+\+Bcast}}(data\+\_\+bffer\+\_\+p,  count\+\_\+p,  datatype\+\_\+p,  root\+\_\+p,  comm\+\_\+p)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\MPI\+\_\+\+Datatype \mbox{\hyperlink{ft__mpi_8h_a17366dee37174f5b22bcd48dd4169c21}{Infer\+MPIType}} ()
+\item 
+MPI\+\_\+\+Op \mbox{\hyperlink{ft__mpi_8h_a61712eddc293fb8780033b6ad325a0f3}{Infer\+MPIMerge\+Op}} (std\+::string \&opt\+\_\+str)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{ft__mpi_8h_a72bac4dc6047476c2ae6479d10681555}{MPIReduce\+Stats}} (const T local\+\_\+value, std\+::vector$<$ T $>$ \&stats\+\_\+vector)
+\begin{DoxyCompactList}\small\item\em get max/min/sum of local\+\_\+value \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__mpi_8h_ae9b7cd43bef20139ca6cb822569c2fe7}\label{ft__mpi_8h_ae9b7cd43bef20139ca6cb822569c2fe7}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!AU\_Bcast@{AU\_Bcast}}
+\index{AU\_Bcast@{AU\_Bcast}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{AU\_Bcast}{AU\_Bcast}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+Bcast(\begin{DoxyParamCaption}\item[{}]{data\+\_\+bffer\+\_\+p,  }\item[{}]{count\+\_\+p,  }\item[{}]{datatype\+\_\+p,  }\item[{}]{root\+\_\+p,  }\item[{}]{comm\+\_\+p }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                 \(\backslash\)}
+\DoxyCodeLine{        MPI\_Bcast(data\_bffer\_p, count\_p, datatype\_p, root\_p, comm\_p); \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__mpi_8h_a19133b9416a0853f0c48f5416a708ab1}\label{ft__mpi_8h_a19133b9416a0853f0c48f5416a708ab1}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!AU\_MPI\_Datatype@{AU\_MPI\_Datatype}}
+\index{AU\_MPI\_Datatype@{AU\_MPI\_Datatype}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{AU\_MPI\_Datatype}{AU\_MPI\_Datatype}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+MPI\+\_\+\+Datatype~MPI\+\_\+\+Datatype}
+
+\mbox{\Hypertarget{ft__mpi_8h_a75460230e689fafd0923d6a1ee101fb3}\label{ft__mpi_8h_a75460230e689fafd0923d6a1ee101fb3}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!AU\_MPI\_Op@{AU\_MPI\_Op}}
+\index{AU\_MPI\_Op@{AU\_MPI\_Op}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{AU\_MPI\_Op}{AU\_MPI\_Op}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+MPI\+\_\+\+Op~MPI\+\_\+\+Op}
+
+\mbox{\Hypertarget{ft__mpi_8h_af23bf91c598bde31d3dcfdd668881e41}\label{ft__mpi_8h_af23bf91c598bde31d3dcfdd668881e41}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!AU\_Reduce@{AU\_Reduce}}
+\index{AU\_Reduce@{AU\_Reduce}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{AU\_Reduce}{AU\_Reduce}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+Reduce(\begin{DoxyParamCaption}\item[{}]{local\+\_\+buffer\+\_\+p,  }\item[{}]{reduced\+\_\+buffer\+\_\+p,  }\item[{}]{size,  }\item[{}]{type,  }\item[{}]{op,  }\item[{}]{root,  }\item[{}]{comm }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                             \(\backslash\)}
+\DoxyCodeLine{        MPI\_Reduce(local\_buffer\_p, reduced\_buffer\_p, size, type, op, root, comm); \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__mpi_8h_abb50d3f0736416c38d965324ddfa4e06}\label{ft__mpi_8h_abb50d3f0736416c38d965324ddfa4e06}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!AU\_WTIME@{AU\_WTIME}}
+\index{AU\_WTIME@{AU\_WTIME}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{AU\_WTIME}{AU\_WTIME}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+WTIME~MPI\+\_\+\+Wtime()}
+
+\mbox{\Hypertarget{ft__mpi_8h_a12ecdb68a395670493c5b47209e983b0}\label{ft__mpi_8h_a12ecdb68a395670493c5b47209e983b0}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!AU\_WTIME\_TYPE@{AU\_WTIME\_TYPE}}
+\index{AU\_WTIME\_TYPE@{AU\_WTIME\_TYPE}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{AU\_WTIME\_TYPE}{AU\_WTIME\_TYPE}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+WTIME\+\_\+\+TYPE~double}
+
+\mbox{\Hypertarget{ft__mpi_8h_aa84164aed4ba3c6c236edde52de3930b}\label{ft__mpi_8h_aa84164aed4ba3c6c236edde52de3930b}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!ENABLE\_MPI@{ENABLE\_MPI}}
+\index{ENABLE\_MPI@{ENABLE\_MPI}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{ENABLE\_MPI}{ENABLE\_MPI}}
+{\footnotesize\ttfamily \#define ENABLE\+\_\+\+MPI~1}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__mpi_8h_a3e41745970da74b7b48efaa6575c56d8}\label{ft__mpi_8h_a3e41745970da74b7b48efaa6575c56d8}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!MPI\_COMM\_TYPE@{MPI\_COMM\_TYPE}}
+\index{MPI\_COMM\_TYPE@{MPI\_COMM\_TYPE}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_COMM\_TYPE}{MPI\_COMM\_TYPE}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+COMM\+\_\+\+TYPE~MPI\+\_\+\+Comm}
+
+\mbox{\Hypertarget{ft__mpi_8h_a7688ec42526d21314ccf954b185f12d8}\label{ft__mpi_8h_a7688ec42526d21314ccf954b185f12d8}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!MPI\_COMM\_WORLD\_DEFAULT@{MPI\_COMM\_WORLD\_DEFAULT}}
+\index{MPI\_COMM\_WORLD\_DEFAULT@{MPI\_COMM\_WORLD\_DEFAULT}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_COMM\_WORLD\_DEFAULT}{MPI\_COMM\_WORLD\_DEFAULT}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+COMM\+\_\+\+WORLD\+\_\+\+DEFAULT~MPI\+\_\+\+COMM\+\_\+\+WORLD}
+
+\mbox{\Hypertarget{ft__mpi_8h_a2c4e65e7b8b4f24a9d119ae5abb89d12}\label{ft__mpi_8h_a2c4e65e7b8b4f24a9d119ae5abb89d12}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!MPI\_FINALIZE@{MPI\_FINALIZE}}
+\index{MPI\_FINALIZE@{MPI\_FINALIZE}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_FINALIZE}{MPI\_FINALIZE}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+FINALIZE(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                      \(\backslash\)}
+\DoxyCodeLine{        int mpi\_finalize\_flag = 0;         \(\backslash\)}
+\DoxyCodeLine{        MPI\_Finalized(\&mpi\_finalize\_flag); \(\backslash\)}
+\DoxyCodeLine{        if (!mpi\_finalize\_flag)            \(\backslash\)}
+\DoxyCodeLine{        \{                                  \(\backslash\)}
+\DoxyCodeLine{            MPI\_Finalize();                \(\backslash\)}
+\DoxyCodeLine{        \}                                  \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__mpi_8h_a000b66125aa79bcf325554d2a3b18ad4}\label{ft__mpi_8h_a000b66125aa79bcf325554d2a3b18ad4}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!MPI\_INFO\_NULL\_DEFAULT@{MPI\_INFO\_NULL\_DEFAULT}}
+\index{MPI\_INFO\_NULL\_DEFAULT@{MPI\_INFO\_NULL\_DEFAULT}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_INFO\_NULL\_DEFAULT}{MPI\_INFO\_NULL\_DEFAULT}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+INFO\+\_\+\+NULL\+\_\+\+DEFAULT~MPI\+\_\+\+INFO\+\_\+\+NULL}
+
+\mbox{\Hypertarget{ft__mpi_8h_afd6144d20b57e8dc26845094fff2a5a2}\label{ft__mpi_8h_afd6144d20b57e8dc26845094fff2a5a2}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!MPI\_INIT@{MPI\_INIT}}
+\index{MPI\_INIT@{MPI\_INIT}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_INIT}{MPI\_INIT}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+INIT(\begin{DoxyParamCaption}\item[{}]{argc,  }\item[{}]{argv,  }\item[{}]{\mbox{\hyperlink{ft_8h_a1cb610d10182779f719c714df5f0acf2}{au\+\_\+mpi\+\_\+comm\+\_\+global}},  }\item[{}]{au\+\_\+mpi\+\_\+rank\+\_\+global,  }\item[{}]{au\+\_\+mpi\+\_\+size\+\_\+global }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                                    \(\backslash\)}
+\DoxyCodeLine{        int mpi\_init\_flag = 0;                                                           \(\backslash\)}
+\DoxyCodeLine{        MPI\_Initialized(\&mpi\_init\_flag);                                                 \(\backslash\)}
+\DoxyCodeLine{        if (!mpi\_init\_flag)                                                              \(\backslash\)}
+\DoxyCodeLine{        \{                                                                                \(\backslash\)}
+\DoxyCodeLine{            MPI\_Init(\&argc, \&argv);                                                      \(\backslash\)}
+\DoxyCodeLine{        \}                                                                                \(\backslash\)}
+\DoxyCodeLine{        MPI\_Comm\_rank(\mbox{\hyperlink{ft_8h_a1cb610d10182779f719c714df5f0acf2}{au\_mpi\_comm\_global}}, \&au\_mpi\_rank\_global);                          \(\backslash\)}
+\DoxyCodeLine{        MPI\_Comm\_size(\mbox{\hyperlink{ft_8h_a1cb610d10182779f719c714df5f0acf2}{au\_mpi\_comm\_global}}, \&au\_mpi\_size\_global);                          \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__mpi_8h_a61712eddc293fb8780033b6ad325a0f3}\label{ft__mpi_8h_a61712eddc293fb8780033b6ad325a0f3}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!InferMPIMergeOp@{InferMPIMergeOp}}
+\index{InferMPIMergeOp@{InferMPIMergeOp}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{InferMPIMergeOp()}{InferMPIMergeOp()}}
+{\footnotesize\ttfamily MPI\+\_\+\+Op Infer\+MPIMerge\+Op (\begin{DoxyParamCaption}\item[{std\+::string \&}]{opt\+\_\+str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ft__mpi_8h_a17366dee37174f5b22bcd48dd4169c21}\label{ft__mpi_8h_a17366dee37174f5b22bcd48dd4169c21}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!InferMPIType@{InferMPIType}}
+\index{InferMPIType@{InferMPIType}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{InferMPIType()}{InferMPIType()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+MPI\+\_\+\+Datatype Infer\+MPIType (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{ft__mpi_8h_a72bac4dc6047476c2ae6479d10681555}\label{ft__mpi_8h_a72bac4dc6047476c2ae6479d10681555}} 
+\index{ft\_mpi.h@{ft\_mpi.h}!MPIReduceStats@{MPIReduceStats}}
+\index{MPIReduceStats@{MPIReduceStats}!ft\_mpi.h@{ft\_mpi.h}}
+\doxysubsubsection{\texorpdfstring{MPIReduceStats()}{MPIReduceStats()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void MPIReduce\+Stats (\begin{DoxyParamCaption}\item[{const T}]{local\+\_\+value,  }\item[{std\+::vector$<$ T $>$ \&}]{stats\+\_\+vector }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get max/min/sum of local\+\_\+value 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em local\+\_\+value} & \+: input value \\
+\hline
+{\em stats\+\_\+vector} & \+: stats result\+: max, min, sum \\
+\hline
+\end{DoxyParams}

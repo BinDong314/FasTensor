@@ -1,0 +1,49 @@
+\hypertarget{ft__endpoint_8cpp}{}\doxysection{ft\+\_\+endpoint.\+cpp File Reference}
+\label{ft__endpoint_8cpp}\index{ft\_endpoint.cpp@{ft\_endpoint.cpp}}
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint_8cpp_a8af3817e207f88e11c82a143846e1bc2}{VOID2\+UNION\+\_\+\+HELPER}}(TARGET\+\_\+\+TYPE,  EMPLACE\+\_\+\+INDEX)
+\item 
+\#define \mbox{\hyperlink{ft__endpoint_8cpp_a9bb2e1828ac5e1393f409a4cc90f096c}{UNION2\+VOID\+\_\+\+HELPER}}(TARGET\+\_\+\+TYPE,  EMPLACE\+\_\+\+INDEX)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__endpoint_8cpp_a9bb2e1828ac5e1393f409a4cc90f096c}\label{ft__endpoint_8cpp_a9bb2e1828ac5e1393f409a4cc90f096c}} 
+\index{ft\_endpoint.cpp@{ft\_endpoint.cpp}!UNION2VOID\_HELPER@{UNION2VOID\_HELPER}}
+\index{UNION2VOID\_HELPER@{UNION2VOID\_HELPER}!ft\_endpoint.cpp@{ft\_endpoint.cpp}}
+\doxysubsubsection{\texorpdfstring{UNION2VOID\_HELPER}{UNION2VOID\_HELPER}}
+{\footnotesize\ttfamily \#define UNION2\+VOID\+\_\+\+HELPER(\begin{DoxyParamCaption}\item[{}]{TARGET\+\_\+\+TYPE,  }\item[{}]{EMPLACE\+\_\+\+INDEX }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                                        \(\backslash\)}
+\DoxyCodeLine{        std::vector<TARGET\_TYPE> temp\_pointer\_of\_type;                                       \(\backslash\)}
+\DoxyCodeLine{        temp\_pointer\_of\_type.resize(n\_elements);                                             \(\backslash\)}
+\DoxyCodeLine{        for (\textcolor{keywordtype}{int} i = 0; i < n\_elements; i++)                                                 \(\backslash\)}
+\DoxyCodeLine{        \{                                                                                    \(\backslash\)}
+\DoxyCodeLine{            temp\_pointer\_of\_type[i] = std::get<EMPLACE\_INDEX>(data\_vector\_in\_union\_type[i]); \(\backslash\)}
+\DoxyCodeLine{        \}                                                                                    \(\backslash\)}
+\DoxyCodeLine{        return \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{void} *\textcolor{keyword}{>}(temp\_pointer\_of\_type.data());                             \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{ft__endpoint_8cpp_a8af3817e207f88e11c82a143846e1bc2}\label{ft__endpoint_8cpp_a8af3817e207f88e11c82a143846e1bc2}} 
+\index{ft\_endpoint.cpp@{ft\_endpoint.cpp}!VOID2UNION\_HELPER@{VOID2UNION\_HELPER}}
+\index{VOID2UNION\_HELPER@{VOID2UNION\_HELPER}!ft\_endpoint.cpp@{ft\_endpoint.cpp}}
+\doxysubsubsection{\texorpdfstring{VOID2UNION\_HELPER}{VOID2UNION\_HELPER}}
+{\footnotesize\ttfamily \#define VOID2\+UNION\+\_\+\+HELPER(\begin{DoxyParamCaption}\item[{}]{TARGET\+\_\+\+TYPE,  }\item[{}]{EMPLACE\+\_\+\+INDEX }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                                                                                     \(\backslash\)}
+\DoxyCodeLine{        TARGET\_TYPE *temp\_pointer\_of\_type = (TARGET\_TYPE *)data\_vector\_in\_void;           \(\backslash\)}
+\DoxyCodeLine{        for (\textcolor{keywordtype}{int} i = 0; i < n\_elements; i++)                                              \(\backslash\)}
+\DoxyCodeLine{        \{                                                                                 \(\backslash\)}
+\DoxyCodeLine{            data\_vector\_in\_union\_type[i].emplace<EMPLACE\_INDEX>(temp\_pointer\_of\_type[i]); \(\backslash\)}
+\DoxyCodeLine{        \}                                                                                 \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}

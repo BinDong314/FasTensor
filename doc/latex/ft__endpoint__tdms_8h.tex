@@ -1,0 +1,192 @@
+\hypertarget{ft__endpoint__tdms_8h}{}\doxysection{ft\+\_\+endpoint\+\_\+tdms.\+h File Reference}
+\label{ft__endpoint__tdms_8h}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}
+{\ttfamily \#include \char`\"{}ft\+\_\+type.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint\+\_\+binary.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_endpoint_t_d_m_s}{Endpoint\+TDMS}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__tdms_8h_a787eceafba71211f12452aa0ad79d179}{NBYTE\+\_\+\+LEADIN}}~28
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__tdms_8h_a02da6ece95396dab0058ee77dbc9aabf}{NBYTE\+\_\+\+PER\+\_\+\+DATUM}}~2
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__tdms_8h_a939c14047a8f93a7bdd38d360cf67be4}{EPOCH\+\_\+\+DIFF}}~2082844800
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__tdms_8h_a206b75e351ac581b4e71fbba153cabeb}{TDMS\+\_\+\+MLS}}~\char`\"{}Measure\+Length\mbox{[}m\mbox{]}\char`\"{}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__tdms_8h_a3482c82aad2fd0348e79620727a95b87}{TDMS\+\_\+\+SRS}}~\char`\"{}Spatial\+Resolution\mbox{[}m\mbox{]}\char`\"{}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9}{tds\+Data\+Type}} \{ \newline
+\mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a3e71cab63816e1a00252f9a2f61b21e3}{tds\+Type\+Void}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9abcc500a77820739271261dc20461502f}{tds\+Type\+I8}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9aa52affd2bba1306dc93e1211acabf242}{tds\+Type\+I16}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a0b224614f6fdd492c99640f67c1f207b}{tds\+Type\+I32}}
+, \newline
+\mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9ae03097ad74e65d8c6a8347f9fe543d0e}{tds\+Type\+I64}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a370da70fc4567e23e920688bf9d96344}{tds\+Type\+U8}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a9ca1b2b3eb222d3f489dbc7f49a64279}{tds\+Type\+U16}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9aed79b3f8edfeb7191ba117dd0fde6348}{tds\+Type\+U32}}
+, \newline
+\mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a4694445ec8467f7cc3e7459543c67cc5}{tds\+Type\+U64}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a5e69812458dc6b752c920b4101acec78}{tds\+Type\+Single\+Float}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a5111536fc9a23f755960f1a255afc11e}{tds\+Type\+Double\+Float}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a0db9e914e0db23d475f7a412b21003d9}{tds\+Type\+Extended\+Float}}
+, \newline
+\mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9ac09fc78b3b0f56bb9a7be06d6ce489ff}{tds\+Type\+Single\+Float\+With\+Unit}} = 0x19
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a7b433dd187bc10c8ee2a8d533ea63142}{tds\+Type\+Double\+Float\+With\+Unit}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a4d65ab2fcbd27fa7e55e76a252dd3418}{tds\+Type\+Extended\+Float\+With\+Unit}}
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a1420e0dcc1da6c74207e214b569de651}{tds\+Type\+String}} = 0x20
+, \newline
+\mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a262870b1d5387ea3f8c90b9afcec8279}{tds\+Type\+Boolean}} = 0x21
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a72a2ddbb5987bd0f26fde73a755daf09}{tds\+Type\+Time\+Stamp}} = 0x44
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9af5537c22a29574bfbfbc40aedd983d24}{tds\+Type\+Fixed\+Point}} = 0x4F
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9ae6b6236d881f0bbada54f4f17d4a9f83}{tds\+Type\+Complex\+Single\+Float}} = 0x08000c
+, \newline
+\mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9af288a4821e1517dd0008c6c06df78cec}{tds\+Type\+Complex\+Double\+Float}} = 0x10000d
+, \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a15e65409ea910739fd71c1e600e59e77}{tds\+Type\+DAQmx\+Raw\+Data}} = 0x\+FFFFFFFF
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__endpoint__tdms_8h_a939c14047a8f93a7bdd38d360cf67be4}\label{ft__endpoint__tdms_8h_a939c14047a8f93a7bdd38d360cf67be4}} 
+\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!EPOCH\_DIFF@{EPOCH\_DIFF}}
+\index{EPOCH\_DIFF@{EPOCH\_DIFF}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}
+\doxysubsubsection{\texorpdfstring{EPOCH\_DIFF}{EPOCH\_DIFF}}
+{\footnotesize\ttfamily \#define EPOCH\+\_\+\+DIFF~2082844800}
+
+\mbox{\Hypertarget{ft__endpoint__tdms_8h_a787eceafba71211f12452aa0ad79d179}\label{ft__endpoint__tdms_8h_a787eceafba71211f12452aa0ad79d179}} 
+\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!NBYTE\_LEADIN@{NBYTE\_LEADIN}}
+\index{NBYTE\_LEADIN@{NBYTE\_LEADIN}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}
+\doxysubsubsection{\texorpdfstring{NBYTE\_LEADIN}{NBYTE\_LEADIN}}
+{\footnotesize\ttfamily \#define NBYTE\+\_\+\+LEADIN~28}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__endpoint__tdms_8h_a02da6ece95396dab0058ee77dbc9aabf}\label{ft__endpoint__tdms_8h_a02da6ece95396dab0058ee77dbc9aabf}} 
+\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!NBYTE\_PER\_DATUM@{NBYTE\_PER\_DATUM}}
+\index{NBYTE\_PER\_DATUM@{NBYTE\_PER\_DATUM}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}
+\doxysubsubsection{\texorpdfstring{NBYTE\_PER\_DATUM}{NBYTE\_PER\_DATUM}}
+{\footnotesize\ttfamily \#define NBYTE\+\_\+\+PER\+\_\+\+DATUM~2}
+
+\mbox{\Hypertarget{ft__endpoint__tdms_8h_a206b75e351ac581b4e71fbba153cabeb}\label{ft__endpoint__tdms_8h_a206b75e351ac581b4e71fbba153cabeb}} 
+\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!TDMS\_MLS@{TDMS\_MLS}}
+\index{TDMS\_MLS@{TDMS\_MLS}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}
+\doxysubsubsection{\texorpdfstring{TDMS\_MLS}{TDMS\_MLS}}
+{\footnotesize\ttfamily \#define TDMS\+\_\+\+MLS~\char`\"{}Measure\+Length\mbox{[}m\mbox{]}\char`\"{}}
+
+\mbox{\Hypertarget{ft__endpoint__tdms_8h_a3482c82aad2fd0348e79620727a95b87}\label{ft__endpoint__tdms_8h_a3482c82aad2fd0348e79620727a95b87}} 
+\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!TDMS\_SRS@{TDMS\_SRS}}
+\index{TDMS\_SRS@{TDMS\_SRS}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}
+\doxysubsubsection{\texorpdfstring{TDMS\_SRS}{TDMS\_SRS}}
+{\footnotesize\ttfamily \#define TDMS\+\_\+\+SRS~\char`\"{}Spatial\+Resolution\mbox{[}m\mbox{]}\char`\"{}}
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9}} 
+\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsDataType@{tdsDataType}}
+\index{tdsDataType@{tdsDataType}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}
+\doxysubsubsection{\texorpdfstring{tdsDataType}{tdsDataType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9}{tds\+Data\+Type}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeVoid@{tdsTypeVoid}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeVoid@{tdsTypeVoid}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a3e71cab63816e1a00252f9a2f61b21e3}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a3e71cab63816e1a00252f9a2f61b21e3}} 
+tds\+Type\+Void&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeI8@{tdsTypeI8}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeI8@{tdsTypeI8}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9abcc500a77820739271261dc20461502f}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9abcc500a77820739271261dc20461502f}} 
+tds\+Type\+I8&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeI16@{tdsTypeI16}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeI16@{tdsTypeI16}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9aa52affd2bba1306dc93e1211acabf242}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9aa52affd2bba1306dc93e1211acabf242}} 
+tds\+Type\+I16&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeI32@{tdsTypeI32}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeI32@{tdsTypeI32}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a0b224614f6fdd492c99640f67c1f207b}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a0b224614f6fdd492c99640f67c1f207b}} 
+tds\+Type\+I32&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeI64@{tdsTypeI64}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeI64@{tdsTypeI64}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9ae03097ad74e65d8c6a8347f9fe543d0e}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9ae03097ad74e65d8c6a8347f9fe543d0e}} 
+tds\+Type\+I64&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeU8@{tdsTypeU8}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeU8@{tdsTypeU8}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a370da70fc4567e23e920688bf9d96344}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a370da70fc4567e23e920688bf9d96344}} 
+tds\+Type\+U8&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeU16@{tdsTypeU16}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeU16@{tdsTypeU16}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a9ca1b2b3eb222d3f489dbc7f49a64279}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a9ca1b2b3eb222d3f489dbc7f49a64279}} 
+tds\+Type\+U16&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeU32@{tdsTypeU32}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeU32@{tdsTypeU32}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9aed79b3f8edfeb7191ba117dd0fde6348}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9aed79b3f8edfeb7191ba117dd0fde6348}} 
+tds\+Type\+U32&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeU64@{tdsTypeU64}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeU64@{tdsTypeU64}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a4694445ec8467f7cc3e7459543c67cc5}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a4694445ec8467f7cc3e7459543c67cc5}} 
+tds\+Type\+U64&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeSingleFloat@{tdsTypeSingleFloat}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeSingleFloat@{tdsTypeSingleFloat}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a5e69812458dc6b752c920b4101acec78}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a5e69812458dc6b752c920b4101acec78}} 
+tds\+Type\+Single\+Float&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeDoubleFloat@{tdsTypeDoubleFloat}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeDoubleFloat@{tdsTypeDoubleFloat}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a5111536fc9a23f755960f1a255afc11e}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a5111536fc9a23f755960f1a255afc11e}} 
+tds\+Type\+Double\+Float&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeExtendedFloat@{tdsTypeExtendedFloat}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeExtendedFloat@{tdsTypeExtendedFloat}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a0db9e914e0db23d475f7a412b21003d9}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a0db9e914e0db23d475f7a412b21003d9}} 
+tds\+Type\+Extended\+Float&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeSingleFloatWithUnit@{tdsTypeSingleFloatWithUnit}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeSingleFloatWithUnit@{tdsTypeSingleFloatWithUnit}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9ac09fc78b3b0f56bb9a7be06d6ce489ff}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9ac09fc78b3b0f56bb9a7be06d6ce489ff}} 
+tds\+Type\+Single\+Float\+With\+Unit&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeDoubleFloatWithUnit@{tdsTypeDoubleFloatWithUnit}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeDoubleFloatWithUnit@{tdsTypeDoubleFloatWithUnit}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a7b433dd187bc10c8ee2a8d533ea63142}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a7b433dd187bc10c8ee2a8d533ea63142}} 
+tds\+Type\+Double\+Float\+With\+Unit&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeExtendedFloatWithUnit@{tdsTypeExtendedFloatWithUnit}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeExtendedFloatWithUnit@{tdsTypeExtendedFloatWithUnit}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a4d65ab2fcbd27fa7e55e76a252dd3418}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a4d65ab2fcbd27fa7e55e76a252dd3418}} 
+tds\+Type\+Extended\+Float\+With\+Unit&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeString@{tdsTypeString}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeString@{tdsTypeString}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a1420e0dcc1da6c74207e214b569de651}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a1420e0dcc1da6c74207e214b569de651}} 
+tds\+Type\+String&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeBoolean@{tdsTypeBoolean}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeBoolean@{tdsTypeBoolean}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a262870b1d5387ea3f8c90b9afcec8279}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a262870b1d5387ea3f8c90b9afcec8279}} 
+tds\+Type\+Boolean&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeTimeStamp@{tdsTypeTimeStamp}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeTimeStamp@{tdsTypeTimeStamp}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a72a2ddbb5987bd0f26fde73a755daf09}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a72a2ddbb5987bd0f26fde73a755daf09}} 
+tds\+Type\+Time\+Stamp&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeFixedPoint@{tdsTypeFixedPoint}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeFixedPoint@{tdsTypeFixedPoint}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9af5537c22a29574bfbfbc40aedd983d24}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9af5537c22a29574bfbfbc40aedd983d24}} 
+tds\+Type\+Fixed\+Point&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeComplexSingleFloat@{tdsTypeComplexSingleFloat}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeComplexSingleFloat@{tdsTypeComplexSingleFloat}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9ae6b6236d881f0bbada54f4f17d4a9f83}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9ae6b6236d881f0bbada54f4f17d4a9f83}} 
+tds\+Type\+Complex\+Single\+Float&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeComplexDoubleFloat@{tdsTypeComplexDoubleFloat}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeComplexDoubleFloat@{tdsTypeComplexDoubleFloat}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9af288a4821e1517dd0008c6c06df78cec}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9af288a4821e1517dd0008c6c06df78cec}} 
+tds\+Type\+Complex\+Double\+Float&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tdsTypeDAQmxRawData@{tdsTypeDAQmxRawData}!ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}}\index{ft\_endpoint\_tdms.h@{ft\_endpoint\_tdms.h}!tdsTypeDAQmxRawData@{tdsTypeDAQmxRawData}}}\mbox{\Hypertarget{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a15e65409ea910739fd71c1e600e59e77}\label{ft__endpoint__tdms_8h_a6ac28b9d684bc0f2bef3200bf9c71fa9a15e65409ea910739fd71c1e600e59e77}} 
+tds\+Type\+DAQmx\+Raw\+Data&\\
+\hline
+
+\end{DoxyEnumFields}

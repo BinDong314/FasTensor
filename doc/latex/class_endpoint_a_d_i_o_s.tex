@@ -1,0 +1,244 @@
+\hypertarget{class_endpoint_a_d_i_o_s}{}\doxysection{Endpoint\+ADIOS Class Reference}
+\label{class_endpoint_a_d_i_o_s}\index{EndpointADIOS@{EndpointADIOS}}
+
+
+{\ttfamily \#include $<$ft\+\_\+endpoint\+\_\+adios.\+h$>$}
+
+Inheritance diagram for Endpoint\+ADIOS\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_endpoint_a_d_i_o_s}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_endpoint_a_d_i_o_s_ae4dfe6146077b36386a9f6e1d93b3ad6}{Endpoint\+ADIOS}} (std\+::string endpoint\+\_\+info\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_endpoint_h_d_f5}{Endpoint\+HDF5}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_endpoint_a_d_i_o_s_ade2ea978eebef10065f4935fb4b6dbdf}{$\sim$\+Endpoint\+ADIOS}} ()
+\item 
+int \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a21046493d18d8c757eeb5306057387b0}{Parse\+Endpoint\+Info}} () override
+\begin{DoxyCompactList}\small\item\em parse endpoint\+\_\+info to my own info \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_a_d_i_o_s_ac64183230102718d9bf5d5a2b9bbcc55}{Extract\+Meta}} () override
+\begin{DoxyCompactList}\small\item\em extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/other ep\+\_\+type dependents ones \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a4a6faef2368fa2fff86bfff9d2eb39ed}{Print\+Info}} () override
+\begin{DoxyCompactList}\small\item\em print information about the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a313ef7aa354b507767517199a3e9695d}{Create}} () override
+\begin{DoxyCompactList}\small\item\em create the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_a_d_i_o_s_ac48da881a222704b8c4cb1feb6f9dc2f}{Open}} () override
+\begin{DoxyCompactList}\small\item\em open the endpoint \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_a_d_i_o_s_aed8537731e1fd6f51f08a484e7f34f62}{Map2\+My\+Type}} () override
+\begin{DoxyCompactList}\small\item\em call the finalize to close everything (like call Destractor) \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_a_d_i_o_s_af860bada32ada8f6d03f997017093d37}{Read}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data) override
+\begin{DoxyCompactList}\small\item\em read the data from end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a4c34266d48d3fb7919ca773cda86c678}{Write}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data) override
+\begin{DoxyCompactList}\small\item\em write the data to the end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_a_d_i_o_s_a0bd0956847eddffe1c9fde3730ad46e4}{Close}} () override
+\begin{DoxyCompactList}\small\item\em close the end-\/point \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_ae4dfe6146077b36386a9f6e1d93b3ad6}\label{class_endpoint_a_d_i_o_s_ae4dfe6146077b36386a9f6e1d93b3ad6}} 
+\index{EndpointADIOS@{EndpointADIOS}!EndpointADIOS@{EndpointADIOS}}
+\index{EndpointADIOS@{EndpointADIOS}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{EndpointADIOS()}{EndpointADIOS()}}
+{\footnotesize\ttfamily Endpoint\+ADIOS\+::\+Endpoint\+ADIOS (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+info\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_endpoint_h_d_f5}{Endpoint\+HDF5}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & contains the info of the endpoint, e.\+g., file type + file info \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_ade2ea978eebef10065f4935fb4b6dbdf}\label{class_endpoint_a_d_i_o_s_ade2ea978eebef10065f4935fb4b6dbdf}} 
+\index{EndpointADIOS@{EndpointADIOS}!````~EndpointADIOS@{$\sim$EndpointADIOS}}
+\index{````~EndpointADIOS@{$\sim$EndpointADIOS}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{$\sim$EndpointADIOS()}{~EndpointADIOS()}}
+{\footnotesize\ttfamily Endpoint\+ADIOS\+::$\sim$\+Endpoint\+ADIOS (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_a0bd0956847eddffe1c9fde3730ad46e4}\label{class_endpoint_a_d_i_o_s_a0bd0956847eddffe1c9fde3730ad46e4}} 
+\index{EndpointADIOS@{EndpointADIOS}!Close@{Close}}
+\index{Close@{Close}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{Close()}{Close()}}
+{\footnotesize\ttfamily int Endpoint\+ADIOS\+::\+Close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+close the end-\/point 
+
+\begin{DoxyReturn}{Returns}
+int int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a76379a7d9acbf7d429d315fbddadb2ad}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_a313ef7aa354b507767517199a3e9695d}\label{class_endpoint_a_d_i_o_s_a313ef7aa354b507767517199a3e9695d}} 
+\index{EndpointADIOS@{EndpointADIOS}!Create@{Create}}
+\index{Create@{Create}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{Create()}{Create()}}
+{\footnotesize\ttfamily int Endpoint\+ADIOS\+::\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+create the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_add0ecdbfabcc9382356bbac955ddb638}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_ac64183230102718d9bf5d5a2b9bbcc55}\label{class_endpoint_a_d_i_o_s_ac64183230102718d9bf5d5a2b9bbcc55}} 
+\index{EndpointADIOS@{EndpointADIOS}!ExtractMeta@{ExtractMeta}}
+\index{ExtractMeta@{ExtractMeta}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{ExtractMeta()}{ExtractMeta()}}
+{\footnotesize\ttfamily int Endpoint\+ADIOS\+::\+Extract\+Meta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/other ep\+\_\+type dependents ones 
+
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a43bcd87f7b7da0b2eefd3010e06c5cd5}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_aed8537731e1fd6f51f08a484e7f34f62}\label{class_endpoint_a_d_i_o_s_aed8537731e1fd6f51f08a484e7f34f62}} 
+\index{EndpointADIOS@{EndpointADIOS}!Map2MyType@{Map2MyType}}
+\index{Map2MyType@{Map2MyType}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{Map2MyType()}{Map2MyType()}}
+{\footnotesize\ttfamily void Endpoint\+ADIOS\+::\+Map2\+My\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+call the finalize to close everything (like call Destractor) 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a755ef0b10d5c4a639d9a11f5e1c7d9a3}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_ac48da881a222704b8c4cb1feb6f9dc2f}\label{class_endpoint_a_d_i_o_s_ac48da881a222704b8c4cb1feb6f9dc2f}} 
+\index{EndpointADIOS@{EndpointADIOS}!Open@{Open}}
+\index{Open@{Open}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{Open()}{Open()}}
+{\footnotesize\ttfamily int Endpoint\+ADIOS\+::\+Open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+open the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a481874b61d83081b4a96a0c2b21a8dbd}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_a21046493d18d8c757eeb5306057387b0}\label{class_endpoint_a_d_i_o_s_a21046493d18d8c757eeb5306057387b0}} 
+\index{EndpointADIOS@{EndpointADIOS}!ParseEndpointInfo@{ParseEndpointInfo}}
+\index{ParseEndpointInfo@{ParseEndpointInfo}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{ParseEndpointInfo()}{ParseEndpointInfo()}}
+{\footnotesize\ttfamily int Endpoint\+ADIOS\+::\+Parse\+Endpoint\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+parse endpoint\+\_\+info to my own info 
+
+\begin{DoxyReturn}{Returns}
+int\+: 0 works, $<$ 0 error, 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a973927c11f35be4f393f456a8b2e2a1e}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_a4a6faef2368fa2fff86bfff9d2eb39ed}\label{class_endpoint_a_d_i_o_s_a4a6faef2368fa2fff86bfff9d2eb39ed}} 
+\index{EndpointADIOS@{EndpointADIOS}!PrintInfo@{PrintInfo}}
+\index{PrintInfo@{PrintInfo}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{PrintInfo()}{PrintInfo()}}
+{\footnotesize\ttfamily int Endpoint\+ADIOS\+::\+Print\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+print information about the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_af014eb78eb2097f23cd48d48c2004b16}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_af860bada32ada8f6d03f997017093d37}\label{class_endpoint_a_d_i_o_s_af860bada32ada8f6d03f997017093d37}} 
+\index{EndpointADIOS@{EndpointADIOS}!Read@{Read}}
+\index{Read@{Read}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}}
+{\footnotesize\ttfamily int Endpoint\+ADIOS\+::\+Read (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+read the data from end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a2ea7ed58e917ba63cb222ffbda09aa0c}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_a_d_i_o_s_a4c34266d48d3fb7919ca773cda86c678}\label{class_endpoint_a_d_i_o_s_a4c34266d48d3fb7919ca773cda86c678}} 
+\index{EndpointADIOS@{EndpointADIOS}!Write@{Write}}
+\index{Write@{Write}!EndpointADIOS@{EndpointADIOS}}
+\doxysubsubsection{\texorpdfstring{Write()}{Write()}}
+{\footnotesize\ttfamily int Endpoint\+ADIOS\+::\+Write (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+write the data to the end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a4bcb3e885bfb1343c610a3163fc01c77}{Endpoint}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__endpoint__adios_8h}{ft\+\_\+endpoint\+\_\+adios.\+h}}\end{DoxyCompactItemize}

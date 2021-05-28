@@ -1,0 +1,90 @@
+\hypertarget{conv_8cpp}{}\doxysection{conv.\+cpp File Reference}
+\label{conv_8cpp}\index{conv.cpp@{conv.cpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}ft.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{conv_8cpp_ae6c73eb17bd83e66f66f7de8d4a3c6b0}{KERNELS}}~3
+\item 
+\#define \mbox{\hyperlink{conv_8cpp_a47e5872f078c657ed9783aae3f3d2244}{KERNEL\+\_\+\+HEIGHT}}~2
+\item 
+\#define \mbox{\hyperlink{conv_8cpp_a31a25793025ce9a6ab29da3d67f76516}{KERNEL\+\_\+\+WIDTH}}~2
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_stencil}{Stencil}}$<$ vector$<$ float $>$ $>$ \mbox{\hyperlink{conv_8cpp_a6947e2aef01973ac452046b84e3e8fc1}{UDF\+\_\+\+Cov}} (const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ float $>$ \&i\+Stencil)
+\item 
+\mbox{\hyperlink{class_stencil}{Stencil}}$<$ vector$<$ float $>$ $>$ \mbox{\hyperlink{conv_8cpp_aa74ff7a0d0accdecdd62ac3da13c1d56}{UDF\+\_\+\+Cov2}} (const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ float $>$ \&i\+Stencil)
+\item 
+int \mbox{\hyperlink{conv_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{conv_8cpp_a91940d4c8d7e1c5615996c14410f6ce7}{kernel\+\_\+weight}} \mbox{[}\mbox{\hyperlink{conv_8cpp_ae6c73eb17bd83e66f66f7de8d4a3c6b0}{KERNELS}}\mbox{]}\mbox{[}\mbox{\hyperlink{conv_8cpp_a47e5872f078c657ed9783aae3f3d2244}{KERNEL\+\_\+\+HEIGHT}}\mbox{]}\mbox{[}\mbox{\hyperlink{conv_8cpp_a31a25793025ce9a6ab29da3d67f76516}{KERNEL\+\_\+\+WIDTH}}\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{conv_8cpp_a47e5872f078c657ed9783aae3f3d2244}\label{conv_8cpp_a47e5872f078c657ed9783aae3f3d2244}} 
+\index{conv.cpp@{conv.cpp}!KERNEL\_HEIGHT@{KERNEL\_HEIGHT}}
+\index{KERNEL\_HEIGHT@{KERNEL\_HEIGHT}!conv.cpp@{conv.cpp}}
+\doxysubsubsection{\texorpdfstring{KERNEL\_HEIGHT}{KERNEL\_HEIGHT}}
+{\footnotesize\ttfamily \#define KERNEL\+\_\+\+HEIGHT~2}
+
+\mbox{\Hypertarget{conv_8cpp_a31a25793025ce9a6ab29da3d67f76516}\label{conv_8cpp_a31a25793025ce9a6ab29da3d67f76516}} 
+\index{conv.cpp@{conv.cpp}!KERNEL\_WIDTH@{KERNEL\_WIDTH}}
+\index{KERNEL\_WIDTH@{KERNEL\_WIDTH}!conv.cpp@{conv.cpp}}
+\doxysubsubsection{\texorpdfstring{KERNEL\_WIDTH}{KERNEL\_WIDTH}}
+{\footnotesize\ttfamily \#define KERNEL\+\_\+\+WIDTH~2}
+
+\mbox{\Hypertarget{conv_8cpp_ae6c73eb17bd83e66f66f7de8d4a3c6b0}\label{conv_8cpp_ae6c73eb17bd83e66f66f7de8d4a3c6b0}} 
+\index{conv.cpp@{conv.cpp}!KERNELS@{KERNELS}}
+\index{KERNELS@{KERNELS}!conv.cpp@{conv.cpp}}
+\doxysubsubsection{\texorpdfstring{KERNELS}{KERNELS}}
+{\footnotesize\ttfamily \#define KERNELS~3}
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{conv_8cpp_a0ddf1224851353fc92bfbff6f499fa97}\label{conv_8cpp_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{conv.cpp@{conv.cpp}!main@{main}}
+\index{main@{main}!conv.cpp@{conv.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{conv_8cpp_a6947e2aef01973ac452046b84e3e8fc1}\label{conv_8cpp_a6947e2aef01973ac452046b84e3e8fc1}} 
+\index{conv.cpp@{conv.cpp}!UDF\_Cov@{UDF\_Cov}}
+\index{UDF\_Cov@{UDF\_Cov}!conv.cpp@{conv.cpp}}
+\doxysubsubsection{\texorpdfstring{UDF\_Cov()}{UDF\_Cov()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_stencil}{Stencil}}$<$vector$<$float$>$ $>$ UDF\+\_\+\+Cov (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ float $>$ \&}]{i\+Stencil }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{conv_8cpp_aa74ff7a0d0accdecdd62ac3da13c1d56}\label{conv_8cpp_aa74ff7a0d0accdecdd62ac3da13c1d56}} 
+\index{conv.cpp@{conv.cpp}!UDF\_Cov2@{UDF\_Cov2}}
+\index{UDF\_Cov2@{UDF\_Cov2}!conv.cpp@{conv.cpp}}
+\doxysubsubsection{\texorpdfstring{UDF\_Cov2()}{UDF\_Cov2()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_stencil}{Stencil}}$<$vector$<$float$>$ $>$ UDF\+\_\+\+Cov2 (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_stencil}{Stencil}}$<$ float $>$ \&}]{i\+Stencil }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{conv_8cpp_a91940d4c8d7e1c5615996c14410f6ce7}\label{conv_8cpp_a91940d4c8d7e1c5615996c14410f6ce7}} 
+\index{conv.cpp@{conv.cpp}!kernel\_weight@{kernel\_weight}}
+\index{kernel\_weight@{kernel\_weight}!conv.cpp@{conv.cpp}}
+\doxysubsubsection{\texorpdfstring{kernel\_weight}{kernel\_weight}}
+{\footnotesize\ttfamily float kernel\+\_\+weight\mbox{[}\mbox{\hyperlink{conv_8cpp_ae6c73eb17bd83e66f66f7de8d4a3c6b0}{KERNELS}}\mbox{]}\mbox{[}\mbox{\hyperlink{conv_8cpp_a47e5872f078c657ed9783aae3f3d2244}{KERNEL\+\_\+\+HEIGHT}}\mbox{]}\mbox{[}\mbox{\hyperlink{conv_8cpp_a31a25793025ce9a6ab29da3d67f76516}{KERNEL\+\_\+\+WIDTH}}\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{    \{\{1, 2\}, \{3, 4\}\},}
+\DoxyCodeLine{    \{\{2, 3\}, \{4, 5\}\},}
+\DoxyCodeLine{    \{\{3, 4\}, \{5, 6\}\},}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}

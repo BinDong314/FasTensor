@@ -1,0 +1,66 @@
+\hypertarget{ft__test__data__generator_8cpp}{}\doxysection{ft\+\_\+test\+\_\+data\+\_\+generator.\+cpp File Reference}
+\label{ft__test__data__generator_8cpp}\index{ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}}
+{\ttfamily \#include \char`\"{}stdlib.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hdf5.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}getopt.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__test__data__generator_8cpp_a6f76b42a280ed4f3ad2378ed5e0cc57c}{SDS\+\_\+\+CLIENT\+\_\+\+MPI}}~1
+\item 
+\#define \mbox{\hyperlink{ft__test__data__generator_8cpp_a6626e848059dbf8f1f5f0b044b780975}{FN\+\_\+\+NAME\+\_\+\+MAX}}~255
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{ft__test__data__generator_8cpp_ab9301284601aa148bb2fce761a2e7d76}{get\+\_\+dimension}} (int dims, char $\ast$dims\+\_\+str, hsize\+\_\+t $\ast$dims\+\_\+size)
+\item 
+void \mbox{\hyperlink{ft__test__data__generator_8cpp_a490d557a233588a2b41d2d9f594500ff}{figure\+\_\+out\+\_\+o\+\_\+c}} (int dims, hsize\+\_\+t $\ast$dims\+\_\+size, int mpi\+\_\+rank, int mpi\+\_\+size, hsize\+\_\+t $\ast$offset, hsize\+\_\+t $\ast$count)
+\item 
+void \mbox{\hyperlink{ft__test__data__generator_8cpp_a853216ac51aa181669ff4d3de74058a7}{print\+\_\+help}} ()
+\item 
+int \mbox{\hyperlink{ft__test__data__generator_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__test__data__generator_8cpp_a6626e848059dbf8f1f5f0b044b780975}\label{ft__test__data__generator_8cpp_a6626e848059dbf8f1f5f0b044b780975}} 
+\index{ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}!FN\_NAME\_MAX@{FN\_NAME\_MAX}}
+\index{FN\_NAME\_MAX@{FN\_NAME\_MAX}!ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}}
+\doxysubsubsection{\texorpdfstring{FN\_NAME\_MAX}{FN\_NAME\_MAX}}
+{\footnotesize\ttfamily \#define FN\+\_\+\+NAME\+\_\+\+MAX~255}
+
+\mbox{\Hypertarget{ft__test__data__generator_8cpp_a6f76b42a280ed4f3ad2378ed5e0cc57c}\label{ft__test__data__generator_8cpp_a6f76b42a280ed4f3ad2378ed5e0cc57c}} 
+\index{ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}!SDS\_CLIENT\_MPI@{SDS\_CLIENT\_MPI}}
+\index{SDS\_CLIENT\_MPI@{SDS\_CLIENT\_MPI}!ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}}
+\doxysubsubsection{\texorpdfstring{SDS\_CLIENT\_MPI}{SDS\_CLIENT\_MPI}}
+{\footnotesize\ttfamily \#define SDS\+\_\+\+CLIENT\+\_\+\+MPI~1}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__test__data__generator_8cpp_a490d557a233588a2b41d2d9f594500ff}\label{ft__test__data__generator_8cpp_a490d557a233588a2b41d2d9f594500ff}} 
+\index{ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}!figure\_out\_o\_c@{figure\_out\_o\_c}}
+\index{figure\_out\_o\_c@{figure\_out\_o\_c}!ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}}
+\doxysubsubsection{\texorpdfstring{figure\_out\_o\_c()}{figure\_out\_o\_c()}}
+{\footnotesize\ttfamily void figure\+\_\+out\+\_\+o\+\_\+c (\begin{DoxyParamCaption}\item[{int}]{dims,  }\item[{hsize\+\_\+t $\ast$}]{dims\+\_\+size,  }\item[{int}]{mpi\+\_\+rank,  }\item[{int}]{mpi\+\_\+size,  }\item[{hsize\+\_\+t $\ast$}]{offset,  }\item[{hsize\+\_\+t $\ast$}]{count }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__test__data__generator_8cpp_ab9301284601aa148bb2fce761a2e7d76}\label{ft__test__data__generator_8cpp_ab9301284601aa148bb2fce761a2e7d76}} 
+\index{ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}!get\_dimension@{get\_dimension}}
+\index{get\_dimension@{get\_dimension}!ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}}
+\doxysubsubsection{\texorpdfstring{get\_dimension()}{get\_dimension()}}
+{\footnotesize\ttfamily void get\+\_\+dimension (\begin{DoxyParamCaption}\item[{int}]{dims,  }\item[{char $\ast$}]{dims\+\_\+str,  }\item[{hsize\+\_\+t $\ast$}]{dims\+\_\+size }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__test__data__generator_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{ft__test__data__generator_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}!main@{main}}
+\index{main@{main}!ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__test__data__generator_8cpp_a853216ac51aa181669ff4d3de74058a7}\label{ft__test__data__generator_8cpp_a853216ac51aa181669ff4d3de74058a7}} 
+\index{ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}!print\_help@{print\_help}}
+\index{print\_help@{print\_help}!ft\_test\_data\_generator.cpp@{ft\_test\_data\_generator.cpp}}
+\doxysubsubsection{\texorpdfstring{print\_help()}{print\_help()}}
+{\footnotesize\ttfamily void print\+\_\+help (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+

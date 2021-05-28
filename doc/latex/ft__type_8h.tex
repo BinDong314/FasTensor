@@ -1,0 +1,338 @@
+\hypertarget{ft__type_8h}{}\doxysection{ft\+\_\+type.\+h File Reference}
+\label{ft__type_8h}\index{ft\_type.h@{ft\_type.h}}
+{\ttfamily \#include $<$type\+\_\+traits$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$variant$>$}\newline
+{\ttfamily \#include $<$complex$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structis__vector}{is\+\_\+vector$<$ T $>$}}
+\item 
+struct \mbox{\hyperlink{structis__vector_3_01std_1_1vector_3_01_t_00_01_a_01_4_01_4}{is\+\_\+vector$<$ std\+::vector$<$ T, A $>$ $>$}}
+\item 
+struct \mbox{\hyperlink{structis__vector__vector}{is\+\_\+vector\+\_\+vector$<$ T $>$}}
+\item 
+struct \mbox{\hyperlink{structis__vector__vector_3_01std_1_1vector_3_01std_1_1vector_3_01_t_00_01_a_01_4_01_4_01_4}{is\+\_\+vector\+\_\+vector$<$ std\+::vector$<$ std\+::vector$<$ T, A $>$ $>$ $>$}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__type_8h_ae816c69d2c33dbcc5806e0e42a6e2688}{AU\+\_\+\+UDT\+\_\+\+INIT}}(A)~\mbox{\hyperlink{ft__type_8h_a14bff69d206f38b81eb44d1e56e72409}{FT\+\_\+\+UDT\+\_\+\+INIT}}(A)
+\item 
+\#define \mbox{\hyperlink{ft__type_8h_a14bff69d206f38b81eb44d1e56e72409}{FT\+\_\+\+UDT\+\_\+\+INIT}}(A)
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef enum \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \mbox{\hyperlink{ft__type_8h_a3117436b285dd167702ccc7f9bd97eae}{Au\+Endpoint\+Type}}
+\item 
+typedef enum \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \mbox{\hyperlink{ft__type_8h_a924eb7d22ec5ec8a2eff3dce636e1306}{Au\+Endpoint\+Data\+Type}}
+\item 
+typedef \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \mbox{\hyperlink{ft__type_8h_a616a22b92faad452c0502d817228deb1}{FTData\+Type}}
+\item 
+typedef \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \mbox{\hyperlink{ft__type_8h_a84cf96d13cce40cfde9001189f386d10}{FTType}}
+\item 
+using \mbox{\hyperlink{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}{Au\+Endpoint\+Data\+Type\+Union}} = std\+::variant$<$ short, int, long, long long, unsigned short, unsigned int, unsigned long, unsigned long long, float, double, std\+::complex$<$ double $>$, std\+::string $>$
+\begin{DoxyCompactList}\small\item\em It should follow the order of above Au\+Endpoint\+Data\+Type. \end{DoxyCompactList}\item 
+typedef enum \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} \mbox{\hyperlink{ft__type_8h_a6a39a380dd602fadf665e55712000706}{Output\+Vector\+Flat\+Direction}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \{ \newline
+\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a63e62238a683d335eb9eb0c85759f5ff}{EP\+\_\+\+HDF5}} = 0
+, \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53ab59a3523816afbe58800f49dc308fb44}{EP\+\_\+\+PNETCDF}} = 1
+, \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a11caf38ade9171418891939507000e38}{EP\+\_\+\+ADIOS}} = 2
+, \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a934c909440177c074b8709eaab556e82}{EP\+\_\+\+BINARY}} = 3
+, \newline
+\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a7735bb63fb45a4cad9c11783b35c974c}{EP\+\_\+\+VIRTUAL}} = 4
+, \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a06621dacdd10d53b233c429dd891a4fe}{EP\+\_\+\+MEMORY}} = 5
+, \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a13f1aacb272c581a8b6e1e213ab0deef}{EP\+\_\+\+H5\+VDS}} = 6
+, \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a68f74e8197a57103d0375dfe963b591c}{EP\+\_\+\+DIR}} = 7
+, \newline
+\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a53c30716ae3d830b4f3ca0c661580a21}{EP\+\_\+\+DASSA}} = 8
+, \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a6cf88d0d658860d8f454cff79be34dc5}{EP\+\_\+\+TDMS}} = 9
+ \}
+\item 
+enum \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \{ \newline
+\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ae6eb15c3802621f3bb5fcccda40226af}{AU\+\_\+\+NO\+\_\+\+TYPE}} = -\/1
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ac495e2c0a1bf6e884246db80e167ff2f}{AU\+\_\+\+SHORT}} = 0
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2d1a9c7d96f2a1ae4627c0bd16808a76}{AU\+\_\+\+INT}} = 1
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a0d3dc18b38a94d0d6f02d9f9e525f86c}{AU\+\_\+\+LONG}} = 2
+, \newline
+\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a36d56b6cfaa2f076058fad12707d4276}{AU\+\_\+\+LONG\+\_\+\+LONG}} = 3
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a3084049be1876107c843494a1669ba09}{AU\+\_\+\+USHORT}} = 4
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7afeadbd9e33a4b2bb2b678d10c1e9806e}{AU\+\_\+\+UINT}} = 5
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2f9682fdc8830f53942397680271a43b}{AU\+\_\+\+ULONG}} = 6
+, \newline
+\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a0f2a84bfed2060a2ee3e4d9bfa8c8ede}{AU\+\_\+\+ULLONG}} = 7
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2bc03d49babea89b29bff2eff044dad9}{AU\+\_\+\+FLOAT}} = 8
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a1bf9ff3cd5cb1f0828e8fe78da194a8a}{AU\+\_\+\+DOUBLE}} = 9
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ad6181a12e1cd4604cff6f74a81f97008}{AU\+\_\+\+DOUBLE\+\_\+\+COMPLEX}} = 10
+, \newline
+\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a446bf61c6debab2bf7d22b23e067d34b}{AU\+\_\+\+STRING}} = 11
+, \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a79b5dedf82271000ac2199f360c4188f}{AU\+\_\+\+NCLASSES}}
+ \}
+\item 
+enum \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} \{ \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9aa5634ba9a1a9f9ef0e8b20cd92275f62}{AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+COL}} = 0
+, \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9abb9abaeefb91f72a570e52d133d8d526}{AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+ROW}} = 1
+, \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9adf470cb1c4ee301e1ba3571d914f1dc9}{AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+NEW}} = 2
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \mbox{\hyperlink{ft__type_8h_a68828c4c089049b3bf1c9f3389e91e13}{Map\+String2\+Endpoint\+Type}} (std\+::string endpoint\+\_\+type\+\_\+str)
+\begin{DoxyCompactList}\small\item\em map string typed name of type to Au\+Endpoint\+Type \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \mbox{\hyperlink{ft__type_8h_a48bc3e096f52b0ae076f7811ce3643da}{Infer\+Data\+Type}} ()
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{ft__type_8h_ab360c97a70838a3dbb552d861c0d78f6}{Infer\+Vector\+Type}} ()
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{ft__type_8h_ad602934ad42f89694f5cd5c44a63d67a}{Infer\+Vector\+Vector\+Type}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__type_8h_ae816c69d2c33dbcc5806e0e42a6e2688}\label{ft__type_8h_ae816c69d2c33dbcc5806e0e42a6e2688}} 
+\index{ft\_type.h@{ft\_type.h}!AU\_UDT\_INIT@{AU\_UDT\_INIT}}
+\index{AU\_UDT\_INIT@{AU\_UDT\_INIT}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{AU\_UDT\_INIT}{AU\_UDT\_INIT}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+UDT\+\_\+\+INIT(\begin{DoxyParamCaption}\item[{}]{A }\end{DoxyParamCaption})~\mbox{\hyperlink{ft__type_8h_a14bff69d206f38b81eb44d1e56e72409}{FT\+\_\+\+UDT\+\_\+\+INIT}}(A)}
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_cmpd_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+cmpd.\+cpp}}, and \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_vds_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+vds.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{ft__type_8h_a14bff69d206f38b81eb44d1e56e72409}\label{ft__type_8h_a14bff69d206f38b81eb44d1e56e72409}} 
+\index{ft\_type.h@{ft\_type.h}!FT\_UDT\_INIT@{FT\_UDT\_INIT}}
+\index{FT\_UDT\_INIT@{FT\_UDT\_INIT}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{FT\_UDT\_INIT}{FT\_UDT\_INIT}}
+{\footnotesize\ttfamily \#define FT\+\_\+\+UDT\+\_\+\+INIT(\begin{DoxyParamCaption}\item[{}]{A }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{  CISTA\_PRINTABLE(A)   \(\backslash\)}
+\DoxyCodeLine{  CISTA\_COMPARABLE()}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{ft__type_8h_a924eb7d22ec5ec8a2eff3dce636e1306}\label{ft__type_8h_a924eb7d22ec5ec8a2eff3dce636e1306}} 
+\index{ft\_type.h@{ft\_type.h}!AuEndpointDataType@{AuEndpointDataType}}
+\index{AuEndpointDataType@{AuEndpointDataType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{AuEndpointDataType}{AuEndpointDataType}}
+{\footnotesize\ttfamily typedef enum \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}}}
+
+\mbox{\Hypertarget{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}\label{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}} 
+\index{ft\_type.h@{ft\_type.h}!AuEndpointDataTypeUnion@{AuEndpointDataTypeUnion}}
+\index{AuEndpointDataTypeUnion@{AuEndpointDataTypeUnion}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{AuEndpointDataTypeUnion}{AuEndpointDataTypeUnion}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{ft__type_8h_a2f436d6a5a168aba3507f0cc828cbb33}{Au\+Endpoint\+Data\+Type\+Union}} =  std\+::variant$<$short, int, long, long long, unsigned short, unsigned int, unsigned long, unsigned long long, float, double, std\+::complex$<$double$>$, std\+::string$>$}
+
+
+
+It should follow the order of above Au\+Endpoint\+Data\+Type. 
+
+\mbox{\Hypertarget{ft__type_8h_a3117436b285dd167702ccc7f9bd97eae}\label{ft__type_8h_a3117436b285dd167702ccc7f9bd97eae}} 
+\index{ft\_type.h@{ft\_type.h}!AuEndpointType@{AuEndpointType}}
+\index{AuEndpointType@{AuEndpointType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{AuEndpointType}{AuEndpointType}}
+{\footnotesize\ttfamily typedef enum \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}}}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft__type_8h_a616a22b92faad452c0502d817228deb1}\label{ft__type_8h_a616a22b92faad452c0502d817228deb1}} 
+\index{ft\_type.h@{ft\_type.h}!FTDataType@{FTDataType}}
+\index{FTDataType@{FTDataType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{FTDataType}{FTDataType}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTData\+Type}}}
+
+\mbox{\Hypertarget{ft__type_8h_a84cf96d13cce40cfde9001189f386d10}\label{ft__type_8h_a84cf96d13cce40cfde9001189f386d10}} 
+\index{ft\_type.h@{ft\_type.h}!FTType@{FTType}}
+\index{FTType@{FTType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{FTType}{FTType}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{FTType}}}
+
+\mbox{\Hypertarget{ft__type_8h_a6a39a380dd602fadf665e55712000706}\label{ft__type_8h_a6a39a380dd602fadf665e55712000706}} 
+\index{ft\_type.h@{ft\_type.h}!OutputVectorFlatDirection@{OutputVectorFlatDirection}}
+\index{OutputVectorFlatDirection@{OutputVectorFlatDirection}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{OutputVectorFlatDirection}{OutputVectorFlatDirection}}
+{\footnotesize\ttfamily typedef enum \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}}}
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}} 
+\index{ft\_type.h@{ft\_type.h}!AuEndpointDataType@{AuEndpointDataType}}
+\index{AuEndpointDataType@{AuEndpointDataType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{AuEndpointDataType}{AuEndpointDataType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_NO\_TYPE@{AU\_NO\_TYPE}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_NO\_TYPE@{AU\_NO\_TYPE}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ae6eb15c3802621f3bb5fcccda40226af}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ae6eb15c3802621f3bb5fcccda40226af}} 
+AU\+\_\+\+NO\+\_\+\+TYPE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_SHORT@{AU\_SHORT}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_SHORT@{AU\_SHORT}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ac495e2c0a1bf6e884246db80e167ff2f}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ac495e2c0a1bf6e884246db80e167ff2f}} 
+AU\+\_\+\+SHORT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_INT@{AU\_INT}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_INT@{AU\_INT}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2d1a9c7d96f2a1ae4627c0bd16808a76}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2d1a9c7d96f2a1ae4627c0bd16808a76}} 
+AU\+\_\+\+INT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_LONG@{AU\_LONG}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_LONG@{AU\_LONG}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a0d3dc18b38a94d0d6f02d9f9e525f86c}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a0d3dc18b38a94d0d6f02d9f9e525f86c}} 
+AU\+\_\+\+LONG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_LONG\_LONG@{AU\_LONG\_LONG}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_LONG\_LONG@{AU\_LONG\_LONG}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a36d56b6cfaa2f076058fad12707d4276}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a36d56b6cfaa2f076058fad12707d4276}} 
+AU\+\_\+\+LONG\+\_\+\+LONG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_USHORT@{AU\_USHORT}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_USHORT@{AU\_USHORT}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a3084049be1876107c843494a1669ba09}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a3084049be1876107c843494a1669ba09}} 
+AU\+\_\+\+USHORT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_UINT@{AU\_UINT}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_UINT@{AU\_UINT}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7afeadbd9e33a4b2bb2b678d10c1e9806e}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7afeadbd9e33a4b2bb2b678d10c1e9806e}} 
+AU\+\_\+\+UINT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_ULONG@{AU\_ULONG}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_ULONG@{AU\_ULONG}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2f9682fdc8830f53942397680271a43b}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2f9682fdc8830f53942397680271a43b}} 
+AU\+\_\+\+ULONG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_ULLONG@{AU\_ULLONG}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_ULLONG@{AU\_ULLONG}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a0f2a84bfed2060a2ee3e4d9bfa8c8ede}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a0f2a84bfed2060a2ee3e4d9bfa8c8ede}} 
+AU\+\_\+\+ULLONG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_FLOAT@{AU\_FLOAT}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_FLOAT@{AU\_FLOAT}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2bc03d49babea89b29bff2eff044dad9}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a2bc03d49babea89b29bff2eff044dad9}} 
+AU\+\_\+\+FLOAT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_DOUBLE@{AU\_DOUBLE}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_DOUBLE@{AU\_DOUBLE}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a1bf9ff3cd5cb1f0828e8fe78da194a8a}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a1bf9ff3cd5cb1f0828e8fe78da194a8a}} 
+AU\+\_\+\+DOUBLE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_DOUBLE\_COMPLEX@{AU\_DOUBLE\_COMPLEX}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_DOUBLE\_COMPLEX@{AU\_DOUBLE\_COMPLEX}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ad6181a12e1cd4604cff6f74a81f97008}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7ad6181a12e1cd4604cff6f74a81f97008}} 
+AU\+\_\+\+DOUBLE\+\_\+\+COMPLEX&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_STRING@{AU\_STRING}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_STRING@{AU\_STRING}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a446bf61c6debab2bf7d22b23e067d34b}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a446bf61c6debab2bf7d22b23e067d34b}} 
+AU\+\_\+\+STRING&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_NCLASSES@{AU\_NCLASSES}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_NCLASSES@{AU\_NCLASSES}}}\mbox{\Hypertarget{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a79b5dedf82271000ac2199f360c4188f}\label{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7a79b5dedf82271000ac2199f360c4188f}} 
+AU\+\_\+\+NCLASSES&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}} 
+\index{ft\_type.h@{ft\_type.h}!AuEndpointType@{AuEndpointType}}
+\index{AuEndpointType@{AuEndpointType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{AuEndpointType}{AuEndpointType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}}}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_HDF5@{EP\_HDF5}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_HDF5@{EP\_HDF5}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a63e62238a683d335eb9eb0c85759f5ff}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a63e62238a683d335eb9eb0c85759f5ff}} 
+EP\+\_\+\+HDF5&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_PNETCDF@{EP\_PNETCDF}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_PNETCDF@{EP\_PNETCDF}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53ab59a3523816afbe58800f49dc308fb44}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53ab59a3523816afbe58800f49dc308fb44}} 
+EP\+\_\+\+PNETCDF&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_ADIOS@{EP\_ADIOS}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_ADIOS@{EP\_ADIOS}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a11caf38ade9171418891939507000e38}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a11caf38ade9171418891939507000e38}} 
+EP\+\_\+\+ADIOS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_BINARY@{EP\_BINARY}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_BINARY@{EP\_BINARY}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a934c909440177c074b8709eaab556e82}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a934c909440177c074b8709eaab556e82}} 
+EP\+\_\+\+BINARY&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_VIRTUAL@{EP\_VIRTUAL}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_VIRTUAL@{EP\_VIRTUAL}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a7735bb63fb45a4cad9c11783b35c974c}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a7735bb63fb45a4cad9c11783b35c974c}} 
+EP\+\_\+\+VIRTUAL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_MEMORY@{EP\_MEMORY}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_MEMORY@{EP\_MEMORY}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a06621dacdd10d53b233c429dd891a4fe}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a06621dacdd10d53b233c429dd891a4fe}} 
+EP\+\_\+\+MEMORY&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_H5VDS@{EP\_H5VDS}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_H5VDS@{EP\_H5VDS}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a13f1aacb272c581a8b6e1e213ab0deef}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a13f1aacb272c581a8b6e1e213ab0deef}} 
+EP\+\_\+\+H5\+VDS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_DIR@{EP\_DIR}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_DIR@{EP\_DIR}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a68f74e8197a57103d0375dfe963b591c}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a68f74e8197a57103d0375dfe963b591c}} 
+EP\+\_\+\+DIR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_DASSA@{EP\_DASSA}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_DASSA@{EP\_DASSA}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a53c30716ae3d830b4f3ca0c661580a21}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a53c30716ae3d830b4f3ca0c661580a21}} 
+EP\+\_\+\+DASSA&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EP\_TDMS@{EP\_TDMS}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!EP\_TDMS@{EP\_TDMS}}}\mbox{\Hypertarget{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a6cf88d0d658860d8f454cff79be34dc5}\label{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53a6cf88d0d658860d8f454cff79be34dc5}} 
+EP\+\_\+\+TDMS&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}\label{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}} 
+\index{ft\_type.h@{ft\_type.h}!OutputVectorFlatDirection@{OutputVectorFlatDirection}}
+\index{OutputVectorFlatDirection@{OutputVectorFlatDirection}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{OutputVectorFlatDirection}{OutputVectorFlatDirection}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_FLAT\_OUTPUT\_COL@{AU\_FLAT\_OUTPUT\_COL}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_FLAT\_OUTPUT\_COL@{AU\_FLAT\_OUTPUT\_COL}}}\mbox{\Hypertarget{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9aa5634ba9a1a9f9ef0e8b20cd92275f62}\label{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9aa5634ba9a1a9f9ef0e8b20cd92275f62}} 
+AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+COL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_FLAT\_OUTPUT\_ROW@{AU\_FLAT\_OUTPUT\_ROW}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_FLAT\_OUTPUT\_ROW@{AU\_FLAT\_OUTPUT\_ROW}}}\mbox{\Hypertarget{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9abb9abaeefb91f72a570e52d133d8d526}\label{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9abb9abaeefb91f72a570e52d133d8d526}} 
+AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+ROW&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AU\_FLAT\_OUTPUT\_NEW@{AU\_FLAT\_OUTPUT\_NEW}!ft\_type.h@{ft\_type.h}}\index{ft\_type.h@{ft\_type.h}!AU\_FLAT\_OUTPUT\_NEW@{AU\_FLAT\_OUTPUT\_NEW}}}\mbox{\Hypertarget{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9adf470cb1c4ee301e1ba3571d914f1dc9}\label{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9adf470cb1c4ee301e1ba3571d914f1dc9}} 
+AU\+\_\+\+FLAT\+\_\+\+OUTPUT\+\_\+\+NEW&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft__type_8h_a48bc3e096f52b0ae076f7811ce3643da}\label{ft__type_8h_a48bc3e096f52b0ae076f7811ce3643da}} 
+\index{ft\_type.h@{ft\_type.h}!InferDataType@{InferDataType}}
+\index{InferDataType@{InferDataType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{InferDataType()}{InferDataType()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{ft__type_8h_a9d935be5797a6566c631562e2b43a1f7}{Au\+Endpoint\+Data\+Type}} Infer\+Data\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__type_8h_ab360c97a70838a3dbb552d861c0d78f6}\label{ft__type_8h_ab360c97a70838a3dbb552d861c0d78f6}} 
+\index{ft\_type.h@{ft\_type.h}!InferVectorType@{InferVectorType}}
+\index{InferVectorType@{InferVectorType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{InferVectorType()}{InferVectorType()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool Infer\+Vector\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__type_8h_ad602934ad42f89694f5cd5c44a63d67a}\label{ft__type_8h_ad602934ad42f89694f5cd5c44a63d67a}} 
+\index{ft\_type.h@{ft\_type.h}!InferVectorVectorType@{InferVectorVectorType}}
+\index{InferVectorVectorType@{InferVectorVectorType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{InferVectorVectorType()}{InferVectorVectorType()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool Infer\+Vector\+Vector\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft__type_8h_a68828c4c089049b3bf1c9f3389e91e13}\label{ft__type_8h_a68828c4c089049b3bf1c9f3389e91e13}} 
+\index{ft\_type.h@{ft\_type.h}!MapString2EndpointType@{MapString2EndpointType}}
+\index{MapString2EndpointType@{MapString2EndpointType}!ft\_type.h@{ft\_type.h}}
+\doxysubsubsection{\texorpdfstring{MapString2EndpointType()}{MapString2EndpointType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ft__type_8h_a335d6b97a2cdfc9f2cf6cfdd6787bd53}{Au\+Endpoint\+Type}} Map\+String2\+Endpoint\+Type (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+type\+\_\+str }\end{DoxyParamCaption})}
+
+
+
+map string typed name of type to Au\+Endpoint\+Type 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint\+\_\+type\+\_\+str} & input of string name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Au\+Endpoint\+Type output of type
+\end{DoxyReturn}
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 

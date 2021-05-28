@@ -1,0 +1,171 @@
+\hypertarget{class_f_t_1_1_array_base}{}\doxysection{FT\+::Array\+Base Class Reference}
+\label{class_f_t_1_1_array_base}\index{FT::ArrayBase@{FT::ArrayBase}}
+
+
+the object to the \mbox{\hyperlink{class_f_t_1_1_array_base}{Array\+Base}}  
+
+
+
+
+{\ttfamily \#include $<$ft\+\_\+array.\+h$>$}
+
+Inheritance diagram for FT\+::Array\+Base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_f_t_1_1_array_base}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual int \mbox{\hyperlink{class_f_t_1_1_array_base_a174ac289f98ae051b296139c4b197aaa}{Enable\+Apply\+Stride}} (const std\+::vector$<$ int $>$ \&skip\+\_\+size\+\_\+p)=0
+\item 
+virtual void \mbox{\hyperlink{class_f_t_1_1_array_base_a800e7bd5bacbb97419b4b0cd00d05532}{Set\+Vector\+Direction}} (\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}} flat\+\_\+direction\+\_\+index)=0
+\item 
+virtual void \mbox{\hyperlink{class_f_t_1_1_array_base_ac2ec2f3b74907881acf7b190e0e43d35}{Report\+Cost}} ()=0
+\item 
+virtual int \mbox{\hyperlink{class_f_t_1_1_array_base_ab1285016f0a5f121f5e7746fe866dd41}{Control\+Endpoint}} (int cmd\+\_\+p)=0
+\item 
+virtual int \mbox{\hyperlink{class_f_t_1_1_array_base_a89f80d118f7762cffd44238c0e205c5c}{Control\+Endpoint}} (int cmd\+\_\+p, std\+::vector$<$ std\+::string $>$ \&arg\+\_\+v\+\_\+p)=0
+\item 
+virtual int \mbox{\hyperlink{class_f_t_1_1_array_base_a725e9ae66a926e57d2c28e77c4418a9e}{Set\+Chunk\+Size}} (std\+::vector$<$ int $>$ data\+\_\+chunk\+\_\+size\+\_\+p)=0
+\item 
+virtual int \mbox{\hyperlink{class_f_t_1_1_array_base_a63c4e423883ec00defa1f5447f3d37ba}{Set\+Overlap\+Size}} (const vector$<$ int $>$ os\+\_\+p)=0
+\item 
+virtual int \mbox{\hyperlink{class_f_t_1_1_array_base_a76dbca47631409aa6f9175fc7cfb3d5c}{Get\+Array\+Size}} (std\+::vector$<$ unsigned long long $>$ \&size\+\_\+p)=0
+\item 
+virtual int \mbox{\hyperlink{class_f_t_1_1_array_base_ab314f2b47fec667bbdaab8aca2590c1b}{Get\+Stencil\+Tag}} ()=0
+\item 
+virtual int \mbox{\hyperlink{class_f_t_1_1_array_base_a7f9b0c106a19247a9a5c7c9d65af857a}{Get\+Tag}} (const std\+::string \&name, std\+::string \&value)=0
+\item 
+virtual \mbox{\hyperlink{class_f_t_1_1_array_base_afc6ae0ef21590be194bd9525bb0c0433}{$\sim$\+Array\+Base}} ()=default
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+the object to the \mbox{\hyperlink{class_f_t_1_1_array_base}{Array\+Base}} \begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_base_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+base.\+cpp}}.\end{Desc}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_f_t_1_1_array_base_afc6ae0ef21590be194bd9525bb0c0433}\label{class_f_t_1_1_array_base_afc6ae0ef21590be194bd9525bb0c0433}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!````~ArrayBase@{$\sim$ArrayBase}}
+\index{````~ArrayBase@{$\sim$ArrayBase}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{$\sim$ArrayBase()}{~ArrayBase()}}
+{\footnotesize\ttfamily virtual FT\+::\+Array\+Base\+::$\sim$\+Array\+Base (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_f_t_1_1_array_base_ab1285016f0a5f121f5e7746fe866dd41}\label{class_f_t_1_1_array_base_ab1285016f0a5f121f5e7746fe866dd41}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!ControlEndpoint@{ControlEndpoint}}
+\index{ControlEndpoint@{ControlEndpoint}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{ControlEndpoint()}{ControlEndpoint()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily virtual int FT\+::\+Array\+Base\+::\+Control\+Endpoint (\begin{DoxyParamCaption}\item[{int}]{cmd\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_a11e072c28a4684f5dbe4ca246e7a8dc9}{FT\+::\+Array$<$ T $>$}}.
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_base_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+base.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{class_f_t_1_1_array_base_a89f80d118f7762cffd44238c0e205c5c}\label{class_f_t_1_1_array_base_a89f80d118f7762cffd44238c0e205c5c}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!ControlEndpoint@{ControlEndpoint}}
+\index{ControlEndpoint@{ControlEndpoint}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{ControlEndpoint()}{ControlEndpoint()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily virtual int FT\+::\+Array\+Base\+::\+Control\+Endpoint (\begin{DoxyParamCaption}\item[{int}]{cmd\+\_\+p,  }\item[{std\+::vector$<$ std\+::string $>$ \&}]{arg\+\_\+v\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_a14cc3a509b8f17244f7bc68887457475}{FT\+::\+Array$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_base_a174ac289f98ae051b296139c4b197aaa}\label{class_f_t_1_1_array_base_a174ac289f98ae051b296139c4b197aaa}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!EnableApplyStride@{EnableApplyStride}}
+\index{EnableApplyStride@{EnableApplyStride}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{EnableApplyStride()}{EnableApplyStride()}}
+{\footnotesize\ttfamily virtual int FT\+::\+Array\+Base\+::\+Enable\+Apply\+Stride (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int $>$ \&}]{skip\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_a24aae4f8ec9f6721a41893fc49ca43ec}{FT\+::\+Array$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_base_a76dbca47631409aa6f9175fc7cfb3d5c}\label{class_f_t_1_1_array_base_a76dbca47631409aa6f9175fc7cfb3d5c}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!GetArraySize@{GetArraySize}}
+\index{GetArraySize@{GetArraySize}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{GetArraySize()}{GetArraySize()}}
+{\footnotesize\ttfamily virtual int FT\+::\+Array\+Base\+::\+Get\+Array\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$ \&}]{size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_ad9bb416fc64bb3d02c1029a3fe0ffd63}{FT\+::\+Array$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_base_ab314f2b47fec667bbdaab8aca2590c1b}\label{class_f_t_1_1_array_base_ab314f2b47fec667bbdaab8aca2590c1b}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!GetStencilTag@{GetStencilTag}}
+\index{GetStencilTag@{GetStencilTag}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{GetStencilTag()}{GetStencilTag()}}
+{\footnotesize\ttfamily virtual int FT\+::\+Array\+Base\+::\+Get\+Stencil\+Tag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_a49351829efcd1d460f068e13725cb260}{FT\+::\+Array$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_base_a7f9b0c106a19247a9a5c7c9d65af857a}\label{class_f_t_1_1_array_base_a7f9b0c106a19247a9a5c7c9d65af857a}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!GetTag@{GetTag}}
+\index{GetTag@{GetTag}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{GetTag()}{GetTag()}}
+{\footnotesize\ttfamily virtual int FT\+::\+Array\+Base\+::\+Get\+Tag (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{std\+::string \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_ac64a1e5e75dd0513b405156c41ab2ad6}{FT\+::\+Array$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_base_ac2ec2f3b74907881acf7b190e0e43d35}\label{class_f_t_1_1_array_base_ac2ec2f3b74907881acf7b190e0e43d35}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!ReportCost@{ReportCost}}
+\index{ReportCost@{ReportCost}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{ReportCost()}{ReportCost()}}
+{\footnotesize\ttfamily virtual void FT\+::\+Array\+Base\+::\+Report\+Cost (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_a1e6fde4d6e644b23ccae0af99f77e452}{FT\+::\+Array$<$ T $>$}}.
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_base_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+base.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{class_f_t_1_1_array_base_a725e9ae66a926e57d2c28e77c4418a9e}\label{class_f_t_1_1_array_base_a725e9ae66a926e57d2c28e77c4418a9e}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!SetChunkSize@{SetChunkSize}}
+\index{SetChunkSize@{SetChunkSize}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{SetChunkSize()}{SetChunkSize()}}
+{\footnotesize\ttfamily virtual int FT\+::\+Array\+Base\+::\+Set\+Chunk\+Size (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$}]{data\+\_\+chunk\+\_\+size\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_a1ab6e449e0a651e81aca41fccbaafba3}{FT\+::\+Array$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_base_a63c4e423883ec00defa1f5447f3d37ba}\label{class_f_t_1_1_array_base_a63c4e423883ec00defa1f5447f3d37ba}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!SetOverlapSize@{SetOverlapSize}}
+\index{SetOverlapSize@{SetOverlapSize}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{SetOverlapSize()}{SetOverlapSize()}}
+{\footnotesize\ttfamily virtual int FT\+::\+Array\+Base\+::\+Set\+Overlap\+Size (\begin{DoxyParamCaption}\item[{const vector$<$ int $>$}]{os\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_a6f4ff0b7ca2f0b052ebaee51acf364a2}{FT\+::\+Array$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_f_t_1_1_array_base_a800e7bd5bacbb97419b4b0cd00d05532}\label{class_f_t_1_1_array_base_a800e7bd5bacbb97419b4b0cd00d05532}} 
+\index{FT::ArrayBase@{FT::ArrayBase}!SetVectorDirection@{SetVectorDirection}}
+\index{SetVectorDirection@{SetVectorDirection}!FT::ArrayBase@{FT::ArrayBase}}
+\doxysubsubsection{\texorpdfstring{SetVectorDirection()}{SetVectorDirection()}}
+{\footnotesize\ttfamily virtual void FT\+::\+Array\+Base\+::\+Set\+Vector\+Direction (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{ft__type_8h_a9b6649698a81aed9cc0ade32af40f5a9}{Output\+Vector\+Flat\+Direction}}}]{flat\+\_\+direction\+\_\+index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_f_t_1_1_array_a5b141e53070a3cfed4d0b60883fcf14d}{FT\+::\+Array$<$ T $>$}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__array_8h}{ft\+\_\+array.\+h}}\end{DoxyCompactItemize}

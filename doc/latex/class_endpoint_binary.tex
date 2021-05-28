@@ -1,0 +1,441 @@
+\hypertarget{class_endpoint_binary}{}\doxysection{Endpoint\+Binary Class Reference}
+\label{class_endpoint_binary}\index{EndpointBinary@{EndpointBinary}}
+
+
+{\ttfamily \#include $<$ft\+\_\+endpoint\+\_\+binary.\+h$>$}
+
+Inheritance diagram for Endpoint\+Binary\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_endpoint_binary}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_endpoint_binary_ac49e773df46daba17fbc4ac31f28d305}{Endpoint\+Binary}} (std\+::string endpoint\+\_\+info\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_endpoint_binary}{Endpoint\+Binary}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_endpoint_binary_a15b1430e15f68a3c1b9f536db69d4e29}{Endpoint\+Binary}} ()
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_endpoint}{Endpoint}} in Binary Nothing to do there, can be used as sub-\/endpoint of directory. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{class_endpoint_binary_ab9875f0ba2945d261489d55dcfb95564}{$\sim$\+Endpoint\+Binary}} ()
+\item 
+void \mbox{\hyperlink{class_endpoint_binary_a5ed42c98959341fdda0fb5df157e7ae9}{Set\+Mode}} (std\+::string model\+\_\+str\+\_\+p)
+\item 
+std\+::string \mbox{\hyperlink{class_endpoint_binary_ac40e9aa4292ed327e000df10c4b1d143}{Get\+Mode}} ()
+\item 
+int \mbox{\hyperlink{class_endpoint_binary_a098f2ed0120af63a9cc7e86b16449583}{Extract\+Meta}} () override
+\begin{DoxyCompactList}\small\item\em extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/data\+\_\+element\+\_\+type \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_binary_ae59e1a805ae90dd0715d9e551b17f1c3}{Print\+Info}} () override
+\begin{DoxyCompactList}\small\item\em print information about the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_binary_a64fa51bfeb933f3308a7d9820e88074e}{Create}} () override
+\begin{DoxyCompactList}\small\item\em create the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_binary_a2d168b130be234c59468e12787d7d400}{Open}} () override
+\begin{DoxyCompactList}\small\item\em open the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_binary_af970026ed7a7adfac906be740b952f29}{Read}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data) override
+\begin{DoxyCompactList}\small\item\em read the data from end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_binary_aa78096ac8a3283a0d56c22f9f6a9bfd0}{Write}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data) override
+\begin{DoxyCompactList}\small\item\em write the data to the end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_binary_a07f0537ebe2cbf0ead39a838139b3151}{Close}} () override
+\begin{DoxyCompactList}\small\item\em close the end-\/point \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_binary_a4a18bc2094d573849f5fe7b5c112a43b}{Map2\+My\+Type}} () override
+\begin{DoxyCompactList}\small\item\em call the finalize to close everything (like call Destractor) \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_binary_ad0e6536bc8ea78e618b96abbd2527863}{Parse\+Endpoint\+Info}} () override
+\begin{DoxyCompactList}\small\item\em parse endpoint\+\_\+info to my own info In binary, it map endpoint\+\_\+info to filename, \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_endpoint_binary_a6861c1ff95fd275b8ee728f04c0a1063}{Update\+Seek\+Offset}} ()
+\begin{DoxyCompactList}\small\item\em update the seek\+\_\+offset \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_binary_af672d95bd8546b5192c10f01bd5603ab}{Control}} (int opt\+\_\+code, std\+::vector$<$ std\+::string $>$ \&parameter\+\_\+v) override
+\begin{DoxyCompactList}\small\item\em call a special operator on binary endpoint such as OP\+\_\+\+SET\+\_\+\+BINARY\+\_\+\+SIZE \end{DoxyCompactList}\item 
+FILE $\ast$ \mbox{\hyperlink{class_endpoint_binary_acb3a278713a2eb1ddfecebce52a81976}{Get\+FP}} ()
+\begin{DoxyCompactList}\small\item\em Get file point. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_binary_ab7e895074bcc62ccaeb9dc2fa5c7db4e}{Set\+Seek\+Offset}} (long int seek\+\_\+offset\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Set the Seek Offset. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_binary_a68320186a6789010a2c90790eccbcbf8}{Map\+Op\+Str2\+Int}} (std\+::string op\+\_\+cmd\+\_\+str) override
+\begin{DoxyCompactList}\small\item\em map a op\+\_\+cmd\+\_\+str to int as input of Special\+Operator \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_endpoint_binary_a6e00e97643db32892b95f7e59c88aa0b}{Map\+Op\+Int2\+Str}} (int op\+\_\+int) override
+\begin{DoxyCompactList}\small\item\em map op\+\_\+int to string \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_binary_af5e9d9ff819757d96aceffec207f15a7}{Enable\+Tranpose\+On\+Read}} ()
+\begin{DoxyCompactList}\small\item\em Enable\+Tranpose\+On\+Read. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_binary_ae608dd91bf8a0ae5a7aa98cb39791027}{Enable\+Tranpose\+On\+Write}} ()
+\begin{DoxyCompactList}\small\item\em Enable\+Tranpose\+On\+Write. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_binary_af97654855e696faffd4328280b2160ea}{Disable\+Tranpose\+On\+Read}} ()
+\begin{DoxyCompactList}\small\item\em Disable\+Tranpose\+On\+Read. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_binary_ae48c76d91cf589b4ab456553ea950cc2}{Disable\+Tranpose\+On\+Write}} ()
+\begin{DoxyCompactList}\small\item\em Disable\+Tranpose\+On\+Write. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_endpoint_binary_ac49e773df46daba17fbc4ac31f28d305}\label{class_endpoint_binary_ac49e773df46daba17fbc4ac31f28d305}} 
+\index{EndpointBinary@{EndpointBinary}!EndpointBinary@{EndpointBinary}}
+\index{EndpointBinary@{EndpointBinary}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{EndpointBinary()}{EndpointBinary()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Endpoint\+Binary\+::\+Endpoint\+Binary (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+info\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_endpoint_binary}{Endpoint\+Binary}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & contains the info of the endpoint, e.\+g., file type + file info \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_binary_a15b1430e15f68a3c1b9f536db69d4e29}\label{class_endpoint_binary_a15b1430e15f68a3c1b9f536db69d4e29}} 
+\index{EndpointBinary@{EndpointBinary}!EndpointBinary@{EndpointBinary}}
+\index{EndpointBinary@{EndpointBinary}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{EndpointBinary()}{EndpointBinary()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Endpoint\+Binary\+::\+Endpoint\+Binary (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_endpoint}{Endpoint}} in Binary Nothing to do there, can be used as sub-\/endpoint of directory. 
+
+\mbox{\Hypertarget{class_endpoint_binary_ab9875f0ba2945d261489d55dcfb95564}\label{class_endpoint_binary_ab9875f0ba2945d261489d55dcfb95564}} 
+\index{EndpointBinary@{EndpointBinary}!````~EndpointBinary@{$\sim$EndpointBinary}}
+\index{````~EndpointBinary@{$\sim$EndpointBinary}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{$\sim$EndpointBinary()}{~EndpointBinary()}}
+{\footnotesize\ttfamily virtual Endpoint\+Binary\+::$\sim$\+Endpoint\+Binary (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_endpoint_binary_a07f0537ebe2cbf0ead39a838139b3151}\label{class_endpoint_binary_a07f0537ebe2cbf0ead39a838139b3151}} 
+\index{EndpointBinary@{EndpointBinary}!Close@{Close}}
+\index{Close@{Close}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{Close()}{Close()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+close the end-\/point 
+
+\begin{DoxyReturn}{Returns}
+int int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a76379a7d9acbf7d429d315fbddadb2ad}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_af672d95bd8546b5192c10f01bd5603ab}\label{class_endpoint_binary_af672d95bd8546b5192c10f01bd5603ab}} 
+\index{EndpointBinary@{EndpointBinary}!Control@{Control}}
+\index{Control@{Control}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{Control()}{Control()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Control (\begin{DoxyParamCaption}\item[{int}]{opt\+\_\+code,  }\item[{std\+::vector$<$ std\+::string $>$ \&}]{parameter\+\_\+v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+call a special operator on binary endpoint such as OP\+\_\+\+SET\+\_\+\+BINARY\+\_\+\+SIZE 
+
+
+\begin{DoxyParams}{Parameters}
+{\em opt\+\_\+code,specially} & defined code \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_ad469d082a014d0a45be6a892352527d4}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_a64fa51bfeb933f3308a7d9820e88074e}\label{class_endpoint_binary_a64fa51bfeb933f3308a7d9820e88074e}} 
+\index{EndpointBinary@{EndpointBinary}!Create@{Create}}
+\index{Create@{Create}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{Create()}{Create()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+create the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_add0ecdbfabcc9382356bbac955ddb638}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_af97654855e696faffd4328280b2160ea}\label{class_endpoint_binary_af97654855e696faffd4328280b2160ea}} 
+\index{EndpointBinary@{EndpointBinary}!DisableTranposeOnRead@{DisableTranposeOnRead}}
+\index{DisableTranposeOnRead@{DisableTranposeOnRead}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{DisableTranposeOnRead()}{DisableTranposeOnRead()}}
+{\footnotesize\ttfamily void Endpoint\+Binary\+::\+Disable\+Tranpose\+On\+Read (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Disable\+Tranpose\+On\+Read. 
+
+\mbox{\Hypertarget{class_endpoint_binary_ae48c76d91cf589b4ab456553ea950cc2}\label{class_endpoint_binary_ae48c76d91cf589b4ab456553ea950cc2}} 
+\index{EndpointBinary@{EndpointBinary}!DisableTranposeOnWrite@{DisableTranposeOnWrite}}
+\index{DisableTranposeOnWrite@{DisableTranposeOnWrite}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{DisableTranposeOnWrite()}{DisableTranposeOnWrite()}}
+{\footnotesize\ttfamily void Endpoint\+Binary\+::\+Disable\+Tranpose\+On\+Write (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Disable\+Tranpose\+On\+Write. 
+
+\mbox{\Hypertarget{class_endpoint_binary_af5e9d9ff819757d96aceffec207f15a7}\label{class_endpoint_binary_af5e9d9ff819757d96aceffec207f15a7}} 
+\index{EndpointBinary@{EndpointBinary}!EnableTranposeOnRead@{EnableTranposeOnRead}}
+\index{EnableTranposeOnRead@{EnableTranposeOnRead}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{EnableTranposeOnRead()}{EnableTranposeOnRead()}}
+{\footnotesize\ttfamily void Endpoint\+Binary\+::\+Enable\+Tranpose\+On\+Read (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Enable\+Tranpose\+On\+Read. 
+
+\mbox{\Hypertarget{class_endpoint_binary_ae608dd91bf8a0ae5a7aa98cb39791027}\label{class_endpoint_binary_ae608dd91bf8a0ae5a7aa98cb39791027}} 
+\index{EndpointBinary@{EndpointBinary}!EnableTranposeOnWrite@{EnableTranposeOnWrite}}
+\index{EnableTranposeOnWrite@{EnableTranposeOnWrite}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{EnableTranposeOnWrite()}{EnableTranposeOnWrite()}}
+{\footnotesize\ttfamily void Endpoint\+Binary\+::\+Enable\+Tranpose\+On\+Write (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Enable\+Tranpose\+On\+Write. 
+
+\mbox{\Hypertarget{class_endpoint_binary_a098f2ed0120af63a9cc7e86b16449583}\label{class_endpoint_binary_a098f2ed0120af63a9cc7e86b16449583}} 
+\index{EndpointBinary@{EndpointBinary}!ExtractMeta@{ExtractMeta}}
+\index{ExtractMeta@{ExtractMeta}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{ExtractMeta()}{ExtractMeta()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Extract\+Meta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/data\+\_\+element\+\_\+type 
+
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works
+\end{DoxyReturn}
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 
+
+Implements \mbox{\hyperlink{class_endpoint_a43bcd87f7b7da0b2eefd3010e06c5cd5}{Endpoint}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_t_d_m_s_a668afa7999a9793e6d3228d64f2d5bc1}{Endpoint\+TDMS}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_acb3a278713a2eb1ddfecebce52a81976}\label{class_endpoint_binary_acb3a278713a2eb1ddfecebce52a81976}} 
+\index{EndpointBinary@{EndpointBinary}!GetFP@{GetFP}}
+\index{GetFP@{GetFP}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{GetFP()}{GetFP()}}
+{\footnotesize\ttfamily FILE $\ast$ Endpoint\+Binary\+::\+Get\+FP (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get file point. 
+
+\begin{DoxyReturn}{Returns}
+FILE$\ast$ return null if nothing opened 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_binary_ac40e9aa4292ed327e000df10c4b1d143}\label{class_endpoint_binary_ac40e9aa4292ed327e000df10c4b1d143}} 
+\index{EndpointBinary@{EndpointBinary}!GetMode@{GetMode}}
+\index{GetMode@{GetMode}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{GetMode()}{GetMode()}}
+{\footnotesize\ttfamily std\+::string Endpoint\+Binary\+::\+Get\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_endpoint_binary_a4a18bc2094d573849f5fe7b5c112a43b}\label{class_endpoint_binary_a4a18bc2094d573849f5fe7b5c112a43b}} 
+\index{EndpointBinary@{EndpointBinary}!Map2MyType@{Map2MyType}}
+\index{Map2MyType@{Map2MyType}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{Map2MyType()}{Map2MyType()}}
+{\footnotesize\ttfamily void Endpoint\+Binary\+::\+Map2\+My\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+call the finalize to close everything (like call Destractor) 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a755ef0b10d5c4a639d9a11f5e1c7d9a3}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_a6e00e97643db32892b95f7e59c88aa0b}\label{class_endpoint_binary_a6e00e97643db32892b95f7e59c88aa0b}} 
+\index{EndpointBinary@{EndpointBinary}!MapOpInt2Str@{MapOpInt2Str}}
+\index{MapOpInt2Str@{MapOpInt2Str}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{MapOpInt2Str()}{MapOpInt2Str()}}
+{\footnotesize\ttfamily std\+::string Endpoint\+Binary\+::\+Map\+Op\+Int2\+Str (\begin{DoxyParamCaption}\item[{int}]{op\+\_\+int }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+map op\+\_\+int to string 
+
+
+\begin{DoxyParams}{Parameters}
+{\em op\+\_\+int} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_af4dd2b2ee92adc7860e5b8f3e8dfbb32}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_a68320186a6789010a2c90790eccbcbf8}\label{class_endpoint_binary_a68320186a6789010a2c90790eccbcbf8}} 
+\index{EndpointBinary@{EndpointBinary}!MapOpStr2Int@{MapOpStr2Int}}
+\index{MapOpStr2Int@{MapOpStr2Int}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{MapOpStr2Int()}{MapOpStr2Int()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Map\+Op\+Str2\+Int (\begin{DoxyParamCaption}\item[{std\+::string}]{op\+\_\+cmd\+\_\+str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+map a op\+\_\+cmd\+\_\+str to int as input of Special\+Operator 
+
+
+\begin{DoxyParams}{Parameters}
+{\em op\+\_\+cmd\+\_\+str} & cmd string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_a843d0df544c43b0aa0081ad17c9f854c}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_a2d168b130be234c59468e12787d7d400}\label{class_endpoint_binary_a2d168b130be234c59468e12787d7d400}} 
+\index{EndpointBinary@{EndpointBinary}!Open@{Open}}
+\index{Open@{Open}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{Open()}{Open()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+open the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a481874b61d83081b4a96a0c2b21a8dbd}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_ad0e6536bc8ea78e618b96abbd2527863}\label{class_endpoint_binary_ad0e6536bc8ea78e618b96abbd2527863}} 
+\index{EndpointBinary@{EndpointBinary}!ParseEndpointInfo@{ParseEndpointInfo}}
+\index{ParseEndpointInfo@{ParseEndpointInfo}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{ParseEndpointInfo()}{ParseEndpointInfo()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Parse\+Endpoint\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+parse endpoint\+\_\+info to my own info In binary, it map endpoint\+\_\+info to filename, 
+
+parse endpoint\+\_\+info to my own info In TMDS, it map endpoint\+\_\+info to filename
+
+\begin{DoxyReturn}{Returns}
+int\+: 0 works, $<$ 0 error, 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a973927c11f35be4f393f456a8b2e2a1e}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_ae59e1a805ae90dd0715d9e551b17f1c3}\label{class_endpoint_binary_ae59e1a805ae90dd0715d9e551b17f1c3}} 
+\index{EndpointBinary@{EndpointBinary}!PrintInfo@{PrintInfo}}
+\index{PrintInfo@{PrintInfo}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{PrintInfo()}{PrintInfo()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Print\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+print information about the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_af014eb78eb2097f23cd48d48c2004b16}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_af970026ed7a7adfac906be740b952f29}\label{class_endpoint_binary_af970026ed7a7adfac906be740b952f29}} 
+\index{EndpointBinary@{EndpointBinary}!Read@{Read}}
+\index{Read@{Read}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Read (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+read the data from end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a2ea7ed58e917ba63cb222ffbda09aa0c}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_a5ed42c98959341fdda0fb5df157e7ae9}\label{class_endpoint_binary_a5ed42c98959341fdda0fb5df157e7ae9}} 
+\index{EndpointBinary@{EndpointBinary}!SetMode@{SetMode}}
+\index{SetMode@{SetMode}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{SetMode()}{SetMode()}}
+{\footnotesize\ttfamily void Endpoint\+Binary\+::\+Set\+Mode (\begin{DoxyParamCaption}\item[{std\+::string}]{model\+\_\+str\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_endpoint_binary_ab7e895074bcc62ccaeb9dc2fa5c7db4e}\label{class_endpoint_binary_ab7e895074bcc62ccaeb9dc2fa5c7db4e}} 
+\index{EndpointBinary@{EndpointBinary}!SetSeekOffset@{SetSeekOffset}}
+\index{SetSeekOffset@{SetSeekOffset}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{SetSeekOffset()}{SetSeekOffset()}}
+{\footnotesize\ttfamily void Endpoint\+Binary\+::\+Set\+Seek\+Offset (\begin{DoxyParamCaption}\item[{long int}]{seek\+\_\+offset\+\_\+p }\end{DoxyParamCaption})}
+
+
+
+Set the Seek Offset. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em seek\+\_\+offset\+\_\+p} & \+: set offset to be used for reading \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_binary_a6861c1ff95fd275b8ee728f04c0a1063}\label{class_endpoint_binary_a6861c1ff95fd275b8ee728f04c0a1063}} 
+\index{EndpointBinary@{EndpointBinary}!UpdateSeekOffset@{UpdateSeekOffset}}
+\index{UpdateSeekOffset@{UpdateSeekOffset}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{UpdateSeekOffset()}{UpdateSeekOffset()}}
+{\footnotesize\ttfamily void Endpoint\+Binary\+::\+Update\+Seek\+Offset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+update the seek\+\_\+offset 
+
+
+
+Reimplemented in \mbox{\hyperlink{class_endpoint_t_d_m_s_aab10f224768845d696a0bf380c6ed105}{Endpoint\+TDMS}}.
+
+\mbox{\Hypertarget{class_endpoint_binary_aa78096ac8a3283a0d56c22f9f6a9bfd0}\label{class_endpoint_binary_aa78096ac8a3283a0d56c22f9f6a9bfd0}} 
+\index{EndpointBinary@{EndpointBinary}!Write@{Write}}
+\index{Write@{Write}!EndpointBinary@{EndpointBinary}}
+\doxysubsubsection{\texorpdfstring{Write()}{Write()}}
+{\footnotesize\ttfamily int Endpoint\+Binary\+::\+Write (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+write the data to the end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a4bcb3e885bfb1343c610a3163fc01c77}{Endpoint}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__endpoint__binary_8h}{ft\+\_\+endpoint\+\_\+binary.\+h}}\item 
+\mbox{\hyperlink{ft__endpoint__binary_8cpp}{ft\+\_\+endpoint\+\_\+binary.\+cpp}}\end{DoxyCompactItemize}

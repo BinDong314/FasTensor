@@ -1,0 +1,92 @@
+\hypertarget{ft__endpoint__binary_8h}{}\doxysection{ft\+\_\+endpoint\+\_\+binary.\+h File Reference}
+\label{ft__endpoint__binary_8h}\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+{\ttfamily \#include \char`\"{}ft\+\_\+type.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_endpoint_binary}{Endpoint\+Binary}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__binary_8h_a892e68988fd817dbe5087e48b55ef0ca}{BINARY\+\_\+\+SET\+\_\+\+SIZE}}~0
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__binary_8h_aed738a9721333162635d1d55beff586f}{BINARY\+\_\+\+ENABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+READ}}~1
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__binary_8h_a3d5bead34b28f3cd33e64e382585335f}{BINARY\+\_\+\+ENABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+WRITE}}~2
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__binary_8h_a57a2710e57b947eb1b69d554f1c35f19}{BINARY\+\_\+\+DISABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+READ}}~3
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__binary_8h_a1364a26075ec2afbc93ad5565787b60b}{BINARY\+\_\+\+DISABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+WRITE}}~4
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__binary_8h_a4f65c66e64522963a2733fc3c48a3fb6}{BINARY\+\_\+\+ENABLE\+\_\+\+TRAN\+\_\+\+READ}}~\mbox{\hyperlink{ft__endpoint__binary_8h_aed738a9721333162635d1d55beff586f}{BINARY\+\_\+\+ENABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+READ}}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__binary_8h_a83e85f3f0090407401ce556eec9388b4}{BINARY\+\_\+\+ENABLE\+\_\+\+TRAN\+\_\+\+WRITE}}~\mbox{\hyperlink{ft__endpoint__binary_8h_a3d5bead34b28f3cd33e64e382585335f}{BINARY\+\_\+\+ENABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+WRITE}}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__binary_8h_a74ee8152367343f591845493353d573e}{BINARY\+\_\+\+DISABLE\+\_\+\+TRAN\+\_\+\+READ}}~\mbox{\hyperlink{ft__endpoint__binary_8h_a57a2710e57b947eb1b69d554f1c35f19}{BINARY\+\_\+\+DISABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+READ}}
+\item 
+\#define \mbox{\hyperlink{ft__endpoint__binary_8h_a73cba877a42a983a81a2d85a4e7a9c17}{BINARY\+\_\+\+DISABLE\+\_\+\+TRAN\+\_\+\+WRITE}}~\mbox{\hyperlink{ft__endpoint__binary_8h_a1364a26075ec2afbc93ad5565787b60b}{BINARY\+\_\+\+DISABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+WRITE}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft__endpoint__binary_8h_a74ee8152367343f591845493353d573e}\label{ft__endpoint__binary_8h_a74ee8152367343f591845493353d573e}} 
+\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}!BINARY\_DISABLE\_TRAN\_READ@{BINARY\_DISABLE\_TRAN\_READ}}
+\index{BINARY\_DISABLE\_TRAN\_READ@{BINARY\_DISABLE\_TRAN\_READ}!ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+\doxysubsubsection{\texorpdfstring{BINARY\_DISABLE\_TRAN\_READ}{BINARY\_DISABLE\_TRAN\_READ}}
+{\footnotesize\ttfamily \#define BINARY\+\_\+\+DISABLE\+\_\+\+TRAN\+\_\+\+READ~\mbox{\hyperlink{ft__endpoint__binary_8h_a57a2710e57b947eb1b69d554f1c35f19}{BINARY\+\_\+\+DISABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+READ}}}
+
+\mbox{\Hypertarget{ft__endpoint__binary_8h_a73cba877a42a983a81a2d85a4e7a9c17}\label{ft__endpoint__binary_8h_a73cba877a42a983a81a2d85a4e7a9c17}} 
+\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}!BINARY\_DISABLE\_TRAN\_WRITE@{BINARY\_DISABLE\_TRAN\_WRITE}}
+\index{BINARY\_DISABLE\_TRAN\_WRITE@{BINARY\_DISABLE\_TRAN\_WRITE}!ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+\doxysubsubsection{\texorpdfstring{BINARY\_DISABLE\_TRAN\_WRITE}{BINARY\_DISABLE\_TRAN\_WRITE}}
+{\footnotesize\ttfamily \#define BINARY\+\_\+\+DISABLE\+\_\+\+TRAN\+\_\+\+WRITE~\mbox{\hyperlink{ft__endpoint__binary_8h_a1364a26075ec2afbc93ad5565787b60b}{BINARY\+\_\+\+DISABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+WRITE}}}
+
+\mbox{\Hypertarget{ft__endpoint__binary_8h_a57a2710e57b947eb1b69d554f1c35f19}\label{ft__endpoint__binary_8h_a57a2710e57b947eb1b69d554f1c35f19}} 
+\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}!BINARY\_DISABLE\_TRANSPOSE\_ON\_READ@{BINARY\_DISABLE\_TRANSPOSE\_ON\_READ}}
+\index{BINARY\_DISABLE\_TRANSPOSE\_ON\_READ@{BINARY\_DISABLE\_TRANSPOSE\_ON\_READ}!ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+\doxysubsubsection{\texorpdfstring{BINARY\_DISABLE\_TRANSPOSE\_ON\_READ}{BINARY\_DISABLE\_TRANSPOSE\_ON\_READ}}
+{\footnotesize\ttfamily \#define BINARY\+\_\+\+DISABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+READ~3}
+
+\mbox{\Hypertarget{ft__endpoint__binary_8h_a1364a26075ec2afbc93ad5565787b60b}\label{ft__endpoint__binary_8h_a1364a26075ec2afbc93ad5565787b60b}} 
+\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}!BINARY\_DISABLE\_TRANSPOSE\_ON\_WRITE@{BINARY\_DISABLE\_TRANSPOSE\_ON\_WRITE}}
+\index{BINARY\_DISABLE\_TRANSPOSE\_ON\_WRITE@{BINARY\_DISABLE\_TRANSPOSE\_ON\_WRITE}!ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+\doxysubsubsection{\texorpdfstring{BINARY\_DISABLE\_TRANSPOSE\_ON\_WRITE}{BINARY\_DISABLE\_TRANSPOSE\_ON\_WRITE}}
+{\footnotesize\ttfamily \#define BINARY\+\_\+\+DISABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+WRITE~4}
+
+\mbox{\Hypertarget{ft__endpoint__binary_8h_a4f65c66e64522963a2733fc3c48a3fb6}\label{ft__endpoint__binary_8h_a4f65c66e64522963a2733fc3c48a3fb6}} 
+\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}!BINARY\_ENABLE\_TRAN\_READ@{BINARY\_ENABLE\_TRAN\_READ}}
+\index{BINARY\_ENABLE\_TRAN\_READ@{BINARY\_ENABLE\_TRAN\_READ}!ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+\doxysubsubsection{\texorpdfstring{BINARY\_ENABLE\_TRAN\_READ}{BINARY\_ENABLE\_TRAN\_READ}}
+{\footnotesize\ttfamily \#define BINARY\+\_\+\+ENABLE\+\_\+\+TRAN\+\_\+\+READ~\mbox{\hyperlink{ft__endpoint__binary_8h_aed738a9721333162635d1d55beff586f}{BINARY\+\_\+\+ENABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+READ}}}
+
+\mbox{\Hypertarget{ft__endpoint__binary_8h_a83e85f3f0090407401ce556eec9388b4}\label{ft__endpoint__binary_8h_a83e85f3f0090407401ce556eec9388b4}} 
+\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}!BINARY\_ENABLE\_TRAN\_WRITE@{BINARY\_ENABLE\_TRAN\_WRITE}}
+\index{BINARY\_ENABLE\_TRAN\_WRITE@{BINARY\_ENABLE\_TRAN\_WRITE}!ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+\doxysubsubsection{\texorpdfstring{BINARY\_ENABLE\_TRAN\_WRITE}{BINARY\_ENABLE\_TRAN\_WRITE}}
+{\footnotesize\ttfamily \#define BINARY\+\_\+\+ENABLE\+\_\+\+TRAN\+\_\+\+WRITE~\mbox{\hyperlink{ft__endpoint__binary_8h_a3d5bead34b28f3cd33e64e382585335f}{BINARY\+\_\+\+ENABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+WRITE}}}
+
+\mbox{\Hypertarget{ft__endpoint__binary_8h_aed738a9721333162635d1d55beff586f}\label{ft__endpoint__binary_8h_aed738a9721333162635d1d55beff586f}} 
+\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}!BINARY\_ENABLE\_TRANSPOSE\_ON\_READ@{BINARY\_ENABLE\_TRANSPOSE\_ON\_READ}}
+\index{BINARY\_ENABLE\_TRANSPOSE\_ON\_READ@{BINARY\_ENABLE\_TRANSPOSE\_ON\_READ}!ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+\doxysubsubsection{\texorpdfstring{BINARY\_ENABLE\_TRANSPOSE\_ON\_READ}{BINARY\_ENABLE\_TRANSPOSE\_ON\_READ}}
+{\footnotesize\ttfamily \#define BINARY\+\_\+\+ENABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+READ~1}
+
+\mbox{\Hypertarget{ft__endpoint__binary_8h_a3d5bead34b28f3cd33e64e382585335f}\label{ft__endpoint__binary_8h_a3d5bead34b28f3cd33e64e382585335f}} 
+\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}!BINARY\_ENABLE\_TRANSPOSE\_ON\_WRITE@{BINARY\_ENABLE\_TRANSPOSE\_ON\_WRITE}}
+\index{BINARY\_ENABLE\_TRANSPOSE\_ON\_WRITE@{BINARY\_ENABLE\_TRANSPOSE\_ON\_WRITE}!ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+\doxysubsubsection{\texorpdfstring{BINARY\_ENABLE\_TRANSPOSE\_ON\_WRITE}{BINARY\_ENABLE\_TRANSPOSE\_ON\_WRITE}}
+{\footnotesize\ttfamily \#define BINARY\+\_\+\+ENABLE\+\_\+\+TRANSPOSE\+\_\+\+ON\+\_\+\+WRITE~2}
+
+\mbox{\Hypertarget{ft__endpoint__binary_8h_a892e68988fd817dbe5087e48b55ef0ca}\label{ft__endpoint__binary_8h_a892e68988fd817dbe5087e48b55ef0ca}} 
+\index{ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}!BINARY\_SET\_SIZE@{BINARY\_SET\_SIZE}}
+\index{BINARY\_SET\_SIZE@{BINARY\_SET\_SIZE}!ft\_endpoint\_binary.h@{ft\_endpoint\_binary.h}}
+\doxysubsubsection{\texorpdfstring{BINARY\_SET\_SIZE}{BINARY\_SET\_SIZE}}
+{\footnotesize\ttfamily \#define BINARY\+\_\+\+SET\+\_\+\+SIZE~0}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory 

@@ -1,0 +1,98 @@
+\hypertarget{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_chunk_overlap_8cpp-example}{}\doxysection{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+chunk\+\_\+overlap.\+cpp}
+This example show how to use Set\+Chunk\+Size/\+Set\+Overlap\+Size in Fas\+Tensor to set chunk size/overlap size. ~\newline
+ \begin{DoxyAuthor}{Author}
+Bin Dong (\href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/05-\/28
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021
+\end{DoxyCopyright}
+
+\begin{DoxyCodeInclude}{0}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include <stdarg.h>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include <stdlib.h>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{ft_8h}{ft.h}}"{}}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{using namespace }std;}
+\DoxyCodeLine{\textcolor{keyword}{using namespace }\mbox{\hyperlink{namespace_f_t}{FT}};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//UDF One: duplicate the original data}}
+\DoxyCodeLine{\textcolor{keyword}{inline} \mbox{\hyperlink{class_stencil}{Stencil<float>}} \mbox{\hyperlink{au__example__chunk__overlap_8cpp_ab9759c3ef0d67032f2e47e198083b89d}{udf\_hello\_world}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_stencil}{Stencil<float>}} \&iStencil)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{    \mbox{\hyperlink{class_stencil}{Stencil<float>}} oStencil;}
+\DoxyCodeLine{    oStencil = iStencil(0, 0) * 2.0;}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} oStencil;}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{int} \mbox{\hyperlink{au__example__1f1p_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char} *argv[])}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{    \textcolor{comment}{//Init the MPICH, etc.}}
+\DoxyCodeLine{    \mbox{\hyperlink{ft_8h_a431d3e09d3b2d6ce2bb5944af7e73ee7}{AU\_Init}}(argc, argv);}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{comment}{// set up the chunk size and the overlap size}}
+\DoxyCodeLine{    std::vector<int> chunk\_size = \{4, 16\};}
+\DoxyCodeLine{    std::vector<int> overlap\_size = \{1, 1\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{    std::string endpoint\_id = \textcolor{stringliteral}{"{}EP\_HDF5:./test-\/data/testf-\/16x16-\/chunk-\/overlap.h5:/testg/testd"{}};}
+\DoxyCodeLine{    \textcolor{comment}{//Input data}}
+\DoxyCodeLine{    Array<float> *A = \textcolor{keyword}{new} Array<float>();}
+\DoxyCodeLine{}
+\DoxyCodeLine{    A-\/>SetEndpoint(endpoint\_id);}
+\DoxyCodeLine{    A-\/>SetChunkSize(chunk\_size);}
+\DoxyCodeLine{    A-\/>SetOverlapSize(overlap\_size);}
+\DoxyCodeLine{    \textcolor{comment}{//Result data}}
+\DoxyCodeLine{    Array<float> *B = \textcolor{keyword}{new} Array<float>(\textcolor{stringliteral}{"{}EP\_HDF5:./test-\/data/testf-\/16x16-\/chunk-\/overlap-\/output.h5:/testg/testd"{}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{comment}{//Run}}
+\DoxyCodeLine{    A-\/>Apply(\mbox{\hyperlink{au__example__chunk__overlap_8cpp_ab9759c3ef0d67032f2e47e198083b89d}{udf\_hello\_world}}, B);}
+\DoxyCodeLine{}
+\DoxyCodeLine{    std::vector<int> chunk\_size\_get;}
+\DoxyCodeLine{    A-\/>GetChunkSize(chunk\_size\_get);}
+\DoxyCodeLine{}
+\DoxyCodeLine{    std::vector<int> overlap\_size\_get;}
+\DoxyCodeLine{    A-\/>GetOverlapSize(overlap\_size\_get);}
+\DoxyCodeLine{}
+\DoxyCodeLine{    std::string endpoint\_id\_get;}
+\DoxyCodeLine{    A-\/>GetEndpoint(endpoint\_id\_get);}
+\DoxyCodeLine{    \textcolor{keywordtype}{int} ret = 0;}
+\DoxyCodeLine{    \textcolor{keywordflow}{if} (chunk\_size\_get != chunk\_size)}
+\DoxyCodeLine{    \{}
+\DoxyCodeLine{        \mbox{\hyperlink{ft__utility__macro_8h_ac96eb3c4d064f5dfb9c24202915e3259}{AU\_INFO}}(\textcolor{stringliteral}{"{}Failed: got wrong chunk size"{}});}
+\DoxyCodeLine{        ret = -\/1;}
+\DoxyCodeLine{    \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{keywordflow}{if} (overlap\_size\_get != overlap\_size)}
+\DoxyCodeLine{    \{}
+\DoxyCodeLine{        \mbox{\hyperlink{ft__utility__macro_8h_ac96eb3c4d064f5dfb9c24202915e3259}{AU\_INFO}}(\textcolor{stringliteral}{"{}Failed: got wrong overlap size"{}});}
+\DoxyCodeLine{        ret = -\/1;}
+\DoxyCodeLine{    \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{keywordflow}{if} (endpoint\_id\_get != endpoint\_id)}
+\DoxyCodeLine{    \{}
+\DoxyCodeLine{        \mbox{\hyperlink{ft__utility__macro_8h_ac96eb3c4d064f5dfb9c24202915e3259}{AU\_INFO}}(\textcolor{stringliteral}{"{}Failed: got wrong endpoint id"{}});}
+\DoxyCodeLine{        ret = -\/1;}
+\DoxyCodeLine{    \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{    std::vector<float> readback;}
+\DoxyCodeLine{    std::vector<unsigned long long> read\_start = \{0, 0\}, read\_end = \{15, 15\};}
+\DoxyCodeLine{    B-\/>ReadArray(read\_start, read\_end, readback);}
+\DoxyCodeLine{    \mbox{\hyperlink{ft__utility_8h_a3bb8c3c86721391778ec4ce4ca4969ed}{PrintVector}}(\textcolor{stringliteral}{"{}readback"{}}, readback);}
+\DoxyCodeLine{    \textcolor{comment}{//Clear}}
+\DoxyCodeLine{    \textcolor{keyword}{delete} A;}
+\DoxyCodeLine{    \textcolor{keyword}{delete} B;}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \mbox{\hyperlink{ft_8h_a52987d19f550018ced56aa710d9979b4}{AU\_Finalize}}();}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} ret;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCodeInclude}
+ 

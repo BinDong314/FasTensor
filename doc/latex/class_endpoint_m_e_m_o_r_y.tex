@@ -1,0 +1,364 @@
+\hypertarget{class_endpoint_m_e_m_o_r_y}{}\doxysection{Endpoint\+MEMORY Class Reference}
+\label{class_endpoint_m_e_m_o_r_y}\index{EndpointMEMORY@{EndpointMEMORY}}
+
+
+{\ttfamily \#include $<$ft\+\_\+endpoint\+\_\+memory.\+h$>$}
+
+Inheritance diagram for Endpoint\+MEMORY\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_endpoint_m_e_m_o_r_y}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a102749211c4cdd06012203b861e4fac8}{Endpoint\+MEMORY}} (std\+::string endpoint\+\_\+info\+\_\+p)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y}{Endpoint\+MEMORY}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a8c8f39d3fb5345044deb0b3cec3c418d}{Endpoint\+MEMORY}} ()
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_endpoint}{Endpoint}} in MEMORY Nothing to do there, can be used as sub-\/endpoint of directory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a6f35712772576e6ee9872acf235bed68}{$\sim$\+Endpoint\+MEMORY}} ()
+\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_aa13f836b34006efbcc1e4ec784ce95fa}{Extract\+Meta}} ()
+\begin{DoxyCompactList}\small\item\em extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/data\+\_\+element\+\_\+type \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a2d2d9a45998165cb5f9183de39333a21}{Print\+Info}} ()
+\begin{DoxyCompactList}\small\item\em print information about the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a0ad58ca4a616e18fa2a885ca25ff14f3}{Create}} ()
+\begin{DoxyCompactList}\small\item\em create the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_ade75c9e83f0eaff220657aa9f3ed9282}{Open}} ()
+\begin{DoxyCompactList}\small\item\em open the endpoint \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a08e8cb0fc299971c0d6754d8d2fce0d6}{Read}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data)
+\begin{DoxyCompactList}\small\item\em read the data from end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a07570e7d3fe54f22968f286c838e9c16}{Write}} (std\+::vector$<$ unsigned long long $>$ start, std\+::vector$<$ unsigned long long $>$ end, void $\ast$data)
+\begin{DoxyCompactList}\small\item\em write the data to the end-\/point \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_ab4ed7c34c4ae6cff1b9c8421c87a8231}{Close}} ()
+\begin{DoxyCompactList}\small\item\em close the end-\/point \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a783a2c9bf09fdc23823fe803fd8af35a}{Map2\+My\+Type}} ()
+\begin{DoxyCompactList}\small\item\em call the finalize to close everything (like call Destractor) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a6113a3eb08313e6484e29780086821b3}{Enable\+Collective\+IO}} ()
+\item 
+void \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a8b0a1b39539d18c8de3037e0f95ba32d}{Disable\+Collective\+IO}} ()
+\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a81917fffc167025bd52cbb9a7193b702}{Parse\+Endpoint\+Info}} ()
+\begin{DoxyCompactList}\small\item\em parse endpoint\+\_\+info to my own info In MEMORY, it map endpoint\+\_\+info to filename, group name and datasetname \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a6f5230c8542dfcc3008179b874b569b5}{Special\+Operator}} (int opt\+\_\+code, std\+::vector$<$ std\+::string $>$ parameter\+\_\+v)
+\begin{DoxyCompactList}\small\item\em call a special operator on endpoint to dump file from MEMORY to HDF5, or in verse \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_aa2f79834bc03cf8b1fdf49f966c5411f}{Nonvolatile}} (std\+::string parameter)
+\begin{DoxyCompactList}\small\item\em Nonvolatile the data in MEMORY to HDF5. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_aa081fe555b730544ba1356c5f2af4883}{Volatile}} (std\+::string parameter)
+\begin{DoxyCompactList}\small\item\em Volatile the data from HDF5 to MEMORY. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_a99480573f496a9033151a398a1d4618b}{Merge\+Mirrors}} (std\+::string op\+\_\+str)
+\begin{DoxyCompactList}\small\item\em Merger mirrors on all processes. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y_ad6eb9227a3346f59673c384a6e95ad42}{Create\+Local\+Mirror}} (std\+::string init\+\_\+value\+\_\+str)
+\begin{DoxyCompactList}\small\item\em Create a Local Mirror object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a102749211c4cdd06012203b861e4fac8}\label{class_endpoint_m_e_m_o_r_y_a102749211c4cdd06012203b861e4fac8}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!EndpointMEMORY@{EndpointMEMORY}}
+\index{EndpointMEMORY@{EndpointMEMORY}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{EndpointMEMORY()}{EndpointMEMORY()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Endpoint\+MEMORY\+::\+Endpoint\+MEMORY (\begin{DoxyParamCaption}\item[{std\+::string}]{endpoint\+\_\+info\+\_\+p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_endpoint_m_e_m_o_r_y}{Endpoint\+MEMORY}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+\_\+endpoint} & contains the info of the endpoint, e.\+g., file type + file info \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a8c8f39d3fb5345044deb0b3cec3c418d}\label{class_endpoint_m_e_m_o_r_y_a8c8f39d3fb5345044deb0b3cec3c418d}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!EndpointMEMORY@{EndpointMEMORY}}
+\index{EndpointMEMORY@{EndpointMEMORY}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{EndpointMEMORY()}{EndpointMEMORY()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Endpoint\+MEMORY\+::\+Endpoint\+MEMORY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_endpoint}{Endpoint}} in MEMORY Nothing to do there, can be used as sub-\/endpoint of directory. 
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a6f35712772576e6ee9872acf235bed68}\label{class_endpoint_m_e_m_o_r_y_a6f35712772576e6ee9872acf235bed68}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!````~EndpointMEMORY@{$\sim$EndpointMEMORY}}
+\index{````~EndpointMEMORY@{$\sim$EndpointMEMORY}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{$\sim$EndpointMEMORY()}{~EndpointMEMORY()}}
+{\footnotesize\ttfamily Endpoint\+MEMORY\+::$\sim$\+Endpoint\+MEMORY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_ab4ed7c34c4ae6cff1b9c8421c87a8231}\label{class_endpoint_m_e_m_o_r_y_ab4ed7c34c4ae6cff1b9c8421c87a8231}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!Close@{Close}}
+\index{Close@{Close}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{Close()}{Close()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+close the end-\/point 
+
+\begin{DoxyReturn}{Returns}
+int int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a76379a7d9acbf7d429d315fbddadb2ad}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a0ad58ca4a616e18fa2a885ca25ff14f3}\label{class_endpoint_m_e_m_o_r_y_a0ad58ca4a616e18fa2a885ca25ff14f3}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!Create@{Create}}
+\index{Create@{Create}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{Create()}{Create()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+create the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_add0ecdbfabcc9382356bbac955ddb638}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_ad6eb9227a3346f59673c384a6e95ad42}\label{class_endpoint_m_e_m_o_r_y_ad6eb9227a3346f59673c384a6e95ad42}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!CreateLocalMirror@{CreateLocalMirror}}
+\index{CreateLocalMirror@{CreateLocalMirror}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{CreateLocalMirror()}{CreateLocalMirror()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Create\+Local\+Mirror (\begin{DoxyParamCaption}\item[{std\+::string}]{init\+\_\+value\+\_\+str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a Local Mirror object. 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a8b0a1b39539d18c8de3037e0f95ba32d}\label{class_endpoint_m_e_m_o_r_y_a8b0a1b39539d18c8de3037e0f95ba32d}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!DisableCollectiveIO@{DisableCollectiveIO}}
+\index{DisableCollectiveIO@{DisableCollectiveIO}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{DisableCollectiveIO()}{DisableCollectiveIO()}}
+{\footnotesize\ttfamily void Endpoint\+MEMORY\+::\+Disable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_af8c636c2a09098d6a7ba91dbef96e9ba}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a6113a3eb08313e6484e29780086821b3}\label{class_endpoint_m_e_m_o_r_y_a6113a3eb08313e6484e29780086821b3}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!EnableCollectiveIO@{EnableCollectiveIO}}
+\index{EnableCollectiveIO@{EnableCollectiveIO}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{EnableCollectiveIO()}{EnableCollectiveIO()}}
+{\footnotesize\ttfamily void Endpoint\+MEMORY\+::\+Enable\+Collective\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_endpoint_a53f5bcbf1fe56d9ebb56d270bb92311e}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_aa13f836b34006efbcc1e4ec784ce95fa}\label{class_endpoint_m_e_m_o_r_y_aa13f836b34006efbcc1e4ec784ce95fa}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!ExtractMeta@{ExtractMeta}}
+\index{ExtractMeta@{ExtractMeta}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{ExtractMeta()}{ExtractMeta()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Extract\+Meta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+extracts metadata, possbile endpoint\+\_\+ranks/endpoint\+\_\+dim\+\_\+size/data\+\_\+element\+\_\+type 
+
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a43bcd87f7b7da0b2eefd3010e06c5cd5}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a783a2c9bf09fdc23823fe803fd8af35a}\label{class_endpoint_m_e_m_o_r_y_a783a2c9bf09fdc23823fe803fd8af35a}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!Map2MyType@{Map2MyType}}
+\index{Map2MyType@{Map2MyType}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{Map2MyType()}{Map2MyType()}}
+{\footnotesize\ttfamily void Endpoint\+MEMORY\+::\+Map2\+My\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+call the finalize to close everything (like call Destractor) 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a755ef0b10d5c4a639d9a11f5e1c7d9a3}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a99480573f496a9033151a398a1d4618b}\label{class_endpoint_m_e_m_o_r_y_a99480573f496a9033151a398a1d4618b}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!MergeMirrors@{MergeMirrors}}
+\index{MergeMirrors@{MergeMirrors}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{MergeMirrors()}{MergeMirrors()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Merge\+Mirrors (\begin{DoxyParamCaption}\item[{std\+::string}]{op\+\_\+str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Merger mirrors on all processes. 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_aa2f79834bc03cf8b1fdf49f966c5411f}\label{class_endpoint_m_e_m_o_r_y_aa2f79834bc03cf8b1fdf49f966c5411f}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!Nonvolatile@{Nonvolatile}}
+\index{Nonvolatile@{Nonvolatile}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{Nonvolatile()}{Nonvolatile()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Nonvolatile (\begin{DoxyParamCaption}\item[{std\+::string}]{parameter }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Nonvolatile the data in MEMORY to HDF5. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameter} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_ade75c9e83f0eaff220657aa9f3ed9282}\label{class_endpoint_m_e_m_o_r_y_ade75c9e83f0eaff220657aa9f3ed9282}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!Open@{Open}}
+\index{Open@{Open}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{Open()}{Open()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+open the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a481874b61d83081b4a96a0c2b21a8dbd}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a81917fffc167025bd52cbb9a7193b702}\label{class_endpoint_m_e_m_o_r_y_a81917fffc167025bd52cbb9a7193b702}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!ParseEndpointInfo@{ParseEndpointInfo}}
+\index{ParseEndpointInfo@{ParseEndpointInfo}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{ParseEndpointInfo()}{ParseEndpointInfo()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Parse\+Endpoint\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+parse endpoint\+\_\+info to my own info In MEMORY, it map endpoint\+\_\+info to filename, group name and datasetname 
+
+\begin{DoxyReturn}{Returns}
+int\+: 0 works, $<$ 0 error, 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a973927c11f35be4f393f456a8b2e2a1e}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a2d2d9a45998165cb5f9183de39333a21}\label{class_endpoint_m_e_m_o_r_y_a2d2d9a45998165cb5f9183de39333a21}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!PrintInfo@{PrintInfo}}
+\index{PrintInfo@{PrintInfo}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{PrintInfo()}{PrintInfo()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Print\+Info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+print information about the endpoint 
+
+\begin{DoxyReturn}{Returns}
+$<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_af014eb78eb2097f23cd48d48c2004b16}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a08e8cb0fc299971c0d6754d8d2fce0d6}\label{class_endpoint_m_e_m_o_r_y_a08e8cb0fc299971c0d6754d8d2fce0d6}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!Read@{Read}}
+\index{Read@{Read}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Read (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+read the data from end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a2ea7ed58e917ba63cb222ffbda09aa0c}{Endpoint}}.
+
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a6f5230c8542dfcc3008179b874b569b5}\label{class_endpoint_m_e_m_o_r_y_a6f5230c8542dfcc3008179b874b569b5}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!SpecialOperator@{SpecialOperator}}
+\index{SpecialOperator@{SpecialOperator}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{SpecialOperator()}{SpecialOperator()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Special\+Operator (\begin{DoxyParamCaption}\item[{int}]{opt\+\_\+code,  }\item[{std\+::vector$<$ std\+::string $>$}]{parameter\+\_\+v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+call a special operator on endpoint to dump file from MEMORY to HDF5, or in verse 
+
+
+\begin{DoxyParams}{Parameters}
+{\em opt\+\_\+code,specially} & defined code \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_aa081fe555b730544ba1356c5f2af4883}\label{class_endpoint_m_e_m_o_r_y_aa081fe555b730544ba1356c5f2af4883}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!Volatile@{Volatile}}
+\index{Volatile@{Volatile}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{Volatile()}{Volatile()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Volatile (\begin{DoxyParamCaption}\item[{std\+::string}]{parameter }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Volatile the data from HDF5 to MEMORY. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameter} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_endpoint_m_e_m_o_r_y_a07570e7d3fe54f22968f286c838e9c16}\label{class_endpoint_m_e_m_o_r_y_a07570e7d3fe54f22968f286c838e9c16}} 
+\index{EndpointMEMORY@{EndpointMEMORY}!Write@{Write}}
+\index{Write@{Write}!EndpointMEMORY@{EndpointMEMORY}}
+\doxysubsubsection{\texorpdfstring{Write()}{Write()}}
+{\footnotesize\ttfamily int Endpoint\+MEMORY\+::\+Write (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned long long $>$}]{start,  }\item[{std\+::vector$<$ unsigned long long $>$}]{end,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+write the data to the end-\/point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start,coordinates} & of the cell to start (including) \\
+\hline
+{\em end,coordinates} & of the cell to end (including) \\
+\hline
+{\em data,store} & the result data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$ 0 error, $>$= 0 works 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_endpoint_a4bcb3e885bfb1343c610a3163fc01c77}{Endpoint}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ft__endpoint__memory_8h}{ft\+\_\+endpoint\+\_\+memory.\+h}}\end{DoxyCompactItemize}

@@ -69,6 +69,17 @@ in binary and source code form.
 */
 
 /**
+ * @example
+ * @author Bin Dong (you@domain.com)
+ * @brief This example show how to access ADIOS data in FastTensor.  
+ * @version 0.1
+ * @date 2021-05-28
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
+/**
  *
  * Author: Bin Dong dbin@lbl.gov
  * Web: https://crd.lbl.gov/bin-dong

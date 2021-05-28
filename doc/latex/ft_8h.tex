@@ -1,0 +1,106 @@
+\hypertarget{ft_8h}{}\doxysection{ft.\+h File Reference}
+\label{ft_8h}\index{ft.h@{ft.h}}
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+endpoint.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+stencil.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+type.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+array.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ft\+\_\+mpi.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ft_8h_a431d3e09d3b2d6ce2bb5944af7e73ee7}{AU\+\_\+\+Init}}(argc,  argv)~\mbox{\hyperlink{ft_8h_af3036c5ec6d221f9869a790f10768f4b}{FT\+\_\+\+Init}}(argc, argv)
+\item 
+\#define \mbox{\hyperlink{ft_8h_a52987d19f550018ced56aa710d9979b4}{AU\+\_\+\+Finalize}}()~\mbox{\hyperlink{ft_8h_ad21fbb7fdadd2d7fa69a210a8cf568c8}{FT\+\_\+\+Finalize}}()
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{ft_8h_af3036c5ec6d221f9869a790f10768f4b}{FT\+\_\+\+Init}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]}, \mbox{\hyperlink{ft__mpi_8h_a3e41745970da74b7b48efaa6575c56d8}{MPI\+\_\+\+COMM\+\_\+\+TYPE}} au\+\_\+mpi\+\_\+comm=\mbox{\hyperlink{ft__mpi_8h_a7688ec42526d21314ccf954b185f12d8}{MPI\+\_\+\+COMM\+\_\+\+WORLD\+\_\+\+DEFAULT}})
+\item 
+void \mbox{\hyperlink{ft_8h_ad21fbb7fdadd2d7fa69a210a8cf568c8}{FT\+\_\+\+Finalize}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{ft_8h_a71a9f6c6b1e7aa7f3e2e417d3521cd55}{ft\+\_\+mpi\+\_\+size\+\_\+global}}
+\item 
+int \mbox{\hyperlink{ft_8h_adfbd5f092a8d4b80bae31b31bbf73afc}{ft\+\_\+mpi\+\_\+rank\+\_\+global}}
+\item 
+int \mbox{\hyperlink{ft_8h_ad9938e784090fa51bc1d573b2fc7c937}{ft\+\_\+size}}
+\item 
+int \mbox{\hyperlink{ft_8h_a1241af5ea5c1b51733696ad265a2f3a2}{ft\+\_\+rank}}
+\item 
+\mbox{\hyperlink{ft__mpi_8h_a3e41745970da74b7b48efaa6575c56d8}{MPI\+\_\+\+COMM\+\_\+\+TYPE}} \mbox{\hyperlink{ft_8h_a1cb610d10182779f719c714df5f0acf2}{au\+\_\+mpi\+\_\+comm\+\_\+global}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ft_8h_a52987d19f550018ced56aa710d9979b4}\label{ft_8h_a52987d19f550018ced56aa710d9979b4}} 
+\index{ft.h@{ft.h}!AU\_Finalize@{AU\_Finalize}}
+\index{AU\_Finalize@{AU\_Finalize}!ft.h@{ft.h}}
+\doxysubsubsection{\texorpdfstring{AU\_Finalize}{AU\_Finalize}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+Finalize(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~\mbox{\hyperlink{ft_8h_ad21fbb7fdadd2d7fa69a210a8cf568c8}{FT\+\_\+\+Finalize}}()}
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_1f1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+1f1p.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_adios_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+adios.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_array_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+array.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_base_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+base.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_cache_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+cache.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_chunk_overlap_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+chunk\+\_\+overlap.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_cmpd_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+cmpd.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_filter_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+filter.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_hello_world_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+hello\+\_\+world.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_kf1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+kf1p.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_pnetcdf_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+pnetcdf.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_reduce_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+reduce.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_reduce2_d_1f1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+reduce2\+D\+\_\+1f1p.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_tag_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+tag.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_vds_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+vds.\+cpp}}, and \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_vector_2d_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+vector\+\_\+2d.\+cpp}}.\end{Desc}
+\mbox{\Hypertarget{ft_8h_a431d3e09d3b2d6ce2bb5944af7e73ee7}\label{ft_8h_a431d3e09d3b2d6ce2bb5944af7e73ee7}} 
+\index{ft.h@{ft.h}!AU\_Init@{AU\_Init}}
+\index{AU\_Init@{AU\_Init}!ft.h@{ft.h}}
+\doxysubsubsection{\texorpdfstring{AU\_Init}{AU\_Init}}
+{\footnotesize\ttfamily \#define AU\+\_\+\+Init(\begin{DoxyParamCaption}\item[{}]{argc,  }\item[{}]{argv }\end{DoxyParamCaption})~\mbox{\hyperlink{ft_8h_af3036c5ec6d221f9869a790f10768f4b}{FT\+\_\+\+Init}}(argc, argv)}
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_1f1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+1f1p.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_adios_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+adios.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_array_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+array.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_base_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+base.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_cache_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+cache.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_chunk_overlap_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+chunk\+\_\+overlap.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_cmpd_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+cmpd.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_filter_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+filter.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_hello_world_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+hello\+\_\+world.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_kf1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+kf1p.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_pnetcdf_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+pnetcdf.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_reduce_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+reduce.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_reduce2_d_1f1p_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+reduce2\+D\+\_\+1f1p.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_tag_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+tag.\+cpp}}, \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_vds_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+vds.\+cpp}}, and \mbox{\hyperlink{_2_users_2dbin_2work_2fastensor_2examples_2ft_example_vector_2d_8cpp-example}{/\+Users/dbin/work/fastensor/examples/ft\+\_\+example\+\_\+vector\+\_\+2d.\+cpp}}.\end{Desc}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ft_8h_ad21fbb7fdadd2d7fa69a210a8cf568c8}\label{ft_8h_ad21fbb7fdadd2d7fa69a210a8cf568c8}} 
+\index{ft.h@{ft.h}!FT\_Finalize@{FT\_Finalize}}
+\index{FT\_Finalize@{FT\_Finalize}!ft.h@{ft.h}}
+\doxysubsubsection{\texorpdfstring{FT\_Finalize()}{FT\_Finalize()}}
+{\footnotesize\ttfamily void FT\+\_\+\+Finalize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ft_8h_af3036c5ec6d221f9869a790f10768f4b}\label{ft_8h_af3036c5ec6d221f9869a790f10768f4b}} 
+\index{ft.h@{ft.h}!FT\_Init@{FT\_Init}}
+\index{FT\_Init@{FT\_Init}!ft.h@{ft.h}}
+\doxysubsubsection{\texorpdfstring{FT\_Init()}{FT\_Init()}}
+{\footnotesize\ttfamily void FT\+\_\+\+Init (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]},  }\item[{\mbox{\hyperlink{ft__mpi_8h_a3e41745970da74b7b48efaa6575c56d8}{MPI\+\_\+\+COMM\+\_\+\+TYPE}}}]{au\+\_\+mpi\+\_\+comm = {\ttfamily \mbox{\hyperlink{ft__mpi_8h_a7688ec42526d21314ccf954b185f12d8}{MPI\+\_\+\+COMM\+\_\+\+WORLD\+\_\+\+DEFAULT}}} }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ft_8h_a1cb610d10182779f719c714df5f0acf2}\label{ft_8h_a1cb610d10182779f719c714df5f0acf2}} 
+\index{ft.h@{ft.h}!au\_mpi\_comm\_global@{au\_mpi\_comm\_global}}
+\index{au\_mpi\_comm\_global@{au\_mpi\_comm\_global}!ft.h@{ft.h}}
+\doxysubsubsection{\texorpdfstring{au\_mpi\_comm\_global}{au\_mpi\_comm\_global}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ft__mpi_8h_a3e41745970da74b7b48efaa6575c56d8}{MPI\+\_\+\+COMM\+\_\+\+TYPE}} au\+\_\+mpi\+\_\+comm\+\_\+global\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{ft_8h_adfbd5f092a8d4b80bae31b31bbf73afc}\label{ft_8h_adfbd5f092a8d4b80bae31b31bbf73afc}} 
+\index{ft.h@{ft.h}!ft\_mpi\_rank\_global@{ft\_mpi\_rank\_global}}
+\index{ft\_mpi\_rank\_global@{ft\_mpi\_rank\_global}!ft.h@{ft.h}}
+\doxysubsubsection{\texorpdfstring{ft\_mpi\_rank\_global}{ft\_mpi\_rank\_global}}
+{\footnotesize\ttfamily int ft\+\_\+mpi\+\_\+rank\+\_\+global\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{ft_8h_a71a9f6c6b1e7aa7f3e2e417d3521cd55}\label{ft_8h_a71a9f6c6b1e7aa7f3e2e417d3521cd55}} 
+\index{ft.h@{ft.h}!ft\_mpi\_size\_global@{ft\_mpi\_size\_global}}
+\index{ft\_mpi\_size\_global@{ft\_mpi\_size\_global}!ft.h@{ft.h}}
+\doxysubsubsection{\texorpdfstring{ft\_mpi\_size\_global}{ft\_mpi\_size\_global}}
+{\footnotesize\ttfamily int ft\+\_\+mpi\+\_\+size\+\_\+global\hspace{0.3cm}{\ttfamily [extern]}}
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory Email questions to \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory
+
+Author\+: Bin Dong \href{mailto:dbin@lbl.gov}{\texttt{ dbin@lbl.\+gov}} Web\+: \href{https://crd.lbl.gov/bin-dong}{\texttt{ https\+://crd.\+lbl.\+gov/bin-\/dong}} Scientific Data Management Research Group Lawrence Berkeley National Laboratory \mbox{\Hypertarget{ft_8h_a1241af5ea5c1b51733696ad265a2f3a2}\label{ft_8h_a1241af5ea5c1b51733696ad265a2f3a2}} 
+\index{ft.h@{ft.h}!ft\_rank@{ft\_rank}}
+\index{ft\_rank@{ft\_rank}!ft.h@{ft.h}}
+\doxysubsubsection{\texorpdfstring{ft\_rank}{ft\_rank}}
+{\footnotesize\ttfamily int ft\+\_\+rank\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{ft_8h_ad9938e784090fa51bc1d573b2fc7c937}\label{ft_8h_ad9938e784090fa51bc1d573b2fc7c937}} 
+\index{ft.h@{ft.h}!ft\_size@{ft\_size}}
+\index{ft\_size@{ft\_size}!ft.h@{ft.h}}
+\doxysubsubsection{\texorpdfstring{ft\_size}{ft\_size}}
+{\footnotesize\ttfamily int ft\+\_\+size\hspace{0.3cm}{\ttfamily [extern]}}
+
