@@ -69,7 +69,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_array.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to use Array in FasTensor to access data.  
  * @version 0.1

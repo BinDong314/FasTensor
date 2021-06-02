@@ -77,8 +77,8 @@ in binary and source code form.
  *
  */
 
-/**
- * @example
+/** 
+ * \example ft_example_1f1p.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to use 1f1p pattern EP_DIR.  
  * @version 0.1

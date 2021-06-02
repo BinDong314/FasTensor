@@ -1,5 +1,13 @@
 This package contains the FastTensor, a new version of ArrayUDF from the project SDS (Scientific Data Services) framework at LBNL. This project is supported by the DOE. Please see copyright at the end. 
 
+
+FasTensor, formerly known as ArrayUDF, is a generic parallel programming model for big data analyses with any user-defined functions (UDF). These functions may express data analysis operations from traditional database (DB) systems to advanced machine learning pipelines. FasTensor exploits the structural-locality in the multidimensional arrays to automate file operations, data partitioning, communication, parallel execution, and common data management operations.
+
+FasTensor has the same idea as the MapReduce and Apache Spark to reduce the programming efforts. But, FasTensor is orders of magnitude faster than them because it is directly defined and executed on the multidimensional array, as shown below. Even comparing with highly optimized code in TensorFlow, FasTensor can achieve up to 13X performance speedup in executing expensive steps in CNN. FasTensor can scale up to over 10,000 CPU cores on supercomputers efficiently.
+
+
+
+
 Please report any problem you've encountered in using this package to  Bin Dong: dbin@lbl.gov
 
 1, Required software packages:

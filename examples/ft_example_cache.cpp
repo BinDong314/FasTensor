@@ -69,7 +69,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_cache.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to use EP_MEMORY in FasTensor to cache data in memory.  
  * @version 0.1

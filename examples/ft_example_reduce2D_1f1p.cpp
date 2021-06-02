@@ -69,7 +69,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_reduce2D_1f1p.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to reduce 2D data  in FasTensor .  
  * @version 0.1

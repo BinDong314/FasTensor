@@ -69,7 +69,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_tag.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to use Tag in FasTensor .  
  * @version 0.1

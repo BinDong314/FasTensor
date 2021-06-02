@@ -1,6 +1,6 @@
 
 /**
- * @example
+ * @example ft_example_overlap.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to use SetChunkSize/SetOverlapSize in FasTensor to set chunk size/overlap size.  
  * @version 0.1

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastTensor: /Users/dbin/work/fastensor/examples/ft_example_base.cpp</title>
+<title>FasTensor: /Users/dbin/work/fastensor/examples/ft_example_base.cpp</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,10 +22,10 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="logo_small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">FastTensor
-   &#160;<span id="projectnumber">1.0</span>
+   <div id="projectname">FasTensor
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
-   <div id="projectbrief">Transform Supercomputer for AI for Science</div>
+   <div id="projectbrief">Transform Supercomputer for AI</div>
   </td>
  </tr>
  </tbody>
@@ -157,7 +157,7 @@ $(function() {
 <div class="line"> </div>
 <div class="line"><span class="comment">//UDF One: duplicate the original data</span></div>
 <div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><span class="keyword">inline</span> <a name="_a0"></a><a class="code" href="class_stencil.html">Stencil&lt;float&gt;</a> <a name="a1"></a><a class="code" href="au__example__chunk__overlap_8cpp.html#ab9759c3ef0d67032f2e47e198083b89d">udf_hello_world</a>(<span class="keyword">const</span> <a class="code" href="class_stencil.html">Stencil&lt;T&gt;</a> &amp;iStencil)</div>
+<div class="line"><span class="keyword">inline</span> <a name="_a0"></a><a class="code" href="class_stencil.html">Stencil&lt;float&gt;</a> <a name="a1"></a><a class="code" href="tag_8cpp.html#ab9759c3ef0d67032f2e47e198083b89d">udf_hello_world</a>(<span class="keyword">const</span> <a class="code" href="class_stencil.html">Stencil&lt;T&gt;</a> &amp;iStencil)</div>
 <div class="line">{</div>
 <div class="line">    <a class="code" href="class_stencil.html">Stencil&lt;float&gt;</a> oStencil;</div>
 <div class="line">    oStencil = iStencil(0, 0) * 2.0;</div>
@@ -166,7 +166,7 @@ $(function() {
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#define S(O, TYPE) static_cast&lt;Array&lt;TYPE&gt; *&gt;(O)</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">int</span> <a name="a2"></a><a class="code" href="au__example__1f1p_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[])</div>
+<div class="line"><span class="keywordtype">int</span> <a name="a2"></a><a class="code" href="conv_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[])</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">//Init the MPICH, etc.</span></div>
 <div class="line">    <a name="a3"></a><a class="code" href="ft_8h.html#a431d3e09d3b2d6ce2bb5944af7e73ee7">AU_Init</a>(argc, argv);</div>
@@ -209,7 +209,7 @@ $(function() {
 <div class="line">    Array&lt;float&gt; *B = <span class="keyword">new</span> Array&lt;float&gt;(<span class="stringliteral">&quot;EP_HDF5:./test-data/testf-16x16-hello-world-output.h5:/testg/testd&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">//Run</span></div>
-<div class="line">    <a name="a7"></a><a class="code" href="ft__array_8h.html#aac8f38a254049b13194b8792b2be8bc4">TRANSFORM</a>(Abase, <a class="code" href="au__example__chunk__overlap_8cpp.html#ab9759c3ef0d67032f2e47e198083b89d">udf_hello_world</a>, B, t, <span class="keywordtype">float</span>);</div>
+<div class="line">    <a name="a7"></a><a class="code" href="ft__array_8h.html#aac8f38a254049b13194b8792b2be8bc4">TRANSFORM</a>(Abase, <a class="code" href="tag_8cpp.html#ab9759c3ef0d67032f2e47e198083b89d">udf_hello_world</a>, B, t, <span class="keywordtype">float</span>);</div>
 <div class="line"> </div>
 <div class="line">    Abase-&gt;<a name="a8"></a><a class="code" href="class_f_t_1_1_array_base.html#ab1285016f0a5f121f5e7746fe866dd41">ControlEndpoint</a>(<a name="a9"></a><a class="code" href="ft__endpoint_8h.html#a9a0b21bd4ee280fba4097ddb095f786b">OP_CREATE_VIS_SCRIPT</a>);</div>
 <div class="line">    Abase-&gt;<a name="a10"></a><a class="code" href="class_f_t_1_1_array_base.html#ac2ec2f3b74907881acf7b190e0e43d35">ReportCost</a>();</div>
@@ -221,12 +221,11 @@ $(function() {
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aau__example__1f1p_8cpp_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="au__example__1f1p_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdef"><b>Definition:</b> au_example_1f1p.cpp:97</div></div>
-<div class="ttc" id="aau__example__chunk__overlap_8cpp_html_ab9759c3ef0d67032f2e47e198083b89d"><div class="ttname"><a href="au__example__chunk__overlap_8cpp.html#ab9759c3ef0d67032f2e47e198083b89d">udf_hello_world</a></div><div class="ttdeci">Stencil&lt; float &gt; udf_hello_world(const Stencil&lt; float &gt; &amp;iStencil)</div><div class="ttdef"><b>Definition:</b> au_example_chunk_overlap.cpp:90</div></div>
 <div class="ttc" id="aclass_f_t_1_1_array_base_html"><div class="ttname"><a href="class_f_t_1_1_array_base.html">FT::ArrayBase</a></div><div class="ttdoc">the object to the ArrayBase</div><div class="ttdef"><b>Definition:</b> ft_array.h:146</div></div>
 <div class="ttc" id="aclass_f_t_1_1_array_base_html_ab1285016f0a5f121f5e7746fe866dd41"><div class="ttname"><a href="class_f_t_1_1_array_base.html#ab1285016f0a5f121f5e7746fe866dd41">FT::ArrayBase::ControlEndpoint</a></div><div class="ttdeci">virtual int ControlEndpoint(int cmd_p)=0</div></div>
 <div class="ttc" id="aclass_f_t_1_1_array_base_html_ac2ec2f3b74907881acf7b190e0e43d35"><div class="ttname"><a href="class_f_t_1_1_array_base.html#ac2ec2f3b74907881acf7b190e0e43d35">FT::ArrayBase::ReportCost</a></div><div class="ttdeci">virtual void ReportCost()=0</div></div>
 <div class="ttc" id="aclass_stencil_html"><div class="ttname"><a href="class_stencil.html">Stencil</a></div><div class="ttdef"><b>Definition:</b> ft_stencil.h:100</div></div>
+<div class="ttc" id="aconv_8cpp_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="conv_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdef"><b>Definition:</b> conv.cpp:138</div></div>
 <div class="ttc" id="aft_8h_html"><div class="ttname"><a href="ft_8h.html">ft.h</a></div></div>
 <div class="ttc" id="aft_8h_html_a431d3e09d3b2d6ce2bb5944af7e73ee7"><div class="ttname"><a href="ft_8h.html#a431d3e09d3b2d6ce2bb5944af7e73ee7">AU_Init</a></div><div class="ttdeci">#define AU_Init(argc, argv)</div><div class="ttdef"><b>Definition:</b> ft.h:112</div></div>
 <div class="ttc" id="aft_8h_html_a52987d19f550018ced56aa710d9979b4"><div class="ttname"><a href="ft_8h.html#a52987d19f550018ced56aa710d9979b4">AU_Finalize</a></div><div class="ttdeci">#define AU_Finalize()</div><div class="ttdef"><b>Definition:</b> ft.h:113</div></div>
@@ -236,6 +235,7 @@ $(function() {
 <div class="ttc" id="aft__type_8h_html_a9d935be5797a6566c631562e2b43a1f7a2bc03d49babea89b29bff2eff044dad9"><div class="ttname"><a href="ft__type_8h.html#a9d935be5797a6566c631562e2b43a1f7a2bc03d49babea89b29bff2eff044dad9">AU_FLOAT</a></div><div class="ttdeci">@ AU_FLOAT</div><div class="ttdef"><b>Definition:</b> ft_type.h:128</div></div>
 <div class="ttc" id="aft__type_8h_html_a9d935be5797a6566c631562e2b43a1f7a2d1a9c7d96f2a1ae4627c0bd16808a76"><div class="ttname"><a href="ft__type_8h.html#a9d935be5797a6566c631562e2b43a1f7a2d1a9c7d96f2a1ae4627c0bd16808a76">AU_INT</a></div><div class="ttdeci">@ AU_INT</div><div class="ttdef"><b>Definition:</b> ft_type.h:121</div></div>
 <div class="ttc" id="anamespace_f_t_html"><div class="ttname"><a href="namespace_f_t.html">FT</a></div><div class="ttdef"><b>Definition:</b> ft_array.h:113</div></div>
+<div class="ttc" id="atag_8cpp_html_ab9759c3ef0d67032f2e47e198083b89d"><div class="ttname"><a href="tag_8cpp.html#ab9759c3ef0d67032f2e47e198083b89d">udf_hello_world</a></div><div class="ttdeci">Stencil&lt; float &gt; udf_hello_world(const Stencil&lt; float &gt; &amp;iStencil)</div><div class="ttdef"><b>Definition:</b> tag.cpp:93</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

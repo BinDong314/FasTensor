@@ -70,7 +70,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_filter.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to filter 1D data in FasTensor .  
  * @version 0.1

@@ -69,8 +69,8 @@ in binary and source code form.
 */
 
 /**
- * @example
- * @author Bin Dong (you@domain.com)
+ * @example ft_example_adios.cpp
+ * @author Bin Dong (dbin@lbl.com)
  * @brief This example show how to access ADIOS data in FastTensor.  
  * @version 0.1
  * @date 2021-05-28

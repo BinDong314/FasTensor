@@ -70,7 +70,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_vds.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to deal with multiple datasets  in FasTensor .  
  * @version 0.1

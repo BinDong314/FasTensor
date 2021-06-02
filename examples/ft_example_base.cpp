@@ -69,7 +69,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_base.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to use FT::ArrayBase in FasTensor to support different input type.  
  * @version 0.1

@@ -100,8 +100,9 @@ inline Stencil<float> udf_hello_world(const Stencil<float> &iStencil)
 }
 
 /**
- *  @example testexample testexample.cpp
+ *  \example ft_example_simple.cpp
  *  An example of the test class.
+ * 
  */
 int main(int argc, char *argv[])
 {

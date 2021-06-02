@@ -69,7 +69,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_kf1p.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to deal with multiple file on a single processes in FasTensor .  
  * @version 0.1

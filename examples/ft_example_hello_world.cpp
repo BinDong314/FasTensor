@@ -69,7 +69,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_hello_world.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to setup basic environment for FasTensor .  
  * @version 0.1

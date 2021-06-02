@@ -69,7 +69,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_vector_2d.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to output a vector in FasTensor .  
  * @version 0.1

@@ -94,14 +94,14 @@ Copyright (c) 2021
 \DoxyCodeLine{\textcolor{keyword}{using namespace }\mbox{\hyperlink{namespace_f_t}{FT}};}
 \DoxyCodeLine{}
 \DoxyCodeLine{\textcolor{comment}{//UDF One: duplicate the original data}}
-\DoxyCodeLine{\textcolor{keyword}{inline} \mbox{\hyperlink{class_stencil}{Stencil<float>}} \mbox{\hyperlink{ft__example__padding_8cpp_adb82af67de148a83c10eca8a62292eeb}{udf\_ma}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_stencil}{Stencil<float>}} \&iStencil)}
+\DoxyCodeLine{\textcolor{keyword}{inline} \mbox{\hyperlink{class_stencil}{Stencil<float>}} \mbox{\hyperlink{ft__ma_8cpp_adb82af67de148a83c10eca8a62292eeb}{udf\_ma}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_stencil}{Stencil<float>}} \&iStencil)}
 \DoxyCodeLine{\{}
 \DoxyCodeLine{    \mbox{\hyperlink{class_stencil}{Stencil<float>}} oStencil;}
 \DoxyCodeLine{    oStencil = (iStencil(0, -\/1) + iStencil(0, 0) + iStencil(0, 1)) / 3.0;}
 \DoxyCodeLine{    \textcolor{keywordflow}{return} oStencil;}
 \DoxyCodeLine{\}}
 \DoxyCodeLine{}
-\DoxyCodeLine{\textcolor{keywordtype}{int} \mbox{\hyperlink{au__example__1f1p_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char} *argv[])}
+\DoxyCodeLine{\textcolor{keywordtype}{int} \mbox{\hyperlink{conv_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char} *argv[])}
 \DoxyCodeLine{\{}
 \DoxyCodeLine{    \textcolor{comment}{//Init the MPICH, etc.}}
 \DoxyCodeLine{    \mbox{\hyperlink{ft_8cpp_ae055925f118ade7b07f9eddbe8210d1b}{FT\_Init}}(argc, argv);}
@@ -119,7 +119,7 @@ Copyright (c) 2021
 \DoxyCodeLine{    Array<float> *B = \textcolor{keyword}{new} Array<float>(\textcolor{stringliteral}{"{}EP\_HDF5:tutorial\_ma.h5:/data"{}});}
 \DoxyCodeLine{}
 \DoxyCodeLine{    \textcolor{comment}{//Run}}
-\DoxyCodeLine{    A-\/>Transform(\mbox{\hyperlink{ft__example__padding_8cpp_adb82af67de148a83c10eca8a62292eeb}{udf\_ma}}, B);}
+\DoxyCodeLine{    A-\/>Transform(\mbox{\hyperlink{ft__ma_8cpp_adb82af67de148a83c10eca8a62292eeb}{udf\_ma}}, B);}
 \DoxyCodeLine{}
 \DoxyCodeLine{    \textcolor{comment}{//Clear}}
 \DoxyCodeLine{    \textcolor{keyword}{delete} A;}

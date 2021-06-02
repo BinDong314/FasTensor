@@ -69,7 +69,7 @@ in binary and source code form.
 */
 
 /**
- * @example
+ * @example ft_example_pnetcdf.cpp
  * @author Bin Dong (dbin@lbl.gov)
  * @brief This example show how to use EP_PNETCDF in FasTensor .  
  * @version 0.1
