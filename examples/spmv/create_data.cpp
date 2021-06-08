@@ -86,7 +86,8 @@ in binary and source code form.
 using namespace std;
 using namespace FT;
 
-#define MATRIX_M 1024
+//1024 * 1024 * 1024
+#define MATRIX_M 1024 * 1024 * 128
 #define MATRIX_N MATRIX_M
 #define N_SPARSE_ELEMENTS (MATRIX_M * 3 - 2)
 

@@ -588,8 +588,8 @@ namespace FT
       return 0;
     }
 
-    template <class UDFOutputType>
-    int UpdateOverlapSize(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &))
+    template <class UDFType>
+    int UpdateOverlapSize(UDFType UDF)
     {
       if (endpoint != NULL)
       {
@@ -616,8 +616,8 @@ namespace FT
       return 0;
     }
 
-    template <class UDFOutputType>
-    void InitializeApplyInput(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &))
+    template <class UDFType>
+    void InitializeApplyInput(UDFType UDF)
     {
       //Read the metadata (rank, dimension size) from endpoint
       if (virtual_array_flag && attribute_endpoint_vector.size() >= 1)
@@ -736,6 +736,125 @@ namespace FT
       }
     }
 
+    template <class UDFOutputType>
+    void InitializeApplyInputTest(int (*UDF)(const Stencil<T> &, Stencil<UDFOutputType> &))
+    {
+      //Read the metadata (rank, dimension size) from endpoint
+      if (virtual_array_flag && attribute_endpoint_vector.size() >= 1)
+      {
+        //Get the data_size from first attribute
+        attribute_endpoint_vector[0]->ExtractMeta();
+        data_size = attribute_endpoint_vector[0]->GetDimensions();
+        data_dims = data_size.size();
+        for (int i = 1; i < attribute_endpoint_vector.size(); i++)
+        {
+          attribute_endpoint_vector[i]->ExtractMeta();
+          std::vector<unsigned long long> data_size_p = attribute_endpoint_vector[i]->GetDimensions();
+
+          if (data_size != data_size_p)
+          {
+            AU_EXIT("All attributes must have same size");
+          }
+        }
+      }
+      else
+      {
+        endpoint->ExtractMeta();
+        data_size = endpoint->GetDimensions();
+        data_dims = data_size.size();
+      }
+
+      UpdateChunkSize();
+      //UpdateOverlapSize(UDF);
+
+      //PrintVector("data_chunk_size: ", data_chunk_size);
+      //PrintVector("data_size: ", data_size);
+
+      current_chunk_start_offset.resize(data_dims);
+      current_chunk_end_offset.resize(data_dims);
+      current_chunk_size.resize(data_dims);
+
+      current_result_chunk_start_offset.resize(data_dims);
+      current_result_chunk_end_offset.resize(data_dims);
+
+      current_chunk_ol_start_offset.resize(data_dims);
+      current_chunk_ol_end_offset.resize(data_dims);
+      current_chunk_ol_size.resize(data_dims);
+
+      data_chunked_size.resize(data_dims);
+      ol_origin_offset.resize(data_dims);
+
+      data_total_chunks = 1;
+
+      for (int i = 0; i < data_dims; i++)
+      {
+        if (data_size[i] % data_chunk_size[i] == 0)
+        {
+          data_chunked_size[i] = data_size[i] / data_chunk_size[i];
+        }
+        else
+        {
+          data_chunked_size[i] = data_size[i] / data_chunk_size[i] + 1;
+        }
+        data_total_chunks = data_total_chunks * data_chunked_size[i];
+      }
+
+      if (skip_flag)
+      {
+        skiped_dims_size.resize(data_dims);
+        skiped_chunks.resize(data_dims);
+        skiped_chunk_size.resize(data_dims);
+
+        for (int i = 0; i < data_dims; i++)
+        {
+
+          /*if (data_size[i] % skip_size[i] != 0 || data_chunk_size[i] % skip_size[i] != 0)
+        {
+          AU_EXIT("Strip size must be aligned with size of both array and chunk ! \n");
+        }*/
+
+          if (data_chunk_size[i] % skip_size[i] != 0)
+          {
+            AU_EXIT("Strip size must be aligned with the size of chunk ! \n");
+          }
+
+          if (data_size[i] % skip_size[i] != 0)
+          {
+            skip_not_aligned_w_array_flag = true;
+            skip_not_aligned_w_array_index = i;
+            skiped_dims_size[i] = data_size[i] / skip_size[i] + 1;
+          }
+          else
+          {
+            skiped_dims_size[i] = data_size[i] / skip_size[i];
+          }
+
+          skiped_chunk_size[i] = data_chunk_size[i] / skip_size[i];
+          if (skiped_dims_size[i] % skiped_chunk_size[i] != 0)
+          {
+            skiped_chunks[i] = skiped_dims_size[i] / skiped_chunk_size[i] + 1;
+          }
+          else
+          {
+            skiped_chunks[i] = skiped_dims_size[i] / skiped_chunk_size[i];
+          }
+        }
+      }
+
+      current_chunk_id = ft_rank; //Each process deal with one chunk one time, starting from its rank
+
+      //#ifdef DEBUG
+      if (ft_rank == 0)
+      {
+        if (!virtual_array_flag)
+          endpoint->PrintInfo();
+        PrintVector("       data size", data_size);
+        PrintVector("      chunk size", data_chunk_size);
+        PrintVector("    overlap size", data_overlap_size);
+        PrintScalar("current chunk id:", current_chunk_id);
+        PrintScalar("    total chunks", data_total_chunks);
+      }
+    }
     /**
    * @brief print endpoint info of this array
    * 
@@ -919,6 +1038,328 @@ namespace FT
             //cell_target.set_my_g_location_rm(cell_target_g_location_rm);
 
             cell_return_stencil = UDF(cell_target); // Called by C++
+            cell_return_value = cell_return_stencil.get_value();
+
+            if (vector_type_flag == true)
+            {
+              cell_return_stencil.GetShape(output_vector_shape);
+            }
+
+            if (cell_return_stencil.HasTagMap())
+            {
+              has_output_stencil_tag_flag = true;
+              cell_return_stencil.GetTagMap(output_stencil_metadata_map);
+            }
+
+            if (save_result_flag)
+            {
+              if (skip_flag)
+              {
+#if defined(_OPENMP)
+                vec_private.push_back(cell_return_value);
+#else
+                current_result_chunk_data[result_vector_index] = cell_return_value;
+                result_vector_index = result_vector_index + 1;
+#endif
+                //When skip_flag is set, there is no need to have apply_replace_flag
+                //Todo: in future
+                //if(apply_replace_flag == 1){
+                //  current_chunk_data[i] = cell_return_value; //Replace the orginal data
+                //}
+              }
+              else
+              {
+                current_result_chunk_data[i] = cell_return_value; //cell_return =  cell_return.
+                if (apply_replace_flag == 1)
+                {
+                  std::memcpy(&current_chunk_data[offset_ol], &cell_return_value, sizeof(T));
+                }
+              }
+            }
+          } //end for loop, finish the processing on a single chunk in row-major direction
+#if defined(_OPENMP)
+          prefix[ithread + 1] = vec_private.size();
+#pragma omp barrier
+#pragma omp single
+          {
+            for (int i = 1; i < (nthreads + 1); i++)
+            {
+              prefix[i] += prefix[i - 1];
+            }
+            if (current_result_chunk_data.size() != prefix[nthreads])
+            {
+              std::cout << "Wrong output size ! prefix[nthreads] =" << prefix[nthreads] << ", current.size() = " << current_result_chunk_data.size() << " \n ";
+            }
+          } //end of omp for
+          std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
+          clear_vector(vec_private);
+#endif
+        } //end of omp parallel
+
+#if defined(_OPENMP)
+        delete[] prefix;
+#endif
+        time_udf = AU_WTIME - t_start + time_udf;
+
+        //////////////////////////////////////
+        //end of processing on a single chunk
+        /////////////////////////////////////
+
+        t_start = AU_WTIME;
+
+        if (B != nullptr)
+        {
+
+          std::vector<unsigned long long> B_data_size;
+          std::vector<int> B_data_chunk_size, B_data_overlap_size;
+
+          if (B->GetEndpointType() == EP_DIR && GetEndpointType() == EP_DIR)
+          {
+            std::vector<std::string> dir_file_list = GetDirFile();
+            B->SetDirFile(dir_file_list);
+            std::vector<int> dir_chunk_size = GetDirChunkSize();
+            B->SetDirChunkSize(dir_chunk_size);
+          }
+
+          if (vector_type_flag)
+          {
+            //output_vector_shape
+            size_t vector_size;
+            std::vector<unsigned long long> current_chunk_start_offset_v = current_result_chunk_start_offset, current_chunk_end_offset_v = current_result_chunk_end_offset;
+            void *data_point;
+            // data_point = FlatVector(current_result_chunk_data, output_vector_flat_direction_index, current_chunk_start_offset_v, current_chunk_end_offset_v, vector_size);
+            // InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, vector_size);
+
+            if (is_the_last_chunk && (previous_output_vector_shape.size() == 0))
+            {
+              //int normal_chunk_output_size = data_chunk_size[i] / (current_chunk_ol_size[i] / output_vector_shape[i]);
+              previous_output_vector_shape = output_vector_shape;
+              for (int i = 0; i < output_vector_shape.size(); i++)
+              {
+                if (skip_not_aligned_w_array_flag && skip_not_aligned_w_array_index == i)
+                {
+                  previous_output_vector_shape[i] = data_chunk_size[i] / (current_chunk_ol_size[i] / output_vector_shape[i]);
+                }
+              }
+            }
+            //PrintVector("Debug:  output_vector_shape = ", output_vector_shape);
+            //PrintVector("Debug:  current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+            //PrintVector("Debug:  current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+            //PrintVector("Debug:  previous_output_vector_shape = ", previous_output_vector_shape);
+
+            data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v, is_the_last_chunk, previous_output_vector_shape);
+            CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
+            //PrintVector("Debug: create B_data_size = ", B_data_size);
+
+            B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+            //PrintVector("Debug: write current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+            //PrintVector("Debug: write current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+            B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
+            free(data_point);
+          }
+          else
+          {
+            InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, 0);
+            B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+            //B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
+            if (!skip_flag)
+            {
+              //PrintVector("current_chunk_start_offset = ", current_chunk_start_offset);
+              //PrintVector("current_chunk_end_offset = ", current_chunk_end_offset);
+              B->WriteArray(current_result_chunk_start_offset, current_chunk_end_offset, current_result_chunk_data);
+            }
+            else
+            {
+              //PrintVector("current_chunk_start_offset = ", current_result_chunk_start_offset);
+              //PrintVector("current_chunk_end_offset = ", current_result_chunk_end_offset);
+              B->WriteArray(current_result_chunk_start_offset, current_result_chunk_end_offset, current_result_chunk_data);
+            }
+          }
+        }
+
+        if (has_output_stencil_tag_flag)
+        {
+          for (std::map<std::string, std::string>::iterator it = output_stencil_metadata_map.begin(); it != output_stencil_metadata_map.end(); ++it)
+          {
+
+            B->SetTag(it->first, it->second);
+            //std::cout << "Key: " << it->first << std::endl();
+            //std::cout << "Value: " << it->second << std::endl();
+          }
+          has_output_stencil_tag_flag = false;
+        }
+
+        time_write = time_write + AU_WTIME - t_start;
+
+        if (vector_type_flag == true)
+        {
+          previous_output_vector_shape = output_vector_shape;
+        }
+
+        t_start = AU_WTIME;
+        load_ret = LoadNextChunk(current_result_chunk_data_size);
+        current_result_chunk_data.resize(current_result_chunk_data_size);
+        time_read = time_read + AU_WTIME - t_start;
+
+      } // end of while:: no more chunks to process
+
+      //May start a empty write for collective I/O
+      if ((data_total_chunks % ft_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + ft_size - (data_total_chunks % ft_size))) && B != nullptr)
+      {
+        //std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
+        //std::cout << "leftover_chunks  = " << data_total_chunks % ft_size << std::endl;
+        //std::cout << "data_total_chunks  = " << data_total_chunks << std::endl;
+        std::vector<unsigned long long> null_start; //Start offset on disk
+        std::vector<unsigned long long> null_end;   //End offset on disk
+        void *data_point = nullptr;
+        null_start.resize(data_dims, 0);
+        null_end.resize(data_dims, 0);
+        B->WriteEndpoint(null_start, null_end, data_point);
+      }
+
+      return;
+    }
+
+    /**
+   * @brief Run a UDF on the data pointed by the array
+   * 
+   * @tparam UDFOutputType : the output type of UDF
+   * @tparam BType : The element type of output Array B
+   * @param UDF: pointer to user-defined function 
+   * @param B : Output Array B
+   */
+    template <class UDFOutputType, class BType = UDFOutputType>
+    void TransformTest(int (*UDF)(const Stencil<T> &, Stencil<UDFOutputType> &), Array<BType> *B = nullptr)
+    {
+      //Set up the input data for LoadNextChunk
+      InitializeApplyInputTest(UDF);
+
+      //reset timer to zero
+      time_read = 0;
+      time_write = 0;
+      time_udf = 0;
+
+      std::vector<UDFOutputType> current_result_chunk_data;
+      unsigned long long current_result_chunk_data_size = 1;
+
+      vector_type_flag = InferVectorType<UDFOutputType>();
+
+      t_start = AU_WTIME;
+      int load_ret = LoadNextChunk(current_result_chunk_data_size);
+      current_result_chunk_data.resize(current_result_chunk_data_size);
+      time_read = time_read + (AU_WTIME - t_start);
+
+      unsigned long long result_vector_index = 0;
+
+      while (load_ret == 1)
+      {
+        unsigned long long cell_target_g_location_rm;
+        result_vector_index = 0;
+
+        //unsigned long long lrm;
+        t_start = AU_WTIME;
+
+#if defined(_OPENMP)
+        size_t *prefix;
+#endif
+
+#if defined(_OPENMP)
+#pragma omp parallel
+#endif
+        {
+          std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
+          unsigned long long offset_ol;
+          Stencil<T> cell_target(0, &current_chunk_data[0], cell_coordinate_ol, current_chunk_ol_size, data_size);
+          if (has_padding_value_flag)
+          {
+            cell_target.SetPadding(padding_value);
+          }
+          cell_target.SetChunkID(prev_chunk_id);
+
+          if (get_stencil_tag_flag)
+          {
+            cell_target.SetTagMap(stencil_metadata_map);
+          }
+          Stencil<UDFOutputType> cell_return_stencil;
+          UDFOutputType cell_return_value;
+          unsigned long long cell_target_g_location_rm;
+          int is_mirror_value = 0;
+          std::vector<unsigned long long> skip_chunk_coordinate(data_dims, 0), skip_chunk_coordinate_start(data_dims, 0);
+          int skip_flag_on_cell = 0;
+
+#if defined(_OPENMP)
+          int ithread = omp_get_thread_num();
+          int nthreads = omp_get_num_threads();
+#pragma omp single
+          {
+            prefix = new size_t[nthreads + 1];
+            prefix[0] = 0;
+          }
+          std::vector<UDFOutputType> vec_private;
+#endif
+
+#if defined(_OPENMP)
+#pragma omp for schedule(static) nowait
+#endif
+          for (unsigned long long i = 0; i < current_chunk_cells; i++)
+          {
+            ROW_MAJOR_ORDER_REVERSE_MACRO(i, current_chunk_size, current_chunk_size.size(), cell_coordinate)
+
+            if (skip_flag == 1)
+            {
+              skip_flag_on_cell = 0;
+              for (int id = 0; id < data_dims; id++)
+              {
+                //The coordinate of the skip chunk this coordinate belong to
+                skip_chunk_coordinate[id] = std::floor(cell_coordinate[id] / skip_size[id]);
+                skip_chunk_coordinate_start[id] = skip_chunk_coordinate[id] * skip_size[id]; //first cell's coodinate of this skip chunk
+                if (skip_chunk_coordinate_start[id] != cell_coordinate[id])
+                { //we only run on the first  element of this skip chunk
+                  skip_flag_on_cell = 1;
+                  break;
+                }
+              }
+
+              if (skip_flag_on_cell == 1)
+                continue; //          for (unsigned long long i = 0; i < current_chunk_cells; i++)
+              assert(i < current_chunk_cells);
+            }
+
+            //Get the coodinate with overlapping
+            //Also, get the global coodinate of the cell in original array
+            for (int ii = 0; ii < data_dims; ii++)
+            {
+              if (cell_coordinate[ii] + ol_origin_offset[ii] < current_chunk_ol_size[ii])
+              {
+                cell_coordinate_ol[ii] = cell_coordinate[ii] + ol_origin_offset[ii];
+              }
+              else
+              {
+                cell_coordinate_ol[ii] = current_chunk_ol_size[ii] - 1;
+              }
+              //get the global coordinate
+              global_cell_coordinate[ii] = current_chunk_start_offset[ii] + cell_coordinate[ii];
+            }
+
+            //Update the offset with overlapping
+            ROW_MAJOR_ORDER_MACRO(current_chunk_ol_size, current_chunk_ol_size.size(), cell_coordinate_ol, offset_ol);
+            if (endpoint != NULL && endpoint->GetEndpointType() != EP_DIR)
+            {
+              ROW_MAJOR_ORDER_MACRO(data_size, data_size.size(), global_cell_coordinate, cell_target_g_location_rm)
+              cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size, global_cell_coordinate, cell_target_g_location_rm);
+            }
+            else
+            {
+              cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size, cell_coordinate_ol, offset_ol);
+            }
+            //Set the global coodinate of the cell as the ID of the cell
+            //Disable it for performance.
+            //RowMajorOrder(data_dims_size, global_cell_coordinate)
+            //ROW_MAJOR_ORDER_MACRO(data_dims_size, data_dims_size.size(), global_cell_coordinate, cell_target_g_location_rm)
+            //cell_target.set_my_g_location_rm(cell_target_g_location_rm);
+
+            //cell_return_stencil = UDF(cell_target); // Called by C++
+            UDF(cell_target, cell_return_stencil); // Called by C++
             cell_return_value = cell_return_stencil.get_value();
 
             if (vector_type_flag == true)
@@ -1409,6 +1850,31 @@ namespace FT
       }
     }
 
+    /**
+     * @brief read the current chunk once the chunk_size and overlap_size are specified at Constructor
+     * 
+     * @param data_vector 
+     * @return int 
+     */
+    int ReadChunk(std::vector<T> &data_vector)
+    {
+      Stencil<T> (*UDF)(const Stencil<T>);
+      InitializeApplyInput(UDF);
+      int ret;
+      unsigned long long current_result_chunk_data_size = 1;
+      ret = LoadNextChunk(current_result_chunk_data_size);
+      data_vector = current_chunk_data;
+      return ret;
+    }
+
+    /**
+     * @brief Read a array cells from start to the end
+     * 
+     * @param start 
+     * @param end 
+     * @param data_vector 
+     * @return int 
+     */
     int ReadArray(const std::vector<unsigned long long> &start, const std::vector<unsigned long long> &end, std::vector<T> &data_vector)
     {
       //InitializeApplyInput();

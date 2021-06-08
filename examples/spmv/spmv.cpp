@@ -158,33 +158,49 @@ int main(int argc, char *argv[])
     FT_Init(argc, argv);
 
     // set up the chunk size and the overlap size
-    std::vector<int> chunk_size = {1535};
+    std::vector<int> chunk_size = {0};
     std::vector<int> overlap_size = {0};
 
     //Input Matrix
     //  Problem: partition a single row on different processes
     //           -> should we keep overlap_size == 0
     //           -> if not, how to decide the overlap_size ==0
-    FT::Array<double> *AI = new Array<double>("EP_HDF5:./matrix.h5:/i", chunk_size, overlap_size);
-    FT::Array<double> *AJ = new Array<double>("EP_HDF5:./matrix.h5:/j", chunk_size, overlap_size);
-    FT::Array<double> *AV = new Array<double>("EP_HDF5:./matrix.h5:/v", chunk_size, overlap_size);
+    FT::Array<double> *AI = new Array<double>("EP_HDF5:./matrix.h5:/i");
+    FT::Array<double> *AJ = new Array<double>("EP_HDF5:./matrix.h5:/j");
+    FT::Array<double> *AV = new Array<double>("EP_HDF5:./matrix.h5:/v");
+
+    std::vector<unsigned long long> size_p;
+    AI->GetArraySize(size_p);
+    chunk_size[0] = size_p[0] / ft_size;
+    AI->SetChunkSize(chunk_size);
+    AJ->SetChunkSize(chunk_size);
+    AV->SetChunkSize(chunk_size);
+
+    PrintVector("A's size = ", size_p);
+    AI->SetOverlapSize(overlap_size);
+    AJ->SetOverlapSize(overlap_size);
+    AV->SetOverlapSize(overlap_size);
 
     //Problem: Restore AI/AJ/AV into memory by chunk
-    std::vector<unsigned long long> start, end;
-    start.push_back(ft_rank * 1535);
-    end.push_back(ft_rank * 1535 + 1535 - 1);
-    AI->ReadArray(start, end, VI);
-    AJ->ReadArray(start, end, VJ);
-    AV->ReadArray(start, end, VV);
+    AI->ReadChunk(VI);
+    AJ->ReadChunk(VJ);
+    AV->ReadChunk(VV);
 
     //Problem:
     //  1) overlap_size is not-predefined
     std::vector<int> chunk_size_v = {512};
     std::vector<int> overlap_size_v = {1};
 
-    FT::Array<double> *X = new Array<double>("EP_HDF5:./vector.h5:/v", chunk_size_v, overlap_size_v);
+    FT::Array<double> *X = new Array<double>("EP_HDF5:./vector.h5:/v");
+    X->GetArraySize(size_p);
+    chunk_size_v[0] = size_p[0] / ft_size;
+    X->SetChunkSize(chunk_size_v);
+    X->SetOverlapSize(overlap_size_v);
+
+    PrintVector("X's size = ", size_p);
 
     //Y =  A * X
+    //In this case, size of Y is equal to size of X
     FT::Array<double> *Y = new Array<double>("EP_HDF5:./y.h5:/v", chunk_size_v, overlap_size_v);
 
     X->EnableApplyStride(chunk_size_v);
