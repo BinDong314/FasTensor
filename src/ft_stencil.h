@@ -976,7 +976,7 @@ public:
 
   /**
    * @brief Set the Location object
-   * 
+   *        This is the used one in 
    * @param my_offset  within the local chunk
    * @param my_coordinate within the local chunk
    * @param my_location_no_ol_p 
@@ -999,23 +999,22 @@ public:
     }
 
     chunk_data_size_no_ol = 1;
-    int rank = my_coordinate.size();
-    for (int i = 0; i < rank; i++)
-    {
-      my_location[i] = my_coordinate[i];
-      //my_location_no_ol[i]    = my_location_no_ol_p[i];
-      //chunk_dim_size_no_ol[i] = chunk_dim_size_no_ol_p[i];
-      //ol_origin_offset[i]     = ol_origin_offset_p[i];
-      chunk_data_size_no_ol = chunk_data_size_no_ol * chunk_dim_size_no_ol_p[i];
-      chunk_dim_size[i] = current_chunk_ol_size[i];
-    }
+    //int rank = my_coordinate.size();
+    my_location = my_coordinate;
+    chunk_dim_size = current_chunk_ol_size;
+
+    for (const auto &e : chunk_dim_size_no_ol_p)
+      chunk_data_size_no_ol *= e;
+    //for (int i = 0; i < my_coordinate.size(); i++)
+    //{
+    //my_location[i] = my_coordinate[i];
+    //chunk_data_size_no_ol = chunk_data_size_no_ol * chunk_dim_size_no_ol_p[i];
+    //chunk_dim_size[i] = current_chunk_ol_size[i];
+    //}
     chunk_data_size_no_ol = chunk_data_size_no_ol - 1; //start from 0
-    //my_offset_no_ol       = RowMajorOrder(chunk_dim_size_no_ol_p, my_location_no_ol_p) - 1;
     ROW_MAJOR_ORDER_MACRO(chunk_dim_size_no_ol_p, chunk_dim_size_no_ol_p.size(), my_location_no_ol_p, my_offset_no_ol);
     my_offset_no_ol = my_offset_no_ol - 1;
-
     my_g_location_rm = global_coordinate_lineared_p;
-
     global_coordinate = global_coordinate_p;
     global_coordinate_lineared = global_coordinate_lineared_p;
   }
