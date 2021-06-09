@@ -943,7 +943,7 @@ public:
     return value;
   }
 
-  void SetLocation(unsigned long long my_offset, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &my_location_no_ol_p, std::vector<unsigned long long> &chunk_dim_size_no_ol_p, std::vector<long long> ol_origin_offset_p, std::vector<unsigned long long> current_chunk_ol_size)
+  inline void SetLocation(unsigned long long my_offset, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &my_location_no_ol_p, std::vector<unsigned long long> &chunk_dim_size_no_ol_p, std::vector<long long> ol_origin_offset_p, std::vector<unsigned long long> current_chunk_ol_size)
   {
     //value                = chunk_data_pointer[my_offset];
     if (my_offset > chunk_data_size)
