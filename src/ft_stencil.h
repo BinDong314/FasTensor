@@ -986,7 +986,7 @@ public:
    * @param global_coordinate  current cell's global coodinate
    * @param global_coordinate_lm  linearized global_coordinate
    */
-  void SetLocation(unsigned long long &my_offset, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &my_location_no_ol_p, std::vector<unsigned long long> &chunk_dim_size_no_ol_p, std::vector<long long> &ol_origin_offset_p, std::vector<unsigned long long> &current_chunk_ol_size, std::vector<unsigned long long> &global_coordinate_p, unsigned long long &global_coordinate_lineared_p)
+  void inline SetLocation(unsigned long long &my_offset, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &my_location_no_ol_p, std::vector<unsigned long long> &chunk_dim_size_no_ol_p, std::vector<long long> &ol_origin_offset_p, std::vector<unsigned long long> &current_chunk_ol_size, std::vector<unsigned long long> &global_coordinate_p, unsigned long long &global_coordinate_lineared_p)
   {
     if (my_offset > chunk_data_size)
     {
