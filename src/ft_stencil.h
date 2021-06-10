@@ -142,6 +142,7 @@ private:
   //Used by operator ()
   mutable std::vector<int> coordinate_shift;
   mutable std::vector<unsigned long long> coordinate;
+  mutable std::vector<int> ov;
 
 public:
   //For test only
@@ -421,7 +422,8 @@ public:
   template <typename... Is>
   inline T operator()(Is... offsets) const
   {
-    std::vector<int> ov{{offsets...}};
+    //std::vector<int> ov{{offsets...}};
+    ov = {offsets...};
     int ov_rank = ov.size();
     if (dims != ov_rank)
     {
