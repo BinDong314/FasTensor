@@ -87,8 +87,8 @@ using namespace std;
 using namespace FT;
 
 //3D problem: 104 104 104
-#define ARRAY_1ST_N 256
-#define ARRAY_2ND_N 256
+#define ARRAY_1ST_N 512
+#define ARRAY_2ND_N 512
 #define ARRAY_3RD_N 256
 
 #define ARRAY_TOTAL_N ARRAY_1ST_N *ARRAY_2ND_N *ARRAY_3RD_N

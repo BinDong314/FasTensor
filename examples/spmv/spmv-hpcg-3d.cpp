@@ -88,13 +88,14 @@ using namespace FT;
 std::vector<double> VI, VJ, VV;
 
 //UDF One: duplicate the original data
-inline Stencil<double> udf_hpcg_3d(const Stencil<double> &iStencil)
+inline int udf_hpcg_3d(const Stencil<double> &iStencil, Stencil<double> &oStencil)
 {
 
     //double result = 0;
     double result = -iStencil(-1, -1, -1) - iStencil(-1, -1, 0) - iStencil(-1, -1, 1) - iStencil(-1, 0, -1) - iStencil(-1, 0, 0) - iStencil(-1, 0, 1) - iStencil(-1, 1, -1) - iStencil(-1, 1, 0) - iStencil(-1, 1, 1) - iStencil(0, -1, -1) - iStencil(0, -1, 0) - iStencil(0, -1, 1) - iStencil(0, 0, -1) + 26 * iStencil(0, 0, 0) - iStencil(0, 0, 1) - iStencil(0, 1, -1) - iStencil(0, 1, 0) - iStencil(0, 1, 1) - iStencil(1, -1, -1) - iStencil(1, -1, 0) - iStencil(1, -1, 1) - iStencil(1, 0, -1) - iStencil(1, 0, 0) - iStencil(1, 0, 1) - iStencil(1, 1, -1) - iStencil(1, 1, 0) - iStencil(1, 1, 1);
-
-    return Stencil<double>(result);
+    oStencil = result;
+    //return Stencil<double>(result);
+    return 0;
 }
 
 int main(int argc, char *argv[])
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
     FT_Init(argc, argv);
 
     // set up the chunk size and the overlap size
-    std::vector<int> chunk_size = {256, 256, 256};
+    std::vector<int> chunk_size = {512, 512, 256};
     std::vector<int> overlap_size = {1, 1, 1};
 
     //Input Matrix
@@ -114,7 +115,7 @@ int main(int argc, char *argv[])
     FT::Array<double> *Y = new Array<double>("EP_HDF5:./y-3d.h5:/v");
 
     //Run
-    A->Transform(udf_hpcg_3d, Y);
+    A->TransformTest(udf_hpcg_3d, Y);
 
     //Report the cost of UDF, I/O, etc,
     A->ReportCost();
