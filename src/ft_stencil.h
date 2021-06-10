@@ -140,8 +140,8 @@ private:
   std::map<std::string, std::string> stencil_tag_map;
 
   //Used by operator ()
-  std::vector<int> coordinate_shift;
-  std::vector<unsigned long long> coordinate;
+  mutable std::vector<int> coordinate_shift;
+  mutable std::vector<unsigned long long> coordinate;
 
 public:
   //For test only
@@ -198,8 +198,10 @@ public:
     chunk_dim_size.resize(dims);
     my_location.resize(dims);
     global_data_size.resize(dims);
+
     coordinate_shift.resize(dims);
     coordinate.resize(dims);
+
     chunk_data_size = 1;
     for (int i = 0; i < dims; i++)
     {
