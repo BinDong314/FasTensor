@@ -139,6 +139,10 @@ private:
   bool is_stencil_tag = false;
   std::map<std::string, std::string> stencil_tag_map;
 
+  //Used by operator ()
+  std::vector<int> coordinate_shift;
+  std::vector<unsigned long long> coordinate;
+
 public:
   //For test only
   Stencil(){};
@@ -194,8 +198,8 @@ public:
     chunk_dim_size.resize(dims);
     my_location.resize(dims);
     global_data_size.resize(dims);
-    //coordinate_shift.resize(dims);
-    //coordinate.resize(dims);
+    coordinate_shift.resize(dims);
+    coordinate.resize(dims);
     chunk_data_size = 1;
     for (int i = 0; i < dims; i++)
     {
@@ -423,8 +427,9 @@ public:
     }
 
     //std::cout << "Call new index ! \n";
-    std::vector<int> coordinate_shift(dims);
-    std::vector<unsigned long long> coordinate(dims);
+    //move below to the main function
+    //std::vector<int> coordinate_shift(dims);
+    //std::vector<unsigned long long> coordinate(dims);
 
     if (trail_run_flag)
     {
