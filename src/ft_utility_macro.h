@@ -144,15 +144,14 @@ extern int ft_rank;
     }
 #endif
 
-#define ROW_MAJOR_ORDER_REVERSE_MACRO_TEST(temp_offset, dsize, dsize_len, result_coord_v, div_temp) \
-    {                                                                                               \
-        for (int iii = dsize_len - 1; iii >= 1; iii--)                                              \
-        {                                                                                           \
-            div_temp = std::lldiv(temp_offset, dsize[iii]);                                         \
-            result_coord_v[iii] = div_temp.rem;                                                     \
-            temp_offset = div_temp.quot;                                                            \
-        }                                                                                           \
-        result_coord_v[0] = temp_offset;                                                            \
+#define ROW_MAJOR_ORDER_REVERSE_MACRO_3D(offset, dsize, dsize_len, result_coord_v) \
+    {                                                                              \
+        unsigned long long temp_offset = offset;                                   \
+        result_coord_v[2] = temp_offset % dsize[2];                                \
+        temp_offset = temp_offset / dsize[2];                                      \
+        result_coord_v[1] = temp_offset % dsize[1];                                \
+        temp_offset = temp_offset / dsize[1];                                      \
+        result_coord_v[0] = temp_offset;                                           \
     }
 
 #define AU_EXIT(info)                                                                                                            \
