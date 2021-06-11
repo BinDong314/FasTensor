@@ -1006,24 +1006,22 @@ public:
     {
       value = chunk_data_pointer[my_offset];
     }
-
-    chunk_data_size_no_ol = 1;
     //int rank = my_coordinate.size();
     my_location = my_coordinate;
     chunk_dim_size = current_chunk_ol_size;
 
-    for (const auto &e : chunk_dim_size_no_ol_p)
-      chunk_data_size_no_ol *= e;
-    //for (int i = 0; i < my_coordinate.size(); i++)
-    //{
-    //my_location[i] = my_coordinate[i];
-    //chunk_data_size_no_ol = chunk_data_size_no_ol * chunk_dim_size_no_ol_p[i];
-    //chunk_dim_size[i] = current_chunk_ol_size[i];
-    //}
-    chunk_data_size_no_ol = chunk_data_size_no_ol - 1; //start from 0
-    ROW_MAJOR_ORDER_MACRO(chunk_dim_size_no_ol_p, chunk_dim_size_no_ol_p.size(), my_location_no_ol_p, my_offset_no_ol);
-    my_offset_no_ol = my_offset_no_ol - 1;
+    //used by get_local_neighbors_count_at_left
+    //chunk_data_size_no_ol = 1;
+    //for (const auto &e : chunk_dim_size_no_ol_p)
+    // chunk_data_size_no_ol *= e;
+    //chunk_data_size_no_ol = chunk_data_size_no_ol - 1; //start from 0
+
+    //used by get_local_neighbors_count_at_left
+    //ROW_MAJOR_ORDER_MACRO(chunk_dim_size_no_ol_p, chunk_dim_size_no_ol_p.size(), my_location_no_ol_p, my_offset_no_ol);
+    //my_offset_no_ol = my_offset_no_ol - 1;
+
     my_g_location_rm = global_coordinate_lineared_p;
+
     global_coordinate = global_coordinate_p;
     global_coordinate_lineared = global_coordinate_lineared_p;
   }
