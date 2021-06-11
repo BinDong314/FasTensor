@@ -1305,8 +1305,9 @@ namespace FT
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
             //ROW_MAJOR_ORDER_REVERSE_MACRO_3D(i, current_chunk_size, current_chunk_size.size(), cell_coordinate)
+            if (i != 0)
+              INCREASE_COORDINATE(begin_coo, current_chunk_size, cell_coordinate, data_dims);
 
-            INCREASE_COORDINATE(begin_coo, current_chunk_size, cell_coordinate, data_dims);
             if (skip_flag == 1)
             {
               skip_flag_on_cell = 0;
