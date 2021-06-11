@@ -1287,6 +1287,7 @@ namespace FT
           std::vector<unsigned long long> skip_chunk_coordinate(data_dims, 0), skip_chunk_coordinate_start(data_dims, 0);
           int skip_flag_on_cell = 0;
 
+          std::vector<unsigned long long> begin_coo(data_dims, 0);
 #if defined(_OPENMP)
           int ithread = omp_get_thread_num();
           int nthreads = omp_get_num_threads();
@@ -1303,8 +1304,9 @@ namespace FT
 #endif
           for (unsigned long long i = 0; i < current_chunk_cells; i++)
           {
-            ROW_MAJOR_ORDER_REVERSE_MACRO_3D(i, current_chunk_size, current_chunk_size.size(), cell_coordinate)
+            //ROW_MAJOR_ORDER_REVERSE_MACRO_3D(i, current_chunk_size, current_chunk_size.size(), cell_coordinate)
 
+            INCREASE_COORDINATE(begin_coo, current_chunk_size, cell_coordinate, data_dims);
             if (skip_flag == 1)
             {
               skip_flag_on_cell = 0;

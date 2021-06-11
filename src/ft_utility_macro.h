@@ -154,6 +154,22 @@ extern int ft_rank;
         result_coord_v[0] = temp_offset;                                           \
     }
 
+#define INCREASE_COORDINATE(begin_coo, end_coo, current_coo, N) \
+    {                                                           \
+        for (size_t n = N - 1; n >= 0; --n)                     \
+        {                                                       \
+            if (++current_coo[n] == end_coo[n])                 \
+            {                                                   \
+                if (n >= 1)                                     \
+                    current_coo[n] = begin_coo[n];              \
+            }                                                   \
+            else                                                \
+            {                                                   \
+                break;                                          \
+            }                                                   \
+        }                                                       \
+    }
+
 #define AU_EXIT(info)                                                                                                            \
     {                                                                                                                            \
         std::cout << "Exit happens at file: " << __FILE__ << ",  function: " << __func__ << ", line: " << __LINE__ << std::endl; \
