@@ -144,6 +144,17 @@ extern int ft_rank;
     }
 #endif
 
+#define ROW_MAJOR_ORDER_REVERSE_MACRO_TEST(temp_offset, dsize, dsize_len, result_coord_v, div_temp) \
+    {                                                                                               \
+        for (int iii = dsize_len - 1; iii >= 1; iii--)                                              \
+        {                                                                                           \
+            div_temp = std::lldiv(temp_offset, dsize[iii]);                                         \
+            result_coord_v[iii] = div_temp.rem;                                                     \
+            temp_offset = div_temp.quot;                                                            \
+        }                                                                                           \
+        result_coord_v[0] = temp_offset;                                                            \
+    }
+
 #define AU_EXIT(info)                                                                                                            \
     {                                                                                                                            \
         std::cout << "Exit happens at file: " << __FILE__ << ",  function: " << __func__ << ", line: " << __LINE__ << std::endl; \
