@@ -1349,7 +1349,7 @@ namespace FT
             if (endpoint != NULL && endpoint->GetEndpointType() != EP_DIR)
             {
               ROW_MAJOR_ORDER_MACRO(data_size, data_size.size(), global_cell_coordinate, cell_target_g_location_rm)
-              cell_target.SetLocation(offset_ol, cell_coordinate_ol, cell_coordinate, current_chunk_size, ol_origin_offset, current_chunk_ol_size, global_cell_coordinate, cell_target_g_location_rm);
+              cell_target.SetLocation(offset_ol, cell_coordinate_ol, global_cell_coordinate, cell_target_g_location_rm);
             }
             else
             {

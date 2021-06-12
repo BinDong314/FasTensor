@@ -987,7 +987,8 @@ public:
 
   /**
    * @brief Set the Location object
-   *        This is the used one in 
+   *        This is the used one in production.
+   *         We can still improve the performance of it if possible.
    * @param my_offset  within the local chunk
    * @param my_coordinate within the local chunk
    * @param my_location_no_ol_p 
@@ -997,7 +998,8 @@ public:
    * @param global_coordinate  current cell's global coodinate
    * @param global_coordinate_lm  linearized global_coordinate
    */
-  void inline SetLocation(const unsigned long long &my_offset, const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &my_location_no_ol_p, const std::vector<unsigned long long> &chunk_dim_size_no_ol_p, const std::vector<long long> &ol_origin_offset_p, const std::vector<unsigned long long> &current_chunk_ol_size, const std::vector<unsigned long long> &global_coordinate_p, const unsigned long long &global_coordinate_lineared_p)
+  //void inline SetLocation(const unsigned long long &my_offset, const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &my_location_no_ol_p, const std::vector<unsigned long long> &chunk_dim_size_no_ol_p, const std::vector<long long> &ol_origin_offset_p, const std::vector<unsigned long long> &current_chunk_ol_size, const std::vector<unsigned long long> &global_coordinate_p, const unsigned long long &global_coordinate_lineared_p)
+  void inline SetLocation(const unsigned long long &my_offset, const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &global_coordinate_p, const unsigned long long &global_coordinate_lineared_p)
   {
     if (my_offset > chunk_data_size)
     {
