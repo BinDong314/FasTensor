@@ -106,7 +106,7 @@ private:
   std::vector<unsigned long long> global_coordinate;
   unsigned long long global_coordinate_lineared;
 
-  unsigned long long my_g_location_rm; //lineared form of my coordinates in original big array.
+  //unsigned long long my_g_location_rm; //lineared form of my coordinates in original big array.
   unsigned long long chunk_id;
   T *chunk_data_pointer = NULL;
   unsigned long long chunk_data_size = 1;
@@ -1006,10 +1006,14 @@ public:
     {
       value = chunk_data_pointer[my_offset];
     }
-    //int rank = my_coordinate.size();
-    my_location = my_coordinate;
-    //chunk_dim_size = current_chunk_ol_size;
+    //my_location = my_coordinate;
+    my_location.assign(my_coordinate.begin(), my_coordinate.end());
+    //global_coordinate = global_coordinate_p;
+    global_coordinate.assign(global_coordinate_p.begin(), global_coordinate_p.end());
+    global_coordinate_lineared = global_coordinate_lineared_p;
 
+    //int rank = my_coordinate.size();
+    //chunk_dim_size = current_chunk_ol_size;
     //Disable below code out
     //used by get_local_neighbors_count_at_left
     //chunk_data_size_no_ol = 1;
@@ -1019,10 +1023,6 @@ public:
     //used by get_local_neighbors_count_at_left
     //ROW_MAJOR_ORDER_MACRO(chunk_dim_size_no_ol_p, chunk_dim_size_no_ol_p.size(), my_location_no_ol_p, my_offset_no_ol);
     //my_offset_no_ol = my_offset_no_ol - 1;
-
-    my_g_location_rm = global_coordinate_lineared_p;
-    global_coordinate = global_coordinate_p;
-    global_coordinate_lineared = global_coordinate_lineared_p;
   }
 
   /**
@@ -1084,19 +1084,19 @@ public:
 
   void set_my_g_location_rm(unsigned long long lrm)
   {
-    my_g_location_rm = lrm;
+    global_coordinate_lineared = lrm;
   }
 
   unsigned long long get_my_g_location_rm() const
   {
-    return my_g_location_rm;
+    return global_coordinate_lineared;
   }
 
   //Use the global coordinate of the cell as the id
   //It is usefull for parallel processing
   unsigned long long get_id() const
   {
-    return my_g_location_rm;
+    return global_coordinate_lineared;
   }
 
   //void SetApplyPadding(T padding_value_p)
