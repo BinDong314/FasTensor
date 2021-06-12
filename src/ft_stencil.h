@@ -203,6 +203,8 @@ public:
     coordinate_shift.resize(dims);
     coordinate.resize(dims);
 
+    global_coordinate.resize(dims);
+
     chunk_data_size = 1;
     for (int i = 0; i < dims; i++)
     {
@@ -1007,9 +1009,9 @@ public:
       value = chunk_data_pointer[my_offset];
     }
     //my_location = my_coordinate;
-    my_location.assign(my_coordinate.begin(), my_coordinate.end());
     //global_coordinate = global_coordinate_p;
-    global_coordinate.assign(global_coordinate_p.begin(), global_coordinate_p.end());
+    memcpy(&my_location.at(0), &my_coordinate.at(0), my_coordinate.size());
+    memcpy(&global_coordinate.at(0), &global_coordinate_p.at(0), global_coordinate_p.size());
     global_coordinate_lineared = global_coordinate_lineared_p;
 
     //int rank = my_coordinate.size();
