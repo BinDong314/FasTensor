@@ -91,8 +91,8 @@ std::vector<double> VI, VJ, VV;
 inline int udf_hpcg_3d(const Stencil<double> &iStencil, Stencil<double> &oStencil)
 {
 
-    double result = 0;
-    //double result = -iStencil(-1, -1, -1) - iStencil(-1, -1, 0) - iStencil(-1, -1, 1) - iStencil(-1, 0, -1) - iStencil(-1, 0, 0) - iStencil(-1, 0, 1) - iStencil(-1, 1, -1) - iStencil(-1, 1, 0) - iStencil(-1, 1, 1) - iStencil(0, -1, -1) - iStencil(0, -1, 0) - iStencil(0, -1, 1) - iStencil(0, 0, -1) + 26 * iStencil(0, 0, 0) - iStencil(0, 0, 1) - iStencil(0, 1, -1) - iStencil(0, 1, 0) - iStencil(0, 1, 1) - iStencil(1, -1, -1) - iStencil(1, -1, 0) - iStencil(1, -1, 1) - iStencil(1, 0, -1) - iStencil(1, 0, 0) - iStencil(1, 0, 1) - iStencil(1, 1, -1) - iStencil(1, 1, 0) - iStencil(1, 1, 1);
+    //double result = 0;
+    double result = -iStencil(-1, -1, -1) - iStencil(-1, -1, 0) - iStencil(-1, -1, 1) - iStencil(-1, 0, -1) - iStencil(-1, 0, 0) - iStencil(-1, 0, 1) - iStencil(-1, 1, -1) - iStencil(-1, 1, 0) - iStencil(-1, 1, 1) - iStencil(0, -1, -1) - iStencil(0, -1, 0) - iStencil(0, -1, 1) - iStencil(0, 0, -1) + 26 * iStencil(0, 0, 0) - iStencil(0, 0, 1) - iStencil(0, 1, -1) - iStencil(0, 1, 0) - iStencil(0, 1, 1) - iStencil(1, -1, -1) - iStencil(1, -1, 0) - iStencil(1, -1, 1) - iStencil(1, 0, -1) - iStencil(1, 0, 0) - iStencil(1, 0, 1) - iStencil(1, 1, -1) - iStencil(1, 1, 0) - iStencil(1, 1, 1);
     oStencil = result;
     //return Stencil<double>(result);
     return 0;
