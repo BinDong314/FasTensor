@@ -987,8 +987,7 @@ public:
 
   /**
    * @brief Set the Location object
-   *        This is the used one in production.
-   *         We can still improve the performance of it if possible.
+   *        This is the used one in 
    * @param my_offset  within the local chunk
    * @param my_coordinate within the local chunk
    * @param my_location_no_ol_p 
@@ -1000,20 +999,6 @@ public:
    */
   void inline SetLocation(const unsigned long long &my_offset, const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &my_location_no_ol_p, const std::vector<unsigned long long> &chunk_dim_size_no_ol_p, const std::vector<long long> &ol_origin_offset_p, const std::vector<unsigned long long> &current_chunk_ol_size, const std::vector<unsigned long long> &global_coordinate_p, const unsigned long long &global_coordinate_lineared_p)
   {
-    SetLocation(my_offset, my_coordinate, global_coordinate_p, global_coordinate_lineared_p);
-  }
-
-  /**
-   * @brief Set the Location object
-   *        This is an improved version (To be tested)
-   * @param my_offset 
-   * @param my_coordinate 
-   * @param global_coordinate_p 
-   * @param global_coordinate_lineared_p 
-   */
-  void inline SetLocation(const unsigned long long &my_offset, const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &global_coordinate_p, const unsigned long long &global_coordinate_lineared_p)
-  {
-
     if (my_offset > chunk_data_size)
     {
       std::cout << "Error in intializing Stencil(). my_offset  = " << my_offset << ", chunk_data_size = " << chunk_data_size << std::endl;
@@ -1023,10 +1008,10 @@ public:
     {
       value = chunk_data_pointer[my_offset];
     }
-    //my_location = my_coordinate;
-    //global_coordinate = global_coordinate_p;
-    memcpy(&my_location.at(0), &my_coordinate.at(0), my_coordinate.size());
-    memcpy(&global_coordinate.at(0), &global_coordinate_p.at(0), global_coordinate_p.size());
+
+    memcpy(&my_location[0], &my_coordinate[0], dims * sizeof(unsigned long long));
+    memcpy(&global_coordinate[0], &global_coordinate_p[0], dims * sizeof(unsigned long long));
+
     global_coordinate_lineared = global_coordinate_lineared_p;
 
     //int rank = my_coordinate.size();
