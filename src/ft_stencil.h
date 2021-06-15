@@ -143,6 +143,7 @@ private:
   mutable std::vector<int> coordinate_shift;
   mutable std::vector<long long> coordinate;
   mutable std::vector<int> ov;
+  mutable size_t shift_offset;
 
 public:
   //For test only
@@ -354,7 +355,7 @@ public:
     //std::vector<int> coordinate_shift(3);
     //std::vector<unsigned long long> coordinate(3);
 
-    if (trail_run_flag == 1)
+    if (trail_run_flag)
     {
       if (std::abs(i1) > coordinate_shift[0])
         coordinate_shift[0] = std::abs(i1);
@@ -362,13 +363,11 @@ public:
         coordinate_shift[1] = std::abs(i2);
       if (std::abs(i3) > coordinate_shift[2])
         coordinate_shift[2] = std::abs(i3);
-
       return chunk_data_pointer[0];
     }
-    size_t shift_offset;
     coordinate[0] = my_location[0] + i1;
-    coordinate[1] = my_location[1] + i1;
-    coordinate[2] = my_location[2] + i1;
+    coordinate[1] = my_location[1] + i2;
+    coordinate[2] = my_location[2] + i3;
 #define CHECK_BOUNDARY(coo, coo_limit) \
   {                                    \
     if (coo >= coo_limit)              \
@@ -381,7 +380,7 @@ public:
     CHECK_BOUNDARY(coordinate[1], chunk_dim_size[1]);
     CHECK_BOUNDARY(coordinate[2], chunk_dim_size[2]);
 
-    shift_offset = coordinate[2] + chunk_dim_size[2] * (coordinate[1] + chunk_dim_size[1] * coordinate[0]);
+    shift_offset = coordinate[2] + chunk_dim_size[2] * coordinate[1] + chunk_dim_size[2] * chunk_dim_size[1] * coordinate[0];
     /*
     coordinate_shift[0] = i1;
     coordinate_shift[1] = i2;
