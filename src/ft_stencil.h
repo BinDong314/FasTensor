@@ -346,12 +346,13 @@ public:
       exit(-1);
     }
   }
+  */
 
   //3D
   inline T &operator()(const int i1, const int i2, const int i3) const
   {
-    std::vector<int> coordinate_shift(3);
-    std::vector<unsigned long long> coordinate(3);
+    //std::vector<int> coordinate_shift(3);
+    //std::vector<unsigned long long> coordinate(3);
 
     if (trail_run_flag == 1)
     {
@@ -409,6 +410,7 @@ public:
     }
   }
 
+  /*
   inline T operator()(int i1, int i2, int i3, int i4)
   {
     std::vector<int> coordinate_shift(4);
