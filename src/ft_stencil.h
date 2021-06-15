@@ -369,6 +369,9 @@ public:
     coordinate_shift[0] = i1;
     coordinate_shift[1] = i2;
     coordinate_shift[2] = i3;
+
+    unsigned long long shift_offset;
+
     for (int i = 0; i < 3; i++)
     {
       if (coordinate_shift[i] == 0)
@@ -393,12 +396,17 @@ public:
           coordinate[i] = my_location[i] - coordinate[i]; //Check boundary :: Be careful with size overflow
         }
       }
+
+      if (i == 0)
+      {
+        shift_offset = coordinate[0];
+      }
+      else
+      {
+        shift_offset = shift_offset * chunk_dim_size[i] + coordinate[i];
+      }
     }
-    unsigned long long shift_offset = coordinate[0];
-    for (int i = 1; i < 3; i++)
-    {
-      shift_offset = shift_offset * chunk_dim_size[i] + coordinate[i];
-    }
+
     if (shift_offset <= chunk_data_size)
     {
       return chunk_data_pointer[shift_offset];
