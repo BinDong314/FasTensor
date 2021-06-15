@@ -141,7 +141,7 @@ private:
 
   //Used by operator ()
   mutable std::vector<int> coordinate_shift;
-  mutable std::vector<unsigned long long> coordinate;
+  mutable std::vector<long long> coordinate;
   mutable std::vector<int> ov;
 
 public:
@@ -365,13 +365,27 @@ public:
 
       return chunk_data_pointer[0];
     }
+    size_t shift_offset;
+    coordinate[0] = my_location[0] + i1;
+    coordinate[1] = my_location[1] + i1;
+    coordinate[2] = my_location[2] + i1;
+#define CHECK_BOUNDARY(coo, coo_limit) \
+  {                                    \
+    if (coo >= coo_limit)              \
+      coo = coo_limit - 1;             \
+    else if (coo < 0)                  \
+      coo = 0;                         \
+  }
 
+    CHECK_BOUNDARY(coordinate[0], chunk_dim_size[0]);
+    CHECK_BOUNDARY(coordinate[1], chunk_dim_size[1]);
+    CHECK_BOUNDARY(coordinate[2], chunk_dim_size[2]);
+
+    shift_offset = coordinate[2] + chunk_dim_size[2](coordinate[1] + chunk_dim_size[1] * coordinate[0]);
+    /*
     coordinate_shift[0] = i1;
     coordinate_shift[1] = i2;
     coordinate_shift[2] = i3;
-
-    unsigned long long shift_offset;
-
     for (int i = 0; i < 3; i++)
     {
       if (coordinate_shift[i] == 0)
@@ -405,7 +419,7 @@ public:
       {
         shift_offset = shift_offset * chunk_dim_size[i] + coordinate[i];
       }
-    }
+    }*/
 
     if (shift_offset <= chunk_data_size)
     {
