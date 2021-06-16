@@ -113,6 +113,7 @@ private:
   unsigned long long chunk_data_size_no_ol = 1;
   unsigned long long my_offset_no_ol;             //for hist
   std::vector<unsigned long long> chunk_dim_size; //This is the size with over-lapping
+  unsigned long long chunk_dim_size_multiple;     //for test
   int dims;
   //std::vector<int> coordinate_shift;
   //std::vector<unsigned long long> coordinate;
@@ -214,7 +215,8 @@ public:
       my_location[i] = my_coordinate[i];
       global_data_size[i] = global_data_size_p[i];
     }
-
+    //for test
+    chunk_dim_size_multiple = chunk_dim_size[2] * chunk_dim_size[1];
     chunk_data_size = chunk_data_size - 1;
     if (my_offset > chunk_data_size)
     {
@@ -354,7 +356,6 @@ public:
   {
     //std::vector<int> coordinate_shift(3);
     //std::vector<unsigned long long> coordinate(3);
-
     if (trail_run_flag)
     {
       if (std::abs(i1) > coordinate_shift[0])
@@ -368,6 +369,7 @@ public:
     coordinate[0] = my_location[0] + i1;
     coordinate[1] = my_location[1] + i2;
     coordinate[2] = my_location[2] + i3;
+
 #define CHECK_BOUNDARY(coo, coo_limit) \
   {                                    \
     if (coo >= coo_limit)              \
@@ -380,7 +382,9 @@ public:
     CHECK_BOUNDARY(coordinate[1], chunk_dim_size[1]);
     CHECK_BOUNDARY(coordinate[2], chunk_dim_size[2]);
 
-    shift_offset = coordinate[2] + chunk_dim_size[2] * coordinate[1] + chunk_dim_size[2] * chunk_dim_size[1] * coordinate[0];
+    //shift_offset = coordinate[2] + chunk_dim_size[2] * coordinate[1] + chunk_dim_size[2] * chunk_dim_size[1] * coordinate[0];
+    shift_offset = coordinate[2] + chunk_dim_size[2] * coordinate[1] + chunk_dim_size_multiple * coordinate[0];
+
     /*
     coordinate_shift[0] = i1;
     coordinate_shift[1] = i2;
