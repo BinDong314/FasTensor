@@ -380,7 +380,7 @@ public:
     CHECK_BOUNDARY(coordinate[1], chunk_dim_size[1]);
     CHECK_BOUNDARY(coordinate[2], chunk_dim_size[2]);
 
-    shift_offset = coordinate[2] + chunk_dim_size[2] * coordinate[1] + chunk_dim_size[2] * chunk_dim_size[1] * coordinate[0];
+    shift_offset = coordinate[2] + chunk_dim_size[2] * (coordinate[1] + chunk_dim_size[1] * coordinate[0]);
     /*
     coordinate_shift[0] = i1;
     coordinate_shift[1] = i2;
