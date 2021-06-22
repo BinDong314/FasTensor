@@ -145,11 +145,6 @@ private:
   mutable std::vector<int> ov;
   mutable size_t shift_offset;
 
-  //test performacne of int
-  mutable std::vector<int> coordinate_int;
-  std::vector<int> chunk_dim_size_int;
-  std::vector<int> my_location_int;
-
 public:
   //For test only
   Stencil(){};
@@ -208,12 +203,8 @@ public:
 
     coordinate_shift.resize(dims);
     coordinate.resize(dims);
-    global_coordinate.resize(dims);
 
-    //test performacne of int
-    coordinate_int.resize(dims);
-    chunk_dim_size_int.resize(dims);
-    my_location_int.resize(dims);
+    global_coordinate.resize(dims);
 
     chunk_data_size = 1;
     for (int i = 0; i < dims; i++)
@@ -222,9 +213,6 @@ public:
       chunk_dim_size[i] = chunk_size[i];
       my_location[i] = my_coordinate[i];
       global_data_size[i] = global_data_size_p[i];
-      //test performacne of int
-      chunk_dim_size_int[i] = chunk_size[i];
-      my_location_int[i] = my_coordinate[i];
     }
 
     chunk_data_size = chunk_data_size - 1;
@@ -384,15 +372,15 @@ public:
         coordinate_shift[2] = std::abs(i3);
       return chunk_data_pointer[0];
     }
-    coordinate_int[0] = my_location_int[0] + i1;
-    coordinate_int[1] = my_location_int[1] + i2;
-    coordinate_int[2] = my_location_int[2] + i3;
+    coordinate[0] = my_location[0] + i1;
+    coordinate[1] = my_location[1] + i2;
+    coordinate[2] = my_location[2] + i3;
 
-    CHECK_BOUNDARY(coordinate_int[0], chunk_dim_size_int[0]);
-    CHECK_BOUNDARY(coordinate_int[1], chunk_dim_size_int[1]);
-    CHECK_BOUNDARY(coordinate_int[2], chunk_dim_size_int[2]);
+    CHECK_BOUNDARY(coordinate[0], chunk_dim_size[0]);
+    CHECK_BOUNDARY(coordinate[1], chunk_dim_size[1]);
+    CHECK_BOUNDARY(coordinate[2], chunk_dim_size[2]);
 
-    shift_offset = coordinate_int[2] + chunk_dim_size_int[2] * (coordinate_int[1] + chunk_dim_size_int[1] * coordinate_int[0]);
+    shift_offset = coordinate[2] + chunk_dim_size[2] * (coordinate[1] + chunk_dim_size[1] * coordinate[0]);
     /*
     coordinate_shift[0] = i1;
     coordinate_shift[1] = i2;
