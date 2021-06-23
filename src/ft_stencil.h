@@ -358,6 +358,7 @@ public:
   }
 
   //3D
+  //This is still in test phase
   inline T &operator()(const int i1, const int i2, const int i3) const
   {
     //std::vector<int> coordinate_shift(3);

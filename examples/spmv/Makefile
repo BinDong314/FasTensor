@@ -21,7 +21,7 @@ DASH_FLAG=-I$(DASH_DIR)/include -L$(DASH_DIR)/lib -ldash-mpi -ldart-mpi -ldart-b
 ALL_FLAGS= $(OTHER_FLAGS) $(AU_FLAG) $(HDF5_FLAG)  $(DASH_FLAG) 
 
 .PHONY:all
-all:create_data spmv spmv-v2 spmv-stencil create_data_3d spmv-hpcg-3d
+all:create_data spmv spmv-v2 spmv-stencil create_data_3d spmv-hpcg-3d spmv-hpcg-3d-read
 
 create_data:create_data.cpp
 	$(CCC) -o create_data create_data.cpp $(ALL_FLAGS)
@@ -41,6 +41,9 @@ create_data_3d:create_data_3d.cpp
 spmv-hpcg-3d:spmv-hpcg-3d.cpp
 	$(CCC) -o spmv-hpcg-3d spmv-hpcg-3d.cpp $(ALL_FLAGS)
 
+spmv-hpcg-3d-read:spmv-hpcg-3d-read.cpp
+	$(CCC) -o spmv-hpcg-3d-read spmv-hpcg-3d-read.cpp $(ALL_FLAGS)
+
 clean:
-	rm -rf create_data create_data.dSYM spmv spmv.dSYM spmv-v2 spmv-v2.dSYM  spmv-stencil spmv-stencil.dSYM create_data_3d create_data_3d.dSYM spmv-hpcg-3d spmv-hpcg-3d.dSYM
+	rm -rf create_data create_data.dSYM spmv spmv.dSYM spmv-v2 spmv-v2.dSYM  spmv-stencil spmv-stencil.dSYM create_data_3d create_data_3d.dSYM spmv-hpcg-3d spmv-hpcg-3d.dSYM spmv-hpcg-3d-read spmv-hpcg-3d-read.dSYM
 
