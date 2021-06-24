@@ -145,6 +145,11 @@ private:
   mutable std::vector<int> ov;
   mutable size_t shift_offset;
 
+  //used by the ReadNeighbors
+  mutable std::vector<size_t> start_offset_size_t, end_offset_size_t;
+  mutable std::vector<unsigned long long> count_size_t;
+  mutable std::vector<unsigned long long> view_start, view_end;
+
 public:
   //For test only
   Stencil(){};
@@ -205,6 +210,13 @@ public:
     coordinate.resize(dims);
 
     global_coordinate.resize(dims);
+
+    //used by the ReadNeighbors
+    start_offset_size_t.resize(dims);
+    end_offset_size_t.resize(dims);
+    count_size_t.resize(dims);
+    view_start.resize(dims);
+    view_end.resize(dims);
 
     chunk_data_size = 1;
     for (int i = 0; i < dims; i++)
@@ -663,18 +675,18 @@ public:
    * @param end_offset 
    * @return std::vector<T> 
    */
-  inline int ReadNeighbors(std::vector<int> &start_offset, std::vector<int> &end_offset, std::vector<T> &rv) const
+  inline int ReadNeighbors(const std::vector<int> &start_offset, const std::vector<int> &end_offset, std::vector<T> &rv) const
   {
     //std::vector<T> rv;
-    int rank_temp = start_offset.size();
-    std::vector<size_t> start_offset_size_t, end_offset_size_t;
-    std::vector<unsigned long long> count_size_t;
-    start_offset_size_t.resize(rank_temp);
-    end_offset_size_t.resize(rank_temp);
-    count_size_t.resize(rank_temp);
+    //int dims = start_offset.size();
+    //std::vector<size_t> start_offset_size_t, end_offset_size_t;
+    //std::vector<unsigned long long> count_size_t;
+    //start_offset_size_t.resize(dims);
+    //end_offset_size_t.resize(dims);
+    //count_size_t.resize(dims);
 
     size_t n = 1;
-    for (int i = 0; i < rank_temp; i++)
+    for (int i = 0; i < dims; i++)
     {
       count_size_t[i] = (end_offset[i] - start_offset[i] + 1);
       n = n * count_size_t[i];
@@ -699,9 +711,9 @@ public:
 
     rv.resize(n);
 
-    std::vector<unsigned long long> view_start(rank_temp), view_end(rank_temp);
+    //std::vector<unsigned long long> view_start(dims), view_end(dims);
     bool out_of_border = false;
-    for (int ii = 0; ii < rank_temp; ii++)
+    for (int ii = 0; ii < dims; ii++)
     {
       view_start[ii] = my_location[ii] + start_offset[ii];
       view_end[ii] = my_location[ii] + end_offset[ii];
