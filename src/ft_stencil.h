@@ -625,7 +625,7 @@ public:
     return has_set_output_value_flag;
   }
 
-  void ReadHoodBorder(std::vector<T> &rv, std::vector<int> &start_offset, std::vector<int> &end_offset) const
+  void ReadHoodBorder(std::vector<T> &rv, const std::vector<int> &start_offset, const std::vector<int> &end_offset) const
   {
     int rank_temp = start_offset.size();
     size_t element_count = rv.size();
