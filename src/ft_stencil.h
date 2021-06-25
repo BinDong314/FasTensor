@@ -151,7 +151,7 @@ private:
   mutable std::vector<unsigned long long> view_start, view_end;
   mutable unsigned long long array_buffer_offset, view_buffer_offset;
 
-  unsigned long long chunk_dim_size_3d_temp, count_size_t_3d_temp;
+  mutable unsigned long long chunk_dim_size_3d_temp, count_size_t_3d_temp;
 
 public:
   //For test only
