@@ -88,7 +88,7 @@ using namespace FT;
 std::vector<double> VI, VJ, VV;
 
 std::vector<double> neighbors_vector_values;
-std::vector<int> neighbors_vector_start = {-1, -1, -1}, neighbors_vector_end = {1, 1, 2};
+std::vector<int> neighbors_vector_start = {-1, -1, -1}, neighbors_vector_end = {1, 1, 1};
 double result;
 //UDF One: duplicate the original data
 inline int udf_hpcg_3d(const Stencil<double> &iStencil, Stencil<double> &oStencil)

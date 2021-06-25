@@ -149,6 +149,7 @@ private:
   mutable std::vector<size_t> start_offset_size_t, end_offset_size_t;
   mutable std::vector<unsigned long long> count_size_t;
   mutable std::vector<unsigned long long> view_start, view_end;
+  mutable unsigned long long array_buffer_offset, view_buffer_offset;
 
 public:
   //For test only
@@ -735,6 +736,20 @@ public:
       return 0;
     }
 
+    //Test Code: optmize the performance of SpMV
+    if (dims == 3)
+    {
+      for (int i = 0; i < count_size_t[0]; i++)
+      {
+        array_buffer_offset = chunk_dim_size[2] * chunk_dim_size[1] * i;
+        view_buffer_offset = count_size_t[2] * count_size_t[1] * i;
+        for (int j = 0; j < count_size_t[1]; j++)
+        {
+          VIEW_ACCESS_HELP_P(rv.data(), view_buffer_offset + count_size_t[2] * j, chunk_data_pointer, array_buffer_offset + chunk_dim_size[2] * j, count_size_t[2], ARRAY_VIEW_READ, sizeof(T));
+        }
+      }
+      return 0;
+    }
     ArrayViewAccessP<T>(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ);
     return 0;
   }
