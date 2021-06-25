@@ -192,7 +192,7 @@ inline int ArrayViewAccessV(std::vector<T> &view_v, std::vector<T> &array_v, std
     }
 
 template <class T>
-inline int ArrayViewAccessP(T *view_v, T *array_v, std::vector<unsigned long long> array_size, std::vector<unsigned long long> start, std::vector<unsigned long long> end, int read_write_code)
+inline int ArrayViewAccessP(T *view_v, T *array_v, const std::vector<unsigned long long> array_size, const std::vector<unsigned long long> start, const std::vector<unsigned long long> end, const int read_write_code)
 {
     std::vector<unsigned long long> view_size;
     unsigned long long element_count = 1;
@@ -231,6 +231,21 @@ inline int ArrayViewAccessP(T *view_v, T *array_v, std::vector<unsigned long lon
             //Copy each row
             VIEW_ACCESS_HELP_P(view_v, view_buffer_offset, array_v, array_buffer_offset, view_size[1], read_write_code, sizeof(T));
             //VIEW_ACCESS_HELP(view_v, view_size[1] * i, array_v, array_size[1] * (start[0] + i) + start[1], view_size[1], read_write_code);
+        }
+        return 0;
+    }
+
+    unsigned long long array_buffer_offset_2;
+    if (view_size.size() == 3)
+    {
+        for (int i = 0; i < view_size[0]; i++)
+        {
+            array_buffer_offset = array_size[2] * array_size[1] * i;
+            view_buffer_offset = view_size[2] * view_size[1] * i;
+            for (int j = 0; j < view_size[1]; j++)
+            {
+                VIEW_ACCESS_HELP_P(view_v, view_buffer_offset + view_size[2] * j, array_v, array_buffer_offset + array_size[2] * j, view_size[2], read_write_code, sizeof(T));
+            }
         }
         return 0;
     }
