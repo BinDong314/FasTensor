@@ -240,11 +240,11 @@ inline int ArrayViewAccessP(T *view_v, T *array_v, const std::vector<unsigned lo
     {
         for (int i = 0; i < view_size[0]; i++)
         {
-            array_buffer_offset = array_size[2] * array_size[1] * i;
-            view_buffer_offset = view_size[2] * view_size[1] * i;
+            array_buffer_offset = array_size[2] * array_size[1] * (start[0] + i);
+            view_buffer_offset = view_size[2] * view_size[1] * (start[0] + i);
             for (int j = 0; j < view_size[1]; j++)
             {
-                VIEW_ACCESS_HELP_P(view_v, view_buffer_offset + view_size[2] * j, array_v, array_buffer_offset + array_size[2] * j, view_size[2], read_write_code, sizeof(T));
+                VIEW_ACCESS_HELP_P(view_v, view_buffer_offset + view_size[2] * (start[1] + j), array_v, array_buffer_offset + array_size[2] * (start[1] + j), view_size[2], read_write_code, sizeof(T));
             }
         }
         return 0;

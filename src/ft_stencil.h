@@ -738,21 +738,21 @@ public:
       return 0;
     }
 
-    array_buffer_offset = 0;
-    view_buffer_offset = 0;
-    count_size_t_3d_temp = count_size_t[2] * count_size_t[1];
-    chunk_dim_size_3d_temp = chunk_dim_size[2] * chunk_dim_size[1];
     //Test Code: optmize the performance of SpMV
     if (dims == 3)
     {
+      array_buffer_offset = 0;
+      view_buffer_offset = 0;
+      count_size_t_3d_temp = count_size_t[2] * count_size_t[1];
+      chunk_dim_size_3d_temp = chunk_dim_size[2] * chunk_dim_size[1];
       for (int i = 0; i < count_size_t[0]; i++)
       {
-        array_buffer_offset += chunk_dim_size_3d_temp;
-        view_buffer_offset += count_size_t_3d_temp;
+        array_buffer_offset = chunk_dim_size_3d_temp * (i + start_offset[0]);
+        view_buffer_offset = count_size_t_3d_temp * i;
         for (int j = 0; j < count_size_t[1]; j++)
         {
           //VIEW_ACCESS_HELP_P(rv.data(), view_buffer_offset + count_size_t[2] * j, chunk_data_pointer, array_buffer_offset + chunk_dim_size[2] * j, count_size_t[2], ARRAY_VIEW_READ, sizeof(T));
-          std::memcpy(rv.data() + view_buffer_offset + count_size_t[2] * j, chunk_data_pointer + array_buffer_offset + chunk_dim_size[2] * j, sizeof(T) * count_size_t[2]);
+          std::memcpy(rv.data() + view_buffer_offset + count_size_t[2] * j, chunk_data_pointer + array_buffer_offset + chunk_dim_size[2] * (start_offset[1] + j), sizeof(T) * count_size_t[2]);
         }
       }
       return 0;
