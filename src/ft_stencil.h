@@ -745,7 +745,8 @@ public:
         view_buffer_offset = count_size_t[2] * count_size_t[1] * i;
         for (int j = 0; j < count_size_t[1]; j++)
         {
-          VIEW_ACCESS_HELP_P(rv.data(), view_buffer_offset + count_size_t[2] * j, chunk_data_pointer, array_buffer_offset + chunk_dim_size[2] * j, count_size_t[2], ARRAY_VIEW_READ, sizeof(T));
+          //VIEW_ACCESS_HELP_P(rv.data(), view_buffer_offset + count_size_t[2] * j, chunk_data_pointer, array_buffer_offset + chunk_dim_size[2] * j, count_size_t[2], ARRAY_VIEW_READ, sizeof(T));
+          std::memcpy(rv.data() + view_buffer_offset + count_size_t[2] * j, chunk_data_pointer + array_buffer_offset + chunk_dim_size[2] * j, sizeof(T) * count_size_t[2]);
         }
       }
       return 0;
