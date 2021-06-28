@@ -759,7 +759,7 @@ public:
         {
           //VIEW_ACCESS_HELP_P(rv.data(), view_buffer_offset + count_size_t[2] * j, chunk_data_pointer, array_buffer_offset + chunk_dim_size[2] * j, count_size_t[2], ARRAY_VIEW_READ, sizeof(T));
           //std::memcpy(rv.data() + view_buffer_offset + count_size_t[2] * j, chunk_data_pointer + array_buffer_offset + chunk_dim_size[2] * (start_offset[1] + j), count_size_t_size);
-          std::memcpy(memcpy_dst + count_size_t[2] * j, memcpy_dst + chunk_dim_size[2] * j, count_size_t_size);
+          std::memcpy((T *)memcpy_dst + count_size_t[2] * j, (T *)memcpy_src + chunk_dim_size[2] * j, count_size_t_size);
         }
       }
       return 0;
