@@ -98,9 +98,8 @@ inline int udf_hpcg_3d(const Stencil<double> &iStencil, Stencil<double> &oStenci
     //double result = -iStencil(-1, -1, -1) - iStencil(-1, -1, 0) - iStencil(-1, -1, 1) - iStencil(-1, 0, -1) - iStencil(-1, 0, 0) - iStencil(-1, 0, 1) - iStencil(-1, 1, -1) - iStencil(-1, 1, 0) - iStencil(-1, 1, 1) - iStencil(0, -1, -1) - iStencil(0, -1, 0) - iStencil(0, -1, 1) - iStencil(0, 0, -1) + 26 * iStencil(0, 0, 0) - iStencil(0, 0, 1) - iStencil(0, 1, -1) - iStencil(0, 1, 0) - iStencil(0, 1, 1) - iStencil(1, -1, -1) - iStencil(1, -1, 0) - iStencil(1, -1, 1) - iStencil(1, 0, -1) - iStencil(1, 0, 0) - iStencil(1, 0, 1) - iStencil(1, 1, -1) - iStencil(1, 1, 0) - iStencil(1, 1, 1);
 
     iStencil.ReadNeighbors(neighbors_vector_start, neighbors_vector_end, neighbors_vector_values);
-    result = 26 * neighbors_vector_values[13] - neighbors_vector_values[0] - neighbors_vector_values[1] - neighbors_vector_values[2] - neighbors_vector_values[3] - neighbors_vector_values[4] - neighbors_vector_values[5] - neighbors_vector_values[6] - neighbors_vector_values[7] - neighbors_vector_values[8] - -neighbors_vector_values[9] - neighbors_vector_values[10] - neighbors_vector_values[11] - neighbors_vector_values[12] - neighbors_vector_values[14] - neighbors_vector_values[15] - neighbors_vector_values[16] - neighbors_vector_values[17] - neighbors_vector_values[18] - neighbors_vector_values[19] - neighbors_vector_values[20] - neighbors_vector_values[21] - -neighbors_vector_values[22] - neighbors_vector_values[23] - neighbors_vector_values[24] - neighbors_vector_values[25] - -neighbors_vector_values[26];
+    result = 26 * neighbors_vector_values[13] - neighbors_vector_values[0] - neighbors_vector_values[1] - neighbors_vector_values[2] - neighbors_vector_values[3] - neighbors_vector_values[4] - neighbors_vector_values[5] - neighbors_vector_values[6] - neighbors_vector_values[7] - neighbors_vector_values[8] - -neighbors_vector_values[9] - neighbors_vector_values[10] - neighbors_vector_values[11] - neighbors_vector_values[12] - neighbors_vector_values[14] - neighbors_vector_values[15] - neighbors_vector_values[16] - neighbors_vector_values[17] - neighbors_vector_values[18] - neighbors_vector_values[19] - neighbors_vector_values[20] - neighbors_vector_values[21] - neighbors_vector_values[22] - neighbors_vector_values[23] - neighbors_vector_values[24] - neighbors_vector_values[25] - neighbors_vector_values[26];
     oStencil = result;
-
     //return Stencil<double>(result);
     return 0;
 }
@@ -120,6 +119,8 @@ int main(int argc, char *argv[])
     //Y =  A * X
     //In this case, size of Y is equal to size of X
     FT::Array<double> *Y = new Array<double>("EP_HDF5:./y-3d.h5:/v");
+
+    neighbors_vector_values.resize(27);
 
     //Run
     A->TransformTest(udf_hpcg_3d, Y);

@@ -13,7 +13,7 @@ DASH_DIR=/Users/dbin/work/soft/dash/build/install
 SHELL:=/bin/bash
 
 CCC=mpicxx
-OTHER_FLAGS=-O3  -std=c++17 -ffast-math
+OTHER_FLAGS=-g3  -std=c++17 -ffast-math
 
 AU_FLAG=-I$(AU_DIR)/include -L$(AU_DIR)/lib -lFastensor
 HDF5_FLAG=-I$(HDF5_DIR)/include -L$(HDF5_DIR)/lib -lhdf5  -lhdf5_hl -lz
