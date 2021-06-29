@@ -158,7 +158,7 @@ private:
 
   //used by ReadHoodBorder
   mutable std::vector<int> ord;
-  size_t element_count;
+  mutable size_t element_count;
 
 public:
   //For test only
