@@ -156,6 +156,10 @@ private:
   mutable size_t count_size_t_size;
   mutable T *memcpy_dst, *memcpy_src;
 
+  //used by ReadHoodBorder
+  mutable std::vector<int> ord;
+  size_t element_count;
+
 public:
   //For test only
   Stencil(){};
@@ -548,20 +552,20 @@ public:
   }
 
   //Generic version of the ()
-  inline T ReadPoint(std::vector<int> &ov) const
+  inline T ReadPoint(const std::vector<int> &ov) const
   {
     //std::vector<int> ov{{offsets...}};
-    int ov_rank = ov.size();
-    if (dims != ov_rank)
+    //int dims = ov.size();
+    if (ov.size() != dims)
     {
-      AU_EXIT("The # of offsets " + std::to_string(ov_rank) + " is not equal to the data's: " + std::to_string(dims));
+      AU_EXIT("The # of offsets " + std::to_string(dims) + " is not equal to the data's: " + std::to_string(dims));
     }
 
     //std::cout << "Call new index ! \n";
-    std::vector<int> coordinate_shift(dims);
-    std::vector<unsigned long long> coordinate(dims);
+    //std::vector<int> coordinate_shift(dims);
+    //std::vector<unsigned long long> coordinate(dims);
 
-    for (int i = 0; i < ov_rank; i++)
+    for (int i = 0; i < dims; i++)
     {
       coordinate_shift[i] = ov[i];
       if (coordinate_shift[i] == 0)
@@ -600,8 +604,8 @@ public:
         }
       }
     }
-    unsigned long long shift_offset = coordinate[0];
-    for (int i = 1; i < ov_rank; i++)
+    //unsigned long long shift_offset = coordinate[0];
+    for (int i = 1; i < dims; i++)
     {
       shift_offset = shift_offset * chunk_dim_size[i] + coordinate[i];
     }
@@ -633,24 +637,25 @@ public:
 
   void ReadHoodBorder(std::vector<T> &rv, const std::vector<int> &start_offset, const std::vector<int> &end_offset) const
   {
-    int rank_temp = start_offset.size();
-    size_t element_count = rv.size();
+    //int dims = start_offset.size();
+    //size_t element_count = rv.size();
 
-    std::vector<unsigned long long> count_size_t(rank_temp);
-    for (int i = 0; i < rank_temp; i++)
+    std::vector<unsigned long long> count_size_t(dims);
+    for (int i = 0; i < dims; i++)
     {
       count_size_t[i] = (end_offset[i] - start_offset[i] + 1);
     }
 
-    if (rank_temp == 1)
+    if (dims == 1)
     {
       for (int iii = start_offset[0]; iii <= end_offset[0]; iii++)
       {
         rv[iii] = this->operator()(iii);
       }
+      return;
     }
 
-    if (rank_temp == 2)
+    if (dims == 2)
     {
       //std::cout << "call out of border\n";
       for (int iii = start_offset[0]; iii <= end_offset[0]; iii++)
@@ -660,10 +665,28 @@ public:
           rv[iii * count_size_t[1] + jjj] = this->operator()(iii, jjj);
         }
       }
+      return;
     }
 
-    unsigned long long array_buffer_offset = 0;
-    std::vector<int> ord(start_offset.begin(), start_offset.end());
+    if (dims == 3)
+    {
+      for (int iii = start_offset[0]; iii <= end_offset[0]; iii++)
+      {
+        for (int jjj = start_offset[1]; jjj <= end_offset[1]; jjj++)
+        {
+          for (int kkk = start_offset[2]; kkk <= end_offset[2]; kkk++)
+          {
+            rv[kkk + start_offset[2] * (jjj + iii * count_size_t[1])] = this->operator()(iii, jjj, kkk);
+          }
+        }
+      }
+      return;
+    }
+
+    element_count = rv.size();
+    //unsigned long long array_buffer_offset = 0;
+    //std::vector<int> ord(start_offset.begin(), start_offset.end());
+    ord = start_offset;
     for (unsigned long long i = 0; i < element_count; i++)
     {
       //ROW_MAJOR_ORDER_MACRO(chunk_dim_size, chunk_dim_size.size(), ord, array_buffer_offset);

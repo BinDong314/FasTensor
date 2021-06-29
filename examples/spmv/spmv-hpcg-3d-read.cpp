@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
 
     neighbors_vector_values.resize(27);
 
+    A->SetOverlapPadding(0);
     //Run
     A->TransformTest(udf_hpcg_3d, Y);
 
