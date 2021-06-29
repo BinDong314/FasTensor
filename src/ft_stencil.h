@@ -604,7 +604,8 @@ public:
         }
       }
     }
-    //unsigned long long shift_offset = coordinate[0];
+    //unsigned long long
+    shift_offset = coordinate[0];
     for (int i = 1; i < dims; i++)
     {
       shift_offset = shift_offset * chunk_dim_size[i] + coordinate[i];
