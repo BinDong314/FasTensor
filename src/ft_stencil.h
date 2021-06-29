@@ -668,7 +668,8 @@ public:
       return;
     }
 
-    if (dims == 3)
+    //Some error in offset
+    if (0)
     {
       for (int iii = start_offset[0]; iii <= end_offset[0]; iii++)
       {
