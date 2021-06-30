@@ -403,7 +403,7 @@ public:
     CHECK_BOUNDARY(coordinate[1], chunk_dim_size[1]);
     CHECK_BOUNDARY(coordinate[2], chunk_dim_size[2]);
 
-    shift_offset = coordinate[2] + chunk_dim_size[2] * (coordinate[1] + chunk_dim_size[1] * coordinate[0]);
+    shift_offset = coordinate[2] + chunk_dim_size[2] * coordinate[1] + chunk_dim_size[2] * chunk_dim_size[1] * coordinate[0];
     /*
     coordinate_shift[0] = i1;
     coordinate_shift[1] = i2;
@@ -780,12 +780,16 @@ public:
         memcpy_src = chunk_data_pointer + chunk_dim_size_3d_temp * (i + start_offset[0]) + chunk_dim_size[2] * start_offset[1];
         //view_buffer_offset = count_size_t_3d_temp * i;
         memcpy_dst = rv.data() + count_size_t_3d_temp * i;
-        for (int j = 0; j < count_size_t[1]; j++)
-        {
-          //VIEW_ACCESS_HELP_P(rv.data(), view_buffer_offset + count_size_t[2] * j, chunk_data_pointer, array_buffer_offset + chunk_dim_size[2] * j, count_size_t[2], ARRAY_VIEW_READ, sizeof(T));
-          //std::memcpy(rv.data() + view_buffer_offset + count_size_t[2] * j, chunk_data_pointer + array_buffer_offset + chunk_dim_size[2] * (start_offset[1] + j), count_size_t_size);
-          std::memcpy(memcpy_dst + count_size_t[2] * j, memcpy_src + chunk_dim_size[2] * j, count_size_t_size);
-        }
+        //for (int j = 0; j < count_size_t[1]; j++)
+        //{
+        //VIEW_ACCESS_HELP_P(rv.data(), view_buffer_offset + count_size_t[2] * j, chunk_data_pointer, array_buffer_offset + chunk_dim_size[2] * j, count_size_t[2], ARRAY_VIEW_READ, sizeof(T));
+        //std::memcpy(rv.data() + view_buffer_offset + count_size_t[2] * j, chunk_data_pointer + array_buffer_offset + chunk_dim_size[2] * (start_offset[1] + j), count_size_t_size);
+        // std::memcpy(memcpy_dst + count_size_t[2] * j, memcpy_src + chunk_dim_size[2] * j, count_size_t_size);
+        std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+        std::memcpy(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t_size);
+        std::memcpy(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t_size);
+
+        //}
       }
       return 0;
     }
