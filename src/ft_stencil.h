@@ -95,6 +95,12 @@ in binary and source code form.
 using namespace std;
 extern double time_address_cal, row_major_order_cal, pre_row_major_order_cal, data_access_time;
 
+static inline void memcpy_double(double *dst, double *src, size_t n)
+{
+  for (size_t i = 0; i < n; i++)
+    *dst++ = *src++;
+}
+
 template <class T>
 class Stencil
 {
@@ -785,10 +791,12 @@ public:
         //VIEW_ACCESS_HELP_P(rv.data(), view_buffer_offset + count_size_t[2] * j, chunk_data_pointer, array_buffer_offset + chunk_dim_size[2] * j, count_size_t[2], ARRAY_VIEW_READ, sizeof(T));
         //std::memcpy(rv.data() + view_buffer_offset + count_size_t[2] * j, chunk_data_pointer + array_buffer_offset + chunk_dim_size[2] * (start_offset[1] + j), count_size_t_size);
         // std::memcpy(memcpy_dst + count_size_t[2] * j, memcpy_src + chunk_dim_size[2] * j, count_size_t_size);
-        std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
-        std::memcpy(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t_size);
-        std::memcpy(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t_size);
-
+        //std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+        //std::memcpy(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t_size);
+        //std::memcpy(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t_size);
+        memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
+        memcpy_double(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t_size);
+        memcpy_double(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t_size);
         //}
       }
       return 0;
@@ -803,108 +811,10 @@ public:
    * @param end_offset 
    * @return std::vector<T> 
    */
-  inline std::vector<T> ReadNeighbors(std::vector<int> &start_offset, std::vector<int> &end_offset) const
+  inline std::vector<T> ReadNeighbors(const std::vector<int> &start_offset, const std::vector<int> &end_offset) const
   {
     std::vector<T> rv;
-    int rank_temp = start_offset.size();
-    std::vector<size_t> start_offset_size_t, end_offset_size_t;
-    std::vector<unsigned long long> count_size_t;
-    start_offset_size_t.resize(rank_temp);
-    end_offset_size_t.resize(rank_temp);
-    count_size_t.resize(rank_temp);
-
-    size_t n = 1;
-    for (int i = 0; i < rank_temp; i++)
-    {
-      count_size_t[i] = (end_offset[i] - start_offset[i] + 1);
-      n = n * count_size_t[i];
-      assert(start_offset[i] >= 0); //ArrayIterator any only process positive offset
-      assert(end_offset[i] >= 0);
-      start_offset_size_t[i] = start_offset[i];
-      end_offset_size_t[i] = end_offset[i] + 1;
-    }
-
-    if (count_size_t == chunk_dim_size)
-    {
-      std::vector<T> rv2(chunk_data_pointer, chunk_data_pointer + n);
-      //std::cout << "read all !" << std::endl;
-      return rv2;
-    }
-
-    rv.resize(n);
-
-    std::vector<unsigned long long> view_start(rank_temp), view_end(rank_temp);
-    bool out_of_border = false;
-    for (int ii = 0; ii < rank_temp; ii++)
-    {
-      view_start[ii] = my_location[ii] + start_offset[ii];
-      view_end[ii] = my_location[ii] + end_offset[ii];
-      if (view_end[ii] > (chunk_dim_size[ii] - 1))
-      {
-        out_of_border = true;
-      }
-    }
-    //ArrayViewAccess(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ, sizeof(T));
-
-    //PrintVector("view_start = ", view_start);
-    //PrintVector("view_end = ", view_end);
-    //PrintVector("chunk_dim_size = ", chunk_dim_size);
-
-    //we may go to use the () operator
-    if (out_of_border)
-    {
-      ReadHoodBorder(rv, start_offset, end_offset);
-      return rv;
-    }
-
-    ArrayViewAccessP<T>(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ);
-    return rv;
-
-    //ArrayViewAccess();
-
-    //inline int ArrayViewAccess(void *view_buffer, void *array_buffer, std::vector<unsigned long long> &array_size, std::vector<unsigned long long> &start, std::vector<unsigned long long> &end, int read_write_code, int element_size);
-    //size_t offset, rv_offset = 0;
-    //std::vector<size_t> coordinate;
-    //coordinate.resize(rank_temp);
-
-    /*
-    for (ArrayIterator<size_t> c(start_offset_size_t, end_offset_size_t); c; ++c)
-    {
-      //PrintVector("ArrayIterator_c: ", c);
-      for (int j = 0; j < rank_temp; j++)
-      {
-        coordinate[j] = my_location[j] + c[j];
-        if (coordinate[j] >= chunk_dim_size[j]) //Check boundary :: Be careful with size overflow
-          coordinate[j] = chunk_dim_size[j] - 1;
-      }
-
-      ROW_MAJOR_ORDER_MACRO(chunk_dim_size, rank_temp, coordinate, offset);
-      assert(offset <= chunk_data_size);
-      rv[rv_offset] = chunk_data_pointer[offset];
-      rv_offset = rv_offset + 1;
-    }*/
-
-    /*
-    std::vector<int> coordinate_iterate(start_offset.begin(), start_offset.end());
-
-    for (size_t ii = 0; ii < n; ii++)
-    {
-      //PrintVector("ArrayIterator_c: ", c);
-      for (int j = 0; j < rank_temp; j++)
-      {
-        coordinate[j] = my_location[j] + coordinate_iterate[j];
-        if (coordinate[j] >= chunk_dim_size[j]) //Check boundary :: Be careful with size overflow
-          coordinate[j] = chunk_dim_size[j] - 1;
-      }
-
-      ROW_MAJOR_ORDER_MACRO(chunk_dim_size, rank_temp, coordinate, offset);
-      assert(offset <= chunk_data_size);
-      rv[rv_offset] = chunk_data_pointer[offset];
-      rv_offset = rv_offset + 1;
-
-      ITERATOR_MACRO(coordinate_iterate, start_offset, end_offset);
-    }*/
-
+    ReadNeighbors(start_offset, end_offset, rv);
     return rv;
   }
 
