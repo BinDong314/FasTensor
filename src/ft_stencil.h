@@ -95,6 +95,50 @@ in binary and source code form.
 using namespace std;
 extern double time_address_cal, row_major_order_cal, pre_row_major_order_cal, data_access_time;
 
+void X_aligned_memcpy_sse2(void *dest, const void *src, const unsigned long size)
+{
+
+  __asm {
+    mov esi, src; //src pointer
+    mov edi, dest; //dest pointer
+
+    mov ebx, size; //ebx is our counter 
+    shr ebx, 7; //divide by 128 (8 * 128bit registers)
+
+
+    loop_copy:
+      prefetchnta 128[ESI]; //SSE2 prefetch
+      prefetchnta 160[ESI];
+      prefetchnta 192[ESI];
+      prefetchnta 224[ESI];
+
+      movdqa xmm0, 0[ESI]; //move data from src to registers
+      movdqa xmm1, 16[ESI];
+      movdqa xmm2, 32[ESI];
+      movdqa xmm3, 48[ESI];
+      movdqa xmm4, 64[ESI];
+      movdqa xmm5, 80[ESI];
+      movdqa xmm6, 96[ESI];
+      movdqa xmm7, 112[ESI];
+
+      movntdq 0[EDI], xmm0; //move data from registers to dest
+      movntdq 16[EDI], xmm1;
+      movntdq 32[EDI], xmm2;
+      movntdq 48[EDI], xmm3;
+      movntdq 64[EDI], xmm4;
+      movntdq 80[EDI], xmm5;
+      movntdq 96[EDI], xmm6;
+      movntdq 112[EDI], xmm7;
+
+      add esi, 128;
+      add edi, 128;
+      dec ebx;
+
+      jnz loop_copy; //loop please
+    loop_copy_end:
+  }
+}
+
 template <class T>
 class Stencil
 {
@@ -785,7 +829,8 @@ public:
         //VIEW_ACCESS_HELP_P(rv.data(), view_buffer_offset + count_size_t[2] * j, chunk_data_pointer, array_buffer_offset + chunk_dim_size[2] * j, count_size_t[2], ARRAY_VIEW_READ, sizeof(T));
         //std::memcpy(rv.data() + view_buffer_offset + count_size_t[2] * j, chunk_data_pointer + array_buffer_offset + chunk_dim_size[2] * (start_offset[1] + j), count_size_t_size);
         // std::memcpy(memcpy_dst + count_size_t[2] * j, memcpy_src + chunk_dim_size[2] * j, count_size_t_size);
-        std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+        //std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+        X_aligned_memcpy_sse2(memcpy_dst, memcpy_src, count_size_t_size);
         std::memcpy(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t_size);
         std::memcpy(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t_size);
 
