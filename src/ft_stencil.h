@@ -98,7 +98,7 @@ extern double time_address_cal, row_major_order_cal, pre_row_major_order_cal, da
 void X_aligned_memcpy_sse2(void *dest, const void *src, const unsigned long size)
 {
 
-  __asm {
+  __asm__ {
     mov esi, src; //src pointer
     mov edi, dest; //dest pointer
 
