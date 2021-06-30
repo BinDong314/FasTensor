@@ -102,7 +102,7 @@ void X_aligned_memcpy_sse2(void *dest, const void *src, const unsigned long size
     mov esi, src; //src pointer
     mov edi, dest; //dest pointer
 
-    mov ebx, size; //ebx is our counter 
+    mov ebx, size; //ebx is our counter
     shr ebx, 7; //divide by 128 (8 * 128bit registers)
 
 
