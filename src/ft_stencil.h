@@ -95,7 +95,8 @@ in binary and source code form.
 using namespace std;
 extern double time_address_cal, row_major_order_cal, pre_row_major_order_cal, data_access_time;
 
-static inline void memcpy_double(double *dst, double *src, size_t n)
+template <class T>
+inline void memcpy_double(T *dst, T *src, size_t n)
 {
   for (size_t i = 0; i < n; i++)
     *dst++ = *src++;
