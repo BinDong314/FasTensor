@@ -163,6 +163,9 @@ private:
   mutable size_t count_size_t_size;
   mutable T *memcpy_dst, *memcpy_src;
 
+  size_t n;
+  bool out_of_border;
+
   //used by ReadHoodBorder
   mutable std::vector<int> ord;
   mutable size_t element_count;
@@ -723,15 +726,20 @@ public:
     //end_offset_size_t.resize(dims);
     //count_size_t.resize(dims);
 
-    size_t n = 1;
+    n = 1;
+    out_of_border = false;
     for (int i = 0; i < dims; i++)
     {
-      count_size_t[i] = (end_offset[i] - start_offset[i] + 1);
+      count_size_t[i] = end_offset[i] - start_offset[i] + 1;
       n = n * count_size_t[i];
       //assert(start_offset[i] >= 0); //ArrayIterator any only process positive offset
       //assert(end_offset[i] >= 0);
-      start_offset_size_t[i] = start_offset[i];
-      end_offset_size_t[i] = end_offset[i] + 1;
+      //start_offset_size_t[i] = start_offset[i];
+      //end_offset_size_t[i] = end_offset[i] + 1;
+      if (my_location[i] + end_offset[i] > (chunk_dim_size[i] - 1) || my_location[i] + start_offset[i] < 0)
+      {
+        out_of_border = true;
+      }
     }
 
     //PrintVector("count_size_t = ", count_size_t);
@@ -747,19 +755,11 @@ public:
       return 0;
     }
 
-    rv.resize(n);
+    if (rv.size() != n)
+      rv.resize(n);
 
     //std::vector<unsigned long long> view_start(dims), view_end(dims);
-    bool out_of_border = false;
-    for (int ii = 0; ii < dims; ii++)
-    {
-      view_start[ii] = my_location[ii] + start_offset[ii];
-      view_end[ii] = my_location[ii] + end_offset[ii];
-      if (view_end[ii] > (chunk_dim_size[ii] - 1))
-      {
-        out_of_border = true;
-      }
-    }
+
     //ArrayViewAccess(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ, sizeof(T));
 
     //PrintVector("view_start = ", view_start);
@@ -818,6 +818,12 @@ public:
       std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
       std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
       return 0;
+    }
+
+    for (int ii = 0; ii < dims; ii++)
+    {
+      view_start[ii] = my_location[ii] + start_offset[ii];
+      view_end[ii] = my_location[ii] + end_offset[ii];
     }
     ArrayViewAccessP<T>(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ);
     return 0;
