@@ -1045,10 +1045,10 @@ public:
    */
   void inline SetLocation(const unsigned long long &my_offset, const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &my_location_no_ol_p, const std::vector<unsigned long long> &chunk_dim_size_no_ol_p, const std::vector<long long> &ol_origin_offset_p, const std::vector<unsigned long long> &current_chunk_ol_size, const std::vector<unsigned long long> &global_coordinate_p, const unsigned long long &global_coordinate_lineared_p)
   {
-    SetLocation(my_coordinate, global_coordinate_p);
+    SetLocation2(my_coordinate, global_coordinate_p);
   }
 
-  inline void SetLocation(const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &global_coordinate_p)
+  inline void SetLocation2(const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &global_coordinate_p)
   {
     /*
     if (my_offset > chunk_data_size)
