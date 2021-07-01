@@ -795,9 +795,9 @@ public:
         //std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
         //std::memcpy(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t_size);
         //std::memcpy(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t_size);
-        memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
-        memcpy_double(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t_size);
-        memcpy_double(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t_size);
+        memcpy_double(memcpy_dst, memcpy_src, count_size_t[2]);
+        memcpy_double(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t[2]);
+        memcpy_double(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t[2]);
         //}
       }
       return 0;
