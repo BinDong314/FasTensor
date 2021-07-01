@@ -780,7 +780,8 @@ public:
       view_buffer_offset = 0;
       count_size_t_3d_temp = count_size_t[2] * count_size_t[1];
       chunk_dim_size_3d_temp = chunk_dim_size[2] * chunk_dim_size[1];
-      count_size_t_size = sizeof(T) * count_size_t[2];
+      //count_size_t_size = sizeof(T) * count_size_t[2];
+      count_size_t_size = count_size_t[2];
       for (int i = 0; i < count_size_t[0]; i++)
       {
         //array_buffer_offset = chunk_dim_size_3d_temp * (i + start_offset[0]);
@@ -795,9 +796,9 @@ public:
         //std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
         //std::memcpy(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t_size);
         //std::memcpy(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t_size);
-        memcpy_double(memcpy_dst, memcpy_src, count_size_t[2]);
-        memcpy_double(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t[2]);
-        memcpy_double(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t[2]);
+        memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
+        memcpy_double(memcpy_dst + count_size_t[2], memcpy_src + chunk_dim_size[2], count_size_t_size);
+        memcpy_double(memcpy_dst + count_size_t[2] * 2, memcpy_src + chunk_dim_size[2] * 2, count_size_t_size);
         //}
       }
       return 0;
