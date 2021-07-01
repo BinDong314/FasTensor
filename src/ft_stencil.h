@@ -118,8 +118,10 @@ private:
   T *chunk_data_pointer = NULL;
   unsigned long long chunk_data_size = 1;
   unsigned long long chunk_data_size_no_ol = 1;
-  unsigned long long my_offset_no_ol;             //for hist
-  std::vector<unsigned long long> chunk_dim_size; //This is the size with over-lapping
+  unsigned long long my_offset_no_ol; //for hist
+  unsigned long long my_offset;
+  std::vector<unsigned long long>
+      chunk_dim_size; //This is the size with over-lapping
   int dims;
   //std::vector<int> coordinate_shift;
   //std::vector<unsigned long long> coordinate;
@@ -214,7 +216,7 @@ public:
   }
 
   //For production
-  Stencil(unsigned long long my_offset, T *chunk, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &chunk_size, std::vector<unsigned long long> &global_data_size_p)
+  Stencil(unsigned long long my_offset_p, T *chunk, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &chunk_size, std::vector<unsigned long long> &global_data_size_p)
   {
 #ifdef DEBUG
     MpiRankSize(&mpi_rank, &mpi_size);
@@ -248,15 +250,17 @@ public:
     }
 
     chunk_data_size = chunk_data_size - 1;
-    if (my_offset > chunk_data_size)
+    /*
+    if (my_offset_p > chunk_data_size)
     {
-      std::cout << "Error in intializing Stencil(). my_offset  = " << my_offset << ", chunk_data_size = " << chunk_data_size << std::endl;
+      std::cout << "Error in intializing Stencil(). my_offset  = " << my_offset_p << ", chunk_data_size = " << chunk_data_size << std::endl;
       exit(-1);
     }
     else
     {
-      value = chunk[my_offset];
+      value = chunk[my_offset_p];
     }
+    my_offset = my_offset_p;*/
   };
 
   ~Stencil()
@@ -395,6 +399,19 @@ public:
   {
     //std::vector<int> coordinate_shift(3);
     //std::vector<unsigned long long> coordinate(3);
+    // if (i1 = 0 && i2 == 0 && i3 == 0)
+    // {
+    //   if (my_offset > chunk_data_size)
+    //   {
+    //     std::cout << "Error in intializing Stencil(). my_offset  = " << my_offset << ", chunk_data_size = " << chunk_data_size << std::endl;
+    //     exit(-1);
+    //   }
+    //   else
+    //   {
+    //     return chunk_data_pointer[my_offset];
+    //   }
+    // }
+
     if (trail_run_flag)
     {
       if (std::abs(i1) > coordinate_shift[0])
@@ -982,6 +999,7 @@ public:
     return value;
   }
 
+  //Not used
   inline void SetLocation(unsigned long long my_offset, std::vector<unsigned long long> &my_coordinate, std::vector<unsigned long long> &my_location_no_ol_p, std::vector<unsigned long long> &chunk_dim_size_no_ol_p, std::vector<long long> ol_origin_offset_p, std::vector<unsigned long long> current_chunk_ol_size)
   {
     //value                = chunk_data_pointer[my_offset];
@@ -1027,11 +1045,12 @@ public:
    */
   void inline SetLocation(const unsigned long long &my_offset, const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &my_location_no_ol_p, const std::vector<unsigned long long> &chunk_dim_size_no_ol_p, const std::vector<long long> &ol_origin_offset_p, const std::vector<unsigned long long> &current_chunk_ol_size, const std::vector<unsigned long long> &global_coordinate_p, const unsigned long long &global_coordinate_lineared_p)
   {
-    SetLocation(my_offset, my_coordinate, global_coordinate_p, global_coordinate_lineared_p);
+    SetLocation(my_coordinate, global_coordinate_p);
   }
 
-  void inline SetLocation(const unsigned long long &my_offset, const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &global_coordinate_p, const unsigned long long &global_coordinate_lineared_p)
+  inline void SetLocation(const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &global_coordinate_p)
   {
+    /*
     if (my_offset > chunk_data_size)
     {
       std::cout << "Error in intializing Stencil(). my_offset  = " << my_offset << ", chunk_data_size = " << chunk_data_size << std::endl;
@@ -1040,13 +1059,13 @@ public:
     else
     {
       value = chunk_data_pointer[my_offset];
-    }
+    }*/
 
+    //my_offset = my_offset_p;
     memcpy(&my_location[0], &my_coordinate[0], dims * sizeof(unsigned long long));
     memcpy(&global_coordinate[0], &global_coordinate_p[0], dims * sizeof(unsigned long long));
 
-    global_coordinate_lineared = global_coordinate_lineared_p;
-
+    //global_coordinate_lineared = global_coordinate_lineared_p;
     //int rank = my_coordinate.size();
     //chunk_dim_size = current_chunk_ol_size;
     //Disable below code out
