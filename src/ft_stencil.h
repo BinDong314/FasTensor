@@ -781,8 +781,8 @@ public:
       count_size_t_3d_temp = count_size_t[2] * count_size_t[1];
       chunk_dim_size_3d_temp = chunk_dim_size[2] * chunk_dim_size[1];
       chunk_dim_size_3d_temp_2 = chunk_dim_size_3d_temp * start_offset[0] + chunk_dim_size[2] * start_offset[1];
-      //count_size_t_size = sizeof(T) * count_size_t[2];
-      count_size_t_size = count_size_t[2];
+      count_size_t_size = sizeof(T) * count_size_t[2];
+      //count_size_t_size = count_size_t[2];
       /*for (int i = 0; i < count_size_t[0]; i++)
       {
         //array_buffer_offset = chunk_dim_size_3d_temp * (i + start_offset[0]);
@@ -808,15 +808,15 @@ public:
       //just some test code for cache effect
       memcpy_src = chunk_data_pointer + chunk_dim_size_3d_temp_2;
       memcpy_dst = rv.data();
-      memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
-      memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
-      memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
-      memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
-      memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
-      memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
-      memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
-      memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
-      memcpy_double(memcpy_dst, memcpy_src, count_size_t_size);
+      std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+      std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+      std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+      std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+      std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+      std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+      std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+      std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
+      std::memcpy(memcpy_dst, memcpy_src, count_size_t_size);
       return 0;
     }
     ArrayViewAccessP<T>(rv.data(), chunk_data_pointer, chunk_dim_size, view_start, view_end, ARRAY_VIEW_READ);
