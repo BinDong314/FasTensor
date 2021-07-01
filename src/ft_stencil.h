@@ -163,8 +163,8 @@ private:
   mutable size_t count_size_t_size;
   mutable T *memcpy_dst, *memcpy_src;
 
-  size_t n;
-  bool out_of_border;
+  mutable size_t n;
+  mutable bool out_of_border;
 
   //used by ReadHoodBorder
   mutable std::vector<int> ord;
