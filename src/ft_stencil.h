@@ -158,7 +158,7 @@ private:
   mutable std::vector<unsigned long long> view_start, view_end;
   mutable unsigned long long array_buffer_offset, view_buffer_offset;
 
-  mutable unsigned long long chunk_dim_size_3d_temp, count_size_t_3d_temp;
+  mutable unsigned long long chunk_dim_size_3d_temp, count_size_t_3d_temp, chunk_dim_size_3d_temp_2;
 
   mutable size_t count_size_t_size;
   mutable T *memcpy_dst, *memcpy_src;
@@ -780,12 +780,13 @@ public:
       view_buffer_offset = 0;
       count_size_t_3d_temp = count_size_t[2] * count_size_t[1];
       chunk_dim_size_3d_temp = chunk_dim_size[2] * chunk_dim_size[1];
+      chunk_dim_size_3d_temp_2 = chunk_dim_size_3d_temp * start_offset[0] + chunk_dim_size[2] * start_offset[1];
       //count_size_t_size = sizeof(T) * count_size_t[2];
       count_size_t_size = count_size_t[2];
       for (int i = 0; i < count_size_t[0]; i++)
       {
         //array_buffer_offset = chunk_dim_size_3d_temp * (i + start_offset[0]);
-        memcpy_src = chunk_data_pointer + chunk_dim_size_3d_temp * (i + start_offset[0]) + chunk_dim_size[2] * start_offset[1];
+        memcpy_src = chunk_data_pointer + chunk_dim_size_3d_temp * i + chunk_dim_size_3d_temp_2;
         //view_buffer_offset = count_size_t_3d_temp * i;
         memcpy_dst = rv.data() + count_size_t_3d_temp * i;
         //for (int j = 0; j < count_size_t[1]; j++)
