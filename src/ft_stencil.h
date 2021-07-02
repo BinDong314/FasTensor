@@ -1045,7 +1045,7 @@ public:
    */
   void inline SetLocation(const unsigned long long &my_offset, const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &my_location_no_ol_p, const std::vector<unsigned long long> &chunk_dim_size_no_ol_p, const std::vector<long long> &ol_origin_offset_p, const std::vector<unsigned long long> &current_chunk_ol_size, const std::vector<unsigned long long> &global_coordinate_p, const unsigned long long &global_coordinate_lineared_p)
   {
-    SetLocation2(my_coordinate, global_coordinate_p);
+    //SetLocation2(my_coordinate, global_coordinate_p);
   }
 
   inline void SetLocation2(const std::vector<unsigned long long> &my_coordinate, const std::vector<unsigned long long> &global_coordinate_p)
@@ -1062,8 +1062,10 @@ public:
     }*/
 
     //my_offset = my_offset_p;
-    memcpy(&my_location[0], &my_coordinate[0], dims * sizeof(unsigned long long));
-    memcpy(&global_coordinate[0], &global_coordinate_p[0], dims * sizeof(unsigned long long));
+    //memcpy(&my_location[0], &my_coordinate[0], dims * sizeof(unsigned long long));
+    //memcpy(&global_coordinate[0], &global_coordinate_p[0], dims * sizeof(unsigned long long));
+    my_location = my_coordinate;
+    global_coordinate = global_coordinate_p;
 
     //global_coordinate_lineared = global_coordinate_lineared_p;
     //int rank = my_coordinate.size();
