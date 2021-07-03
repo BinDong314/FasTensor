@@ -1,0 +1,2 @@
+git log --pretty=format:'%h' -n 1
+44acd80
