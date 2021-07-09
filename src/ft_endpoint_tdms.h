@@ -89,6 +89,7 @@ in binary and source code form.
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <map>
 
 #define NBYTE_LEADIN 28
 #define NBYTE_PER_DATUM 2
@@ -124,10 +125,22 @@ typedef enum
     tdsTypeDAQmxRawData = 0xFFFFFFFF
 } tdsDataType;
 
+template <typename T>
+std::string tostr(const T &t)
+{
+    std::ostringstream os;
+    os << t;
+    return os.str();
+}
+
 //
 //I/O layer
 class EndpointTDMS : public EndpointBinary
 {
+private:
+    std::map<std::string, std::string> meta_map; //Get the list of metadata from TDMS file
+    bool tdms_ExtractMeta_once_flag = false;
+
 public:
     EndpointTDMS(std::string endpoint_info_p) : EndpointBinary(endpoint_info_p)
     {
@@ -165,5 +178,48 @@ public:
      * @return int 
      */
     int FindMlSr(unsigned int &MeasureLength, double &SpatialResolution);
+
+    /**
+     * @brief Get the Populate data into MataMap
+     * 
+     * @return int 
+     */
+    int PopulateMetaMap();
+
+    /**
+     * @brief Set the Attribute object
+     *   Do not need to be pure virtual method
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+    int WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
+
+    /**
+     * @brief Get the Attribute object
+     *  Do not need to be pure virtual method
+     * @param name 
+     * @param data 
+     * @return int 
+     */
+    int ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
+
+    /**
+     * @brief call a special operator on endpoint
+     *        such as, enable collective I/O for HDF5
+     *                 dump file from MEMORY to HDF5
+     * @param opt_code, specially defined code 
+     */
+    int Control(int opt_code, std::vector<std::string> &parameter_v) override;
+
+    /**
+     * @brief Read all attribute name
+     * 
+     * @param attri_name 
+     * @return int 
+     */
+    int ReadAllAttributeName(std::vector<std::string> &attr_name);
+
+    int GetAttributeSize(const std::string &name, FTDataType data_type_p) override;
 };
 #endif
