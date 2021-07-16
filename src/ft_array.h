@@ -1117,10 +1117,33 @@ namespace FT
           if (B->GetEndpointType() == EP_DIR && GetEndpointType() == EP_DIR)
           {
             std::vector<std::string> dir_file_list = GetDirFile();
-            B->SetDirFile(dir_file_list);
             std::vector<int> dir_chunk_size = GetDirChunkSize();
-            B->SetDirChunkSize(dir_chunk_size);
+            //B->SetDirChunkSize(dir_chunk_size);
+            //Here we update the filename list for the output endpoint
+            //Basically, if the input has merge
+            //We only keep the filename of the first merged as output
+            int n_merge = 1;
+            for (int i = 0; i < data_dims; i++)
+            {
+
+              n_merge = n_merge * data_chunk_size[i] / dir_chunk_size[i];
+            }
+            std::vector<std::string> dir_file_list_new;
+            for (int i = 0; i < dir_file_list.size(); i++)
+            {
+              if (i % n_merge == 0)
+                dir_file_list_new.push_back(dir_file_list[i]);
+            }
+            //Debug
+            //for (int i = 0; i < dir_file_list_new.size(); i++)
+            //{
+            //  std::cout << "i: " << dir_file_list_new[i] << "\n";
+            //}
+            B->SetDirFile(dir_file_list_new);
           }
+
+          //PrintVector("Debug: write current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+          //PrintVector("Debug: write current_chunk_end_offset_v = ", current_chunk_end_offset_v);
 
           if (vector_type_flag)
           {
@@ -1151,10 +1174,16 @@ namespace FT
             data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v, is_the_last_chunk, previous_output_vector_shape);
             CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
             //PrintVector("Debug: create B_data_size = ", B_data_size);
-
+            if (B->GetEndpointType() == EP_DIR && GetEndpointType() == EP_DIR)
+            {
+              B->SetDirChunkSize(B_data_chunk_size);
+            }
             B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+            //PrintVector("Debug: write B_data_chunk_size = ", B_data_chunk_size);
+            //PrintVector("Debug: write B_data_size = ", B_data_size);
             //PrintVector("Debug: write current_chunk_start_offset_v = ", current_chunk_start_offset_v);
             //PrintVector("Debug: write current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+
             B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
             free(data_point);
           }
@@ -1449,6 +1478,9 @@ namespace FT
             B->SetDirChunkSize(dir_chunk_size);
           }
 
+          PrintVector("Debug: create B_data_size = ", B_data_size);
+          PrintVector("Debug: create B_data_chunk_size = ", B_data_chunk_size);
+
           if (vector_type_flag)
           {
             //output_vector_shape
@@ -1477,8 +1509,8 @@ namespace FT
 
             data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v, is_the_last_chunk, previous_output_vector_shape);
             CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
-            //PrintVector("Debug: create B_data_size = ", B_data_size);
-
+            PrintVector("Debug: create B_data_size = ", B_data_size);
+            PrintVector("Debug: create B_data_chunk_size = ", B_data_chunk_size);
             B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
             //PrintVector("Debug: write current_chunk_start_offset_v = ", current_chunk_start_offset_v);
             //PrintVector("Debug: write current_chunk_end_offset_v = ", current_chunk_end_offset_v);
@@ -1489,6 +1521,10 @@ namespace FT
           {
             InferOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size, 0);
             B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
+
+            PrintVector("Debug: create B_data_size = ", B_data_size);
+            PrintVector("Debug: create B_data_chunk_size = ", B_data_chunk_size);
+
             //B->WriteEndpoint(current_chunk_start_offset, current_chunk_end_offset, &current_result_chunk_data[0]);
             if (!skip_flag)
             {
@@ -1698,6 +1734,7 @@ namespace FT
             else
             {
               data_size_p[i] = data_size_p[i] * output_vector_shape[i];
+              data_chunk_size_p[i] = output_vector_shape[i];
             }
           }
         }

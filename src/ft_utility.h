@@ -213,19 +213,19 @@ inline void PrintVV(std::string name, std::vector<std::vector<T>> v)
 
     if (n > 8)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             PrintVector("", v[i]);
         }
         std::cout << " ... \n";
-        for (int i = n - 4; i < n; i++)
+        for (int i = n - 5; i < n; i++)
         {
             PrintVector("", v[i]);
         }
     }
     else
     {
-        for (int i = 0; i < n - 1; i++)
+        for (int i = 0; i < n; i++)
         {
             PrintVector("", v[i]);
         }
@@ -308,70 +308,71 @@ inline void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_
     {
         T1 attribute_vector_value = attribute_vector[i];
         int m_index = 0;
-        cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, attribute_vector_value, union_index](auto &&m) {
-            if (m_index == attribute_index)
-            {
-                switch (union_index)
-                {
-                case AU_SHORT:
-                {
-                    m = std::get<AU_SHORT>(attribute_vector_value);
-                    break;
-                }
-                case AU_INT:
-                {
-                    m = std::get<AU_INT>(attribute_vector_value);
-                    break;
-                }
-                case AU_LONG:
-                {
-                    m = std::get<AU_LONG>(attribute_vector_value);
-                    break;
-                }
-                case AU_LONG_LONG:
-                {
-                    m = std::get<AU_LONG_LONG>(attribute_vector_value);
-                    break;
-                }
-                case AU_USHORT:
-                {
-                    m = std::get<AU_USHORT>(attribute_vector_value);
-                    break;
-                }
-                case AU_UINT:
-                {
-                    m = std::get<AU_UINT>(attribute_vector_value);
-                    break;
-                }
-                case AU_ULONG:
-                {
-                    m = std::get<AU_ULONG>(attribute_vector_value);
-                    break;
-                }
-                case AU_ULLONG:
-                {
-                    m = std::get<AU_ULLONG>(attribute_vector_value);
-                    break;
-                }
-                case AU_FLOAT:
-                {
-                    m = std::get<AU_FLOAT>(attribute_vector_value);
-                    break;
-                }
-                case AU_DOUBLE:
-                {
-                    m = std::get<AU_DOUBLE>(attribute_vector_value);
-                    break;
-                }
-                default:
-                    std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
-                    std::flush(std::cout);
-                    std::exit(EXIT_FAILURE);
-                }
-                return;
-            }
-            m_index++;
-        });
+        cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, attribute_vector_value, union_index](auto &&m)
+                              {
+                                  if (m_index == attribute_index)
+                                  {
+                                      switch (union_index)
+                                      {
+                                      case AU_SHORT:
+                                      {
+                                          m = std::get<AU_SHORT>(attribute_vector_value);
+                                          break;
+                                      }
+                                      case AU_INT:
+                                      {
+                                          m = std::get<AU_INT>(attribute_vector_value);
+                                          break;
+                                      }
+                                      case AU_LONG:
+                                      {
+                                          m = std::get<AU_LONG>(attribute_vector_value);
+                                          break;
+                                      }
+                                      case AU_LONG_LONG:
+                                      {
+                                          m = std::get<AU_LONG_LONG>(attribute_vector_value);
+                                          break;
+                                      }
+                                      case AU_USHORT:
+                                      {
+                                          m = std::get<AU_USHORT>(attribute_vector_value);
+                                          break;
+                                      }
+                                      case AU_UINT:
+                                      {
+                                          m = std::get<AU_UINT>(attribute_vector_value);
+                                          break;
+                                      }
+                                      case AU_ULONG:
+                                      {
+                                          m = std::get<AU_ULONG>(attribute_vector_value);
+                                          break;
+                                      }
+                                      case AU_ULLONG:
+                                      {
+                                          m = std::get<AU_ULLONG>(attribute_vector_value);
+                                          break;
+                                      }
+                                      case AU_FLOAT:
+                                      {
+                                          m = std::get<AU_FLOAT>(attribute_vector_value);
+                                          break;
+                                      }
+                                      case AU_DOUBLE:
+                                      {
+                                          m = std::get<AU_DOUBLE>(attribute_vector_value);
+                                          break;
+                                      }
+                                      default:
+                                          std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
+                                          std::flush(std::cout);
+                                          std::exit(EXIT_FAILURE);
+                                      }
+                                      return;
+                                  }
+                                  m_index++;
+                              });
     }
 }
 

@@ -299,6 +299,11 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
 
     //start[dir_data_merge_index] = 0;
     //end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
+    //#define DEBUG 0
+#ifdef DEBUG
+    PrintVector("EndpointDIR::dir_chunk_size before update :", dir_chunk_size);
+#endif
+
     for (int i = 0; i < endpoint_ranks; i++)
     {
         endpoint_size[i] = end[i] - start[i] + 1;
@@ -307,11 +312,12 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
             dir_chunk_size[i] = endpoint_size[i];
         }
     }
-
-    //PrintVector("EndpointDIR::Write start :", start);
-    //PrintVector("EndpointDIR::Write end :", end);
-    //PrintVector("EndpointDIR::dir_chunk_size :", dir_chunk_size);
-    //std::cout << " dir_data_merge_index = " << dir_data_merge_index << " \n";
+#ifdef DEBUG
+    PrintVector("EndpointDIR::Write start :", start);
+    PrintVector("EndpointDIR::Write end :", end);
+    PrintVector("EndpointDIR::dir_chunk_size after update :", dir_chunk_size);
+    std::cout << " dir_data_merge_index = " << dir_data_merge_index << " \n";
+#endif
     int sub_endpoint_index = 0;
     sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
     for (int i = 0; i < endpoint_ranks; i++)
@@ -324,12 +330,12 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     //save for metadata operation
     dir_file_list_current_index = sub_endpoint_index;
 
-    //PrintVector("EndpointDIR::Write endpoint_size:", endpoint_size);
-
-    //std::cout << "call write (before) :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " + append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << " \n";
-
-    //PrintVector("EndpointDIR::Write start (after):", start);
-    //PrintVector("EndpointDIR::Write end (after) :", end);
+#ifdef DEBUG
+    PrintVector("EndpointDIR::Write endpoint_size:", endpoint_size);
+    std::cout << "call write (before) :  " << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " + append_sub_endpoint_info << ", sub_endpoint_index = " << sub_endpoint_index << " \n";
+    PrintVector("EndpointDIR::Write start (after):", start);
+    PrintVector("EndpointDIR::Write end (after) :", end);
+#endif
 
     std::string new_file_name_after_regex;
 
@@ -353,7 +359,7 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
         //new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], *output_replace_regex, output_replace_regex_aug);
         new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], re_test, output_replace_regex_aug);
 
-        //std::cout << " output_replace_regex_aug = " << output_replace_regex_aug << ", new_file_name_after_regex = " << new_file_name_after_regex << ", dir_file_list[sub_endpoint_index] =" << dir_file_list[sub_endpoint_index] << ", output_replace_regex_match_str =" << output_replace_regex_match_str << "\n";
+        std::cout << " output_replace_regex_aug = " << output_replace_regex_aug << ", new_file_name_after_regex = " << new_file_name_after_regex << ", dir_file_list[sub_endpoint_index] =" << dir_file_list[sub_endpoint_index] << ", output_replace_regex_match_str =" << output_replace_regex_match_str << "\n";
     }
     else
     {
