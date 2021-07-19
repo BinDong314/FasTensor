@@ -108,9 +108,9 @@ class Stencil
 private:
   T value;
   int has_set_output_value_flag = false;
-  std::vector<unsigned long long> my_location; //This is the coodinate with overlapping
+  //std::vector<unsigned long long> my_location; //This is the coodinate with overlapping
   std::vector<unsigned long long> my_location_no_ol;
-  std::vector<unsigned long long> global_coordinate;
+  // std::vector<unsigned long long> global_coordinate;
   unsigned long long global_coordinate_lineared;
 
   //unsigned long long my_g_location_rm; //lineared form of my coordinates in original big array.
@@ -173,6 +173,9 @@ private:
   mutable size_t element_count;
 
 public:
+  //Test it with public attribute
+  std::vector<unsigned long long> my_location; //This is the coodinate with overlapping
+  std::vector<unsigned long long> global_coordinate;
   //For test only
   Stencil(){};
 
