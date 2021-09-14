@@ -87,7 +87,16 @@ extern int ft_rank;
 
 int EndpointDIR::ExtractMeta()
 {
-    std::vector<std::string> temp_dir_file_list = GetDirFileList(dir_str);
+    std::vector<std::string> temp_dir_file_list;
+    if (!is_list_dir_recursive)
+    {
+        temp_dir_file_list = GetDirFileList(dir_str);
+    }
+    else
+    {
+        temp_dir_file_list = GetDirFileListRecursive(dir_str);
+    }
+
     //dir_file_list = GetDirFileList(dir_str);
     if (temp_dir_file_list.size() <= 0)
         AU_EXIT("No file under directory" + dir_str);
@@ -303,7 +312,6 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
 #ifdef DEBUG
     PrintVector("EndpointDIR::dir_chunk_size before update :", dir_chunk_size);
 #endif
-
     for (int i = 0; i < endpoint_ranks; i++)
     {
         endpoint_size[i] = end[i] - start[i] + 1;
@@ -312,6 +320,13 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
             dir_chunk_size[i] = endpoint_size[i];
         }
     }
+
+    unsigned long long vector_con = 1;
+    if (IsVectorEq(endpoint_size, vector_con))
+    {
+        return 0;
+    }
+
 #ifdef DEBUG
     PrintVector("EndpointDIR::Write start :", start);
     PrintVector("EndpointDIR::Write end :", end);
@@ -514,12 +529,13 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         {
             AU_EXIT("DIR_SUB_CMD_ARG  needs at least 1 parameter: sub command code \n");
         }
-        if (sub_endpoint != nullptr)
-            sub_cmd = sub_endpoint->MapOpStr2Int(parameter_v[0]);
-
+        //if (sub_endpoint != nullptr)
+        //    sub_cmd = sub_endpoint->MapOpStr2Int(parameter_v[0]);
+        sub_cmd = std::stoi(parameter_v[0]);
         if (parameter_v.size() > 1)
         {
-            sub_cmd_arg.push_back(parameter_v[1]);
+            //sub_cmd_arg.push_back(parameter_v[1]);
+            sub_cmd_arg.insert(sub_cmd_arg.begin(), parameter_v.begin() + 1, parameter_v.end());
         }
         else
         {
@@ -573,6 +589,9 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         break;
     case OP_LIST_TAG:
         ReadAllAttributeName(parameter_v);
+        break;
+    case DIR_LIST_DIR_RECURSIZE:
+        is_list_dir_recursive = true;
         break;
     default:
         break;

@@ -91,10 +91,12 @@ in binary and source code form.
 
 #include "hdf5.h" //right now, we only have code for HDF5
 
-#define HDF5_ENABLE_MPI_IO 0
-#define HDF5_DISABLE_MPI_IO 1
-#define HDF5_ENABLE_COLLECTIVE_IO 2
-#define HDF5_DISABLE_COLLECTIVE_IO 3
+#define HDF5_ENABLE_MPI_IO (OP_USER_DEFINED_START + 0)
+#define HDF5_DISABLE_MPI_IO (OP_USER_DEFINED_START + 1)
+#define HDF5_ENABLE_COLLECTIVE_IO (OP_USER_DEFINED_START + 2)
+#define HDF5_DISABLE_COLLECTIVE_IO (OP_USER_DEFINED_START + 3)
+#define HDF5_ENABLE_FILTER (OP_USER_DEFINED_START + 4)
+#define HDF5_ENABLE_FILTER_PREPROCESSING (OP_USER_DEFINED_START + 5)
 
 //For some old code
 #define OP_ENABLE_MPI_IO HDF5_ENABLE_MPI_IO
@@ -110,9 +112,19 @@ private:
     hid_t fid = -1, gid = -1, did = -1;
     hid_t dataspace_id = -1;
     std::string fn_str, gn_str, dn_str;
-    hid_t plist_id = H5P_DEFAULT, plist_cio_id = H5P_DEFAULT;
+    hid_t plist_id = H5P_DEFAULT, plist_cio_id = H5P_DEFAULT, create_dcpl_id = H5P_DEFAULT;
     hid_t mem_type, disk_type;
     bool is_mpi_enabled = false;
+
+    bool is_filter_set_before = false;
+    H5Z_filter_t filter_id;
+    unsigned int filter_flags = H5Z_FLAG_MANDATORY;
+    size_t filter_cd_nelmts;
+    std::vector<unsigned int> filter_cd_values;
+    std::vector<hsize_t> filter_chunk_size;
+
+    H5Z_filter_t filter_preprocessing_id;
+    bool is_filter_preprocessing = false;
 
 public:
     /**
@@ -288,5 +300,9 @@ public:
     int GetAttributeSize(const std::string &name, FTDataType data_type_p) override;
 
     int CreateXDMF();
+
+    void EnableFilter(std::vector<std::string> &parameter_v);
+
+    void EnableFilterPreprocessing(std::vector<std::string> &parameter_v);
 };
 #endif

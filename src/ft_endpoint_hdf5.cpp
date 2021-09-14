@@ -137,8 +137,8 @@ int EndpointHDF5::Create()
             gid = H5Gopen(fid, gn_str.c_str(), H5P_DEFAULT);
         }
     }
-    //PrintVector("endpoint_size = ", endpoint_size);
-    //printf("endpoint_ranks = %d \n", endpoint_ranks);
+    PrintVector("endpoint_size = ", endpoint_size);
+    printf("endpoint_ranks = %d \n", endpoint_ranks);
     std::vector<hsize_t> dims_out;
     dims_out = endpoint_size;
     hid_t ts_id;
@@ -151,7 +151,7 @@ int EndpointHDF5::Create()
             H5Ldelete(gid, dn_str.c_str(), H5P_DEFAULT); //we delete
         }
 
-        did = H5Dcreate(gid, dn_str.c_str(), disk_type, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+        did = H5Dcreate(gid, dn_str.c_str(), disk_type, ts_id, H5P_DEFAULT, create_dcpl_id, H5P_DEFAULT);
     }
     else
     {
@@ -160,7 +160,7 @@ int EndpointHDF5::Create()
             H5Ldelete(fid, dn_str.c_str(), H5P_DEFAULT); //we delete
         }
         //printf("Debug: %s:%d\n", __FILE__, __LINE__);
-        did = H5Dcreate(fid, dn_str.c_str(), disk_type, ts_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+        did = H5Dcreate(fid, dn_str.c_str(), disk_type, ts_id, H5P_DEFAULT, create_dcpl_id, H5P_DEFAULT);
         assert(did >= 0);
     }
     //printf("Debug: %s:%d\n", __FILE__, __LINE__);
@@ -379,6 +379,85 @@ void EndpointHDF5::EnableCollectiveIO()
     H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
 }
 
+/**
+ * @brief EnableFilterPreprocessing
+ *        It has the same ID as the EnableFilter below
+ * @param parameter_v 
+ */
+void EndpointHDF5::EnableFilterPreprocessing(std::vector<std::string> &parameter_v)
+{
+    filter_preprocessing_id = std::stoi(parameter_v[0]);
+    is_filter_preprocessing = true;
+}
+
+/**
+ * @brief Enable Fil
+ * 
+ * @param parameter_v 
+ *  parameter_v[0]: filter_id
+ *  parameter_v[2]: filter_cd_values, (filter_cd_nelmts = filter_cd_values.size())
+ *  parameter_v[1]: chunk_size
+ *   Both filter_cd_values and chunk_size are two comma seperated string
+ */
+void EndpointHDF5::EnableFilter(std::vector<std::string> &parameter_v)
+{
+    if (!is_filter_set_before)
+    {
+        create_dcpl_id = H5Pcreate(H5P_DATASET_CREATE);
+        is_filter_set_before = true;
+    }
+    filter_id = std::stoi(parameter_v[0]);
+    //std::stringstream sstream(parameter_v[1]);
+    //sstream >> filter_cd_nelmts;
+    if (is_filter_preprocessing)
+    {
+        switch (filter_preprocessing_id)
+        {
+        case H5Z_FILTER_SHUFFLE:
+            H5Pset_shuffle(create_dcpl_id);
+            break;
+        default:
+            AU_EXIT("filter_preprocessing_id is not supported " + std::to_string(filter_preprocessing_id));
+        }
+    }
+
+    std::cout << "EnableFilter: filter_id = " << filter_id << "\n";
+    String2Vector(parameter_v[1], filter_cd_values);
+    filter_cd_nelmts = filter_cd_values.size();
+    PrintVector("EnableFilter:filter_cd_values =", filter_cd_values);
+    //herr_t H5Pset_filter(hid_t plist_id, H5Z_filter_t filter_id, unsigned int flags, size_t cd_nelmts, const unsigned int cd_values[] )
+    H5Pset_filter(create_dcpl_id, filter_id, filter_flags, filter_cd_nelmts, filter_cd_values.data());
+
+    String2Vector(parameter_v[2], filter_chunk_size);
+    endpoint_ranks = filter_chunk_size.size();
+    H5Pset_chunk(create_dcpl_id, endpoint_ranks, filter_chunk_size.data());
+    PrintVector("EnableFilter:filter_chunk_size =", filter_chunk_size);
+
+    //printf("Set fill never !\n");
+    //H5Pset_fill_time(create_dcpl_id, H5D_FILL_TIME_NEVER);
+
+    //Double check
+    htri_t avail = H5Zfilter_avail(filter_id);
+    if (avail)
+    {
+        unsigned filter_config;
+        herr_t status = H5Zget_filter_info(filter_id, &filter_config);
+        if (filter_config & H5Z_FILTER_CONFIG_ENCODE_ENABLED)
+        {
+            AU_INFO("Filter " + std::to_string(filter_id) + " is  ENABLED for HDF5 Endpoint.\n");
+        }
+        else
+        {
+            AU_INFO("Filter " + std::to_string(filter_id) + " is  NOT ENABLED for HDF5 Endpoint.\n");
+        }
+    }
+    else
+    {
+
+        AU_EXIT("Filter " + std::to_string(filter_id) + " is  NOT available for HDF5 Endpoint.\n");
+    }
+}
+
 void EndpointHDF5::DisableCollectiveIO()
 {
     //cout << "H5P_DEFAULT =" << H5P_DEFAULT << ", DisableCollectiveIO \n";
@@ -430,12 +509,13 @@ void EndpointHDF5::Map2MyType()
         disk_type = H5T_STD_I64LE;
         return;
     case AU_USHORT:
-        mem_type = H5T_NATIVE_UINT;
-        disk_type = H5T_STD_U32LE;
-        return;
-    case AU_UINT:
+        printf(" EndpointHDF5::Map2MyTypeParameters: USHOR !\n");
         mem_type = H5T_NATIVE_USHORT;
         disk_type = H5T_STD_U16LE;
+        return;
+    case AU_UINT:
+        mem_type = H5T_NATIVE_UINT;
+        disk_type = H5T_STD_U32LE;
         return;
     case AU_ULONG:
         mem_type = H5T_NATIVE_ULONG;
@@ -485,12 +565,13 @@ void EndpointHDF5::Map2MyTypeParameters(FTDataType ft_type, hid_t &mem_type_p, h
         disk_type_p = H5T_STD_I64LE;
         return;
     case AU_USHORT:
-        mem_type_p = H5T_NATIVE_UINT;
-        disk_type_p = H5T_STD_U16LE;
-        return;
-    case AU_UINT:
+        printf(" EndpointHDF5::Map2MyTypeParameters: USHOR !\n");
         mem_type_p = H5T_NATIVE_USHORT;
         disk_type_p = H5T_STD_U32LE;
+        return;
+    case AU_UINT:
+        mem_type_p = H5T_NATIVE_UINT;
+        disk_type_p = H5T_STD_U16LE;
         return;
     case AU_ULONG:
         mem_type_p = H5T_NATIVE_ULONG;
@@ -602,6 +683,12 @@ int EndpointHDF5::Control(int opt_code, std::vector<std::string> &parameter_v)
         break;
     case OP_LIST_TAG:
         ReadAllAttributeName(parameter_v);
+        break;
+    case HDF5_ENABLE_FILTER:
+        EnableFilter(parameter_v);
+        break;
+    case HDF5_ENABLE_FILTER_PREPROCESSING:
+        EnableFilterPreprocessing(parameter_v);
         break;
     default:
         break;

@@ -144,6 +144,8 @@ using AuEndpointDataTypeUnion = std::variant<short, int, long, long long, unsign
 template <typename T>
 AuEndpointDataType InferDataType()
 {
+  //printf("InferDataType : enter\n");
+
   if (std::is_same<T, int>::value)
   {
     return AU_INT;
@@ -166,6 +168,7 @@ AuEndpointDataType InferDataType()
   }
   else if (std::is_same<T, unsigned short>::value)
   {
+    //printf("InferDataType : AU_USHORT\n");
     return AU_USHORT;
   }
   else if (std::is_same<T, unsigned long>::value)

@@ -128,6 +128,14 @@ std::string realpathEx(std::string path);
 std::vector<std::string> GetDirFileList(std::string dir_str_p);
 
 /**
+ * @brief Get the Dir File List Recursive object
+ * 
+ * @param dir_str_p : the directory
+ * @return std::vector<std::string> 
+ */
+std::vector<std::string> GetDirFileListRecursive(std::string dir_str_p);
+
+/**
  * @brief Split endpoint_type_info string to type and information
  * 
  * @param endpoint_type_info , information string for the endpoint
@@ -160,6 +168,19 @@ std::string ExtractFileName(const std::string &fullPath);
  * @return std::string 
  */
 std::string ExtractPath(const std::string &fullPath);
+
+template <typename T>
+inline bool IsVectorEq(const std::vector<T> &v, T value)
+{
+    for (int i = 0; i < v.size(); i++)
+    {
+        if (v[i] != value)
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 template <typename T>
 inline void PrintVector(std::string name, std::vector<T> v)

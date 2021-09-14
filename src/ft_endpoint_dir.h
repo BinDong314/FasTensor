@@ -80,22 +80,24 @@ in binary and source code form.
 #ifndef END_POINT_DIR_H
 #define END_POINT_DIR_H
 
-#define DIR_MERGE_INDEX 0
-#define DIR_SUB_CMD_ARG 1
-#define DIR_INPUT_SEARCH_RGX 2
-#define DIR_OUPUT_REPLACE_RGX 3
-#define DIR_OUPUT_REPLACE_RGX_ARG 4
-#define DIR_FILE_SORT_INDEXES 15
-#define DIR_N_FILES 6
-#define DIR_GET_FILE_SIZE 7
-#define DIR_SET_CHUNK_SIZE 8
-#define DIR_GET_ALL_CHUNK_TAGS 9
-#define DIR_SET_ALL_CHUNK_TAGS 10
+#define DIR_MERGE_INDEX (OP_USER_DEFINED_START + 0)
+#define DIR_SUB_CMD_ARG (OP_USER_DEFINED_START + 1)
+#define DIR_INPUT_SEARCH_RGX (OP_USER_DEFINED_START + 2)
+#define DIR_OUPUT_REPLACE_RGX (OP_USER_DEFINED_START + 3)
+#define DIR_OUPUT_REPLACE_RGX_ARG (OP_USER_DEFINED_START + 4)
+#define DIR_FILE_SORT_INDEXES (OP_USER_DEFINED_START + 15)
+#define DIR_N_FILES (OP_USER_DEFINED_START + 6)
+#define DIR_GET_FILE_SIZE (OP_USER_DEFINED_START + 7)
+#define DIR_SET_CHUNK_SIZE (OP_USER_DEFINED_START + 8)
+#define DIR_GET_ALL_CHUNK_TAGS (OP_USER_DEFINED_START + 9)
+#define DIR_SET_ALL_CHUNK_TAGS (OP_USER_DEFINED_START + 10)
 
 //Todo
-#define DIR_INPUT_ELASTIC_SIZE 11
-#define DIR_OUTPUT_ELASTIC_SIZE 12
-#define DIR_SET_OUTPUT_FILE_NAMES 13
+#define DIR_INPUT_ELASTIC_SIZE (OP_USER_DEFINED_START + 11)
+#define DIR_OUTPUT_ELASTIC_SIZE (OP_USER_DEFINED_START + 12)
+#define DIR_SET_OUTPUT_FILE_NAMES (OP_USER_DEFINED_START + 13)
+
+#define DIR_LIST_DIR_RECURSIZE (OP_USER_DEFINED_START + 14)
 
 #include "ft_utility.h"
 #include "ft_type.h"
@@ -138,6 +140,8 @@ private:
 
     bool has_ordering_on_file_list = false; //User may apply ordering on list, based on sorted ordring
     std::vector<size_t> order_on_file_list;
+
+    bool is_list_dir_recursive = false;
 
 public:
     /**

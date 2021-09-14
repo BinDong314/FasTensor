@@ -16914,8 +16914,8 @@ if test "x$with_dash" != xno; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for DASH at $DASH_HOME" >&5
 $as_echo_n "checking for DASH at $DASH_HOME... " >&6; }
   if test -d "$DASH_HOME"   && test -d "$DASH_HOME/include"  && test -d "$DASH_HOME/lib"; then
-  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS    -DHAS_DASH_ENDPOINT   -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
-  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -DHAS_DASH_ENDPOINT  -I$DASH_HOME/include -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS    -DHAS_DASH_ENDPOINT   -I$DASH_HOME/include -std=c++17 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -DHAS_DASH_ENDPOINT  -I$DASH_HOME/include -std=c++17 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
   ARRAYUDF_LIBS="$ARRAYUDF_LIBS        -DHAS_DASH_ENDPOINT   -L$DASH_HOME/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'"
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }

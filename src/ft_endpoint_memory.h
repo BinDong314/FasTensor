@@ -92,6 +92,7 @@ in binary and source code form.
 #define DASH_READ_FLAG 0
 #define DASH_WRITE_FLAG 1
 
+//Use the (OP_USER_DEFINED_START )
 #define DASH_NONVOLATILE_CODE 0
 #define DASH_VOLATILE_CODE 1
 #define DASH_ENABLE_LOCAL_MIRROR_CODE 2

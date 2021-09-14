@@ -93,8 +93,10 @@ using namespace std;
 
 //Todo:
 //This might be general command
-#define OP_CREATE_VIS_SCRIPT 4
-#define OP_LIST_TAG 5
+#define OP_CREATE_VIS_SCRIPT 1
+#define OP_LIST_TAG 2
+
+#define OP_USER_DEFINED_START 100
 
 /**
  * @brief Define the class for the Endpoint used by ArrayUDF 

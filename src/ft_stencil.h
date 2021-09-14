@@ -120,8 +120,7 @@ private:
   unsigned long long chunk_data_size_no_ol = 1;
   unsigned long long my_offset_no_ol; //for hist
   unsigned long long my_offset;
-  std::vector<unsigned long long>
-      chunk_dim_size; //This is the size with over-lapping
+  std::vector<unsigned long long> chunk_dim_size; //This is the size with over-lapping
   int dims;
   //std::vector<int> coordinate_shift;
   //std::vector<unsigned long long> coordinate;
