@@ -7,6 +7,9 @@ AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part  @ARRAYUDF_CXX
 AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static  -ldl 
 #AM_LDFLAGS  = -Wl,--start-group @ARRAYUDF_LIBS@  -all-static  -ldl 
 
+LDADD=../src/libFastensor.la @ARRAYUDF_LIBS@  -ldl
+DEPENDENCIES=../src/libFastensor.la
+
 bin_PROGRAMS=   ft_test_data_generator \
                 ft_example_hello_world \
                 ft_example_vector \
@@ -30,8 +33,7 @@ bin_PROGRAMS=   ft_test_data_generator \
 
                
 
-LDADD=../src/libFastensor.la @ARRAYUDF_LIBS@ 
-DEPENDENCIES=../src/libFastensor.la
+
 
 ft_test_data_generator_SOURCES = ft_test_data_generator.cpp
 ft_example_hello_world_SOURCES=ft_example_hello_world.cpp
