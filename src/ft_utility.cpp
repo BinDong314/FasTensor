@@ -174,6 +174,7 @@ std::vector<std::string> GetDirFileList(std::string dir_str_p)
     return file_list;
 }
 
+/*
 AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
 {
     AuEndpointType endpoint_type;
@@ -223,3 +224,4 @@ AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
     }
     return endpoint_type;
 }
+*/

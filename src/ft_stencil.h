@@ -919,7 +919,7 @@ public:
    * 
    * @return T 
    */
-  T get_value()
+  inline T get_value()
   {
     return value;
   }
