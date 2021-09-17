@@ -79,7 +79,7 @@ in binary and source code form.
 
 #include "ft_utility.h"
 #include <limits.h>
-#include <filesystem>
+//#include <filesystem>
 
 std::string realpathEx(std::string path)
 {
@@ -135,14 +135,14 @@ std::vector<std::string> GetDirFileListRecursive(std::string dir_str_p)
 {
     std::vector<std::string> file_list;
     std::string dir_str_p_new = realpathEx(dir_str_p);
-    for (auto &p : std::filesystem::recursive_directory_iterator(dir_str_p_new))
+    /*for (auto &p : std::filesystem::recursive_directory_iterator(dir_str_p_new))
     {
         //std::cout << p.path() << '\n';
         if (p.is_regular_file())
         {
             file_list.push_back(p.path());
         }
-    }
+    }*/
 
     std::sort(file_list.begin(), file_list.end());
 
