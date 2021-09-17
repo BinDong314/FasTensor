@@ -709,7 +709,7 @@ int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
         ExtractMeta(); //Will call open
     }
 
-    int na;
+    unsigned int na;
     hid_t aid;
 
     na = H5Aget_num_attrs(did);
@@ -717,15 +717,15 @@ int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
     ssize_t len;
     char buf[1024];
     attr_names.clear();
-    for (int iii = 0; iii < na; iii++)
+    for (unsigned int iiiii = 0; iiiii < na; iiiii++)
     {
-        printf("Open attribute = %d \n", iii);
-        aid = H5Aopen_idx(did, iii);
+        printf("Open attribute = %d \n", iiiii);
+        aid = H5Aopen_idx(did, iiiii);
         if (aid < 0)
         {
-            AU_EXIT("Error in H5Aopen_idx = " + std::to_string(iii));
+            AU_EXIT("Error in H5Aopen_idx = " + std::to_string(iiiii));
         }
-        break;
+        continue;
         memset(buf, '\0', 1024);
         len = H5Aget_name(aid, 1024, buf);
         if (len < 0)
