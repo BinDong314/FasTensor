@@ -443,7 +443,8 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part     -I/Users/d
 AM_CFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part         -I/Users/dbin/work/soft/hdf5-1.10.7/build/include    -DHAS_DASH_ENDPOINT   -I/Users/dbin/work/soft/dash/build/install/include -std=c++17 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'    -ldl 
 AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part      -std=c++17 -g3    -ldl 
 AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-1.10.7/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'  -all-static  -ldl 
-LDADD = ../src/libFastensor.la            -L/Users/dbin/work/soft/hdf5-1.10.7/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich' 
+#AM_LDFLAGS  = -Wl,--start-group            -L/Users/dbin/work/soft/hdf5-1.10.7/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'  -all-static  -ldl 
+LDADD = ../src/libFastensor.la            -L/Users/dbin/work/soft/hdf5-1.10.7/build/lib -lhdf5 -lhdf5_hl -lz        -DHAS_DASH_ENDPOINT   -L/Users/dbin/work/soft/dash/build/install/lib -ldash-mpi -ldart-mpi -ldart-base -lpthread -std=c++14 -DDASH_ENABLE_HDF5 -DDASH_MPI_IMPL_ID='mpich'  -ldl
 DEPENDENCIES = ../src/libFastensor.la
 ft_test_data_generator_SOURCES = ft_test_data_generator.cpp
 ft_example_hello_world_SOURCES = ft_example_hello_world.cpp
