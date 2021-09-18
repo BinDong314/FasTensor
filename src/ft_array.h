@@ -1461,6 +1461,10 @@ namespace FT
           std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
           clear_vector(vec_private);
 #endif
+          if (skip_flag == 1 && current_chunk_size == skip_size)
+          {
+            break;
+          }
         } //end of omp parallel
 
 #if defined(_OPENMP)
