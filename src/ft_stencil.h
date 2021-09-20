@@ -778,18 +778,18 @@ public:
     //PrintVector("count_size_t = ", count_size_t);
     //PrintVector("chunk_dim_size = ", chunk_dim_size);
 
+    if (rv.size() != n)
+      rv.resize(n);
     if (count_size_t == chunk_dim_size)
     {
       //copy(&dataArray[0], &dataArray[dataArraySize], back_inserter(dataVec));
       //std::vector<T> rv2(chunk_data_pointer, chunk_data_pointer + n);
       //std::cout << "read all ! n = " << n << std::endl;
       //return rv2;
-      std::copy(&chunk_data_pointer[0], &chunk_data_pointer[n], back_inserter(rv));
+      //std::copy(&chunk_data_pointer[0], &chunk_data_pointer[n], back_inserter(rv));
+      memcpy(&rv[0], chunk_data_pointer, n * sizeof(T));
       return 0;
     }
-
-    if (rv.size() != n)
-      rv.resize(n);
 
     //std::vector<unsigned long long> view_start(dims), view_end(dims);
 
