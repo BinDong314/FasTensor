@@ -171,6 +171,8 @@ private:
   mutable std::vector<int> ord;
   mutable size_t element_count;
 
+  mutable bool is_SetValuePointer = false;
+
 public:
   //Test it with public attribute
   std::vector<unsigned long long> my_location; //This is the coodinate with overlapping
@@ -654,7 +656,7 @@ public:
   }
 
   template <class TO>
-  inline void operator=(TO &others)
+  inline void operator=(const TO &others)
   {
     value = others;
     has_set_output_value_flag = true;
@@ -726,6 +728,18 @@ public:
       //view_buffer_offset++;
       ITERATOR_MACRO(ord, start_offset, end_offset); //update ord by increasing "1", row-major order
     }
+  }
+
+  inline int GetChunkPointer(T *&data_p)
+  {
+    data_p = chunk_data_pointer;
+  }
+
+  inline int SetValuePointer(T *data_p)
+  {
+    is_SetValuePointer = true;
+    has_set_output_value_flag = true;
+    chunk_data_pointer = data_p;
   }
 
   /**
@@ -919,8 +933,13 @@ public:
    * 
    * @return T 
    */
-  inline T get_value()
+  inline T &get_value()
   {
+    // if (is_SetValuePointer)
+    // {
+    //   T value(chunk_data_pointer);
+    //   return value;
+    // }
     return value;
   }
 

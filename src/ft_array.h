@@ -1443,6 +1443,10 @@ namespace FT
                 }
               }
             }
+            if (skip_flag == 1 && VectorEqVector(current_chunk_size, skip_size))
+            {
+              break;
+            }
           } //end for loop, finish the processing on a single chunk in row-major direction
 #if defined(_OPENMP)
           prefix[ithread + 1] = vec_private.size();
@@ -1461,10 +1465,6 @@ namespace FT
           std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
           clear_vector(vec_private);
 #endif
-          if (skip_flag == 1 && current_chunk_size == skip_size)
-          {
-            break;
-          }
         } //end of omp parallel
 
 #if defined(_OPENMP)

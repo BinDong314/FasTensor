@@ -182,6 +182,24 @@ inline bool IsVectorEq(const std::vector<T> &v, T value)
     return true;
 }
 
+template <typename T1, typename T2>
+inline bool VectorEqVector(const std::vector<T1> &v1, const std::vector<T2> &v2)
+{
+    if (v1.size() != v2.size())
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i < v1.size(); i++)
+    {
+        if (v1[i] != v2[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 template <typename T>
 inline void PrintVector(std::string name, std::vector<T> v)
 {
