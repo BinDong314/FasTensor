@@ -153,7 +153,7 @@ int EndpointDIR::ExtractMeta()
         {
             if (endpoint_size != temp_endpoint_dim_size)
             {
-                AU_EXIT("Data under directory must have same size");
+                AU_EXIT("Data under directory must have same size: " + dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
             }
         }
     }
