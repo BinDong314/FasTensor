@@ -292,7 +292,7 @@ namespace FT
     */
     Array(std::string data_endpoint)
     {
-      printf("Debug: Here at INIT\n");
+      //printf("Debug: Here at INIT\n");
       array_data_endpoint_info = data_endpoint;
       endpoint = EndpointFactory::NewEndpoint(data_endpoint);
       AuEndpointDataType data_element_type = InferDataType<T>();
