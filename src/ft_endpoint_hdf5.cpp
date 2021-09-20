@@ -421,17 +421,21 @@ void EndpointHDF5::EnableFilter(std::vector<std::string> &parameter_v)
         }
     }
 
-    std::cout << "EnableFilter: filter_id = " << filter_id << "\n";
+    //AU_VERBOSE("EnableFilter: filter_id = " + std::to_string(filter_id), 0)
+    if (!ft_rank)
+        std::cout << "EnableFilter: filter_id = " << filter_id << "\n";
     String2Vector(parameter_v[1], filter_cd_values);
     filter_cd_nelmts = filter_cd_values.size();
-    PrintVector("EnableFilter:filter_cd_values =", filter_cd_values);
+    if (!ft_rank)
+        PrintVector("EnableFilter:filter_cd_values =", filter_cd_values);
     //herr_t H5Pset_filter(hid_t plist_id, H5Z_filter_t filter_id, unsigned int flags, size_t cd_nelmts, const unsigned int cd_values[] )
     H5Pset_filter(create_dcpl_id, filter_id, filter_flags, filter_cd_nelmts, filter_cd_values.data());
 
     String2Vector(parameter_v[2], filter_chunk_size);
     endpoint_ranks = filter_chunk_size.size();
     H5Pset_chunk(create_dcpl_id, endpoint_ranks, filter_chunk_size.data());
-    PrintVector("EnableFilter:filter_chunk_size =", filter_chunk_size);
+    if (!ft_rank)
+        PrintVector("EnableFilter:filter_chunk_size =", filter_chunk_size);
 
     //printf("Set fill never !\n");
     //H5Pset_fill_time(create_dcpl_id, H5D_FILL_TIME_NEVER);
@@ -444,17 +448,19 @@ void EndpointHDF5::EnableFilter(std::vector<std::string> &parameter_v)
         herr_t status = H5Zget_filter_info(filter_id, &filter_config);
         if (filter_config & H5Z_FILTER_CONFIG_ENCODE_ENABLED)
         {
-            AU_INFO("Filter " + std::to_string(filter_id) + " is  ENABLED for HDF5 Endpoint.\n");
+            if (!ft_rank)
+                AU_INFO("Filter " + std::to_string(filter_id) + " is  ENABLED for HDF5 Endpoint.\n");
         }
         else
         {
-            AU_INFO("Filter " + std::to_string(filter_id) + " is  NOT ENABLED for HDF5 Endpoint.\n");
+            if (!ft_rank)
+                AU_INFO("Filter " + std::to_string(filter_id) + " is  NOT ENABLED for HDF5 Endpoint.\n");
         }
     }
     else
     {
-
-        AU_EXIT("Filter " + std::to_string(filter_id) + " is  NOT available for HDF5 Endpoint.\n");
+        if (!ft_rank)
+            AU_EXIT("Filter " + std::to_string(filter_id) + " is  NOT available for HDF5 Endpoint.\n");
     }
 }
 
