@@ -788,7 +788,7 @@ int EndpointHDF5::WriteAttribute(const std::string &name, const void *data, FTDa
         }
         else
         {
-            std::cout << "WriteAttribute: name " << name << ", data_length_p = " << data_length_p << "\n";
+            //std::cout << "WriteAttribute: name " << name << ", data_length_p = " << data_length_p << "\n";
             H5Tset_size(attribute_str_type, 1);
         }
         //H5Tset_strpad(attribute_str_type, H5T_STR_NULLTERM);
