@@ -99,6 +99,8 @@ in binary and source code form.
 
 #define DIR_LIST_DIR_RECURSIZE (OP_USER_DEFINED_START + 14)
 
+#define DIR_SKIP_SIZE_CHECK (OP_USER_DEFINED_START + 15)
+
 #include "ft_utility.h"
 #include "ft_type.h"
 #include "ft_endpoint.h"
@@ -142,6 +144,8 @@ private:
     std::vector<size_t> order_on_file_list;
 
     bool is_list_dir_recursive = false;
+
+    bool skip_size_check = false;
 
 public:
     /**

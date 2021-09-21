@@ -148,6 +148,8 @@ int EndpointDIR::ExtractMeta()
         if (i == 0)
         {
             endpoint_size = temp_endpoint_dim_size;
+            if (skip_size_check)
+                break;
         }
         else
         {
@@ -592,6 +594,9 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         break;
     case DIR_LIST_DIR_RECURSIZE:
         is_list_dir_recursive = true;
+        break;
+    case DIR_SKIP_SIZE_CHECK:
+        skip_size_check = true;
         break;
     default:
         break;
