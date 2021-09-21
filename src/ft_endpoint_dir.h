@@ -99,7 +99,7 @@ in binary and source code form.
 
 #define DIR_LIST_DIR_RECURSIZE (OP_USER_DEFINED_START + 14)
 
-#define DIR_SKIP_SIZE_CHECK (OP_USER_DEFINED_START + 15)
+#define DIR_SKIP_SIZE_CHECK (OP_USER_DEFINED_START + 16)
 
 #include "ft_utility.h"
 #include "ft_type.h"
