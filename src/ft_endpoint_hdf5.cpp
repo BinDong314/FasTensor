@@ -906,14 +906,17 @@ int EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_type
         {
             //printf("It is H5Tis_variable_str!\n");
             hid_t attribute_memtype = H5Tcopy(H5T_C_S1);
-            char **string_attr;
+            //char **string_attr;
+            char *string_attr;
             H5Tset_size(attribute_memtype, H5T_VARIABLE);
-            string_attr = (char **)malloc(1 * sizeof(char *));
-            H5Aread(attribute_id, attribute_memtype, string_attr);
-            std::string temp_str(string_attr[0]);
+            //string_attr = (char **)malloc(1 * sizeof(char *));
+            H5Aread(attribute_id, attribute_memtype, &string_attr);
+            //std::string temp_str(string_attr[0]);
+            std::string temp_str(string_attr);
             attribute_size = temp_str.size();
-            H5Dvlen_reclaim(attribute_memtype, attribute_space, H5P_DEFAULT, string_attr);
+            //H5Dvlen_reclaim(attribute_memtype, attribute_space, H5P_DEFAULT, string_attr);
             free(string_attr);
+            std::cout << "It is H5Tis_variable_str, temp_str = " << temp_str << "\n";
             H5Tclose(attribute_memtype);
         }
         else
