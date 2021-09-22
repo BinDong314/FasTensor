@@ -1270,6 +1270,7 @@ public:
   {
     //PrintVector("GetOffsetUpper.chunk_dim_size = ", chunk_dim_size);
     //PrintVector("GetOffsetUpper.my_location = ", my_location);
+    max_offset.clear();
     int rank = chunk_dim_size.size();
     for (int i = 0; i < rank; i++)
     {
