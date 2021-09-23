@@ -918,10 +918,10 @@ int EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_type
             }
             //std::string temp_str(string_attr[0]);
             attribute_size = strlen(string_attr);
-            if (attribute_size == 0)
-            {
-                std::cout << "H5Aread name = " << name << " , size = " << attribute_size << " fname = " << fn_str << "\n";
-            }
+            //if (attribute_size == 0)
+            //{
+            //    std::cout << "H5Aread name = " << name << " , size = " << attribute_size << " fname = " << fn_str << "\n";
+            //}
             //std::string temp_str(string_attr);
             //attribute_size = temp_str.size();
             //H5Dvlen_reclaim(attribute_memtype, attribute_space, H5P_DEFAULT, string_attr);
