@@ -911,6 +911,11 @@ int EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_type
             H5Tset_size(attribute_memtype, H5T_VARIABLE);
             //string_attr = (char **)malloc(1 * sizeof(char *));
             assert(H5Aread(attribute_id, attribute_memtype, &string_attr) >= 0);
+            if (string_attr == NULL)
+            {
+                attribute_size = 0;
+                goto read_null;
+            }
             //std::string temp_str(string_attr[0]);
             attribute_size = strlen(string_attr);
             if (attribute_size == 0)
@@ -922,6 +927,7 @@ int EndpointHDF5::GetAttributeSize(const std::string &name, FTDataType data_type
             //H5Dvlen_reclaim(attribute_memtype, attribute_space, H5P_DEFAULT, string_attr);
             free(string_attr);
             //std::cout << "It is H5Tis_variable_str, temp_str = " << temp_str << "\n";
+        read_null:
             H5Tclose(attribute_memtype);
         }
         else
