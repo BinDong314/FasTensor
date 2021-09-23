@@ -3139,6 +3139,12 @@ namespace FT
       {
         return -1;
       }
+
+      if (str_len == 0)
+      {
+        value = "";
+        return 0;
+      }
       value.resize(str_len);
       //std::cout << "GetTag : name = " << name << ", str_len = " << str_len << "\n";
       return endpoint->ReadAttribute(name, &value[0], AU_STRING, value.length());
