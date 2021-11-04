@@ -79,7 +79,7 @@ in binary and source code form.
 
 #include "ft_utility.h"
 #include <limits.h>
-//#include <filesystem>
+#include <filesystem>
 
 std::string realpathEx(std::string path)
 {
@@ -131,12 +131,39 @@ std::string ExtractPath(const std::string &fullPath)
     return fullPath.substr(0, lastSlashIndex);
 }
 
+void GetReqDirs(const std::string &path, std::vector<std::string> &files)
+{
+    DIR *dpdf;
+    struct dirent *epdf;
+    dpdf = opendir(path.c_str());
+    if (dpdf != NULL)
+    {
+        while ((epdf = readdir(dpdf)) != NULL)
+        {
+            //std::cout << std::string(epdf->d_name) << " \n";
+            //: (epdf->d_type == DT_DIR && strstr(epdf->d_name, "..") == NULL && strstr(epdf->d_name, ".") == NULL)
+            if (epdf->d_type == DT_DIR && std::string(epdf->d_name) != ".." && std::string(epdf->d_name) != ".")
+            {
+                GetReqDirs(path + "/" + epdf->d_name + "/", files);
+                //GetReqDirs(std::string(epdf->d_name) + "/", files);
+            }
+            if (epdf->d_type == DT_REG)
+            {
+                files.push_back(path + "/" + epdf->d_name);
+                //files.push_back(std::string(epdf->d_name));
+            }
+        }
+    }
+    closedir(dpdf);
+}
+
 std::vector<std::string> GetDirFileListRecursive(std::string dir_str_p)
 {
     std::vector<std::string> file_list;
     std::string dir_str_p_new = realpathEx(dir_str_p);
-    /*for (auto &p : std::filesystem::recursive_directory_iterator(dir_str_p_new))
+    /* for (auto &p : std::filesystem::recursive_directory_iterator(dir_str_p_new))
     {
+
         //std::cout << p.path() << '\n';
         if (p.is_regular_file())
         {
@@ -144,6 +171,13 @@ std::vector<std::string> GetDirFileListRecursive(std::string dir_str_p)
         }
     }*/
 
+    std::cout << "dir: " << dir_str_p_new << "\n";
+    GetReqDirs(dir_str_p_new, file_list);
+
+    for (int i = 0; i < file_list.size(); i++)
+    {
+        std::cout << file_list[i] << " \n";
+    }
     std::sort(file_list.begin(), file_list.end());
 
     return file_list;

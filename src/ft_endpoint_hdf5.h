@@ -97,6 +97,7 @@ in binary and source code form.
 #define HDF5_DISABLE_COLLECTIVE_IO (OP_USER_DEFINED_START + 3)
 #define HDF5_ENABLE_FILTER (OP_USER_DEFINED_START + 4)
 #define HDF5_ENABLE_FILTER_PREPROCESSING (OP_USER_DEFINED_START + 5)
+#define HDF5_LIST_RECURSIVE (OP_USER_DEFINED_START + 6)
 
 //For some old code
 #define OP_ENABLE_MPI_IO HDF5_ENABLE_MPI_IO
@@ -304,5 +305,24 @@ public:
     void EnableFilter(std::vector<std::string> &parameter_v);
 
     void EnableFilterPreprocessing(std::vector<std::string> &parameter_v);
+
+    /**
+     * @brief List datasets of a HDF5 
+     * 
+     * @param dataset_list, each item contain path from root to HDF5 
+     */
+    void ListDatasetsRecursive(std::vector<std::string> &dataset_list);
+
+    /**
+     * @brief an operator function for ListDatasetsRecursive
+     * 
+     * @param loc_id 
+     * @param name 
+     * @param info 
+     * @param operator_data 
+     * @return herr_t 
+     */
+    //herr_t static ListDatasetsRecursiveOpFunc(hid_t loc_id, const char *name, const H5O_info_t *info,
+    //                                          void *operator_data);
 };
 #endif

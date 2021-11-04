@@ -620,6 +620,7 @@ int EndpointHDF5::ParseEndpointInfo()
 
     if (!std::getline(ss, group_dataset_name_str, ':'))
     {
+        return 0; //Ingore the one without dataset but just name
         AU_EXIT("Invalid endpoint_info");
     }
 
@@ -695,6 +696,9 @@ int EndpointHDF5::Control(int opt_code, std::vector<std::string> &parameter_v)
         break;
     case HDF5_ENABLE_FILTER_PREPROCESSING:
         EnableFilterPreprocessing(parameter_v);
+        break;
+    case HDF5_LIST_RECURSIVE:
+        ListDatasetsRecursive(parameter_v);
         break;
     default:
         break;
@@ -954,4 +958,45 @@ int EndpointHDF5::CreateXDMF()
     }
     //int create_xdmf(std::string file_name, std::string dset_name, std::vector<unsigned long long> dimensions, FTType data_element_type)
     create_xdmf(fn_str, gn_str + "/" + dn_str, endpoint_size, data_element_type);
+}
+
+std::vector<std::string> ListDatasetsRecursiveOpFuncList;
+/************************************************************
+
+  Operator function for H5Ovisit.  This function prints the
+  name and type of the object passed to it.
+
+ ************************************************************/
+herr_t
+ListDatasetsRecursiveOpFunc(hid_t loc_id, const char *name, const H5O_info_t *info,
+                            void *operator_data)
+{
+
+    if (info->type == H5O_TYPE_DATASET)
+    {
+        //std::vector<std::string> *p = static_cast<std::vector<std::string> *>(operator_data);
+        //list_recursive_objects.push_back(name);
+        ListDatasetsRecursiveOpFuncList.push_back(name);
+    }
+    return 0;
+}
+
+/**
+     * @brief List datasets of a HDF5 
+     * 
+     * @param dataset_list, each item contain path from root to HDF5 
+     */
+void EndpointHDF5::ListDatasetsRecursive(std::vector<std::string> &dataset_list)
+{
+
+    hid_t file; /* Handle */
+    herr_t status;
+    dataset_list.clear();
+    ListDatasetsRecursiveOpFuncList.clear();
+    //list_recursive_objects.clear();
+    file = H5Fopen(fn_str.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+    status = H5Ovisit(file, H5_INDEX_NAME, H5_ITER_NATIVE, ListDatasetsRecursiveOpFunc, NULL);
+    status = H5Fclose(file);
+    dataset_list = ListDatasetsRecursiveOpFuncList;
+    ListDatasetsRecursiveOpFuncList.clear();
 }

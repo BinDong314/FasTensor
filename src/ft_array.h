@@ -1133,7 +1133,7 @@ namespace FT
           {
             std::vector<std::string> dir_file_list = GetDirFile();
             std::vector<int> dir_chunk_size = GetDirChunkSize();
-            //B->SetDirChunkSize(dir_chunk_size);
+            B->SetDirChunkSize(dir_chunk_size);
             //Here we update the filename list for the output endpoint
             //Basically, if the input has merge
             //We only keep the filename of the first merged as output

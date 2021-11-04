@@ -97,7 +97,8 @@ in binary and source code form.
 #define DIR_OUTPUT_ELASTIC_SIZE (OP_USER_DEFINED_START + 12)
 #define DIR_SET_OUTPUT_FILE_NAMES (OP_USER_DEFINED_START + 13)
 
-#define DIR_LIST_DIR_RECURSIZE (OP_USER_DEFINED_START + 14)
+#define DIR_LIST_RECURSIVE (OP_USER_DEFINED_START + 14)
+#define DIR_FILE_LIST_RECURSIVE (OP_USER_DEFINED_START + 17)
 
 #define DIR_SKIP_SIZE_CHECK (OP_USER_DEFINED_START + 16)
 
@@ -111,7 +112,7 @@ in binary and source code form.
 #include <vector>
 #include <math.h>
 #include <regex>
-
+#include <string.h>
 //
 //I/O layer
 class EndpointDIR : public Endpoint
@@ -143,8 +144,8 @@ private:
     bool has_ordering_on_file_list = false; //User may apply ordering on list, based on sorted ordring
     std::vector<size_t> order_on_file_list;
 
-    bool is_list_dir_recursive = false;
-
+    bool is_list_dir_recursive = false;      //List file in a directory
+    bool is_dir_file_list_recursive = false; //List dataset inside a file within a directory.
     bool skip_size_check = false;
 
 public:
