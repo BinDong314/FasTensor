@@ -1850,8 +1850,8 @@ namespace FT
             B->SetDirChunkSize(dir_chunk_size);
           }
 
-          PrintVector("Debug: create B_data_size = ", B_data_size);
-          PrintVector("Debug: create B_data_chunk_size = ", B_data_chunk_size);
+          //PrintVector("Debug: create B_data_size = ", B_data_size);
+          //PrintVector("Debug: create B_data_chunk_size = ", B_data_chunk_size);
 
           if (vector_type_flag)
           {

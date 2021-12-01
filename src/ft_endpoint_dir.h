@@ -101,6 +101,7 @@ in binary and source code form.
 #define DIR_FILE_LIST_RECURSIVE (OP_USER_DEFINED_START + 17)
 
 #define DIR_SKIP_SIZE_CHECK (OP_USER_DEFINED_START + 16)
+#define DIR_INPUT_VARIABLE_SEARCH_RGX (OP_USER_DEFINED_START + 18)
 
 #include "ft_utility.h"
 #include "ft_type.h"
@@ -135,6 +136,9 @@ private:
     //http://www.cplusplus.com/reference/regex/ECMAScript/
     bool input_replace_regex_flag = false;
     std::regex *input_filter_regex; //The regex to "search" on list of file as input
+
+    bool input_variable_filter_regex_flag = false;
+    std::regex *input_variable_filter_regex; //The regex to "search" on list of file as input
 
     bool output_replace_regex_flag = false;
     std::regex *output_replace_regex; //The regex to "replace" on list of file as output (input)

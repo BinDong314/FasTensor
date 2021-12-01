@@ -140,7 +140,7 @@ int EndpointDIR::ExtractMeta()
     //int endpoint_ranks;
     std::vector<unsigned long long> temp_endpoint_dim_size;
     std::vector<std::string> dir_file_list_for_file_list_recursive;
-    std::vector<std::string> sub_endpoint_list_for_file_list_recursive;
+    std::vector<std::string> sub_endpoint_list_for_file_list_recursive, sub_endpoint_list_for_file_list_recursive_temp;
 
     for (int i = 0; i < dir_file_list.size(); i++)
     {
@@ -160,15 +160,37 @@ int EndpointDIR::ExtractMeta()
             else
             {
                 sub_endpoint->SetEndpointInfo(dir_file_list[i]);
-                sub_endpoint->Control(HDF5_LIST_RECURSIVE, sub_endpoint_list_for_file_list_recursive);
+                sub_endpoint_list_for_file_list_recursive_temp.clear();
+                sub_endpoint->Control(HDF5_LIST_RECURSIVE, sub_endpoint_list_for_file_list_recursive_temp);
+
+                //input_variable_filter_regex_flag = true;
+                //input_variable_filter_regex
+                if (input_variable_filter_regex_flag)
+                {
+                    sub_endpoint_list_for_file_list_recursive.clear();
+                    for (int i = 0; i < sub_endpoint_list_for_file_list_recursive_temp.size(); i++)
+                    {
+                        //std::cout << "Before: " << sub_endpoint_list_for_file_list_recursive_temp[i] << "\n";
+                        if (std::regex_match(sub_endpoint_list_for_file_list_recursive_temp[i], *input_variable_filter_regex))
+                        {
+                            //std::cout << "After: " << sub_endpoint_list_for_file_list_recursive_temp[i] << "\n";
+                            sub_endpoint_list_for_file_list_recursive.push_back(sub_endpoint_list_for_file_list_recursive_temp[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    sub_endpoint_list_for_file_list_recursive = sub_endpoint_list_for_file_list_recursive_temp;
+                }
+
                 for (int j = 0; j < sub_endpoint_list_for_file_list_recursive.size(); j++)
                 {
                     //std::cout << dir_file_list[i] + ":" + sub_endpoint_list_for_file_list_recursive[j] << "  \n";
-                    dir_file_list_for_file_list_recursive.push_back(dir_file_list[i] + ":" + sub_endpoint_list_for_file_list_recursive[j]);
+                    dir_file_list_for_file_list_recursive.push_back(dir_file_list[i] + ":/" + sub_endpoint_list_for_file_list_recursive[j]);
                     //std::cout << dir_file_list_for_file_list_recursive[0];
                 }
 
-                if (dir_file_list_for_file_list_recursive.size() > 1)
+                if (dir_file_list_for_file_list_recursive.size() >= 1)
                 {
                     sub_endpoint->SetEndpointInfo(dir_file_list_for_file_list_recursive[0]);
                 }
@@ -179,8 +201,12 @@ int EndpointDIR::ExtractMeta()
             }
         }
 
+        //PrintVector("Before temp_endpoint_dim_size =", temp_endpoint_dim_size);
+
         sub_endpoint->ExtractMeta();
         temp_endpoint_dim_size = sub_endpoint->GetDimensions();
+
+        //PrintVector("temp_endpoint_dim_size =", temp_endpoint_dim_size);
 
         if (i == 0)
         {
@@ -221,6 +247,11 @@ int EndpointDIR::ExtractMeta()
         //std::cout << "dir_file_list_for_file_list_recursive.size = " << dir_file_list_for_file_list_recursive.size() << "\n";
         dir_file_list.clear();
         dir_file_list = dir_file_list_for_file_list_recursive;
+    }
+
+    if (dir_file_list.size() == 0)
+    {
+        AU_EXIT("No files found by DIR !\n");
     }
 
     AU_VERBOSE("The [" + std::to_string(dir_file_list.size()) + "] files used by DIR (ordered): ", 0);
@@ -645,7 +676,8 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         {
             AU_EXIT("DIR_INPUT_SEARCH_RGX  needs 1 parameters: regex pattern and replace string pattern \n");
         }
-        std::cout << "regex string: " << parameter_v[0] << "\n";
+        //std::cout << "regex string: " << parameter_v[0] << "\n";
+        AU_VERBOSE("regex string: " + parameter_v[0], 0)
         input_replace_regex_flag = true;
         input_filter_regex = new std::regex(parameter_v[0]);
         break;
@@ -693,6 +725,15 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         break;
     case DIR_SKIP_SIZE_CHECK:
         skip_size_check = true;
+        break;
+    case DIR_INPUT_VARIABLE_SEARCH_RGX:
+        if (parameter_v.size() < 1)
+        {
+            AU_EXIT("DIR_INPUT_VARIABLE_SEARCH_RGX  needs 1 parameters: regex pattern and replace string pattern \n");
+        }
+        AU_VERBOSE("regex string: " + parameter_v[0], 0)
+        input_variable_filter_regex_flag = true;
+        input_variable_filter_regex = new std::regex(parameter_v[0]);
         break;
     default:
         break;

@@ -187,5 +187,6 @@ extern int ft_rank;
         if (ft_rank == rank_p)               \
             std::cout << info_p << std::endl \
                       << std::flush;         \
+        std::cout << std::flush;             \
     }
 #endif

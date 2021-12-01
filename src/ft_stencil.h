@@ -758,7 +758,6 @@ public:
     //start_offset_size_t.resize(dims);
     //end_offset_size_t.resize(dims);
     //count_size_t.resize(dims);
-
     n = 1;
     out_of_border = false;
     for (int i = 0; i < dims; i++)
@@ -807,7 +806,7 @@ public:
     }
 
     //Test Code: optmize the performance of SpMV
-    if (dims == 3)
+    if (dims == 3 && 0)
     {
       array_buffer_offset = 0;
       view_buffer_offset = 0;
