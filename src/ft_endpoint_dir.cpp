@@ -364,16 +364,17 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     start_sub_endpoint[dir_data_merge_index] = 0;
     end_sub_endpoint[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
 
-#ifdef FT_DEBUG
+    size_t total_element;
+    COUNT_CELLS(start_sub_endpoint, end_sub_endpoint, total_element);
+    size_t sub_endpoint_element_size = sub_endpoint->GetDataElementTypeSize();
+
+#ifdef 1
     PrintVector("R: start : ", start);
     PrintVector("R: end : ", end);
     PrintVector("R: start_sub_endpoint : ", start_sub_endpoint);
     PrintVector("R: end_sub_endpoint : ", end_sub_endpoint);
+    PrintScalar("R: total_element :", total_element);
 #endif
-
-    size_t total_element;
-    COUNT_CELLS(start_sub_endpoint, end_sub_endpoint, total_element);
-    size_t sub_endpoint_element_size = sub_endpoint->GetDataElementTypeSize();
 
     void *data_temp = malloc(total_element * sub_endpoint_element_size);
 
