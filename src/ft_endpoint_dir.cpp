@@ -3,7 +3,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -14,7 +14,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -25,7 +25,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -90,16 +90,22 @@ int EndpointDIR::ExtractMeta()
     std::vector<std::string> temp_dir_file_list;
     if (!is_list_dir_recursive)
     {
-        //This only get the file name
+        // This only get the file name
         temp_dir_file_list = GetDirFileList(dir_str);
+        // To be the same as GetDirFileListRecursive
+        // add directory path to the file list
+        for (int i = 0; i < temp_dir_file_list.size(); i++)
+        {
+            temp_dir_file_list[i] = dir_str + "/" + temp_dir_file_list[i];
+        }
     }
     else
     {
-        //This get the full path name
+        // This get the full path name
         temp_dir_file_list = GetDirFileListRecursive(dir_str);
     }
 
-    //dir_file_list = GetDirFileList(dir_str);
+    // dir_file_list = GetDirFileList(dir_str);
     if (temp_dir_file_list.size() <= 0)
         AU_EXIT("No file under directory" + dir_str);
 
@@ -136,77 +142,78 @@ int EndpointDIR::ExtractMeta()
         dir_file_list = temp_dir_file_list;
     }
 
-    //std::vector<unsigned long long> endpoint_dim_size;
-    //int endpoint_ranks;
+    // std::vector<unsigned long long> endpoint_dim_size;
+    // int endpoint_ranks;
     std::vector<unsigned long long> temp_endpoint_dim_size;
     std::vector<std::string> dir_file_list_for_file_list_recursive;
     std::vector<std::string> sub_endpoint_list_for_file_list_recursive, sub_endpoint_list_for_file_list_recursive_temp;
 
     for (int i = 0; i < dir_file_list.size(); i++)
     {
-        if (!is_list_dir_recursive)
-        {
+        // if (!is_list_dir_recursive)
+        //{
 
-            //sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
-            dir_file_list[i] = dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info;
-            sub_endpoint->SetEndpointInfo(dir_file_list[i]);
+        // sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
+        //   dir_file_list[i] = dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info;
+        //   std::cout << "dir_str =" << dir_str << ", dir_file_list[i] = " << dir_file_list[i] << std::endl;
+        //   sub_endpoint->SetEndpointInfo(dir_file_list[i]);
+        //}
+        // else
+        //{
+        if (!is_dir_file_list_recursive)
+        {
+            sub_endpoint->SetEndpointInfo(dir_file_list[i] + ":" + append_sub_endpoint_info);
         }
         else
         {
-            if (!is_dir_file_list_recursive)
+            sub_endpoint->SetEndpointInfo(dir_file_list[i]);
+            sub_endpoint_list_for_file_list_recursive_temp.clear();
+            sub_endpoint->Control(HDF5_LIST_RECURSIVE, sub_endpoint_list_for_file_list_recursive_temp);
+
+            // input_variable_filter_regex_flag = true;
+            // input_variable_filter_regex
+            if (input_variable_filter_regex_flag)
             {
-                sub_endpoint->SetEndpointInfo(dir_file_list[i] + ":" + append_sub_endpoint_info);
+                sub_endpoint_list_for_file_list_recursive.clear();
+                for (int i = 0; i < sub_endpoint_list_for_file_list_recursive_temp.size(); i++)
+                {
+                    // std::cout << "Before: " << sub_endpoint_list_for_file_list_recursive_temp[i] << "\n";
+                    if (std::regex_match(sub_endpoint_list_for_file_list_recursive_temp[i], *input_variable_filter_regex))
+                    {
+                        // std::cout << "After: " << sub_endpoint_list_for_file_list_recursive_temp[i] << "\n";
+                        sub_endpoint_list_for_file_list_recursive.push_back(sub_endpoint_list_for_file_list_recursive_temp[i]);
+                    }
+                }
             }
             else
             {
-                sub_endpoint->SetEndpointInfo(dir_file_list[i]);
-                sub_endpoint_list_for_file_list_recursive_temp.clear();
-                sub_endpoint->Control(HDF5_LIST_RECURSIVE, sub_endpoint_list_for_file_list_recursive_temp);
+                sub_endpoint_list_for_file_list_recursive = sub_endpoint_list_for_file_list_recursive_temp;
+            }
 
-                //input_variable_filter_regex_flag = true;
-                //input_variable_filter_regex
-                if (input_variable_filter_regex_flag)
-                {
-                    sub_endpoint_list_for_file_list_recursive.clear();
-                    for (int i = 0; i < sub_endpoint_list_for_file_list_recursive_temp.size(); i++)
-                    {
-                        //std::cout << "Before: " << sub_endpoint_list_for_file_list_recursive_temp[i] << "\n";
-                        if (std::regex_match(sub_endpoint_list_for_file_list_recursive_temp[i], *input_variable_filter_regex))
-                        {
-                            //std::cout << "After: " << sub_endpoint_list_for_file_list_recursive_temp[i] << "\n";
-                            sub_endpoint_list_for_file_list_recursive.push_back(sub_endpoint_list_for_file_list_recursive_temp[i]);
-                        }
-                    }
-                }
-                else
-                {
-                    sub_endpoint_list_for_file_list_recursive = sub_endpoint_list_for_file_list_recursive_temp;
-                }
+            for (int j = 0; j < sub_endpoint_list_for_file_list_recursive.size(); j++)
+            {
+                // std::cout << dir_file_list[i] + ":" + sub_endpoint_list_for_file_list_recursive[j] << "  \n";
+                dir_file_list_for_file_list_recursive.push_back(dir_file_list[i] + ":/" + sub_endpoint_list_for_file_list_recursive[j]);
+                // std::cout << dir_file_list_for_file_list_recursive[0];
+            }
 
-                for (int j = 0; j < sub_endpoint_list_for_file_list_recursive.size(); j++)
-                {
-                    //std::cout << dir_file_list[i] + ":" + sub_endpoint_list_for_file_list_recursive[j] << "  \n";
-                    dir_file_list_for_file_list_recursive.push_back(dir_file_list[i] + ":/" + sub_endpoint_list_for_file_list_recursive[j]);
-                    //std::cout << dir_file_list_for_file_list_recursive[0];
-                }
-
-                if (dir_file_list_for_file_list_recursive.size() >= 1)
-                {
-                    sub_endpoint->SetEndpointInfo(dir_file_list_for_file_list_recursive[0]);
-                }
-                else
-                {
-                    return -1;
-                }
+            if (dir_file_list_for_file_list_recursive.size() >= 1)
+            {
+                sub_endpoint->SetEndpointInfo(dir_file_list_for_file_list_recursive[0]);
+            }
+            else
+            {
+                return -1;
             }
         }
+        //}
 
-        //PrintVector("Before temp_endpoint_dim_size =", temp_endpoint_dim_size);
+        // PrintVector("Before temp_endpoint_dim_size =", temp_endpoint_dim_size);
 
         sub_endpoint->ExtractMeta();
         temp_endpoint_dim_size = sub_endpoint->GetDimensions();
 
-        //PrintVector("temp_endpoint_dim_size =", temp_endpoint_dim_size);
+        // PrintVector("temp_endpoint_dim_size =", temp_endpoint_dim_size);
 
         if (i == 0)
         {
@@ -235,7 +242,7 @@ int EndpointDIR::ExtractMeta()
             {
                 for (int j = 0; j < sub_endpoint_list_for_file_list_recursive.size(); j++)
                 {
-                    //std::cout << sub_endpoint_list_for_file_list_recursive[j] << " \n";
+                    // std::cout << sub_endpoint_list_for_file_list_recursive[j] << " \n";
                     dir_file_list_for_file_list_recursive.push_back(dir_file_list[i] + ":" + sub_endpoint_list_for_file_list_recursive[j]);
                 }
             }
@@ -244,7 +251,7 @@ int EndpointDIR::ExtractMeta()
 
     if (is_dir_file_list_recursive)
     {
-        //std::cout << "dir_file_list_for_file_list_recursive.size = " << dir_file_list_for_file_list_recursive.size() << "\n";
+        // std::cout << "dir_file_list_for_file_list_recursive.size = " << dir_file_list_for_file_list_recursive.size() << "\n";
         dir_file_list.clear();
         dir_file_list = dir_file_list_for_file_list_recursive;
     }
@@ -255,8 +262,11 @@ int EndpointDIR::ExtractMeta()
     }
 
     AU_VERBOSE("The [" + std::to_string(dir_file_list.size()) + "] files used by DIR (ordered): ", 0);
-
-#define FT_DEBUG 1
+    for (int i = 0; i < dir_file_list.size(); i++)
+    {
+        AU_VERBOSE(dir_file_list[i], 0);
+    }
+//#define FT_DEBUG 1
 #ifdef FT_DEBUG
     for (int i = 0; i < dir_file_list.size(); i++)
     {
@@ -265,7 +275,7 @@ int EndpointDIR::ExtractMeta()
     PrintVector("endpoint_size =", endpoint_size);
 #endif
 
-    //Set chunk size to be the size of a end_point
+    // Set chunk size to be the size of a end_point
     dir_chunk_size.resize(endpoint_size.size());
     dir_overlap_size.resize(endpoint_size.size());
     endpoint_ranks = endpoint_size.size();
@@ -283,14 +293,36 @@ int EndpointDIR::ExtractMeta()
         }
     }
 
+    dir_file_size = dir_chunk_size; // The dir_chunk_size may be updated latter to have small subset
+    if (is_view_set)
+    {
+#ifdef FT_DEBUG
+        std::cout << "EndpointDIR::ExtractMeta index_view_on_a_rank = " << index_view_on_a_rank << "\n";
+        std::cout << "EndpointDIR::ExtractMeta set_view_count[0] = " << set_view_count[0] << "\n";
+#endif
+        if (is_view_on_a_rank)
+        {
+            dir_chunk_size[index_view_on_a_rank] = set_view_count[0];
+        }
+        else
+        {
+            assert(set_view_count.size() == endpoint_ranks);
+            for (int i = 0; i < endpoint_ranks; i++)
+                dir_chunk_size[i] = set_view_count[i];
+        }
+#ifdef FT_DEBUG
+        PrintVector("EndpointDIR::ExtractMeta Final dir_chunk_size = ", dir_chunk_size);
+#endif
+    }
+
     return 0;
 }
 
 int EndpointDIR::Create()
 {
-    //sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info);
-    //sub_endpoint->SetDataElementType(data_element_type);
-    //return sub_endpoint->Create();
+    // sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[0] + ":" + append_sub_endpoint_info);
+    // sub_endpoint->SetDataElementType(data_element_type);
+    // return sub_endpoint->Create();
     return 0;
 }
 
@@ -300,13 +332,13 @@ int EndpointDIR::Open()
 }
 
 /**
-     * @brief read the data from end-point
-     * 
-     * @param start, coordinates of the cell to start (including)
-     * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
-     * @return int < 0 error, >= 0 works
-     */
+ * @brief read the data from end-point
+ *
+ * @param start, coordinates of the cell to start (including)
+ * @param end , coordinates of the cell to end (including)
+ * @param data, store the result data
+ * @return int < 0 error, >= 0 works
+ */
 int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
 
@@ -314,7 +346,7 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
 
     sub_endpoint->SetDataElementType(data_element_type);
 
-    //get the size of data to read
+    // get the size of data to read
     std::vector<unsigned long long> count(data_rank);
     COUNT_RANGES(start, end, count);
 
@@ -322,8 +354,8 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     sub_endpoint_index = start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
     sub_endpoint_index_end = (end[dir_data_merge_index] + 1) / dir_chunk_size[dir_data_merge_index];
 
-    //save for metadata operation
-    // TODO: we only consider the first file here and try to consider more file here
+    // save for metadata operation
+    //  TODO: we only consider the first file here and try to consider more file here
     dir_file_list_current_index = sub_endpoint_index;
 
     std::vector<unsigned long long> start_sub_endpoint(start.begin(), start.end());
@@ -332,10 +364,12 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     start_sub_endpoint[dir_data_merge_index] = 0;
     end_sub_endpoint[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
 
-    //PrintVector("R: start : ", start);
-    //PrintVector("R: end : ", end);
-    //PrintVector("R: start_sub_endpoint : ", start_sub_endpoint);
-    //PrintVector("R: end_sub_endpoint : ", end_sub_endpoint);
+#ifdef FT_DEBUG
+    PrintVector("R: start : ", start);
+    PrintVector("R: end : ", end);
+    PrintVector("R: start_sub_endpoint : ", start_sub_endpoint);
+    PrintVector("R: end_sub_endpoint : ", end_sub_endpoint);
+#endif
 
     size_t total_element;
     COUNT_CELLS(start_sub_endpoint, end_sub_endpoint, total_element);
@@ -343,22 +377,23 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
 
     void *data_temp = malloc(total_element * sub_endpoint_element_size);
 
-    //Insert data_temp into data
+    // Insert data_temp into data
     std::vector<unsigned long long> view_start(start_sub_endpoint.begin(), start_sub_endpoint.end());
     std::vector<unsigned long long> view_end(end_sub_endpoint.begin(), end_sub_endpoint.end());
     for (int i = sub_endpoint_index; i < sub_endpoint_index_end; i++)
     {
-        //sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
-        sub_endpoint->SetEndpointInfo(dir_file_list[i]);
+        // sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
+        // std::cout << "Read = dir_file_list[i] = " << dir_file_list[i] << "\n";
+        sub_endpoint->SetEndpointInfo(dir_file_list[i] + ":" + append_sub_endpoint_info);
         sub_endpoint->Open();
         sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
         sub_endpoint->Close();
         view_start[dir_data_merge_index] = (i - sub_endpoint_index) * (end_sub_endpoint[dir_data_merge_index] + 1);
         view_end[dir_data_merge_index] = (i - sub_endpoint_index + 1) * (end_sub_endpoint[dir_data_merge_index] + 1) - 1;
 
-        //PrintVector("R: count : ", count);
-        //PrintVector("R: view_start : ", view_start);
-        //PrintVector("R: view_end : ", view_end);
+        // PrintVector("R: count : ", count);
+        // PrintVector("R: view_start : ", view_start);
+        // PrintVector("R: view_end : ", view_end);
 
         switch (data_element_type)
         {
@@ -404,18 +439,18 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
 }
 
 /**
-     * @brief write the data to the end-point
-     * 
-     * @param start, coordinates of the cell to start (including)
-     * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
-     * @return int < 0 error, >= 0 works
-     */
+ * @brief write the data to the end-point
+ *
+ * @param start, coordinates of the cell to start (including)
+ * @param end , coordinates of the cell to end (including)
+ * @param data, store the result data
+ * @return int < 0 error, >= 0 works
+ */
 int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
 
-    //start[dir_data_merge_index] = 0;
-    //end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
+    // start[dir_data_merge_index] = 0;
+    // end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
     //#define DEBUG 0
 #ifdef DEBUG
     PrintVector("EndpointDIR::dir_chunk_size before update :", dir_chunk_size);
@@ -450,18 +485,21 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
         end[i] = endpoint_size[i] - 1;
     }
 
-    //save for metadata operation
+    // save for metadata operation
     dir_file_list_current_index = sub_endpoint_index;
 
     std::stringstream ss(dir_file_list[sub_endpoint_index]);
     std::string input_path, input_file_str, input_append_sub_endpoint_info;
+    // std::cout << "Write: dir_file_list[sub_endpoint_index] =" << dir_file_list[sub_endpoint_index] << "\n";
     if (!std::getline(ss, input_path, ':'))
     {
         AU_EXIT("Wrong sub_endpoint_info");
     }
     if (!std::getline(ss, input_append_sub_endpoint_info, ':'))
     {
-        AU_EXIT("Wrong sub_endpoint_info");
+        input_append_sub_endpoint_info = append_sub_endpoint_info;
+        std::cout << "input_path = " << input_path << ", input_file_str = " << input_file_str << ", input_append_sub_endpoint_info = " << input_append_sub_endpoint_info << " \n";
+        // AU_EXIT("Wrong sub_endpoint_info"); //Coment out to use the "append_sub_endpoint_info" if "input_path" does not has the appendent info
     }
     input_file_str = ExtractFileName(input_path);
 
@@ -477,8 +515,8 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     std::string new_file_name_after_regex;
     std::regex re_test(output_replace_regex_match_str, std::regex_constants::ECMAScript);
 
-    //output_replace_regex_match_str
-    //std::regex re_test("^(.*)\\.h5$");
+    // output_replace_regex_match_str
+    // std::regex re_test("^(.*)\\.h5$");
 
     /*if (output_replace_regex_match_str == "^(.*)\\.h5$")
     {
@@ -493,24 +531,26 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
 
     if (output_replace_regex_flag)
     {
-        //new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], *output_replace_regex, output_replace_regex_aug);
-        //new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], re_test, output_replace_regex_aug);
+        // new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], *output_replace_regex, output_replace_regex_aug);
+        // new_file_name_after_regex = std::regex_replace(dir_file_list[sub_endpoint_index], re_test, output_replace_regex_aug);
         new_file_name_after_regex = std::regex_replace(input_file_str, re_test, output_replace_regex_aug);
 
+#ifdef FT_DEBUG
         std::cout << " output_replace_regex_aug = " << output_replace_regex_aug << ", new_file_name_after_regex = " << new_file_name_after_regex << ", dir_file_list[sub_endpoint_index] =" << dir_file_list[sub_endpoint_index] << ", output_replace_regex_match_str =" << output_replace_regex_match_str << "\n";
+#endif
     }
     else
     {
-        //new_file_name_after_regex = dir_file_list[sub_endpoint_index];
+        // new_file_name_after_regex = dir_file_list[sub_endpoint_index];
         new_file_name_after_regex = input_file_str;
     }
-
-    //std::cout << "call write (after) :  " << dir_str + "/" + new_file_name_after_regex + ": " + append_sub_endpoint_info << " \n";
-
+#ifdef FT_DEBUG
+    std::cout << "call write (after) :  " << dir_str + "/" + new_file_name_after_regex + ": " + input_append_sub_endpoint_info << " \n";
+#endif
     sub_endpoint->SetDataElementType(data_element_type);
     sub_endpoint->SetDimensions(endpoint_size);
-    //sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
-    //sub_endpoint->SetEndpointInfo(dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info);
+    // sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[sub_endpoint_index] + ":" + append_sub_endpoint_info);
+    // sub_endpoint->SetEndpointInfo(dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info);
     sub_endpoint->SetEndpointInfo(dir_str + "/" + new_file_name_after_regex + ":" + input_append_sub_endpoint_info);
     sub_endpoint->Create();
     sub_endpoint->Write(start, end, data);
@@ -518,10 +558,10 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
 }
 
 /**
-     * @brief close the end-point
-     * 
-     * @return int int < 0 error, >= 0 works
-     */
+ * @brief close the end-point
+ *
+ * @return int int < 0 error, >= 0 works
+ */
 int EndpointDIR::Close()
 {
     return 0;
@@ -568,10 +608,10 @@ int EndpointDIR::ParseEndpointInfo()
 }
 
 /**
-     * @brief Get the Chunk Size object
-     * 
-     * @return std::vector<int> 
-     */
+ * @brief Get the Chunk Size object
+ *
+ * @return std::vector<int>
+ */
 std::vector<int> EndpointDIR::GetDirChunkSize()
 {
     return dir_chunk_size;
@@ -655,12 +695,12 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         {
             AU_EXIT("DIR_SUB_CMD_ARG  needs at least 1 parameter: sub command code \n");
         }
-        //if (sub_endpoint != nullptr)
-        //    sub_cmd = sub_endpoint->MapOpStr2Int(parameter_v[0]);
+        // if (sub_endpoint != nullptr)
+        //     sub_cmd = sub_endpoint->MapOpStr2Int(parameter_v[0]);
         sub_cmd = std::stoi(parameter_v[0]);
         if (parameter_v.size() > 1)
         {
-            //sub_cmd_arg.push_back(parameter_v[1]);
+            // sub_cmd_arg.push_back(parameter_v[1]);
             sub_cmd_arg.insert(sub_cmd_arg.begin(), parameter_v.begin() + 1, parameter_v.end());
         }
         else
@@ -676,7 +716,7 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         {
             AU_EXIT("DIR_INPUT_SEARCH_RGX  needs 1 parameters: regex pattern and replace string pattern \n");
         }
-        //std::cout << "regex string: " << parameter_v[0] << "\n";
+        // std::cout << "regex string: " << parameter_v[0] << "\n";
         AU_VERBOSE("regex string: " + parameter_v[0], 0)
         input_replace_regex_flag = true;
         input_filter_regex = new std::regex(parameter_v[0]);
@@ -686,7 +726,9 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         {
             AU_EXIT("DIR_OUPUT_REPLACE_RGX  needs two parameters: regex pattern and replace string pattern \n");
         }
+#ifdef FT_DEBUG
         std::cout << " output_replace_regex = " << parameter_v[0] << "\n";
+#endif
         output_replace_regex_flag = true;
         output_replace_regex = new std::regex(parameter_v[0]);
         output_replace_regex_match_str = parameter_v[0];
@@ -707,9 +749,9 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         break;
     case DIR_GET_FILE_SIZE:
         ExtractMeta();
-        //std::string file_size_str = ;
+        // std::string file_size_str = ;
         parameter_v.clear();
-        parameter_v.push_back(Vector2String(dir_chunk_size));
+        parameter_v.push_back(Vector2String(dir_file_size));
         break;
     case DIR_SET_CHUNK_SIZE:
         String2Vector(parameter_v[0], dir_chunk_size);
@@ -735,6 +777,9 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         input_variable_filter_regex_flag = true;
         input_variable_filter_regex = new std::regex(parameter_v[0]);
         break;
+    case DIR_SET_VIEW:
+        SetView(parameter_v[0]);
+        break;
     default:
         break;
     }
@@ -742,36 +787,38 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
 }
 
 /**
-     * @brief Set the Merge Index
-     * 
-     * @param index_p 
-     */
+ * @brief Set the Merge Index
+ *
+ * @param index_p
+ */
 void EndpointDIR::SetMergeIndex(int index_p)
 {
     dir_data_merge_index = index_p;
 }
 
 /**
-     * @brief Get the Merge Index object
-     * 
-     * @return int 
-     */
+ * @brief Get the Merge Index object
+ *
+ * @return int
+ */
 int EndpointDIR::GetMergeIndex()
 {
     return dir_data_merge_index;
 }
 
 /**
-     * @brief Read all attribute name
-     * 
-     * @param attri_name 
-     * @return int 
-     */
+ * @brief Read all attribute name
+ *
+ * @param attri_name
+ * @return int
+ */
 int EndpointDIR::ReadAllAttributeName(std::vector<std::string> &attr_name)
 {
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    // sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    sub_endpoint->SetEndpointInfo(dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+
     sub_endpoint->Open();
-    //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
+    // sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
     sub_endpoint->Control(OP_LIST_TAG, attr_name);
     sub_endpoint->Close();
 
@@ -779,30 +826,35 @@ int EndpointDIR::ReadAllAttributeName(std::vector<std::string> &attr_name)
 }
 
 /**
-     * @brief Set the Attribute object
-     *   Do not need to be pure virtual method
-     * @param name 
-     * @param data 
-     * @return int 
-     */
+ * @brief Set the Attribute object
+ *   Do not need to be pure virtual method
+ * @param name
+ * @param data
+ * @return int
+ */
 int EndpointDIR::WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p)
 {
     std::string new_file_name_after_regex;
-    //regex re("^(.*)\\.tdms$");
+    // regex re("^(.*)\\.tdms$");
+
+    std::string input_file_str = ExtractFileName(dir_file_list[dir_file_list_current_index]);
 
     if (output_replace_regex_flag)
     {
-        new_file_name_after_regex = std::regex_replace(dir_file_list[dir_file_list_current_index], *output_replace_regex, output_replace_regex_aug);
+        new_file_name_after_regex = std::regex_replace(input_file_str, *output_replace_regex, output_replace_regex_aug);
     }
     else
     {
-        new_file_name_after_regex = dir_file_list[dir_file_list_current_index];
+        new_file_name_after_regex = input_file_str;
     }
 
+#ifdef FT_DEBUG
+    std::cout << " write attribute: " << dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info << " \n";
+#endif
     sub_endpoint->SetEndpointInfo(dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info);
+    // sub_endpoint->SetEndpointInfo(new_file_name_after_regex + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
-    //std::cout << " write attribute: " << dir_str + "/" + new_file_name_after_regex + ":" + append_sub_endpoint_info << " \n";
-    //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
+    // sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
     sub_endpoint->WriteAttribute(name, data, data_type_p, data_length_p);
     sub_endpoint->Close();
 
@@ -810,18 +862,20 @@ int EndpointDIR::WriteAttribute(const std::string &name, const void *data, FTDat
 }
 
 /**
-     * @brief Get the Attribute object
-     *  Do not need to be pure virtual method
-     * @param name 
-     * @param data 
-     * @return int 
-     */
+ * @brief Get the Attribute object
+ *  Do not need to be pure virtual method
+ * @param name
+ * @param data
+ * @return int
+ */
 int EndpointDIR::ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p)
 {
     int ret;
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    // sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    // std::cout << "ReadAttribute: " << dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info << "\n";
+    sub_endpoint->SetEndpointInfo(dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
-    //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
+    // sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
     ret = sub_endpoint->ReadAttribute(name, data, data_type_p, data_length_p);
     sub_endpoint->Close();
 
@@ -830,11 +884,63 @@ int EndpointDIR::ReadAttribute(const std::string &name, void *data, FTDataType d
 
 int EndpointDIR::GetAttributeSize(const std::string &name, FTDataType data_type_p)
 {
-    sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
+    // std::cout << "ReadAttribute: " << dir_str + "/" + dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info << "\n";
+
+    sub_endpoint->SetEndpointInfo(dir_file_list[dir_file_list_current_index] + ":" + append_sub_endpoint_info);
     sub_endpoint->Open();
     int a_size = sub_endpoint->GetAttributeSize(name, data_type_p);
-    //sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
+    // sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
     sub_endpoint->Close();
 
     return a_size;
+}
+
+/**
+ * @brief Set the View object
+ *
+ * @param view_par: is a string, ',' seperated, containing the parameter for the setview
+ *              It has two types: 0 and 1, as the first value and then it has below pattern
+ *              0,rank_to_set_view,view_start,view_count
+ *              1,ranks,view_start[0],.. view_start[ranks], view_count[0],.. view_count[ranks]
+ *              The type 0 is called by  SetView(unsigned long long start, unsigned long long count, int rank)
+ *              The type 1 is called by  SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count)
+ *
+ * Note: this function now is only required by endpoint_dir to update its chunk size inside
+ * @return int
+ */
+int EndpointDIR::SetView(const std::string &view_par)
+{
+    std::vector<unsigned long long> view_par_vector;
+    // std::cout << "EndpointDIR::SetView view_par =" << view_par << "\n";
+
+    String2Vector(view_par, view_par_vector);
+    assert(view_par_vector.size() >= 4);
+    is_view_set = true;
+
+    if (view_par_vector[0] == 0)
+    {
+        is_view_on_a_rank = true;
+        // view_start, view_end;
+        index_view_on_a_rank = view_par_vector[1];
+        set_view_start.resize(1);
+        set_view_start[0] = view_par_vector[2];
+        set_view_count.resize(1);
+        set_view_count[0] = view_par_vector[3];
+    }
+    else if (view_par_vector[0] == 1)
+    {
+        set_view_start.resize(view_par_vector[1]);
+        set_view_count.resize(view_par_vector[1]);
+        for (int i = 0; i < view_par_vector[1]; i++)
+        {
+            set_view_start[i] = view_par_vector[2 + i];
+            set_view_count[i] = view_par_vector[2 + i + view_par_vector[1]];
+        }
+    }
+    else
+    {
+        AU_EXIT("Not supported typed in via_par!");
+    }
+
+    return 0;
 }

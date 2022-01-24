@@ -3,7 +3,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -14,7 +14,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -25,7 +25,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -92,7 +92,7 @@ in binary and source code form.
 #define DIR_GET_ALL_CHUNK_TAGS (OP_USER_DEFINED_START + 9)
 #define DIR_SET_ALL_CHUNK_TAGS (OP_USER_DEFINED_START + 10)
 
-//Todo
+// Todo
 #define DIR_INPUT_ELASTIC_SIZE (OP_USER_DEFINED_START + 11)
 #define DIR_OUTPUT_ELASTIC_SIZE (OP_USER_DEFINED_START + 12)
 #define DIR_SET_OUTPUT_FILE_NAMES (OP_USER_DEFINED_START + 13)
@@ -102,6 +102,7 @@ in binary and source code form.
 
 #define DIR_SKIP_SIZE_CHECK (OP_USER_DEFINED_START + 16)
 #define DIR_INPUT_VARIABLE_SEARCH_RGX (OP_USER_DEFINED_START + 18)
+#define DIR_SET_VIEW (OP_USER_DEFINED_START + 19)
 
 #include "ft_utility.h"
 #include "ft_type.h"
@@ -115,47 +116,52 @@ in binary and source code form.
 #include <regex>
 #include <string.h>
 //
-//I/O layer
+// I/O layer
 class EndpointDIR : public Endpoint
 {
 private:
     std::string endpoint_info;
     AuEndpointType sub_endpoint_type;
-    std::string sub_endpoint_info; //Directory of files
+    std::string sub_endpoint_info; // Directory of files
     Endpoint *sub_endpoint = nullptr;
 
     std::string dir_str;
     std::vector<std::string> dir_file_list;
-    int dir_file_list_current_index = 0; //index of the current one in read/write
+    int dir_file_list_current_index = 0; // index of the current one in read/write
 
-    std::string append_sub_endpoint_info;              //dir_file_list[i] + append_sub_endpoint_info is the finale sub_endpoint_info
-    std::vector<int> dir_chunk_size, dir_overlap_size; //set chunk size to be each sub_endpoint
-
+    std::string append_sub_endpoint_info;              // dir_file_list[i] + append_sub_endpoint_info is the finale sub_endpoint_info
+    std::vector<int> dir_chunk_size, dir_overlap_size; // set chunk size to be each sub_endpoint
+    std::vector<int> dir_file_size;                    // It records the size of each "merged file" from small files.
     int dir_data_merge_index = 0;
 
-    //http://www.cplusplus.com/reference/regex/ECMAScript/
+    // http://www.cplusplus.com/reference/regex/ECMAScript/
     bool input_replace_regex_flag = false;
-    std::regex *input_filter_regex; //The regex to "search" on list of file as input
+    std::regex *input_filter_regex; // The regex to "search" on list of file as input
 
     bool input_variable_filter_regex_flag = false;
-    std::regex *input_variable_filter_regex; //The regex to "search" on list of file as input
+    std::regex *input_variable_filter_regex; // The regex to "search" on list of file as input
 
     bool output_replace_regex_flag = false;
-    std::regex *output_replace_regex; //The regex to "replace" on list of file as output (input)
+    std::regex *output_replace_regex; // The regex to "replace" on list of file as output (input)
     std::string output_replace_regex_aug;
     std::string output_replace_regex_match_str;
 
-    bool has_ordering_on_file_list = false; //User may apply ordering on list, based on sorted ordring
+    bool has_ordering_on_file_list = false; // User may apply ordering on list, based on sorted ordring
     std::vector<size_t> order_on_file_list;
 
-    bool is_list_dir_recursive = false;      //List file in a directory
-    bool is_dir_file_list_recursive = false; //List dataset inside a file within a directory.
+    bool is_list_dir_recursive = false;      // List file in a directory
+    bool is_dir_file_list_recursive = false; // List dataset inside a file within a directory.
     bool skip_size_check = false;
+
+    bool is_view_set = false;
+    bool is_view_on_a_rank = false;
+    std::vector<unsigned long long> set_view_start, set_view_count;
+    int index_view_on_a_rank;
 
 public:
     /**
      * @brief Construct a new EndpointDIR object
-     * 
+     *
      * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
      */
     EndpointDIR(std::string endpoint_info_p)
@@ -188,54 +194,54 @@ public:
     }
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
-     * 
-     * @return int < 0 error, >= 0 works 
+     *
+     * @return int < 0 error, >= 0 works
      */
     int ExtractMeta() override;
     /**
      * @brief print information about the endpoint
-     * 
-     * @return < 0 error, >= 0 works 
+     *
+     * @return < 0 error, >= 0 works
      */
     int PrintInfo() override;
 
     /**
      * @brief create the endpoint
-     * 
-     * @return  < 0 error, >= 0 works 
+     *
+     * @return  < 0 error, >= 0 works
      */
     int Create() override;
 
     /**
      * @brief open the endpoint
-     * 
-     * @return < 0 error, >= 0 works 
+     *
+     * @return < 0 error, >= 0 works
      */
     int Open() override;
 
     /**
      * @brief read the data from end-point
-     * 
+     *
      * @param start, coordinates of the cell to start (including)
      * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
+     * @param data, store the result data
      * @return int < 0 error, >= 0 works
      */
     int Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
 
     /**
      * @brief write the data to the end-point
-     * 
+     *
      * @param start, coordinates of the cell to start (including)
      * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
+     * @param data, store the result data
      * @return int < 0 error, >= 0 works
      */
     int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
 
     /**
      * @brief close the end-point
-     * 
+     *
      * @return int int < 0 error, >= 0 works
      */
     int Close() override;
@@ -250,8 +256,8 @@ public:
 
     /**
      * @brief Get the Chunk Size object
-     * 
-     * @return std::vector<int> 
+     *
+     * @return std::vector<int>
      */
     std::vector<int> GetDirChunkSize() override;
 
@@ -265,39 +271,39 @@ public:
      * @brief call a special operator on endpoint
      *        such as, enable collective I/O for HDF5
      *                 dump file from MEMORY to HDF5
-     * @param opt_code, specially defined code 
+     * @param opt_code, specially defined code
      */
     int Control(int opt_code, std::vector<std::string> &parameter_v) override;
 
     /**
      * @brief Set the Merge Index
-     * 
-     * @param index_p 
+     *
+     * @param index_p
      */
     void SetMergeIndex(int index_p);
 
     /**
      * @brief Get the Merge Index object
-     * 
-     * @return int 
+     *
+     * @return int
      */
     int GetMergeIndex();
 
     /**
      * @brief Set the Attribute object
      *   Do not need to be pure virtual method
-     * @param name 
-     * @param data 
-     * @return int 
+     * @param name
+     * @param data
+     * @return int
      */
     int WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
 
     /**
      * @brief Get the Attribute object
      *  Do not need to be pure virtual method
-     * @param name 
-     * @param data 
-     * @return int 
+     * @param name
+     * @param data
+     * @return int
      */
     int ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
 
@@ -305,10 +311,25 @@ public:
 
     /**
      * @brief Read all attribute name
-     * 
-     * @param attri_name 
-     * @return int 
+     *
+     * @param attri_name
+     * @return int
      */
     int ReadAllAttributeName(std::vector<std::string> &attr_name);
+
+    /**
+     * @brief Set the View object
+     *
+     * @param view_par: is a string, ',' seperated, containing the parameter for the setview
+     *              It has two types: 0 and 1, as the first value and then it has below pattern
+     *              0,rank_to_set_view,view_start,view_count
+     *              1,ranks,view_start[0],.. view_start[ranks], view_count[0],.. view_count[ranks]
+     *              The type 0 is called by  SetView(unsigned long long start, unsigned long long count, int rank)
+     *              The type 1 is called by  SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count)
+     *
+     * Note: this function now is only required by endpoint_dir to update its chunk size inside
+     * @return int
+     */
+    int SetView(const std::string &view_par);
 };
 #endif

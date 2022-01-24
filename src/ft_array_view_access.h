@@ -3,7 +3,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -14,7 +14,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -25,7 +25,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -91,7 +91,7 @@ in binary and source code form.
 
 /**
  * @brief Access a subset between v_bu (view buffer) and a_bu (array buffer)
- * 
+ *
  * @param v_bu: view buffer
  * @param v_st: start of view buffer
  * @param a_bu: array buffer
@@ -112,8 +112,8 @@ in binary and source code form.
         }                                                                                       \
     }
 /**
- * @brief Access an view (subset) of an array 
- * 
+ * @brief Access an view (subset) of an array
+ *
  * @param view_buffer : pointer to the buffer for the view
  * @param array_buffer : pointer to the buffer for the array
  * @param array_size : the size for the array
@@ -156,13 +156,13 @@ inline int ArrayViewAccessV(std::vector<T> &view_v, std::vector<T> &array_v, std
         {
             array_buffer_offset = array_size[1] * (start[0] + i) + start[1];
             view_buffer_offset = view_size[1] * i;
-            //Copy each row
+            // Copy each row
             VIEW_ACCESS_HELP(view_v, view_buffer_offset, array_v, array_buffer_offset, view_size[1], read_write_code);
         }
         return 0;
     }
 
-    //Generic version
+    // Generic version
     array_buffer_offset = 0, view_buffer_offset = 0;
     std::vector<unsigned long long> ord(start.begin(), start.end());
     for (unsigned long long i = 0; i < element_count; i++)
@@ -170,14 +170,14 @@ inline int ArrayViewAccessV(std::vector<T> &view_v, std::vector<T> &array_v, std
         ROW_MAJOR_ORDER_MACRO(array_size, array_size.size(), ord, array_buffer_offset);
         MEMCPY_ACCESS_HELP(view_v, view_buffer_offset, array_v, array_buffer_offset, 1, read_write_code);
         view_buffer_offset++;
-        ITERATOR_MACRO(ord, start, end); //update ord by increasing "1", row-major order
+        ITERATOR_MACRO(ord, start, end); // update ord by increasing "1", row-major order
     }
 
     return 0;
 }
 
-//void* memcpy( void* dest, const void* src, std::size_t count );
-//std::memcpy(data, local_mirror_buffer, element_count * sizeof(T));
+// void* memcpy( void* dest, const void* src, std::size_t count );
+// std::memcpy(data, local_mirror_buffer, element_count * sizeof(T));
 
 #define VIEW_ACCESS_HELP_P(v_bu, v_st, a_bu, a_st, count_n, rw, type_size) \
     {                                                                      \
@@ -192,7 +192,7 @@ inline int ArrayViewAccessV(std::vector<T> &view_v, std::vector<T> &array_v, std
     }
 
 template <class T>
-inline int ArrayViewAccessP(T *view_v, T *array_v, const std::vector<unsigned long long> array_size, const std::vector<unsigned long long> start, const std::vector<unsigned long long> end, const int read_write_code)
+inline int ArrayViewAccessP(T *view_v, T *array_v, const std::vector<unsigned long long> &array_size, const std::vector<unsigned long long> &start, const std::vector<unsigned long long> &end, const int read_write_code)
 {
     std::vector<unsigned long long> view_size;
     unsigned long long element_count = 1;
@@ -203,24 +203,26 @@ inline int ArrayViewAccessP(T *view_v, T *array_v, const std::vector<unsigned lo
         element_count = element_count * view_size[i];
     }
 
-    //view_v.resize(element_count);
+    // view_v.resize(element_count);
     if (view_size == array_size)
     {
         VIEW_ACCESS_HELP_P(view_v, 0, array_v, 0, element_count, read_write_code, sizeof(T));
         return 0;
     }
 
+    // 1D data
     if (view_size.size() == 1)
     {
         VIEW_ACCESS_HELP_P(view_v, 0, array_v, start[0], element_count, read_write_code, sizeof(T));
         return 0;
     }
 
+    // 2D data
     unsigned long long array_buffer_offset = 0, view_buffer_offset = 0;
     if (view_size.size() == 2)
     {
-        //PrintVector("view_size =", view_size);
-        //PrintVector("array_size =", array_size);
+        // PrintVector("view_size =", view_size);
+        // PrintVector("array_size =", array_size);
 
         for (int i = 0; i < view_size[0]; i++)
         {
@@ -228,15 +230,16 @@ inline int ArrayViewAccessP(T *view_v, T *array_v, const std::vector<unsigned lo
             // PrintScalar("view_buffer_offset = ", view_buffer_offset);
             array_buffer_offset = array_size[1] * (start[0] + i) + start[1];
             view_buffer_offset = view_size[1] * i;
-            //Copy each row
+            // Copy each row
             VIEW_ACCESS_HELP_P(view_v, view_buffer_offset, array_v, array_buffer_offset, view_size[1], read_write_code, sizeof(T));
-            //VIEW_ACCESS_HELP(view_v, view_size[1] * i, array_v, array_size[1] * (start[0] + i) + start[1], view_size[1], read_write_code);
+            // VIEW_ACCESS_HELP(view_v, view_size[1] * i, array_v, array_size[1] * (start[0] + i) + start[1], view_size[1], read_write_code);
         }
         return 0;
     }
 
+    // 3D data
     unsigned long long array_buffer_offset_2;
-    if (view_size.size() == 3)
+    if (view_size.size() == 3 && 0) // This still under-test
     {
         for (int i = 0; i < view_size[0]; i++)
         {
@@ -250,7 +253,7 @@ inline int ArrayViewAccessP(T *view_v, T *array_v, const std::vector<unsigned lo
         return 0;
     }
 
-    //Generic version
+    // Generic version
     array_buffer_offset = 0, view_buffer_offset = 0;
     std::vector<unsigned long long> ord(start.begin(), start.end());
     for (unsigned long long i = 0; i < element_count; i++)
@@ -258,7 +261,7 @@ inline int ArrayViewAccessP(T *view_v, T *array_v, const std::vector<unsigned lo
         ROW_MAJOR_ORDER_MACRO(array_size, array_size.size(), ord, array_buffer_offset);
         VIEW_ACCESS_HELP_P(view_v, view_buffer_offset, array_v, array_buffer_offset, 1, read_write_code, sizeof(T));
         view_buffer_offset++;
-        ITERATOR_MACRO(ord, start, end); //update ord by increasing "1", row-major order
+        ITERATOR_MACRO(ord, start, end); // update ord by increasing "1", row-major order
     }
 
     return 0;

@@ -3,7 +3,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -14,7 +14,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -25,7 +25,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -80,20 +80,20 @@ in binary and source code form.
 #include "ft_endpoint.h"
 
 /**
-     * @brief Get the Dimensions of the data
-     * 
-     * @return vector for the size of data  endpoint_dim_size.size() is the rank
-     */
+ * @brief Get the Dimensions of the data
+ *
+ * @return vector for the size of data  endpoint_dim_size.size() is the rank
+ */
 std::vector<unsigned long long> Endpoint::GetDimensions()
 {
     return endpoint_size;
 }
 
 /**
-     * @brief Set the Dimensions 
-     * 
-     * @return < 0 error, works otherwise
-     */
+ * @brief Set the Dimensions
+ *
+ * @return < 0 error, works otherwise
+ */
 void Endpoint::SetDimensions(std::vector<unsigned long long> endpoint_dim_size_p)
 {
     endpoint_ranks = endpoint_dim_size_p.size();
@@ -112,13 +112,13 @@ AuEndpointDataType Endpoint::GetDataElementType()
 }
 
 /**
-     * @brief Get the size of the type for the element
-     * 
-     * @return int 
-     */
+ * @brief Get the size of the type for the element
+ *
+ * @return int
+ */
 int Endpoint::GetDataElementTypeSize()
 {
-    //std::cout << "data_element_type =" << data_element_type << "\n";
+    // std::cout << "data_element_type =" << data_element_type << "\n";
     switch (data_element_type)
     {
     case AU_SHORT:
@@ -327,41 +327,41 @@ void *Endpoint::Union2Void(std::vector<AuEndpointDataTypeUnion> &data_vector_in_
 }
 
 /**
-     * @brief set the endpoint_info string 
-     * 
-     * @param endpoint_info 
-     */
+ * @brief set the endpoint_info string
+ *
+ * @param endpoint_info
+ */
 void Endpoint::SetEndpointInfo(std::string endpoint_info_p)
 {
     endpoint_info = endpoint_info_p;
-    ParseEndpointInfo(); //After set, we need to refresh related other parts
+    ParseEndpointInfo(); // After set, we need to refresh related other parts
 }
 
 /**
-    * @brief Get the endpoint_info string 
-     * 
-     * @return std::string 
-     */
+ * @brief Get the endpoint_info string
+ *
+ * @return std::string
+ */
 std::string Endpoint::GetEndpointInfo()
 {
     return endpoint_info;
 }
 
 /**
-     * @brief Set the Endpoint Type object
-     * 
-     * @param endpoint_type_p 
-     */
+ * @brief Set the Endpoint Type object
+ *
+ * @param endpoint_type_p
+ */
 void Endpoint::SetEndpointType(AuEndpointType endpoint_type_p)
 {
     endpoint_type = endpoint_type_p;
 }
 
 /**
-     * @brief Get the Endpoint Type object
-     * 
-     * @return AuEndpointType 
-     */
+ * @brief Get the Endpoint Type object
+ *
+ * @return AuEndpointType
+ */
 AuEndpointType Endpoint::GetEndpointType()
 {
     return endpoint_type;
@@ -380,44 +380,44 @@ void Endpoint::SetDirFileVector(std::vector<std::string> &file_list)
 }
 
 /**
-     * @brief Get the Dir Chunk Size object
-     * 
-     * @return std::vector<int> 
-     */
+ * @brief Get the Dir Chunk Size object
+ *
+ * @return std::vector<int>
+ */
 std::vector<int> Endpoint::GetDirChunkSize()
 {
     AU_EXIT("Error: should not be called");
 }
 
 /**
-     * @brief Set the Dir Chunk Size object
-     * 
-     * @param dir_chunk_size_p 
-     */
+ * @brief Set the Dir Chunk Size object
+ *
+ * @param dir_chunk_size_p
+ */
 void Endpoint::SetDirChunkSize(std::vector<int> &dir_chunk_size_p)
 {
     AU_EXIT("Error: SetDirChunkSize is not implemented in endpoint");
 }
 
 /**
-     * @brief call a special operator on endpoint
-     *        such as, enable collective I/O for HDF5
-     *                 dump file from MEMORY to HDF5
-     * @param opt_code, specially defined code 
-     */
-//int Endpoint::SpecialOperator(int opt_code, std::string parameter)
+ * @brief call a special operator on endpoint
+ *        such as, enable collective I/O for HDF5
+ *                 dump file from MEMORY to HDF5
+ * @param opt_code, specially defined code
+ */
+// int Endpoint::SpecialOperator(int opt_code, std::string parameter)
 //{
-//    AU_EXIT("Error: SpecialOperator is not implemented in endpoint");
-//    return 0;
-//}
+//     AU_EXIT("Error: SpecialOperator is not implemented in endpoint");
+//     return 0;
+// }
 
 /**
-     * @brief call a special operator on endpoint
-     *        such as, enable collective I/O for HDF5
-     *                 dump file from MEMORY to HDF5
-     * @param opt_code, specially defined code 
-     * @param parameter_v, vector of argument
-     */
+ * @brief call a special operator on endpoint
+ *        such as, enable collective I/O for HDF5
+ *                 dump file from MEMORY to HDF5
+ * @param opt_code, specially defined code
+ * @param parameter_v, vector of argument
+ */
 int Endpoint::Control(int opt_code, std::vector<std::string> &parameter_v)
 {
     AU_EXIT("Error: Control is not implemented in endpoint");
@@ -440,11 +440,11 @@ int Endpoint::MapOpStr2Int(std::string op_cmd_str)
 }
 
 /**
-     * @brief map op_int to string 
-     * 
-     * @param op_int 
-     * @return std::string 
-     */
+ * @brief map op_int to string
+ *
+ * @param op_int
+ * @return std::string
+ */
 std::string Endpoint::MapOpInt2Str(int op_int)
 {
     AU_EXIT("Error: MapOpInt2String is not implemented in endpoint");
@@ -452,12 +452,12 @@ std::string Endpoint::MapOpInt2Str(int op_int)
 }
 
 /**
-     * @brief Set the Attribute object
-     * 
-     * @param name 
-     * @param data 
-     * @return int 
-     */
+ * @brief Set the Attribute object
+ *
+ * @param name
+ * @param data
+ * @return int
+ */
 int Endpoint::WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p)
 {
     AU_EXIT("Error: SetAttribute is not implemented in endpoint");
@@ -465,12 +465,12 @@ int Endpoint::WriteAttribute(const std::string &name, const void *data, FTDataTy
 }
 
 /**
-     * @brief Get the Attribute object
-     * 
-     * @param name 
-     * @param data 
-     * @return int 
-     */
+ * @brief Get the Attribute object
+ *
+ * @param name
+ * @param data
+ * @return int
+ */
 int Endpoint::ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p)
 {
     AU_EXIT("Error: GetAttribute is not implemented in endpoint");
@@ -482,3 +482,22 @@ int Endpoint::GetAttributeSize(const std::string &name, FTDataType data_type_p)
     AU_EXIT("Error: GetAttributeSize is not implemented in endpoint");
     return 0;
 }
+
+/**
+ * @brief Set the View object
+ *
+ * @param view_par: is a string, ',' seperated, containing the parameter for the setview
+ *              It has two types: 0 and 1, as the first value and then it has below pattern
+ *              0,rank_to_set_view,view_start,view_count
+ *              1,ranks,view_start[0],.. view_start[ranks], view_count[0],.. view_count[ranks]
+ *              The type 0 is called by  SetView(unsigned long long start, unsigned long long count, int rank)
+ *              The type 1 is called by  SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count)
+ *
+ * Note: this function now is only required by endpoint_dir to update its chunk size inside
+ * @return int
+ */
+/*int Endpoint::SetView(const std::string &view_par)
+{
+    AU_EXIT("Error: SetView is not implemented in endpoint");
+    return 0;
+}*/
