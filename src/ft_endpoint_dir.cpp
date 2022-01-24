@@ -381,6 +381,12 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     // Insert data_temp into data
     std::vector<unsigned long long> view_start(start_sub_endpoint.begin(), start_sub_endpoint.end());
     std::vector<unsigned long long> view_end(end_sub_endpoint.begin(), end_sub_endpoint.end());
+    if (is_view_set && is_view_on_a_rank)
+    {
+        view_end[index_view_on_a_rank] = view_end[index_view_on_a_rank] - view_start[index_view_on_a_rank];
+        view_start[index_view_on_a_rank] = 0;
+    }
+
     for (int i = sub_endpoint_index; i < sub_endpoint_index_end; i++)
     {
         // sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
@@ -392,9 +398,9 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
         view_start[dir_data_merge_index] = (i - sub_endpoint_index) * (end_sub_endpoint[dir_data_merge_index] + 1);
         view_end[dir_data_merge_index] = (i - sub_endpoint_index + 1) * (end_sub_endpoint[dir_data_merge_index] + 1) - 1;
 
-        // PrintVector("R: count : ", count);
-        // PrintVector("R: view_start : ", view_start);
-        // PrintVector("R: view_end : ", view_end);
+        PrintVector("R: count : ", count);
+        PrintVector("R: view_start : ", view_start);
+        PrintVector("R: view_end : ", view_end);
 
         switch (data_element_type)
         {
