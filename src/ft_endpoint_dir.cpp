@@ -87,6 +87,8 @@ extern int ft_rank;
 
 int EndpointDIR::ExtractMeta()
 {
+    if (is_ExtractMeta_called)
+        return 0;
     std::vector<std::string> temp_dir_file_list;
     if (!is_list_dir_recursive)
     {
@@ -331,6 +333,7 @@ int EndpointDIR::ExtractMeta()
 #endif
     }
 
+    is_ExtractMeta_called = true;
     return 0;
 }
 

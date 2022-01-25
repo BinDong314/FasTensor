@@ -158,6 +158,8 @@ private:
     std::vector<unsigned long long> set_view_start, set_view_count;
     int index_view_on_a_rank;
 
+    bool is_ExtractMeta_called = false;
+
 public:
     /**
      * @brief Construct a new EndpointDIR object
