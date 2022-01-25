@@ -522,8 +522,8 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
     if (!std::getline(ss, input_append_sub_endpoint_info, ':'))
     {
         input_append_sub_endpoint_info = append_sub_endpoint_info;
-        std::cout << "input_path = " << input_path << ", input_file_str = " << input_file_str << ", input_append_sub_endpoint_info = " << input_append_sub_endpoint_info << " \n";
-        // AU_EXIT("Wrong sub_endpoint_info"); //Coment out to use the "append_sub_endpoint_info" if "input_path" does not has the appendent info
+        // std::cout << "input_path = " << input_path << ", input_file_str = " << input_file_str << ", input_append_sub_endpoint_info = " << input_append_sub_endpoint_info << " \n";
+        //  AU_EXIT("Wrong sub_endpoint_info"); //Coment out to use the "append_sub_endpoint_info" if "input_path" does not has the appendent info
     }
     input_file_str = ExtractFileName(input_path);
 
