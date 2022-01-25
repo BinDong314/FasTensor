@@ -1154,8 +1154,8 @@ namespace FT
             // Here we update the filename list for the output endpoint
             // Basically, if the input has merge
             // We only keep the filename of the first merged as output
-            PrintVector("Debug:  data_chunk_size = ", data_chunk_size);
-            PrintVector("Debug:  dir_chunk_size = ", dir_chunk_size);
+            // PrintVector("Debug:  data_chunk_size = ", data_chunk_size);
+            // PrintVector("Debug:  dir_chunk_size = ", dir_chunk_size);
             int n_merge = 1;
             for (int i = 0; i < data_dims; i++)
             {

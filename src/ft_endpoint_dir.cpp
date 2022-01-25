@@ -262,9 +262,25 @@ int EndpointDIR::ExtractMeta()
     }
 
     AU_VERBOSE("The [" + std::to_string(dir_file_list.size()) + "] files used by DIR (ordered): ", 0);
-    for (int i = 0; i < dir_file_list.size(); i++)
+    if (dir_file_list.size() <= 10)
     {
-        AU_VERBOSE(dir_file_list[i], 0);
+        for (int i = 0; i < dir_file_list.size(); i++)
+        {
+            AU_VERBOSE(dir_file_list[i], 0);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            AU_VERBOSE(dir_file_list[i], 0);
+        }
+        AU_VERBOSE("...", 0);
+        AU_VERBOSE("...", 0);
+        for (int i = dir_file_list.size() - 5; i < dir_file_list.size(); i++)
+        {
+            AU_VERBOSE(dir_file_list[i], 0);
+        }
     }
 //#define FT_DEBUG 1
 #ifdef FT_DEBUG
@@ -368,13 +384,11 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     COUNT_CELLS(start_sub_endpoint, end_sub_endpoint, total_element);
     size_t sub_endpoint_element_size = sub_endpoint->GetDataElementTypeSize();
 
-#ifdef 1
-    PrintVector("R: start : ", start);
-    PrintVector("R: end : ", end);
-    PrintVector("R: start_sub_endpoint : ", start_sub_endpoint);
-    PrintVector("R: end_sub_endpoint : ", end_sub_endpoint);
-    PrintScalar("R: total_element :", total_element);
-#endif
+    // PrintVector("R: start : ", start);
+    // PrintVector("R: end : ", end);
+    // PrintVector("R: start_sub_endpoint : ", start_sub_endpoint);
+    // PrintVector("R: end_sub_endpoint : ", end_sub_endpoint);
+    // PrintScalar("R: total_element :", total_element);
 
     void *data_temp = malloc(total_element * sub_endpoint_element_size);
 
@@ -398,9 +412,9 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
         view_start[dir_data_merge_index] = (i - sub_endpoint_index) * (end_sub_endpoint[dir_data_merge_index] + 1);
         view_end[dir_data_merge_index] = (i - sub_endpoint_index + 1) * (end_sub_endpoint[dir_data_merge_index] + 1) - 1;
 
-        PrintVector("R: count : ", count);
-        PrintVector("R: view_start : ", view_start);
-        PrintVector("R: view_end : ", view_end);
+        // PrintVector("R: count : ", count);
+        // PrintVector("R: view_start : ", view_start);
+        // PrintVector("R: view_end : ", view_end);
 
         switch (data_element_type)
         {
