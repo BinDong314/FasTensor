@@ -90,27 +90,28 @@ in binary and source code form.
  */
 int mkpath(std::string s, mode_t mode)
 {
-    size_t pos = 0;
-    std::string dir;
-    int mdret;
+    /*   size_t pos = 0;
+       std::string dir;
+       int mdret;
 
-    if (s[s.size() - 1] != '/')
-    {
-        // force trailing / so we can handle everything in loop
-        s += '/';
-    }
+       if (s[s.size() - 1] != '/')
+       {
+           // force trailing / so we can handle everything in loop
+           s += '/';
+       }
 
-    while ((pos = s.find_first_of('/', pos)) != std::string::npos)
-    {
-        dir = s.substr(0, pos++);
-        if (dir.size() == 0)
-            continue; // if leading / first time is 0 length
-        if ((mdret = mkdir(dir.c_str(), mode)) && errno != EEXIST)
-        {
-            return mdret;
-        }
-    }
-    return mdret;
+       while ((pos = s.find_first_of('/', pos)) != std::string::npos)
+       {
+           dir = s.substr(0, pos++);
+           if (dir.size() == 0)
+               continue; // if leading / first time is 0 length
+           if ((mdret = mkdir(dir.c_str(), mode)) && errno != EEXIST)
+           {
+               return mdret;
+           }
+       }
+       return mdret;
+       */
 }
 
 std::string realpathEx(std::string path)
