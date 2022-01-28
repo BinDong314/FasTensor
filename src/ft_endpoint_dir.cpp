@@ -231,7 +231,7 @@ int EndpointDIR::ExtractMeta()
             }
             else if (i == (dir_file_list.size() - 1))
             {
-                AU_INFO("All files have the same size ! \n");
+                AU_VERBOSE("All files have the same size !", 0);
             }
         }
     }
