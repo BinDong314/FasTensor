@@ -107,8 +107,12 @@ int EndpointHDF5::Create()
 
     if (file_exist(fn_str.c_str()) == 0)
     {
+        char *ts1 = strdup(fn_str.c_str());
+        char *dir = dirname(ts1);
+        std::string dir_str(dir);
+        mkpath(dir_str, 0755);
         // std::cout << "Call H5Fcreate 1 : " << fn_str << "\n"<< std::flush;
-
+        free(ts1);
         fid = H5Fcreate(fn_str.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
         // std::cout << "After Call H5Fcreate : af " << fn_str << "\n"<< std::flush;
     }

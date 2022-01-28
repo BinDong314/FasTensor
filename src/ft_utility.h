@@ -5,7 +5,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -16,7 +16,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -27,7 +27,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -111,61 +111,61 @@ in binary and source code form.
 extern int ft_rank;
 
 /**
- * @brief expand the path to full directory 
+ * @brief expand the path to full directory
  *    https://www.dreamincode.net/forums/topic/218601-realpath-and-tilde/
- * @param path 
- * @param buff 
- * @return char* 
+ * @param path
+ * @param buff
+ * @return char*
  */
 std::string realpathEx(std::string path);
 
 /**
  * @brief Get file list of a direction
- * 
- * @param dir_str_p 
- * @return std::vector<std::string> 
+ *
+ * @param dir_str_p
+ * @return std::vector<std::string>
  */
 std::vector<std::string> GetDirFileList(std::string dir_str_p);
 
 /**
  * @brief Get the Dir File List Recursive object
- * 
+ *
  * @param dir_str_p : the directory
- * @return std::vector<std::string> 
+ * @return std::vector<std::string>
  */
 std::vector<std::string> GetDirFileListRecursive(std::string dir_str_p);
 
 /**
  * @brief Split endpoint_type_info string to type and information
- * 
+ *
  * @param endpoint_type_info , information string for the endpoint
  * @param endpoint_type , output value containing the type
  * @param endpoint_info , output value containging all other parts
- * @return int 
+ * @return int
  */
 int ExtractEndpointTypeInfo(std::string endpoint_type_info, AuEndpointType &endpoint_type, std::string &endpoint_info);
 
 /**
  * @brief Check wether the file exists
- * 
- * @param filename 
- * @return int 
+ *
+ * @param filename
+ * @return int
  */
 int file_exist(const char *filename);
 
 /**
- * @brief 
- * 
- * @param fullPath 
- * @return std::string 
+ * @brief
+ *
+ * @param fullPath
+ * @return std::string
  */
 std::string ExtractFileName(const std::string &fullPath);
 
 /**
- * @brief 
- * 
- * @param fullPath 
- * @return std::string 
+ * @brief
+ *
+ * @param fullPath
+ * @return std::string
  */
 std::string ExtractPath(const std::string &fullPath);
 
@@ -289,7 +289,7 @@ inline void PrintString(std::string name)
 
 /**
  * @brief convert coordinate to linearized one
- * 
+ *
  * @param dsize : size of all dimensions of the data
  * @param coordinate : multidimensional coordinate
  * @return unsigned long long : linearized one
@@ -307,9 +307,9 @@ inline unsigned long long RowMajorOrder(std::vector<unsigned long long> dsize, s
 
 /**
  * @brief convert linearized coordinate to multidimensional one
- * 
+ *
  * @param offset : linearized coordinate
- * @param dsize : data size 
+ * @param dsize : data size
  * @return std::vector<unsigned long long> :multidimensional coordinate
  */
 inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long offset, std::vector<unsigned long long> dsize)
@@ -317,26 +317,26 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
     int n = dsize.size();
     std::vector<unsigned long long> original_coordinate;
     original_coordinate.resize(n);
-    //unsigned long long reminder;
+    // unsigned long long reminder;
     for (unsigned long long i = n - 1; i >= 1; i--)
     {
         original_coordinate[i] = offset % dsize[i];
         offset = offset / dsize[i];
     }
-    //Last dimenstion
+    // Last dimenstion
     original_coordinate[0] = offset;
 
     return original_coordinate;
 }
 
 /**
- * @brief 
- * 
- * @tparam T1 
- * @tparam T2 
+ * @brief
+ *
+ * @tparam T1
+ * @tparam T2
  * @param attribute_vector it is type of AuEndpointDataTypeUnion
- * @param virtual_array_vector 
- * @param index 
+ * @param virtual_array_vector
+ * @param index
  */
 template <class T1, class T2>
 inline void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
@@ -410,8 +410,7 @@ inline void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_
                                       }
                                       return;
                                   }
-                                  m_index++;
-                              });
+                                  m_index++; });
     }
 }
 
@@ -421,22 +420,21 @@ inline void InsertAttribute2VirtualArrayVector<AuEndpointDataTypeUnion, std::com
     AU_EXIT("std::complex does not work with cista::for_each_field now");
 }
 
-#define ExtractAttributeFromVirtualArrayVector_HELPER(ELEMENT_TYPE)                                                       \
-    {                                                                                                                     \
-        ELEMENT_TYPE *attribute_data_typed = (ELEMENT_TYPE *)attribute_data_void_pointer;                                 \
-        for (size_t i = 0; i < n; i++)                                                                                    \
-        {                                                                                                                 \
-            int m_index = 0;                                                                                              \
-            ELEMENT_TYPE temp_attribute_value;                                                                            \
+#define ExtractAttributeFromVirtualArrayVector_HELPER(ELEMENT_TYPE)                                                           \
+    {                                                                                                                         \
+        ELEMENT_TYPE *attribute_data_typed = (ELEMENT_TYPE *)attribute_data_void_pointer;                                     \
+        for (size_t i = 0; i < n; i++)                                                                                        \
+        {                                                                                                                     \
+            int m_index = 0;                                                                                                  \
+            ELEMENT_TYPE temp_attribute_value;                                                                                \
             cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, &temp_attribute_value](auto &&m) { \
                 if (m_index == attribute_index)                                                                           \
                 {                                                                                                         \
                     temp_attribute_value = m;                                                                             \
                 }                                                                                                         \
-                m_index++;                                                                                                \
-            });                                                                                                           \
-            attribute_data_typed[i] = temp_attribute_value;                                                               \
-        }                                                                                                                 \
+                m_index++; }); \
+            attribute_data_typed[i] = temp_attribute_value;                                                                   \
+        }                                                                                                                     \
     }
 
 template <class T2>
@@ -522,7 +520,7 @@ template <typename T>
 std::string Vector2String(const std::vector<T> &vec)
 {
     std::ostringstream vts;
-    vts << std::setprecision(17); //force high prevision for float
+    vts << std::setprecision(17); // force high prevision for float
     if (!vec.empty())
     {
         // Convert all but the last element to avoid a trailing ","

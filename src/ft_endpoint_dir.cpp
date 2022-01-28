@@ -229,6 +229,10 @@ int EndpointDIR::ExtractMeta()
             {
                 AU_EXIT("Data under directory must have same size: " + dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
             }
+            else if (i == (dir_file_list.size() - 1))
+            {
+                AU_INFO("All files have the same size ! \n");
+            }
         }
     }
 
