@@ -5,7 +5,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -16,7 +16,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -27,7 +27,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -93,27 +93,28 @@ in binary and source code form.
 
 typedef enum AuEndpointType
 {
-  EP_HDF5 = 0,    //from/to HDF5
-  EP_PNETCDF = 1, //from/to NETCDF; todo
-  EP_ADIOS = 2,   //from/to AUDIOS; todo
-  EP_BINARY = 3,  //from/to binary file; todo
-  EP_VIRTUAL = 4, //from/to Virtual array of above types; todo
-  EP_MEMORY = 5,  //from/to in-memory cache: todo
-  EP_H5VDS = 6,   //H5 VDS: todo
-  EP_DIR = 7,     //Directory to data to process. file format to be detected
-  EP_DASSA = 8,   //customized DASSA IO
-  EP_TDMS = 9,    //tdms file format (to binary file)
+  EP_HDF5 = 0,    // from/to HDF5
+  EP_PNETCDF = 1, // from/to NETCDF; todo
+  EP_ADIOS = 2,   // from/to AUDIOS; todo
+  EP_BINARY = 3,  // from/to binary file; todo
+  EP_VIRTUAL = 4, // from/to Virtual array of above types; todo
+  EP_MEMORY = 5,  // from/to in-memory cache: todo
+  EP_H5VDS = 6,   // H5 VDS: todo
+  EP_DIR = 7,     // Directory to data to process. file format to be detected
+  EP_DASSA = 8,   // customized DASSA IO
+  EP_TDMS = 9,    // tdms file format (to binary file)
+  EP_CSV = 10,    // CSV format, text format with , or user-specified del
 } AuEndpointType;
 /**
  * @brief map string typed name of type to AuEndpointType
- * 
+ *
  * @param endpoint_type_str input of string name
- * @return AuEndpointType output of type 
+ * @return AuEndpointType output of type
  */
 AuEndpointType MapString2EndpointType(std::string endpoint_type_str);
 
-//See https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h
-//for reference
+// See https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h
+// for reference
 typedef enum AuEndpointDataType
 {
   AU_NO_TYPE = -1,
@@ -127,8 +128,8 @@ typedef enum AuEndpointDataType
   AU_ULLONG = 7,
   AU_FLOAT = 8,
   AU_DOUBLE = 9,
-  AU_DOUBLE_COMPLEX = 10, //it is std::complex<double>
-  AU_STRING = 11,         //mostly used to store attribute
+  AU_DOUBLE_COMPLEX = 10, // it is std::complex<double>
+  AU_STRING = 11,         // mostly used to store attribute
   AU_NCLASSES             /*this must be last                          */
 } AuEndpointDataType;
 
@@ -137,14 +138,14 @@ typedef AuEndpointDataType FTType;
 
 /**
  * @brief It should follow the order of above AuEndpointDataType
- * 
+ *
  */
 using AuEndpointDataTypeUnion = std::variant<short, int, long, long long, unsigned short, unsigned int, unsigned long, unsigned long long, float, double, std::complex<double>, std::string>;
 
 template <typename T>
 AuEndpointDataType InferDataType()
 {
-  //printf("InferDataType : enter\n");
+  // printf("InferDataType : enter\n");
 
   if (std::is_same<T, int>::value)
   {
@@ -168,7 +169,7 @@ AuEndpointDataType InferDataType()
   }
   else if (std::is_same<T, unsigned short>::value)
   {
-    //printf("InferDataType : AU_USHORT\n");
+    // printf("InferDataType : AU_USHORT\n");
     return AU_USHORT;
   }
   else if (std::is_same<T, unsigned long>::value)
@@ -197,7 +198,7 @@ AuEndpointDataType InferDataType()
   }
   else
   {
-    return AU_NO_TYPE; //Here it might be User-defined class
+    return AU_NO_TYPE; // Here it might be User-defined class
   }
 }
 
@@ -209,7 +210,7 @@ AuEndpointDataType InferDataType()
 //
 //   vsize = -1,  variable size of output vector (determined at runtime)
 //   vsize >= 0,  size of output vector (set by the users)
-//Todo: we can infer "vsize" in futher version
+// Todo: we can infer "vsize" in futher version
 //      we can also support multiple dimensional vector
 typedef enum OutputVectorFlatDirection
 {
@@ -228,8 +229,8 @@ struct is_vector<std::vector<T, A>> : public std::true_type
 {
 };
 
-//1: vector type
-//0: other types
+// 1: vector type
+// 0: other types
 template <typename T>
 bool InferVectorType()
 {
@@ -246,18 +247,18 @@ struct is_vector_vector<std::vector<std::vector<T, A>>> : public std::true_type
 {
 };
 
-//1: vector type
-//0: other types
+// 1: vector type
+// 0: other types
 template <typename T>
 bool InferVectorVectorType()
 {
   return is_vector_vector<T>{};
 }
 
-//see more detail in third_party/cista.h
+// see more detail in third_party/cista.h
 #define AU_UDT_INIT(A) FT_UDT_INIT(A)
 
-//see more detail in third_party/cista.h
+// see more detail in third_party/cista.h
 #define FT_UDT_INIT(A) \
   CISTA_PRINTABLE(A)   \
   CISTA_COMPARABLE()

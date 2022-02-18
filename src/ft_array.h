@@ -157,6 +157,8 @@ namespace FT
     virtual int GetTag(const std::string &name, std::string &value) = 0;
     virtual int SetView(unsigned long long start, unsigned long long count, int rank) = 0;
     virtual int SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count) = 0;
+    virtual void DisableOverlapLower() = 0;
+    virtual void DisableOverlapUpper() = 0;
     virtual ~ArrayBase() = default;
   };
 
@@ -255,6 +257,9 @@ namespace FT
     bool chunk_size_by_user_by_dimension_flag = false;
     bool set_chunk_size_by_mem_flag = false;
     bool set_overlap_size_by_auto_detection_flag = false;
+
+    bool is_disable_overlap_upper_set = false;
+    bool is_disable_overlap_lower_set = false;
 
     bool set_direct_output_flag = false;
 
@@ -2304,6 +2309,88 @@ namespace FT
     }
 
     /**
+     * @brief read the current chunk once the chunk_size and overlap_size are specified at Constructor
+     *
+     * @param data_vector
+     * @return int
+     *   1, data read into   local_chunk_data
+     *     0, end of file (no data left to handle)
+     *    -1: error happen
+     */
+    int ReadNextChunk(std::vector<T> &data_vector)
+    {
+      // We need to set chunk size first
+      Stencil<T> (*UDF)(const Stencil<T>);
+      InitializeApplyInput(UDF);
+      int ret;
+      unsigned long long current_result_chunk_data_size = 1;
+      ret = LoadNextChunk(current_result_chunk_data_size);
+      data_vector = current_chunk_data;
+      return ret;
+    }
+
+    /**
+     * @brief Read a array cells from start to the end
+     *
+     * @param start
+     * @param end
+     * @param data_vector
+     * @return int
+     */
+    int ReadArrayAll(std::vector<T> &data_vector)
+    {
+      // InitializeApplyInput();
+      std::vector<unsigned long long> start, end;
+      if (!virtual_array_flag)
+      {
+        endpoint->ExtractMeta();
+        end = endpoint->GetDimensions();
+      }
+      else
+      {
+        assert(attribute_endpoint_vector.size() >= 1);
+        attribute_endpoint_vector[0]->ExtractMeta();
+        end = attribute_endpoint_vector[0]->GetDimensions();
+      }
+
+      start.resize(end.size());
+      for (int i = 0; i < end.size(); i++)
+      {
+        start[i] = 0;
+        end[i] = end[i] - 1;
+      }
+
+      unsigned long long data_vector_size;
+      COUNT_CELLS(start, end, data_vector_size);
+
+      // std::vector<T> data_vector;
+      data_vector.resize(data_vector_size);
+      if (!virtual_array_flag)
+      {
+        endpoint->Read(start, end, &data_vector[0]);
+      }
+      else
+      {
+        int n = attribute_endpoint_vector.size();
+        std::vector<AuEndpointDataTypeUnion> current_chunk_data_union_vector;
+        for (int i = 0; i < n; i++)
+        {
+          int element_type_size = attribute_endpoint_vector[i]->GetDataElementTypeSize();
+          void *current_chunk_data_temp = (void *)malloc(data_vector_size * element_type_size);
+          if (!current_chunk_data_temp)
+          {
+            AU_EXIT("Not enough memory");
+          }
+          attribute_endpoint_vector[i]->Read(start, end, current_chunk_data_temp);
+          current_chunk_data_union_vector = attribute_endpoint_vector[i]->Void2Union(current_chunk_data_temp, data_vector_size);
+          InsertAttribute2VirtualArrayVector(current_chunk_data_union_vector, attribute_endpoint_vector[i]->GetDataElementType(), data_vector, i);
+          free(current_chunk_data_temp);
+        }
+      }
+      return 0;
+    }
+
+    /**
      * @brief Read a array cells from start to the end
      *
      * @param start
@@ -2343,7 +2430,8 @@ namespace FT
       }
       return 0;
     }
-    inline std::vector<T> ReadArray(const std::vector<unsigned long long> start, const std::vector<unsigned long long> end) // used by the old code
+    // used by the old code
+    inline std::vector<T> ReadArray(const std::vector<unsigned long long> start, const std::vector<unsigned long long> end)
     {
       std::vector<T> data_vector;
       ReadArray(start, end, data_vector);
@@ -2463,29 +2551,44 @@ namespace FT
           }
           assert((current_result_chunk_end_offset[i] - current_result_chunk_start_offset[i] + 1 >= 0));
           current_result_chunk_cells = current_result_chunk_cells * (current_result_chunk_end_offset[i] - current_result_chunk_start_offset[i] + 1);
-        }
+        } // end of result chunk
 
         // Deal with overlapping
         // Starting coordinate for the data chunk with overlapping
-        if (current_chunk_start_offset[i] <= data_overlap_size[i])
+        if (!is_disable_overlap_lower_set)
         {
-          current_chunk_ol_start_offset[i] = 0;
+          if (current_chunk_start_offset[i] <= data_overlap_size[i])
+          {
+            current_chunk_ol_start_offset[i] = 0;
+          }
+          else
+          {
+            current_chunk_ol_start_offset[i] = current_chunk_start_offset[i] - data_overlap_size[i];
+          }
         }
         else
         {
-          current_chunk_ol_start_offset[i] = current_chunk_start_offset[i] - data_overlap_size[i];
+          current_chunk_ol_start_offset[i] = current_chunk_start_offset[i];
         }
+
         // Original coordinate offset for each, used to get gloabl coordinate in Apply
         ol_origin_offset[i] = current_chunk_start_offset[i] - current_chunk_ol_start_offset[i];
 
-        // Ending oordinate for the data chunk with overlapping
-        if (current_chunk_end_offset[i] + data_overlap_size[i] < data_size[i])
+        // Ending coordinate for the data chunk with overlapping
+        if (!is_disable_overlap_upper_set)
         {
-          current_chunk_ol_end_offset[i] = current_chunk_end_offset[i] + data_overlap_size[i];
+          if (current_chunk_end_offset[i] + data_overlap_size[i] < data_size[i])
+          {
+            current_chunk_ol_end_offset[i] = current_chunk_end_offset[i] + data_overlap_size[i];
+          }
+          else
+          {
+            current_chunk_ol_end_offset[i] = data_size[i] - 1;
+          }
         }
         else
         {
-          current_chunk_ol_end_offset[i] = data_size[i] - 1;
+          current_chunk_ol_end_offset[i] = current_chunk_end_offset[i];
         }
         assert((current_chunk_ol_end_offset[i] - current_chunk_ol_start_offset[i] + 1 >= 0));
         current_chunk_ol_size[i] = current_chunk_ol_end_offset[i] - current_chunk_ol_start_offset[i] + 1;
@@ -3179,6 +3282,20 @@ namespace FT
      * @param cmd_p : int cmd (specific to Endpoint)
      * @param arg_v_p : a vector of arg. It is typed as string and specific to cmd_p
      */
+    int ControlEndpoint(int cmd_p, std::string arg_v_p)
+    {
+      std::vector<std::string> arg_v;
+      arg_v.push_back("");
+
+      return endpoint->Control(cmd_p, arg_v);
+    }
+
+    /**
+     * @brief pass command cmd to Endpoint of Array
+     *
+     * @param cmd_p : int cmd (specific to Endpoint)
+     * @param arg_v_p : a vector of arg. It is typed as string and specific to cmd_p
+     */
     int ControlEndpoint(int cmd_p, std::vector<std::string> &arg_v_p)
     {
       return endpoint->Control(cmd_p, arg_v_p);
@@ -3377,8 +3494,18 @@ namespace FT
       get_stencil_tag_flag = true;
       return 0;
     }
-  }; // class of array
-} // namespace FT
+
+    inline void DisableOverlapUpper()
+    {
+      is_disable_overlap_upper_set = true;
+    }
+
+    inline void DisableOverlapLower()
+    {
+      is_disable_overlap_lower_set = true;
+    }
+  }; // end of class of array
+} // end of namespace FT
 
 namespace AU = FT;
 #endif

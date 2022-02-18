@@ -3,7 +3,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -14,7 +14,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -25,7 +25,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -83,6 +83,7 @@ in binary and source code form.
 #include "ft_endpoint_memory.h"
 #include "ft_endpoint_adios.h"
 #include "ft_endpoint_pnetcdf.h"
+#include "ft_endpoint_csv.h"
 
 #include <string.h>
 
@@ -91,9 +92,9 @@ class EndpointFactory
 public:
     /**
      * @brief create a normal endpoint
-     * 
-     * @param endpoint 
-     * @return Endpoint* 
+     *
+     * @param endpoint
+     * @return Endpoint*
      */
     static Endpoint *NewEndpoint(std::string endpoint)
     {
@@ -110,6 +111,8 @@ public:
             return new EndpointADIOS(endpoint_info);
         if (endpoint_type == EP_PNETCDF)
             return new EndpointPnetCDF(endpoint_info);
+        if (endpoint_type == EP_CSV)
+            return new EndpointCSV(endpoint_info);
         AU_EXIT("Not supported endpoint");
         return nullptr;
     }

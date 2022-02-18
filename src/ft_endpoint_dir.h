@@ -109,6 +109,7 @@ in binary and source code form.
 #include "ft_endpoint.h"
 #include "ft_endpoint_hdf5.h"
 #include "ft_endpoint_tdms.h"
+#include "ft_endpoint_csv.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -181,6 +182,15 @@ public:
         {
             sub_endpoint = new EndpointTDMS();
         }
+        else if (sub_endpoint_type == EP_CSV)
+        {
+            sub_endpoint = new EndpointCSV();
+        }
+        else
+        {
+            AU_EXIT("Not supported sub endpoint in EndpointDIR \n");
+        }
+
         SetEndpointType(EP_DIR);
         sub_endpoint->SetDataElementType(data_element_type);
     }

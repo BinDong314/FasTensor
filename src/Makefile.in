@@ -137,7 +137,7 @@ am_libFastensor_la_OBJECTS = ft.lo ft_array.lo ft_endpoint.lo \
 	ft_type.lo ft_endpoint_hdf5.lo ft_utility.lo \
 	ft_endpoint_dir.lo ft_endpoint_memory.lo ft_endpoint_adios.lo \
 	ft_endpoint_pnetcdf.lo ft_endpoint_tdms.lo \
-	ft_endpoint_binary.lo ft_array_iterator.lo \
+	ft_endpoint_binary.lo ft_endpoint_csv.lo ft_array_iterator.lo \
 	ft_array_view_access.lo ft_output_vector.lo ft_xdmf.lo
 libFastensor_la_OBJECTS = $(am_libFastensor_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -168,6 +168,7 @@ am__depfiles_remade = ./$(DEPDIR)/ft.Plo ./$(DEPDIR)/ft_array.Plo \
 	./$(DEPDIR)/ft_array_view_access.Plo \
 	./$(DEPDIR)/ft_endpoint.Plo ./$(DEPDIR)/ft_endpoint_adios.Plo \
 	./$(DEPDIR)/ft_endpoint_binary.Plo \
+	./$(DEPDIR)/ft_endpoint_csv.Plo \
 	./$(DEPDIR)/ft_endpoint_dir.Plo \
 	./$(DEPDIR)/ft_endpoint_hdf5.Plo \
 	./$(DEPDIR)/ft_endpoint_memory.Plo \
@@ -402,6 +403,7 @@ libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_endpoint_pnetcdf.h ft_endpoint_pnetcdf.cpp \
                        ft_endpoint_tdms.h  ft_endpoint_tdms.cpp \
                        ft_endpoint_binary.h ft_endpoint_binary.cpp \
+                       ft_endpoint_csv.h ft_endpoint_csv.cpp \
                        ft_array_iterator.h ft_array_iterator.cpp \
                        ft_array_view_access.h ft_array_view_access.cpp \
                        ft_array_transpose.h \
@@ -427,6 +429,7 @@ include_HEADERS = ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hd
                 ft_array_transpose.h \
                 ft_utility_macro.h \
                 ft_output_vector.h \
+                ft_endpoint_csv.h \
                 ft_xdmf.h \
                 ft_vis.h
 
@@ -515,6 +518,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_adios.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_binary.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_csv.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_dir.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_hdf5.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_memory.Plo@am__quote@ # am--include-marker
@@ -717,6 +721,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_adios.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_binary.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_csv.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_dir.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_hdf5.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo
@@ -778,6 +783,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_adios.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_binary.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_csv.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_dir.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_hdf5.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo

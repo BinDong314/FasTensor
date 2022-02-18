@@ -20,6 +20,7 @@ libFastensor_la_SOURCES=ft.h ft.cpp \
                        ft_endpoint_pnetcdf.h ft_endpoint_pnetcdf.cpp \
                        ft_endpoint_tdms.h  ft_endpoint_tdms.cpp \
                        ft_endpoint_binary.h ft_endpoint_binary.cpp \
+                       ft_endpoint_csv.h ft_endpoint_csv.cpp \
                        ft_array_iterator.h ft_array_iterator.cpp \
                        ft_array_view_access.h ft_array_view_access.cpp \
                        ft_array_transpose.h \
@@ -45,6 +46,7 @@ include_HEADERS=ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hdf5
                 ft_array_transpose.h \
                 ft_utility_macro.h \
                 ft_output_vector.h \
+                ft_endpoint_csv.h \
                 ft_xdmf.h \
                 ft_vis.h
 
