@@ -178,7 +178,10 @@ public:
   std::vector<unsigned long long> my_location; // This is the coodinate with overlapping
   std::vector<unsigned long long> global_coordinate;
   // For test only
-  Stencil(){};
+  Stencil()
+  {
+    is_SetValuePointer = false;
+  };
 
   // For trail run
   Stencil(int dims_input, T *chunk)
@@ -740,6 +743,18 @@ public:
     is_SetValuePointer = true;
     has_set_output_value_flag = true;
     chunk_data_pointer = data_p;
+  }
+
+  inline bool IsEmpty()
+  {
+    if (has_set_output_value_flag == false)
+      return true;
+    return false;
+  }
+
+  inline bool SetEmpty()
+  {
+    has_set_output_value_flag = false;
   }
 
   /**

@@ -205,7 +205,7 @@ inline void PrintVector(std::string name, std::vector<T> v)
 {
     int n = v.size();
     if (name != "")
-        std::cout << "Rank " << ft_rank << ", " << name << ": ";
+        std::cout << "Rank=" << ft_rank << ",size=" << v.size() << ", " << name << ": ";
 
     if (!n)
     {

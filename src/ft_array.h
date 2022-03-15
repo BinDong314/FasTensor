@@ -603,7 +603,8 @@ namespace FT
     {
       if (endpoint != NULL)
       {
-        if (endpoint->GetEndpointType() == EP_DIR || chunk_size_by_user_by_dimension_flag)
+        //        if (endpoint->GetEndpointType() == EP_DIR || chunk_size_by_user_by_dimension_flag)
+        if (chunk_size_by_user_by_dimension_flag)
         {
           data_overlap_size.resize(data_dims);
           for (int i = 0; i < data_dims; i++)
@@ -1076,7 +1077,18 @@ namespace FT
             // cell_target.set_my_g_location_rm(cell_target_g_location_rm);
 
             cell_return_stencil = UDF(cell_target); // Called by C++
-            cell_return_value = cell_return_stencil.get_value();
+
+            if (!cell_return_stencil.IsEmpty())
+            {
+              std::cout << "Got value ! \n";
+              cell_return_value = cell_return_stencil.get_value();
+            }
+            else
+            {
+              std::cout << "Got NO value ! \n";
+              goto end_of_process;
+              // break;
+            }
 
             if (vector_type_flag == true)
             {
@@ -1271,6 +1283,7 @@ namespace FT
 
       } // end of while:: no more chunks to process
 
+    end_of_process:
       // May start a empty write for collective I/O
       if ((data_total_chunks % ft_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + ft_size - (data_total_chunks % ft_size))) && B != nullptr)
       {
@@ -2624,6 +2637,9 @@ namespace FT
           }
         }
       }
+
+      // PrintVector("current_chunk_ol_end_offset = ", current_chunk_ol_end_offset);
+      // PrintVector("current_chunk_ol_start_offset = ", current_chunk_ol_start_offset);
 
       // update current_chunk_id
       SchduleChunkNext();
