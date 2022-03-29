@@ -79,6 +79,8 @@ in binary and source code form.
 
 #include "ft_utility.h"
 #include <limits.h>
+#include <dirent.h>
+#include <errno.h>
 //#include <filesystem>  //Does not support by Intel C++
 
 /**
@@ -116,6 +118,11 @@ int mkpath(std::string s, mode_t mode)
 
 std::string realpathEx(std::string path)
 {
+    if (!dir_exist(path.c_str()))
+    {
+        // std::cout << path << " doesn't exit \n";
+        AU_EXIT(path + " doesn't exit \n");
+    }
     const char *path_c_str = path.c_str();
     char *home;
     char buff[PATH_MAX]; // = (char *)malloc(path.size());
@@ -144,6 +151,34 @@ int ExtractEndpointTypeInfo(std::string endpoint_type_info, AuEndpointType &endp
 
     std::getline(ss, endpoint_info);
     return 0;
+}
+
+/**
+ * @brief
+ *
+ * @param dir_name
+ * @return int 1: exists, others does not
+ */
+int dir_exist(const char *dir_name)
+{
+
+    DIR *dir = opendir(dir_name);
+    if (dir)
+    {
+        /* Directory exists. */
+        closedir(dir);
+        return 1;
+    }
+    else if (ENOENT == errno)
+    {
+        return 0;
+        /* Directory does not exist. */
+    }
+    else
+    {
+        return -1;
+        /* opendir() failed for some other reason. */
+    }
 }
 
 int file_exist(const char *filename)

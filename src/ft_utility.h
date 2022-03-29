@@ -120,6 +120,14 @@ extern int ft_rank;
 std::string realpathEx(std::string path);
 
 /**
+ * @brief
+ *
+ * @param dir_name
+ * @return int 1: exists, others does not
+ */
+int dir_exist(const char *dir_name);
+
+/**
  * @brief Get file list of a direction
  *
  * @param dir_str_p
