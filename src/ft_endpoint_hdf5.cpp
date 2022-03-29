@@ -844,6 +844,7 @@ int EndpointHDF5::ReadAttribute(const std::string &name, void *data, FTDataType 
             return -1;
         }
         hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
+        assert(attribute_id >= 0);
         ret = H5Aread(attribute_id, mem_type_l, data);
         H5Aclose(attribute_id);
     }
@@ -854,6 +855,7 @@ int EndpointHDF5::ReadAttribute(const std::string &name, void *data, FTDataType 
             return -1;
         }
         hid_t attribute_id = H5Aopen(did, name.c_str(), H5P_DEFAULT);
+        assert(attribute_id >= 0);
         hid_t attribute_datatype = H5Aget_type(attribute_id);
         size_t attribute_sdim = H5Tget_size(attribute_datatype);
         hid_t attribute_memtype = H5Tcopy(H5T_C_S1);
@@ -863,6 +865,7 @@ int EndpointHDF5::ReadAttribute(const std::string &name, void *data, FTDataType 
             char *string_attr;
             H5Tset_size(attribute_memtype, H5T_VARIABLE);
             ret = H5Aread(attribute_id, attribute_memtype, &string_attr);
+            assert(ret >= 0);
             std::string temp_str(string_attr);
             // std::cout << "ReadAttribute: name " << name << ", value = " << std::string(string_attr) << "\n";
             memcpy(data, temp_str.data(), temp_str.size());
@@ -871,6 +874,7 @@ int EndpointHDF5::ReadAttribute(const std::string &name, void *data, FTDataType 
         {
             H5Tset_size(attribute_memtype, attribute_sdim);
             ret = H5Aread(attribute_id, attribute_memtype, data);
+            assert(ret >= 0);
         }
 
         H5Aclose(attribute_id);
