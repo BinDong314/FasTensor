@@ -216,6 +216,7 @@ int EndpointDIR::ExtractMeta()
 
         sub_endpoint->ExtractMeta();
         temp_endpoint_dim_size = sub_endpoint->GetDimensions();
+        sub_endpoint->Close();
 
         // PrintVector("temp_endpoint_dim_size =", temp_endpoint_dim_size);
 
