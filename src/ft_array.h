@@ -1080,12 +1080,12 @@ namespace FT
 
             if (!cell_return_stencil.IsEmpty())
             {
-              std::cout << "Got value ! \n";
+              // std::cout << "Got value ! \n";
               cell_return_value = cell_return_stencil.get_value();
             }
             else
             {
-              std::cout << "Got NO value ! \n";
+              // std::cout << "Got NO value ! \n";
               goto end_of_process;
               // break;
             }
