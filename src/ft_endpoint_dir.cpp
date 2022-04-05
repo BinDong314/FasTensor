@@ -142,7 +142,7 @@ int EndpointDIR::ExtractMeta()
     }
     else
     {
-        std::cout << " input_replace_regex_flag = " << input_replace_regex_flag << "\n";
+        // std::cout << " input_replace_regex_flag = " << input_replace_regex_flag << "\n";
         dir_file_list = temp_dir_file_list;
     }
 
