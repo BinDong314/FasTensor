@@ -107,6 +107,12 @@ int EndpointDIR::ExtractMeta()
         temp_dir_file_list = GetDirFileListRecursive(dir_str);
     }
 
+    std::cout << "Fist list : \n";
+    for (int i = 0; i < temp_dir_file_list.size(); i++)
+    {
+        std::cout << temp_dir_file_list[i] << " \n";
+    }
+
     // dir_file_list = GetDirFileList(dir_str);
     if (temp_dir_file_list.size() <= 0)
         AU_EXIT("No file under directory" + dir_str);
@@ -123,6 +129,12 @@ int EndpointDIR::ExtractMeta()
             temp_dir_file_list_ordered.push_back(temp_dir_file_list[order]);
         }
         temp_dir_file_list = temp_dir_file_list_ordered;
+    }
+
+    std::cout << "after has_ordering_on_file_list : \n";
+    for (int i = 0; i < temp_dir_file_list.size(); i++)
+    {
+        std::cout << temp_dir_file_list[i] << " \n";
     }
 
     if (input_replace_regex_flag)
