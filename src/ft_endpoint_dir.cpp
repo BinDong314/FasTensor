@@ -258,8 +258,8 @@ int EndpointDIR::ExtractMeta()
         {
             if (!is_dir_file_list_recursive)
             {
-                AU_VERBOSE("is_dir_file_list_recursive is true", 0);
-                dir_file_list[i] = dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info;
+                AU_VERBOSE("is_dir_file_list_recursive is false", 0);
+                dir_file_list[i] = dir_file_list[i] + ":" + append_sub_endpoint_info;
             }
             else
             {
@@ -431,7 +431,7 @@ int EndpointDIR::Read(std::vector<unsigned long long> start, std::vector<unsigne
     for (int i = sub_endpoint_index; i < sub_endpoint_index_end; i++)
     {
         // sub_endpoint->SetEndpointInfo(dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info);
-        // std::cout << "Read = dir_file_list[" << i << "] = " << dir_file_list[i] << " , append_sub_endpoint_info =" << append_sub_endpoint_info << "\n";
+        std::cout << "Read = dir_file_list[" << i << "] = " << dir_file_list[i] << " , append_sub_endpoint_info =" << append_sub_endpoint_info << "\n";
         sub_endpoint->SetEndpointInfo(dir_file_list[i] + ":" + append_sub_endpoint_info);
         sub_endpoint->Open();
         sub_endpoint->Read(start_sub_endpoint, end_sub_endpoint, data_temp);
