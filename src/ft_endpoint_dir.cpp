@@ -107,10 +107,13 @@ int EndpointDIR::ExtractMeta()
         temp_dir_file_list = GetDirFileListRecursive(dir_str);
     }
 
-    std::cout << "Fist list : \n";
-    for (int i = 0; i < temp_dir_file_list.size(); i++)
+    if (!ft_rank)
     {
-        std::cout << temp_dir_file_list[i] << " \n";
+        std::cout << "Fist list : \n";
+        for (int i = 0; i < 20; i++)
+        {
+            std::cout << temp_dir_file_list[i] << " \n";
+        }
     }
 
     // dir_file_list = GetDirFileList(dir_str);
@@ -131,12 +134,14 @@ int EndpointDIR::ExtractMeta()
         temp_dir_file_list = temp_dir_file_list_ordered;
     }
 
-    std::cout << "after has_ordering_on_file_list : \n";
-    for (int i = 0; i < temp_dir_file_list.size(); i++)
+    if (!ft_rank)
     {
-        std::cout << temp_dir_file_list[i] << " \n";
+        std::cout << "after has_ordering_on_file_list : \n";
+        for (int i = 0; i < 20; i++)
+        {
+            std::cout << temp_dir_file_list[i] << " \n";
+        }
     }
-
     if (input_replace_regex_flag)
     {
         dir_file_list.clear();
@@ -156,6 +161,15 @@ int EndpointDIR::ExtractMeta()
     {
         // std::cout << " input_replace_regex_flag = " << input_replace_regex_flag << "\n";
         dir_file_list = temp_dir_file_list;
+    }
+
+    if (!ft_rank)
+    {
+        std::cout << "after input_replace_regex_flag : \n";
+        for (int i = 0; i < 20; i++)
+        {
+            std::cout << dir_file_list[i] << " \n";
+        }
     }
 
     // std::vector<unsigned long long> endpoint_dim_size;
@@ -248,6 +262,15 @@ int EndpointDIR::ExtractMeta()
             {
                 AU_VERBOSE("All files have the same size !", 0);
             }
+        }
+    }
+
+    if (!ft_rank)
+    {
+        std::cout << "after skip_size_check : \n";
+        for (int i = 0; i < 20; i++)
+        {
+            std::cout << dir_file_list[i] << " \n";
         }
     }
 
