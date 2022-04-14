@@ -108,13 +108,7 @@ int EndpointDIR::ExtractMeta()
     }
 
     if (!ft_rank)
-    {
-        std::cout << "Fist list : \n";
-        for (int i = 0; i < 20; i++)
-        {
-            std::cout << temp_dir_file_list[i] << " \n";
-        }
-    }
+        PrintVector("After list : ", temp_dir_file_list);
 
     // dir_file_list = GetDirFileList(dir_str);
     if (temp_dir_file_list.size() <= 0)
@@ -135,13 +129,8 @@ int EndpointDIR::ExtractMeta()
     }
 
     if (!ft_rank)
-    {
-        std::cout << "after has_ordering_on_file_list : \n";
-        for (int i = 0; i < 20; i++)
-        {
-            std::cout << temp_dir_file_list[i] << " \n";
-        }
-    }
+        PrintVector("After apply order : ", temp_dir_file_list);
+
     if (input_replace_regex_flag)
     {
         dir_file_list.clear();
@@ -164,13 +153,7 @@ int EndpointDIR::ExtractMeta()
     }
 
     if (!ft_rank)
-    {
-        std::cout << "after input_replace_regex_flag : \n";
-        for (int i = 0; i < 20; i++)
-        {
-            std::cout << dir_file_list[i] << " \n";
-        }
-    }
+        PrintVector("After apply replace_regex : ", dir_file_list);
 
     // std::vector<unsigned long long> endpoint_dim_size;
     // int endpoint_ranks;
@@ -265,15 +248,6 @@ int EndpointDIR::ExtractMeta()
         }
     }
 
-    if (!ft_rank)
-    {
-        std::cout << "after skip_size_check : \n";
-        for (int i = 0; i < 20; i++)
-        {
-            std::cout << dir_file_list[i] << " \n";
-        }
-    }
-
     if (skip_size_check)
     {
         for (int i = 1; i < dir_file_list.size(); i++)
@@ -299,6 +273,9 @@ int EndpointDIR::ExtractMeta()
         dir_file_list.clear();
         dir_file_list = dir_file_list_for_file_list_recursive;
     }
+
+    if (!ft_rank)
+        PrintVector("After size check: ", dir_file_list);
 
     if (dir_file_list.size() == 0)
     {
