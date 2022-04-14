@@ -248,12 +248,17 @@ int EndpointDIR::ExtractMeta()
         }
     }
 
+    if (!ft_rank)
+        PrintVector("After size check: ", dir_file_list);
+
     if (skip_size_check)
     {
+        AU_VERBOSE("skip_size_check is true", 0);
         for (int i = 1; i < dir_file_list.size(); i++)
         {
             if (!is_dir_file_list_recursive)
             {
+                AU_VERBOSE("is_dir_file_list_recursive is true", 0);
                 dir_file_list[i] = dir_str + "/" + dir_file_list[i] + ":" + append_sub_endpoint_info;
             }
             else
@@ -275,7 +280,7 @@ int EndpointDIR::ExtractMeta()
     }
 
     if (!ft_rank)
-        PrintVector("After size check: ", dir_file_list);
+        PrintVector("After skip_size_check: ", dir_file_list);
 
     if (dir_file_list.size() == 0)
     {
