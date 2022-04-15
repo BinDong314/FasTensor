@@ -106,9 +106,10 @@ int EndpointDIR::ExtractMeta()
         // This get the full path name
         temp_dir_file_list = GetDirFileListRecursive(dir_str);
     }
-
+#ifdef DEBUG
     if (!ft_rank)
         PrintVector("After list : ", temp_dir_file_list);
+#endif
 
     // dir_file_list = GetDirFileList(dir_str);
     if (temp_dir_file_list.size() <= 0)
@@ -128,8 +129,10 @@ int EndpointDIR::ExtractMeta()
         temp_dir_file_list = temp_dir_file_list_ordered;
     }
 
+#ifdef DEBUG
     if (!ft_rank)
         PrintVector("After apply order : ", temp_dir_file_list);
+#endif
 
     if (input_replace_regex_flag)
     {
@@ -152,8 +155,10 @@ int EndpointDIR::ExtractMeta()
         dir_file_list = temp_dir_file_list;
     }
 
+#ifdef DEBUG
     if (!ft_rank)
         PrintVector("After apply replace_regex : ", dir_file_list);
+#endif
 
     // std::vector<unsigned long long> endpoint_dim_size;
     // int endpoint_ranks;
@@ -248,21 +253,27 @@ int EndpointDIR::ExtractMeta()
         }
     }
 
+#ifdef DEBUG
     if (!ft_rank)
         PrintVector("After size check: ", dir_file_list);
+#endif
 
     if (skip_size_check)
     {
-        AU_VERBOSE("skip_size_check is true", 0);
+        // AU_VERBOSE("skip_size_check is true", 0);
         for (int i = 1; i < dir_file_list.size(); i++)
         {
             if (!is_dir_file_list_recursive)
             {
                 AU_VERBOSE("is_dir_file_list_recursive is false", 0);
+                break;
+                // Note: here the "append_sub_endpoint_info" is under test
+                //       we need to upldate other functions to handle it.
                 dir_file_list[i] = dir_file_list[i] + ":" + append_sub_endpoint_info;
             }
             else
             {
+                AU_EXIT("Error: some debug code here. To test");
                 for (int j = 0; j < sub_endpoint_list_for_file_list_recursive.size(); j++)
                 {
                     // std::cout << sub_endpoint_list_for_file_list_recursive[j] << " \n";
@@ -278,9 +289,10 @@ int EndpointDIR::ExtractMeta()
         dir_file_list.clear();
         dir_file_list = dir_file_list_for_file_list_recursive;
     }
-
+#ifdef DEBUG
     if (!ft_rank)
         PrintVector("After skip_size_check: ", dir_file_list);
+#endif
 
     if (dir_file_list.size() == 0)
     {
