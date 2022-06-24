@@ -139,7 +139,7 @@ int EndpointDIR::ExtractMeta()
         dir_file_list.clear();
         for (int i = 0; i < temp_dir_file_list.size(); i++)
         {
-            std::cout << " temp_dir_file_list = " << temp_dir_file_list[i] << "\n";
+            // std::cout << " temp_dir_file_list = " << temp_dir_file_list[i] << "\n";
             if (std::regex_match(temp_dir_file_list[i], *input_filter_regex))
             {
                 dir_file_list.push_back(temp_dir_file_list[i]);
