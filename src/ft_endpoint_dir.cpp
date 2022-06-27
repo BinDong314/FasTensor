@@ -808,6 +808,7 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         ExtractMeta();
         parameter_v.clear();
         parameter_v.push_back(std::to_string(dir_file_list.size()));
+        // std::cout << " parameter_v  = " << parameter_v << ", dir_file_list.size =" << dir_file_list.size() << "\n";
         break;
     case DIR_GET_FILE_SIZE:
         ExtractMeta();
@@ -828,6 +829,7 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         is_dir_file_list_recursive = true;
         break;
     case DIR_SKIP_SIZE_CHECK:
+        std::cout << "skip_size_check is called \n";
         skip_size_check = true;
         break;
     case DIR_INPUT_VARIABLE_SEARCH_RGX:
