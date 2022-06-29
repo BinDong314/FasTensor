@@ -159,6 +159,7 @@ namespace FT
     virtual int SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count) = 0;
     virtual void DisableOverlapLower() = 0;
     virtual void DisableOverlapUpper() = 0;
+    virtual void SkipTailChunk() = 0;
     virtual ~ArrayBase() = default;
   };
 
@@ -262,7 +263,7 @@ namespace FT
     bool is_disable_overlap_lower_set = false;
 
     bool set_direct_output_flag = false;
-
+    bool is_skip_tail_chunk = false;
     bool get_stencil_tag_flag = false;
     std::map<std::string, std::string> stencil_metadata_map;
 
@@ -692,7 +693,7 @@ namespace FT
 
       for (int i = 0; i < data_dims; i++)
       {
-        if (data_size[i] % data_chunk_size[i] == 0)
+        if (data_size[i] % data_chunk_size[i] == 0 || is_skip_tail_chunk)
         {
           data_chunked_size[i] = data_size[i] / data_chunk_size[i];
         }
@@ -1085,9 +1086,9 @@ namespace FT
             }
             else
             {
-              // std::cout << "Got NO value ! \n";
-              goto end_of_process;
-              // break;
+              std::cout << "Disable the [goto to] let openMP work(test)  ! \n";
+              // goto end_of_process;
+              //  break;
             }
 
             if (vector_type_flag == true)
@@ -3519,6 +3520,11 @@ namespace FT
     inline void DisableOverlapLower()
     {
       is_disable_overlap_lower_set = true;
+    }
+
+    inline void SkipTailChunk()
+    {
+      is_skip_tail_chunk = true;
     }
   }; // end of class of array
 } // end of namespace FT
