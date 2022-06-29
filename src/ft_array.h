@@ -264,6 +264,8 @@ namespace FT
 
     bool set_direct_output_flag = false;
     bool is_skip_tail_chunk = false;
+
+    bool is_init_called_in_rnc = false; // is init function called in ReadNextChunk function
     bool get_stencil_tag_flag = false;
     std::map<std::string, std::string> stencil_metadata_map;
 
@@ -2334,8 +2336,12 @@ namespace FT
     int ReadNextChunk(std::vector<T> &data_vector)
     {
       // We need to set chunk size first
-      Stencil<T> (*UDF)(const Stencil<T>);
-      InitializeApplyInput(UDF);
+      if (!is_init_called_in_rnc)
+      {
+        Stencil<T> (*UDF)(const Stencil<T>);
+        InitializeApplyInput(UDF);
+        is_init_called_in_rnc = true;
+      }
       int ret;
       unsigned long long current_result_chunk_data_size = 1;
       ret = LoadNextChunk(current_result_chunk_data_size);
