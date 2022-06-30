@@ -554,7 +554,7 @@ ft.lo: ft.cpp ft.h \
   /Users/dbin/work/soft/dash/build/install/include/dash/io/hdf5/internal/OutputStream-inl.h \
   /Users/dbin/work/soft/dash/build/install/include/dash/tools/PatternVisualizer.h \
   ft_endpoint_adios.h ft_endpoint_pnetcdf.h ft_output_vector.h ft_vis.h \
-  ft_array_transpose.h
+  ft_array_transpose.h ft_chunk_scheduling.h
 
 ft.h:
 
@@ -1699,3 +1699,5 @@ ft_output_vector.h:
 ft_vis.h:
 
 ft_array_transpose.h:
+
+ft_chunk_scheduling.h:

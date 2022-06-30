@@ -100,6 +100,7 @@ extern int ft_rank;
 #include "ft_output_vector.h"
 #include "ft_vis.h"
 #include "ft_array_transpose.h"
+#include "ft_chunk_scheduling.h"
 
 // std::vector<Endpoint *> endpoint_clean_vector;
 // extern std::map<Endpoint *, bool> endpoint_clean_vector;
@@ -265,7 +266,12 @@ namespace FT
     bool set_direct_output_flag = false;
     bool is_skip_tail_chunk = false;
 
-    bool is_init_called_in_rnc = false; // is init function called in ReadNextChunk function
+    // is init function called in ReadNextChunk function
+    bool is_init_called_in_rnc = false;
+
+    // bool is_set_chunk_scheduling = false;
+    ChunkSchedulingMethod scheduling_method = CHUNK_SCHEDULING_RR;
+
     bool get_stencil_tag_flag = false;
     std::map<std::string, std::string> stencil_metadata_map;
 
@@ -748,7 +754,8 @@ namespace FT
         }
       }
 
-      current_chunk_id = ft_rank; // Each process deal with one chunk one time, starting from its rank
+      // current_chunk_id = ft_rank; // Each process deal with one chunk one time, starting from its rank
+      current_chunk_id = InitFirstChunk();
 
       //#ifdef DEBUG
       if (ft_rank == 0)
@@ -2458,32 +2465,75 @@ namespace FT
       return data_vector;
     }
 
-    bool HasNextChunk()
+    inline bool HasNextChunk()
     {
-      if (current_chunk_id >= data_total_chunks || current_chunk_id < 0)
+      switch (scheduling_method)
       {
-        return false;
+      case CHUNK_SCHEDULING_RR:
+        if (current_chunk_id >= data_total_chunks || current_chunk_id < 0)
+        {
+          return false;
+        }
+        // current_chunk_id = current_chunk_id + ft_size;
+        break;
+      case CHUNK_SCHEDULING_CR:
+        if (current_chunk_id >= CRMyMaxChunks(data_total_chunks, ft_rank, ft_size))
+        {
+          return false;
+        }
+        // current_chunk_id = current_chunk_id + 1;
+        break;
+      default:
+        AU_EXIT("Unsupported scheduling methods !\n");
+        break;
       }
 
       return true;
     }
 
+    inline unsigned long long InitFirstChunk()
+    {
+      switch (scheduling_method)
+      {
+      case CHUNK_SCHEDULING_RR:
+        return ft_rank;
+        break;
+      case CHUNK_SCHEDULING_CR:
+        return CRMyStartChunk(data_total_chunks, ft_rank, ft_size);
+        break;
+      default:
+        AU_EXIT("Unsupported scheduling methods !\n");
+        break;
+      }
+    }
     /**
      * @brief update current_chunk_id
      *
      * @return int
      */
-    void SchduleChunkNext()
+    inline void ScheduleChunkNext()
     {
       prev_chunk_id = current_chunk_id;
       // Next chunk id
-      if (!reverse_apply_direction_flag)
+      // if (!reverse_apply_direction_flag)
+      //{
+      // current_chunk_id = current_chunk_id + ft_size;
+      //}
+      // else
+      //{
+      // current_chunk_id = current_chunk_id - ft_size;
+      //}
+      switch (scheduling_method)
       {
+      case CHUNK_SCHEDULING_RR:
         current_chunk_id = current_chunk_id + ft_size;
-      }
-      else
-      {
-        current_chunk_id = current_chunk_id - ft_size;
+        break;
+      case CHUNK_SCHEDULING_CR:
+        current_chunk_id = current_chunk_id + 1;
+        break;
+      default:
+        AU_EXIT("Unsupported scheduling methods !\n");
+        break;
       }
     }
     /**
@@ -2649,7 +2699,7 @@ namespace FT
       // PrintVector("current_chunk_ol_start_offset = ", current_chunk_ol_start_offset);
 
       // update current_chunk_id
-      SchduleChunkNext();
+      ScheduleChunkNext();
 
       // Return  1, data read into   local_chunk_data
       // Return  0, end of file (no data left to handle)
@@ -3531,6 +3581,12 @@ namespace FT
     inline void SkipTailChunk()
     {
       is_skip_tail_chunk = true;
+    }
+
+    inline void SetChunkSchedulingMethod(const ChunkSchedulingMethod &m_p)
+    {
+      // is_set_chunk_scheduling = true;
+      scheduling_method = m_p;
     }
   }; // end of class of array
 } // end of namespace FT
