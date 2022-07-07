@@ -409,7 +409,9 @@ libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_array_transpose.h \
                        ft_utility_macro.h \
                        ft_output_vector.h ft_output_vector.cpp \
-                       ft_xdmf.h ft_xdmf.cpp 
+                       ft_xdmf.h \
+                       ft_xdmf.cpp \
+                       ft_chunk_scheduling.h
 
 libFastensor_la_LDFLAGS = -version-info 0:0:0  -all-static
 include_HEADERS = ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hdf5.h \
@@ -431,7 +433,8 @@ include_HEADERS = ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hd
                 ft_output_vector.h \
                 ft_endpoint_csv.h \
                 ft_xdmf.h \
-                ft_vis.h
+                ft_vis.h \
+                ft_chunk_scheduling.h
 
 all: all-am
 
