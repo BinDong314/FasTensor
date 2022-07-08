@@ -161,6 +161,7 @@ namespace FT
     virtual void DisableOverlapLower() = 0;
     virtual void DisableOverlapUpper() = 0;
     virtual void SkipTailChunk() = 0;
+    virtual void GetMyChunkStartEnd(unsigned long long &start, unsigned long long &end) = 0;
     virtual ~ArrayBase() = default;
   };
 
@@ -2477,7 +2478,7 @@ namespace FT
         // current_chunk_id = current_chunk_id + ft_size;
         break;
       case CHUNK_SCHEDULING_CR:
-        if (current_chunk_id >= CRMyMaxChunks(data_total_chunks, ft_rank, ft_size))
+        if (current_chunk_id >= CRMyLastChunks(data_total_chunks, ft_rank, ft_size))
         {
           return false;
         }
@@ -3589,6 +3590,26 @@ namespace FT
     {
       // is_set_chunk_scheduling = true;
       scheduling_method = m_p;
+    }
+
+    inline void GetMyChunkStartEnd(unsigned long long &start, unsigned long long &end)
+    {
+      if (scheduling_method == CHUNK_SCHEDULING_CR)
+      {
+        // We need to set chunk size first
+        if (!is_init_called_in_rnc)
+        {
+          Stencil<T> (*UDF)(const Stencil<T>);
+          InitializeApplyInput(UDF);
+          is_init_called_in_rnc = true;
+        }
+        start = current_chunk_id;
+        end = CRMyLastChunks(data_total_chunks, ft_rank, ft_size);
+      }
+      else
+      {
+        AU_EXIT("Unsupported GetMyChunkStartEnd for the scheduling methods !\n");
+      }
     }
   }; // end of class of array
 } // end of namespace FT

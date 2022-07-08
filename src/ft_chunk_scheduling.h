@@ -155,4 +155,9 @@ inline bool CRMyStartChunk(unsigned long long data_total_chunks_p, int ft_rank_p
         }
     }
 }
+
+inline bool CRMyLastChunks(unsigned long long data_total_chunks_p, int ft_rank_p, int ft_size_p)
+{
+    return CRMyStartChunk(data_total_chunks_p, ft_rank_p, ft_size_p) + CRMyMaxChunks(data_total_chunks_p, ft_rank_p, ft_size_p);
+}
 #endif
