@@ -106,7 +106,7 @@ typedef enum ChunkSchedulingMethodEnum
  * @return false
  *  5 0 2 -> 3, 5 1 2 -> 2,
  */
-inline bool CRMyMaxChunks(unsigned long long data_total_chunks_p, int ft_rank_p, int ft_size_p)
+inline int CRMyMaxChunks(unsigned long long data_total_chunks_p, int ft_rank_p, int ft_size_p)
 {
     if (data_total_chunks_p % ft_size_p == 0)
     {
@@ -135,7 +135,7 @@ inline bool CRMyMaxChunks(unsigned long long data_total_chunks_p, int ft_rank_p,
  * @return false
  *  5 0 2 -> 0, 5 1 2 -> 2,
  */
-inline bool CRMyStartChunk(unsigned long long data_total_chunks_p, int ft_rank_p, int ft_size_p)
+inline int CRMyStartChunk(unsigned long long data_total_chunks_p, int ft_rank_p, int ft_size_p)
 {
     if (data_total_chunks_p % ft_size_p == 0)
     {
