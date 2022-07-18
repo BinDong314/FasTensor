@@ -156,8 +156,12 @@ inline bool CRMyStartChunk(unsigned long long data_total_chunks_p, int ft_rank_p
     }
 }
 
-inline bool CRMyLastChunks(unsigned long long data_total_chunks_p, int ft_rank_p, int ft_size_p)
+inline int CRMyLastChunks(unsigned long long data_total_chunks_p, int ft_rank_p, int ft_size_p)
 {
+    // int start_chunk = CRMyStartChunk(data_total_chunks_p, ft_rank_p, ft_size_p);
+    // std::cout << "CRMyStartChunk(" << data_total_chunks_p << ", " << ft_rank_p << ", " << ft_size_p << ") =" << start_chunk << "\n";
+    // int max_chunks = CRMyMaxChunks(data_total_chunks_p, ft_rank_p, ft_size_p);
+    // std::cout << "CRMyMaxChunks(" << data_total_chunks_p << ", " << ft_rank_p << ", " << ft_size_p << ") =" << max_chunks << "\n";
     return CRMyStartChunk(data_total_chunks_p, ft_rank_p, ft_size_p) + CRMyMaxChunks(data_total_chunks_p, ft_rank_p, ft_size_p);
 }
 #endif

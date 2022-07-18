@@ -3592,6 +3592,12 @@ namespace FT
       scheduling_method = m_p;
     }
 
+    /**
+     * @brief Get the My Chunk Start End object
+     *
+     * @param start inclusive
+     * @param end inclusive
+     */
     inline void GetMyChunkStartEnd(unsigned long long &start, unsigned long long &end)
     {
       if (scheduling_method == CHUNK_SCHEDULING_CR)
