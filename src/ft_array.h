@@ -2878,7 +2878,7 @@ namespace FT
         break;
       }
 
-      std::cout << "Rank [" << ft_rank << "]: current_chunk_id = " << prev_chunk_id << " , next chunk = " << current_chunk_id << "\n";
+      // std::cout << "Rank [" << ft_rank << "]: current_chunk_id = " << prev_chunk_id << " , next chunk = " << current_chunk_id << "\n";
     }
     /**
      * @brief Load the next chunk

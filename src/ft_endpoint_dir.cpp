@@ -829,7 +829,8 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         is_dir_file_list_recursive = true;
         break;
     case DIR_SKIP_SIZE_CHECK:
-        std::cout << "skip_size_check is called \n";
+        if (!ft_rank)
+            std::cout << "skip_size_check is called \n";
         skip_size_check = true;
         break;
     case DIR_INPUT_VARIABLE_SEARCH_RGX:

@@ -124,7 +124,8 @@ int EndpointCSV::ExtractMeta()
     endpoint_size.resize(2);
     endpoint_size[0] = number_of_rows;
     endpoint_size[1] = number_of_columns;
-    PrintVector("EndpointCSV::ExtractMeta: endpoint_size = ", endpoint_size);
+    if (!ft_rank)
+        PrintVector("EndpointCSV::ExtractMeta: endpoint_size = ", endpoint_size);
     set_endpoint_dim_size_flag = true;
     endpoint_ranks = 2;
 
