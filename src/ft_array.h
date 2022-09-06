@@ -1575,7 +1575,7 @@ namespace FT
 
             data_point = InsertOutputVV2WriteV(current_result_chunk_data, output_vector_shape, current_chunk_start_offset_v, current_chunk_end_offset_v, is_the_last_chunk, previous_output_vector_shape);
             CalculateOutputSize(B_data_size, B_data_chunk_size, B_data_overlap_size);
-            // PrintVector("Debug: create B_data_size = ", B_data_size);
+            PrintVector("Debug: create B_data_size = ", B_data_size);
             if (B->GetEndpointType() == EP_DIR && GetEndpointType() == EP_DIR)
             {
               B->SetDirChunkSize(B_data_chunk_size);
