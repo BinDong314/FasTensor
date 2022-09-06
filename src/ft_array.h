@@ -1581,10 +1581,10 @@ namespace FT
               B->SetDirChunkSize(B_data_chunk_size);
             }
             B->CreateEndpoint(B_data_size, B_data_chunk_size, B_data_overlap_size);
-            // PrintVector("Debug: write B_data_chunk_size = ", B_data_chunk_size);
-            // PrintVector("Debug: write B_data_size = ", B_data_size);
-            // PrintVector("Debug: write current_chunk_start_offset_v = ", current_chunk_start_offset_v);
-            // PrintVector("Debug: write current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+            PrintVector("Debug: write B_data_chunk_size = ", B_data_chunk_size);
+            PrintVector("Debug: write B_data_size = ", B_data_size);
+            PrintVector("Debug: write current_chunk_start_offset_v = ", current_chunk_start_offset_v);
+            PrintVector("Debug: write current_chunk_end_offset_v = ", current_chunk_end_offset_v);
 
             B->WriteEndpoint(current_chunk_start_offset_v, current_chunk_end_offset_v, data_point);
             free(data_point);
