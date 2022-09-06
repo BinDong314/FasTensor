@@ -2482,13 +2482,13 @@ namespace FT
                 // we need to update the output_vector_shape,  data_chunk_size, current_chunk_ol_size
                 // PrintVector("data_chunk_size");
                 int normal_chunk_output_size = data_chunk_size[i] / (current_chunk_ol_size[i] / output_vector_shape[i]);
-                /*PrintScalar("data_chunk_size[i] =", data_chunk_size[i]);
+                PrintScalar("data_chunk_size[i] =", data_chunk_size[i]);
                 PrintScalar("current_chunk_ol_size[i] =", current_chunk_ol_size[i]);
                 PrintScalar("output_vector_shape[i] =", output_vector_shape[i]);
                 PrintScalar("normal_chunk_output_size =", normal_chunk_output_size);
                 PrintScalar("skip_size[i] = ", skip_size[i]);
                 PrintScalar("data_size[i] = ", data_size[i]);
-                PrintScalar("data_size[i] % skip_size[i] = ", data_size[i] % skip_size[i]);*/
+                PrintScalar("data_size[i] % skip_size[i] = ", data_size[i] % skip_size[i]);
 
                 data_size_p[i] = (data_size_p[i] - 1) * normal_chunk_output_size;
                 data_size_p[i] = data_size_p[i] + ((data_size[i] % skip_size[i]) * normal_chunk_output_size) / data_chunk_size[i];
