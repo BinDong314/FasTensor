@@ -753,7 +753,9 @@ namespace FT
             AU_EXIT("Strip size must be aligned with the size of chunk ! \n");
           }
 
-          if (data_size[i] % skip_size[i] != 0)
+          // Fix me: here we assume skip_size needs to be aligned
+          //         with data_size when is_skip_tail_chunk is set
+          if ((data_size[i] % skip_size[i] != 0) && (is_skip_tail_chunk == false))
           {
             skip_not_aligned_w_array_flag = true;
             skip_not_aligned_w_array_index = i;
@@ -2481,6 +2483,7 @@ namespace FT
               {
                 // we need to update the output_vector_shape,  data_chunk_size, current_chunk_ol_size
                 // PrintVector("data_chunk_size");
+                //     600000 / (630000 / 62219)
                 int normal_chunk_output_size = data_chunk_size[i] / (current_chunk_ol_size[i] / output_vector_shape[i]);
                 PrintScalar("data_chunk_size[i] =", data_chunk_size[i]);
                 PrintScalar("current_chunk_ol_size[i] =", current_chunk_ol_size[i]);
