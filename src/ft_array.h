@@ -181,7 +181,7 @@ namespace FT
     virtual int SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count) = 0;
     virtual void DisableOverlapLower() = 0;
     virtual void DisableOverlapUpper() = 0;
-    virtual void SkipTailChunk() = 0;
+    virtual void SkipFileTail() = 0;
     virtual void GetMyChunkStartEnd(unsigned long long &start, unsigned long long &end) = 0;
     virtual ~ArrayBase() = default;
   };
@@ -287,6 +287,7 @@ namespace FT
 
     bool set_direct_output_flag = false;
     bool is_skip_tail_chunk = false;
+    bool is_execute_udf_once = false;
 
     // is init function called in ReadNextChunk function
     bool is_init_called_in_rnc = false;
@@ -1500,6 +1501,8 @@ namespace FT
                 }
               }
             }
+            if (is_execute_udf_once)
+              break;
           } // end for loop, finish the processing on a single chunk in row-major direction
         }   // end of omp parallel
 
@@ -3925,9 +3928,14 @@ namespace FT
       is_disable_overlap_lower_set = true;
     }
 
-    inline void SkipTailChunk()
+    inline void SkipFileTail()
     {
       is_skip_tail_chunk = true;
+    }
+
+    inline void ExecuteUDFOnce()
+    {
+      is_execute_udf_once = true;
     }
 
     inline void SetChunkSchedulingMethod(const ChunkSchedulingMethod &m_p)
