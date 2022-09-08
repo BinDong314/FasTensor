@@ -182,6 +182,7 @@ namespace FT
     virtual void DisableOverlapLower() = 0;
     virtual void DisableOverlapUpper() = 0;
     virtual void SkipFileTail() = 0;
+    virtual void ExecuteUDFOnce() = 0;
     virtual void GetMyChunkStartEnd(unsigned long long &start, unsigned long long &end) = 0;
     virtual ~ArrayBase() = default;
   };
