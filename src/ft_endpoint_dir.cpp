@@ -115,20 +115,6 @@ int EndpointDIR::ExtractMeta()
     if (temp_dir_file_list.size() <= 0)
         AU_EXIT("No file under directory" + dir_str);
 
-    if (has_ordering_on_file_list)
-    {
-        std::vector<std::string> temp_dir_file_list_ordered;
-        for (auto order : order_on_file_list)
-        {
-            if (order > temp_dir_file_list.size())
-            {
-                AU_EXIT("The sorted index [" + std::to_string(order) + "] is larger than the number of files listed [" + std::to_string(temp_dir_file_list.size()) + "] !\n");
-            }
-            temp_dir_file_list_ordered.push_back(temp_dir_file_list[order]);
-        }
-        temp_dir_file_list = temp_dir_file_list_ordered;
-    }
-
 #ifdef DEBUG
     if (!ft_rank)
         PrintVector("After apply order : ", temp_dir_file_list);
@@ -153,6 +139,20 @@ int EndpointDIR::ExtractMeta()
     {
         // std::cout << " input_replace_regex_flag = " << input_replace_regex_flag << "\n";
         dir_file_list = temp_dir_file_list;
+    }
+
+    if (has_ordering_on_file_list)
+    {
+        std::vector<std::string> temp_dir_file_list_ordered;
+        for (auto order : order_on_file_list)
+        {
+            if (order > dir_file_list.size())
+            {
+                AU_EXIT("The sorted index [" + std::to_string(order) + "] is larger than the number of files listed [" + std::to_string(dir_file_list.size()) + "] !\n");
+            }
+            temp_dir_file_list_ordered.push_back(dir_file_list[order]);
+        }
+        dir_file_list = temp_dir_file_list_ordered;
     }
 
 #ifdef DEBUG
