@@ -554,4 +554,11 @@ void String2Vector(const std::string &str, std::vector<T> &vec_new)
     }
 }
 
+template <class T>
+inline void clear_vector(std::vector<T> &v)
+{
+    v.clear();
+    std::vector<T>().swap(v);
+}
+
 #endif
