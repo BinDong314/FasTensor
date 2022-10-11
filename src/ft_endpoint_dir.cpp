@@ -265,7 +265,7 @@ int EndpointDIR::ExtractMeta()
         {
             if (!is_dir_file_list_recursive)
             {
-                AU_VERBOSE("is_dir_file_list_recursive is false", 0);
+                // AU_VERBOSE("is_dir_file_list_recursive is false", 0);
                 break;
                 // Note: here the "append_sub_endpoint_info" is under test
                 //       we need to upldate other functions to handle it.

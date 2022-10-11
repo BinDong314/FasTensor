@@ -102,6 +102,10 @@ extern int ft_rank;
 #include "ft_array_transpose.h"
 #include "ft_chunk_scheduling.h"
 
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 // std::vector<Endpoint *> endpoint_clean_vector;
 // extern std::map<Endpoint *, bool> endpoint_clean_vector;
 
@@ -177,8 +181,8 @@ namespace FT
     virtual int GetArraySize(std::vector<unsigned long long> &size_p) = 0;
     virtual int GetStencilTag() = 0;
     virtual int GetTag(const std::string &name, std::string &value) = 0;
-    virtual int SetView(unsigned long long start, unsigned long long count, int rank) = 0;
-    virtual int SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count) = 0;
+    virtual void SetView(unsigned long long start, unsigned long long count, int rank) = 0;
+    virtual void SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count) = 0;
     virtual void DisableOverlapLower() = 0;
     virtual void DisableOverlapUpper() = 0;
     virtual void SkipFileTail() = 0;
@@ -3119,7 +3123,7 @@ namespace FT
      * @param rank : the rank on which dimension to subset
      * @return int
      */
-    int SetView(unsigned long long start, unsigned long long count, int rank)
+    void SetView(unsigned long long start, unsigned long long count, int rank)
     {
       view_flag = true;
       is_view_rank = true;
@@ -3145,7 +3149,7 @@ namespace FT
       }
     }
 
-    int SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count)
+    void SetView(std::vector<unsigned long long> start, std::vector<unsigned long long> count)
     {
       view_flag = true;
       view_start_offset = start;

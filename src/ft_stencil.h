@@ -752,7 +752,7 @@ public:
     return false;
   }
 
-  inline bool SetEmpty()
+  inline void SetEmpty()
   {
     has_set_output_value_flag = false;
   }
