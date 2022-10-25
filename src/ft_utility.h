@@ -213,7 +213,7 @@ inline void PrintVector(std::string name, std::vector<T> v)
 {
     int n = v.size();
     if (name != "")
-        std::cout << "Rank=" << ft_rank << ",size=" << v.size() << ", " << name << ": ";
+        std::cout << "Rank=" << ft_rank << ", size=" << v.size() << ", " << name << ": ";
 
     if (!n)
     {
@@ -249,8 +249,18 @@ template <typename T>
 inline void PrintVV(std::string name, std::vector<std::vector<T>> v)
 {
     int n = v.size();
-    if (name != "")
-        std::cout << "Rank " << ft_rank << ", " << name << ": ";
+    if (v.size() > 1)
+    {
+        if (name != "")
+            std::cout << "Rank " << ft_rank << ", "
+                      << ", size= (" << v.size() << "," << v[0].size() << "), " << name << ": \n";
+    }
+    else
+    {
+        if (name != "")
+            std::cout << "Rank " << ft_rank << ", "
+                      << ", size= (" << v.size() << "," << 0 << "), " << name << ": \n";
+    }
 
     if (!n)
     {
