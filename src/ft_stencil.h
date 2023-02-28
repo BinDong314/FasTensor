@@ -663,7 +663,7 @@ public:
   {
     value = others;
     has_set_output_value_flag = true;
-    std::cout << "= output \n";
+    // std::cout << "= output \n";
   }
 
   bool has_output_value()

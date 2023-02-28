@@ -1008,6 +1008,8 @@ namespace FT
 
       unsigned long long result_vector_index = 0;
 
+      bool has_no_udf_return_result = false;
+
       while (load_ret == 1)
       {
         unsigned long long cell_target_g_location_rm;
@@ -1021,7 +1023,7 @@ namespace FT
 #endif
 
 #if defined(_OPENMP)
-#pragma omp parallel
+#pragma omp parallel private(has_no_udf_return_result)
 #endif
         {
           std::vector<unsigned long long> cell_coordinate(data_dims, 0), cell_coordinate_ol(data_dims, 0), global_cell_coordinate(data_dims, 0);
@@ -1120,14 +1122,15 @@ namespace FT
 
             if (!cell_return_stencil.IsEmpty())
             {
-              std::cout << "Got value ! \n";
+              // std::cout << "Got value ! \n";
               cell_return_value = cell_return_stencil.get_value();
             }
             else
             {
               // std::cout << cell_return_stencil.get_value() <
-              std::cout << "Disable the [goto to] let openMP work(test)  !" << cell_return_stencil.get_value() << ", IsEmpty =" << cell_return_stencil.IsEmpty() << " \n";
-              goto end_of_process;
+              // std::cout << "Disable the [goto to] let openMP work(test)  !" << cell_return_stencil.get_value() << ", IsEmpty =" << cell_return_stencil.IsEmpty() << " \n";
+              // goto end_of_process;
+              has_no_udf_return_result = true;
               //  break;
             }
 
@@ -1142,7 +1145,7 @@ namespace FT
               cell_return_stencil.GetTagMap(output_stencil_metadata_map);
             }
 
-            if (save_result_flag)
+            if (save_result_flag && (has_no_udf_return_result == false))
             {
               if (skip_flag)
               {
@@ -1198,7 +1201,7 @@ namespace FT
 
         t_start = AU_WTIME;
 
-        if (B != nullptr)
+        if (B != nullptr && (has_no_udf_return_result == false))
         {
 
           std::vector<unsigned long long> B_data_size;
@@ -1324,9 +1327,9 @@ namespace FT
 
       } // end of while:: no more chunks to process
 
-    end_of_process:
-      // May start a empty write for collective I/O
-      if ((data_total_chunks % ft_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + ft_size - (data_total_chunks % ft_size))) && B != nullptr)
+      // end_of_process:
+      //  May start a empty write for collective I/O
+      if ((has_no_udf_return_result == true) && (data_total_chunks % ft_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + ft_size - (data_total_chunks % ft_size))) && B != nullptr)
       {
         // std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
         // std::cout << "leftover_chunks  = " << data_total_chunks % ft_size << std::endl;
