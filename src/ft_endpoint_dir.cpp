@@ -320,7 +320,7 @@ int EndpointDIR::ExtractMeta()
             AU_VERBOSE(dir_file_list[i], 0);
         }
     }
-//#define FT_DEBUG 1
+// #define FT_DEBUG 1
 #ifdef FT_DEBUG
     for (int i = 0; i < dir_file_list.size(); i++)
     {
@@ -513,7 +513,7 @@ int EndpointDIR::Write(std::vector<unsigned long long> start, std::vector<unsign
 
     // start[dir_data_merge_index] = 0;
     // end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
-    //#define DEBUG 0
+    // #define DEBUG 0
 #ifdef DEBUG
     PrintVector("EndpointDIR::dir_chunk_size before update :", dir_chunk_size);
 #endif
@@ -844,6 +844,29 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
         break;
     case DIR_SET_VIEW:
         SetView(parameter_v[0]);
+        break;
+    case DIR_SAVE_FINAL_FILE_LIST:
+        if (parameter_v.size() < 1)
+        {
+            AU_EXIT("DIR_SAVE_FINAL_FILE_LIST  needs 1 parameters: file name \n");
+        }
+        if (ft_rank == 0)
+        {
+            ofstream outputfile(parameter_v[0]);
+            if (outputfile.is_open())
+            {
+                for (int i = 0; i < dir_file_list.size(); i++)
+                {
+
+                    outputfile << dir_file_list[i] << " \n";
+                }
+                outputfile.close();
+            }
+            else
+            {
+                AU_EXIT("Unable to open file for DIR_SAVE_FINAL_FILE_LIST: " + parameter_v[0] + "\n");
+            }
+        }
         break;
     default:
         break;

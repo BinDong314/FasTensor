@@ -104,6 +104,8 @@ in binary and source code form.
 #define DIR_INPUT_VARIABLE_SEARCH_RGX (OP_USER_DEFINED_START + 18)
 #define DIR_SET_VIEW (OP_USER_DEFINED_START + 19)
 
+#define DIR_SAVE_FINAL_FILE_LIST (OP_USER_DEFINED_START + 20)
+
 #include "ft_utility.h"
 #include "ft_type.h"
 #include "ft_endpoint.h"
@@ -116,6 +118,8 @@ in binary and source code form.
 #include <math.h>
 #include <regex>
 #include <string.h>
+#include <fstream>
+
 //
 // I/O layer
 class EndpointDIR : public Endpoint

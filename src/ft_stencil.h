@@ -107,7 +107,7 @@ class Stencil
 {
 private:
   T value;
-  int has_set_output_value_flag = false;
+  bool has_set_output_value_flag = false;
   // std::vector<unsigned long long> my_location; //This is the coodinate with overlapping
   std::vector<unsigned long long> my_location_no_ol;
   // std::vector<unsigned long long> global_coordinate;
@@ -663,6 +663,7 @@ public:
   {
     value = others;
     has_set_output_value_flag = true;
+    std::cout << "= output \n";
   }
 
   bool has_output_value()

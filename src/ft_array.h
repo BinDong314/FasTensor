@@ -109,8 +109,8 @@ extern int ft_rank;
 // std::vector<Endpoint *> endpoint_clean_vector;
 // extern std::map<Endpoint *, bool> endpoint_clean_vector;
 
-//#define AU_DEFAULT_CHUNK_SIZE_PER_DIM 1000
-// extern std::map<Endpoint *, bool> endpoint_clean_vector;
+// #define AU_DEFAULT_CHUNK_SIZE_PER_DIM 1000
+//  extern std::map<Endpoint *, bool> endpoint_clean_vector;
 
 extern std::vector<Endpoint *> endpoint_to_clean_vector;
 
@@ -236,7 +236,7 @@ namespace FT
     unsigned long long prev_chunk_id;                 // for SetChunkID of CellTarget
     std::vector<int> skip_size;                       // Size to ship after each operation
     std::vector<unsigned long long> skiped_dims_size; // Size of the data after skip
-    std::vector<unsigned long long> skiped_chunks;    //# of chunks after skip
+    std::vector<unsigned long long> skiped_chunks;    // # of chunks after skip
     std::vector<int> skiped_chunk_size;               // Size of each chunk after skip
 
     std::vector<T> current_chunk_data; // Pointer to data of current chunk
@@ -787,7 +787,7 @@ namespace FT
       // current_chunk_id = ft_rank; // Each process deal with one chunk one time, starting from its rank
       current_chunk_id = InitFirstChunk();
 
-      //#ifdef DEBUG
+      // #ifdef DEBUG
       if (ft_rank == 0)
       {
         if (!virtual_array_flag)
@@ -907,7 +907,7 @@ namespace FT
 
       current_chunk_id = ft_rank; // Each process deal with one chunk one time, starting from its rank
 
-      //#ifdef DEBUG
+      // #ifdef DEBUG
       if (ft_rank == 0)
       {
         if (!virtual_array_flag)
@@ -1120,13 +1120,14 @@ namespace FT
 
             if (!cell_return_stencil.IsEmpty())
             {
-              // std::cout << "Got value ! \n";
+              std::cout << "Got value ! \n";
               cell_return_value = cell_return_stencil.get_value();
             }
             else
             {
-              std::cout << "Disable the [goto to] let openMP work(test)  ! \n";
-              // goto end_of_process;
+              // std::cout << cell_return_stencil.get_value() <
+              std::cout << "Disable the [goto to] let openMP work(test)  !" << cell_return_stencil.get_value() << ", IsEmpty =" << cell_return_stencil.IsEmpty() << " \n";
+              goto end_of_process;
               //  break;
             }
 
