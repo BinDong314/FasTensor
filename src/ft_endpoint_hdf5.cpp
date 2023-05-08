@@ -1008,7 +1008,7 @@ void EndpointHDF5::ListDatasetsRecursive(std::vector<std::string> &dataset_list)
     ListDatasetsRecursiveOpFuncList.clear();
     // list_recursive_objects.clear();
     file = H5Fopen(fn_str.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
-    status = H5Ovisit(file, H5_INDEX_NAME, H5_ITER_NATIVE, ListDatasetsRecursiveOpFunc, NULL);
+    status = H5Ovisit(file, H5_INDEX_NAME, H5_ITER_NATIVE, ListDatasetsRecursiveOpFunc, NULL, H5O_INFO_ALL);
     status = H5Fclose(file);
     dataset_list = ListDatasetsRecursiveOpFuncList;
     ListDatasetsRecursiveOpFuncList.clear();
