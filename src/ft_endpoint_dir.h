@@ -105,6 +105,7 @@ in binary and source code form.
 #define DIR_SET_VIEW (OP_USER_DEFINED_START + 19)
 
 #define DIR_SAVE_FINAL_FILE_LIST (OP_USER_DEFINED_START + 20)
+#define DIR_SET_INPUT_FILE_LIST (OP_USER_DEFINED_START + 21)
 
 #include "ft_utility.h"
 #include "ft_type.h"
@@ -164,6 +165,9 @@ private:
     int index_view_on_a_rank;
 
     bool is_ExtractMeta_called = false;
+    // DIR_SET_INPUT_FILE_LIST
+    bool is_set_input_file_list = false;
+    std::vector<std::string> input_file_list;
 
 public:
     /**

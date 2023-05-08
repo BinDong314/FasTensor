@@ -90,21 +90,31 @@ int EndpointDIR::ExtractMeta()
     if (is_ExtractMeta_called)
         return 0;
     std::vector<std::string> temp_dir_file_list;
-    if (!is_list_dir_recursive)
+    if (!is_set_input_file_list)
     {
-        // This only get the file name
-        temp_dir_file_list = GetDirFileList(dir_str);
-        // To be the same as GetDirFileListRecursive
-        // add directory path to the file list
-        for (int i = 0; i < temp_dir_file_list.size(); i++)
+        if (!is_list_dir_recursive)
         {
-            temp_dir_file_list[i] = dir_str + "/" + temp_dir_file_list[i];
+            // This only get the file name
+            temp_dir_file_list = GetDirFileList(dir_str);
+            // To be the same as GetDirFileListRecursive
+            // add directory path to the file list
+            for (int i = 0; i < temp_dir_file_list.size(); i++)
+            {
+                temp_dir_file_list[i] = dir_str + "/" + temp_dir_file_list[i];
+            }
+        }
+        else
+        {
+            // This get the full path name
+            temp_dir_file_list = GetDirFileListRecursive(dir_str);
         }
     }
     else
     {
-        // This get the full path name
-        temp_dir_file_list = GetDirFileListRecursive(dir_str);
+        for (int i = 0; i < input_file_list.size(); i++)
+        {
+            temp_dir_file_list[i] = dir_str + "/" + input_file_list[i];
+        }
     }
 #ifdef DEBUG
     if (!ft_rank)
@@ -867,6 +877,10 @@ int EndpointDIR::Control(int opt_code, std::vector<std::string> &parameter_v)
                 AU_EXIT("Unable to open file for DIR_SAVE_FINAL_FILE_LIST: " + parameter_v[0] + "\n");
             }
         }
+        break;
+    case DIR_SET_INPUT_FILE_LIST:
+        is_set_input_file_list = true;
+        input_file_list = parameter_v;
         break;
     default:
         break;
