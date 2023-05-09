@@ -1,0 +1,5 @@
+
+##./configure --prefix=/project/projectdirs/m1248/fasttensor-new/build --with-dash=/project/projectdirs/m1248/fasttensor-new/tools3rd/dash/build/install --with-hdf5=/opt/cray/pe/hdf5-parallel/1.10.5.2/GNU/8.2/ CXX=CC
+
+./configure --prefix=$PWD/build  --with-hdf5=/opt/cray/pe/hdf5-parallel/1.12.2.3/gnu/9.1 CXX=CC
+
