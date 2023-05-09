@@ -979,7 +979,8 @@ namespace FT
 
     /**
      * @brief Run a UDF on the data pointed by the array
-     *
+     *        This version returns the UDFOutputType type
+     *        The next Transform which returns int is the latest.
      * @tparam UDFOutputType : the output type of UDF
      * @tparam BType : The element type of output Array B
      * @param UDF: pointer to user-defined function
@@ -1845,10 +1846,12 @@ namespace FT
                 }
               }
             }
-            if (skip_flag == 1 && VectorEqVector(current_chunk_size, skip_size))
-            {
-              break;
-            }
+            // This code is like execute the UDF once
+            // To do, we need to test its effect.
+            //  if (skip_flag == 1 && VectorEqVector(current_chunk_size, skip_size))
+            //{
+            //    break;
+            //  }
           } // end for loop, finish the processing on a single chunk in row-major direction
 #if defined(_OPENMP)
           prefix[ithread + 1] = vec_private.size();
