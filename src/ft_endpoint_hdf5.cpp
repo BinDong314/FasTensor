@@ -739,18 +739,26 @@ int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
         AU_EXIT("Error in H5Aget_num_attrs, na = " + std::to_string(na));
     }
 
+    if (na == 0)
+    {
+        attr_names.clear();
+        return 0;
+    }
+
     // printf("ReadAllAttributeName, na = %d \n", na);
     ssize_t len;
     char buf[1024];
     attr_names.clear();
 
-    for (int iiiii = 0; iiiii < na; iiiii++)
+    //    for (int iiiii = 0; iiiii < na; iiiii++)
+    //{
+    for (int i = 0; i < na; i++)
     {
-        printf("Open attribute = %u , na = %d \n", iiiii, na);
-        aid = H5Aopen_idx(did, iiiii);
+        printf("Open attribute = %d , na = %d \n", i, na);
+        aid = H5Aopen_idx(did, i);
         if (aid < 0)
         {
-            AU_EXIT("Error in H5Aopen_idx = " + std::to_string(iiiii) + ", total # of attrs = " + std::to_string(na));
+            AU_EXIT("Error in H5Aopen_idx = " + std::to_string(i) + ", total # of attrs = " + std::to_string(na));
         }
         // continue;
         memset(buf, '\0', 1024);
