@@ -974,6 +974,7 @@ int EndpointHDF5::CreateXDMF()
     // int create_xdmf(std::string file_name, std::string dset_name, std::vector<unsigned long long> dimensions, FTType data_element_type)
     std::string gd_str = gn_str + "/" + dn_str;
     create_xdmf(fn_str, gd_str, endpoint_size, data_element_type);
+    return 0;
 }
 
 std::vector<std::string> ListDatasetsRecursiveOpFuncList;

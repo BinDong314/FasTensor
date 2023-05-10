@@ -142,6 +142,7 @@ const char *footer = "\
 
 int create_xdmf(std::string file_name, std::string dset_name, std::vector<unsigned long long> dimensions, FTType data_element_type)
 {
+    return 0;
     PrintVector("dimensions = ", dimensions);
     if (!(dimensions.size() != 2 || dimensions.size() != 3))
     {
