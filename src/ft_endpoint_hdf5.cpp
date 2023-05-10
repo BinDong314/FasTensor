@@ -617,9 +617,9 @@ void EndpointHDF5::Map2MyTypeParameters(FTDataType ft_type, hid_t &mem_type_p, h
 int EndpointHDF5::ParseEndpointInfo()
 {
     std::cout << endpoint_info << "\n";
-    //std::stringstream ss(endpoint_info);
+    // std::stringstream ss(endpoint_info);
     std::stringstream ss;
-    ss<<endpoint_info;
+    ss << endpoint_info;
     if (!std::getline(ss, fn_str, ':'))
     {
         AU_EXIT("Invalid endpoint_info");
@@ -640,15 +640,10 @@ int EndpointHDF5::ParseEndpointInfo()
     }
     dn_str = ExtractFileName(group_dataset_name_str);
 
-//#ifdef FT_DEBUG
+#ifdef FT_DEBUG
     std::cout << "EndpointHDF5::ParseEndpointInfo: fn_str =" << fn_str << ", gn_str = " << gn_str << ", dn_str =" << dn_str << std::endl;
-<<<<<<< HEAD
 #endif
     return 0;
-=======
-    return 0;
-//#endif
->>>>>>> 27a314d063ede07af4bf4961aff7caf5c3bc367b
 }
 
 /**
