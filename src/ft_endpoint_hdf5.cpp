@@ -746,7 +746,7 @@ int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
 
     for (unsigned int iiiii = 0; iiiii < na; iiiii++)
     {
-        // printf("Open attribute = %u , na = %d \n", iiiii, na);
+        printf("Open attribute = %u , na = %d \n", iiiii, na);
         aid = H5Aopen_idx(did, iiiii);
         if (aid < 0)
         {
