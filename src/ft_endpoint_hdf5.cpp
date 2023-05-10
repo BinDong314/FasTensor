@@ -640,8 +640,8 @@ int EndpointHDF5::ParseEndpointInfo()
 
 #ifdef FT_DEBUG
     std::cout << "EndpointHDF5::ParseEndpointInfo: fn_str =" << fn_str << ", gn_str = " << gn_str << ", dn_str =" << dn_str << std::endl;
-    return 0;
 #endif
+    return 0;
 }
 
 /**

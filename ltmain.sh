@@ -1,1 +1,1 @@
-/global/homes/d/dbin/bin/libtool-2.4.6/build/share/libtool/build-aux/ltmain.sh
+/usr/local/Cellar/libtool/2.4.7/share/libtool/build-aux/ltmain.sh

@@ -3,7 +3,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -14,7 +14,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -25,7 +25,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -82,17 +82,17 @@ in binary and source code form.
 <!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" []>
 <Xdmf xmlns:xi="http://www.w3.org/2001/XInclude" Version="2.0">
 <Domain>
-<Grid GridType="Uniform"> 
+<Grid GridType="Uniform">
 <Topology Dimensions="16 16" TopologyType="2DCoRectMesh"/>
 <Geometry Type="ORIGIN_DXDY">
 <DataItem Dimensions="2" Format="XML">0.000000 0.000000</DataItem>
 <DataItem Dimensions="2" Format="XML">1.000000 1.000000</DataItem>
 </Geometry>
-<Attribute AttributeType ="Scalar" Center="Node"  Name="dat">  
-<DataItem ItemType="Uniform" Dimensions="16 16" DataType="Float" Precision="4" Format="HDF"> 
-    tutorial.h5:/dat 
-</DataItem>  
-</Attribute>   
+<Attribute AttributeType ="Scalar" Center="Node"  Name="dat">
+<DataItem ItemType="Uniform" Dimensions="16 16" DataType="Float" Precision="4" Format="HDF">
+    tutorial.h5:/dat
+</DataItem>
+</Attribute>
 </Grid>
 </Domain>
 </Xdmf>
@@ -158,29 +158,37 @@ int create_xdmf(std::string file_name, std::string dset_name, std::vector<unsign
     FILE *fp = fopen(xdmf_file_name.c_str(), "w");
     fputs(header, fp);
 
-    std::ostringstream dimensions_str;
-    if (!dimensions.empty())
-    {
-        // Convert all but the last element to avoid a trailing ","
-        std::copy(dimensions.begin(), std::prev(dimensions.end(), 1),
-                  std::ostream_iterator<unsigned long long>(dimensions_str, " "));
+    // std::ostringstream dimensions_str;
+    // if (!dimensions.empty())
+    // {
+    //     // Convert all but the last element to avoid a trailing ","
+    //     std::copy(dimensions.begin(), std::prev(dimensions.end(), 1),
+    //               std::ostream_iterator<unsigned long long>(dimensions_str, " "));
 
-        // Now add the last element with no delimiter
-        dimensions_str << dimensions.back();
+    //     // Now add the last element with no delimiter
+    //     dimensions_str << dimensions.back();
+    // }
+    // std::cout << "dimensions_str = " << dimensions_str.str() << "\n";
+
+    std::stringstream ss;
+    for (const auto &n : dimensions)
+    {
+        ss << n << " ";
     }
-    std::cout << "dimensions_str = " << dimensions_str.str() << "\n";
+    std::string dimensions_str = ss.str();
+
     if (dimensions.size() == 2)
     {
-        fprintf(fp, topology, dimensions_str.str().c_str(), topology_type_2d);
+        fprintf(fp, topology, dimensions_str.c_str(), topology_type_2d);
         fprintf(fp, geometry, geometry_type_2d, 2, geometry_origin_2d, 2, geometry_dxdy_2d);
     }
     else
     {
-        fprintf(fp, topology, dimensions_str.str().c_str(), topology_type_3d);
+        fprintf(fp, topology, dimensions_str.c_str(), topology_type_3d);
         fprintf(fp, geometry, geometry_type_3d, 3, geometry_origin_3d, 3, geometry_dydydz_3d);
     }
 
-    fprintf(fp, attribute_dataitem, xdmf_dset_name.c_str(), dimensions_str.str().c_str(), hdf5_file_name.c_str(), dset_name.c_str());
+    fprintf(fp, attribute_dataitem, xdmf_dset_name.c_str(), dimensions_str.c_str(), hdf5_file_name.c_str(), dset_name.c_str());
 
     fputs(footer, fp);
     fclose(fp);

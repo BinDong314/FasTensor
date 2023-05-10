@@ -1,1 +1,1 @@
-/global/homes/d/dbin/bin/libtool-2.4.6/build/share/aclocal/ltsugar.m4
+/usr/local/Cellar/libtool/2.4.7/share/aclocal/ltsugar.m4
