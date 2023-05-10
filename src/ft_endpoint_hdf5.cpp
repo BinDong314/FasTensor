@@ -750,7 +750,7 @@ int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
         aid = H5Aopen_idx(did, iiiii);
         if (aid < 0)
         {
-            AU_EXIT("Error in H5Aopen_idx = " + std::to_string(iiiii));
+            AU_EXIT("Error in H5Aopen_idx = " + std::to_string(iiiii) + ", total # of attrs = " + std::to_string(na));
         }
         // continue;
         memset(buf, '\0', 1024);
