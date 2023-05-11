@@ -745,22 +745,31 @@ int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
         return 0;
     }
 
-    // printf("ReadAllAttributeName, na = %d \n", na);
+    //printf("ReadAllAttributeName, na = %d \n", na);
+    //for (int i = 0; i < na; i++)
+    //{
+    //    printf("Open attribute = %d , na = %d \n", i, na);
+    //}    
+
+    //return 0;
+
+
     ssize_t len;
     char buf[1024];
     attr_names.clear();
 
     //    for (int iiiii = 0; iiiii < na; iiiii++)
     //{
-    for (int i = 0; i < na; i++)
+    int j;
+    for (j  = 0; j < na; j++)
     {
-        printf("Open attribute = %d , na = %d \n", i, na);
-        aid = H5Aopen_idx(did, i);
+        //printf("Open attribute = %d , na = %d \n", j, na);
+	//std::cout << "j = " << j << ", na = "<< na << std::endl;
+        aid = H5Aopen_idx(did, j);
         if (aid < 0)
         {
-            AU_EXIT("Error in H5Aopen_idx = " + std::to_string(i) + ", total # of attrs = " + std::to_string(na));
+           AU_EXIT("Error in H5Aopen_idx = " + std::to_string(j) + ", total # of attrs = " + std::to_string(na));
         }
-        // continue;
         memset(buf, '\0', 1024);
         len = H5Aget_name(aid, 1024, buf);
         if (len < 0)
@@ -770,6 +779,7 @@ int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
         attr_names.push_back(std::string(buf));
         H5Aclose(aid);
     }
+    return 0;
 }
 
 /**
