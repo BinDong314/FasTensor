@@ -301,13 +301,8 @@ ACLOCAL = ${SHELL} '/Users/dbin/work/fastensor/missing' aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-<<<<<<< HEAD
 ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include
 ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-git-dev/build/include
-=======
-ARRAYUDF_CFLAGS =        -I/opt/cray/pe/hdf5-parallel/1.12.2.3/gnu/9.1/include
-ARRAYUDF_CPPFLAGS =    -I/opt/cray/pe/hdf5-parallel/1.12.2.3/gnu/9.1/include
->>>>>>> 27a314d063ede07af4bf4961aff7caf5c3bc367b
 ARRAYUDF_CXXFLAGS =     -std=c++17 -g3
 ARRAYUDF_LDFLAGS = 
 ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz
@@ -323,22 +318,13 @@ AU_OLDCXX_ENABLED = false
 AWK = awk
 CC = mpicc
 CCDEPMODE = depmode=gcc3
-<<<<<<< HEAD
 CFLAGS = -g -O2 -g3
 CPP = mpicc -E
-=======
-CFLAGS = -g3
-CPP = gcc -E
->>>>>>> 27a314d063ede07af4bf4961aff7caf5c3bc367b
 CPPFLAGS = 
 CXX = mpic++
 CXXCPP = mpic++ -E
 CXXDEPMODE = depmode=gcc3
-<<<<<<< HEAD
 CXXFLAGS = -g -O2 -g3
-=======
-CXXFLAGS = -g3
->>>>>>> 27a314d063ede07af4bf4961aff7caf5c3bc367b
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -454,21 +440,12 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AUTOMAKE_OPTIONS = gnu
-<<<<<<< HEAD
 AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part     -I/Users/dbin/work/soft/hdf5-git-dev/build/include   -ldl 
 AM_CFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part         -I/Users/dbin/work/soft/hdf5-git-dev/build/include    -ldl 
 AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part      -std=c++17 -g3    -ldl 
 AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz  -all-static  -ldl 
 #AM_LDFLAGS  = -Wl,--start-group            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz  -all-static  -ldl 
 LDADD = ../src/libFastensor.la            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz  -ldl
-=======
-AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part     -I/opt/cray/pe/hdf5-parallel/1.12.2.3/gnu/9.1/include   -ldl 
-AM_CFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part         -I/opt/cray/pe/hdf5-parallel/1.12.2.3/gnu/9.1/include    -ldl 
-AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part      -std=c++17 -g3    -ldl 
-AM_LDFLAGS =            -L/opt/cray/pe/hdf5-parallel/1.12.2.3/gnu/9.1/lib -lhdf5 -lhdf5_hl -lz  -all-static  -ldl 
-#AM_LDFLAGS  = -Wl,--start-group            -L/opt/cray/pe/hdf5-parallel/1.12.2.3/gnu/9.1/lib -lhdf5 -lhdf5_hl -lz  -all-static  -ldl 
-LDADD = ../src/libFastensor.la            -L/opt/cray/pe/hdf5-parallel/1.12.2.3/gnu/9.1/lib -lhdf5 -lhdf5_hl -lz  -ldl
->>>>>>> 27a314d063ede07af4bf4961aff7caf5c3bc367b
 DEPENDENCIES = ../src/libFastensor.la
 ft_test_data_generator_SOURCES = ft_test_data_generator.cpp
 ft_example_hello_world_SOURCES = ft_example_hello_world.cpp

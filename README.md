@@ -1,3 +1,7 @@
+
+Moved this FasTensor to https://github.com/BinDong314/FasTensor.git
+
+
 This package contains the FastTensor, a new version of ArrayUDF from the project SDS (Scientific Data Services) framework at LBNL. This project is supported by the DOE. Please see copyright at the end. 
 
 
