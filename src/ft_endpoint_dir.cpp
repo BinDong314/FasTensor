@@ -111,6 +111,7 @@ int EndpointDIR::ExtractMeta()
     }
     else
     {
+        temp_dir_file_list.resize(input_file_list.size());
         for (int i = 0; i < input_file_list.size(); i++)
         {
             temp_dir_file_list[i] = dir_str + "/" + input_file_list[i];
