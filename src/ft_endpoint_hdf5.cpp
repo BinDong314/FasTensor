@@ -616,7 +616,7 @@ void EndpointHDF5::Map2MyTypeParameters(FTDataType ft_type, hid_t &mem_type_p, h
  */
 int EndpointHDF5::ParseEndpointInfo()
 {
-    std::cout << endpoint_info << "\n";
+    //std::cout << endpoint_info << "\n";
     // std::stringstream ss(endpoint_info);
     std::stringstream ss;
     ss << endpoint_info;

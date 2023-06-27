@@ -205,6 +205,7 @@ public:
   Stencil(T value_p)
   {
     value = value_p;
+    has_set_output_value_flag = true;
   }
 
   /**
@@ -663,7 +664,7 @@ public:
   {
     value = others;
     has_set_output_value_flag = true;
-    // std::cout << "= output \n";
+    //std::cout << "value = "<< value << ", has_set_output_value_flag = " << has_set_output_value_flag << "\n";
   }
 
   bool has_output_value()

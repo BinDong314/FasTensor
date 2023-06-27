@@ -1123,11 +1123,12 @@ namespace FT
 
             if (!cell_return_stencil.IsEmpty())
             {
-              // std::cout << "Got value ! \n";
+               //std::cout << "Got value ! \n";
               cell_return_value = cell_return_stencil.get_value();
             }
             else
             {
+	      std::cout << "IsEmpty = True ! \n";	    
               // std::cout << cell_return_stencil.get_value() <
               // std::cout << "Disable the [goto to] let openMP work(test)  !" << cell_return_stencil.get_value() << ", IsEmpty =" << cell_return_stencil.IsEmpty() << " \n";
               // goto end_of_process;
