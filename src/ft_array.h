@@ -1056,6 +1056,7 @@ namespace FT
             prefix[0] = 0;
           }
           std::vector<UDFOutputType> vec_private;
+	  //std::cout << "nthreads = " << nthreads << "\n"; 
 #endif
 
 #if defined(_OPENMP)
@@ -1125,6 +1126,7 @@ namespace FT
             {
                //std::cout << "Got value ! \n";
               cell_return_value = cell_return_stencil.get_value();
+	      has_no_udf_return_result = false;
             }
             else
             {
@@ -1146,9 +1148,10 @@ namespace FT
               has_output_stencil_tag_flag = true;
               cell_return_stencil.GetTagMap(output_stencil_metadata_map);
             }
-
+            //std::cout << "save_result_flag = " << save_result_flag << ", has_no_udf_return_result =" << has_no_udf_return_result << "\n";
             if (save_result_flag && (has_no_udf_return_result == false))
             {
+	      //std::cout << "save_result_flag && (has_no_udf_return_result == false) \n";
               if (skip_flag)
               {
 #if defined(_OPENMP)
@@ -1167,6 +1170,7 @@ namespace FT
               {
 #if defined(_OPENMP)
                 vec_private.push_back(cell_return_value);
+		//std::cout << "vec_private.push_back(cell_return_value) is called \n";
 #else
                 current_result_chunk_data[i] = cell_return_value; // cell_return =  cell_return.
 #endif
@@ -1189,7 +1193,7 @@ namespace FT
             }
             if (current_result_chunk_data.size() != prefix[nthreads])
             {
-              std::cout << "Wrong output size ! prefix[nthreads] =" << prefix[nthreads] << ", current.size() = " << current_result_chunk_data.size() << " \n ";
+              std::cout << "DD Wrong output size ! prefix[nthreads] =" << prefix[nthreads] << ", current.size() = " << current_result_chunk_data.size() << " \n ";
             }
           } // end of omp for
           std::copy(vec_private.begin(), vec_private.end(), current_result_chunk_data.begin() + prefix[ithread]);
