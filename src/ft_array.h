@@ -1165,11 +1165,16 @@ namespace FT
               }
               else
               {
+#if defined(_OPENMP)
+                vec_private.push_back(cell_return_value);
+#else
                 current_result_chunk_data[i] = cell_return_value; // cell_return =  cell_return.
-                if (apply_replace_flag == 1)
+#endif
+		if (apply_replace_flag == 1)
                 {
                   std::memcpy(&current_chunk_data[offset_ol], &cell_return_value, sizeof(T));
                 }
+
               }
             }
           } // end for loop, finish the processing on a single chunk in row-major direction
