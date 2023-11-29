@@ -188,6 +188,10 @@ namespace FT
     virtual void SkipFileTail() = 0;
     virtual void ExecuteUDFOnce() = 0;
     virtual void GetMyChunkStartEnd(unsigned long long &start, unsigned long long &end) = 0;
+    virtual void EnableCollectiveIO() = 0;
+    virtual void DisableCollectiveIO() = 0;
+    virtual void EnableWriteRootOnly() = 0;
+    virtual void DisableWriteRootOnly() = 0;
     virtual ~ArrayBase() = default;
   };
 
@@ -293,7 +297,7 @@ namespace FT
     bool set_direct_output_flag = false;
     bool is_skip_tail_chunk = false;
     bool is_execute_udf_once = false;
-
+    bool is_write_root_only = false;
     // is init function called in ReadNextChunk function
     bool is_init_called_in_rnc = false;
 
@@ -1056,7 +1060,7 @@ namespace FT
             prefix[0] = 0;
           }
           std::vector<UDFOutputType> vec_private;
-	  //std::cout << "nthreads = " << nthreads << "\n"; 
+          // std::cout << "nthreads = " << nthreads << "\n";
 #endif
 
 #if defined(_OPENMP)
@@ -1124,13 +1128,13 @@ namespace FT
 
             if (!cell_return_stencil.IsEmpty())
             {
-               //std::cout << "Got value ! \n";
+              // std::cout << "Got value ! \n";
               cell_return_value = cell_return_stencil.get_value();
-	      has_no_udf_return_result = false;
+              has_no_udf_return_result = false;
             }
             else
             {
-	      std::cout << "IsEmpty = True ! \n";	    
+              std::cout << "IsEmpty = True ! \n";
               // std::cout << cell_return_stencil.get_value() <
               // std::cout << "Disable the [goto to] let openMP work(test)  !" << cell_return_stencil.get_value() << ", IsEmpty =" << cell_return_stencil.IsEmpty() << " \n";
               // goto end_of_process;
@@ -1148,10 +1152,10 @@ namespace FT
               has_output_stencil_tag_flag = true;
               cell_return_stencil.GetTagMap(output_stencil_metadata_map);
             }
-            //std::cout << "save_result_flag = " << save_result_flag << ", has_no_udf_return_result =" << has_no_udf_return_result << "\n";
+            // std::cout << "save_result_flag = " << save_result_flag << ", has_no_udf_return_result =" << has_no_udf_return_result << "\n";
             if (save_result_flag && (has_no_udf_return_result == false))
             {
-	      //std::cout << "save_result_flag && (has_no_udf_return_result == false) \n";
+              // std::cout << "save_result_flag && (has_no_udf_return_result == false) \n";
               if (skip_flag)
               {
 #if defined(_OPENMP)
@@ -1170,15 +1174,14 @@ namespace FT
               {
 #if defined(_OPENMP)
                 vec_private.push_back(cell_return_value);
-		//std::cout << "vec_private.push_back(cell_return_value) is called \n";
+                // std::cout << "vec_private.push_back(cell_return_value) is called \n";
 #else
                 current_result_chunk_data[i] = cell_return_value; // cell_return =  cell_return.
 #endif
-		if (apply_replace_flag == 1)
+                if (apply_replace_flag == 1)
                 {
                   std::memcpy(&current_chunk_data[offset_ol], &cell_return_value, sizeof(T));
                 }
-
               }
             }
           } // end for loop, finish the processing on a single chunk in row-major direction
@@ -1355,6 +1358,17 @@ namespace FT
 
       return;
     }
+    bool IsVectorZeros(const std::vector<size_t> &vec)
+    {
+      for (const size_t &element : vec)
+      {
+        if (element != 0)
+        {
+          return false; // Found a non-zero element
+        }
+      }
+      return true; // All elements are zero
+    }
 
     /**
      * @brief Run a UDF on the data pointed by the array
@@ -1491,6 +1505,8 @@ namespace FT
             if (vector_type_flag == true)
             {
               cell_return_stencil.GetShape(output_vector_shape);
+              if (IsVectorZeros(output_vector_shape))
+                goto end_of_process;
             }
 
             if (cell_return_stencil.HasTagMap())
@@ -2371,6 +2387,16 @@ namespace FT
       return;
     }
 
+    void EnableWriteRootOnly()
+    {
+      is_write_root_only = true;
+    }
+
+    void DisableWriteRootOnly()
+    {
+      is_write_root_only = false;
+    }
+
     int WriteArray(const std::vector<unsigned long long> &start_p, const std::vector<unsigned long long> &end_p, std::vector<T> &data_p)
     {
       if (!is_endpoint_created_flag)
@@ -2444,13 +2470,66 @@ namespace FT
       return 0;
     }
 
+    unsigned long long CountCells(const std::vector<unsigned long long> &start_p, const std::vector<unsigned long long> &end_p)
+    {
+      // Check if the dimensions of start_p and end_p are the same
+      if (start_p.size() != end_p.size())
+      {
+        // Handle error: Dimensions mismatch
+        return 0; // You can also throw an exception or handle it according to your needs
+      }
+
+      // Calculate the number of cells in each dimension
+      unsigned long long total_cells = 1;
+      for (size_t i = 0; i < start_p.size(); ++i)
+      {
+        // Ensure that the end point is greater than or equal to the start point in each dimension
+        if (end_p[i] < start_p[i])
+        {
+          // Handle error: End point is less than start point
+          return 0; // You can also throw an exception or handle it according to your needs
+        }
+
+        // Calculate the number of cells in the current dimension
+        total_cells *= (end_p[i] - start_p[i] + 1);
+      }
+
+      return total_cells;
+    }
+
     int WriteEndpoint(std::vector<unsigned long long> &start_p, std::vector<unsigned long long> &end_p, void *data)
     {
       // PrintVector("start_p =", start_p);
       // PrintVector("end_p = ", end_p);
 
       if (!virtual_array_flag)
+      {
         return endpoint->Write(start_p, end_p, data);
+      }
+      else
+      {
+        int n = attribute_endpoint_vector.size();
+        size_t total_cells = CountCells(start_p, end_p);
+        // std::vector<T> vt(data, data + total_cells);
+        std::vector<T> vt;
+        vt.reserve(total_cells); // Reserve space for n elements in the vector
+
+        // Copy the elements from the allocated memory to the vector
+        T *arr = static_cast<T *>(data);
+        std::copy(arr, arr + total_cells, std::back_inserter(vt));
+
+        for (int i = 0; i < n; i++)
+        {
+          std::cout << "WriteArray write attribute [ " << i << " ] "
+                    << "total_cells = " << total_cells << " \n";
+          void *current_chunk_data_void_p = ExtractAttributeFromVirtualArrayVector(vt, i, attribute_endpoint_vector[i]->GetDataElementType(), attribute_endpoint_vector[i]->GetDataElementTypeSize());
+          attribute_endpoint_vector[i]->Write(start_p, end_p, current_chunk_data_void_p);
+          free(current_chunk_data_void_p);
+        }
+        return 1;
+
+        // AU_EXIT("Not supported yet !\n");
+      }
 
       return 0;
     }
@@ -2469,6 +2548,15 @@ namespace FT
      */
     void inline CalculateOutputSize(std::vector<unsigned long long> &data_size_p, std::vector<int> &data_chunk_size_p, std::vector<int> &data_overlap_size_p)
     {
+      // Add this to support vector search on 1D case
+      if (is_write_root_only && is_execute_udf_once)
+      {
+        data_size_p.resize(output_vector_shape.size());
+        for (int i = 0; i < output_vector_shape.size(); i++)
+          data_size_p[i] = output_vector_shape[i];
+        return;
+      }
+
       if (skip_flag)
       {
         data_size_p = skiped_dims_size;
@@ -3882,17 +3970,78 @@ namespace FT
      */
     void DisableCollectiveIO()
     {
-      if (endpoint->GetEndpointType() == EP_HDF5)
+
+      if (!virtual_array_flag)
       {
-        endpoint->DisableCollectiveIO();
+        if (endpoint->GetEndpointType() == EP_HDF5)
+          endpoint->DisableCollectiveIO();
+      }
+      else
+      {
+        int n = attribute_endpoint_vector.size();
+        for (int i = 0; i < n; i++)
+        {
+          if (attribute_endpoint_vector[i]->GetEndpointType() == EP_HDF5)
+            attribute_endpoint_vector[i]->DisableCollectiveIO();
+        }
       }
     }
 
     void EnableCollectiveIO()
     {
-      if (endpoint->GetEndpointType() == EP_HDF5)
+      if (!virtual_array_flag)
       {
-        endpoint->EnableCollectiveIO();
+        if (endpoint->GetEndpointType() == EP_HDF5)
+        {
+          endpoint->EnableCollectiveIO();
+        }
+      }
+      else
+      {
+        int n = attribute_endpoint_vector.size();
+        for (int i = 0; i < n; i++)
+        {
+          if (attribute_endpoint_vector[i]->GetEndpointType() == EP_HDF5)
+            attribute_endpoint_vector[i]->EnableCollectiveIO();
+        }
+      }
+    }
+
+    inline void DisableMPIIO()
+    {
+
+      if (!virtual_array_flag)
+      {
+        if (endpoint->GetEndpointType() == EP_HDF5)
+          endpoint->DisableMPIIO();
+      }
+      else
+      {
+        int n = attribute_endpoint_vector.size();
+        for (int i = 0; i < n; i++)
+        {
+          if (attribute_endpoint_vector[i]->GetEndpointType() == EP_HDF5)
+            attribute_endpoint_vector[i]->DisableMPIIO();
+        }
+      }
+    }
+
+    inline void EnableMPIIO()
+    {
+
+      if (!virtual_array_flag)
+      {
+        if (endpoint->GetEndpointType() == EP_HDF5)
+          endpoint->EnableMPIIO();
+      }
+      else
+      {
+        int n = attribute_endpoint_vector.size();
+        for (int i = 0; i < n; i++)
+        {
+          if (attribute_endpoint_vector[i]->GetEndpointType() == EP_HDF5)
+            attribute_endpoint_vector[i]->EnableMPIIO();
+        }
       }
     }
 

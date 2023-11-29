@@ -432,6 +432,14 @@ void Endpoint::DisableCollectiveIO()
 {
 }
 
+void Endpoint::EnableMPIIO()
+{
+}
+
+void Endpoint::DisableMPIIO()
+{
+}
+
 int Endpoint::MapOpStr2Int(std::string op_cmd_str)
 {
     AU_EXIT("Error: MapOpString2Int is not implemented in endpoint");

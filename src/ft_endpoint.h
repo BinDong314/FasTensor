@@ -309,6 +309,10 @@ public:
 
     virtual void DisableCollectiveIO();
 
+    virtual void EnableMPIIO();
+
+    virtual void DisableMPIIO();
+
     /**
      * @brief Get the Dir File Vector object
      *

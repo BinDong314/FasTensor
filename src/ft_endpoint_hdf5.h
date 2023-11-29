@@ -4,7 +4,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -15,7 +15,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -26,7 +26,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -99,14 +99,14 @@ in binary and source code form.
 #define HDF5_ENABLE_FILTER_PREPROCESSING (OP_USER_DEFINED_START + 5)
 #define HDF5_LIST_RECURSIVE (OP_USER_DEFINED_START + 6)
 
-//For some old code
+// For some old code
 #define OP_ENABLE_MPI_IO HDF5_ENABLE_MPI_IO
 #define OP_DISABLE_MPI_IO HDF5_DISABLE_MPI_IO
 #define OP_ENABLE_COLLECTIVE_IO HDF5_ENABLE_COLLECTIVE_IO
 #define OP_DISABLE_COLLECTIVE_IO HDF5_DISABLE_COLLECTIVE_IO
 
 //
-//I/O layer
+// I/O layer
 class EndpointHDF5 : public Endpoint
 {
 private:
@@ -130,7 +130,7 @@ private:
 public:
     /**
      * @brief Construct a new EndpointHDF5 object
-     * 
+     *
      * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
      */
     EndpointHDF5(std::string endpoint_info_p)
@@ -145,7 +145,7 @@ public:
         is_mpi_enabled = true;
     }
     /**
-     * @brief Construct a new Endpoint in HDF5 
+     * @brief Construct a new Endpoint in HDF5
      *         Nothing to do there, can be used as sub-endpoint of directory
      */
     EndpointHDF5()
@@ -160,18 +160,18 @@ public:
 
     /**
      * @brief Construct a new EndpointHDF5 object without MPI
-     * 
+     *
      * @param no_mpi  any number should work
      */
     EndpointHDF5(int no_mpi)
     {
-        //endpoint_info = endpoint_info_p;
-        //ParseEndpointInfo();
+        // endpoint_info = endpoint_info_p;
+        // ParseEndpointInfo();
         SetOpenFlag(false);
         SetRwFlag(H5F_ACC_RDONLY);
         SetEndpointType(EP_HDF5);
-        //EnableMPIIO();
-        //EnableCollectiveIO();
+        // EnableMPIIO();
+        // EnableCollectiveIO();
     }
 
     ~EndpointHDF5()
@@ -185,54 +185,54 @@ public:
     }
     /**
      * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
-     * 
-     * @return int < 0 error, >= 0 works 
+     *
+     * @return int < 0 error, >= 0 works
      */
     int ExtractMeta() override;
     /**
      * @brief print information about the endpoint
-     * 
-     * @return < 0 error, >= 0 works 
+     *
+     * @return < 0 error, >= 0 works
      */
     int PrintInfo() override;
 
     /**
      * @brief create the endpoint
-     * 
-     * @return  < 0 error, >= 0 works 
+     *
+     * @return  < 0 error, >= 0 works
      */
     int Create() override;
 
     /**
      * @brief open the endpoint
-     * 
-     * @return < 0 error, >= 0 works 
+     *
+     * @return < 0 error, >= 0 works
      */
     int Open() override;
 
     /**
      * @brief read the data from end-point
-     * 
+     *
      * @param start, coordinates of the cell to start (including)
      * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
+     * @param data, store the result data
      * @return int < 0 error, >= 0 works
      */
     int Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
 
     /**
      * @brief write the data to the end-point
-     * 
+     *
      * @param start, coordinates of the cell to start (including)
      * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
+     * @param data, store the result data
      * @return int < 0 error, >= 0 works
      */
     int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
 
     /**
      * @brief close the end-point
-     * 
+     *
      * @return int int < 0 error, >= 0 works
      */
     int Close() override;
@@ -245,9 +245,9 @@ public:
 
     void DisableCollectiveIO() override;
 
-    void EnableMPIIO();
+    void EnableMPIIO() override;
 
-    void DisableMPIIO();
+    void DisableMPIIO() override;
 
     /**
      * @brief parse endpoint_info to my own info
@@ -260,41 +260,41 @@ public:
      * @brief call a special operator on endpoint
      *        such as, enable collective I/O for HDF5
      *                 dump file from MEMORY to HDF5
-     * @param opt_code, specially defined code 
+     * @param opt_code, specially defined code
      */
-    //int SpecialOperator(int opt_code, std::string parameter) override;
+    // int SpecialOperator(int opt_code, std::string parameter) override;
 
     /**
      * @brief call a special operator on endpoint
      *        such as, enable collective I/O for HDF5
      *                 dump file from MEMORY to HDF5
-     * @param opt_code, specially defined code 
+     * @param opt_code, specially defined code
      */
     int Control(int opt_code, std::vector<std::string> &parameter_v) override;
 
     /**
      * @brief Set the Attribute object
-     * 
-     * @param name 
-     * @param data 
-     * @return int 
+     *
+     * @param name
+     * @param data
+     * @return int
      */
     int WriteAttribute(const std::string &name, const void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
 
     /**
      * @brief Read all attribute name
-     * 
-     * @param attri_name 
-     * @return int 
+     *
+     * @param attri_name
+     * @return int
      */
     int ReadAllAttributeName(std::vector<std::string> &attr_name);
 
     /**
      * @brief Get the Attribute object
-     * 
-     * @param name 
-     * @param data 
-     * @return int 
+     *
+     * @param name
+     * @param data
+     * @return int
      */
     int ReadAttribute(const std::string &name, void *data, FTDataType data_type_p, const size_t &data_length_p = 0) override;
 
@@ -307,22 +307,22 @@ public:
     void EnableFilterPreprocessing(std::vector<std::string> &parameter_v);
 
     /**
-     * @brief List datasets of a HDF5 
-     * 
-     * @param dataset_list, each item contain path from root to HDF5 
+     * @brief List datasets of a HDF5
+     *
+     * @param dataset_list, each item contain path from root to HDF5
      */
     void ListDatasetsRecursive(std::vector<std::string> &dataset_list);
 
     /**
      * @brief an operator function for ListDatasetsRecursive
-     * 
-     * @param loc_id 
-     * @param name 
-     * @param info 
-     * @param operator_data 
-     * @return herr_t 
+     *
+     * @param loc_id
+     * @param name
+     * @param info
+     * @param operator_data
+     * @return herr_t
      */
-    //herr_t static ListDatasetsRecursiveOpFunc(hid_t loc_id, const char *name, const H5O_info_t *info,
-    //                                          void *operator_data);
+    // herr_t static ListDatasetsRecursiveOpFunc(hid_t loc_id, const char *name, const H5O_info_t *info,
+    //                                           void *operator_data);
 };
 #endif
