@@ -2,4 +2,6 @@
 #git push https://BinDong314@github.com/BinDong314/FasTensor.git --all
 
 #git push -u origin main https://BinDong314@github.com/BinDong314/FasTensor.git
-git push https://BinDong314@github.com/BinDong314/FasTensor.git -u origin main
+#git push https://BinDong314@github.com/BinDong314/FasTensor.git -f origin master
+
+git push -u origin main
