@@ -3,7 +3,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -14,7 +14,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -25,7 +25,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -79,7 +79,7 @@ in binary and source code form.
 
 #include "ft_endpoint_memory.h"
 
-//see au.h for its definations
+// see au.h for its definations
 extern int ft_size;
 extern int ft_rank;
 
@@ -99,7 +99,7 @@ int EndpointMEMORY::Create()
     {
         endpoint_dim_size_ul[i] = endpoint_size[i];
     }
-    //PrintVector("Create endpoint_dim_size_ul = ", endpoint_dim_size_ul);
+    // PrintVector("Create endpoint_dim_size_ul = ", endpoint_dim_size_ul);
     switch (endpoint_size.size())
     {
     case 1:
@@ -134,17 +134,17 @@ int EndpointMEMORY::Open()
 }
 
 /**
-     * @brief read the data from end-point
-     * 
-     * @param start, coordinates of the cell to start (including)
-     * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
-     * @return int < 0 error, >= 0 works
-     */
+ * @brief read the data from end-point
+ *
+ * @param start, coordinates of the cell to start (including)
+ * @param end , coordinates of the cell to end (including)
+ * @param data, store the result data
+ * @return int < 0 error, >= 0 works
+ */
 int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
-    //AU_INFO("Memory read");
-    //dash::Team::All().barrier();
+    // AU_INFO("Memory read");
+    // dash::Team::All().barrier();
     if (!GetCreateFlag())
     {
         Create();
@@ -257,16 +257,16 @@ int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsi
 }
 
 /**
-     * @brief write the data to the end-point
-     * 
-     * @param start, coordinates of the cell to start (including)
-     * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
-     * @return int < 0 error, >= 0 works
-     */
+ * @brief write the data to the end-point
+ *
+ * @param start, coordinates of the cell to start (including)
+ * @param end , coordinates of the cell to end (including)
+ * @param data, store the result data
+ * @return int < 0 error, >= 0 works
+ */
 int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
 {
-    //dash::Team::All().barrier();
+    // dash::Team::All().barrier();
 
     if (!GetCreateFlag())
     {
@@ -373,13 +373,13 @@ int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<uns
 }
 
 /**
-     * @brief close the end-point
-     * 
-     * @return int int < 0 error, >= 0 works
-     */
+ * @brief close the end-point
+ *
+ * @return int int < 0 error, >= 0 works
+ */
 int EndpointMEMORY::Close()
 {
-    //AU_INFO("Memory Close");
+    // AU_INFO("Memory Close");
 
     return 0;
 };
@@ -441,11 +441,11 @@ int EndpointMEMORY::Control(int opt_code, std::vector<std::string> &parameter_v)
 }
 
 /**
-     * @brief Nonvolatile the data in MEMORY to HDF5
-     * 
-     * @param parameter 
-     * @return int 
-     */
+ * @brief Nonvolatile the data in MEMORY to HDF5
+ *
+ * @param parameter
+ * @return int
+ */
 int EndpointMEMORY::Nonvolatile(std::string parameter)
 {
     hdf5_options fopts;
@@ -462,7 +462,7 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
         AU_EXIT("Invalued endpoint_info");
     }
 
-    //std::cout << "Nonvolatile \n";
+    // std::cout << "Nonvolatile \n";
 
     if (local_mirror_flag)
     {
@@ -476,17 +476,17 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
                 end[i] = endpoint_size[i] - 1;
             }
             Endpoint *sub_endpoint = new EndpointHDF5(1);
-            //sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, std::vector<std::string>());
-            //sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, std::vector<std::string>());
+            // sub_endpoint->SpecialOperator(OP_DISABLE_MPI_IO, std::vector<std::string>());
+            // sub_endpoint->SpecialOperator(OP_DISABLE_COLLECTIVE_IO, std::vector<std::string>());
 
             sub_endpoint->SetDataElementType(data_element_type);
             sub_endpoint->SetDimensions(endpoint_size);
             sub_endpoint->SetEndpointInfo(parameter);
-            //std::cout << sub_endpoint->GetEndpointInfo() << "\n";
-            //PrintVector("endpoint_dim_size", endpoint_dim_size);
-            //std::cout << "Create pre \n";
+            // std::cout << sub_endpoint->GetEndpointInfo() << "\n";
+            // PrintVector("endpoint_dim_size", endpoint_dim_size);
+            // std::cout << "Create pre \n";
             sub_endpoint->Create();
-            //std::cout << "Write pre \n";
+            // std::cout << "Write pre \n";
             sub_endpoint->Write(start, end, local_mirror_buffer);
         }
 
@@ -501,52 +501,52 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
             if (data_element_type == AU_SHORT)
             {
                 dash::Matrix<short, 1, unsigned long> *dash_array_typed = (dash::Matrix<short, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_INT)
             {
                 dash::Matrix<int, 1, unsigned long> *dash_array_typed = (dash::Matrix<int, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG)
             {
                 dash::Matrix<long, 1, unsigned long> *dash_array_typed = (dash::Matrix<long, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG_LONG)
             {
                 dash::Matrix<long long, 1, unsigned long> *dash_array_typed = (dash::Matrix<long long, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_USHORT)
             {
                 dash::Matrix<unsigned short, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_UINT)
             {
                 dash::Matrix<unsigned int, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULONG)
             {
                 dash::Matrix<unsigned long, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULLONG)
             {
                 dash::Matrix<unsigned long long, 1, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_FLOAT)
             {
                 dash::Matrix<float, 1, unsigned long> *dash_array_typed = (dash::Matrix<float, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_DOUBLE)
             {
                 dash::Matrix<double, 1, unsigned long> *dash_array_typed = (dash::Matrix<double, 1, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else
             {
@@ -559,52 +559,52 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
             if (data_element_type == AU_SHORT)
             {
                 dash::Matrix<short, 2, unsigned long> *dash_array_typed = (dash::Matrix<short, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_INT)
             {
                 dash::Matrix<int, 2, unsigned long> *dash_array_typed = (dash::Matrix<int, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG)
             {
                 dash::Matrix<long, 2, unsigned long> *dash_array_typed = (dash::Matrix<long, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG_LONG)
             {
                 dash::Matrix<long long, 2, unsigned long> *dash_array_typed = (dash::Matrix<long long, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_USHORT)
             {
                 dash::Matrix<unsigned short, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_UINT)
             {
                 dash::Matrix<unsigned int, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULONG)
             {
                 dash::Matrix<unsigned long, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULLONG)
             {
                 dash::Matrix<unsigned long long, 2, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_FLOAT)
             {
                 dash::Matrix<float, 2, unsigned long> *dash_array_typed = (dash::Matrix<float, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_DOUBLE)
             {
                 dash::Matrix<double, 2, unsigned long> *dash_array_typed = (dash::Matrix<double, 2, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else
             {
@@ -617,52 +617,52 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
             if (data_element_type == AU_SHORT)
             {
                 dash::Matrix<short, 3, unsigned long> *dash_array_typed = (dash::Matrix<short, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_INT)
             {
                 dash::Matrix<int, 3, unsigned long> *dash_array_typed = (dash::Matrix<int, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG)
             {
                 dash::Matrix<long, 3, unsigned long> *dash_array_typed = (dash::Matrix<long, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_LONG_LONG)
             {
                 dash::Matrix<long long, 3, unsigned long> *dash_array_typed = (dash::Matrix<long long, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_USHORT)
             {
                 dash::Matrix<unsigned short, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned short, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_UINT)
             {
                 dash::Matrix<unsigned int, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned int, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULONG)
             {
                 dash::Matrix<unsigned long, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_ULLONG)
             {
                 dash::Matrix<unsigned long long, 3, unsigned long> *dash_array_typed = (dash::Matrix<unsigned long long, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_FLOAT)
             {
                 dash::Matrix<float, 3, unsigned long> *dash_array_typed = (dash::Matrix<float, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else if (data_element_type == AU_DOUBLE)
             {
                 dash::Matrix<double, 3, unsigned long> *dash_array_typed = (dash::Matrix<double, 3, unsigned long> *)dash_array_p;
-                //StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
+                // StoreHDF::write(*dash_array_typed, fn_str, path_str, fopts);
             }
             else
             {
@@ -679,11 +679,11 @@ int EndpointMEMORY::Nonvolatile(std::string parameter)
 }
 
 /**
-     * @brief Volatile the data from HDF5 to MEMORY
-     * 
-     * @param parameter 
-     * @return int 
-     */
+ * @brief Volatile the data from HDF5 to MEMORY
+ *
+ * @param parameter
+ * @return int
+ */
 int EndpointMEMORY::Volatile(std::string parameter)
 {
     hdf5_options fopts;
@@ -887,10 +887,10 @@ int EndpointMEMORY::Volatile(std::string parameter)
 }
 
 /**
-     * @brief Merger mirrors on all processes
-     * 
-     * @return int 
-     */
+ * @brief Merger mirrors on all processes
+ *
+ * @return int
+ */
 int EndpointMEMORY::MergeMirrors(std::string op_str)
 {
     void *reduced_mirror_buffer;
@@ -959,7 +959,7 @@ int EndpointMEMORY::MergeMirrors(std::string op_str)
     }
     }
 
-    //if(!ft_rank) std::cout << "Pre write merged result to dash disabled\n" ;
+    // if(!ft_rank) std::cout << "Pre write merged result to dash disabled\n" ;
     if (!ft_rank && false)
     {
         std::vector<unsigned long> start_ul, end_ul;
@@ -971,8 +971,8 @@ int EndpointMEMORY::MergeMirrors(std::string op_str)
             start_ul[i] = 0;
             end_ul[i] = endpoint_size[i] - 1;
         }
-        //PrintScalar("local_mirror_size = ", local_mirror_size);
-        //PrintVector("endpoint_size = ", endpoint_size);
+        // PrintScalar("local_mirror_size = ", local_mirror_size);
+        // PrintVector("endpoint_size = ", endpoint_size);
 
         switch (endpoint_size.size())
         {
@@ -995,10 +995,10 @@ int EndpointMEMORY::MergeMirrors(std::string op_str)
 }
 
 /**
-     * @brief Create a Local Mirror object (Clone)
-     * 
-     * @return int 
-     */
+ * @brief Create a Local Mirror object (Clone)
+ *
+ * @return int
+ */
 int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
 {
     local_mirror_size = 1;
@@ -1071,11 +1071,11 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
     }
     }
 
-    //std::cout << "Pre init_value_str at " << ft_rank << "\n" <<  std::flush;
+    // std::cout << "Pre init_value_str at " << ft_rank << "\n" <<  std::flush;
 
-    //Error:
-    //Disable them for DASH distribution issue.
-    //AccessDashData1D may access data from different nodes
+    // Error:
+    // Disable them for DASH distribution issue.
+    // AccessDashData1D may access data from different nodes
     if (init_value_str == "" && false)
     {
         if (!ft_rank)
@@ -1089,8 +1089,8 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
                 start_ul[i] = 0;
                 end_ul[i] = endpoint_size[i] - 1;
             }
-            //PrintScalar("local_mirror_size = ", local_mirror_size);
-            //PrintVector("endpoint_size = ", endpoint_size);
+            // PrintScalar("local_mirror_size = ", local_mirror_size);
+            // PrintVector("endpoint_size = ", endpoint_size);
 
             switch (endpoint_size.size())
             {
@@ -1177,6 +1177,181 @@ int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
     }
 
     return 0;
+}
+
+#else
+
+/**
+ * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
+ *
+ * @return int < 0 error, >= 0 works
+ */
+int EndpointMEMORY::ExtractMeta()
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+/**
+ * @brief print information about the endpoint
+ *
+ * @return < 0 error, >= 0 works
+ */
+int EndpointMEMORY::PrintInfo()
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+/**
+ * @brief create the endpoint
+ *
+ * @return  < 0 error, >= 0 works
+ */
+int EndpointMEMORY::Create()
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+/**
+ * @brief open the endpoint
+ *
+ * @return < 0 error, >= 0 works
+ */
+int EndpointMEMORY::Open()
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+/**
+ * @brief read the data from end-point
+ *
+ * @param start, coordinates of the cell to start (including)
+ * @param end , coordinates of the cell to end (including)
+ * @param data, store the result data
+ * @return int < 0 error, >= 0 works
+ */
+int EndpointMEMORY::Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+/**
+ * @brief write the data to the end-point
+ *
+ * @param start, coordinates of the cell to start (including)
+ * @param end , coordinates of the cell to end (including)
+ * @param data, store the result data
+ * @return int < 0 error, >= 0 works
+ */
+int EndpointMEMORY::Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data)
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+/**
+ * @brief close the end-point
+ *
+ * @return int int < 0 error, >= 0 works
+ */
+int EndpointMEMORY::Close()
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+void EndpointMEMORY::Map2MyType()
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+void EndpointMEMORY::EnableCollectiveIO()
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+void EndpointMEMORY::DisableCollectiveIO()
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+/**
+ * @brief parse endpoint_info to my own info
+ *        In MEMORY, it map endpoint_info to filename, group name and datasetname
+ * @return int: 0 works,  < 0 error,
+ */
+int EndpointMEMORY::ParseEndpointInfo()
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+/**
+ * @brief call a special operator on endpoint
+ *        to dump file from MEMORY to HDF5, or in verse
+ *
+ * @param opt_code, specially defined code
+ */
+// int EndpointMEMORY::SpecialOperator(int opt_code, std::vector<std::string> parameter_v)
+// {
+//     std::cout << "EP_MEMORY is not configured and compiled ! \n";
+//     AU_EXIT(-1);
+// }
+
+int EndpointMEMORY::Control(int opt_code, std::vector<std::string> &parameter_v)
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+/**
+ * @brief Nonvolatile the data in MEMORY to HDF5
+ *
+ * @param parameter
+ * @return int
+ */
+int EndpointMEMORY::Nonvolatile(std::string parameter)
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+/**
+ * @brief Volatile the data from HDF5 to MEMORY
+ *
+ * @param parameter
+ * @return int
+ */
+int EndpointMEMORY::Volatile(std::string parameter)
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+/**
+ * @brief Merger mirrors on all processes
+ *
+ * @return int
+ */
+int EndpointMEMORY::MergeMirrors(std::string op_str)
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
+}
+
+/**
+ * @brief Create a Local Mirror object
+ *
+ * @return int
+ */
+int EndpointMEMORY::CreateLocalMirror(std::string init_value_str)
+{
+    std::cout << "EP_MEMORY is not configured and compiled ! \n";
+    AU_EXIT(-1);
 }
 
 #endif
