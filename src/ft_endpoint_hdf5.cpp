@@ -90,7 +90,12 @@ int EndpointHDF5::ExtractMeta()
     dataspace_id = H5Dget_space(did);
     endpoint_ranks = H5Sget_simple_extent_ndims(dataspace_id);
     endpoint_size.resize(endpoint_ranks);
-    H5Sget_simple_extent_dims(dataspace_id, &endpoint_size[0], NULL);
+    std::vector<hsize_t> endpoint_size_endpoint_size;
+    endpoint_size_endpoint_size.resize(endpoint_ranks);
+    H5Sget_simple_extent_dims(dataspace_id, &endpoint_size_endpoint_size[0], NULL);
+    for (int i = 0; i < endpoint_ranks; i++)
+        endpoint_size[i] = endpoint_size_endpoint_size[i];
+
     return 0;
 }
 
@@ -145,7 +150,11 @@ int EndpointHDF5::Create()
     // PrintVector("endpoint_size = ", endpoint_size);
     // printf("endpoint_ranks = %d \n", endpoint_ranks);
     std::vector<hsize_t> dims_out;
-    dims_out = endpoint_size;
+    dims_out.resize(endpoint_size.size());
+    for (int i = 0; i < endpoint_size.size(); i++)
+    {
+        dims_out[i] = endpoint_size[i];
+    }
     hid_t ts_id;
     ts_id = H5Screate_simple(endpoint_ranks, &dims_out[0], NULL);
 
@@ -238,7 +247,7 @@ int EndpointHDF5::Read(std::vector<unsigned long long> start, std::vector<unsign
 
     Map2MyType();
 
-    std::vector<unsigned long long> offset, count;
+    std::vector<hsize_t> offset, count;
     offset.resize(endpoint_ranks);
     count.resize(endpoint_ranks);
     for (int i = 0; i < endpoint_ranks; i++)
@@ -298,7 +307,7 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
     // Open(); //Re-open it
 
     bool is_empty_write = false;
-    std::vector<unsigned long long> offset, count;
+    std::vector<hsize_t> offset, count;
     offset.resize(endpoint_ranks);
     count.resize(endpoint_ranks);
     for (int i = 0; i < endpoint_ranks; i++)
@@ -319,9 +328,8 @@ int EndpointHDF5::Write(std::vector<unsigned long long> start, std::vector<unsig
     // PrintVector("offset =", offset);
     // PrintVector("count =", count);
 
-    std::vector<unsigned long long> endpoint_dim_size_temp(endpoint_ranks);
-    H5Sget_simple_extent_dims(dataspace_id, &endpoint_dim_size_temp[0], NULL);
-
+    // std::vector<unsigned long long> endpoint_dim_size_temp(endpoint_ranks);
+    // H5Sget_simple_extent_dims(dataspace_id, &endpoint_dim_size_temp[0], NULL);
     // PrintVector("endpoint_dim_size = ", endpoint_dim_size_temp);
 
     hid_t memspace_id = H5Screate_simple(endpoint_ranks, &count[0], NULL);
@@ -616,8 +624,8 @@ void EndpointHDF5::Map2MyTypeParameters(FTDataType ft_type, hid_t &mem_type_p, h
  */
 int EndpointHDF5::ParseEndpointInfo()
 {
-    //std::cout << endpoint_info << "\n";
-    // std::stringstream ss(endpoint_info);
+    // std::cout << endpoint_info << "\n";
+    //  std::stringstream ss(endpoint_info);
     std::stringstream ss;
     ss << endpoint_info;
     if (!std::getline(ss, fn_str, ':'))
@@ -745,14 +753,13 @@ int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
         return 0;
     }
 
-    //printf("ReadAllAttributeName, na = %d \n", na);
-    //for (int i = 0; i < na; i++)
+    // printf("ReadAllAttributeName, na = %d \n", na);
+    // for (int i = 0; i < na; i++)
     //{
-    //    printf("Open attribute = %d , na = %d \n", i, na);
-    //}    
+    //     printf("Open attribute = %d , na = %d \n", i, na);
+    // }
 
-    //return 0;
-
+    // return 0;
 
     ssize_t len;
     char buf[1024];
@@ -761,14 +768,14 @@ int EndpointHDF5::ReadAllAttributeName(std::vector<std::string> &attr_names)
     //    for (int iiiii = 0; iiiii < na; iiiii++)
     //{
     int j;
-    for (j  = 0; j < na; j++)
+    for (j = 0; j < na; j++)
     {
-        //printf("Open attribute = %d , na = %d \n", j, na);
-	//std::cout << "j = " << j << ", na = "<< na << std::endl;
+        // printf("Open attribute = %d , na = %d \n", j, na);
+        // std::cout << "j = " << j << ", na = "<< na << std::endl;
         aid = H5Aopen_idx(did, j);
         if (aid < 0)
         {
-           AU_EXIT("Error in H5Aopen_idx = " + std::to_string(j) + ", total # of attrs = " + std::to_string(na));
+            AU_EXIT("Error in H5Aopen_idx = " + std::to_string(j) + ", total # of attrs = " + std::to_string(na));
         }
         memset(buf, '\0', 1024);
         len = H5Aget_name(aid, 1024, buf);
