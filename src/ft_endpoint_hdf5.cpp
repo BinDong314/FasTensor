@@ -387,11 +387,22 @@ int EndpointHDF5::Close()
 
 void EndpointHDF5::EnableCollectiveIO()
 {
+    if(mpi_comm == MPI_COMM_NULL){
+        return;
+    }
     EnableMPIIO();
-    if (plist_cio_id > 0)
-        H5Pclose(plist_cio_id);
-    plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
-    H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
+       plist_cio_id = H5Pcreate(H5P_DATASET_XFER);
+        if (plist_cio_id < 0) {
+            throw std::runtime_error("Failed to create H5P_DATASET_XFER property list");
+        }
+
+        //std::cout << "Rank " << ft_rank << ": Setting MPIO collective" << std::endl;
+        herr_t satatus = H5Pset_dxpl_mpio(plist_cio_id, H5FD_MPIO_COLLECTIVE);
+        if (satatus < 0) {
+            throw std::runtime_error("Failed to set H5FD_MPIO_COLLECTIVE");
+        }
+
+        // std::cout << "Rank " << ft_rank << ": EnableCollectiveIO completed successfully" << std::endl;
 }
 
 /**
@@ -489,10 +500,34 @@ void EndpointHDF5::DisableCollectiveIO()
 
 void EndpointHDF5::EnableMPIIO()
 {
+    if(mpi_comm == MPI_COMM_NULL){
+        return;
+    }
     if (plist_id > 0)
-        H5Pclose(plist_id);
+         H5Pclose(plist_id);
     plist_id = H5Pcreate(H5P_FILE_ACCESS);
-    H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
+    if (plist_id < 0) {
+        std::cerr << "Rank " << ft_rank << ": Error: Failed to create property list" << std::endl;
+        return;
+    }
+
+   // std::cout << "Rank " << ft_rank << ": Setting MPIO fapl with worker_comm" << pcom << std::endl;
+   int comm_size;
+   int result = MPI_Comm_size(mpi_comm, &comm_size);
+    if (result != MPI_SUCCESS) {
+        std::cerr << "Rank " << ft_rank << ": Error: Invalid communicator" << std::endl;
+        return;
+    }
+  
+    herr_t statusa = H5Pset_fapl_mpio(plist_id, mpi_comm, MPI_INFO_NULL);
+    if (statusa < 0) {
+        std::cerr << "Rank " << ft_rank << ": Error: Failed to set MPIO fapl" << std::endl;
+        H5Pclose(plist_id);
+        return;
+    }
+   
+
+   // std::cout << "Rank " << ft_rank << ": MPIO enabled successfully" << std::endl;
 }
 
 void EndpointHDF5::DisableMPIIO()

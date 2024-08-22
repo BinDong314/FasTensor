@@ -96,24 +96,28 @@ public:
      * @param endpoint
      * @return Endpoint*
      */
-    static Endpoint *NewEndpoint(std::string endpoint)
+static Endpoint *NewEndpoint(const std::string& endpoint, MPI_Comm comm = MPI_COMM_WORLD)
     {
         AuEndpointType endpoint_type;
         std::string endpoint_info;
         ExtractEndpointTypeInfo(endpoint, endpoint_type, endpoint_info);
-        if (endpoint_type == EP_HDF5)
-            return new EndpointHDF5(endpoint_info);
-        if (endpoint_type == EP_DIR)
-            return new EndpointDIR(endpoint_info);
-        if (endpoint_type == EP_MEMORY)
-            return new EndpointMEMORY(endpoint_info);
-        if (endpoint_type == EP_ADIOS)
-            return new EndpointADIOS(endpoint_info);
-        if (endpoint_type == EP_PNETCDF)
-            return new EndpointPnetCDF(endpoint_info);
-        if (endpoint_type == EP_CSV)
-            return new EndpointCSV(endpoint_info);
-        AU_EXIT("Not supported endpoint");
-        return nullptr;
+        
+        switch (endpoint_type) {
+            case EP_HDF5:
+                return new EndpointHDF5(endpoint_info, comm);
+            case EP_DIR:
+                return new EndpointDIR(endpoint_info);
+            case EP_MEMORY:
+                return new EndpointMEMORY(endpoint_info);
+            case EP_ADIOS:
+                return new EndpointADIOS(endpoint_info);
+            case EP_PNETCDF:
+                return new EndpointPnetCDF(endpoint_info);
+            case EP_CSV:
+                return new EndpointCSV(endpoint_info);
+            default:
+                AU_EXIT("Not supported endpoint");
+                return nullptr;
+        }
     }
 };
