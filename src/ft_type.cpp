@@ -79,6 +79,7 @@ in binary and source code form.
 
 #include "ft_type.h"
 #include "ft_utility.h"
+#include <unordered_map>
 
 AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
 {
@@ -91,7 +92,7 @@ AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
     {
         endpoint_type = EP_PNETCDF;
     }
-    else if (endpoint_type_str == "EP_AUDIOS")
+    else if (endpoint_type_str == "EP_ADIOS")
     {
         endpoint_type = EP_ADIOS;
     }
@@ -132,4 +133,26 @@ AuEndpointType MapString2EndpointType(std::string endpoint_type_str)
         AU_EXIT("Not supported AuDataEndpointType");
     }
     return endpoint_type;
+}
+
+std::string getEndpointExtension(const std::string& format) {
+    // Create a map of format strings to file extensions
+    static const std::unordered_map<std::string, std::string> formatToExtension = {
+        {"EP_HDF5", ".h5"},
+        {"EP_ADIOS", ".bp"},
+        {"EP_CSV", ".csv"},
+        {"EP_PNETCDF", ".nc"}
+    };
+
+    // Convert the input to uppercase for case-insensitive matching
+    std::string upperFormat = format;
+    std::transform(upperFormat.begin(), upperFormat.end(), upperFormat.begin(), ::toupper);
+
+    // Look up the extension in the map
+    auto it = formatToExtension.find(upperFormat);
+    if (it != formatToExtension.end()) {
+        return it->second;
+    } else {
+        return ""; // Return an empty string if the format is not found
+    }
 }

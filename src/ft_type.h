@@ -113,6 +113,8 @@ typedef enum AuEndpointType
  */
 AuEndpointType MapString2EndpointType(std::string endpoint_type_str);
 
+std::string getEndpointExtension(const std::string& format);
+
 // See https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h
 // for reference
 typedef enum AuEndpointDataType
