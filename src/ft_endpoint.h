@@ -83,6 +83,7 @@ in binary and source code form.
 #define END_POINT_H
 
 #include "ft_utility.h"
+#include "mpi.h"
 #include "ft_type.h"
 #include <string>
 #include <iostream>
@@ -119,10 +120,12 @@ protected:
     bool open_flag = false;
     bool create_flag = false;
     unsigned read_write_flag;
+    MPI_Comm mpi_comm;
+    
 
 public:
-    Endpoint(){};
-    virtual ~Endpoint(){};
+    Endpoint(MPI_Comm comm = MPI_COMM_WORLD) : mpi_comm(comm) {}
+    virtual ~Endpoint() = default;
 
     /**
      * @brief Get the Dimensions of the data
@@ -388,6 +391,9 @@ public:
      * @return int
      */
     // virtual int SetView(const std::string &view_par);
+    void SetMPICommunicator(MPI_Comm comm) {
+        mpi_comm = comm;
+    }
 };
 
 #endif

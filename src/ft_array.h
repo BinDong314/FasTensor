@@ -80,6 +80,7 @@ in binary and source code form.
 // see au.h for its definations
 // extern int ft_size;
 // extern int ft_rank;
+#include <iostream>
 extern int ft_size;
 extern int ft_rank;
 
@@ -88,7 +89,10 @@ extern int ft_rank;
 
 #include <assert.h>
 #include <stdarg.h>
+#include <optional>
+
 #include <regex>
+#include <queue>
 #include "mpi.h"
 #include "ft_endpoint.h"
 #include "ft_stencil.h"
@@ -101,6 +105,10 @@ extern int ft_rank;
 #include "ft_vis.h"
 #include "ft_array_transpose.h"
 #include "ft_chunk_scheduling.h"
+
+#include "ft_streamview.h"
+#include "ft_directory_monitor.h"
+
 
 #if defined(_OPENMP)
 #include <omp.h>
@@ -212,6 +220,8 @@ namespace FT
      */
     std::string array_data_endpoint_info;
     Endpoint *endpoint = NULL;
+    int worker_size,worker_rank;
+    MPI_Comm io_comm;
 
     // Below are info about endpooint
     int data_dims;                                     // The number of dimensioins of data in endpoint
@@ -261,10 +271,13 @@ namespace FT
     std::vector<std::string> attribute_array_data_endpoint_info;
 
     std::vector<Endpoint *> attribute_endpoint_vector; // vector of endpoints for a virtual array
-
+    std::string array_dir;
     // For directory
     std::regex dir_input_regex, dir_output_regex;
     std::string dir_output_replace_str;
+    // For streaming
+    std::regex stream_input_regex;
+    std::string stream_out_dir,stream_base_name="stream";
 
     // For chunk operations
     size_t set_chunk_size_by_mem_max_mem_size = 1073741824; // Byte, 1GB
@@ -300,6 +313,13 @@ namespace FT
     bool is_write_root_only = false;
     // is init function called in ReadNextChunk function
     bool is_init_called_in_rnc = false;
+    bool is_streaming_array = false;
+    bool terminationRequested = false;
+    
+    std::string ep_name;
+    std::string dataset;
+    std::string stream_dir;
+    
 
     // bool is_set_chunk_scheduling = false;
     ChunkSchedulingMethod scheduling_method = CHUNK_SCHEDULING_RR;
@@ -322,158 +342,109 @@ namespace FT
     AU_WTIME_TYPE t_start, time_read = 0, time_udf = 0, time_write = 0, time_create = 0, time_sync = 0, time_nonvolatile = 0;
 
   public:
-    /**
-     * @brief Construct a new Array object for Write
-     * The data can be cached or dumped later
-     */
-    Array(){
+        // Default constructor
+    Array() = default;
 
-    };
-
-    // Below are three constructors for file based constructor
-
-    /**
-     * @brief Construct a new Array object for either Input or Output
-     *       For Input, data_endpoint is opened before Apply
-     *       For Ouput, data_endpoint is created during Apply
-     * @param data_endpoint file information, ("AuDataEndpointType + [file name]")
-     *        data_endpoint  get chunk infro from Apply
-     *
-     */
-    Array(std::string data_endpoint)
+    // Main constructor
+    explicit Array(const std::string& data_endpoint, 
+                   std::optional<std::vector<int>> cs = std::nullopt, 
+                   std::optional<std::vector<int>> os = std::nullopt,
+                   std::optional<MPI_Comm> mpio_comm = std::nullopt)
     {
-      // printf("Debug: Here at INIT\n");
-      array_data_endpoint_info = data_endpoint;
-      endpoint = EndpointFactory::NewEndpoint(data_endpoint);
-      AuEndpointDataType data_element_type = InferDataType<T>();
-      endpoint->SetDataElementType(data_element_type);
+        if (cs) {
+           
+            data_chunk_size = *cs;
+            chunk_size_by_user_flag = true;
+        
+        }
 
-      if (endpoint->GetEndpointType() == EP_MEMORY)
-        endpoint_memory_flag = true;
-      // endpoint_clean_vector[endpoint] = true;
-      endpoint_to_clean_vector.push_back(endpoint);
+        if (os) {
+            data_overlap_size = *os;
+        } else if (cs) {
+            data_overlap_size.resize(cs->size(), 0);
+        }
+        // Parses string of format: EP_*:<file_path>:<data_set>
+        // Example : EP_HDF5:/home/a:/testg/testd
+        //           EP_HDF5:/home/a/test.h5:/testg/testd
+        std::regex base_regex(R"(^(\w+):([^:]+):([^:]+)$)");  
+        // Parses string of format: <Operation>:EP_*:<file_path>:<data_set>:<additional_options>
+        // Example: STREAM:EP_HDF5:/home/a:/testg/testd:(^|.*/)stream_\\d{3}\\.h5$
+        std::regex operation_regex(R"(^(\w+):(\w+):([^:]+):([^:]+):?([^:]+)?(:(.+))?$)");
+
+        std::smatch match;
+        // parsed_endpoint_str is guaranteed to be correctly formatted to the FasTensor's expected standard
+        std::string parsed_endpoint_str;
+        if (std::regex_match(data_endpoint, match, operation_regex)) {
+            std::string operation = match[1].str();
+            ep_name = match[2].str();
+            stream_dir = match[3].str();
+            dataset = match[4].str();
+            std::string base_string = ep_name + ":" + stream_dir + ":" + dataset;
+            std::string additional_options = match[5].str();
+            if(operation =="STREAM"){
+              is_streaming_array=true;
+              parsed_endpoint_str = base_string;
+              array_data_endpoint_info = parsed_endpoint_str;     
+              if(!additional_options.empty())  {       
+                stream_input_regex = std::regex(additional_options); 
+              }
+              else{
+                stream_input_regex = std::regex("(^\/(([\w.-]+\/)*)[\w.-]+\\" + getEndpointExtension(ep_name) +"$)");
+              }
+
+                
+            }
+            else{
+              throw std::runtime_error("Unsupported operation: " + operation);
+            }
+            
+        } else if (std::regex_match(data_endpoint, match, base_regex)) {
+            array_dir = match[2].str();
+            parsed_endpoint_str = data_endpoint;
+        } else {
+            throw std::runtime_error("Invalid input format");
+        }
+
+        io_comm = mpio_comm.value_or(MPI_COMM_WORLD);
+        if(io_comm != MPI_COMM_NULL){
+          if(is_streaming_array){
+            bool isMonitorProcess = (ft_rank==0);
+            MPI_Comm_split(MPI_COMM_WORLD,  isMonitorProcess ? 0 : 1, ft_rank, &io_comm);          
+            
+          }
+          else{
+            initializeEndpoint(parsed_endpoint_str,io_comm);
+          }
+          MPI_Comm_rank(io_comm, &worker_rank);
+          MPI_Comm_size(io_comm, &worker_size);
+        }
+
     }
 
-    /**
-     * @brief Construct a new Array object for read, as Input of Apply
-     *
-     * @param data_endpoint contains file info, ("AuDataEndpointType + file name")
-     * @param cs , chunk size
-     * @param os , ghost size
-     */
-    Array(std::string data_endpoint, std::vector<int> cs)
+    // Constructor for auto-chunking
+    Array(const std::string& data_endpoint, int auto_chunk_dim_index)
+        : Array(data_endpoint)
     {
-      array_data_endpoint_info = data_endpoint;
-      data_chunk_size = cs;
-      data_overlap_size.resize(cs.size());
-      std::fill(data_overlap_size.begin(), data_overlap_size.end(), 0);
-
-      endpoint = EndpointFactory::NewEndpoint(data_endpoint);
-
-      AuEndpointDataType data_element_type = InferDataType<T>();
-      endpoint->SetDataElementType(data_element_type);
-
-      chunk_size_by_user_flag = true;
-      if (endpoint->GetEndpointType() == EP_MEMORY)
-        endpoint_memory_flag = true;
-
-      // endpoint_clean_vector.push_back(endpoint);
-      // endpoint_clean_vector[endpoint] = true;
-      endpoint_to_clean_vector.push_back(endpoint);
+        data_auto_chunk_dim_index = auto_chunk_dim_index;
+        chunk_size_by_user_by_dimension_flag = true;
     }
 
-    /**
-     * @brief Construct a new Array object for read, as Input of Apply
-     *
-     * @param data_endpoint contains file info, ("AuDataEndpointType + file name")
-     * @param cs , chunk size
-     * @param os , ghost size
-     */
-    Array(std::string data_endpoint, std::vector<int> cs, std::vector<int> os)
+    // Constructor with predefined size
+    Array(const std::string& data_endpoint, const std::vector<unsigned long long>& size_p)
+        : Array(data_endpoint)
     {
-      array_data_endpoint_info = data_endpoint;
-      data_chunk_size = cs;
-      data_overlap_size = os;
-      endpoint = EndpointFactory::NewEndpoint(data_endpoint);
+        endpoint->SetDimensions(size_p);
+        data_size = size_p;
 
-      AuEndpointDataType data_element_type = InferDataType<T>();
-      endpoint->SetDataElementType(data_element_type);
-
-      chunk_size_by_user_flag = true;
-      if (endpoint->GetEndpointType() == EP_MEMORY)
-        endpoint_memory_flag = true;
-
-      // endpoint_clean_vector.push_back(endpoint);
-      // endpoint_clean_vector[endpoint] = true;
-      endpoint_to_clean_vector.push_back(endpoint);
+        if (endpoint->GetEndpointType() == EP_MEMORY) {
+            endpoint->Create();
+        }
     }
 
-    /**
-     * @brief Construct a new Array object for read, as Input of Apply
-     *
-     * @param data_endpoint file information ("AuDataEndpointType + file name")
-     * @param auto_chunk_dim_index  fileinfo is chunked on auto_chunk_dim_index
-     */
-    Array(std::string data_endpoint, int auto_chunk_dim_index)
-    {
-      array_data_endpoint_info = data_endpoint;
-      data_auto_chunk_dim_index = auto_chunk_dim_index;
-      endpoint = EndpointFactory::NewEndpoint(data_endpoint);
-      // std::cout << data_endpoint << "\n";
-      AuEndpointDataType data_element_type = InferDataType<T>();
-      endpoint->SetDataElementType(data_element_type);
-      chunk_size_by_user_by_dimension_flag = true;
-      if (endpoint->GetEndpointType() == EP_MEMORY)
-        endpoint_memory_flag = true;
+    // Constructor for virtual arrays
+    Array(const std::vector<int>& cs, const std::vector<int>& os = {})
+        : data_chunk_size(cs), data_overlap_size(os.empty() ? std::vector<int>(cs.size(), 0) : os) {}
 
-      // endpoint_clean_vector[endpoint] = true;
-      endpoint_to_clean_vector.push_back(endpoint);
-    }
-
-    /**
-     * @brief Construct a new Array object for read, as Input of Apply
-     *
-     * @param data_endpoint contains file info, ("AuDataEndpointType + file name")
-     * @param cs , chunk size
-     * @param os , ghost size
-     */
-    Array(std::string data_endpoint, std::vector<unsigned long long> size_p)
-    {
-      array_data_endpoint_info = data_endpoint;
-      endpoint = EndpointFactory::NewEndpoint(data_endpoint);
-      AuEndpointDataType data_element_type = InferDataType<T>();
-      endpoint->SetDataElementType(data_element_type);
-      endpoint->SetDimensions(size_p);
-
-      if (endpoint->GetEndpointType() == EP_MEMORY)
-      {
-        endpoint_memory_flag = true;
-        endpoint->Create();
-      }
-
-      data_size = size_p;
-      // endpoint_clean_vector[endpoint] = true;
-      endpoint_to_clean_vector.push_back(endpoint);
-    }
-
-    /**
-     * @brief Construct a new Array object with only chunk size and overlap size
-     *         Mostly, this is used for virtual array which has uniform chunk size and overlap size
-     * @param cs chunk size
-     * @param os overlap size
-     */
-    Array(std::vector<int> cs, std::vector<int> os)
-    {
-      data_chunk_size = cs;
-      data_overlap_size = os;
-    }
-
-    Array(std::vector<int> cs)
-    {
-      data_chunk_size = cs;
-      data_overlap_size.resize(cs.size());
-      std::fill(data_overlap_size.begin(), data_overlap_size.end(), 0);
-    }
     /**
      * @brief Construct a new Array object from in-memory vector
      *        The data are assumed to be 1D too here
@@ -526,13 +497,13 @@ namespace FT
         {
           if (data_auto_chunk_dim_index == i)
           {
-            if (data_size[i] % ft_size == 0)
+            if (data_size[i] % worker_size == 0)
             {
-              data_chunk_size[i] = data_size[i] / ft_size;
+              data_chunk_size[i] = data_size[i] / worker_size;
             }
             else
             {
-              data_chunk_size[i] = data_size[i] / ft_size + 1;
+              data_chunk_size[i] = data_size[i] / worker_size + 1;
             }
           }
           else
@@ -552,7 +523,7 @@ namespace FT
         {
           total_elements = data_size[i] * total_elements;
         }
-        total_elements = total_elements / ft_size;
+        total_elements = total_elements / worker_size;
         if (total_elements > (set_chunk_size_by_mem_max_mem_size / sizeof(T)))
         {
           total_elements = set_chunk_size_by_mem_max_mem_size / sizeof(T);
@@ -790,9 +761,12 @@ namespace FT
 
       // current_chunk_id = ft_rank; // Each process deal with one chunk one time, starting from its rank
       current_chunk_id = InitFirstChunk();
+      /* if(current_chunk_id = 1){
+        current_chunk_id = 0;
+      } */
 
       // #ifdef DEBUG
-      if (ft_rank == 0)
+      if (worker_rank == 0)
       {
         if (!virtual_array_flag)
           endpoint->PrintInfo();
@@ -993,6 +967,10 @@ namespace FT
     template <class UDFOutputType, class BType = UDFOutputType>
     void Transform(Stencil<UDFOutputType> (*UDF)(const Stencil<T> &), Array<BType> *B = nullptr)
     {
+      if(is_streaming_array){
+        streamingTransform(UDF, B);
+      }
+      
       // Set up the input data for LoadNextChunk
       InitializeApplyInput(UDF);
 
@@ -1343,7 +1321,7 @@ namespace FT
 
       // end_of_process:
       //  May start a empty write for collective I/O
-      if ((has_no_udf_return_result == true) && (data_total_chunks % ft_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + ft_size - (data_total_chunks % ft_size))) && B != nullptr)
+      if ((has_no_udf_return_result == true) && (data_total_chunks % worker_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + worker_size - (data_total_chunks % worker_size))) && B != nullptr)
       {
         // std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
         // std::cout << "leftover_chunks  = " << data_total_chunks % ft_size << std::endl;
@@ -1678,7 +1656,7 @@ namespace FT
 
     end_of_process:
       // May start a empty write for collective I/O
-      if ((data_total_chunks % ft_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + ft_size - (data_total_chunks % ft_size))) && B != nullptr)
+      if ((data_total_chunks % worker_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + worker_size - (data_total_chunks % worker_size))) && B != nullptr)
       {
         // std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
         // std::cout << "leftover_chunks  = " << data_total_chunks % ft_size << std::endl;
@@ -2035,7 +2013,7 @@ namespace FT
       } // end of while:: no more chunks to process
 
       // May start a empty write for collective I/O
-      if ((data_total_chunks % ft_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + ft_size - (data_total_chunks % ft_size))) && B != nullptr)
+      if ((data_total_chunks % worker_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + worker_size - (data_total_chunks % worker_size))) && B != nullptr)
       {
         // std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
         // std::cout << "leftover_chunks  = " << data_total_chunks % ft_size << std::endl;
@@ -2371,7 +2349,7 @@ namespace FT
       } // end of while:: no more chunks to process
 
       // May start a empty write for collective I/O
-      if ((data_total_chunks % ft_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + ft_size - (data_total_chunks % ft_size))) && B != nullptr)
+      if ((data_total_chunks % worker_size != 0) && (current_chunk_id >= data_total_chunks) && (current_chunk_id < (data_total_chunks + worker_size - (data_total_chunks % worker_size))) && B != nullptr)
       {
         // std::cout << "current_chunk_id = " << current_chunk_id << std::endl;
         // std::cout << "leftover_chunks  = " << data_total_chunks % ft_size << std::endl;
@@ -2954,7 +2932,7 @@ namespace FT
       switch (scheduling_method)
       {
       case CHUNK_SCHEDULING_RR:
-        return ft_rank;
+        return worker_rank;
         break;
       case CHUNK_SCHEDULING_CR:
         return CRMyStartChunk(data_total_chunks, ft_rank, ft_size);
@@ -2984,7 +2962,7 @@ namespace FT
       switch (scheduling_method)
       {
       case CHUNK_SCHEDULING_RR:
-        current_chunk_id = current_chunk_id + ft_size;
+        current_chunk_id = current_chunk_id + worker_size;
         break;
       case CHUNK_SCHEDULING_CR:
         current_chunk_id = current_chunk_id + 1;
@@ -3031,27 +3009,12 @@ namespace FT
       // calculate the start and end of a chunk
       for (int i = 0; i < data_dims; i++)
       {
-        if (data_chunk_size[i] * chunk_coordinate[i] < data_size[i])
-        {
-          current_chunk_start_offset[i] = data_chunk_size[i] * chunk_coordinate[i];
-        }
-        else
-        {
-          current_chunk_start_offset[i] = data_size[i];
-        }
-
-        if (current_chunk_start_offset[i] + data_chunk_size[i] - 1 < data_size[i])
-        {
-          current_chunk_end_offset[i] = current_chunk_start_offset[i] + data_chunk_size[i] - 1;
-        }
-        else
-        {
-          current_chunk_end_offset[i] = data_size[i] - 1;
-        }
+        current_chunk_start_offset[i] = std::min(data_chunk_size[i] * chunk_coordinate[i], data_size[i]);        
+        current_chunk_end_offset[i] = std::min(current_chunk_start_offset[i] + data_chunk_size[i] - 1, data_size[i] - 1);
 
         assert((current_chunk_end_offset[i] - current_chunk_start_offset[i] + 1 >= 0));
         current_chunk_size[i] = current_chunk_end_offset[i] - current_chunk_start_offset[i] + 1;
-        current_chunk_cells = current_chunk_cells * current_chunk_size[i];
+        current_chunk_cells *= current_chunk_size[i];
 
         // Deal with the result chunks size
         if (!skip_flag)
@@ -3768,7 +3731,7 @@ namespace FT
      */
     int Fill(T fill_value)
     {
-      if (!ft_rank)
+      if (!worker_rank)
       {
         unsigned long long total_size = 1;
         std::vector<unsigned long long> start_p(data_size.size());
@@ -4140,6 +4103,48 @@ namespace FT
         AU_EXIT("Unsupported GetMyChunkStartEnd for the scheduling methods !\n");
       }
     }
+      void SetIOComm(MPI_Comm comm) {
+        io_comm = comm;
+        endpoint->SetMPICommunicator(io_comm);
+    }
+
+
+    void setStreamInputRegex(const std::string regex_p){
+        stream_input_regex = std::regex(regex_p);
+    }
+    void setStreamBaseName(const std::string base_name){
+        stream_base_name = base_name;
+    }
+    std::string getStreamBaseName(){
+        return stream_base_name ;
+    }
+    void setStreamOutputDirectory(const std::string output_dir){
+        stream_out_dir = output_dir;
+    }
+    std::string getDirectory(){
+      return is_streaming_array ? stream_dir : array_dir;
+    }
+
+    std::string getEndpointName(){
+      return ep_name;
+    }
+    private:
+    
+    void initializeEndpoint(const std::string& data_endpoint, MPI_Comm io_comm)
+    {
+        array_data_endpoint_info = data_endpoint;
+        endpoint = EndpointFactory::NewEndpoint(data_endpoint,io_comm);
+        AuEndpointDataType data_element_type = InferDataType<T>();
+        endpoint->SetDataElementType(data_element_type);
+
+        if (endpoint->GetEndpointType() == EP_MEMORY) {
+            endpoint_memory_flag = true;
+        }
+
+        endpoint_to_clean_vector.push_back(endpoint);
+    }
+    // Array class wasbecoming too big so I added Stream epecific functionality in a separate file
+    #include "ft_array_stream.h"
   }; // end of class of array
 } // end of namespace FT
 

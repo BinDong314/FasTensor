@@ -84,6 +84,7 @@ in binary and source code form.
 #include "ft_endpoint.h"
 #include "ft_xdmf.h"
 
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -126,53 +127,39 @@ private:
 
     H5Z_filter_t filter_preprocessing_id;
     bool is_filter_preprocessing = false;
+    MPI_Comm pcom = MPI_COMM_WORLD;
 
 public:
-    /**
-     * @brief Construct a new EndpointHDF5 object
-     *
-     * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
-     */
-    EndpointHDF5(std::string endpoint_info_p)
+    EndpointHDF5(const std::string& endpoint_info_p, MPI_Comm comm = MPI_COMM_WORLD)
+        : Endpoint(comm)
     {
         endpoint_info = endpoint_info_p;
         ParseEndpointInfo();
         SetOpenFlag(false);
         SetRwFlag(H5F_ACC_RDONLY);
         SetEndpointType(EP_HDF5);
-        EnableMPIIO();
-        EnableCollectiveIO();
-        is_mpi_enabled = true;
-    }
-    /**
-     * @brief Construct a new Endpoint in HDF5
-     *         Nothing to do there, can be used as sub-endpoint of directory
-     */
-    EndpointHDF5()
-    {
-        SetOpenFlag(false);
-        SetRwFlag(H5F_ACC_RDONLY);
-        SetEndpointType(EP_HDF5);
-        EnableMPIIO();
         EnableCollectiveIO();
         is_mpi_enabled = true;
     }
 
-    /**
-     * @brief Construct a new EndpointHDF5 object without MPI
-     *
-     * @param no_mpi  any number should work
-     */
-    EndpointHDF5(int no_mpi)
+    EndpointHDF5()
+        : Endpoint(MPI_COMM_WORLD)
     {
-        // endpoint_info = endpoint_info_p;
-        // ParseEndpointInfo();
         SetOpenFlag(false);
         SetRwFlag(H5F_ACC_RDONLY);
         SetEndpointType(EP_HDF5);
-        // EnableMPIIO();
-        // EnableCollectiveIO();
+        EnableCollectiveIO();
+        is_mpi_enabled = true;
     }
+
+    EndpointHDF5(int no_mpi)
+        : Endpoint(MPI_COMM_SELF)
+    {
+        SetOpenFlag(false);
+        SetRwFlag(H5F_ACC_RDONLY);
+        SetEndpointType(EP_HDF5);
+    }
+
 
     ~EndpointHDF5()
     {

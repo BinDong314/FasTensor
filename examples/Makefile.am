@@ -28,7 +28,8 @@ bin_PROGRAMS=   ft_test_data_generator \
                 ft_example_chunk_overlap \
                 ft_example_cache \
                 ft_example_cmpd \
-                ft_example_base 
+                ft_example_base \
+                ft_example_streaming
 
 
                
@@ -54,3 +55,4 @@ ft_example_tag_SOURCES=ft_example_tag.cpp
 ft_example_chunk_overlap_SOURCES=ft_example_chunk_overlap.cpp
 ft_example_cmpd_SOURCES=ft_example_cmpd.cpp
 ft_example_base_SOURCES=ft_example_base.cpp
+ft_example_streaming_SOURCES=ft_example_streaming.cpp
