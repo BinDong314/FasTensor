@@ -28,7 +28,6 @@ Please report any problem you've encountered in using this package to  Bin Dong:
        https://www.hdfgroup.org/downloads/hdf5/source-code/
 
   Other Optional packages
-   -- DASH from  https://github.com/dash-project/dash/   
    -- ADIOS https://github.com/ornladios/ADIOS2
 ```
 
@@ -43,8 +42,35 @@ Please report any problem you've encountered in using this package to  Bin Dong:
  >  make install
 ```
 
-3, DASH
 
+3, FastTensor
+
+```
+ > ./configure --prefix=$PWD/build --with-hdf5=../hdf5-1.12.0/build/build/ CXX=mpic++ CC=mpicc 
+```
+
+
+4, Note on Lawrencium at LBNL
+
+
+> module load gcc/7.4.0 hdf5/1.10.5-gcc-p
+> ./autogen.sh
+> ./configure --prefix=/clusterfs/bear/BinDong_DAS_Data/fasttensor/build --wit
+h-hdf5=/global/software/sl-7.x86_64/modules/gcc/7.4.0/hdf5/1.10.5-gcc-p CXX=mpic
+++ --with-dash=/clusterfs/bear/BinDong_DAS_Data/fasttensor/tools3rd/dash/build/o
+pt/dash-0.4.0/
+
+
+5, Note on Cori at NERSC
+
+export HDF5_BASE=/opt/cray/pe/hdf5-parallel/1.10.5.2/GNU/8.2/
+vim CMakeExt/HDF5.cmake
+set (HDF5_LINKER_FLAGS "-lhdf5_hl -lhdf5 -ldl -lm -lz")
+
+
+
+6, DASH (It is not used now)
+   -- DASH from  https://github.com/dash-project/dash/   
 ```
  > cd tools3rd
  > tar zxvf dash.tar.gz
@@ -66,14 +92,7 @@ Please report any problem you've encountered in using this package to  Bin Dong:
 
 ```
 
-4, FastTensor
-
-```
- > ./configure --prefix=$PWD/build --with-hdf5=../hdf5-1.12.0/build/build/ CXX=mpic++ CC=mpicc --with-dash=/Users/dbin/opt/dash-0.4.0/
-```
-
-
-5, Error issue with DASH/C++ compiler:
+Error issue with DASH/C++ compiler:
 
 ```
 /Users/dbin/opt/dash-0.4.0//include/cpp17/cstddef.h:12:12: error:
@@ -88,25 +107,9 @@ You can resolve it by
 ```
 
 
-Note on Lawrencium at LBNL
 
 
-> module load gcc/7.4.0 hdf5/1.10.5-gcc-p
-> ./autogen.sh
-> ./configure --prefix=/clusterfs/bear/BinDong_DAS_Data/fasttensor/build --wit
-h-hdf5=/global/software/sl-7.x86_64/modules/gcc/7.4.0/hdf5/1.10.5-gcc-p CXX=mpic
-++ --with-dash=/clusterfs/bear/BinDong_DAS_Data/fasttensor/tools3rd/dash/build/o
-pt/dash-0.4.0/
-
-
-Note on Cori at NERSC
-
-export HDF5_BASE=/opt/cray/pe/hdf5-parallel/1.10.5.2/GNU/8.2/
-vim CMakeExt/HDF5.cmake
-set (HDF5_LINKER_FLAGS "-lhdf5_hl -lhdf5 -ldl -lm -lz")
-
-
-6, Copyright 
+7, Copyright 
 
 ****************************
 
