@@ -82,22 +82,22 @@ in binary and source code form.
 #ifndef ARRAY_UDF_UTILITY_H
 #define ARRAY_UDF_UTILITY_H
 
-#include <vector>
-#include <type_traits>
-#include <cstring>
-#include <cmath>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <tuple>
-#include <string>
-#include <sstream>
 #include <algorithm>
-#include <iterator>
+#include <cmath>
+#include <cstring>
+#include <dirent.h>
 #include <iostream>
+#include <iterator>
+#include <sstream>
+#include <string>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <tuple>
+#include <type_traits>
+#include <unistd.h>
 #include <utility>
 #include <variant>
-#include <dirent.h>
+#include <vector>
 
 #include "ft_type.h"
 #include "ft_utility_macro.h"
@@ -151,7 +151,9 @@ std::vector<std::string> GetDirFileListRecursive(std::string dir_str_p);
  * @param endpoint_info , output value containging all other parts
  * @return int
  */
-int ExtractEndpointTypeInfo(std::string endpoint_type_info, AuEndpointType &endpoint_type, std::string &endpoint_info);
+int ExtractEndpointTypeInfo(std::string endpoint_type_info,
+                            AuEndpointType &endpoint_type,
+                            std::string &endpoint_info);
 
 /**
  * @brief Check wether the file exists
@@ -177,132 +179,105 @@ std::string ExtractFileName(const std::string &fullPath);
  */
 std::string ExtractPath(const std::string &fullPath);
 
-template <typename T>
-inline bool IsVectorEq(const std::vector<T> &v, T value)
-{
-    for (int i = 0; i < v.size(); i++)
-    {
-        if (v[i] != value)
-        {
-            return false;
-        }
+template <typename T> inline bool IsVectorEq(const std::vector<T> &v, T value) {
+  for (int i = 0; i < v.size(); i++) {
+    if (v[i] != value) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 
 template <typename T1, typename T2>
-inline bool VectorEqVector(const std::vector<T1> &v1, const std::vector<T2> &v2)
-{
-    if (v1.size() != v2.size())
-    {
-        return false;
-    }
+inline bool VectorEqVector(const std::vector<T1> &v1,
+                           const std::vector<T2> &v2) {
+  if (v1.size() != v2.size()) {
+    return false;
+  }
 
-    for (size_t i = 0; i < v1.size(); i++)
-    {
-        if (v1[i] != v2[i])
-        {
-            return false;
-        }
+  for (size_t i = 0; i < v1.size(); i++) {
+    if (v1[i] != v2[i]) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 
 template <typename T>
-inline void PrintVector(std::string name, std::vector<T> v)
-{
-    int n = v.size();
-    if (name != "")
-        std::cout << "Rank=" << ft_rank << ", size=" << v.size() << ", " << name << ": ";
+inline void PrintVector(std::string name, std::vector<T> v) {
+  int n = v.size();
+  if (name != "")
+    std::cout << "Rank=" << ft_rank << ", size=" << v.size() << ", " << name
+              << ": ";
 
-    if (!n)
-    {
-        std::cout << std::endl;
-        return;
-    }
-
-    if (n > 8)
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            std::cout << v[i] << ",";
-        }
-        std::cout << " ... ";
-        for (int i = n - 4; i < n - 1; i++)
-        {
-            std::cout << v[i] << ",";
-        }
-        std::cout << v[n - 1];
-    }
-    else
-    {
-        for (int i = 0; i < n - 1; i++)
-        {
-            std::cout << v[i] << ",";
-        }
-        std::cout << v[n - 1];
-    }
+  if (!n) {
     std::cout << std::endl;
+    return;
+  }
+
+  if (n > 8) {
+    for (int i = 0; i < 4; i++) {
+      std::cout << v[i] << ",";
+    }
+    std::cout << " ... ";
+    for (int i = n - 4; i < n - 1; i++) {
+      std::cout << v[i] << ",";
+    }
+    std::cout << v[n - 1];
+  } else {
+    for (int i = 0; i < n - 1; i++) {
+      std::cout << v[i] << ",";
+    }
+    std::cout << v[n - 1];
+  }
+  std::cout << std::endl;
 }
 
 template <typename T>
-inline void PrintVV(std::string name, std::vector<std::vector<T>> v)
-{
-    int n = v.size();
-    if (v.size() > 1)
-    {
-        if (name != "")
-            std::cout << "Rank " << ft_rank << ", "
-                      << ", size= (" << v.size() << "," << v[0].size() << "), " << name << ": \n";
-    }
-    else
-    {
-        if (name != "")
-            std::cout << "Rank " << ft_rank << ", "
-                      << ", size= (" << v.size() << "," << 0 << "), " << name << ": \n";
-    }
+inline void PrintVV(std::string name, std::vector<std::vector<T>> v) {
+  int n = v.size();
+  if (v.size() > 1) {
+    if (name != "")
+      std::cout << "Rank " << ft_rank << ", "
+                << ", size= (" << v.size() << "," << v[0].size() << "), "
+                << name << ": \n";
+  } else {
+    if (name != "")
+      std::cout << "Rank " << ft_rank << ", "
+                << ", size= (" << v.size() << "," << 0 << "), " << name
+                << ": \n";
+  }
 
-    if (!n)
-    {
-        std::cout << std::endl;
-        return;
-    }
-
-    if (n > 8)
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            PrintVector("", v[i]);
-        }
-        std::cout << " ... \n";
-        for (int i = n - 5; i < n; i++)
-        {
-            PrintVector("", v[i]);
-        }
-    }
-    else
-    {
-        for (int i = 0; i < n; i++)
-        {
-            PrintVector("", v[i]);
-        }
-    }
+  if (!n) {
     std::cout << std::endl;
+    return;
+  }
+
+  if (n > 8) {
+    for (int i = 0; i < 5; i++) {
+      PrintVector("", v[i]);
+    }
+    std::cout << " ... \n";
+    for (int i = n - 5; i < n; i++) {
+      PrintVector("", v[i]);
+    }
+  } else {
+    for (int i = 0; i < n; i++) {
+      PrintVector("", v[i]);
+    }
+  }
+  std::cout << std::endl;
 }
 
-template <typename T>
-inline void PrintScalar(std::string name, T v)
-{
-    if (name != "")
-        std::cout << "Rank " << ft_rank << ", " << name << ": "
-                  << ": " << v << std::endl;
+template <typename T> inline void PrintScalar(std::string name, T v) {
+  if (name != "")
+    std::cout << "Rank " << ft_rank << ", " << name << ": "
+              << ": " << v << std::endl;
 }
 
-template <typename T>
-inline void PrintString(std::string name)
-{
-    if (name != "")
-        std::cout << "Rank " << ft_rank << ", " << name << std::endl;
+template <typename T> inline void PrintString(std::string name) {
+  if (name != "")
+    std::cout << "Rank " << ft_rank << ", " << name << std::endl;
 }
 
 /**
@@ -312,15 +287,15 @@ inline void PrintString(std::string name)
  * @param coordinate : multidimensional coordinate
  * @return unsigned long long : linearized one
  */
-inline unsigned long long RowMajorOrder(std::vector<unsigned long long> dsize, std::vector<unsigned long long> coordinate)
-{
-    unsigned long long offset = coordinate[0];
-    int n = dsize.size();
-    for (int i = 1; i < n; i++)
-    {
-        offset = offset * dsize[i] + coordinate[i];
-    }
-    return offset;
+inline unsigned long long
+RowMajorOrder(std::vector<unsigned long long> dsize,
+              std::vector<unsigned long long> coordinate) {
+  unsigned long long offset = coordinate[0];
+  int n = dsize.size();
+  for (int i = 1; i < n; i++) {
+    offset = offset * dsize[i] + coordinate[i];
+  }
+  return offset;
 }
 
 /**
@@ -330,21 +305,21 @@ inline unsigned long long RowMajorOrder(std::vector<unsigned long long> dsize, s
  * @param dsize : data size
  * @return std::vector<unsigned long long> :multidimensional coordinate
  */
-inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long offset, std::vector<unsigned long long> dsize)
-{
-    int n = dsize.size();
-    std::vector<unsigned long long> original_coordinate;
-    original_coordinate.resize(n);
-    // unsigned long long reminder;
-    for (unsigned long long i = n - 1; i >= 1; i--)
-    {
-        original_coordinate[i] = offset % dsize[i];
-        offset = offset / dsize[i];
-    }
-    // Last dimenstion
-    original_coordinate[0] = offset;
+inline std::vector<unsigned long long>
+RowMajorOrderReverse(unsigned long long offset,
+                     std::vector<unsigned long long> dsize) {
+  int n = dsize.size();
+  std::vector<unsigned long long> original_coordinate;
+  original_coordinate.resize(n);
+  // unsigned long long reminder;
+  for (unsigned long long i = n - 1; i >= 1; i--) {
+    original_coordinate[i] = offset % dsize[i];
+    offset = offset / dsize[i];
+  }
+  // Last dimenstion
+  original_coordinate[0] = offset;
 
-    return original_coordinate;
+  return original_coordinate;
 }
 
 /**
@@ -357,218 +332,210 @@ inline std::vector<unsigned long long> RowMajorOrderReverse(unsigned long long o
  * @param index
  */
 template <class T1, class T2>
-inline void InsertAttribute2VirtualArrayVector(const std::vector<T1> &attribute_vector, AuEndpointDataType union_index, std::vector<T2> &virtual_array_vector, int attribute_index)
-{
-    assert(attribute_vector.size() == virtual_array_vector.size());
-    size_t n = attribute_vector.size();
-    for (size_t i = 0; i < n; i++)
-    {
-        T1 attribute_vector_value = attribute_vector[i];
-        int m_index = 0;
-        cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, attribute_vector_value, union_index](auto &&m)
-                              {
-                                  if (m_index == attribute_index)
-                                  {
-                                      switch (union_index)
-                                      {
-                                      case AU_SHORT:
-                                      {
-                                          m = std::get<AU_SHORT>(attribute_vector_value);
-                                          break;
-                                      }
-                                      case AU_INT:
-                                      {
-                                          m = std::get<AU_INT>(attribute_vector_value);
-                                          break;
-                                      }
-                                      case AU_LONG:
-                                      {
-                                          m = std::get<AU_LONG>(attribute_vector_value);
-                                          break;
-                                      }
-                                      case AU_LONG_LONG:
-                                      {
-                                          m = std::get<AU_LONG_LONG>(attribute_vector_value);
-                                          break;
-                                      }
-                                      case AU_USHORT:
-                                      {
-                                          m = std::get<AU_USHORT>(attribute_vector_value);
-                                          break;
-                                      }
-                                      case AU_UINT:
-                                      {
-                                          m = std::get<AU_UINT>(attribute_vector_value);
-                                          break;
-                                      }
-                                      case AU_ULONG:
-                                      {
-                                          m = std::get<AU_ULONG>(attribute_vector_value);
-                                          break;
-                                      }
-                                      case AU_ULLONG:
-                                      {
-                                          m = std::get<AU_ULLONG>(attribute_vector_value);
-                                          break;
-                                      }
-                                      case AU_FLOAT:
-                                      {
-                                          m = std::get<AU_FLOAT>(attribute_vector_value);
-                                          break;
-                                      }
-                                      case AU_DOUBLE:
-                                      {
-                                          m = std::get<AU_DOUBLE>(attribute_vector_value);
-                                          break;
-                                      }
-                                      default:
-                                          std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
-                                          std::flush(std::cout);
-                                          std::exit(EXIT_FAILURE);
-                                      }
-                                      return;
-                                  }
-                                  m_index++; });
-    }
+inline void InsertAttribute2VirtualArrayVector(
+    const std::vector<T1> &attribute_vector, AuEndpointDataType union_index,
+    std::vector<T2> &virtual_array_vector, int attribute_index) {
+  assert(attribute_vector.size() == virtual_array_vector.size());
+  size_t n = attribute_vector.size();
+  for (size_t i = 0; i < n; i++) {
+    T1 attribute_vector_value = attribute_vector[i];
+    int m_index = 0;
+    cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index,
+                                                    attribute_vector_value,
+                                                    union_index](auto &&m) {
+      if (m_index == attribute_index) {
+        switch (union_index) {
+        case AU_SHORT: {
+          m = std::get<AU_SHORT>(attribute_vector_value);
+          break;
+        }
+        case AU_INT: {
+          m = std::get<AU_INT>(attribute_vector_value);
+          break;
+        }
+        case AU_LONG: {
+          m = std::get<AU_LONG>(attribute_vector_value);
+          break;
+        }
+        case AU_LONG_LONG: {
+          m = std::get<AU_LONG_LONG>(attribute_vector_value);
+          break;
+        }
+        case AU_USHORT: {
+          m = std::get<AU_USHORT>(attribute_vector_value);
+          break;
+        }
+        case AU_UINT: {
+          m = std::get<AU_UINT>(attribute_vector_value);
+          break;
+        }
+        case AU_ULONG: {
+          m = std::get<AU_ULONG>(attribute_vector_value);
+          break;
+        }
+        case AU_ULLONG: {
+          m = std::get<AU_ULLONG>(attribute_vector_value);
+          break;
+        }
+        case AU_FLOAT: {
+          m = std::get<AU_FLOAT>(attribute_vector_value);
+          break;
+        }
+        case AU_DOUBLE: {
+          m = std::get<AU_DOUBLE>(attribute_vector_value);
+          break;
+        }
+        default:
+          std::cout << "Unsupported datatype in " << __FILE__ << " : "
+                    << __LINE__ << std::endl;
+          std::flush(std::cout);
+          std::exit(EXIT_FAILURE);
+        }
+        return;
+      }
+      m_index++;
+    });
+  }
 }
 
 template <>
-inline void InsertAttribute2VirtualArrayVector<AuEndpointDataTypeUnion, std::complex<double>>(const std::vector<AuEndpointDataTypeUnion> &attribute_vector, AuEndpointDataType union_index, std::vector<std::complex<double>> &virtual_array_vector, int attribute_index)
-{
-    AU_EXIT("std::complex does not work with cista::for_each_field now");
+inline void InsertAttribute2VirtualArrayVector<AuEndpointDataTypeUnion,
+                                               std::complex<double>>(
+    const std::vector<AuEndpointDataTypeUnion> &attribute_vector,
+    AuEndpointDataType union_index,
+    std::vector<std::complex<double>> &virtual_array_vector,
+    int attribute_index) {
+  AU_EXIT("std::complex does not work with cista::for_each_field now");
 }
 
-#define ExtractAttributeFromVirtualArrayVector_HELPER(ELEMENT_TYPE)                                                           \
-    {                                                                                                                         \
-        ELEMENT_TYPE *attribute_data_typed = (ELEMENT_TYPE *)attribute_data_void_pointer;                                     \
-        for (size_t i = 0; i < n; i++)                                                                                        \
-        {                                                                                                                     \
-            int m_index = 0;                                                                                                  \
-            ELEMENT_TYPE temp_attribute_value;                                                                                \
-            cista::for_each_field(virtual_array_vector[i], [&m_index, attribute_index, &temp_attribute_value](auto &&m) { \
-                if (m_index == attribute_index)                                                                           \
-                {                                                                                                         \
-                    temp_attribute_value = m;                                                                             \
-                }                                                                                                         \
-                m_index++; }); \
-            attribute_data_typed[i] = temp_attribute_value;                                                                   \
-        }                                                                                                                     \
-    }
+#define ExtractAttributeFromVirtualArrayVector_HELPER(ELEMENT_TYPE)            \
+  {                                                                            \
+    ELEMENT_TYPE *attribute_data_typed =                                       \
+        (ELEMENT_TYPE *)attribute_data_void_pointer;                           \
+    for (size_t i = 0; i < n; i++) {                                           \
+      int m_index = 0;                                                         \
+      ELEMENT_TYPE temp_attribute_value;                                       \
+      cista::for_each_field(                                                   \
+          virtual_array_vector[i],                                             \
+          [&m_index, attribute_index, &temp_attribute_value](auto &&m) {       \
+            if (m_index == attribute_index) {                                  \
+              temp_attribute_value = m;                                        \
+            }                                                                  \
+            m_index++;                                                         \
+          });                                                                  \
+      attribute_data_typed[i] = temp_attribute_value;                          \
+    }                                                                          \
+  }
 
 template <class T2>
-inline void *ExtractAttributeFromVirtualArrayVector(std::vector<T2> &virtual_array_vector, int attribute_index, AuEndpointDataType element_type, int element_type_size)
-{
+inline void *ExtractAttributeFromVirtualArrayVector(
+    std::vector<T2> &virtual_array_vector, int attribute_index,
+    AuEndpointDataType element_type, int element_type_size) {
 
-    size_t n = virtual_array_vector.size();
-    void *attribute_data_void_pointer = malloc(n * element_type_size);
+  size_t n = virtual_array_vector.size();
+  void *attribute_data_void_pointer = malloc(n * element_type_size);
 
-    switch (element_type)
-    {
-    case AU_SHORT:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(short);
-        break;
-    }
-    case AU_INT:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(int);
-        break;
-    }
-    case AU_LONG:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(long);
-        break;
-    }
-    case AU_LONG_LONG:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(long long);
-        break;
-    }
-    case AU_USHORT:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(unsigned short);
-        break;
-    }
-    case AU_UINT:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(unsigned int);
-        break;
-    }
-    case AU_ULONG:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(unsigned long);
-        break;
-    }
-    case AU_ULLONG:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(unsigned long long);
-        break;
-    }
-    case AU_FLOAT:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(float);
-        break;
-    }
-    case AU_DOUBLE:
-    {
-        ExtractAttributeFromVirtualArrayVector_HELPER(double);
-        break;
-    }
-    default:
-        std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__ << std::endl;
-        std::flush(std::cout);
-        std::exit(EXIT_FAILURE);
-    }
-    return attribute_data_void_pointer;
+  switch (element_type) {
+  case AU_SHORT: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(short);
+    break;
+  }
+  case AU_INT: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(int);
+    break;
+  }
+  case AU_LONG: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(long);
+    break;
+  }
+  case AU_LONG_LONG: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(long long);
+    break;
+  }
+  case AU_USHORT: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(unsigned short);
+    break;
+  }
+  case AU_UINT: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(unsigned int);
+    break;
+  }
+  case AU_ULONG: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(unsigned long);
+    break;
+  }
+  case AU_ULLONG: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(unsigned long long);
+    break;
+  }
+  case AU_FLOAT: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(float);
+    break;
+  }
+  case AU_DOUBLE: {
+    ExtractAttributeFromVirtualArrayVector_HELPER(double);
+    break;
+  }
+  default:
+    std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__
+              << std::endl;
+    std::flush(std::cout);
+    std::exit(EXIT_FAILURE);
+  }
+  return attribute_data_void_pointer;
+}
+
+inline void *ExtractAttributeFromVirtualArrayVector(
+    std::vector<std::string> &virtual_array_vector, int attribute_index,
+    AuEndpointDataType element_type, int element_type_size) {
+  std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__
+            << std::endl;
+  std::flush(std::cout);
+  std::exit(EXIT_FAILURE);
 }
 
 template <>
-inline void *ExtractAttributeFromVirtualArrayVector<std::complex<double>>(std::vector<std::complex<double>> &virtual_array_vector, int attribute_index, AuEndpointDataType element_type, int element_type_size)
-{
-    AU_EXIT("std::complex<double> does work with cista::to_tuple<");
+inline void *ExtractAttributeFromVirtualArrayVector<std::complex<double>>(
+    std::vector<std::complex<double>> &virtual_array_vector,
+    int attribute_index, AuEndpointDataType element_type,
+    int element_type_size) {
+  AU_EXIT("std::complex<double> does work with cista::to_tuple<");
 }
 
-#include <vector>
-#include <iterator>
-#include <iostream>
-#include <string>
-#include <sstream>
 #include <iomanip>
-template <typename T>
-std::string Vector2String(const std::vector<T> &vec)
-{
-    std::ostringstream vts;
-    vts << std::setprecision(17); // force high prevision for float
-    if (!vec.empty())
-    {
-        // Convert all but the last element to avoid a trailing ","
-        std::copy(vec.begin(), std::prev(vec.end(), 1),
-                  std::ostream_iterator<T>(vts, ","));
+#include <iostream>
+#include <iterator>
+#include <sstream>
+#include <string>
+#include <vector>
+template <typename T> std::string Vector2String(const std::vector<T> &vec) {
+  std::ostringstream vts;
+  vts << std::setprecision(17); // force high prevision for float
+  if (!vec.empty()) {
+    // Convert all but the last element to avoid a trailing ","
+    std::copy(vec.begin(), std::prev(vec.end(), 1),
+              std::ostream_iterator<T>(vts, ","));
 
-        // Now add the last element with no delimiter
-        vts << vec.back();
-    }
-    return vts.str();
+    // Now add the last element with no delimiter
+    vts << vec.back();
+  }
+  return vts.str();
 }
 
 template <typename T>
-void String2Vector(const std::string &str, std::vector<T> &vec_new)
-{
-    std::stringstream ss(str);
-    vec_new.clear();
-    for (T i; ss >> i;)
-    {
-        vec_new.push_back(i);
-        if (ss.peek() == ',')
-            ss.ignore();
-    }
+void String2Vector(const std::string &str, std::vector<T> &vec_new) {
+  std::stringstream ss(str);
+  vec_new.clear();
+  for (T i; ss >> i;) {
+    vec_new.push_back(i);
+    if (ss.peek() == ',')
+      ss.ignore();
+  }
 }
 
-template <class T>
-inline void clear_vector(std::vector<T> &v)
-{
-    v.clear();
-    std::vector<T>().swap(v);
+template <class T> inline void clear_vector(std::vector<T> &v) {
+  v.clear();
+  std::vector<T>().swap(v);
 }
 
 #endif

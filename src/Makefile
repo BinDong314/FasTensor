@@ -87,8 +87,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = x86_64-apple-darwin22.6.0
-host_triplet = x86_64-apple-darwin22.6.0
+build_triplet = x86_64-apple-darwin24.1.0
+host_triplet = x86_64-apple-darwin24.1.0
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -137,8 +137,10 @@ am_libFastensor_la_OBJECTS = ft.lo ft_array.lo ft_endpoint.lo \
 	ft_type.lo ft_endpoint_hdf5.lo ft_utility.lo \
 	ft_endpoint_dir.lo ft_endpoint_memory.lo ft_endpoint_adios.lo \
 	ft_endpoint_pnetcdf.lo ft_endpoint_tdms.lo \
-	ft_endpoint_binary.lo ft_endpoint_csv.lo ft_array_iterator.lo \
-	ft_array_view_access.lo ft_output_vector.lo ft_xdmf.lo
+	ft_endpoint_binary.lo ft_endpoint_csv.lo \
+	ft_endpoint_dir_stream.lo ft_endpoint_rabbitmq.lo \
+	ft_array_iterator.lo ft_array_view_access.lo \
+	ft_output_vector.lo ft_xdmf.lo
 libFastensor_la_OBJECTS = $(am_libFastensor_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -170,9 +172,11 @@ am__depfiles_remade = ./$(DEPDIR)/ft.Plo ./$(DEPDIR)/ft_array.Plo \
 	./$(DEPDIR)/ft_endpoint_binary.Plo \
 	./$(DEPDIR)/ft_endpoint_csv.Plo \
 	./$(DEPDIR)/ft_endpoint_dir.Plo \
+	./$(DEPDIR)/ft_endpoint_dir_stream.Plo \
 	./$(DEPDIR)/ft_endpoint_hdf5.Plo \
 	./$(DEPDIR)/ft_endpoint_memory.Plo \
 	./$(DEPDIR)/ft_endpoint_pnetcdf.Plo \
+	./$(DEPDIR)/ft_endpoint_rabbitmq.Plo \
 	./$(DEPDIR)/ft_endpoint_tdms.Plo \
 	./$(DEPDIR)/ft_output_vector.Plo ./$(DEPDIR)/ft_type.Plo \
 	./$(DEPDIR)/ft_utility.Plo ./$(DEPDIR)/ft_xdmf.Plo
@@ -289,7 +293,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LD = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+LD = /Library/Developer/CommandLineTools/usr/bin/ld
 LDFLAGS = 
 LIBOBJS = 
 LIBS = 
@@ -341,10 +345,10 @@ am__quote =
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build = x86_64-apple-darwin22.6.0
+build = x86_64-apple-darwin24.1.0
 build_alias = 
 build_cpu = x86_64
-build_os = darwin22.6.0
+build_os = darwin24.1.0
 build_vendor = apple
 builddir = .
 datadir = ${datarootdir}
@@ -352,10 +356,10 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = x86_64-apple-darwin22.6.0
+host = x86_64-apple-darwin24.1.0
 host_alias = 
 host_cpu = x86_64
-host_os = darwin22.6.0
+host_os = darwin24.1.0
 host_vendor = apple
 htmldir = ${docdir}
 includedir = ${prefix}/include
@@ -405,6 +409,8 @@ libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_endpoint_tdms.h  ft_endpoint_tdms.cpp \
                        ft_endpoint_binary.h ft_endpoint_binary.cpp \
                        ft_endpoint_csv.h ft_endpoint_csv.cpp \
+                       ft_endpoint_dir_stream.h ft_endpoint_dir_stream.cpp \
+                       ft_endpoint_rabbitmq.h ft_endpoint_rabbitmq.cpp \
                        ft_array_iterator.h ft_array_iterator.cpp \
                        ft_array_view_access.h ft_array_view_access.cpp \
                        ft_array_transpose.h \
@@ -435,7 +441,9 @@ include_HEADERS = ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hd
                 ft_endpoint_csv.h \
                 ft_xdmf.h \
                 ft_vis.h \
-                ft_chunk_scheduling.h
+                ft_chunk_scheduling.h \
+                ft_endpoint_rabbitmq.h \
+                ft_endpoint_dir_stream.h
 
 all: all-am
 
@@ -524,9 +532,11 @@ include ./$(DEPDIR)/ft_endpoint_adios.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_binary.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_csv.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_dir.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_dir_stream.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_hdf5.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_memory.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_rabbitmq.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_tdms.Plo # am--include-marker
 include ./$(DEPDIR)/ft_output_vector.Plo # am--include-marker
 include ./$(DEPDIR)/ft_type.Plo # am--include-marker
@@ -727,9 +737,11 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint_binary.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_csv.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_dir.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_dir_stream.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_hdf5.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
 	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
 	-rm -f ./$(DEPDIR)/ft_type.Plo
@@ -789,9 +801,11 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint_binary.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_csv.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_dir.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_dir_stream.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_hdf5.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
 	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
 	-rm -f ./$(DEPDIR)/ft_type.Plo

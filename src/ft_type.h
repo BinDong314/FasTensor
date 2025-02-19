@@ -82,17 +82,16 @@ in binary and source code form.
 #ifndef ARRAY_UDF_TYPE_H
 #define ARRAY_UDF_TYPE_H
 
-#include <type_traits>
-#include <iostream>
-#include <variant>
 #include <complex>
+#include <iostream>
+#include <type_traits>
+#include <variant>
 
 #if __cplusplus > 201402L
 #include "cista.h"
 #endif
 
-typedef enum AuEndpointType
-{
+typedef enum AuEndpointType {
   EP_HDF5 = 0,    // from/to HDF5
   EP_PNETCDF = 1, // from/to NETCDF; todo
   EP_ADIOS = 2,   // from/to AUDIOS; todo
@@ -104,6 +103,8 @@ typedef enum AuEndpointType
   EP_DASSA = 8,   // customized DASSA IO
   EP_TDMS = 9,    // tdms file format (to binary file)
   EP_CSV = 10,    // CSV format, text format with , or user-specified del
+  EP_DIR_STREAM = 11, // stream type, like EP_DIR but it monitor new file coming
+  EP_RabbitMQ = 12,   // read and write data to EP_RabbitMQ
 } AuEndpointType;
 /**
  * @brief map string typed name of type to AuEndpointType
@@ -113,10 +114,10 @@ typedef enum AuEndpointType
  */
 AuEndpointType MapString2EndpointType(std::string endpoint_type_str);
 
-// See https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h
+// See
+// https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h
 // for reference
-typedef enum AuEndpointDataType
-{
+typedef enum AuEndpointDataType {
   AU_NO_TYPE = -1,
   AU_SHORT = 0,
   AU_INT = 1,
@@ -140,64 +141,40 @@ typedef AuEndpointDataType FTType;
  * @brief It should follow the order of above AuEndpointDataType
  *
  */
-using AuEndpointDataTypeUnion = std::variant<short, int, long, long long, unsigned short, unsigned int, unsigned long, unsigned long long, float, double, std::complex<double>, std::string>;
+using AuEndpointDataTypeUnion =
+    std::variant<short, int, long, long long, unsigned short, unsigned int,
+                 unsigned long, unsigned long long, float, double,
+                 std::complex<double>, std::string>;
 
-template <typename T>
-AuEndpointDataType InferDataType()
-{
+template <typename T> AuEndpointDataType InferDataType() {
   // printf("InferDataType : enter\n");
 
-  if (std::is_same<T, int>::value)
-  {
+  if (std::is_same<T, int>::value) {
     return AU_INT;
-  }
-  else if (std::is_same<T, short>::value)
-  {
+  } else if (std::is_same<T, short>::value) {
     return AU_SHORT;
-  }
-  else if (std::is_same<T, long>::value)
-  {
+  } else if (std::is_same<T, long>::value) {
     return AU_LONG;
-  }
-  else if (std::is_same<T, long long>::value)
-  {
+  } else if (std::is_same<T, long long>::value) {
     return AU_LONG_LONG;
-  }
-  else if (std::is_same<T, unsigned int>::value)
-  {
+  } else if (std::is_same<T, unsigned int>::value) {
     return AU_UINT;
-  }
-  else if (std::is_same<T, unsigned short>::value)
-  {
+  } else if (std::is_same<T, unsigned short>::value) {
     // printf("InferDataType : AU_USHORT\n");
     return AU_USHORT;
-  }
-  else if (std::is_same<T, unsigned long>::value)
-  {
+  } else if (std::is_same<T, unsigned long>::value) {
     return AU_ULONG;
-  }
-  else if (std::is_same<T, unsigned long long>::value)
-  {
+  } else if (std::is_same<T, unsigned long long>::value) {
     return AU_ULLONG;
-  }
-  else if (std::is_same<T, float>::value)
-  {
+  } else if (std::is_same<T, float>::value) {
     return AU_FLOAT;
-  }
-  else if (std::is_same<T, double>::value)
-  {
+  } else if (std::is_same<T, double>::value) {
     return AU_DOUBLE;
-  }
-  else if (std::is_same<T, std::complex<double>>::value)
-  {
+  } else if (std::is_same<T, std::complex<double>>::value) {
     return AU_DOUBLE_COMPLEX;
-  }
-  else if (std::is_same<T, std::string>::value)
-  {
+  } else if (std::is_same<T, std::string>::value) {
     return AU_STRING;
-  }
-  else
-  {
+  } else {
     return AU_NO_TYPE; // Here it might be User-defined class
   }
 }
@@ -205,53 +182,38 @@ AuEndpointDataType InferDataType()
 // The "direction" specify how to flat output vector
 // For example, when running a UDF on a cell (i, j) of a 2D array
 //  flat_direction_index = 0: store result vector in (i : i + vsize, j)
-//  flat_direction_index = 1: store result vector in (i,             j: j + vsize)
-//  flat_direction_index = 2: store result vector as new dimension of a 3D array (i, j, 0:vsize)
+//  flat_direction_index = 1: store result vector in (i,             j: j +
+//  vsize) flat_direction_index = 2: store result vector as new dimension of a
+//  3D array (i, j, 0:vsize)
 //
 //   vsize = -1,  variable size of output vector (determined at runtime)
 //   vsize >= 0,  size of output vector (set by the users)
 // Todo: we can infer "vsize" in futher version
 //      we can also support multiple dimensional vector
-typedef enum OutputVectorFlatDirection
-{
+typedef enum OutputVectorFlatDirection {
   AU_FLAT_OUTPUT_COL = 0,
   AU_FLAT_OUTPUT_ROW = 1,
   AU_FLAT_OUTPUT_NEW = 2,
 } OutputVectorFlatDirection;
 
-template <typename T>
-struct is_vector : public std::false_type
-{
-};
+template <typename T> struct is_vector : public std::false_type {};
 
 template <typename T, typename A>
-struct is_vector<std::vector<T, A>> : public std::true_type
-{
-};
+struct is_vector<std::vector<T, A>> : public std::true_type {};
 
 // 1: vector type
 // 0: other types
-template <typename T>
-bool InferVectorType()
-{
-  return is_vector<T>{};
-}
+template <typename T> bool InferVectorType() { return is_vector<T>{}; }
 
-template <typename T>
-struct is_vector_vector : public std::false_type
-{
-};
+template <typename T> struct is_vector_vector : public std::false_type {};
 
 template <typename T, typename A>
-struct is_vector_vector<std::vector<std::vector<T, A>>> : public std::true_type
-{
-};
+struct is_vector_vector<std::vector<std::vector<T, A>>>
+    : public std::true_type {};
 
 // 1: vector type
 // 0: other types
-template <typename T>
-bool InferVectorVectorType()
-{
+template <typename T> bool InferVectorVectorType() {
   return is_vector_vector<T>{};
 }
 
@@ -259,7 +221,7 @@ bool InferVectorVectorType()
 #define AU_UDT_INIT(A) FT_UDT_INIT(A)
 
 // see more detail in third_party/cista.h
-#define FT_UDT_INIT(A) \
-  CISTA_PRINTABLE(A)   \
+#define FT_UDT_INIT(A)                                                         \
+  CISTA_PRINTABLE(A)                                                           \
   CISTA_COMPARABLE()
 #endif
