@@ -54,6 +54,28 @@ AC_MSG_ERROR([no: HDF5 directory not found!])
 fi
 
 
+# Handle --with-rabbitmq option
+AC_ARG_WITH([rabbitmq],
+    [AS_HELP_STRING([--with-rabbitmq=DIR],
+    [use DIR as the root directory for RabbitMQ-C include and lib])],
+    [RABBITMQ_HOME="$withval"],  # Set the value of RABBITMQ_HOME if specified
+    [RABBITMQ_HOME=""])          # If not specified, set to an empty string
+
+# Check for RabbitMQ only if specified
+if test -n "$RABBITMQ_HOME"; then
+    AC_MSG_CHECKING([for RabbitMQ at $RABBITMQ_HOME])
+    if test -d "$RABBITMQ_HOME" && test -d "$RABBITMQ_HOME/include" && test -d "$RABBITMQ_HOME/lib"; then
+        ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS -I$RABBITMQ_HOME/include -DHAS_RABBITMQ_END_POINT"
+        ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -I$RABBITMQ_HOME/include -DHAS_RABBITMQ_END_POINT"
+        ARRAYUDF_LIBS="$ARRAYUDF_LIBS -L$RABBITMQ_HOME/lib -lrabbitmq"
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_ERROR([RabbitMQ directory not found in $RABBITMQ_HOME!])
+    fi
+else
+    AC_MSG_RESULT([RabbitMQ not requested])
+fi
+
 AC_ARG_WITH([adios],
 [AS_HELP_STRING([--with-adios=DIR],
 [use DIR as the root directory for ADIOS include and lib])],

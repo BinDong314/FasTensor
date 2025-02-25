@@ -758,13 +758,13 @@ ft.lo: ft.cpp ft.h \
   third_part/cista_au_extended_tuple.h \
   third_part/cista_au_extended_ptr_tuple.h ft_utility_macro.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/iomanip \
-  ft_stencil.h /usr/local/Cellar/mpich/4.2.2/include/mpi.h \
+  ft_stencil.h ft_array_view_access.h ft_array_iterator.h \
+  /usr/local/Cellar/mpich/4.2.2/include/mpi.h \
   /usr/local/Cellar/mpich/4.2.2/include/mpi_proto.h \
   /usr/local/Cellar/mpich/4.2.2/include/mpio.h \
-  /usr/local/Cellar/mpich/4.2.2/include/mpicxx.h ft_array_view_access.h \
-  ft_array_iterator.h ft_array.h ft_array_transpose.h \
-  ft_chunk_scheduling.h ft_endpoint_factory.h ft_endpoint_adios.h \
-  ft_endpoint_csv.h \
+  /usr/local/Cellar/mpich/4.2.2/include/mpicxx.h ft_array.h \
+  ft_array_transpose.h ft_chunk_scheduling.h ft_endpoint_factory.h \
+  ft_endpoint_adios.h ft_endpoint_csv.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/fstream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/filesystem \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/copy_options.h \
@@ -844,6 +844,10 @@ ft.lo: ft.cpp ft.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/deque \
   ft_endpoint_dir_stream.h ft_endpoint_memory.h ft_local_mirror.h \
   ft_mpi.h ft_merge.h ft_endpoint_pnetcdf.h ft_endpoint_rabbitmq.h \
+  /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/tcp_socket.h \
+  /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/amqp.h \
+  /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/export.h \
+  /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/framing.h \
   ft_output_vector.h ft_vis.h
 
 ft.h:
@@ -2372,6 +2376,10 @@ ft_utility_macro.h:
 
 ft_stencil.h:
 
+ft_array_view_access.h:
+
+ft_array_iterator.h:
+
 /usr/local/Cellar/mpich/4.2.2/include/mpi.h:
 
 /usr/local/Cellar/mpich/4.2.2/include/mpi_proto.h:
@@ -2379,10 +2387,6 @@ ft_stencil.h:
 /usr/local/Cellar/mpich/4.2.2/include/mpio.h:
 
 /usr/local/Cellar/mpich/4.2.2/include/mpicxx.h:
-
-ft_array_view_access.h:
-
-ft_array_iterator.h:
 
 ft_array.h:
 
@@ -2569,6 +2573,14 @@ ft_merge.h:
 ft_endpoint_pnetcdf.h:
 
 ft_endpoint_rabbitmq.h:
+
+/Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/tcp_socket.h:
+
+/Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/amqp.h:
+
+/Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/export.h:
+
+/Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/framing.h:
 
 ft_output_vector.h:
 

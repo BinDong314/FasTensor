@@ -797,6 +797,7 @@ with_gnu_ld
 with_sysroot
 enable_libtool_lock
 with_hdf5
+with_rabbitmq
 with_adios
 with_pnetcdf
 with_dash
@@ -1469,6 +1470,8 @@ Optional Packages:
                           compiler's sysroot if not specified).
   --with-hdf5=DIR         use DIR as the root directory for HDF5 include and
                           lib
+  --with-rabbitmq=DIR     use DIR as the root directory for RabbitMQ-C include
+                          and lib
   --with-adios=DIR        use DIR as the root directory for ADIOS include and
                           lib
   --with-pnetcdf=DIR      use DIR as the root directory for PnetCDF include
@@ -16980,6 +16983,35 @@ else
 as_fn_error $? "no: HDF5 directory not found!" "$LINENO" 5
 fi
 
+
+# Handle --with-rabbitmq option
+
+# Check whether --with-rabbitmq was given.
+if test "${with_rabbitmq+set}" = set; then :
+  withval=$with_rabbitmq; RABBITMQ_HOME="$withval"
+else
+  # Set the value of RABBITMQ_HOME if specified
+    RABBITMQ_HOME=""
+fi
+          # If not specified, set to an empty string
+
+# Check for RabbitMQ only if specified
+if test -n "$RABBITMQ_HOME"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for RabbitMQ at $RABBITMQ_HOME" >&5
+$as_echo_n "checking for RabbitMQ at $RABBITMQ_HOME... " >&6; }
+    if test -d "$RABBITMQ_HOME" && test -d "$RABBITMQ_HOME/include" && test -d "$RABBITMQ_HOME/lib"; then
+        ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS -I$RABBITMQ_HOME/include -DHAS_RABBITMQ_END_POINT"
+        ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -I$RABBITMQ_HOME/include -DHAS_RABBITMQ_END_POINT"
+        ARRAYUDF_LIBS="$ARRAYUDF_LIBS -L$RABBITMQ_HOME/lib -lrabbitmq"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    else
+        as_fn_error $? "RabbitMQ directory not found in $RABBITMQ_HOME!" "$LINENO" 5
+    fi
+else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: RabbitMQ not requested" >&5
+$as_echo "RabbitMQ not requested" >&6; }
+fi
 
 
 # Check whether --with-adios was given.

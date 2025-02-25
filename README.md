@@ -31,7 +31,7 @@ Please report any problem you've encountered in using this package to  Bin Dong:
    -- ADIOS https://github.com/ornladios/ADIOS2
 ```
 
-2, HDF5
+1.1, HDF5
 
 ```
  > cd tools3rd
@@ -42,15 +42,24 @@ Please report any problem you've encountered in using this package to  Bin Dong:
  >  make install
 ```
 
+1.2 RabbitMQ-C
 
-3, FastTensor
+```
+ >  git clone https://github.com/alanxz/rabbitmq-c
+ >  cd rabbitmq-c
+ >	mkdir build && cd build
+ >	cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/install -DOPENSSL_ROOT_DIR=$(brew --prefix openssl)
+ >	cmake --build . --target install
+```
+
+2, FastTensor
 
 ```
  > ./configure --prefix=$PWD/build --with-hdf5=../hdf5-1.12.0/build/build/ CXX=mpic++ CC=mpicc 
 ```
 
 
-4, Note on Lawrencium at LBNL
+3, Note on Lawrencium at LBNL
 
 
 > module load gcc/7.4.0 hdf5/1.10.5-gcc-p
@@ -61,7 +70,7 @@ h-hdf5=/global/software/sl-7.x86_64/modules/gcc/7.4.0/hdf5/1.10.5-gcc-p CXX=mpic
 pt/dash-0.4.0/
 
 
-5, Note on Cori at NERSC
+4, Note on Cori at NERSC
 
 export HDF5_BASE=/opt/cray/pe/hdf5-parallel/1.10.5.2/GNU/8.2/
 vim CMakeExt/HDF5.cmake
@@ -69,7 +78,8 @@ set (HDF5_LINKER_FLAGS "-lhdf5_hl -lhdf5 -ldl -lm -lz")
 
 
 
-6, DASH (It is not used now)
+
+5, DASH (It is not used now)
    -- DASH from  https://github.com/dash-project/dash/   
 ```
  > cd tools3rd

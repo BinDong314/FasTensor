@@ -12,6 +12,9 @@
 #include <string>
 #include <vector>
 
+#ifdef HAS_RABBITMQ_END_POINT
+#include <rabbitmq-c/tcp_socket.h>
+
 //
 // I/O layer
 class EndpointRabbitMQ : public Endpoint {
@@ -40,5 +43,49 @@ public:
             std::vector<unsigned long long> end, void *data) override;
   int Close() override;
   void Map2MyType() override;
+
+  amqp_connection_state_t conn;
 };
+
+#else
+class EndpointRabbitMQ : public Endpoint {
+private:
+public:
+  /**
+   * @brief Construct a new EndpointHDF5 object
+   *
+   * @param data_endpoint contains the info of the endpoint, e.g., file type +
+   * file info
+   */
+  EndpointRabbitMQ(std::string endpoint_info_p) {
+    std::cout << "EndpointRabbitMQ is not configured and compiled ! \n";
+  }
+  ~EndpointRabbitMQ() { Close(); }
+
+  int ParseEndpointInfo() override { return -1; }
+
+  int ExtractMeta() override { return -1; }
+
+  int PrintInfo() override { return -1; }
+
+  int Create() override { return -1; }
+
+  int Open() override { return -1; }
+
+  void Map2MyType() override {}
+
+  int Read(std::vector<unsigned long long> start,
+           std::vector<unsigned long long> end, void *data) override {
+    return -1;
+  }
+
+  int Write(std::vector<unsigned long long> start,
+            std::vector<unsigned long long> end, void *data) override {
+    return -1;
+  }
+
+  int Close() override { return -1; }
+};
+#endif
+
 #endif

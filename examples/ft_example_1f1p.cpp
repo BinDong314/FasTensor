@@ -3,7 +3,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -14,7 +14,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -25,7 +25,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -77,64 +77,65 @@ in binary and source code form.
  *
  */
 
-/** 
+/**
  * \example ft_example_1f1p.cpp
  * @author Bin Dong (dbin@lbl.gov)
- * @brief This example show how to use 1f1p pattern EP_DIR.  
+ * @brief This example show how to use 1f1p pattern EP_DIR.
  * @version 0.1
  * @date 2021-05-28
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 
+#include "ft.h"
 #include <iostream>
 #include <stdarg.h>
-#include <vector>
 #include <stdlib.h>
-#include "ft.h"
+#include <vector>
 
 using namespace std;
 using namespace FT;
 
-//UDF One: duplicate the original data
-inline Stencil<float> udf_1f1p(const Stencil<float> &iStencil)
-{
-    Stencil<float> oStencil;
-    oStencil = iStencil(0, 0) * 2.0;
-    return oStencil;
+// UDF One: duplicate the original data
+inline Stencil<float> udf_1f1p(const Stencil<float> &iStencil) {
+  Stencil<float> oStencil;
+  oStencil = iStencil(0, 0) * 2.0;
+  return oStencil;
 }
 
 /**
  * @brief show how to use 1f1p pattern in FT
- * 
- * @param argc 
- * @param argv 
- * @return int 
+ *
+ * @param argc
+ * @param argv
+ * @return int
  */
-int main(int argc, char *argv[])
-{
-    //Init the MPICH, etc.
-    AU_Init(argc, argv);
+int main(int argc, char *argv[]) {
+  // Init the MPICH, etc.
+  AU_Init(argc, argv);
 
-    // set up the chunk size and the overlap size
-    std::vector<int> chunk_size = {16, 16};
-    std::vector<int> overlap_size = {0, 0};
+  // set up the chunk size and the overlap size
+  std::vector<int> chunk_size = {16, 16};
+  std::vector<int> overlap_size = {0, 0};
 
-    //Input data
-    Array<float> *A = new Array<float>("EP_DIR:EP_HDF5:./test-data/test_1f1p_dir:/testg/testd", chunk_size, overlap_size);
+  // Input data
+  Array<float> *A =
+      new Array<float>("EP_DIR:EP_HDF5:./test-data/test_1f1p_dir:/testg/testd",
+                       chunk_size, overlap_size);
 
-    //Result data
-    Array<float> *B = new Array<float>("EP_DIR:EP_HDF5:./test-data/test_1f1p_dir_output:/testg/testd");
+  // Result data
+  Array<float> *B = new Array<float>(
+      "EP_DIR:EP_HDF5:./test-data/test_1f1p_dir_output:/testg/testd");
 
-    //Run
-    A->Apply(udf_1f1p, B);
+  // Run
+  A->Apply(udf_1f1p, B);
 
-    //Clear
-    delete A;
-    delete B;
+  // Clear
+  delete A;
+  delete B;
 
-    AU_Finalize();
+  AU_Finalize();
 
-    return 0;
+  return 0;
 }
