@@ -8,12 +8,15 @@
 #include <iostream>
 #include <math.h>
 #include <regex>
-#include <string.h>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #ifdef HAS_RABBITMQ_END_POINT
 #include <rabbitmq-c/tcp_socket.h>
+
+#define RABBITMQ_SET_HEADER (OP_USER_DEFINED_START + 0)
+#define RABBITMQ_GET_HEADER (OP_USER_DEFINED_START + 1)
 
 //
 // I/O layer
@@ -26,6 +29,8 @@ private:
   std::string password;
   std::string vhost;
   std::string queue_name;
+
+  std::unordered_map<std::string, std::string> headertable;
 
 public:
   EndpointRabbitMQ(std::string endpoint_info_p);
@@ -43,11 +48,13 @@ public:
             std::vector<unsigned long long> end, void *data) override;
   int Close() override;
   void Map2MyType() override;
+  int Control(int opt_code, std::vector<std::string> &parameter_v) override;
 
   amqp_connection_state_t conn;
 };
 
 #else
+
 class EndpointRabbitMQ : public Endpoint {
 private:
 public:
@@ -85,6 +92,10 @@ public:
   }
 
   int Close() override { return -1; }
+
+  int Control(int opt_code, std::vector<std::string> &parameter_v) {
+    return -1;
+  }
 };
 #endif
 

@@ -17013,6 +17013,7 @@ else
 $as_echo "RabbitMQ not requested" >&6; }
 fi
 
+# Handle --with-adios option
 
 # Check whether --with-adios was given.
 if test "${with_adios+set}" = set; then :

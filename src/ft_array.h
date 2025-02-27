@@ -99,6 +99,7 @@ extern int ft_rank;
 #include "ft_vis.h"
 #include "mpi.h"
 #include <assert.h>
+#include <limits>
 #include <regex>
 #include <stdarg.h>
 
@@ -788,9 +789,20 @@ public:
         }
       }
     } else {
-      endpoint->ExtractMeta();
-      data_size = endpoint->GetDimensions();
-      data_dims = data_size.size();
+      if (endpoint->GetEndpointType() == EP_RabbitMQ ||
+          endpoint->GetEndpointType() == EP_DIR_STREAM) {
+        data_dims = data_chunk_size.size();
+        if (data_dims == 0) {
+          throw std::runtime_error("Error: data_dims cannot be zero.");
+        }
+        unsigned long long max_per_dim =
+            std::numeric_limits<unsigned long long>::max() / data_dims - 1;
+        data_size = std::vector<unsigned long long>(data_dims, max_per_dim);
+      } else {
+        endpoint->ExtractMeta();
+        data_size = endpoint->GetDimensions();
+        data_dims = data_size.size();
+      }
     }
 
     UpdateChunkSize();
@@ -1251,6 +1263,7 @@ public:
           if (B->GetEndpointType() == EP_DIR && GetEndpointType() == EP_DIR) {
             B->SetDirChunkSize(B_data_chunk_size);
           }
+
           B->CreateEndpoint(B_data_size, B_data_chunk_size,
                             B_data_overlap_size);
           // PrintVector("Debug: write B_data_chunk_size = ",
@@ -1259,6 +1272,14 @@ public:
           // current_chunk_start_offset_v = ", current_chunk_start_offset_v);
           // PrintVector("Debug: write current_chunk_end_offset_v = ",
           // current_chunk_end_offset_v);
+
+          if (GetEndpointType() == EP_DIR_STREAM &&
+              B->GetEndpointType() == EP_RabbitMQ) {
+            std::vector<std::string> para;
+            ControlEndpoint(DIR_STREAM_GET_CURRENT_SUB_INFO, para);
+            para.insert(para.begin(), "fileinfo");
+            B->ControlEndpoint(RABBITMQ_SET_HEADER, para);
+          }
 
           B->WriteEndpoint(current_chunk_start_offset_v,
                            current_chunk_end_offset_v, data_point);
@@ -2961,6 +2982,14 @@ public:
   }
 
   inline bool HasNextChunk() {
+    // Only read will call this function, so it's OK to return it
+    if (endpoint->GetEndpointType() == EP_RabbitMQ)
+      return true;
+
+    // Only read will call this function, so it's OK to return it
+    if (endpoint->GetEndpointType() == EP_DIR_STREAM)
+      return true;
+
     switch (scheduling_method) {
     case CHUNK_SCHEDULING_RR:
       if (current_chunk_id >= data_total_chunks || current_chunk_id < 0) {

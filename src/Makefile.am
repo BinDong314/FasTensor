@@ -13,7 +13,7 @@ libFastensor_la_SOURCES=ft.h ft.cpp \
                        ft_type.h ft_type.cpp \
                        ft_endpoint_hdf5.h ft_endpoint_hdf5.cpp \
                        ft_endpoint_factory.h \
-                       ft_utility.cpp ft_utility.h \
+                       ft   _utility.cpp ft_utility.h \
                        ft_endpoint_dir.cpp ft_endpoint_dir.h \
                        ft_endpoint_memory.cpp ft_endpoint_memory.h \
                        ft_endpoint_adios.h ft_endpoint_adios.cpp \

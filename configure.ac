@@ -76,6 +76,7 @@ else
     AC_MSG_RESULT([RabbitMQ not requested])
 fi
 
+# Handle --with-adios option
 AC_ARG_WITH([adios],
 [AS_HELP_STRING([--with-adios=DIR],
 [use DIR as the root directory for ADIOS include and lib])],

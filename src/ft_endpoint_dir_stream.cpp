@@ -434,6 +434,8 @@ int EndpointDIR_STREAM::Read(std::vector<unsigned long long> start,
               << " , append_sub_endpoint_info =" << append_sub_endpoint_info
               << "\n";
 #endif
+    current_sub_endpoint_info =
+        dir_file_list[i] + ":" + append_sub_endpoint_info;
     sub_endpoint->SetEndpointInfo(dir_file_list[i] + ":" +
                                   append_sub_endpoint_info);
     sub_endpoint->Open();
@@ -770,7 +772,7 @@ int EndpointDIR_STREAM::Control(int opt_code,
           "DIR_SUB_CMD_ARG  needs at least 1 parameter: sub command code \n");
     }
     // if (sub_endpoint != nullptr)
-    //     sub_cmd = sub_endpoint->MapOpStr2Int(parameter_v[0]);
+    //   sub_cmd = sub_endpoint->MapOpStr2Int(parameter_v[0]);
     sub_cmd = std::stoi(parameter_v[0]);
     if (parameter_v.size() > 1) {
       // sub_cmd_arg.push_back(parameter_v[1]);
@@ -780,8 +782,10 @@ int EndpointDIR_STREAM::Control(int opt_code,
       sub_cmd_arg.push_back("");
     }
 
-    if (sub_endpoint != nullptr)
+    if (sub_endpoint != nullptr) {
       sub_endpoint->Control(sub_cmd, sub_cmd_arg);
+      parameter_v = sub_cmd_arg;
+    }
     break;
   case DIR_INPUT_SEARCH_RGX:
     if (parameter_v.size() < 1) {
@@ -877,6 +881,10 @@ int EndpointDIR_STREAM::Control(int opt_code,
   case DIR_SET_INPUT_FILE_LIST:
     is_set_input_file_list = true;
     input_file_list = parameter_v;
+    break;
+  case DIR_STREAM_GET_CURRENT_SUB_INFO:
+    parameter_v.clear();
+    parameter_v.push_back(current_sub_endpoint_info);
     break;
   default:
     break;

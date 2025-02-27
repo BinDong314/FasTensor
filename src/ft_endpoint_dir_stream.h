@@ -107,6 +107,8 @@ in binary and source code form.
 #define DIR_SAVE_FINAL_FILE_LIST (OP_USER_DEFINED_START + 20)
 #define DIR_SET_INPUT_FILE_LIST (OP_USER_DEFINED_START + 21)
 
+#define DIR_STREAM_GET_CURRENT_SUB_INFO (OP_USER_DEFINED_START + 22)
+
 #include "ft_endpoint.h"
 #include "ft_endpoint_csv.h"
 #include "ft_endpoint_hdf5.h"
@@ -129,6 +131,8 @@ private:
   AuEndpointType sub_endpoint_type;
   std::string sub_endpoint_info; // Directory of files
   Endpoint *sub_endpoint = nullptr;
+
+  std::string current_sub_endpoint_info; // Directory of files
 
   std::string dir_str;
   std::vector<std::string> dir_file_list;
