@@ -671,9 +671,36 @@ public:
         }
       }
     } else {
-      endpoint->ExtractMeta();
-      data_size = endpoint->GetDimensions();
-      data_dims = data_size.size();
+      // endpoint->ExtractMeta();
+      // data_size = endpoint->GetDimensions();
+      // data_dims = data_size.size();
+      if (GetEndpointType() == EP_DIR_STREAM) {
+        endpoint->ExtractMeta();
+        data_size = endpoint->GetDimensions();
+        data_dims = data_size.size();
+        std::vector<std::string> para;
+        endpoint->Control(DIR_GET_MERGE_INDEX, para);
+        int merge_dim_index = std::stoi(para[0]);
+        data_size[merge_dim_index] =
+            std::numeric_limits<unsigned long long>::max();
+        std::cout << "max_per_dim = "
+                  << std::numeric_limits<unsigned long long>::max() << "\n";
+      } else if (GetEndpointType() == EP_RabbitMQ) {
+        data_dims = data_chunk_size.size();
+        if (data_dims == 0) {
+          throw std::runtime_error("Error: data_dims cannot be zero.");
+        }
+        unsigned long long max_value =
+            std::numeric_limits<unsigned long long>::max();
+        double result = pow(max_value, 1.0 / data_dims);
+        unsigned long long max_per_dim = std::floor(result);
+        data_size = std::vector<unsigned long long>(data_dims, max_per_dim);
+        std::cout << "max_per_dim = " << max_per_dim << "\n";
+      } else {
+        endpoint->ExtractMeta();
+        data_size = endpoint->GetDimensions();
+        data_dims = data_size.size();
+      }
     }
 
     if (view_flag) {
@@ -789,15 +816,18 @@ public:
         }
       }
     } else {
-      if (endpoint->GetEndpointType() == EP_RabbitMQ ||
-          endpoint->GetEndpointType() == EP_DIR_STREAM) {
+      if (GetEndpointType() == EP_RabbitMQ ||
+          GetEndpointType() == EP_DIR_STREAM) {
         data_dims = data_chunk_size.size();
         if (data_dims == 0) {
           throw std::runtime_error("Error: data_dims cannot be zero.");
         }
-        unsigned long long max_per_dim =
-            std::numeric_limits<unsigned long long>::max() / data_dims - 1;
+        unsigned long long max_value =
+            std::numeric_limits<unsigned long long>::max();
+        double result = pow(max_value, 1.0 / data_dims);
+        unsigned long long max_per_dim = std::floor(result);
         data_size = std::vector<unsigned long long>(data_dims, max_per_dim);
+        std::cout << "max_per_dim = " << max_per_dim << "\n";
       } else {
         endpoint->ExtractMeta();
         data_size = endpoint->GetDimensions();
@@ -808,8 +838,8 @@ public:
     UpdateChunkSize();
     // UpdateOverlapSize(UDF);
 
-    // PrintVector("data_chunk_size: ", data_chunk_size);
-    // PrintVector("data_size: ", data_size);
+    PrintVector("data_chunk_size: ", data_chunk_size);
+    PrintVector("data_size: ", data_size);
 
     current_chunk_start_offset.resize(data_dims);
     current_chunk_end_offset.resize(data_dims);

@@ -113,3 +113,27 @@ AuEndpointType MapString2EndpointType(std::string endpoint_type_str) {
   }
   return endpoint_type;
 }
+
+size_t GetAuEndpointDataTypeSize(AuEndpointDataType type) {
+  static const size_t sizes[] = {
+      0,                            // AU_NO_TYPE
+      sizeof(short),                // AU_SHORT
+      sizeof(int),                  // AU_INT
+      sizeof(long),                 // AU_LONG
+      sizeof(long long),            // AU_LONG_LONG
+      sizeof(unsigned short),       // AU_USHORT
+      sizeof(unsigned int),         // AU_UINT
+      sizeof(unsigned long),        // AU_ULONG
+      sizeof(unsigned long long),   // AU_ULLONG
+      sizeof(float),                // AU_FLOAT
+      sizeof(double),               // AU_DOUBLE
+      sizeof(std::complex<double>), // AU_DOUBLE_COMPLEX
+      sizeof(const char *),         // AU_STRING
+  };
+
+  if (type < AU_NO_TYPE || type >= AU_NCLASSES) {
+    throw std::invalid_argument("Invalid type");
+  }
+
+  return sizes[type + 1]; // +1 because AU_NO_TYPE is -1
+}

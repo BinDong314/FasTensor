@@ -228,10 +228,22 @@ void print_vector(std::string info,
 
 amqp_table_t create_header_table(
     const std::unordered_map<std::string, std::string> &headers) {
+  if (headers.empty()) {
+    amqp_table_t table;
+    table.num_entries = 0;
+    table.entries = NULL;
+    return table;
+  }
+
   amqp_table_t table;
   table.num_entries = headers.size();
   table.entries =
       (amqp_table_entry_t *)calloc(headers.size(), sizeof(amqp_table_entry_t));
+  if (table.entries == NULL) {
+    // Handle memory allocation error
+    std::cerr << "Failed to allocate memory for table entries" << std::endl;
+    exit(1);
+  }
 
   size_t index = 0;
   for (const auto &[key, value] : headers) {
@@ -244,6 +256,14 @@ amqp_table_t create_header_table(
   return table;
 }
 
+void destroy_header_table(amqp_table_t *table) {
+  if (table != NULL) {
+    if (table->entries != NULL) {
+      free(table->entries);
+    }
+  }
+}
+
 int EndpointRabbitMQ::Write(std::vector<unsigned long long> start,
                             std::vector<unsigned long long> end, void *data) {
   // Implement writing logic specific to RabbitMQ
@@ -251,11 +271,11 @@ int EndpointRabbitMQ::Write(std::vector<unsigned long long> start,
 
   size_t total_bytes;
   COUNT_CELLS(start, end, total_bytes);
-  total_bytes = total_bytes * data_element_type;
+  total_bytes = total_bytes * GetAuEndpointDataTypeSize(data_element_type);
   print_vector("start: ", start);
   print_vector("end: ", end);
-  std::cout << "total_bytes: " << total_bytes
-            << ", data_element_type= " << data_element_type << "\n";
+  std::cout << "total_bytes: " << total_bytes << ", data_element_size= "
+            << GetAuEndpointDataTypeSize(data_element_type) << "\n";
 
   if (!open_flag) {
     std::cerr << "Connection is not open" << std::endl;
@@ -273,12 +293,12 @@ int EndpointRabbitMQ::Write(std::vector<unsigned long long> start,
   int status = amqp_basic_publish(conn, 1, amqp_cstring_bytes(""),
                                   amqp_cstring_bytes(queue_name.c_str()), 0, 0,
                                   &props, message_bytes);
-  free(props.headers.entries);
-
   if (status < 0) {
     std::cerr << "Failed to publish message" << std::endl;
+    destroy_header_table(&props.headers);
     return -1;
   }
+  destroy_header_table(&props.headers);
 
   return 0;
 }

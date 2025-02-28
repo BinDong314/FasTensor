@@ -109,6 +109,8 @@ in binary and source code form.
 
 #define DIR_STREAM_GET_CURRENT_SUB_INFO (OP_USER_DEFINED_START + 22)
 #define DIR_STREAM_SET_CURRENT_SUB_INFO (OP_USER_DEFINED_START + 23)
+#define DIR_GET_MERGE_INDEX (OP_USER_DEFINED_START + 24)
+#define DIR_SET_MERGE_INDEX (OP_USER_DEFINED_START + 25)
 
 #include "ft_endpoint.h"
 #include "ft_endpoint_csv.h"

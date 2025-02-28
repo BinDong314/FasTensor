@@ -80,7 +80,7 @@ in binary and source code form.
  */
 
 #ifndef ARRAY_UDF_TYPE_H
-#define ARRAY_UDF_TYPE_H
+#define ARRAY_UDF_TYPE_H 1
 
 #include <complex>
 #include <iostream>
@@ -113,7 +113,6 @@ typedef enum AuEndpointType {
  * @return AuEndpointType output of type
  */
 AuEndpointType MapString2EndpointType(std::string endpoint_type_str);
-
 // See
 // https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/src/H5Tpublic.h
 // for reference
@@ -133,6 +132,7 @@ typedef enum AuEndpointDataType {
   AU_STRING = 11,         // mostly used to store attribute
   AU_NCLASSES             /*this must be last                          */
 } AuEndpointDataType;
+size_t GetAuEndpointDataTypeSize(AuEndpointDataType type);
 
 typedef AuEndpointDataType FTDataType;
 typedef AuEndpointDataType FTType;

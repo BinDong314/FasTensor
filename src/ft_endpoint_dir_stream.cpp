@@ -395,6 +395,8 @@ int EndpointDIR_STREAM::Read(std::vector<unsigned long long> start,
   std::vector<unsigned long long> count(data_rank);
   COUNT_RANGES(start, end, count);
 
+  std::cout << "dir_data_merge_index =" << dir_data_merge_index << "\n";
+
   int sub_endpoint_index = 0, sub_endpoint_index_end = 0;
   sub_endpoint_index =
       start[dir_data_merge_index] / dir_chunk_size[dir_data_merge_index];
@@ -404,14 +406,16 @@ int EndpointDIR_STREAM::Read(std::vector<unsigned long long> start,
   std::cout << "sub_endpoint_index =" << sub_endpoint_index
             << ",sub_endpoint_index_end = " << sub_endpoint_index_end
             << ", dir_file_list.size() =" << dir_file_list.size() << "\n";
-
   signal(SIGINT, dir_steam_signal_handler);
 
   // Add signal handling  and sleep time
-  while (sub_endpoint_index >= dir_file_list.size() ||
-         sub_endpoint_index_end >= dir_file_list.size()) {
+  while (sub_endpoint_index_end > dir_file_list.size()) {
     if (dir_stream_stop_loop) {
-      break; // Exit loop if SIGINT received
+      // break; // Exit loop if SIGINT received
+      std::cout << "User send signal to stop it " << __FILE__ << " : "
+                << __LINE__ << std::endl;
+      std::flush(std::cout);
+      std::exit(0);
     }
     ExtractMeta();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -784,6 +788,7 @@ int EndpointDIR_STREAM::Control(int opt_code,
                                 std::vector<std::string> &parameter_v) {
   int sub_cmd;
   std::vector<std::string> sub_cmd_arg;
+  std::string temp;
   switch (opt_code) {
   case DIR_MERGE_INDEX:
     if (parameter_v.size() < 1) {
@@ -791,6 +796,11 @@ int EndpointDIR_STREAM::Control(int opt_code,
           "DIR_MERGE_INDEX  needs 1 parameter: index of dimension to merge \n");
     }
     SetMergeIndex(std::stoi(parameter_v[0]));
+    break;
+  case DIR_GET_MERGE_INDEX:
+    parameter_v.clear();
+    temp = std::to_string(dir_data_merge_index);
+    parameter_v.push_back(temp);
     break;
   case DIR_SUB_CMD_ARG:
     if (parameter_v.size() < 1) {
