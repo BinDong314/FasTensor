@@ -1218,6 +1218,27 @@ public:
         // PrintVector("Debug: write current_chunk_start_offset_v = ",
         // current_chunk_start_offset_v); PrintVector("Debug: write
         // current_chunk_end_offset_v = ", current_chunk_end_offset_v);
+        if (GetEndpointType() == EP_DIR_STREAM &&
+            B->GetEndpointType() == EP_RabbitMQ) {
+          std::vector<std::string> para;
+          ControlEndpoint(DIR_STREAM_GET_CURRENT_SUB_INFO, para);
+          para.insert(para.begin(), "fileinfo");
+          para.push_back("chunksize");
+          para.push_back(Vector2String(data_chunk_size));
+          B->ControlEndpoint(RABBITMQ_SET_HEADER, para);
+        }
+
+        if (GetEndpointType() == EP_RabbitMQ &&
+            B->GetEndpointType() == EP_DIR_STREAM) {
+          std::vector<std::string> para;
+          ControlEndpoint(RABBITMQ_GET_HEADER, para);
+          // para.insert(para.begin(), "fileinfo");
+          // para.push_back("chunksize");
+          // para.push_back(Vector2String(data_chunk_size));
+          // B->ControlEndpoint(RABBITMQ_SET_HEADER, para);
+
+          B->ControlEndpoint(DIR_STREAM_SET_CURRENT_SUB_INFO, para);
+        }
 
         if (vector_type_flag) {
           // output_vector_shape
@@ -1272,14 +1293,6 @@ public:
           // current_chunk_start_offset_v = ", current_chunk_start_offset_v);
           // PrintVector("Debug: write current_chunk_end_offset_v = ",
           // current_chunk_end_offset_v);
-
-          if (GetEndpointType() == EP_DIR_STREAM &&
-              B->GetEndpointType() == EP_RabbitMQ) {
-            std::vector<std::string> para;
-            ControlEndpoint(DIR_STREAM_GET_CURRENT_SUB_INFO, para);
-            para.insert(para.begin(), "fileinfo");
-            B->ControlEndpoint(RABBITMQ_SET_HEADER, para);
-          }
 
           B->WriteEndpoint(current_chunk_start_offset_v,
                            current_chunk_end_offset_v, data_point);

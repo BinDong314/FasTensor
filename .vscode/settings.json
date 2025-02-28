@@ -74,6 +74,18 @@
         "iterator": "cpp",
         "memory_resource": "cpp",
         "random": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "charconv": "cpp",
+        "stack": "cpp",
+        "codecvt": "cpp",
+        "condition_variable": "cpp",
+        "numeric": "cpp",
+        "format": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "span": "cpp",
+        "stop_token": "cpp",
+        "text_encoding": "cpp",
+        "thread": "cpp"
     }
 }

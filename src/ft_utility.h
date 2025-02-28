@@ -80,7 +80,7 @@ in binary and source code form.
  */
 
 #ifndef ARRAY_UDF_UTILITY_H
-#define ARRAY_UDF_UTILITY_H
+#define ARRAY_UDF_UTILITY_H 1
 
 #include <algorithm>
 #include <cmath>
@@ -508,6 +508,7 @@ inline void *ExtractAttributeFromVirtualArrayVector<std::complex<double>>(
 #include <sstream>
 #include <string>
 #include <vector>
+
 template <typename T> std::string Vector2String(const std::vector<T> &vec) {
   std::ostringstream vts;
   vts << std::setprecision(17); // force high prevision for float

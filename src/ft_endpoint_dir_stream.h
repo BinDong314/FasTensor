@@ -108,6 +108,7 @@ in binary and source code form.
 #define DIR_SET_INPUT_FILE_LIST (OP_USER_DEFINED_START + 21)
 
 #define DIR_STREAM_GET_CURRENT_SUB_INFO (OP_USER_DEFINED_START + 22)
+#define DIR_STREAM_SET_CURRENT_SUB_INFO (OP_USER_DEFINED_START + 23)
 
 #include "ft_endpoint.h"
 #include "ft_endpoint_csv.h"
@@ -204,7 +205,7 @@ public:
       AU_EXIT("Not supported sub endpoint in EndpointDIR_STREAM \n");
     }
 
-    SetEndpointType(EP_DIR);
+    SetEndpointType(EP_DIR_STREAM);
     sub_endpoint->SetDataElementType(data_element_type);
   }
 

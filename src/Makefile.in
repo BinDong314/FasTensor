@@ -134,8 +134,8 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libFastensor_la_LIBADD =
 am_libFastensor_la_OBJECTS = ft.lo ft_array.lo ft_endpoint.lo \
-	ft_type.lo ft_endpoint_hdf5.lo _utility.lo ft_endpoint_dir.lo \
-	ft_endpoint_memory.lo ft_endpoint_adios.lo \
+	ft_type.lo ft_endpoint_hdf5.lo ft_utility.lo \
+	ft_endpoint_dir.lo ft_endpoint_memory.lo ft_endpoint_adios.lo \
 	ft_endpoint_pnetcdf.lo ft_endpoint_tdms.lo \
 	ft_endpoint_binary.lo ft_endpoint_csv.lo \
 	ft_endpoint_dir_stream.lo ft_endpoint_rabbitmq.lo \
@@ -165,8 +165,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/_utility.Plo ./$(DEPDIR)/ft.Plo \
-	./$(DEPDIR)/ft_array.Plo ./$(DEPDIR)/ft_array_iterator.Plo \
+am__depfiles_remade = ./$(DEPDIR)/ft.Plo ./$(DEPDIR)/ft_array.Plo \
+	./$(DEPDIR)/ft_array_iterator.Plo \
 	./$(DEPDIR)/ft_array_view_access.Plo \
 	./$(DEPDIR)/ft_endpoint.Plo ./$(DEPDIR)/ft_endpoint_adios.Plo \
 	./$(DEPDIR)/ft_endpoint_binary.Plo \
@@ -179,7 +179,7 @@ am__depfiles_remade = ./$(DEPDIR)/_utility.Plo ./$(DEPDIR)/ft.Plo \
 	./$(DEPDIR)/ft_endpoint_rabbitmq.Plo \
 	./$(DEPDIR)/ft_endpoint_tdms.Plo \
 	./$(DEPDIR)/ft_output_vector.Plo ./$(DEPDIR)/ft_type.Plo \
-	./$(DEPDIR)/ft_xdmf.Plo
+	./$(DEPDIR)/ft_utility.Plo ./$(DEPDIR)/ft_xdmf.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -401,7 +401,7 @@ libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_type.h ft_type.cpp \
                        ft_endpoint_hdf5.h ft_endpoint_hdf5.cpp \
                        ft_endpoint_factory.h \
-                       ft   _utility.cpp ft_utility.h \
+                       ft_utility.cpp ft_utility.h \
                        ft_endpoint_dir.cpp ft_endpoint_dir.h \
                        ft_endpoint_memory.cpp ft_endpoint_memory.h \
                        ft_endpoint_adios.h ft_endpoint_adios.cpp \
@@ -523,7 +523,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/_utility.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_array.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_array_iterator.Plo@am__quote@ # am--include-marker
@@ -541,6 +540,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_tdms.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_output_vector.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_type.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_utility.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_xdmf.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -728,8 +728,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/_utility.Plo
-	-rm -f ./$(DEPDIR)/ft.Plo
+		-rm -f ./$(DEPDIR)/ft.Plo
 	-rm -f ./$(DEPDIR)/ft_array.Plo
 	-rm -f ./$(DEPDIR)/ft_array_iterator.Plo
 	-rm -f ./$(DEPDIR)/ft_array_view_access.Plo
@@ -746,6 +745,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
 	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
 	-rm -f ./$(DEPDIR)/ft_type.Plo
+	-rm -f ./$(DEPDIR)/ft_utility.Plo
 	-rm -f ./$(DEPDIR)/ft_xdmf.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -792,8 +792,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/_utility.Plo
-	-rm -f ./$(DEPDIR)/ft.Plo
+		-rm -f ./$(DEPDIR)/ft.Plo
 	-rm -f ./$(DEPDIR)/ft_array.Plo
 	-rm -f ./$(DEPDIR)/ft_array_iterator.Plo
 	-rm -f ./$(DEPDIR)/ft_array_view_access.Plo
@@ -810,6 +809,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
 	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
 	-rm -f ./$(DEPDIR)/ft_type.Plo
+	-rm -f ./$(DEPDIR)/ft_utility.Plo
 	-rm -f ./$(DEPDIR)/ft_xdmf.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

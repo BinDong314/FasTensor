@@ -1,12 +1,11 @@
 #include "ft_endpoint_rabbitmq.h"
-#include <iostream>
-#include <string>
 
 #ifdef HAS_RABBITMQ_END_POINT
 
 EndpointRabbitMQ::EndpointRabbitMQ(std::string endpoint_info_p) {
   // Constructor implementation
   endpoint_info = endpoint_info_p;
+  SetEndpointType(EP_RabbitMQ);
   ParseEndpointInfo();
 }
 
@@ -157,6 +156,10 @@ int EndpointRabbitMQ::Open() {
   return 0;
 }
 
+volatile sig_atomic_t should_stop = 0;
+
+void signal_handler(int signal) { should_stop = 1; }
+
 int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
                            std::vector<unsigned long long> end, void *data) {
   std::cout << "Reading from RabbitMQ endpoint" << std::endl;
@@ -174,20 +177,43 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
     return -1;
   }
 
-  amqp_envelope_t envelope;
-  struct timeval timeout = {5, 0}; // 5 seconds timeout
-  amqp_maybe_release_buffers(conn);
+  signal(SIGINT, signal_handler);
 
-  rpc_reply = amqp_consume_message(conn, &envelope, &timeout, 0);
-  if (rpc_reply.reply_type != AMQP_RESPONSE_NORMAL) {
-    std::cerr << "No message received within timeout" << std::endl;
-    return -1;
+  while (!should_stop) {
+    amqp_envelope_t envelope;
+    struct timeval timeout = {5, 0}; // 5 seconds timeout
+    amqp_maybe_release_buffers(conn);
+
+    rpc_reply = amqp_consume_message(conn, &envelope, &timeout, 0);
+    if (rpc_reply.reply_type != AMQP_RESPONSE_NORMAL) {
+      std::cerr << "No message received, retrying..." << std::endl;
+      continue;
+    }
+
+    // Extract message headers
+    std::unordered_map<std::string, std::string> headertable;
+    if (envelope.message.properties._flags & AMQP_BASIC_HEADERS_FLAG) {
+      amqp_table_t headers = envelope.message.properties.headers;
+      for (int i = 0; i < headers.num_entries; ++i) {
+        amqp_table_entry_t entry = headers.entries[i];
+        std::string key((char *)entry.key.bytes, entry.key.len);
+
+        if (entry.value.kind == AMQP_FIELD_KIND_UTF8) {
+          std::string value((char *)entry.value.value.bytes.bytes,
+                            entry.value.value.bytes.len);
+          headertable[key] = value;
+        }
+      }
+    }
+
+    // Copy message body
+    size_t message_size = envelope.message.body.len;
+    std::memcpy(data, envelope.message.body.bytes, message_size);
+
+    amqp_destroy_envelope(&envelope);
   }
 
-  size_t message_size = envelope.message.body.len;
-  std::memcpy(data, envelope.message.body.bytes, message_size);
-  amqp_destroy_envelope(&envelope);
-
+  std::cout << "Stopping message consumption." << std::endl;
   return 0;
 }
 
@@ -228,7 +254,8 @@ int EndpointRabbitMQ::Write(std::vector<unsigned long long> start,
   total_bytes = total_bytes * data_element_type;
   print_vector("start: ", start);
   print_vector("end: ", end);
-  std::cout << "total_bytes: " << total_bytes << "\n";
+  std::cout << "total_bytes: " << total_bytes
+            << ", data_element_type= " << data_element_type << "\n";
 
   if (!open_flag) {
     std::cerr << "Connection is not open" << std::endl;
@@ -322,8 +349,7 @@ int EndpointRabbitMQ::Control(int opt_code,
     std::flush(std::cout);
     std::exit(EXIT_FAILURE);
   }
-}
 
-return -1;
+  return 0;
 }
 #endif

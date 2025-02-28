@@ -79,6 +79,9 @@ in binary and source code form.
 
 #include "ft_endpoint_dir_stream.h"
 #include "ft_array_view_access.h"
+#include <chrono>
+#include <csignal>
+#include <thread>
 
 extern int ft_mpi_size_global;
 extern int ft_mpi_rank_global;
@@ -365,6 +368,14 @@ int EndpointDIR_STREAM::Create() {
 
 int EndpointDIR_STREAM::Open() { return 0; }
 
+volatile sig_atomic_t dir_stream_stop_loop = 0;
+
+void dir_steam_signal_handler(int signal) {
+  if (signal == SIGINT) {
+    dir_stream_stop_loop = 1;
+  }
+}
+
 /**
  * @brief read the data from end-point
  *
@@ -390,6 +401,21 @@ int EndpointDIR_STREAM::Read(std::vector<unsigned long long> start,
   sub_endpoint_index_end =
       (end[dir_data_merge_index] + 1) / dir_chunk_size[dir_data_merge_index];
 
+  std::cout << "sub_endpoint_index =" << sub_endpoint_index
+            << ",sub_endpoint_index_end = " << sub_endpoint_index_end
+            << ", dir_file_list.size() =" << dir_file_list.size() << "\n";
+
+  signal(SIGINT, dir_steam_signal_handler);
+
+  // Add signal handling  and sleep time
+  while (sub_endpoint_index >= dir_file_list.size() ||
+         sub_endpoint_index_end >= dir_file_list.size()) {
+    if (dir_stream_stop_loop) {
+      break; // Exit loop if SIGINT received
+    }
+    ExtractMeta();
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  }
   // save for metadata operation
   //  TODO: we only consider the first file here and try to consider more file
   //  here
