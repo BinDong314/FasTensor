@@ -166,7 +166,9 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
 
   if (!open_flag) {
     std::cerr << "Connection is not open" << std::endl;
-    return -1;
+    if(Open() < 0){
+      return -1;
+    }
   }
 
   amqp_basic_consume(conn, 1, amqp_cstring_bytes(queue_name.c_str()),
@@ -187,11 +189,12 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
     rpc_reply = amqp_consume_message(conn, &envelope, &timeout, 0);
     if (rpc_reply.reply_type != AMQP_RESPONSE_NORMAL) {
       std::cerr << "No message received, retrying..." << std::endl;
-      continue;
+      break;
     }
 
     // Extract message headers
-    std::unordered_map<std::string, std::string> headertable;
+    //std::unordered_map<std::string, std::string> headertable;
+    headertable.clear();
     if (envelope.message.properties._flags & AMQP_BASIC_HEADERS_FLAG) {
       amqp_table_t headers = envelope.message.properties.headers;
       for (int i = 0; i < headers.num_entries; ++i) {
@@ -202,6 +205,7 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
           std::string value((char *)entry.value.value.bytes.bytes,
                             entry.value.value.bytes.len);
           headertable[key] = value;
+          std::cout << "receiving key = " << key << ", value = " << value << "\n";
         }
       }
     }
@@ -211,6 +215,7 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
     std::memcpy(data, envelope.message.body.bytes, message_size);
 
     amqp_destroy_envelope(&envelope);
+    break;
   }
 
   std::cout << "Stopping message consumption." << std::endl;
@@ -343,10 +348,12 @@ void ParseHeaders(std::unordered_map<std::string, std::string> &headers,
 std::vector<std::string>
 FlattenHeaders(const std::unordered_map<std::string, std::string> &headers) {
   std::vector<std::string> result;
+  std::cout << "calling FlattenHeaders..  headertable.size() = " << headers.size() << std::endl;
 
   for (const auto &[key, value] : headers) {
     result.push_back(key);
     result.push_back(value);
+    std::cout << "FlattenHeaders key = " << key << ", value = " << value << std::endl;
   }
 
   return result;
@@ -357,12 +364,13 @@ int EndpointRabbitMQ::Control(int opt_code,
   switch (opt_code) {
   case RABBITMQ_SET_HEADER:
     if (parameter_v.size() < 2) {
-      AU_EXIT("SET_HEADER  needs 1 parameter: index of dimension to merge \n");
+      AU_EXIT("SET_HEADER  needs at least 2 parameter: key-value \n");
     }
     ParseHeaders(headertable, parameter_v);
     break;
   case RABBITMQ_GET_HEADER:
     parameter_v = FlattenHeaders(headertable);
+    break;
   default:
     std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__
               << std::endl;

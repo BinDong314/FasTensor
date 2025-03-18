@@ -110,6 +110,7 @@ int EndpointHDF5::Create()
     // plist_id = H5Pcreate(H5P_FILE_ACCESS);
     // H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
 
+    ensure_directory_exists(fn_str);
     if (file_exist(fn_str.c_str()) == 0)
     {
         // char *ts1 = strdup(fn_str.c_str());

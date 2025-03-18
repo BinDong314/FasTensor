@@ -88,6 +88,7 @@ extern int ft_mpi_rank_global;
 extern int ft_size;
 extern int ft_rank;
 
+
 int EndpointDIR_STREAM::ExtractMeta() {
   if (is_ExtractMeta_called)
     return 0;
@@ -553,10 +554,10 @@ int EndpointDIR_STREAM::Write(std::vector<unsigned long long> start,
 
   // start[dir_data_merge_index] = 0;
   // end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
-  // #define DEBUG 0
+#define DEBUG 1
 #ifdef DEBUG
-  PrintVector("EndpointDIR_STREAM::dir_chunk_size before update :",
-              dir_chunk_size);
+  PrintVector("EndpointDIR_STREAM::dir_chunk_size = :", dir_chunk_size);
+  PrintVector("EndpointDIR_STREAM::endpoint_size =:", endpoint_size);
 #endif
   for (int i = 0; i < endpoint_ranks; i++) {
     endpoint_size[i] = end[i] - start[i] + 1;
@@ -570,7 +571,7 @@ int EndpointDIR_STREAM::Write(std::vector<unsigned long long> start,
     return 0;
   }
 
-#ifdef FT_DEBUG
+#ifdef DEBUG
   PrintVector("EndpointDIR_STREAM::Write start :", start);
   PrintVector("EndpointDIR_STREAM::Write end :", end);
   PrintVector("EndpointDIR_STREAM::dir_chunk_size after update :",
@@ -589,7 +590,8 @@ int EndpointDIR_STREAM::Write(std::vector<unsigned long long> start,
   // save for metadata operation
   dir_file_list_current_index = sub_endpoint_index;
 
-  std::stringstream ss(dir_file_list[sub_endpoint_index]);
+  //std::stringstream ss(dir_file_list[sub_endpoint_index]);
+  std::stringstream ss(current_sub_endpoint_info);
   std::string input_path, input_file_str, input_append_sub_endpoint_info;
   // std::cout << "Write: dir_file_list[sub_endpoint_index] =" <<
   // dir_file_list[sub_endpoint_index] << "\n";
@@ -607,12 +609,12 @@ int EndpointDIR_STREAM::Write(std::vector<unsigned long long> start,
   }
   input_file_str = ExtractFileName(input_path);
 
-#ifdef FT_DEBUG
+#ifdef DEBUG
   PrintVector("EndpointDIR_STREAM::Write endpoint_size:", endpoint_size);
   std::cout << "call write (before) :  "
-            << dir_str + "/" + dir_file_list[sub_endpoint_index] + ": " +
+            << dir_str + "/" + current_sub_endpoint_info + ": " +
                    append_sub_endpoint_info
-            << ", sub_endpoint_index = " << sub_endpoint_index << " \n";
+            << " \n";
   std::cout << "input_path = " << input_path
             << ", input_file_str = " << input_file_str
             << ", input_append_sub_endpoint_info = "
@@ -663,7 +665,7 @@ int EndpointDIR_STREAM::Write(std::vector<unsigned long long> start,
     // new_file_name_after_regex = dir_file_list[sub_endpoint_index];
     new_file_name_after_regex = input_file_str;
   }
-#ifdef FT_DEBUG
+#ifdef DEBUG
   std::cout << "call write (after) :  "
             << dir_str + "/" + new_file_name_after_regex + ": " +
                    input_append_sub_endpoint_info
@@ -707,7 +709,7 @@ int EndpointDIR_STREAM::ParseEndpointInfo() {
   if (!std::getline(ss, dir_str, ':')) {
     AU_EXIT("Wrong sub_endpoint_info");
   }
-
+  std::cout << "EndpointDIR_STREAM::ParseEndpointInfo, dir_str = " << dir_str << "\n";
   if (sub_endpoint_type == EP_HDF5) {
     if (!std::getline(ss, append_sub_endpoint_info, ':')) {
       return 0;
@@ -921,6 +923,10 @@ int EndpointDIR_STREAM::Control(int opt_code,
   case DIR_STREAM_GET_CURRENT_SUB_INFO:
     parameter_v.clear();
     parameter_v.push_back(current_sub_endpoint_info);
+    break;
+  case DIR_STREAM_SET_CURRENT_SUB_INFO:
+    //fileinfo,./test-dir/testf-1.h5:testg/testd,chunksize,128,256
+    current_sub_endpoint_info = parameter_v[1];
     break;
   default:
     break;

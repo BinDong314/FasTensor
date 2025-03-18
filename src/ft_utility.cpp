@@ -83,6 +83,26 @@ in binary and source code form.
 #include <errno.h>
 //#include <filesystem>  //Does not support by Intel C++
 
+#include <filesystem>
+#include <iostream>
+
+
+void ensure_directory_exists(const std::string& file_path) {
+    namespace fs = std::filesystem;
+
+    fs::path path(file_path);
+    fs::path dir = path.parent_path(); // Extract directory path
+
+    if (!dir.empty() && !fs::exists(dir)) {
+        try {
+            fs::create_directories(dir);
+        } catch (const std::exception& e) {
+            std::cerr << "Error creating directory: " << e.what() << std::endl;
+        }
+    }
+}
+
+
 /**
  * @brief mkdir for the path
  *

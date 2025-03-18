@@ -119,6 +119,8 @@ extern int ft_rank;
  */
 std::string realpathEx(std::string path);
 
+void ensure_directory_exists(const std::string& file_path);
+
 /**
  * @brief
  *
@@ -205,7 +207,11 @@ inline bool VectorEqVector(const std::vector<T1> &v1,
 
 template <typename T>
 inline void PrintVector(std::string name, std::vector<T> v) {
+
   int n = v.size();
+  if (n == 0)
+    std::cout << "Rank=" << ft_rank << ", size=" << v.size() << ", " << name << ": empty ";
+
   if (name != "")
     std::cout << "Rank=" << ft_rank << ", size=" << v.size() << ", " << name
               << ": ";

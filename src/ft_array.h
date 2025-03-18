@@ -674,6 +674,7 @@ public:
       // endpoint->ExtractMeta();
       // data_size = endpoint->GetDimensions();
       // data_dims = data_size.size();
+      std::cout << "GetEndpointType() = " << GetEndpointType() << "\n";
       if (GetEndpointType() == EP_DIR_STREAM) {
         endpoint->ExtractMeta();
         data_size = endpoint->GetDimensions();
@@ -1262,12 +1263,16 @@ public:
             B->GetEndpointType() == EP_DIR_STREAM) {
           std::vector<std::string> para;
           ControlEndpoint(RABBITMQ_GET_HEADER, para);
+          PrintVector("RABBITMQ_GET_HEADER = ", para);
+          B->ControlEndpoint(DIR_STREAM_SET_CURRENT_SUB_INFO, para);
+          para.clear();
+          para.push_back(Vector2String(data_chunk_size));    
+          B->ControlEndpoint(DIR_SET_CHUNK_SIZE, para);
           // para.insert(para.begin(), "fileinfo");
           // para.push_back("chunksize");
           // para.push_back(Vector2String(data_chunk_size));
           // B->ControlEndpoint(RABBITMQ_SET_HEADER, para);
 
-          B->ControlEndpoint(DIR_STREAM_SET_CURRENT_SUB_INFO, para);
         }
 
         if (vector_type_flag) {
