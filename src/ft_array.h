@@ -692,7 +692,8 @@ public:
             std::numeric_limits<unsigned long long>::max();
         std::cout << "max_per_dim = "
                   << std::numeric_limits<unsigned long long>::max() << "\n";
-      } else if (GetEndpointType() == EP_RabbitMQ) {
+      } else if (GetEndpointType() == EP_RabbitMQ ||
+                 GetEndpointType() == EP_RabbitMQ_RESTAPI) {
         data_dims = data_chunk_size.size();
         if (data_dims == 0) {
           throw std::runtime_error("Error: data_dims cannot be zero.");
@@ -824,6 +825,7 @@ public:
       }
     } else {
       if (GetEndpointType() == EP_RabbitMQ ||
+          GetEndpointType() == EP_RabbitMQ_RESTAPI ||
           GetEndpointType() == EP_DIR_STREAM) {
         data_dims = data_chunk_size.size();
         if (data_dims == 0) {
@@ -1256,7 +1258,8 @@ public:
         // current_chunk_start_offset_v); PrintVector("Debug: write
         // current_chunk_end_offset_v = ", current_chunk_end_offset_v);
         if (GetEndpointType() == EP_DIR_STREAM &&
-            B->GetEndpointType() == EP_RabbitMQ) {
+            (B->GetEndpointType() == EP_RabbitMQ ||
+             B->GetEndpointType() == EP_RabbitMQ_RESTAPI)) {
           std::vector<std::string> para;
           ControlEndpoint(DIR_STREAM_GET_CURRENT_SUB_INFO, para);
           para.insert(para.begin(), "fileinfo");
@@ -1265,7 +1268,8 @@ public:
           B->ControlEndpoint(RABBITMQ_SET_HEADER, para);
         }
 
-        if (GetEndpointType() == EP_RabbitMQ &&
+        if ((GetEndpointType() == EP_RabbitMQ ||
+             GetEndpointType() == EP_RabbitMQ_RESTAPI) &&
             B->GetEndpointType() == EP_DIR_STREAM) {
           std::vector<std::string> para;
           ControlEndpoint(RABBITMQ_GET_HEADER, para);
@@ -3036,7 +3040,8 @@ public:
 
   inline bool HasNextChunk() {
     // Only read will call this function, so it's OK to return it
-    if (endpoint->GetEndpointType() == EP_RabbitMQ)
+    if (endpoint->GetEndpointType() == EP_RabbitMQ ||
+        GetEndpointType() == EP_RabbitMQ_RESTAPI)
       return true;
 
     // Only read will call this function, so it's OK to return it
