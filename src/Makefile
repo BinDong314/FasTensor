@@ -250,11 +250,11 @@ ACLOCAL = ${SHELL} '/Users/dbin/work/fastensor/missing' aclocal-1.17
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT -I/opt/homebrew/opt/openssl@3/include   -DHAS_RABBITMQ_RESTAPI_END_POINT
+ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT    -I/opt/homebrew/opt/openssl@3/include  -DHAS_RABBITMQ_RESTAPI_END_POINT
 ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT -I/opt/homebrew/opt/openssl@3/include -DHAS_RABBITMQ_RESTAPI_END_POINT
 ARRAYUDF_CXXFLAGS =     -std=c++17 -O3
 ARRAYUDF_LDFLAGS = 
-ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto -lcurl
+ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto -lcurl  -lssl -lcrypto  -DHAS_RABBITMQ_RESTAPI_END_POINT
 ARRAY_UDF_PYTHON_ENABLED = false
 AUPY_CFLAGS = 
 AUPY_CPPFLAGS = 
@@ -398,9 +398,9 @@ top_builddir = ..
 top_srcdir = ..
 AUTOMAKE_OPTIONS = gnu
 AM_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT -I/opt/homebrew/opt/openssl@3/include -DHAS_RABBITMQ_RESTAPI_END_POINT  -I./third_part
-AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT -I/opt/homebrew/opt/openssl@3/include   -DHAS_RABBITMQ_RESTAPI_END_POINT  -I./third_part
+AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT    -I/opt/homebrew/opt/openssl@3/include  -DHAS_RABBITMQ_RESTAPI_END_POINT  -I./third_part
 AM_CXXFLAGS =     -std=c++17 -O3    -I./third_part  
-AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto -lcurl   -all-static     -I./third_part
+AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto -lcurl  -lssl -lcrypto  -DHAS_RABBITMQ_RESTAPI_END_POINT   -all-static     -I./third_part
 lib_LTLIBRARIES = libFastensor.la
 libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_array.h ft_array.cpp \

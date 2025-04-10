@@ -73,6 +73,53 @@ int EndpointRabbitMQRestAPI::PrintInfo() {
 
 int EndpointRabbitMQRestAPI::Create() {
   // Implement creation logic specific to RabbitMQ
+
+  CURL *curl = curl_easy_init();
+  if (!curl) {
+    std::cerr << "Failed to initialize CURL\n";
+    return -1;
+  }
+
+  std::string encoded_vhost = (vhost == "/") ? "%2f" : vhost;
+  std::string url =
+      "http://" + hostname + "/api/queues/" + encoded_vhost + "/" + queue_name;
+
+  // Create JSON payload
+  nlohmann::json payload = {{"durable", true},
+                            {"auto_delete", false},
+                            {"arguments", nlohmann::json::object()}};
+  std::string json_payload = payload.dump(); // Dump JSON to string
+
+  struct curl_slist *headers = nullptr;
+  headers = curl_slist_append(headers, "Content-Type: application/json");
+
+  // Set CURL options
+  curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+  curl_easy_setopt(curl, CURLOPT_USERPWD, (username + ":" + password).c_str());
+  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+  curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
+  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_payload.c_str());
+
+  // Perform request
+  CURLcode res = curl_easy_perform(curl);
+
+  long response_code = 0;
+  curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+
+  if (res != CURLE_OK) {
+    std::cerr << "CURL error: " << curl_easy_strerror(res) << "\n";
+  } else if (response_code == 201) {
+    std::cout << "Queue '" << queue_name << "' created successfully!\n";
+  } else if (response_code == 204) {
+    std::cout << "Queue '" << queue_name << "' already exists.\n";
+  } else {
+    std::cerr << "Queue creation failed. HTTP code: " << response_code << "\n";
+  }
+
+  // Cleanup
+  curl_slist_free_all(headers);
+  curl_easy_cleanup(curl);
+
   return 0;
 }
 
@@ -284,7 +331,7 @@ int EndpointRabbitMQRestAPI::Write(std::vector<unsigned long long> start,
 
   // Build URL
   std::ostringstream url;
-  url << "http://" << hostname << ":" << port << "/api/exchanges/"
+  url << "http://" << hostname << "/api/exchanges/"
       << curl_easy_escape(curl, vhost.c_str(), 0)
       << "/amq.default/publish"; // assuming "amq.default" exchange
 
