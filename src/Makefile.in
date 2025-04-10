@@ -141,7 +141,7 @@ am_libFastensor_la_OBJECTS = ft.lo ft_array.lo ft_endpoint.lo \
 	ft_endpoint_binary.lo ft_endpoint_csv.lo \
 	ft_endpoint_dir_stream.lo ft_endpoint_rabbitmq.lo \
 	ft_array_iterator.lo ft_array_view_access.lo \
-	ft_output_vector.lo ft_xdmf.lo
+	ft_endpoint_rabbitmq_restapi.lo ft_output_vector.lo ft_xdmf.lo
 libFastensor_la_OBJECTS = $(am_libFastensor_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -178,6 +178,7 @@ am__depfiles_remade = ./$(DEPDIR)/ft.Plo ./$(DEPDIR)/ft_array.Plo \
 	./$(DEPDIR)/ft_endpoint_memory.Plo \
 	./$(DEPDIR)/ft_endpoint_pnetcdf.Plo \
 	./$(DEPDIR)/ft_endpoint_rabbitmq.Plo \
+	./$(DEPDIR)/ft_endpoint_rabbitmq_restapi.Plo \
 	./$(DEPDIR)/ft_endpoint_tdms.Plo \
 	./$(DEPDIR)/ft_output_vector.Plo ./$(DEPDIR)/ft_type.Plo \
 	./$(DEPDIR)/ft_utility.Plo ./$(DEPDIR)/ft_xdmf.Plo
@@ -311,6 +312,8 @@ NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
+OPENSSL_CFLAGS = @OPENSSL_CFLAGS@
+OPENSSL_LIBS = @OPENSSL_LIBS@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
@@ -418,6 +421,7 @@ libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_endpoint_rabbitmq.h ft_endpoint_rabbitmq.cpp \
                        ft_array_iterator.h ft_array_iterator.cpp \
                        ft_array_view_access.h ft_array_view_access.cpp \
+                       ft_endpoint_rabbitmq_restapi.h ft_endpoint_rabbitmq_restapi.cpp \
                        ft_array_transpose.h \
                        ft_utility_macro.h \
                        ft_output_vector.h ft_output_vector.cpp \
@@ -448,7 +452,8 @@ include_HEADERS = ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hd
                 ft_vis.h \
                 ft_chunk_scheduling.h \
                 ft_endpoint_rabbitmq.h \
-                ft_endpoint_dir_stream.h
+                ft_endpoint_dir_stream.h \
+                ft_endpoint_rabbitmq_restapi.h
 
 all: all-am
 
@@ -540,6 +545,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_memory.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_pnetcdf.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_rabbitmq.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_rabbitmq_restapi.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_endpoint_tdms.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_output_vector.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ft_type.Plo@am__quote@ # am--include-marker
@@ -744,6 +750,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq_restapi.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
 	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
 	-rm -f ./$(DEPDIR)/ft_type.Plo
@@ -808,6 +815,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq_restapi.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
 	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
 	-rm -f ./$(DEPDIR)/ft_type.Plo

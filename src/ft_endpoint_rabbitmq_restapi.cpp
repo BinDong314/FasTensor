@@ -1,11 +1,11 @@
-#include "ft_endpoint_rabbitmq.h"
+#include "ft_endpoint_rabbitmq_restapi.h"
 
 #ifdef HAS_RABBITMQ_RESTAPI_END_POINT
 
 EndpointRabbitMQRestAPI::EndpointRabbitMQRestAPI(std::string endpoint_info_p) {
   // Constructor implementation
   endpoint_info = endpoint_info_p;
-  SetEndpointType(EP_RabbitMQ);
+  SetEndpointType(EP_RabbitMQ_RESTAPI);
   ParseEndpointInfo();
 }
 
@@ -81,9 +81,12 @@ int EndpointRabbitMQRestAPI::Open() {
   return 0;
 }
 
-volatile sig_atomic_t should_stop = 0;
+volatile sig_atomic_t EndpointRabbitMQRestAPI_read_signal_handler_should_stop =
+    0;
 
-void signal_handler(int signal) { should_stop = 1; }
+void EndpointRabbitMQRestAPI_read_signal_handler(int signal) {
+  EndpointRabbitMQRestAPI_read_signal_handler_should_stop = 1;
+}
 
 // Helper function to capture HTTP response into a string
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb,
@@ -92,11 +95,12 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb,
   return size * nmemb;
 }
 
-int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
-                           std::vector<unsigned long long> end, void *data) {
+int EndpointRabbitMQRestAPI::Read(std::vector<unsigned long long> start,
+                                  std::vector<unsigned long long> end,
+                                  void *data) {
   std::cout << "Reading from RabbitMQ endpoint via HTTP REST API" << std::endl;
 
-  signal(SIGINT, signal_handler);
+  signal(SIGINT, EndpointRabbitMQRestAPI_read_signal_handler);
 
   CURL *curl;
   CURLcode res;
@@ -133,7 +137,7 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
 
-  while (!should_stop) {
+  while (!EndpointRabbitMQRestAPI_read_signal_handler_should_stop) {
     res = curl_easy_perform(curl);
     if (res != CURLE_OK) {
       std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res)
@@ -197,8 +201,8 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
   return 0;
 }
 
-void print_vector(std::string info,
-                  const std::vector<unsigned long long> &vec) {
+void print_vector2(std::string info,
+                   const std::vector<unsigned long long> &vec) {
   std::cout << info << ": ";
   for (const auto &val : vec) {
     std::cout << val << " "; // Print each element followed by a space
@@ -243,8 +247,8 @@ int EndpointRabbitMQRestAPI::Write(std::vector<unsigned long long> start,
   size_t total_bytes;
   COUNT_CELLS(start, end, total_bytes);
   total_bytes = total_bytes * GetAuEndpointDataTypeSize(data_element_type);
-  print_vector("start: ", start);
-  print_vector("end: ", end);
+  print_vector2("start: ", start);
+  print_vector2("end: ", end);
   std::cout << "total_bytes: " << total_bytes << ", data_element_size= "
             << GetAuEndpointDataTypeSize(data_element_type) << "\n";
 
@@ -335,8 +339,8 @@ void EndpointRabbitMQRestAPI::Map2MyType() {
 }
 
 // Function to parse a long vector into a header table
-void ParseHeaders(std::unordered_map<std::string, std::string> &headers,
-                  const std::vector<std::string> &vs) {
+void ParseHeaders2(std::unordered_map<std::string, std::string> &headers,
+                   const std::vector<std::string> &vs) {
   if (vs.size() % 2 != 0) {
     std::cerr
         << "Invalid header format! Each key must have exactly one value.\n";
@@ -350,7 +354,7 @@ void ParseHeaders(std::unordered_map<std::string, std::string> &headers,
 
 // Function to flatten a header table into a single vector
 std::vector<std::string>
-FlattenHeaders(const std::unordered_map<std::string, std::string> &headers) {
+FlattenHeaders2(const std::unordered_map<std::string, std::string> &headers) {
   std::vector<std::string> result;
   std::cout << "calling FlattenHeaders..  headertable.size() = "
             << headers.size() << std::endl;
@@ -372,10 +376,10 @@ int EndpointRabbitMQRestAPI::Control(int opt_code,
     if (parameter_v.size() < 2) {
       AU_EXIT("SET_HEADER  needs at least 2 parameter: key-value \n");
     }
-    ParseHeaders(headertable, parameter_v);
+    ParseHeaders2(headertable, parameter_v);
     break;
   case RABBITMQ_GET_HEADER:
-    parameter_v = FlattenHeaders(headertable);
+    parameter_v = FlattenHeaders2(headertable);
     break;
   default:
     std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__

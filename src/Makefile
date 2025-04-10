@@ -141,7 +141,7 @@ am_libFastensor_la_OBJECTS = ft.lo ft_array.lo ft_endpoint.lo \
 	ft_endpoint_binary.lo ft_endpoint_csv.lo \
 	ft_endpoint_dir_stream.lo ft_endpoint_rabbitmq.lo \
 	ft_array_iterator.lo ft_array_view_access.lo \
-	ft_output_vector.lo ft_xdmf.lo
+	ft_endpoint_rabbitmq_restapi.lo ft_output_vector.lo ft_xdmf.lo
 libFastensor_la_OBJECTS = $(am_libFastensor_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -178,6 +178,7 @@ am__depfiles_remade = ./$(DEPDIR)/ft.Plo ./$(DEPDIR)/ft_array.Plo \
 	./$(DEPDIR)/ft_endpoint_memory.Plo \
 	./$(DEPDIR)/ft_endpoint_pnetcdf.Plo \
 	./$(DEPDIR)/ft_endpoint_rabbitmq.Plo \
+	./$(DEPDIR)/ft_endpoint_rabbitmq_restapi.Plo \
 	./$(DEPDIR)/ft_endpoint_tdms.Plo \
 	./$(DEPDIR)/ft_output_vector.Plo ./$(DEPDIR)/ft_type.Plo \
 	./$(DEPDIR)/ft_utility.Plo ./$(DEPDIR)/ft_xdmf.Plo
@@ -249,11 +250,11 @@ ACLOCAL = ${SHELL} '/Users/dbin/work/fastensor/missing' aclocal-1.17
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT
-ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT
+ARRAYUDF_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT -I/opt/homebrew/opt/openssl@3/include   -DHAS_RABBITMQ_RESTAPI_END_POINT
+ARRAYUDF_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT -I/opt/homebrew/opt/openssl@3/include -DHAS_RABBITMQ_RESTAPI_END_POINT
 ARRAYUDF_CXXFLAGS =     -std=c++17 -O3
 ARRAYUDF_LDFLAGS = 
-ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq
+ARRAYUDF_LIBS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto -lcurl
 ARRAY_UDF_PYTHON_ENABLED = false
 AUPY_CFLAGS = 
 AUPY_CPPFLAGS = 
@@ -311,6 +312,8 @@ NM = /usr/bin/nm -B
 NMEDIT = nmedit
 OBJDUMP = objdump
 OBJEXT = o
+OPENSSL_CFLAGS = -I/opt/homebrew/opt/openssl@3/include
+OPENSSL_LIBS = -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto
 OTOOL = otool
 OTOOL64 = :
 PACKAGE = arrayudf
@@ -394,10 +397,10 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AUTOMAKE_OPTIONS = gnu
-AM_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT  -I./third_part
-AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT  -I./third_part
+AM_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT -I/opt/homebrew/opt/openssl@3/include -DHAS_RABBITMQ_RESTAPI_END_POINT  -I./third_part
+AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT -I/opt/homebrew/opt/openssl@3/include   -DHAS_RABBITMQ_RESTAPI_END_POINT  -I./third_part
 AM_CXXFLAGS =     -std=c++17 -O3    -I./third_part  
-AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq   -all-static     -I./third_part
+AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto -lcurl   -all-static     -I./third_part
 lib_LTLIBRARIES = libFastensor.la
 libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_array.h ft_array.cpp \
@@ -418,6 +421,7 @@ libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_endpoint_rabbitmq.h ft_endpoint_rabbitmq.cpp \
                        ft_array_iterator.h ft_array_iterator.cpp \
                        ft_array_view_access.h ft_array_view_access.cpp \
+                       ft_endpoint_rabbitmq_restapi.h ft_endpoint_rabbitmq_restapi.cpp \
                        ft_array_transpose.h \
                        ft_utility_macro.h \
                        ft_output_vector.h ft_output_vector.cpp \
@@ -448,7 +452,8 @@ include_HEADERS = ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hd
                 ft_vis.h \
                 ft_chunk_scheduling.h \
                 ft_endpoint_rabbitmq.h \
-                ft_endpoint_dir_stream.h
+                ft_endpoint_dir_stream.h \
+                ft_endpoint_rabbitmq_restapi.h
 
 all: all-am
 
@@ -540,6 +545,7 @@ include ./$(DEPDIR)/ft_endpoint_hdf5.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_memory.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_rabbitmq.Plo # am--include-marker
+include ./$(DEPDIR)/ft_endpoint_rabbitmq_restapi.Plo # am--include-marker
 include ./$(DEPDIR)/ft_endpoint_tdms.Plo # am--include-marker
 include ./$(DEPDIR)/ft_output_vector.Plo # am--include-marker
 include ./$(DEPDIR)/ft_type.Plo # am--include-marker
@@ -744,6 +750,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq_restapi.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
 	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
 	-rm -f ./$(DEPDIR)/ft_type.Plo
@@ -808,6 +815,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ft_endpoint_memory.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_pnetcdf.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq.Plo
+	-rm -f ./$(DEPDIR)/ft_endpoint_rabbitmq_restapi.Plo
 	-rm -f ./$(DEPDIR)/ft_endpoint_tdms.Plo
 	-rm -f ./$(DEPDIR)/ft_output_vector.Plo
 	-rm -f ./$(DEPDIR)/ft_type.Plo

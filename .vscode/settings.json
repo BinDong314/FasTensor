@@ -91,6 +91,8 @@
         "execution": "cpp",
         "forward_list": "cpp",
         "print": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "any": "cpp",
+        "valarray": "cpp"
     }
 }

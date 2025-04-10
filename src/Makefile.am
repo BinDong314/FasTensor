@@ -25,6 +25,7 @@ libFastensor_la_SOURCES=ft.h ft.cpp \
                        ft_endpoint_rabbitmq.h ft_endpoint_rabbitmq.cpp \
                        ft_array_iterator.h ft_array_iterator.cpp \
                        ft_array_view_access.h ft_array_view_access.cpp \
+                       ft_endpoint_rabbitmq_restapi.h ft_endpoint_rabbitmq_restapi.cpp \
                        ft_array_transpose.h \
                        ft_utility_macro.h \
                        ft_output_vector.h ft_output_vector.cpp \
@@ -55,7 +56,8 @@ include_HEADERS=ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hdf5
                 ft_vis.h \
                 ft_chunk_scheduling.h \
                 ft_endpoint_rabbitmq.h \
-                ft_endpoint_dir_stream.h
+                ft_endpoint_dir_stream.h \
+                ft_endpoint_rabbitmq_restapi.h
 
 
 

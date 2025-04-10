@@ -6,13 +6,14 @@ if [ -f /etc/debian_version ]; then
     echo "Installing libcurl development package..."
     sudo apt-get update
     sudo apt-get install -y libcurl4-openssl-dev
+    sudo apt-get install -y libssl-dev
 
 # Check for macOS with Homebrew
 elif command -v brew &>/dev/null; then
     echo "Homebrew detected on macOS."
     echo "Installing libcurl via Homebrew..."
     brew install curl
-
+    brew install openssl
 else
     echo "Unknown system. Please install libcurl manually."
     exit 1

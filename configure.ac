@@ -100,6 +100,43 @@ if test "x$enable_rabbitmq_restapi" = "xyes"; then
         AC_MSG_NOTICE([nlohmann/json.hpp not found. Downloading...])
         ./scripts/download_json.sh
     ])
+
+    # Check if OpenSSL headers are available
+    AC_CHECK_HEADER([openssl/ssl.h], [AC_MSG_RESULT([found])], [
+        AC_MSG_RESULT([not found])
+        AC_MSG_NOTICE([OpenSSL not found. Running installation script...])
+
+        # Run the OpenSSL installation script
+        ./scripts/download_openssl.sh
+
+        # Check again after running the script
+        #AC_CHECK_HEADER([openssl/ssl.h], [AC_MSG_RESULT([found])], [
+        #    AC_MSG_ERROR([OpenSSL is still not found after running the installation script.])
+        #])
+    ])
+
+    # Find OpenSSL libraries and include paths
+    AC_CHECK_LIB([ssl], [SSL_library_init])
+    AC_CHECK_LIB([crypto], [CRYPTO_num_locks])
+
+    OPENSSL_CFLAGS="-I$(brew --prefix openssl)/include"
+    OPENSSL_LIBS="-L$(brew --prefix openssl)/lib -lssl -lcrypto"
+
+    #If not using Homebrew on macOS, use default paths
+    #if test "$OS" != "Darwin"; then
+    #    OPENSSL_CFLAGS="-I/usr/include/openssl"
+    #    OPENSSL_LIBS="-L/usr/lib -lssl -lcrypto"
+    #fi
+
+    AC_SUBST([OPENSSL_CFLAGS])
+    AC_SUBST([OPENSSL_LIBS])
+
+    ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS $OPENSSL_CFLAGS"
+    ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS $OPENSSL_CFLAGS"
+    ARRAYUDF_LIBS="$ARRAYUDF_LIBS $OPENSSL_LIBS -lcurl"
+
+    ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS   -DHAS_RABBITMQ_RESTAPI_END_POINT"
+    ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -DHAS_RABBITMQ_RESTAPI_END_POINT"
 fi
 
 # Handle --with-adios option

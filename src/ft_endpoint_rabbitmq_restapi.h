@@ -1,6 +1,6 @@
 
-#ifndef END_POINT_RABBITMQ__RESTAPI_H
-#define END_POINT_RABBITMQ__RESTAPI_H 1
+#ifndef END_POINT_RABBITMQ_RESTAPI_H
+#define END_POINT_RABBITMQ_RESTAPI_H 1
 #include "ft_endpoint.h"
 #include "ft_type.h"
 #include <fstream>
@@ -12,9 +12,11 @@
 #include <vector>
 
 #ifdef HAS_RABBITMQ_RESTAPI_END_POINT
-
 #include <curl/curl.h>
 #include <nlohmann/json.hpp> // Use nlohmann/json library (single header JSON parser)
+#include <openssl/bio.h>
+#include <openssl/buffer.h>
+#include <openssl/evp.h>
 
 #define RABBITMQ_SET_HEADER (OP_USER_DEFINED_START + 0)
 #define RABBITMQ_GET_HEADER (OP_USER_DEFINED_START + 1)
@@ -50,8 +52,6 @@ public:
   int Close() override;
   void Map2MyType() override;
   int Control(int opt_code, std::vector<std::string> &parameter_v) override;
-
-  amqp_connection_state_t conn;
 };
 
 #else

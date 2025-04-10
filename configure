@@ -676,6 +676,8 @@ AU_DEBUG_ENABLED
 BUILD_OLDCXX_FALSE
 BUILD_OLDCXX_TRUE
 AU_OLDCXX_ENABLED
+OPENSSL_LIBS
+OPENSSL_CFLAGS
 CURL
 ARRAYUDF_LDFLAGS
 ARRAYUDF_LIBS
@@ -19802,6 +19804,154 @@ printf "%s\n" "$as_me: nlohmann/json.hpp not found. Downloading..." >&6;}
 esac
 fi
 
+
+    # Check if OpenSSL headers are available
+    ac_fn_c_check_header_compile "$LINENO" "openssl/ssl.h" "ac_cv_header_openssl_ssl_h" "$ac_includes_default"
+if test "x$ac_cv_header_openssl_ssl_h" = xyes
+then :
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: found" >&5
+printf "%s\n" "found" >&6; }
+else case e in #(
+  e)
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+printf "%s\n" "not found" >&6; }
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: OpenSSL not found. Running installation script..." >&5
+printf "%s\n" "$as_me: OpenSSL not found. Running installation script..." >&6;}
+
+        # Run the OpenSSL installation script
+        ./scripts/download_openssl.sh
+
+        # Check again after running the script
+        #AC_CHECK_HEADER([openssl/ssl.h], [AC_MSG_RESULT([found])], [
+        #    AC_MSG_ERROR([OpenSSL is still not found after running the installation script.])
+        #])
+     ;;
+esac
+fi
+
+
+    # Find OpenSSL libraries and include paths
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for SSL_library_init in -lssl" >&5
+printf %s "checking for SSL_library_init in -lssl... " >&6; }
+if test ${ac_cv_lib_ssl_SSL_library_init+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) ac_check_lib_save_LIBS=$LIBS
+LIBS="-lssl  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char SSL_library_init (void);
+int
+main (void)
+{
+return SSL_library_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+  ac_cv_lib_ssl_SSL_library_init=yes
+else case e in #(
+  e) ac_cv_lib_ssl_SSL_library_init=no ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS ;;
+esac
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ssl_SSL_library_init" >&5
+printf "%s\n" "$ac_cv_lib_ssl_SSL_library_init" >&6; }
+if test "x$ac_cv_lib_ssl_SSL_library_init" = xyes
+then :
+  printf "%s\n" "#define HAVE_LIBSSL 1" >>confdefs.h
+
+  LIBS="-lssl $LIBS"
+
+fi
+
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for CRYPTO_num_locks in -lcrypto" >&5
+printf %s "checking for CRYPTO_num_locks in -lcrypto... " >&6; }
+if test ${ac_cv_lib_crypto_CRYPTO_num_locks+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) ac_check_lib_save_LIBS=$LIBS
+LIBS="-lcrypto  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char CRYPTO_num_locks (void);
+int
+main (void)
+{
+return CRYPTO_num_locks ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+  ac_cv_lib_crypto_CRYPTO_num_locks=yes
+else case e in #(
+  e) ac_cv_lib_crypto_CRYPTO_num_locks=no ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS ;;
+esac
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_crypto_CRYPTO_num_locks" >&5
+printf "%s\n" "$ac_cv_lib_crypto_CRYPTO_num_locks" >&6; }
+if test "x$ac_cv_lib_crypto_CRYPTO_num_locks" = xyes
+then :
+  printf "%s\n" "#define HAVE_LIBCRYPTO 1" >>confdefs.h
+
+  LIBS="-lcrypto $LIBS"
+
+fi
+
+
+    OPENSSL_CFLAGS="-I$(brew --prefix openssl)/include"
+    OPENSSL_LIBS="-L$(brew --prefix openssl)/lib -lssl -lcrypto"
+
+    #If not using Homebrew on macOS, use default paths
+    #if test "$OS" != "Darwin"; then
+    #    OPENSSL_CFLAGS="-I/usr/include/openssl"
+    #    OPENSSL_LIBS="-L/usr/lib -lssl -lcrypto"
+    #fi
+
+
+
+
+    ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS $OPENSSL_CFLAGS"
+    ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS $OPENSSL_CFLAGS"
+    ARRAYUDF_LIBS="$ARRAYUDF_LIBS $OPENSSL_LIBS -lcurl"
+
+    ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS   -DHAS_RABBITMQ_RESTAPI_END_POINT"
+    ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -DHAS_RABBITMQ_RESTAPI_END_POINT"
 fi
 
 # Handle --with-adios option
