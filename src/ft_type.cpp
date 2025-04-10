@@ -108,6 +108,8 @@ AuEndpointType MapString2EndpointType(std::string endpoint_type_str) {
     endpoint_type = EP_RabbitMQ;
   } else if (endpoint_type_str == "EP_DIR_STREAM") {
     endpoint_type = EP_DIR_STREAM;
+  } else if (endpoint_type_str == "EP_RabbitMQ_RESTAPI") {
+    endpoint_type = EP_RabbitMQ_RESTAPI;
   } else {
     AU_EXIT("Not supported AuDataEndpointType");
   }
