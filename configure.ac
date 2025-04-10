@@ -76,6 +76,32 @@ else
     AC_MSG_RESULT([RabbitMQ not requested])
 fi
 
+# Check if we need RabbitMQ REST API support
+AC_ARG_ENABLE([rabbitmq-restapi],
+  [AS_HELP_STRING([--enable-rabbitmq-restapi], [Enable RabbitMQ REST API support])],
+  [enable_rabbitmq_restapi=$enableval], [enable_rabbitmq_restapi=no])
+
+if test "x$enable_rabbitmq_restapi" = "xyes"; then
+    AC_MSG_NOTICE([RabbitMQ REST API support enabled])
+
+    # Check if libcurl is installed
+    AC_CHECK_PROG([CURL], [curl], [yes], [no])
+
+    if test "x$CURL" = "xno"; then
+        AC_MSG_NOTICE([libcurl not found. Attempting to download and install libcurl...])
+        # Attempt to download and install libcurl
+        ./scripts/download_curl.sh
+    else
+        AC_MSG_NOTICE([libcurl found.])
+    fi
+
+    # Check if nlohmann/json.hpp exists in src directory
+    AC_CHECK_FILE([src/nlohmann/json.hpp], [], [
+        AC_MSG_NOTICE([nlohmann/json.hpp not found. Downloading...])
+        ./scripts/download_json.sh
+    ])
+fi
+
 # Handle --with-adios option
 AC_ARG_WITH([adios],
 [AS_HELP_STRING([--with-adios=DIR],

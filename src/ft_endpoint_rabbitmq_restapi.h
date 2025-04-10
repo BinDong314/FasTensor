@@ -11,8 +11,10 @@
 #include <unordered_map>
 #include <vector>
 
-#ifdef HAS_RABBITMQ_END_POINT
-#include <rabbitmq-c/tcp_socket.h>
+#ifdef HAS_RABBITMQ_RESTAPI_END_POINT
+
+#include <curl/curl.h>
+#include <nlohmann/json.hpp> // Use nlohmann/json library (single header JSON parser)
 
 #define RABBITMQ_SET_HEADER (OP_USER_DEFINED_START + 0)
 #define RABBITMQ_GET_HEADER (OP_USER_DEFINED_START + 1)
@@ -68,33 +70,31 @@ public:
   }
   ~EndpointRabbitMQRestAPI() { Close(); }
 
-  int ParseEndpointInfo() override { return -1; }
+  int ParseEndpointInfo() override { return 0; }
 
-  int ExtractMeta() override { return -1; }
+  int ExtractMeta() override { return 0; }
 
-  int PrintInfo() override { return -1; }
+  int PrintInfo() override { return 0; }
 
-  int Create() override { return -1; }
+  int Create() override { return 0; }
 
-  int Open() override { return -1; }
+  int Open() override { return 0; }
 
   void Map2MyType() override {}
 
   int Read(std::vector<unsigned long long> start,
            std::vector<unsigned long long> end, void *data) override {
-    return -1;
+    return 0;
   }
 
   int Write(std::vector<unsigned long long> start,
             std::vector<unsigned long long> end, void *data) override {
-    return -1;
+    return 0;
   }
 
-  int Close() override { return -1; }
+  int Close() override { return 0; }
 
-  int Control(int opt_code, std::vector<std::string> &parameter_v) {
-    return -1;
-  }
+  int Control(int opt_code, std::vector<std::string> &parameter_v) { return 0; }
 };
 #endif
 

@@ -1,6 +1,6 @@
 #include "ft_endpoint_rabbitmq.h"
 
-#ifdef HAS_RABBITMQ_END_POINT
+#ifdef HAS_RABBITMQ_RESTAPI_END_POINT
 
 EndpointRabbitMQRestAPI::EndpointRabbitMQRestAPI(std::string endpoint_info_p) {
   // Constructor implementation

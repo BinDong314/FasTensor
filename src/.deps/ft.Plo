@@ -1077,7 +1077,7 @@ ft.lo: ft.cpp ft.h \
   /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/amqp.h \
   /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/export.h \
   /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/framing.h \
-  ft_output_vector.h ft_vis.h
+  ft_endpoint_rabbitmq_restapi.h ft_output_vector.h ft_vis.h
 ft.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/assert.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:
@@ -2173,5 +2173,6 @@ ft_endpoint_rabbitmq.h:
 /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/amqp.h:
 /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/export.h:
 /Users/dbin/work/soft/rabbitmq-c/build/install/include/rabbitmq-c/framing.h:
+ft_endpoint_rabbitmq_restapi.h:
 ft_output_vector.h:
 ft_vis.h:

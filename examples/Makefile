@@ -322,6 +322,7 @@ CFLAGS = -g -O2 -O3
 CPPFLAGS = 
 CSCOPE = cscope
 CTAGS = ctags
+CURL = yes
 CXX = mpic++ -std=gnu++11
 CXXCPP = mpic++ -std=gnu++11 -E
 CXXDEPMODE = depmode=gcc3
