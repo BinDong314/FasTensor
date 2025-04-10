@@ -88,7 +88,6 @@ extern int ft_mpi_rank_global;
 extern int ft_size;
 extern int ft_rank;
 
-
 int EndpointDIR_STREAM::ExtractMeta() {
   if (is_ExtractMeta_called)
     return 0;
@@ -467,6 +466,7 @@ int EndpointDIR_STREAM::Read(std::vector<unsigned long long> start,
 #endif
     current_sub_endpoint_info =
         dir_file_list[i] + ":" + append_sub_endpoint_info;
+    current_sub_endpoint_index = i;
     sub_endpoint->SetEndpointInfo(dir_file_list[i] + ":" +
                                   append_sub_endpoint_info);
     sub_endpoint->Open();
@@ -590,7 +590,7 @@ int EndpointDIR_STREAM::Write(std::vector<unsigned long long> start,
   // save for metadata operation
   dir_file_list_current_index = sub_endpoint_index;
 
-  //std::stringstream ss(dir_file_list[sub_endpoint_index]);
+  // std::stringstream ss(dir_file_list[sub_endpoint_index]);
   std::stringstream ss(current_sub_endpoint_info);
   std::string input_path, input_file_str, input_append_sub_endpoint_info;
   // std::cout << "Write: dir_file_list[sub_endpoint_index] =" <<
@@ -709,7 +709,8 @@ int EndpointDIR_STREAM::ParseEndpointInfo() {
   if (!std::getline(ss, dir_str, ':')) {
     AU_EXIT("Wrong sub_endpoint_info");
   }
-  std::cout << "EndpointDIR_STREAM::ParseEndpointInfo, dir_str = " << dir_str << "\n";
+  std::cout << "EndpointDIR_STREAM::ParseEndpointInfo, dir_str = " << dir_str
+            << "\n";
   if (sub_endpoint_type == EP_HDF5) {
     if (!std::getline(ss, append_sub_endpoint_info, ':')) {
       return 0;
@@ -791,6 +792,8 @@ int EndpointDIR_STREAM::Control(int opt_code,
   int sub_cmd;
   std::vector<std::string> sub_cmd_arg;
   std::string temp;
+  std::vector<unsigned long long> temp_endpoint_dim_size;
+
   switch (opt_code) {
   case DIR_MERGE_INDEX:
     if (parameter_v.size() < 1) {
@@ -925,8 +928,22 @@ int EndpointDIR_STREAM::Control(int opt_code,
     parameter_v.push_back(current_sub_endpoint_info);
     break;
   case DIR_STREAM_SET_CURRENT_SUB_INFO:
-    //fileinfo,./test-dir/testf-1.h5:testg/testd,chunksize,128,256
+    // fileinfo,./test-dir/testf-1.h5:testg/testd,chunksize,128,256
     current_sub_endpoint_info = parameter_v[1];
+    break;
+  case DIR_STREAM_GET_NEXT_SUB_SIZE:
+    ExtractMeta();
+    current_sub_endpoint_info = dir_file_list[current_sub_endpoint_index + 1] +
+                                ":" + append_sub_endpoint_info;
+    // current_sub_endpoint_index =  current_sub_endpoint_index;
+    sub_endpoint->SetEndpointInfo(current_sub_endpoint_info + ":" +
+                                  append_sub_endpoint_info);
+    sub_endpoint->Open();
+    sub_endpoint->ExtractMeta();
+    temp_endpoint_dim_size = sub_endpoint->GetDimensions();
+    sub_endpoint->Close();
+    parameter_v.clear();
+    parameter_v.push_back(Vector2String(temp_endpoint_dim_size));
     break;
   default:
     break;

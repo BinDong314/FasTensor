@@ -105,6 +105,7 @@ typedef enum AuEndpointType {
   EP_CSV = 10,    // CSV format, text format with , or user-specified del
   EP_DIR_STREAM = 11, // stream type, like EP_DIR but it monitor new file coming
   EP_RabbitMQ = 12,   // read and write data to EP_RabbitMQ
+  EP_RabbitMQ_RESTAPI = 13, // read and write data to EP_RabbitMQ
 } AuEndpointType;
 /**
  * @brief map string typed name of type to AuEndpointType

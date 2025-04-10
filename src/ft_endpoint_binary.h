@@ -5,7 +5,7 @@
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 If you have questions about your rights to use or distribute this software,
@@ -16,7 +16,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department
 of Energy and the U.S. Government consequently retains certain rights.  As
 such, the U.S. Government has been granted for itself and others acting on
 its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
-Software to reproduce, distribute copies to the public, prepare derivative 
+Software to reproduce, distribute copies to the public, prepare derivative
 works, and perform publicly and display publicly, and to permit others to do so.
 
 
@@ -27,7 +27,7 @@ works, and perform publicly and display publicly, and to permit others to do so.
 
 FasTensor (FT) Copyright (c) 2021, The Regents of the University of
 California, through Lawrence Berkeley National Laboratory (subject to
-receipt of any required approvals from the U.S. Dept. of Energy). 
+receipt of any required approvals from the U.S. Dept. of Energy).
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -82,12 +82,12 @@ in binary and source code form.
 #ifndef END_POINT_BINARY_H
 #define END_POINT_BINARY_H
 
-#include "ft_type.h"
 #include "ft_endpoint.h"
-#include <string>
+#include "ft_type.h"
 #include <iostream>
-#include <vector>
 #include <math.h>
+#include <string>
+#include <vector>
 
 #define BINARY_SET_SIZE (OP_USER_DEFINED_START + 0)
 #define BINARY_ENABLE_TRANSPOSE_ON_READ (OP_USER_DEFINED_START + 1)
@@ -100,196 +100,190 @@ in binary and source code form.
 #define BINARY_DISABLE_TRAN_READ BINARY_DISABLE_TRANSPOSE_ON_READ
 #define BINARY_DISABLE_TRAN_WRITE BINARY_DISABLE_TRANSPOSE_ON_WRITE
 //
-//I/O layer
-class EndpointBinary : public Endpoint
-{
+// I/O layer
+class EndpointBinary : public Endpoint {
 private:
-    std::string fn_str;
-    FILE *fp = NULL;
+  std::string fn_str;
+  FILE *fp = NULL;
 
-    /**
-     * @brief 
-     * "r" :  Opens a file for reading. The file must exist.
-     * "w" :  Creates an empty file for writing. If a file with the same name already exists, its content is erased and the file is considered as a new empty file.
-     * "a" : Appends to a file. Writing operations, append data at the end of the file. The file is created if it does not exist.
-     * "r+" : Opens a file to update both reading and writing. The file must exist.
-     * "w+" : Creates an empty file for both reading and writing.
-     * "a+" : Opens a file for reading and appending.
-     */
-    std::string model_str = "r";
+  /**
+   * @brief
+   * "r" :  Opens a file for reading. The file must exist.
+   * "w" :  Creates an empty file for writing. If a file with the same name
+   * already exists, its content is erased and the file is considered as a new
+   * empty file. "a" : Appends to a file. Writing operations, append data at the
+   * end of the file. The file is created if it does not exist. "r+" : Opens a
+   * file to update both reading and writing. The file must exist. "w+" :
+   * Creates an empty file for both reading and writing. "a+" : Opens a file for
+   * reading and appending.
+   */
+  std::string model_str = "r";
 
-    size_t rw_type_size;
+  size_t rw_type_size;
 
-    long int seek_offset = 0; //SEEK_SET: from the beginning of file
+  long int seek_offset = 0; // SEEK_SET: from the beginning of file
 
-    bool tranpose_on_read_flag = false;
-    bool tranpose_on_write_flag = false;
+  bool tranpose_on_read_flag = false;
+  bool tranpose_on_write_flag = false;
 
-    //std::vector<size_t> array_size;
+  // std::vector<size_t> array_size;
 public:
-    /**
-     * @brief Construct a new EndpointBinary object
-     * 
-     * @param data_endpoint contains the info of the endpoint, e.g., file type + file info
-     */
-    EndpointBinary(std::string endpoint_info_p)
-    {
-        endpoint_info = endpoint_info_p;
-        ParseEndpointInfo();
-        SetOpenFlag(false);
-        SetEndpointType(EP_BINARY);
-    }
-    /**
-     * @brief Construct a new Endpoint in Binary 
-     *         Nothing to do there, can be used as sub-endpoint of directory
-     */
-    EndpointBinary()
-    {
-        SetOpenFlag(false);
-        SetEndpointType(EP_BINARY);
-    }
+  /**
+   * @brief Construct a new EndpointBinary object
+   *
+   * @param data_endpoint contains the info of the endpoint, e.g., file type +
+   * file info
+   */
+  EndpointBinary(std::string endpoint_info_p) {
+    endpoint_info = endpoint_info_p;
+    ParseEndpointInfo();
+    SetOpenFlag(false);
+    SetEndpointType(EP_BINARY);
+  }
+  /**
+   * @brief Construct a new Endpoint in Binary
+   *         Nothing to do there, can be used as sub-endpoint of directory
+   */
+  EndpointBinary() {
+    SetOpenFlag(false);
+    SetEndpointType(EP_BINARY);
+  }
 
-    virtual ~EndpointBinary()
-    {
-        Close();
-    }
+  virtual ~EndpointBinary() { Close(); }
 
-    void SetMode(std::string model_str_p)
-    {
-        model_str = model_str_p;
-    }
+  void SetMode(std::string model_str_p) { model_str = model_str_p; }
 
-    std::string GetMode()
-    {
-        return model_str;
-    }
-    /**
-     * @brief extracts metadata, possbile endpoint_ranks/endpoint_dim_size/data_element_type
-     * 
-     * @return int < 0 error, >= 0 works 
-     */
-    int ExtractMeta() override;
-    /**
-     * @brief print information about the endpoint
-     * 
-     * @return < 0 error, >= 0 works 
-     */
-    int PrintInfo() override;
+  std::string GetMode() { return model_str; }
+  /**
+   * @brief extracts metadata, possbile
+   * endpoint_ranks/endpoint_dim_size/data_element_type
+   *
+   * @return int < 0 error, >= 0 works
+   */
+  int ExtractMeta() override;
+  /**
+   * @brief print information about the endpoint
+   *
+   * @return < 0 error, >= 0 works
+   */
+  int PrintInfo() override;
 
-    /**
-     * @brief create the endpoint
-     * 
-     * @return  < 0 error, >= 0 works 
-     */
-    int Create() override;
+  /**
+   * @brief create the endpoint
+   *
+   * @return  < 0 error, >= 0 works
+   */
+  int Create() override;
 
-    /**
-     * @brief open the endpoint
-     * 
-     * @return < 0 error, >= 0 works 
-     */
-    int Open() override;
+  /**
+   * @brief open the endpoint
+   *
+   * @return < 0 error, >= 0 works
+   */
+  int Open() override;
 
-    /**
-     * @brief read the data from end-point
-     * 
-     * @param start, coordinates of the cell to start (including)
-     * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
-     * @return int < 0 error, >= 0 works
-     */
-    int Read(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
+  /**
+   * @brief read the data from end-point
+   *
+   * @param start, coordinates of the cell to start (including)
+   * @param end , coordinates of the cell to end (including)
+   * @param data, store the result data
+   * @return int < 0 error, >= 0 works
+   */
+  int Read(std::vector<unsigned long long> start,
+           std::vector<unsigned long long> end, void *data) override;
 
-    /**
-     * @brief write the data to the end-point
-     * 
-     * @param start, coordinates of the cell to start (including)
-     * @param end , coordinates of the cell to end (including)
-     * @param data, store the result data 
-     * @return int < 0 error, >= 0 works
-     */
-    int Write(std::vector<unsigned long long> start, std::vector<unsigned long long> end, void *data) override;
+  /**
+   * @brief write the data to the end-point
+   *
+   * @param start, coordinates of the cell to start (including)
+   * @param end , coordinates of the cell to end (including)
+   * @param data, store the result data
+   * @return int < 0 error, >= 0 works
+   */
+  int Write(std::vector<unsigned long long> start,
+            std::vector<unsigned long long> end, void *data) override;
 
-    /**
-     * @brief close the end-point
-     * 
-     * @return int int < 0 error, >= 0 works
-     */
-    int Close() override;
+  /**
+   * @brief close the end-point
+   *
+   * @return int int < 0 error, >= 0 works
+   */
+  int Close() override;
 
-    void Map2MyType() override;
+  void Map2MyType() override;
 
-    /**
-     * @brief parse endpoint_info to my own info
-     *        In binary, it map endpoint_info to filename,
-     * @return int: 0 works,  < 0 error,
-     */
-    int ParseEndpointInfo() override;
+  /**
+   * @brief parse endpoint_info to my own info
+   *        In binary, it map endpoint_info to filename,
+   * @return int: 0 works,  < 0 error,
+   */
+  int ParseEndpointInfo() override;
 
-    /**
-     * @brief update the seek_offset
-     * 
-     */
-    virtual void UpdateSeekOffset();
+  /**
+   * @brief update the seek_offset
+   *
+   */
+  virtual void UpdateSeekOffset();
 
-    /**
-     * @brief call a special operator on binary endpoint
-     *        such as OP_SET_BINARY_SIZE
-     * @param opt_code, specially defined code 
-     */
-    int Control(int opt_code, std::vector<std::string> &parameter_v) override;
+  /**
+   * @brief call a special operator on binary endpoint
+   *        such as OP_SET_BINARY_SIZE
+   * @param opt_code, specially defined code
+   */
+  int Control(int opt_code, std::vector<std::string> &parameter_v) override;
 
-    /**
-     * @brief Get file point
-     * 
-     * @return FILE* return null if nothing opened
-     */
-    FILE *GetFP();
+  /**
+   * @brief Get file point
+   *
+   * @return FILE* return null if nothing opened
+   */
+  FILE *GetFP();
 
-    /**
-     * @brief Set the Seek Offset 
-     * 
-     * @param seek_offset_p : set offset to be used for reading 
-     */
-    void SetSeekOffset(long int seek_offset_p);
+  /**
+   * @brief Set the Seek Offset
+   *
+   * @param seek_offset_p : set offset to be used for reading
+   */
+  void SetSeekOffset(long int seek_offset_p);
 
-    /**
-     * @brief map a op_cmd_str to int as input of SpecialOperator
-     * 
-     * @param op_cmd_str cmd string 
-     * @return int 
-     */
-    int MapOpStr2Int(std::string op_cmd_str) override;
+  /**
+   * @brief map a op_cmd_str to int as input of SpecialOperator
+   *
+   * @param op_cmd_str cmd string
+   * @return int
+   */
+  int MapOpStr2Int(std::string op_cmd_str) override;
 
-    /**
-     * @brief map op_int to string 
-     * 
-     * @param op_int 
-     * @return std::string 
-     */
-    std::string MapOpInt2Str(int op_int) override;
+  /**
+   * @brief map op_int to string
+   *
+   * @param op_int
+   * @return std::string
+   */
+  std::string MapOpInt2Str(int op_int) override;
 
-    /**
-     * @brief EnableTranposeOnRead
-     * 
-     */
-    void EnableTranposeOnRead();
-    /**
-     * @brief EnableTranposeOnWrite
-     * 
-     */
-    void EnableTranposeOnWrite();
+  /**
+   * @brief EnableTranposeOnRead
+   *
+   */
+  void EnableTranposeOnRead();
+  /**
+   * @brief EnableTranposeOnWrite
+   *
+   */
+  void EnableTranposeOnWrite();
 
-    /**
-     * @brief DisableTranposeOnRead
-     * 
-     */
-    void DisableTranposeOnRead();
+  /**
+   * @brief DisableTranposeOnRead
+   *
+   */
+  void DisableTranposeOnRead();
 
-    /**
-     * @brief DisableTranposeOnWrite
-     * 
-     */
-    void DisableTranposeOnWrite();
+  /**
+   * @brief DisableTranposeOnWrite
+   *
+   */
+  void DisableTranposeOnWrite();
 };
 #endif

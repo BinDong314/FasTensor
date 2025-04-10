@@ -317,6 +317,8 @@ private:
   bool chunk_size_by_user_by_dimension_flag = false;
   bool set_chunk_size_by_mem_flag = false;
   bool set_overlap_size_by_auto_detection_flag = false;
+  bool variable_chunking_from_file_flag =
+      false; // mostly used for streaming data with binary input
 
   bool is_disable_overlap_upper_set = false;
   bool is_disable_overlap_lower_set = false;
@@ -594,8 +596,12 @@ public:
       return;
     }
 
-    if (endpoint != NULL && endpoint->GetEndpointType() == EP_DIR) {
+    if (endpoint != NULL && variable_chunking_from_file_flag) {
       // chunk_size_p = endpoint->GetChunkSize();
+      std::vector<std::string> file_size_vector;
+      endpoint->Control(DIR_GET_FILE_SIZE, file_size_vector);
+      String2Vector(file_size_vector[0], data_chunk_size);
+      data_overlap_size.resize(data_chunk_size.size(), 0);
     }
     // optimal chunk_size
   }
@@ -1266,13 +1272,12 @@ public:
           PrintVector("RABBITMQ_GET_HEADER = ", para);
           B->ControlEndpoint(DIR_STREAM_SET_CURRENT_SUB_INFO, para);
           para.clear();
-          para.push_back(Vector2String(data_chunk_size));    
+          para.push_back(Vector2String(data_chunk_size));
           B->ControlEndpoint(DIR_SET_CHUNK_SIZE, para);
           // para.insert(para.begin(), "fileinfo");
           // para.push_back("chunksize");
           // para.push_back(Vector2String(data_chunk_size));
           // B->ControlEndpoint(RABBITMQ_SET_HEADER, para);
-
         }
 
         if (vector_type_flag) {
@@ -3118,6 +3123,14 @@ public:
       return 0;
     }
 
+    if (GetEndpointType() == EP_DIR_STREAM &&
+        variable_chunking_from_file_flag) {
+      std::vector<std::string> para;
+      endpoint->Control(DIR_STREAM_GET_NEXT_SUB_SIZE, para);
+      String2Vector(para[0], data_chunk_size);
+      data_overlap_size.resize(data_chunk_size.size(), 0);
+    }
+
     // We only handle last chunk when skip is not even with the array size
     if (current_chunk_id == (data_total_chunks - 1) &&
         skip_not_aligned_w_array_flag)
@@ -3311,6 +3324,10 @@ public:
     }
   }
 
+  inline int EnableVariableChunkingFromFile() {
+    variable_chunking_from_file_flag = true;
+    return 0;
+  }
   inline int EnableApplyStride(const std::vector<int> &skip_size_p) {
     return SetStride(skip_size_p);
   }
@@ -3651,6 +3668,14 @@ public:
   }
 
   inline int GetChunkSize(std::vector<int> &data_chunk_size_p) {
+
+    if (GetEndpointType() == EP_DIR_STREAM &&
+        variable_chunking_from_file_flag) {
+      std::vector<std::string> para;
+      endpoint->Control(DIR_STREAM_GET_NEXT_SUB_SIZE, para);
+      String2Vector(para[0], data_chunk_size);
+      data_overlap_size.resize(data_chunk_size.size(), 0);
+    }
     data_chunk_size_p = data_chunk_size;
     return 0;
   }

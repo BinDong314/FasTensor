@@ -86,6 +86,11 @@
         "span": "cpp",
         "stop_token": "cpp",
         "text_encoding": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "csignal": "cpp",
+        "execution": "cpp",
+        "forward_list": "cpp",
+        "print": "cpp",
+        "queue": "cpp"
     }
 }

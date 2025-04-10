@@ -111,8 +111,10 @@ in binary and source code form.
 #define DIR_STREAM_SET_CURRENT_SUB_INFO (OP_USER_DEFINED_START + 23)
 #define DIR_GET_MERGE_INDEX (OP_USER_DEFINED_START + 24)
 #define DIR_SET_MERGE_INDEX (OP_USER_DEFINED_START + 25)
+#define DIR_STREAM_GET_NEXT_SUB_SIZE (OP_USER_DEFINED_START + 26)
 
 #include "ft_endpoint.h"
+#include "ft_endpoint_binary.h"
 #include "ft_endpoint_csv.h"
 #include "ft_endpoint_hdf5.h"
 #include "ft_endpoint_tdms.h"
@@ -136,6 +138,7 @@ private:
   Endpoint *sub_endpoint = nullptr;
 
   std::string current_sub_endpoint_info; // Directory of files
+  int current_sub_endpoint_index = -1;
 
   std::string dir_str;
   std::vector<std::string> dir_file_list;
@@ -203,6 +206,8 @@ public:
       sub_endpoint = new EndpointTDMS();
     } else if (sub_endpoint_type == EP_CSV) {
       sub_endpoint = new EndpointCSV();
+    } else if (sub_endpoint_type == EP_BINARY) {
+      sub_endpoint = new EndpointBinary();
     } else {
       AU_EXIT("Not supported sub endpoint in EndpointDIR_STREAM \n");
     }

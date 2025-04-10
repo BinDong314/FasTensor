@@ -83,6 +83,20 @@ in binary and source code form.
 
 int EndpointBinary::ExtractMeta()
 {
+    endpoint_ranks = 1;
+    endpoint_size.resize(1);
+
+    if (GetOpenFlag() == false)
+    {
+        Open();
+    }
+
+    uint64_t nByte_metadata;
+    FILE *fp = this->GetFP();
+    fseek(fp, 0, SEEK_END);
+    uint64_t size = ftell(fp);
+    rewind(fp); 
+    endpoint_size[0]=size;
     return 0;
 }
 

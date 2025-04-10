@@ -86,6 +86,7 @@ in binary and source code form.
 #include "ft_endpoint_memory.h"
 #include "ft_endpoint_pnetcdf.h"
 #include "ft_endpoint_rabbitmq.h"
+#include "ft_endpoint_rabbitmq_restapi.h"
 
 #include <string.h>
 
@@ -117,6 +118,9 @@ public:
       return new EndpointRabbitMQ(endpoint_info);
     if (endpoint_type == EP_DIR_STREAM)
       return new EndpointDIR_STREAM(endpoint_info);
+    if (endpoint_type == EP_RabbitMQ_RESTAPI)
+      return new EndpointRabbitMQRestAPI(endpoint_info);
+
     AU_EXIT("Not supported endpoint");
     return nullptr;
   }

@@ -166,7 +166,7 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
 
   if (!open_flag) {
     std::cerr << "Connection is not open" << std::endl;
-    if(Open() < 0){
+    if (Open() < 0) {
       return -1;
     }
   }
@@ -193,7 +193,7 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
     }
 
     // Extract message headers
-    //std::unordered_map<std::string, std::string> headertable;
+    // std::unordered_map<std::string, std::string> headertable;
     headertable.clear();
     if (envelope.message.properties._flags & AMQP_BASIC_HEADERS_FLAG) {
       amqp_table_t headers = envelope.message.properties.headers;
@@ -205,7 +205,8 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
           std::string value((char *)entry.value.value.bytes.bytes,
                             entry.value.value.bytes.len);
           headertable[key] = value;
-          std::cout << "receiving key = " << key << ", value = " << value << "\n";
+          std::cout << "receiving key = " << key << ", value = " << value
+                    << "\n";
         }
       }
     }
@@ -348,12 +349,14 @@ void ParseHeaders(std::unordered_map<std::string, std::string> &headers,
 std::vector<std::string>
 FlattenHeaders(const std::unordered_map<std::string, std::string> &headers) {
   std::vector<std::string> result;
-  std::cout << "calling FlattenHeaders..  headertable.size() = " << headers.size() << std::endl;
+  std::cout << "calling FlattenHeaders..  headertable.size() = "
+            << headers.size() << std::endl;
 
   for (const auto &[key, value] : headers) {
     result.push_back(key);
     result.push_back(value);
-    std::cout << "FlattenHeaders key = " << key << ", value = " << value << std::endl;
+    std::cout << "FlattenHeaders key = " << key << ", value = " << value
+              << std::endl;
   }
 
   return result;
