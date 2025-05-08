@@ -53,6 +53,8 @@ public:
 };
 
 #else
+#define RABBITMQ_SET_HEADER (OP_USER_DEFINED_START + 0)
+#define RABBITMQ_GET_HEADER (OP_USER_DEFINED_START + 1)
 
 class EndpointRabbitMQ : public Endpoint {
 private:

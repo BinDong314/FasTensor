@@ -523,10 +523,12 @@ int EndpointDIR::Write(std::vector<unsigned long long> start,
 
   // start[dir_data_merge_index] = 0;
   // end[dir_data_merge_index] = dir_chunk_size[dir_data_merge_index] - 1;
-  // #define DEBUG 0
+#define DEBUG 1
 #ifdef DEBUG
+  PrintVector("EndpointDIR::endpoint_size before update :", endpoint_size);
   PrintVector("EndpointDIR::dir_chunk_size before update :", dir_chunk_size);
 #endif
+  endpoint_size.resize(endpoint_ranks);
   for (int i = 0; i < endpoint_ranks; i++) {
     endpoint_size[i] = end[i] - start[i] + 1;
     if (endpoint_size[i] < dir_chunk_size[i]) {

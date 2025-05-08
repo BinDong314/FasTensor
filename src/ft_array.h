@@ -1621,8 +1621,10 @@ public:
           // Here we update the filename list for the output endpoint
           // Basically, if the input has merge
           // We only keep the filename of the first merged as output
-          // PrintVector("Debug:  data_chunk_size = ", data_chunk_size);
-          // PrintVector("Debug:  dir_chunk_size = ", dir_chunk_size);
+          PrintVector("SetDirChunkSize Debug:  data_chunk_size = ",
+                      data_chunk_size);
+          PrintVector("SetDirChunkSize Debug:  dir_chunk_size = ",
+                      dir_chunk_size);
           int n_merge = 1;
           for (int i = 0; i < data_dims; i++) {
             n_merge = n_merge * data_chunk_size[i] / dir_chunk_size[i];
@@ -3658,13 +3660,25 @@ public:
   std::vector<std::string> GetDirFile() { return endpoint->GetDirFileVector(); }
 
   void SetDirFile(std::vector<std::string> &file_list) {
-    endpoint->SetDirFileVector(file_list);
+    if (!virtual_array_flag) {
+      endpoint->SetDirFileVector(file_list);
+    } else {
+      int n = attribute_endpoint_vector.size();
+      for (int i = 0; i < n; i++)
+        attribute_endpoint_vector[i]->SetDirFileVector(file_list);
+    }
   }
 
   std::vector<int> GetDirChunkSize() { return endpoint->GetDirChunkSize(); }
 
   inline void SetDirChunkSize(std::vector<int> &dir_chunk_size_p) {
-    endpoint->SetDirChunkSize(dir_chunk_size_p);
+    if (!virtual_array_flag) {
+      endpoint->SetDirChunkSize(dir_chunk_size_p);
+    } else {
+      int n = attribute_endpoint_vector.size();
+      for (int i = 0; i < n; i++)
+        attribute_endpoint_vector[i]->SetDirChunkSize(dir_chunk_size_p);
+    }
   }
 
   inline int SetChunkSize(std::vector<int> data_chunk_size_p) {
