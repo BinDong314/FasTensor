@@ -3,6 +3,7 @@
 #define END_POINT_RABBITMQ_RESTAPI_H 1
 #include "ft_endpoint.h"
 #include "ft_type.h"
+#include <csignal>
 #include <fstream>
 #include <iostream>
 #include <math.h>
