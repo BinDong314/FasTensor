@@ -1,9 +1,9 @@
 AUTOMAKE_OPTIONS=gnu
 
-AM_CPPFLAGS = @ARRAYUDF_CPPFLAGS@  -I./third_part
-AM_CFLAGS = @ARRAYUDF_CFLAGS@  -I./third_part
-AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@    -I./third_part  
-AM_LDFLAGS = @ARRAYUDF_LIBS@   -all-static     -I./third_part
+AM_CPPFLAGS = @ARRAYUDF_CPPFLAGS@  -I./third_part -lcurl -lgssapi_krb5
+AM_CFLAGS = @ARRAYUDF_CFLAGS@  -I./third_part -lcurl -lgssapi_krb5
+AM_CXXFLAGS = @ARRAYUDF_CXXFLAGS@    -I./third_part  -lcurl -lgssapi_krb5
+AM_LDFLAGS = @ARRAYUDF_LIBS@   -all-static     -I./third_part -lcurl -lgssapi_krb5
 
 lib_LTLIBRARIES=libFastensor.la
 libFastensor_la_SOURCES=ft.h ft.cpp \
