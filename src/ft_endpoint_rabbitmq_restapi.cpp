@@ -5,6 +5,7 @@
 EndpointRabbitMQRestAPI::EndpointRabbitMQRestAPI(std::string endpoint_info_p) {
   // Constructor implementation
   endpoint_info = endpoint_info_p;
+  has_user_set_interface = false;
   SetEndpointType(EP_RabbitMQ_RESTAPI);
   ParseEndpointInfo();
 }
@@ -329,6 +330,9 @@ int EndpointRabbitMQRestAPI::Write(std::vector<unsigned long long> start,
     return -1;
   }
 
+  if (has_user_set_interface) {
+    curl_easy_setopt(curl, CURLOPT_INTERFACE, interface.c_str());
+  }
   // Build URL
   std::ostringstream url;
   url << "http://" << hostname << "/api/exchanges/"
@@ -427,6 +431,14 @@ int EndpointRabbitMQRestAPI::Control(int opt_code,
     break;
   case RABBITMQ_GET_HEADER:
     parameter_v = FlattenHeaders2(headertable);
+    break;
+  case RABBITMQ_SET_NET_INTERFACE:
+    if (parameter_v.size() < 1) {
+      AU_EXIT("SET_HEADER  needs at least 2 parameter: key-value \n");
+    }
+    std::cout << "RABBITMQ_SET_NET_INTERFACE: " << parameter_v[0] << std::endl;
+    has_user_set_interface = true;
+    interface = parameter_v[0];
     break;
   default:
     std::cout << "Unsupported datatype in " << __FILE__ << " : " << __LINE__

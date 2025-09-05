@@ -21,6 +21,7 @@
 
 #define RABBITMQ_SET_HEADER (OP_USER_DEFINED_START + 0)
 #define RABBITMQ_GET_HEADER (OP_USER_DEFINED_START + 1)
+#define RABBITMQ_SET_NET_INTERFACE (OP_USER_DEFINED_START + 2)
 
 //
 // I/O layer
@@ -35,6 +36,9 @@ private:
   std::string queue_name;
 
   std::unordered_map<std::string, std::string> headertable;
+
+  bool has_user_set_interface;
+  std::string interface;
 
 public:
   EndpointRabbitMQRestAPI(std::string endpoint_info_p);
