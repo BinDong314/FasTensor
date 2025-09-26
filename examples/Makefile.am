@@ -4,7 +4,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part  @ARRAYUDF_CPP
 AM_CFLAGS   = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part  @ARRAYUDF_CFLAGS@    -ldl -pthread 
 AM_CXXFLAGS = -I$(top_srcdir)/src/ -I$(top_srcdir)/src/third_part  @ARRAYUDF_CXXFLAGS@    -ldl -pthread
 
-AM_LDFLAGS  = @ARRAYUDF_LIBS@  -all-static  -ldl -pthread
+AM_LDFLAGS  = @ARRAYUDF_LIBS@  -ldl -pthread
 #AM_LDFLAGS  = -Wl,--start-group @ARRAYUDF_LIBS@  -all-static  -ldl 
 
 LDADD=../src/libFastensor.la @ARRAYUDF_LIBS@  -ldl 
