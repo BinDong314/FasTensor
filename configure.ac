@@ -45,12 +45,12 @@ AC_ARG_WITH([hdf5],
 
 AC_MSG_CHECKING([for HDF5 at $HDF5_HOME])
 if test -d "$HDF5_HOME"   && test -d "$HDF5_HOME/include"  && test -d "$HDF5_HOME/lib"; then
-ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$HDF5_HOME/include"
-ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$HDF5_HOME/include"
-ARRAYUDF_LIBS="$ARRAYUDF_LIBS           -L$HDF5_HOME/lib -lhdf5 -lhdf5_hl -lz"
-AC_MSG_RESULT([yes])	    
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$HDF5_HOME/include"
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$HDF5_HOME/include"
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS           -L$HDF5_HOME/lib -lhdf5 -lhdf5_hl -lz"
+  AC_MSG_RESULT([yes])	    
 else
-AC_MSG_ERROR([no: HDF5 directory not found!])
+  AC_MSG_ERROR([no: HDF5 directory not found!])
 fi
 
 
@@ -64,13 +64,23 @@ AC_ARG_WITH([rabbitmq],
 # Check for RabbitMQ only if specified
 if test -n "$RABBITMQ_HOME"; then
     AC_MSG_CHECKING([for RabbitMQ at $RABBITMQ_HOME])
-    if test -d "$RABBITMQ_HOME" && test -d "$RABBITMQ_HOME/include" && test -d "$RABBITMQ_HOME/lib"; then
+    
+    # First, determine the library directory path
+    rabbitmq_lib_dir=""
+    if test -d "$RABBITMQ_HOME/lib64"; then
+        rabbitmq_lib_dir="$RABBITMQ_HOME/lib64"
+    elif test -d "$RABBITMQ_HOME/lib"; then
+        rabbitmq_lib_dir="$RABBITMQ_HOME/lib"
+    fi
+
+    # Now, check if the base, include, and a valid lib directory were found
+    if test -d "$RABBITMQ_HOME" && test -d "$RABBITMQ_HOME/include" && test -n "$rabbitmq_lib_dir"; then
         ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS -I$RABBITMQ_HOME/include -DHAS_RABBITMQ_END_POINT"
         ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -I$RABBITMQ_HOME/include -DHAS_RABBITMQ_END_POINT"
-        ARRAYUDF_LIBS="$ARRAYUDF_LIBS -L$RABBITMQ_HOME/lib -lrabbitmq"
+        ARRAYUDF_LIBS="$ARRAYUDF_LIBS -L$rabbitmq_lib_dir -lrabbitmq"
         AC_MSG_RESULT([yes])
     else
-        AC_MSG_ERROR([RabbitMQ directory not found in $RABBITMQ_HOME!])
+        AC_MSG_ERROR([RabbitMQ installation invalid in $RABBITMQ_HOME! Check for include/ and lib/ or lib64/ subdirectories.])
     fi
 else
     AC_MSG_RESULT([RabbitMQ not requested])

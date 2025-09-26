@@ -165,7 +165,7 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
   std::cout << "Reading from RabbitMQ endpoint" << std::endl;
 
   if (!open_flag) {
-    std::cerr << "Connection is not open" << std::endl;
+    std::cerr << "Connection is not open yet, we open it now" << std::endl;
     if (Open() < 0) {
       return -1;
     }
@@ -183,12 +183,21 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
 
   while (!should_stop) {
     amqp_envelope_t envelope;
-    struct timeval timeout = {5, 0}; // 5 seconds timeout
+    struct timeval timeout = {1, 0}; // 5 seconds timeout
     amqp_maybe_release_buffers(conn);
 
     rpc_reply = amqp_consume_message(conn, &envelope, &timeout, 0);
     if (rpc_reply.reply_type != AMQP_RESPONSE_NORMAL) {
-      std::cerr << "No message received, retrying..." << std::endl;
+      // A timeout is expected when no messages are available. We should
+      // continue waiting.
+      if (rpc_reply.reply_type == AMQP_RESPONSE_LIBRARY_EXCEPTION &&
+          rpc_reply.library_error == AMQP_STATUS_TIMEOUT) {
+        continue;
+      }
+
+      // Any other error during consumption is a problem.
+      std::cerr << "Failed to consume message, stopping." << std::endl;
+      bytes_read = -1; // Indicate a fatal error
       break;
     }
 
@@ -219,7 +228,12 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
     break;
   }
 
-  std::cout << "Stopping message consumption." << std::endl;
+  if (should_stop && bytes_read == 0) {
+    std::cout << "Signal received, stopping message consumption." << std::endl;
+  } else {
+    std::cout << "Stopping message consumption." << std::endl;
+  }
+  // std::cout << "Stopping message consumption." << std::endl;
   return 0;
 }
 
