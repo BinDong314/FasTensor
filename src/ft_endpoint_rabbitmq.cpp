@@ -180,7 +180,7 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
   }
 
   signal(SIGINT, signal_handler);
-
+  size_t bytes_read = 0;
   while (!should_stop) {
     amqp_envelope_t envelope;
     struct timeval timeout = {1, 0}; // 5 seconds timeout
@@ -223,6 +223,7 @@ int EndpointRabbitMQ::Read(std::vector<unsigned long long> start,
     // Copy message body
     size_t message_size = envelope.message.body.len;
     std::memcpy(data, envelope.message.body.bytes, message_size);
+    bytes_read = message_size;
 
     amqp_destroy_envelope(&envelope);
     break;
