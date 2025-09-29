@@ -82,6 +82,7 @@ in binary and source code form.
 #include <chrono>
 #include <csignal>
 #include <thread>
+using namespace std::chrono_literals;
 
 extern int ft_mpi_size_global;
 extern int ft_mpi_rank_global;
@@ -418,10 +419,13 @@ int EndpointDIR_STREAM::Read(std::vector<unsigned long long> start,
       std::exit(0);
     }
 
+    std::cout << "Looping: sub_endpoint_index_end=" << sub_endpoint_index_end
+              << ", dir_file_list.size()=" << dir_file_list.size() << std::endl;
+
     std::cout << "Call ExtractMeta " << std::endl;
     is_ExtractMeta_called = false;
     ExtractMeta();
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(10s);
   }
   // save for metadata operation
   //  TODO: we only consider the first file here and try to consider more file
