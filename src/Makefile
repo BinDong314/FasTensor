@@ -400,7 +400,7 @@ AUTOMAKE_OPTIONS = gnu
 AM_CPPFLAGS =    -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT -I/opt/homebrew/opt/openssl@3/include -DHAS_RABBITMQ_RESTAPI_END_POINT  -I./third_part -lcurl -lgssapi_krb5
 AM_CFLAGS =        -I/Users/dbin/work/soft/hdf5-git-dev/build/include -I/Users/dbin/work/soft/rabbitmq-c/build/install/include -DHAS_RABBITMQ_END_POINT    -I/opt/homebrew/opt/openssl@3/include  -DHAS_RABBITMQ_RESTAPI_END_POINT  -I./third_part -lcurl -lgssapi_krb5
 AM_CXXFLAGS =     -std=c++17 -O3    -I./third_part  -lcurl -lgssapi_krb5
-AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto -lcurl  -lssl -lcrypto  -DHAS_RABBITMQ_RESTAPI_END_POINT   -all-static     -I./third_part -lcurl -lgssapi_krb5
+AM_LDFLAGS =            -L/Users/dbin/work/soft/hdf5-git-dev/build/lib -lhdf5 -lhdf5_hl -lz -L/Users/dbin/work/soft/rabbitmq-c/build/install/lib -lrabbitmq -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto -lcurl  -lssl -lcrypto  -DHAS_RABBITMQ_RESTAPI_END_POINT     -I./third_part -lcurl -lgssapi_krb5
 lib_LTLIBRARIES = libFastensor.la
 libFastensor_la_SOURCES = ft.h ft.cpp \
                        ft_array.h ft_array.cpp \

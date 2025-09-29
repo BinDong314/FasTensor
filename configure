@@ -19662,13 +19662,13 @@ fi
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for HDF5 at $HDF5_HOME" >&5
 printf %s "checking for HDF5 at $HDF5_HOME... " >&6; }
 if test -d "$HDF5_HOME"   && test -d "$HDF5_HOME/include"  && test -d "$HDF5_HOME/lib"; then
-ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$HDF5_HOME/include"
-ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$HDF5_HOME/include"
-ARRAYUDF_LIBS="$ARRAYUDF_LIBS           -L$HDF5_HOME/lib -lhdf5 -lhdf5_hl -lz"
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+  ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS       -I$HDF5_HOME/include"
+  ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS   -I$HDF5_HOME/include"
+  ARRAYUDF_LIBS="$ARRAYUDF_LIBS           -L$HDF5_HOME/lib -lhdf5 -lhdf5_hl -lz"
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 else
-as_fn_error $? "no: HDF5 directory not found!" "$LINENO" 5
+  as_fn_error $? "no: HDF5 directory not found!" "$LINENO" 5
 fi
 
 
@@ -19689,14 +19689,24 @@ fi
 if test -n "$RABBITMQ_HOME"; then
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for RabbitMQ at $RABBITMQ_HOME" >&5
 printf %s "checking for RabbitMQ at $RABBITMQ_HOME... " >&6; }
-    if test -d "$RABBITMQ_HOME" && test -d "$RABBITMQ_HOME/include" && test -d "$RABBITMQ_HOME/lib"; then
+
+    # First, determine the library directory path
+    rabbitmq_lib_dir=""
+    if test -d "$RABBITMQ_HOME/lib64"; then
+        rabbitmq_lib_dir="$RABBITMQ_HOME/lib64"
+    elif test -d "$RABBITMQ_HOME/lib"; then
+        rabbitmq_lib_dir="$RABBITMQ_HOME/lib"
+    fi
+
+    # Now, check if the base, include, and a valid lib directory were found
+    if test -d "$RABBITMQ_HOME" && test -d "$RABBITMQ_HOME/include" && test -n "$rabbitmq_lib_dir"; then
         ARRAYUDF_CFLAGS="$ARRAYUDF_CFLAGS -I$RABBITMQ_HOME/include -DHAS_RABBITMQ_END_POINT"
         ARRAYUDF_CPPFLAGS="$ARRAYUDF_CPPFLAGS -I$RABBITMQ_HOME/include -DHAS_RABBITMQ_END_POINT"
-        ARRAYUDF_LIBS="$ARRAYUDF_LIBS -L$RABBITMQ_HOME/lib -lrabbitmq"
+        ARRAYUDF_LIBS="$ARRAYUDF_LIBS -L$rabbitmq_lib_dir -lrabbitmq"
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
     else
-        as_fn_error $? "RabbitMQ directory not found in $RABBITMQ_HOME!" "$LINENO" 5
+        as_fn_error $? "RabbitMQ installation invalid in $RABBITMQ_HOME! Check for include/ and lib/ or lib64/ subdirectories." "$LINENO" 5
     fi
 else
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: RabbitMQ not requested" >&5
