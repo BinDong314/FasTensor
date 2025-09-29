@@ -406,7 +406,7 @@ int EndpointDIR_STREAM::Read(std::vector<unsigned long long> start,
 
   std::cout << "sub_endpoint_index =" << sub_endpoint_index
             << ",sub_endpoint_index_end = " << sub_endpoint_index_end
-            << ", dir_file_list.size() =" << dir_file_list.size() << "\n";
+            << ", dir_file_list.size() test =" << dir_file_list.size() << "\n";
   signal(SIGINT, dir_steam_signal_handler);
 
   std::cout << "Enter the loop ..." << std::endl;
