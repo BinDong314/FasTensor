@@ -111,7 +111,7 @@ int EndpointDIR_STREAM::ExtractMeta() {
       temp_dir_file_list[i] = dir_str + "/" + input_file_list[i];
     }
   }
-#ifdef DEBUG
+#ifdef 1
   if (!ft_rank)
     PrintVector("After list : ", temp_dir_file_list);
 #endif
