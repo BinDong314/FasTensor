@@ -33,7 +33,7 @@ libFastensor_la_SOURCES=ft.h ft.cpp \
                        ft_xdmf.cpp \
                        ft_chunk_scheduling.h
 
-libFastensor_la_LDFLAGS=-version-info 0:0:0  -all-static
+libFastensor_la_LDFLAGS=-version-info 0:0:0
 include_HEADERS=ft_array.h	ft_endpoint.h ft_stencil.h ft_type.h ft_endpoint_hdf5.h \
                 ft_utility.h \
                 third_part/cista.h\
