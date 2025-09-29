@@ -409,6 +409,7 @@ int EndpointDIR_STREAM::Read(std::vector<unsigned long long> start,
             << ", dir_file_list.size() =" << dir_file_list.size() << "\n";
   signal(SIGINT, dir_steam_signal_handler);
 
+  std::cout << "Enter the loop ..." << std::endl;
   // Add signal handling  and sleep time
   while (sub_endpoint_index_end > dir_file_list.size()) {
     if (dir_stream_stop_loop) {
