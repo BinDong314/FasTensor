@@ -417,6 +417,8 @@ int EndpointDIR_STREAM::Read(std::vector<unsigned long long> start,
       std::flush(std::cout);
       std::exit(0);
     }
+
+    std::cout << "Call ExtractMeta " << std::endl;
     is_ExtractMeta_called = false;
     ExtractMeta();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
